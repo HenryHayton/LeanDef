@@ -20,11 +20,11 @@ misreadings the true object must refute), all certified through the Lean kernel.
 
 ## Pinned versions
 
-_To be filled in during Step 0 (Task 3)._
-
-- Lean: TBD
-- Mathlib: TBD
-- lean-interact: TBD
+- Lean: [`v4.32.0`](https://github.com/leanprover/lean4/releases/tag/v4.32.0)
+- Mathlib: [`v4.32.0`](https://github.com/leanprover-community/mathlib4/releases/tag/v4.32.0)
+  (exact tag, pinned in `lean/lakefile.toml`)
+- lean-interact: `0.11.5` (pinned via `uv.lock`)
+- Python: `3.12`
 
 ## Timings
 

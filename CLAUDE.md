@@ -49,10 +49,26 @@ hardening pass, Mathlib mining pipeline, model experiments.
 _Filled in as Step 0 progresses — see README.md "Pinned versions" and "Timings" sections,
 which should stay in sync with this file._
 
-- Lean version: TBD
-- Mathlib tag/commit: TBD
-- lean-interact version: TBD
-- Python version / packaging layout: TBD
+- Lean version: `v4.32.0` (newest stable Lean release, 2026-07-13). Chosen by checking
+  lean-interact's *actual GitHub release notes* (not just its README table, which lagged) —
+  0.11.5 (published 2026-07-16) added support for "v4.31.0-rc2 to v4.33.0-rc1", a range that
+  covers v4.32.0 stable.
+- Mathlib tag/commit: tag `v4.32.0` (its `lean-toolchain` file targets `leanprover/lean4:v4.32.0`
+  exactly — verified before pinning). Pinned as an exact tag in `lean/lakefile.toml`, not a
+  moving branch.
+- lean-interact version: 0.11.5 (latest on PyPI as of setup; its supported-version range
+  determined the Lean version choice above).
+- Python: 3.12, managed with `uv`. `pyproject.toml` lives at the repo root (single-package
+  repo, keeps `uv run` / `pytest` invocations simple); the `harness/` directory is the
+  installable package itself (`packages = ["harness"]` in `[tool.hatch.build.targets.wheel]`).
+- Lean subproject scaffolded via `lake init definition_verifier math` (named `definition_verifier`
+  because the directory name `lean` is a reserved package name). The `math` template auto-pinned
+  Mathlib to the exact matching tag and auto-ran a full Mathlib cache download as a side effect —
+  worth knowing if re-scaffolding, since it's a multi-GB download with no separate warning.
+  It also added GitHub Actions workflows (CI, auto-release-tagging, docs→Pages deploy) and a
+  `weak.linter.mathlibStandardSet` style-linter (copyright headers, doc-strings) — both removed/
+  disabled since Step 0 doesn't need CI and the Mathlib contributor style rules don't apply to
+  our own files.
 
 ## Constraints
 
