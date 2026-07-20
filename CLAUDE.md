@@ -69,6 +69,19 @@ which should stay in sync with this file._
   `weak.linter.mathlibStandardSet` style-linter (copyright headers, doc-strings) — both removed/
   disabled since Step 0 doesn't need CI and the Mathlib contributor style rules don't apply to
   our own files.
+- `AutoLeanServer` refuses to run once system-wide memory usage is above `max_total_memory`
+  (default 0.8 = 80%). Dev laptops sit above that from unrelated apps often enough that this
+  needs raising (we use 0.95 in `scripts/smoke_test.py` and `tests/conftest.py`) — otherwise it
+  restart-loops and raises `MemoryError` before even trying. Real Mathlib-import memory use was
+  ~2.5 GB RSS in our one measurement.
+- `lean_interact.LocalProject` creates an empty concurrency-control lock file as a sibling of
+  the project directory (`lean.lock` next to `lean/`, not to be confused with `uv.lock`).
+  Gitignored via `/lean.lock`.
+- The pytest-facing tests (`tests/test_lean_repl.py`) deliberately skip `import Mathlib` — the
+  two required known-answer checks (`decide` on arithmetic, `sorry`-as-warning) don't need it,
+  and skipping keeps `uv run pytest` fast (~18s) rather than 2+ minutes per run. Full
+  Mathlib-environment behavior (cold import, warm checks, splice pattern, pickling) is what
+  `scripts/smoke_test.py` exercises separately — see README "Timings".
 
 ## Constraints
 
