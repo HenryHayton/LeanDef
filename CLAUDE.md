@@ -83,6 +83,32 @@ which should stay in sync with this file._
   Mathlib-environment behavior (cold import, warm checks, splice pattern, pickling) is what
   `scripts/smoke_test.py` exercises separately — see README "Timings".
 
+## Known follow-ups (from 2026-07-20 verification pass)
+
+- **Dial the `AutoLeanServer` memory guard back down.** It's currently raised to
+  `max_total_memory=0.95` in `scripts/smoke_test.py` and `tests/conftest.py` (default is
+  `0.8`) because this dev machine regularly sits above 80% system memory used from unrelated
+  apps. Revisit once on a machine with more headroom, or before the guard's protection
+  actually matters (e.g. running many REPL sessions at once).
+- **Lean v4.32.0's support status is not unambiguously confirmed.** lean-interact 0.11.5's own
+  bundled README (installed with the package, in `*.dist-info/METADATA`) states support for
+  "all Lean versions between `v4.8.0-rc1` and `v4.32.0-rc1`" — note the upper bound is the
+  release candidate, not the `v4.32.0` stable release we pinned. Separately, 0.11.5's GitHub
+  release notes say it "added support for v4.31.0-rc2 to v4.33.0-rc1," which would cover
+  v4.32.0 stable — but that's the changelog, not the shipped docs, and the two sources
+  disagree. In practice `lake build` and every REPL check in `scripts/smoke_test.py` and
+  `tests/` pass cleanly against v4.32.0, so it works; it just isn't stated as supported by the
+  package's own installed documentation. Worth watching for lean-interact updates that
+  explicitly bump the stated ceiling.
+- **Environment unpickling has not yet been shown to be fast.** Two independent full runs of
+  `scripts/smoke_test.py` (2026-07-20) both show unpickle time in the same order of magnitude
+  as the cold `import Mathlib` (run 1: 138.2s unpickle vs 141.7s cold import; run 2: 133.5s vs
+  161.4s). Both runs were on a machine under real memory pressure (~87% system memory used,
+  ~2.1–2.4 GB free), so this may be disk-swapping overhead rather than something intrinsic to
+  the pickle mechanism — but that's unconfirmed. If pickling's speed matters for a later
+  milestone, re-run `scripts/smoke_test.py` on a quiet machine (most other apps closed) before
+  relying on it, or investigate further.
+
 ## Constraints
 
 - No heavyweight deps (torch, transformers, etc.) at this stage.
