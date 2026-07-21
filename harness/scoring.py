@@ -7,9 +7,22 @@ loop, and result collection identified there as generic are here; the specific f
 candidate bodies, and pinned signature are left as caller-supplied data.
 `archive/n1_tau/` itself is left untouched -- nothing in this module reads from it.
 
+Per `docs/design/reward_structure_2026-07-21.md` §2, a fact suite has three types: decidable
+casework, membership facts (decidable where possible, proof-based otherwise), and global
+theorem facts (always proof-based, adjudicated by a prover agent with tri-state TRUE/FALSE/
+UNKNOWN semantics). This module implements exactly one of those three mechanisms: `run_facts`
+sends each fact as a raw REPL command and reads PASSED/FAILED off `has_errors()` -- correct
+for decidable casework and decidable membership checks, and *only* those. It has no path for
+a fact that needs a prover agent, and no representation for UNKNOWN. A τ-shaped object (this
+repo's only worked example so far, `archive/n1_tau/` -- computable, cheap, decidable-fact-rich)
+is fully covered by what's here; a proof-heavy object (e.g. a compactness-style property on an
+infinite carrier, with almost no decidable facts at all) is not, and would need a genuinely
+different adjudication path, not an extension of `run_facts`. See
+`docs/decidability_bias_survey.md` for exactly where this module's result types and defaults
+assume decidable-scale cost.
+
 Deliberately out of scope (see `docs/design/`): fact mining, mutant generation, the prover
-layer, tri-state adjudication. Only decidable facts (reward-structure design §2.1) are
-implemented.
+layer, tri-state adjudication.
 """
 
 from lean_interact import AutoLeanServer, Command
@@ -56,7 +69,14 @@ def run_facts(
     timeout: float | None = None,
 ) -> list[CheckResult]:
     """Run each fact (a full `example ... := by decide` source string) against the spliced
-    candidate's environment. One `CheckResult` per fact, in order."""
+    candidate's environment. One `CheckResult` per fact, in order.
+
+    This is the decidable-casework adjudication mechanism only (reward-structure design
+    §2.1) -- every fact here is assumed to resolve via kernel computation within `timeout`.
+    Membership facts that need a proof and global theorem facts (§2.2-§2.3) are not
+    representable as a plain fact string and are not handled by this function; see the
+    module docstring and `docs/decidability_bias_survey.md`.
+    """
     timeout = timeout if timeout is not None else cfg.DEFAULT_CHECK_TIMEOUT
     return [run_checked(server, Command(cmd=fact, env=candidate_env), timeout=timeout) for fact in facts]
 

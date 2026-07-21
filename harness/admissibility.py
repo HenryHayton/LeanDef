@@ -29,13 +29,18 @@ from harness.signature import PinnedSignature
 # The three axioms almost every nontrivial Mathlib definition ends up depending on --
 # Finset/Multiset are built on Quotient, which pulls in Quot.sound, and generic
 # Decidable/Fintype instance resolution commonly goes through Classical.choice/propext even
-# when a computable path also exists. Empirically confirmed for this project's own pinned
-# `tau`: `#print axioms tau` on the true, fully computable definition reports exactly this
-# set (see docs/repo_audit.md and this task's own verification run) -- NOT the empty set, so
-# "no new axioms" has to mean "no axioms beyond what any ordinary Mathlib definition already
-# carries," not "zero axioms," or almost every real candidate would be rejected. Callers
-# whose task's true definition has a different (or empty) axiom footprint should pass their
-# own `baseline_axioms`.
+# when a computable path also exists. This pattern is general to Mathlib-based definitions,
+# not particular to simple/computable ones -- abstract and infinite-carrier objects route
+# through the same Quotient/Classical machinery at least as often. Empirically confirmed only
+# for this project's own pinned `tau` so far (an easy, decidable-fact-rich object -- see
+# docs/repo_audit.md and this task's own verification run): `#print axioms tau` on the true,
+# fully computable definition reports exactly this set, NOT the empty set, so "no new axioms"
+# has to mean "no axioms beyond what any ordinary Mathlib definition already carries," not
+# "zero axioms," or almost every real candidate would be rejected. Not yet confirmed against a
+# proof-heavy true definition, where the *facts* also being proof-based (not just the
+# definition, per reward-structure design §2.3) could plausibly widen the baseline further.
+# Callers whose task's true definition has a different (or empty) axiom footprint should pass
+# their own `baseline_axioms`.
 STANDARD_MATHLIB_AXIOMS: frozenset[str] = frozenset({"propext", "Classical.choice", "Quot.sound"})
 
 _AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]")

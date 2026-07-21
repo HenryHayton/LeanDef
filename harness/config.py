@@ -19,5 +19,12 @@ MAX_TOTAL_MEMORY = 0.95
 # Timeouts (seconds). Every REPL call in this package is expected to pass one of these
 # explicitly rather than relying on lean_interact's own default of no timeout at all -- see
 # docs/repo_audit.md observation 2 for the hang this is meant to prevent.
+#
+# DEFAULT_CHECK_TIMEOUT is tuned for decidable facts (reward-structure design §2.1) and
+# decidable membership checks -- kernel computation, milliseconds. It is far too short for a
+# genuine global/proof-based fact (§2.3), which the design doc puts at "seconds to minutes"
+# per attempt. There is currently only this one tier; a prover-agent adjudication path, when
+# built, will need its own (larger, budget-shaped, not just a longer timeout) parameter rather
+# than reusing this constant. See docs/decidability_bias_survey.md.
 DEFAULT_CHECK_TIMEOUT = 60.0
 DEFAULT_WARMUP_TIMEOUT = 600.0  # 10 minutes: LeanREPLConfig/AutoLeanServer construction + imports

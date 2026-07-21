@@ -3,7 +3,11 @@
 A kernel-adjudicated verifier that checks whether a candidate Lean 4 definition denotes the
 *intended* mathematical object, not merely that it type-checks. Faithfulness is scored via a
 two-sided fact suite (things the true object satisfies) and mutant suites (typed plausible
-misreadings the true object must refute), all certified through the Lean kernel.
+misreadings the true object must refute), all certified through the Lean kernel — either by
+kernel computation (`decide`) or by a kernel-checked proof, depending on the fact. See
+`docs/design/reward_structure_2026-07-21.md` §2 for the three fact types (decidable casework,
+membership facts, and global theorem facts adjudicated by a prover agent); most mined objects
+are expected to lean heavily on the latter two, not on `decide` alone.
 
 ## Status
 
@@ -32,6 +36,12 @@ From `scripts/smoke_test.py` (run on a MacBook, Apple Silicon, with the Mathlib 
 already downloaded). Run under real memory pressure from other apps (~86% system memory
 used, ~2.4 GB free) — cold-import and unpickle times are likely inflated versus a quiet
 machine; re-run and update these numbers if they matter for planning later milestones.
+
+**Scope note:** every per-check row below is a `decide`/`#eval` call on a trivial arithmetic
+proposition, proving the REPL plumbing works — not a benchmark of "what a fact costs." Only
+decidable facts (reward-structure design §2.1) run this fast; membership facts that need a
+proof and global theorem facts (§2.2–§2.3) go through an LLM prover agent instead of `decide`
+and cost seconds to minutes, not milliseconds. No proof-based-fact timings exist yet.
 
 | Stage | Time |
 |---|---|

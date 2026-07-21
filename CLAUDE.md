@@ -23,10 +23,18 @@ mathematical object — the Lean kernel only checks type-correctness, not intent
 builds a kernel-adjudicated signal for definitional faithfulness.
 
 - A **task** = an informal dossier for a mathematical object + a **pinned Lean signature**
-  (name and type; body is the hole a candidate fills) + a **two-sided fact suite** (concrete
-  decidable statements checked via `decide`) + **mutant suites** (copies of the fact suite,
-  each encoding one typed plausible misreading — boundary shifted, side condition dropped,
-  inequality flipped — each containing at least one fact the true object refutes).
+  (name and type; body is the hole a candidate fills) + a **two-sided fact suite** + **mutant
+  suites** (copies of the fact suite, each encoding one typed plausible misreading — boundary
+  shifted, side condition dropped, inequality flipped — each containing at least one fact the
+  true object refutes). The fact suite is **not** decidable statements checked via `decide` in
+  general — see `docs/design/reward_structure_2026-07-21.md` §2 for the design of record:
+  three fact types (decidable casework, membership facts, global theorem facts), the latter
+  two adjudicated by a kernel-checking LLM prover agent wherever finiteness/decidability runs
+  out (e.g. a compactness-style property on an infinite carrier has almost no decidable facts
+  at all). `decide` dominates only for cheap, casework-rich objects like this repo's one
+  worked example (the divisor function τ, `archive/n1_tau/`) — that example is not
+  representative of the target task distribution and must not be read as "facts are decide
+  checks."
 - Scoring: (0) admissibility gate (compiles against pinned signature, no `sorry` — REPL
   reports this as a *warning*, not an error — no new axioms, no dependency tampering),
   (1) fidelity = fraction of true fact suite certified, (2) separation = fraction of mutant
@@ -34,8 +42,12 @@ builds a kernel-adjudicated signal for definitional faithfulness.
   mutants but fail the facts. Only the intended object scores well on both.
 - All checking runs through the **Lean REPL**, driven from Python via **LeanInteract**
   (`lean-interact` on PyPI, github.com/augustepoiroux/LeanInteract). Cold Mathlib import
-  takes ~1 minute; the REPL holds a warm environment in memory after that, so each
-  subsequent check takes seconds. The REPL can pickle a warmed environment to `.olean` for
+  takes ~1 minute; the REPL holds a warm environment in memory after that. Per-check cost
+  after that point depends entirely on the fact's adjudication mechanism, not on the REPL
+  being warm: decidable facts are milliseconds (kernel computation only), while global/
+  membership facts requiring a genuine proof search go through the prover agent and cost
+  seconds to minutes, per fact, with a real chance of UNKNOWN (neither direction proved in
+  budget) rather than a fast answer. The REPL can pickle a warmed environment to `.olean` for
   fast reload.
 - CPU-only for now. No model training, no GPU code, no data mining yet.
 
