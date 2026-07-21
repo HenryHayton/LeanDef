@@ -22,6 +22,7 @@ from enum import Enum
 
 from lean_interact import AutoLeanServer, Command
 
+from harness import config as cfg
 from harness.repl import run_checked
 from harness.results import CheckStatus
 from harness.signature import PinnedSignature
@@ -103,7 +104,7 @@ def check_admissibility(
     scope here; this task asked for a gate that fails closed, not a permissive one.
     """
     baseline_axioms = baseline_axioms if baseline_axioms is not None else STANDARD_MATHLIB_AXIOMS
-    timeout = timeout if timeout is not None else 60.0
+    timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
 
     if splice_response is not None:
         if splice_response.has_errors():

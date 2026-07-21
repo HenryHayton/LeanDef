@@ -131,7 +131,7 @@ def run_checked(
     warm state. Recovering full context (re-import, re-splice) after a mid-run crash is not
     implemented; out of scope for this task.
     """
-    timeout = timeout if timeout is not None else cfg.DEFAULT_CHECK_TIMEOUT
+    timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
     attempts_left = 1 + max(retries, 0)
     last_detail = ""
 

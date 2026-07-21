@@ -13,7 +13,7 @@ bare-Lean tests in `test_lean_repl.py`.
 
 from lean_interact import Command
 
-from harness import PinnedSignature, score_candidate, score_spliced_candidate
+from harness import Fact, PinnedSignature, score_candidate, score_spliced_candidate
 from harness.admissibility import AdmissibilityFailure, check_admissibility
 from harness.repl import run_checked
 from harness.results import CheckStatus
@@ -21,9 +21,9 @@ from harness.results import CheckStatus
 DOUBLE = PinnedSignature(name="double", type_sig="Nat → Nat")
 TRUE_BODY = "fun n => 2 * n"
 FACTS = [
-    "example : double 1 = 2 := by decide",
-    "example : double 2 = 4 := by decide",
-    "example : double 5 = 10 := by decide",
+    Fact(id="double_1", type="casework", mechanism="decide", statement="example : double 1 = 2 := by decide"),
+    Fact(id="double_2", type="casework", mechanism="decide", statement="example : double 2 = 4 := by decide"),
+    Fact(id="double_5", type="casework", mechanism="decide", statement="example : double 5 = 10 := by decide"),
 ]
 
 # `env=None` starts a fresh, isolated session per test -- nothing needs importing first for

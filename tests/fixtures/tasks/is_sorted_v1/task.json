@@ -1,0 +1,99 @@
+{
+  "task_id": "is_sorted_v1",
+  "schema_version": "1",
+  "signature": {
+    "name": "isSorted",
+    "type": "List Nat -> Bool",
+    "imports": []
+  },
+  "domain": {
+    "constraint": "True",
+    "conventions": [
+      {
+        "point": "[]",
+        "statement": "isSorted [] = true",
+        "note": "the empty list is vacuously sorted"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "facts": [
+    {
+      "id": "casework_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "isSorted [] = true",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task",
+        "validation_run_id": "fixture-v1"
+      }
+    },
+    {
+      "id": "casework_ascending",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "isSorted [1, 2, 3] = true",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task",
+        "validation_run_id": "fixture-v1"
+      }
+    },
+    {
+      "id": "casework_descending",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "isSorted [3, 1, 2] = false",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task",
+        "validation_run_id": "fixture-v1"
+      }
+    },
+    {
+      "id": "membership_accept_ascending",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "isSorted [1, 2, 3] = true",
+      "instance": "[1, 2, 3]",
+      "polarity": "accept",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task",
+        "validation_run_id": "fixture-v1"
+      }
+    },
+    {
+      "id": "membership_reject_adjacent_swap",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "isSorted [2, 1, 3] = false",
+      "instance": "[2, 1, 3]",
+      "polarity": "reject",
+      "violated_property": "ascending order violated between index 0 and 1",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task",
+        "validation_run_id": "fixture-v1"
+      }
+    },
+    {
+      "id": "global_singleton_or_reverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "forall l : List Nat, isSorted l = true -> l.length <= 1 -> isSorted l.reverse = true",
+      "provenance": {
+        "note": "hand-authored for the schema validator fixture, not a real task -- not proved, this fixture only exercises schema shape",
+        "validation_run_id": "fixture-v1"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "prover_budget": null,
+  "provenance": {
+    "source": "fresh",
+    "dossier_generator": "hand-authored-fixture",
+    "validation_run_id": "fixture-v1",
+    "review_status": "human_reviewed"
+  }
+}
