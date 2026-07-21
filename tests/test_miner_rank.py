@@ -1,19 +1,48 @@
-"""Unit tests for miner.rank -- scoring and curation, on synthetic VerifiedDef instances (no
-REPL, no real Mathlib data, no real curation.yaml on disk unless a test says so)."""
+"""Unit tests for miner.rank -- gates-then-preference-score selection and curation, on
+synthetic VerifiedDef instances (no REPL, no real Mathlib data, no real curation.yaml on disk
+unless a test says so)."""
 
+from miner.gates import GateConfig
 from miner.rank import CurationEntry, build_manifest, load_curation
 from miner.verify import VerifiedDef
 
+_ANTI_PLUMBING_PATTERNS = [
+    r"(?i)aux\d*$",
+    r"(?i)^aux",
+    r"Impl$",
+    r"(?:^|\.)go$",
+    r"TR$",
+    r"(?i)decEq$",
+    r"(?i)beq$",
+]
+
+
+def _gate_config(**overrides) -> GateConfig:
+    defaults = dict(
+        mention_floor=30,
+        length_min=40,
+        length_max=500,
+        docstring_min_length=20,
+        vocabulary_modules=["Data/Nat", "Data/List", "Data/Finset", "Logic"],
+        anti_plumbing_patterns=_ANTI_PLUMBING_PATTERNS,
+    )
+    defaults.update(overrides)
+    return GateConfig(**defaults)
+
 
 def _verified(name: str, **overrides) -> VerifiedDef:
+    """Passes all six gates by default: substantial docstring, body within the length band,
+    mention count at the floor, an ordinary name, no exotic dependencies, and a casework-rich
+    supply tier (ℕ -> ℕ, executable, decidable-equal output)."""
     defaults = dict(
         name=name,
         module_path="Test.lean",
-        source_text=f"def {name} (n : Nat) : Nat := n",
-        docstring=None,
-        mention_count=0,
+        source_text=f"def {name} (n : Nat) : Nat := n + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1",
+        docstring="A perfectly ordinary docstring describing what this computes in full.",
+        mention_count=30,
         included=True,
         elaborates=True,
+        binder_groups=[],
         explicit_arg_types=["ℕ"],
         return_type="ℕ",
         executable=True,
@@ -26,18 +55,62 @@ def _verified(name: str, **overrides) -> VerifiedDef:
     return VerifiedDef(**defaults)
 
 
+def _build(verified, **kwargs):
+    kwargs.setdefault("declaration_index", {})
+    kwargs.setdefault("gate_config", _gate_config())
+    return build_manifest(verified, **kwargs)
+
+
 def _record_for(records, name):
     return next(r for r in records if r.name == name)
+
+
+# --- gates, at the build_manifest integration level (see tests/test_miner_gates.py for the
+# individual-gate unit tests) ---
+
+
+def test_gate_failure_excludes_and_records_which_gates_fired():
+    verified = [_verified("Foo.a", mention_count=5)]  # fails the mention floor only
+    records = _build(verified, top_n=10)
+    record = _record_for(records, "Foo.a")
+    assert record.included is False
+    assert record.gates_failed == ["mention_floor"]
+    assert "mention_floor" in record.exclusion_reason
+    assert record.rank is None
+
+
+def test_gate_survivor_is_ranked_normally():
+    verified = [_verified("Foo.a")]
+    records = _build(verified, top_n=10)
+    record = _record_for(records, "Foo.a")
+    assert record.included is True
+    assert record.gates_failed == []
+    assert record.rank == 1
+
+
+def test_gate_excluded_candidate_does_not_consume_a_rank_slot():
+    verified = [_verified("Foo.gated", mention_count=5), _verified("Foo.eligible")]
+    records = _build(verified, top_n=10)
+    assert _record_for(records, "Foo.gated").rank is None
+    assert _record_for(records, "Foo.eligible").rank == 1
+
+
+def test_gate_excluded_record_still_carries_richness_and_score_for_auditability():
+    verified = [_verified("Foo.a", mention_count=5)]
+    records = _build(verified, top_n=10)
+    record = _record_for(records, "Foo.a")
+    assert record.richness is not None
+    assert record.score is not None
 
 
 # --- curation: exclude ---
 
 
 def test_exclude_removes_from_included_set_and_records_reason():
-    verified = [_verified("Foo.a", mention_count=20), _verified("Foo.b", mention_count=1)]
+    verified = [_verified("Foo.a"), _verified("Foo.b")]
     curation = [CurationEntry(name="Foo.a", action="exclude", reason="internal helper")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build(verified, top_n=10, curation=curation)
 
     excluded = _record_for(records, "Foo.a")
     assert excluded.included is False
@@ -54,12 +127,13 @@ def test_exclude_removes_from_included_set_and_records_reason():
 def test_excluded_record_still_carries_its_proxies_and_score():
     """Excluding shouldn't throw away the mechanical data -- just the inclusion decision --
     so a reviewer can still see why it scored the way it did."""
-    verified = [_verified("Foo.a", mention_count=20)]
+    verified = [_verified("Foo.a")]
     curation = [CurationEntry(name="Foo.a", action="exclude", reason="internal helper")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build(verified, top_n=10, curation=curation)
     excluded = _record_for(records, "Foo.a")
     assert excluded.proxies is not None
+    assert excluded.richness is not None
     assert excluded.score is not None
 
 
@@ -67,40 +141,40 @@ def test_excluded_record_still_carries_its_proxies_and_score():
 
 
 def test_demote_ranks_below_a_higher_scoring_undemoted_peer():
-    # Both stay in the same (THIN) global tier -- mention_count 1 vs 4 -- so the pre-demote
-    # score gap is small (just the log1p in-degree term), well within DEMOTE_PENALTY's reach.
-    # A bigger gap (e.g. crossing into the RICH tier) would swamp the penalty and not test
-    # what this case is meant to test.
-    verified = [_verified("Foo.strong", mention_count=4), _verified("Foo.weak", mention_count=1)]
+    # "strong" has one extra comparison operator over "weak" -- a richness gap of exactly
+    # RICHNESS_WEIGHT (10), comfortably inside DEMOTE_PENALTY's reach (15). A bigger richness
+    # gap would swamp the penalty and not test what this case is meant to test.
+    strong = _verified("Foo.strong", source_text="def strong (n : Nat) : Nat := n + 1 + 1 + 1 + 1 + 1 ≠ 1")
+    weak = _verified("Foo.weak")
     curation = [CurationEntry(name="Foo.strong", action="demote", reason="near-duplicate")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build([strong, weak], top_n=10, curation=curation)
 
-    strong = _record_for(records, "Foo.strong")
-    weak = _record_for(records, "Foo.weak")
-    assert weak.rank < strong.rank
-    assert strong.curation_applied == {"action": "demote", "reason": "near-duplicate"}
+    strong_record = _record_for(records, "Foo.strong")
+    weak_record = _record_for(records, "Foo.weak")
+    assert weak_record.rank < strong_record.rank
+    assert strong_record.curation_applied == {"action": "demote", "reason": "near-duplicate"}
 
 
 def test_demote_does_not_alter_the_recorded_score_total():
     """The penalty is sort-key-only -- the stored score must stay the true, unpenalized
     value so the manifest remains auditable (a demoted item's score should match what an
     identical undemoted item would get)."""
-    demoted = [_verified("Foo.a", mention_count=5)]
-    plain = [_verified("Foo.a", mention_count=5)]
+    demoted = [_verified("Foo.a")]
+    plain = [_verified("Foo.a")]
     curation = [CurationEntry(name="Foo.a", action="demote", reason="reason")]
 
-    demoted_records = build_manifest(demoted, top_n=10, curation=curation)
-    plain_records = build_manifest(plain, top_n=10, curation=None)
+    demoted_records = _build(demoted, top_n=10, curation=curation)
+    plain_records = _build(plain, top_n=10, curation=None)
 
     assert _record_for(demoted_records, "Foo.a").score.total == _record_for(plain_records, "Foo.a").score.total
 
 
 def test_demote_can_still_survive_to_be_included_if_score_is_high_enough():
-    verified = [_verified("Foo.only", mention_count=20)]
+    verified = [_verified("Foo.only")]
     curation = [CurationEntry(name="Foo.only", action="demote", reason="reason")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build(verified, top_n=10, curation=curation)
     assert _record_for(records, "Foo.only").included is True
 
 
@@ -108,11 +182,11 @@ def test_demote_can_still_survive_to_be_included_if_score_is_high_enough():
 
 
 def test_note_leaves_ranking_and_inclusion_untouched_but_records_reason():
-    verified = [_verified("Foo.a", mention_count=20), _verified("Foo.b", mention_count=1)]
-    plain_records = build_manifest(verified, top_n=10, curation=None)
+    verified = [_verified("Foo.a"), _verified("Foo.b")]
+    plain_records = _build(verified, top_n=10, curation=None)
 
     curation = [CurationEntry(name="Foo.a", action="note", reason="near-duplicate of Foo.b")]
-    noted_records = build_manifest(verified, top_n=10, curation=curation)
+    noted_records = _build(verified, top_n=10, curation=curation)
 
     assert _record_for(noted_records, "Foo.a").rank == _record_for(plain_records, "Foo.a").rank
     assert _record_for(noted_records, "Foo.a").included == _record_for(plain_records, "Foo.a").included
@@ -123,10 +197,10 @@ def test_note_leaves_ranking_and_inclusion_untouched_but_records_reason():
 
 
 def test_uncurated_records_have_no_curation_applied():
-    verified = [_verified("Foo.a", mention_count=20)]
+    verified = [_verified("Foo.a")]
     curation = [CurationEntry(name="Foo.other", action="note", reason="unrelated")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build(verified, top_n=10, curation=curation)
     assert _record_for(records, "Foo.a").curation_applied is None
 
 
@@ -134,7 +208,7 @@ def test_curation_applied_recorded_even_for_verification_failures():
     verified = [_verified("Foo.a", included=False, exclusion_reason="does not elaborate")]
     curation = [CurationEntry(name="Foo.a", action="note", reason="known issue")]
 
-    records = build_manifest(verified, top_n=10, curation=curation)
+    records = _build(verified, top_n=10, curation=curation)
     record = _record_for(records, "Foo.a")
     assert record.curation_applied == {"action": "note", "reason": "known issue"}
     assert record.exclusion_reason == "does not elaborate"  # note doesn't override the real reason

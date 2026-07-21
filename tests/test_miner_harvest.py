@@ -40,13 +40,22 @@ def test_harvest_over_single_module_produces_valid_manifest(tmp_path):
     assert dist_record.verified.output_decidable_eq is True
     assert dist_record.verified.return_type.strip() in ("ℕ", "Nat")
     assert dist_record.proxies is not None
+    assert dist_record.richness is not None
     assert dist_record.score is not None
-    assert dist_record.rank == 1
-    assert dist_record.included is True  # the only candidate; trivially inside top_n=10
+    # Nat.dist's body (`n - m + (m - n)`) is short enough to fail the length-band gate under
+    # the batch-2 selection redesign (docs/design/definition_selection_2026-07-21.md §3b) --
+    # expected, not a regression: this is exactly the one-line-arithmetic shape that gate
+    # exists to screen out. (It also fails the mention floor here, since the scratch root
+    # this test copies Dist.lean into has nothing else mentioning it -- irrelevant to what
+    # this test checks, which is that the pipeline runs end-to-end and gate exclusion is
+    # recorded correctly, not this candidate's real-corpus mention count.)
+    assert "length_band" in dist_record.gates_failed
+    assert dist_record.included is False
+    assert dist_record.rank is None
 
     assert output_path.exists()
     lines = output_path.read_text(encoding="utf-8").strip().splitlines()
     assert len(lines) == len(records)
     for line in lines:
         payload = json.loads(line)
-        assert {"name", "module_path", "included", "exclusion_reason", "verified"} <= payload.keys()
+        assert {"name", "module_path", "included", "exclusion_reason", "gates_failed", "verified"} <= payload.keys()

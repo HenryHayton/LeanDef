@@ -233,10 +233,17 @@ def scan_module(path: Path, mathlib_root: Path) -> list[ScanHit]:
 
 
 def scan_all(target_dirs: list[Path], mathlib_root: Path) -> list[ScanHit]:
-    """Scan every `.lean` file under each directory in `target_dirs` (recursively)."""
+    """Scan every `.lean` file under each entry in `target_dirs`. An entry may be a directory
+    (scanned recursively) or a single `.lean` file (scanned directly) -- batch 2's widened
+    `TARGET_MODULES` (docs/design/definition_selection_2026-07-21.md §6) deliberately mixes
+    both, since several "basics" selections are individual files (e.g. `Algebra/Group/Defs.lean`)
+    rather than whole subtrees."""
     hits: list[ScanHit] = []
-    for target_dir in target_dirs:
-        for path in sorted(target_dir.rglob("*.lean")):
+    for target in target_dirs:
+        if target.is_file():
+            hits.extend(scan_module(target, mathlib_root))
+            continue
+        for path in sorted(target.rglob("*.lean")):
             hits.extend(scan_module(path, mathlib_root))
     return hits
 

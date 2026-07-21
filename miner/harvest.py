@@ -8,6 +8,8 @@ from pathlib import Path
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 from miner import config as miner_cfg
+from miner.depindex import build_declaration_index
+from miner.gates import GateConfig
 from miner.rank import DEFAULT_CURATION_PATH, ManifestRecord, build_manifest, load_curation, write_manifest
 from miner.scan import ScanHit, scan_all, scan_theorem_statements
 from miner.verify import verify_all_with_recovery
@@ -54,8 +56,9 @@ def compute_theorem_mention_counts(hits: list[ScanHit], target_dirs: list[Path])
     and `miner.scan.scan_theorem_statements`).
     """
     statement_texts: list[str] = []
-    for target_dir in target_dirs:
-        for path in sorted(target_dir.rglob("*.lean")):
+    for target in target_dirs:
+        paths = [target] if target.is_file() else sorted(target.rglob("*.lean"))
+        for path in paths:
             statement_texts.extend(scan_theorem_statements(path.read_text(encoding="utf-8")))
 
     return {hit.name: sum(1 for s in statement_texts if hit.name in s) for hit in hits}
@@ -68,6 +71,7 @@ def harvest(
     top_n: int = 100,
     verify_timeout: float | None = None,
     curation_path: Path | None = None,
+    gate_config: GateConfig | None = None,
 ) -> list[ManifestRecord]:
     """Run the full stage-1 pipeline and write the manifest. Returns the records too, so
     callers (including tests) don't have to re-read the file they just wrote.
@@ -80,15 +84,31 @@ def harvest(
 
     `curation_path` defaults to the committed `miner/curation.yaml` (see `miner.rank`); pass
     an explicit path (or a path to a nonexistent file) to run without the real overrides.
+
+    `gate_config` defaults to the config-module thresholds (see `miner.config`); pass an
+    explicit `GateConfig` to override for testing.
     """
     mathlib_root = mathlib_root if mathlib_root is not None else miner_cfg.MATHLIB_ROOT
     target_dirs = target_dirs if target_dirs is not None else miner_cfg.target_dirs(mathlib_root)
     output_path = output_path if output_path is not None else DEFAULT_OUTPUT_PATH
     curation_path = curation_path if curation_path is not None else DEFAULT_CURATION_PATH
+    gate_config = (
+        gate_config
+        if gate_config is not None
+        else GateConfig(
+            mention_floor=miner_cfg.MENTION_FLOOR,
+            length_min=miner_cfg.LENGTH_MIN,
+            length_max=miner_cfg.LENGTH_MAX,
+            docstring_min_length=miner_cfg.DOCSTRING_MIN_LENGTH,
+            vocabulary_modules=miner_cfg.COMMON_VOCABULARY_MODULES,
+            anti_plumbing_patterns=miner_cfg.ANTI_PLUMBING_PATTERNS,
+        )
+    )
 
     hits = scan_all(target_dirs, mathlib_root)
     compute_mention_counts(hits, mathlib_root)
     theorem_counts = compute_theorem_mention_counts(hits, target_dirs)
+    declaration_index = build_declaration_index(mathlib_root)
 
     server, base_import = get_warm_environment()
     if base_import.status is not CheckStatus.PASSED:
@@ -97,7 +117,14 @@ def harvest(
     verified = verify_all_with_recovery(server, base_import.env, hits, timeout=verify_timeout)
 
     curation = load_curation(curation_path)
-    records = build_manifest(verified, theorem_mention_counts=theorem_counts, top_n=top_n, curation=curation)
+    records = build_manifest(
+        verified,
+        declaration_index=declaration_index,
+        gate_config=gate_config,
+        theorem_mention_counts=theorem_counts,
+        top_n=top_n,
+        curation=curation,
+    )
     write_manifest(records, output_path)
     return records
 
