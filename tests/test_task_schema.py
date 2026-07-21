@@ -175,6 +175,20 @@ def test_missing_axiom_baseline_fails(valid_data):
         validate_task_data(valid_data)
 
 
+def test_duplicated_axiom_baseline_validates_and_normalizes(tmp_path, valid_data):
+    """Duplicates don't fail validation -- axiom_baseline is a set in spirit, and
+    validate_task_dir normalizes (sorts, deduplicates) it rather than rejecting the source
+    file for something that doesn't affect gate behaviour."""
+    valid_data["axiom_baseline"] = ["Quot.sound", "propext", "propext", "Classical.choice"]
+    task_dir = tmp_path / "dup_axioms"
+    task_dir.mkdir()
+    (task_dir / "task.json").write_text(json.dumps(valid_data))
+    (task_dir / "dossier.md").write_text((FIXTURE_DIR / "dossier.md").read_text())
+
+    validated = validate_task_dir(task_dir)
+    assert validated.data["axiom_baseline"] == ["Classical.choice", "Quot.sound", "propext"]
+
+
 def test_missing_signature_field_fails(valid_data):
     del valid_data["signature"]["type"]
     with pytest.raises(TaskSchemaError, match="type"):

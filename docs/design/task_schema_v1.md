@@ -100,7 +100,8 @@ A task is shippable only with a recorded validation run demonstrating:
 1. every `decide` fact executed TRUE against the ground-truth definition;
 2. every `proof` fact proved of the ground-truth definition under the
    production budget;
-3. every fact in-domain per the domain validation rule;
+3. every fact in-domain per the domain validation rule, and every
+   membership-fact instance elaborates in the pinned environment;
 4. dossier/domain consistency check passed;
 5. the axiom baseline was computed, not assumed.
 Tasks without a manifest enter no dataset.

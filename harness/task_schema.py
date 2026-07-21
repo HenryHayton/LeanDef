@@ -245,7 +245,12 @@ def validate_task_data(data: dict) -> None:
 
 def validate_task_dir(task_dir: Path) -> ValidatedTask:
     """Load and validate a task directory per the schema's "Artifact shape": task.json must
-    parse as JSON and pass `validate_task_data`; a sibling dossier.md must exist."""
+    parse as JSON and pass `validate_task_data`; a sibling dossier.md must exist.
+
+    `axiom_baseline` is normalized (sorted, deduplicated) on the returned `ValidatedTask.data`
+    -- order and duplicates in the source file don't affect gate behaviour (subset-of-baseline
+    checks don't care about either), so this canonicalizes rather than rejects them.
+    """
     task_dir = Path(task_dir)
     task_json_path = task_dir / "task.json"
     dossier_path = task_dir / "dossier.md"
@@ -259,4 +264,5 @@ def validate_task_dir(task_dir: Path) -> ValidatedTask:
         raise TaskSchemaError(f"{task_json_path}: invalid JSON: {e}") from e
 
     validate_task_data(data)
+    data["axiom_baseline"] = sorted(set(data["axiom_baseline"]))
     return ValidatedTask(task_dir=task_dir, data=data)
