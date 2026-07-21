@@ -5,7 +5,6 @@ end, and records timings for the README "Timings" section. Run with:
 """
 
 import time
-from pathlib import Path
 
 import psutil
 from lean_interact import (
@@ -18,14 +17,11 @@ from lean_interact import (
 )
 from lean_interact.utils import get_total_memory_usage
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-LEAN_PROJECT_DIR = REPO_ROOT / "lean"
-PICKLE_DIR = REPO_ROOT / "pickles"
+from harness import config as cfg
 
-# AutoLeanServer refuses to run above this fraction of system-wide memory usage (default
-# 0.8) to protect against OOM. Raised here since dev laptops often sit well above 80% used
-# from unrelated apps; Mathlib import itself still needs real headroom to succeed.
-MAX_TOTAL_MEMORY = 0.95
+LEAN_PROJECT_DIR = cfg.LEAN_PROJECT_DIR
+PICKLE_DIR = cfg.REPO_ROOT / "pickles"
+MAX_TOTAL_MEMORY = cfg.MAX_TOTAL_MEMORY
 
 timings: dict[str, float] = {}
 
