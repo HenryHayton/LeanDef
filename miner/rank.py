@@ -1,12 +1,18 @@
 """Gates-then-preference-score selection and manifest emission (design doc
-`docs/design/definition_selection_2026-07-21.md`).
+`docs/design/definition_selection_2026-07-21.md`, recalibrated 22 July 2026).
 
 Replaces miner stage 1's single weighted score (quality/in-degree/dependency-footprint) with
-two mechanisms that cannot compensate for one another: `miner.gates`' six hard eligibility
-gates define the includable set (every exclusion records which gate(s) fired); a small
-preference score, dominated by structural richness (`miner.richness`), orders only what
-survives the gates. Every component is stored in the manifest record alongside the final
-score -- never just a number with no way to audit it.
+two mechanisms that cannot compensate for one another: `miner.gates`' hard eligibility gates
+define the includable set (every exclusion records which gate(s) fired); a small preference
+score, dominated by structural richness (`miner.richness`), orders only what survives the
+gates. Every component is stored in the manifest record alongside the final score -- never
+just a number with no way to audit it.
+
+**Two-population manifest (22 July 2026 revision, item (c)):** there is no top-N cutoff. Every
+verified candidate ends up either `eligible` (passed every gate, ranked by the preference
+score, in full) or not (`eligible=False`, with `exclusion_reason` and, where applicable,
+`gates_failed` explaining why). How many of the ranked eligible set to consume is a stage-2
+decision, not a mining parameter -- nothing here is "outranked."
 """
 
 import json
@@ -20,6 +26,7 @@ import yaml
 from miner.gates import GateConfig, evaluate_gates
 from miner.proxies import SupplyProxies, SupplyTier, compute_proxies
 from miner.richness import RichnessComponents, compute_richness
+from miner.shape import classify_return_shape
 from miner.verify import VerifiedDef
 
 _TIER_VALUE = {SupplyTier.NONE: 0, SupplyTier.THIN: 1, SupplyTier.RICH: 2}
@@ -112,7 +119,9 @@ class ScoreComponents:
     total: float
 
 
-def score_definition(richness: RichnessComponents, docstring_substance: DocstringSubstance, proxies: SupplyProxies) -> ScoreComponents:
+def score_definition(
+    richness: RichnessComponents, docstring_substance: DocstringSubstance, proxies: SupplyProxies
+) -> ScoreComponents:
     tiers = (proxies.casework_tier, proxies.membership_tier, proxies.global_tier)
     breadth = sum(1 for t in tiers if t is not SupplyTier.NONE)
     total = RICHNESS_WEIGHT * richness.total + DOCSTRING_WEIGHT * docstring_substance.score + BREADTH_WEIGHT * breadth
@@ -126,20 +135,21 @@ def score_definition(richness: RichnessComponents, docstring_substance: Docstrin
 
 @dataclass(frozen=True)
 class ManifestRecord:
-    """One line of the harvest manifest. `included` means "passed every gate and was selected
-    into the final top-N set," not merely "passed verification" -- a verified candidate can be
-    `included=False` either because it failed one or more gates (`gates_failed` non-empty) or
-    because it was outranked among gate-survivors (`gates_failed` empty, `exclusion_reason`
-    names the rank cutoff instead). `curation_applied` is set whenever a `miner/curation.yaml`
-    entry matched this name, regardless of action -- including `note`, which otherwise leaves
-    the record untouched."""
+    """One line of the harvest manifest. The manifest is exactly two populations (22 July 2026
+    revision, item (c)): `eligible=True` means "passed every gate" -- ranked by the preference
+    score, in full, with no cutoff; `eligible=False` means a gate failed (`gates_failed`
+    non-empty) or curation excluded it (`exclusion_reason` names the reason, `gates_failed`
+    empty). There is no "outranked" state. `curation_applied` is set whenever a
+    `miner/curation.yaml` entry matched this name, regardless of action -- including `note`,
+    which otherwise leaves the record untouched."""
 
     name: str
     module_path: str
-    included: bool
+    eligible: bool
     exclusion_reason: str
     gates_failed: list[str]
-    rank: int | None  # 1-based rank among gate-eligible candidates; None if excluded
+    rank: int | None  # 1-based rank among the eligible population; None if not eligible
+    return_shape: str | None  # "value" | "prop" | "bundled"; None only for verification failures
     verified: VerifiedDef
     proxies: SupplyProxies | None
     richness: RichnessComponents | None
@@ -153,16 +163,16 @@ def build_manifest(
     declaration_index: dict[str, str],
     gate_config: GateConfig,
     theorem_mention_counts: dict[str, int] | None = None,
-    top_n: int = 100,
     curation: list[CurationEntry] | None = None,
 ) -> list[ManifestRecord]:
     """`curation` is a list of already-loaded `CurationEntry` (see `load_curation`) -- this
     function does no file I/O itself, so it stays trivially testable. Pass `None` (the
-    default) for no curation at all."""
+    default) for no curation at all. No `top_n`: every gate-survivor is eligible and ranked, in
+    full -- see the module docstring."""
     theorem_mention_counts = theorem_mention_counts or {}
     curation_by_name = {c.name: c for c in (curation or [])}
 
-    eligible: list[tuple[VerifiedDef, SupplyProxies, RichnessComponents, DocstringSubstance, ScoreComponents]] = []
+    eligible_pool: list[tuple[VerifiedDef, SupplyProxies, RichnessComponents, DocstringSubstance, ScoreComponents]] = []
     gate_excluded: list[ManifestRecord] = []
     failed_records: list[ManifestRecord] = []
 
@@ -172,10 +182,11 @@ def build_manifest(
                 ManifestRecord(
                     name=v.name,
                     module_path=v.module_path,
-                    included=False,
+                    eligible=False,
                     exclusion_reason=v.exclusion_reason,
                     gates_failed=[],
                     rank=None,
+                    return_shape=None,
                     verified=v,
                     proxies=None,
                     richness=None,
@@ -190,17 +201,19 @@ def build_manifest(
         richness = compute_richness(v)
         docstring_substance = compute_docstring_substance(v.docstring, gate_config.docstring_min_length)
         score = score_definition(richness, docstring_substance, proxies)
-        gates_failed = evaluate_gates(v, proxies, declaration_index, gate_config)
+        return_shape = classify_return_shape(v.return_type)
+        gates_failed = evaluate_gates(v, proxies, richness.total, declaration_index, gate_config)
 
         if gates_failed:
             gate_excluded.append(
                 ManifestRecord(
                     name=v.name,
                     module_path=v.module_path,
-                    included=False,
+                    eligible=False,
                     exclusion_reason=f"failed gate(s): {', '.join(gates_failed)}",
                     gates_failed=gates_failed,
                     rank=None,
+                    return_shape=return_shape,
                     verified=v,
                     proxies=proxies,
                     richness=richness,
@@ -211,24 +224,25 @@ def build_manifest(
             )
             continue
 
-        eligible.append((v, proxies, richness, docstring_substance, score))
+        eligible_pool.append((v, proxies, richness, docstring_substance, score))
 
-    # Curation, final pass: pull "exclude" entries out of the eligible pool entirely (they can
-    # never be included, whatever their score); "demote" and "note" stay in the pool, with
+    # Curation, final pass over the eligible pool: "exclude" entries are pulled out entirely
+    # (they can never be eligible, whatever their score); "demote" and "note" stay in, with
     # "demote" applying a sort-only penalty.
     curated_excluded: list[ManifestRecord] = []
     remaining: list[tuple[VerifiedDef, SupplyProxies, RichnessComponents, DocstringSubstance, ScoreComponents]] = []
-    for v, proxies, richness, docstring_substance, score in eligible:
+    for v, proxies, richness, docstring_substance, score in eligible_pool:
         entry = curation_by_name.get(v.name)
         if entry is not None and entry.action == "exclude":
             curated_excluded.append(
                 ManifestRecord(
                     name=v.name,
                     module_path=v.module_path,
-                    included=False,
+                    eligible=False,
                     exclusion_reason=entry.reason,
                     gates_failed=[],
                     rank=None,
+                    return_shape=classify_return_shape(v.return_type),
                     verified=v,
                     proxies=proxies,
                     richness=richness,
@@ -250,15 +264,15 @@ def build_manifest(
 
     records: list[ManifestRecord] = []
     for rank, (v, proxies, richness, docstring_substance, score) in enumerate(remaining, start=1):
-        in_top = rank <= top_n
         records.append(
             ManifestRecord(
                 name=v.name,
                 module_path=v.module_path,
-                included=in_top,
-                exclusion_reason="" if in_top else f"ranked {rank}, below top {top_n}",
+                eligible=True,
+                exclusion_reason="",
                 gates_failed=[],
                 rank=rank,
+                return_shape=classify_return_shape(v.return_type),
                 verified=v,
                 proxies=proxies,
                 richness=richness,

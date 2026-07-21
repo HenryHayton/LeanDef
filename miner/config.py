@@ -79,17 +79,19 @@ def target_dirs(mathlib_root: Path | None = None) -> list[Path]:
     return [mathlib_root / m for m in TARGET_MODULES]
 
 
-# --- Gate thresholds (design doc §3) ---
+# --- Gate thresholds (design doc §3, recalibrated 22 July 2026 after batch 2) ---
 
-# (a) Full-corpus mention floor. Applied against `mention_count` (the raw full-Mathlib-tree
-# text-occurrence count computed by `miner.harvest.compute_mention_counts` via `grep -r` over
-# the whole `mathlib_root`, independent of `TARGET_MODULES` scope) rather than
-# `theorem_mention_count` (which is scoped only to the scanned corpus, per that field's own
-# docstring, and is *not* "full-corpus" in the sense this gate needs). On the batch-1 data,
-# `mention_count < 30` alone excludes 89.5% of verified candidates -- flagged, not tuned away,
-# per this task's instruction to report pathological attrition and let it stand for a human to
-# read and adjust.
-MENTION_FLOOR = 30
+# (a) Full-corpus THEOREM-mention floor (recalibrated 22 July 2026 -- see the design doc's
+# "Revision: 22 July 2026" section for the full rationale). Retires the raw mention-count
+# floor: raw `mention_count` measures ubiquity, not the actual requirement (global-fact
+# supply), and batch 2 showed a floor tuned against the foundational corners' ubiquity
+# excludes 87.5% of a corpus deliberately widened into less-central territory (batch 2's
+# Finding A). `theorem_mention_count` (full-corpus, scanned once over all of Mathlib by
+# `miner.harvest.compute_theorem_mention_counts`) measures supply directly, so the floor can
+# be set low -- its only remaining job is confirming *some* supply exists, not selecting for
+# prominence. `mention_count` (the old raw metric) is retained as recorded metadata on
+# `VerifiedDef` only; nothing gates on it anymore.
+THEOREM_MENTION_FLOOR = 2
 
 # (b) Length band on the normalized definition body (see `miner.gates.normalize_body` for the
 # exact normalization: comments stripped, whitespace collapsed). Chosen by inspecting the
@@ -111,14 +113,21 @@ LENGTH_MAX = 500
 DOCSTRING_MIN_LENGTH = 20
 
 # (d) Dependency vocabulary tier (design §3d): a candidate's direct references
-# (`VerifiedDef.referenced_constants`) must all resolve -- via `miner.depindex`'s best-effort
-# name -> defining-module index over the full Mathlib tree -- to a module path starting with
-# one of these prefixes. Deliberately directory-level prefixes, not an exhaustive file list,
-# to keep this list itself small and auditable; a reference that resolves to no known module
-# (almost always textual noise from `referenced_constants`' own known limitation -- local
-# bound variables like `x`, `a_1` slipping through, see miner.verify's module docstring) does
-# not count against a candidate, since the gate's purpose is to catch exotic *infrastructure*,
-# not to penalize the extraction step's noise.
+# (`VerifiedDef.referenced_constants`, filtered per `miner.gates._looks_like_bound_variable` --
+# see that function's docstring for batch 2's Finding B and its fix) must all resolve -- via
+# `miner.depindex`'s best-effort name -> defining-module index over the full Mathlib tree --
+# to a module path starting with one of these prefixes. Deliberately directory-level prefixes,
+# not an exhaustive file list, to keep this list itself small and auditable; a reference that
+# resolves to no known module does not count against a candidate, since the gate's purpose is
+# to catch exotic *infrastructure*, not to penalize the extraction step's noise.
+#
+# Widened 22 July 2026 (design doc revision, item (d)): added `Data/Sym`, `Algebra/Polynomial`,
+# `Algebra/BigOperators`, `Algebra/GroupWithZero`, `Algebra/Field` -- batch 2 showed genuine
+# Combinatorics-territory candidates dying on `dependency_vocabulary` because their natural
+# dependencies (symmetric-power types, generating-function polynomials, big-operator sums)
+# simply weren't on a list tuned against the original five foundational corners. Expected to
+# keep growing empirically, corner by corner, as each batch's review reports this gate's
+# exclusions -- not a one-time correction.
 COMMON_VOCABULARY_MODULES: list[str] = [
     "Data/Nat",
     "Data/Int",
@@ -126,6 +135,7 @@ COMMON_VOCABULARY_MODULES: list[str] = [
     "Data/Finset",
     "Data/Set",
     "Data/Multiset",
+    "Data/Sym",
     "Data/Option",
     "Data/Prod",
     "Data/Sigma",
@@ -134,8 +144,12 @@ COMMON_VOCABULARY_MODULES: list[str] = [
     "Logic",
     "Order",
     "Algebra/Group",
+    "Algebra/GroupWithZero",
     "Algebra/Order",
     "Algebra/Ring",
+    "Algebra/Field",
+    "Algebra/BigOperators",
+    "Algebra/Polynomial",
 ]
 
 # (e) Anti-plumbing name patterns (design §3e): a candidate whose bare name (last dotted
@@ -153,3 +167,13 @@ ANTI_PLUMBING_PATTERNS: list[str] = [
     r"(?i)decEq$",  # e.g. instDecidableEqFoo, fooDecEq -- decidable-equality machinery
     r"(?i)beq$",  # e.g. fooBeq, instBEqFoo -- boolean-equality machinery
 ]
+
+# (g) Richness floor (new 22 July 2026, design doc revision item (b)): `richness_total >= this`
+# is now a hard gate, not only the dominant preference-score term (design §4.1). Introduced
+# only once `miner.richness`'s `=>`/`:=` counting bug (batch 2's §5 item 3) was fixed --
+# gating on a miscounted metric would have reintroduced exactly the kind of
+# measurement-error-masquerading-as-selection-decision the whole design exists to prevent.
+# Set to the lowest possible value (1) since its job is only to catch the richness-zero
+# population (pure delegations/projections) the length band demonstrably misses -- batch 2
+# included 23 richness-zero candidates (44% of its eligible set) despite the length band.
+RICHNESS_FLOOR = 1

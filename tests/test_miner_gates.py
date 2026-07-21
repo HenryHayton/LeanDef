@@ -1,8 +1,9 @@
-"""Unit tests for miner.gates -- the six hard eligibility gates, on synthetic VerifiedDef/
+"""Unit tests for miner.gates -- the seven hard eligibility gates, on synthetic VerifiedDef/
 SupplyProxies instances. No REPL, no real Mathlib data."""
 
 from miner.gates import (
     GateConfig,
+    _looks_like_bound_variable,
     anti_plumbing_gate,
     bare_name,
     dependency_vocabulary_gate,
@@ -11,7 +12,8 @@ from miner.gates import (
     fact_supply_gate,
     length_band_gate,
     looks_like_prop_type,
-    mention_floor_gate,
+    richness_floor_gate,
+    theorem_mention_floor_gate,
     normalize_body,
 )
 from miner.proxies import SupplyProxies, SupplyTier
@@ -56,7 +58,7 @@ def _proxies(**overrides) -> SupplyProxies:
         membership_tier=SupplyTier.NONE,
         global_tier=SupplyTier.NONE,
         mention_count=100,
-        theorem_mention_count=None,
+        theorem_mention_count=5,
         enumerable_arg_count=1,
         is_predicate_shaped=False,
         classifies_structure=False,
@@ -67,12 +69,13 @@ def _proxies(**overrides) -> SupplyProxies:
 
 def _config(**overrides) -> GateConfig:
     defaults = dict(
-        mention_floor=30,
+        theorem_mention_floor=2,
         length_min=40,
         length_max=500,
         docstring_min_length=20,
         vocabulary_modules=["Data/Nat", "Data/List", "Data/Finset", "Logic"],
         anti_plumbing_patterns=_ANTI_PLUMBING_PATTERNS,
+        richness_floor=1,
     )
     defaults.update(overrides)
     return GateConfig(**defaults)
@@ -94,18 +97,22 @@ def test_bare_name_takes_last_dotted_component():
     assert bare_name("foo") == "foo"
 
 
-# --- (a) mention_floor_gate ---
+# --- (a) theorem_mention_floor_gate ---
 
 
-def test_mention_floor_gate_passes_at_or_above_floor():
-    v = _verified(mention_count=30)
-    assert mention_floor_gate(v, floor=30) is True
+def test_theorem_mention_floor_gate_passes_at_or_above_floor():
+    p = _proxies(theorem_mention_count=2)
+    assert theorem_mention_floor_gate(p, floor=2) is True
 
 
-def test_mention_floor_gate_fails_definition_mentioned_five_times():
-    """Explicit acceptance case: a definition mentioned 5 times must fail the mention floor."""
-    v = _verified(mention_count=5)
-    assert mention_floor_gate(v, floor=30) is False
+def test_theorem_mention_floor_gate_fails_below_floor():
+    p = _proxies(theorem_mention_count=1)
+    assert theorem_mention_floor_gate(p, floor=2) is False
+
+
+def test_theorem_mention_floor_gate_treats_none_as_zero():
+    p = _proxies(theorem_mention_count=None)
+    assert theorem_mention_floor_gate(p, floor=2) is False
 
 
 # --- (b) length_band_gate ---
@@ -145,6 +152,23 @@ def test_docstring_floor_gate_passes_substantial_docstring():
     assert docstring_floor_gate(v, min_length=20) is True
 
 
+# --- _looks_like_bound_variable (batch-2 Finding B fix) ---
+
+
+def test_looks_like_bound_variable_true_for_short_lowercase_bare_tokens():
+    assert _looks_like_bound_variable("i") is True
+    assert _looks_like_bound_variable("j") is True
+    assert _looks_like_bound_variable("xs") is True
+    assert _looks_like_bound_variable("a_1") is True  # len 3
+
+
+def test_looks_like_bound_variable_false_for_qualified_or_long_or_capitalized():
+    assert _looks_like_bound_variable("Nat.succ") is False  # qualified
+    assert _looks_like_bound_variable("DecidableEq") is False  # capitalized, long
+    assert _looks_like_bound_variable("Nat") is False  # capitalized
+    assert _looks_like_bound_variable("cast") is False  # len 4, too long
+
+
 # --- (d) dependency_vocabulary_gate ---
 
 
@@ -155,6 +179,7 @@ def test_dependency_vocabulary_gate_passes_when_all_resolve_in_vocabulary():
 
 
 def test_dependency_vocabulary_gate_fails_on_exotic_dependency():
+    """Acceptance case: a constructed fixture with a genuine exotic dependency still fails."""
     v = _verified(referenced_constants=["Nat.succ", "Analysis.Exotic.thing"])
     index = {
         "Nat.succ": "Data/Nat/Basic.lean",
@@ -169,6 +194,29 @@ def test_dependency_vocabulary_gate_ignores_unresolvable_references():
     v = _verified(referenced_constants=["x", "a_1", "Nat.succ"])
     index = {"Nat.succ": "Data/Nat/Basic.lean"}
     assert dependency_vocabulary_gate(v, index, ["Data/Nat"]) is True
+
+
+def test_dependency_vocabulary_gate_pairwise_fixture_passes_after_fix():
+    """Acceptance case (batch-2 Finding B): a Pairwise-shaped fixture, whose only
+    referenced_constants are its own bound variables `i`, `j`, must pass the gate even when
+    the declaration index happens to have unrelated real declarations bare-named `i`/`j` in
+    exotic modules -- exactly the collision that excluded `Pairwise` and `Set.Pairwise` in
+    batch 2."""
+    v = _verified(name="Pairwise", referenced_constants=["i", "j"])
+    index = {
+        "i": "Algebra/Homology/Factorizations/CM5a.lean",
+        "j": "AlgebraicGeometry/EllipticCurve/Weierstrass.lean",
+    }
+    assert dependency_vocabulary_gate(v, index, ["Data/Nat", "Logic"]) is True
+
+
+def test_dependency_vocabulary_gate_set_pairwise_fixture_passes_after_fix():
+    v = _verified(name="Set.Pairwise", referenced_constants=["x", "y"])
+    index = {
+        "x": "Analysis/SomeExoticFile.lean",
+        "y": "CategoryTheory/SomeExoticFile.lean",
+    }
+    assert dependency_vocabulary_gate(v, index, ["Data/Nat", "Logic"]) is True
 
 
 # --- (e) anti_plumbing_gate ---
@@ -225,6 +273,17 @@ def test_fact_supply_gate_passes_one_non_none_tier():
     assert fact_supply_gate(p) is True
 
 
+# --- (g) richness_floor_gate ---
+
+
+def test_richness_floor_gate_fails_pure_delegation():
+    assert richness_floor_gate(0, floor=1) is False
+
+
+def test_richness_floor_gate_passes_xor_shaped_richness():
+    assert richness_floor_gate(4, floor=1) is True
+
+
 # --- looks_like_prop_type ---
 
 
@@ -244,16 +303,27 @@ def test_looks_like_prop_type_false_for_plain_data_type():
 def test_evaluate_gates_empty_list_when_all_pass():
     v = _verified()
     p = _proxies()
-    assert evaluate_gates(v, p, declaration_index={}, config=_config()) == []
+    assert evaluate_gates(v, p, richness_total=4, declaration_index={}, config=_config()) == []
 
 
 def test_evaluate_gates_records_every_failing_gate_not_just_the_first():
     v = _verified(
         name="Nat.digitsAux1",  # fails anti_plumbing
-        mention_count=5,  # fails mention_floor
         source_text="def Prime (p : ℕ) := Irreducible p",  # fails length_band
         docstring=None,  # fails docstring_floor
     )
-    p = _proxies(casework_tier=SupplyTier.NONE, membership_tier=SupplyTier.NONE, global_tier=SupplyTier.NONE)
-    failed = evaluate_gates(v, p, declaration_index={}, config=_config())
-    assert set(failed) == {"mention_floor", "length_band", "docstring_floor", "anti_plumbing", "fact_supply"}
+    p = _proxies(
+        theorem_mention_count=0,  # fails theorem_mention_floor
+        casework_tier=SupplyTier.NONE,
+        membership_tier=SupplyTier.NONE,
+        global_tier=SupplyTier.NONE,
+    )
+    failed = evaluate_gates(v, p, richness_total=0, declaration_index={}, config=_config())
+    assert set(failed) == {
+        "theorem_mention_floor",
+        "length_band",
+        "docstring_floor",
+        "anti_plumbing",
+        "richness_floor",
+        "fact_supply",
+    }

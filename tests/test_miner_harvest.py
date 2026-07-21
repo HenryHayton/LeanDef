@@ -30,7 +30,6 @@ def test_harvest_over_single_module_produces_valid_manifest(tmp_path):
         target_dirs=[scan_dir],
         mathlib_root=scratch_root,
         output_path=output_path,
-        top_n=10,
     )
 
     assert len(records) >= 1
@@ -42,15 +41,16 @@ def test_harvest_over_single_module_produces_valid_manifest(tmp_path):
     assert dist_record.proxies is not None
     assert dist_record.richness is not None
     assert dist_record.score is not None
+    assert dist_record.return_shape == "value"
     # Nat.dist's body (`n - m + (m - n)`) is short enough to fail the length-band gate under
-    # the batch-2 selection redesign (docs/design/definition_selection_2026-07-21.md §3b) --
-    # expected, not a regression: this is exactly the one-line-arithmetic shape that gate
-    # exists to screen out. (It also fails the mention floor here, since the scratch root
-    # this test copies Dist.lean into has nothing else mentioning it -- irrelevant to what
-    # this test checks, which is that the pipeline runs end-to-end and gate exclusion is
-    # recorded correctly, not this candidate's real-corpus mention count.)
+    # the selection redesign (docs/design/definition_selection_2026-07-21.md §3b) -- expected,
+    # not a regression: this is exactly the one-line-arithmetic shape that gate exists to
+    # screen out. (It may also fail the theorem-mention floor here, since the scratch root
+    # this test copies Dist.lean into has no theorem statements to scan at all -- irrelevant
+    # to what this test checks, which is that the pipeline runs end-to-end and gate exclusion
+    # is recorded correctly, not this candidate's real-corpus supply.)
     assert "length_band" in dist_record.gates_failed
-    assert dist_record.included is False
+    assert dist_record.eligible is False
     assert dist_record.rank is None
 
     assert output_path.exists()
@@ -58,4 +58,4 @@ def test_harvest_over_single_module_produces_valid_manifest(tmp_path):
     assert len(lines) == len(records)
     for line in lines:
         payload = json.loads(line)
-        assert {"name", "module_path", "included", "exclusion_reason", "gates_failed", "verified"} <= payload.keys()
+        assert {"name", "module_path", "eligible", "exclusion_reason", "gates_failed", "verified"} <= payload.keys()

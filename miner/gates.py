@@ -60,11 +60,14 @@ def bare_name(name: str) -> str:
 # --- Individual gates -- each returns True if the candidate PASSES. ---
 
 
-def mention_floor_gate(v: VerifiedDef, floor: int) -> bool:
-    """(a) Full-corpus mentions >= floor. Applied to `mention_count` (the raw, full-Mathlib-
-    tree occurrence count), not `theorem_mention_count` (scoped only to the scanned corpus --
-    see `miner.config.MENTION_FLOOR`'s comment for why)."""
-    return v.mention_count >= floor
+def theorem_mention_floor_gate(proxies: SupplyProxies, floor: int) -> bool:
+    """(a) Full-corpus THEOREM-mention count >= floor (recalibrated 22 July 2026 -- see
+    `miner.config.THEOREM_MENTION_FLOOR`'s comment and the design doc's revision section).
+    Applied to `proxies.theorem_mention_count`, now always computed full-corpus by
+    `miner.harvest.compute_theorem_mention_counts`, not the raw `mention_count` (ubiquity,
+    retired as a gate input) that gated this position before."""
+    count = proxies.theorem_mention_count if proxies.theorem_mention_count is not None else 0
+    return count >= floor
 
 
 def length_band_gate(v: VerifiedDef, length_min: int, length_max: int) -> bool:
@@ -81,16 +84,35 @@ def docstring_floor_gate(v: VerifiedDef, min_length: int) -> bool:
     return len(_WHITESPACE_RE.sub(" ", v.docstring).strip()) >= min_length
 
 
+def _looks_like_bound_variable(token: str) -> bool:
+    """Batch 2's Finding B, fixed: a short (<=3 char), unqualified, lowercase-leading token in
+    `referenced_constants` is overwhelmingly a local bound variable that survived
+    `miner.verify`'s extraction (a known noise source -- see that module's docstring), not a
+    real declaration reference. Before this filter, such tokens were resolved against
+    `miner.depindex`'s full-Mathlib index anyway and could collide with an unrelated real
+    declaration that happens to share the same short bare name -- e.g. `Pairwise`'s own bound
+    variables `i`, `j` (from `∀ ⦃i j⦄, ...`) resolved to some unrelated file's `def i`/`def j`
+    and failed the gate for a dependency `Pairwise` never had. Quantified on the batch-2
+    corpus: of 430 `dependency_vocabulary` failures, 342 (79.5%) had at least one token of
+    exactly this shape, and 230 (53.5%) would have passed outright with it filtered -- this is
+    that filter. A genuine qualified reference (`Nat.succ`, `DecidableEq`) is never this shape,
+    so the filter costs no real detections."""
+    return "." not in token and len(token) <= 3 and token[:1].islower()
+
+
 def dependency_vocabulary_gate(
     v: VerifiedDef, declaration_index: dict[str, str], vocabulary_modules: list[str]
 ) -> bool:
     """(d) Every referenced constant that resolves to a known module must resolve to a module
-    under one of `vocabulary_modules` (directory-prefix match). A reference that resolves to
-    no module at all (common -- `referenced_constants` includes local bound-variable noise,
-    see `miner.verify`'s module docstring) does not count against the candidate: this gate's
-    job is to catch exotic *infrastructure*, not to penalize the extraction step's own known
-    imprecision."""
+    under one of `vocabulary_modules` (directory-prefix match). Bound-variable-shaped tokens
+    (`_looks_like_bound_variable`) are skipped before resolution -- see that function's
+    docstring for batch 2's Finding B. A reference that still resolves to no module at all
+    (e.g. a genuine Lean-core name not declared anywhere in Mathlib's own tree) does not count
+    against the candidate either: this gate's job is to catch exotic Mathlib *infrastructure*,
+    not to penalize either extraction noise or core-library references."""
     for ref in v.referenced_constants:
+        if _looks_like_bound_variable(ref):
+            continue
         module_path = declaration_index.get(ref)
         if module_path is None:
             continue
@@ -112,39 +134,51 @@ def fact_supply_gate(proxies: SupplyProxies) -> bool:
     )
 
 
+def richness_floor_gate(richness_total: int, floor: int) -> bool:
+    """(g) New 22 July 2026 (design doc revision item (b)): `richness_total >= floor`. Once
+    `miner.richness`'s `=>`/`:=` counting bug (batch 2 §5 item 3) was fixed, a richness-zero
+    definition is reliably a pure delegation or projection -- exactly the population the
+    length-band gate (b) was supposed to catch but demonstrably didn't (batch 2 included 23
+    richness-zero candidates, 44% of its eligible set, that cleared the length band easily)."""
+    return richness_total >= floor
+
+
 _GATE_NAMES = (
-    "mention_floor",
+    "theorem_mention_floor",
     "length_band",
     "docstring_floor",
     "dependency_vocabulary",
     "anti_plumbing",
+    "richness_floor",
     "fact_supply",
 )
 
 
 @dataclass(frozen=True)
 class GateConfig:
-    mention_floor: int
+    theorem_mention_floor: int
     length_min: int
     length_max: int
     docstring_min_length: int
     vocabulary_modules: list[str]
     anti_plumbing_patterns: list[str]
+    richness_floor: int
 
 
 def evaluate_gates(
     v: VerifiedDef,
     proxies: SupplyProxies,
+    richness_total: int,
     declaration_index: dict[str, str],
     config: GateConfig,
 ) -> list[str]:
-    """Evaluate all six gates and return the names of every gate that FAILED (empty list ==
-    passes all six, i.e. eligible). Every gate is always evaluated, even after an earlier one
+    """Evaluate all seven gates and return the names of every gate that FAILED (empty list ==
+    passes all seven, i.e. eligible). Every gate is always evaluated, even after an earlier one
     has already failed, so the manifest can record every reason a candidate was excluded, not
     just the first one found."""
     failed: list[str] = []
-    if not mention_floor_gate(v, config.mention_floor):
-        failed.append("mention_floor")
+    if not theorem_mention_floor_gate(proxies, config.theorem_mention_floor):
+        failed.append("theorem_mention_floor")
     if not length_band_gate(v, config.length_min, config.length_max):
         failed.append("length_band")
     if not docstring_floor_gate(v, config.docstring_min_length):
@@ -153,6 +187,8 @@ def evaluate_gates(
         failed.append("dependency_vocabulary")
     if not anti_plumbing_gate(v, config.anti_plumbing_patterns):
         failed.append("anti_plumbing")
+    if not richness_floor_gate(richness_total, config.richness_floor):
+        failed.append("richness_floor")
     if not fact_supply_gate(proxies):
         failed.append("fact_supply")
     return failed

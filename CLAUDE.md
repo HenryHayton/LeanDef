@@ -42,13 +42,17 @@ builds a kernel-adjudicated signal for definitional faithfulness.
   mutants but fail the facts. Only the intended object scores well on both.
 - Mining candidate definitions from Mathlib uses **gates-then-preference-score selection**,
   not a weighted sum: see `docs/design/definition_selection_2026-07-21.md` for the design of
-  record. Hard eligibility gates (mention floor, length band, docstring floor, dependency
-  vocabulary tier, anti-plumbing name patterns, non-`none` fact supply) define the includable
-  set; a small preference score dominated by structural richness (a proxy for how many
-  distinguishable ways a definition can be misread) orders only what survives the gates. This
-  supersedes miner stage 1's single weighted score of quality/in-degree/dependency-footprint,
-  which was found to select for fundamental, memorized-verbatim vocabulary rather than
-  content worth training or evaluating on.
+  record (and its 22 July 2026 revision section for the post-batch-2 recalibration). Hard
+  eligibility gates (theorem-mention floor, length band, docstring floor, dependency
+  vocabulary tier, anti-plumbing name patterns, richness floor, non-`none` fact supply) define
+  the includable set; a small preference score dominated by structural richness (a proxy for
+  how many distinguishable ways a definition can be misread) orders every gate-survivor — there
+  is no top-N cutoff; the manifest is exactly two populations, eligible (ranked, in full) and
+  excluded (with the gate(s) that fired), and how many tasks to draw from the ranked list is a
+  stage-2 consumption decision, not a mining parameter. This supersedes miner stage 1's single
+  weighted score of quality/in-degree/dependency-footprint, which was found to select for
+  fundamental, memorized-verbatim vocabulary rather than content worth training or evaluating
+  on.
 - All checking runs through the **Lean REPL**, driven from Python via **LeanInteract**
   (`lean-interact` on PyPI, github.com/augustepoiroux/LeanInteract). Cold Mathlib import
   takes ~1 minute; the REPL holds a warm environment in memory after that. Per-check cost

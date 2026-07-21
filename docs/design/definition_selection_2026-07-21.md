@@ -237,3 +237,91 @@ richness weighting (§4.1) both push selection away from that shape for their ow
 reasons (too little content to formalize; too little structure to be wrong about); that they
 also happen to push away from the objects most likely to be pure recall is a welcome
 consequence of the same fixes, not a third, separate mechanism.
+
+---
+
+## Revision: 22 July 2026 — recalibration after batch 2
+
+Batch 2 (`docs/harvest_review_batch2.md`) ran the gates-and-bands design of record above for
+the first time, over a corpus widened per §6. It surfaced two measurement bugs and one
+threshold miscalibration severe enough to shrink the eligible set to 52 candidates against a
+requested top-100 — well below what §2's "already-acceptable candidates" framing intended. This
+section is the second calibration pass the design always expected (§2: "none of them is
+expected to be correct on the first attempt"), not a reversal of the architecture. Five changes
+follow.
+
+**(a) The raw mention floor is retired, replaced by a theorem-mention floor.** Gate (a) of §3
+now reads: *full-corpus theorem mentions ≥ `THEOREM_MENTION_FLOOR`* (initial value: 2), measured
+against the count of theorem/lemma *statements* mentioning the name — not, as before, a raw
+text-occurrence count. Batch 2's Finding A traced the old floor's 87.5% attrition rate to a
+category error: raw mention-count measures *ubiquity*, and ubiquity is systematically lower in
+less-central territory almost by construction — the whole point of widening the corpus past the
+original five foundational corners was to reach exactly that territory, so a floor tuned against
+foundational-corner ubiquity was never going to survive contact with it. But ubiquity was never
+actually what gate (a) needed to guarantee; §3's own original rationale said so explicitly ("enough
+theorem-statement mentions... to guarantee that global-fact supply and documentation actually
+exist," not "to guarantee prominence"). Theorem-mention count measures that requirement directly
+instead of through the ubiquity proxy, so the floor can be set low — 2, not 30 — because its only
+remaining job is confirming *some* supply exists, the same demotion-from-score-to-minimum logic
+§3(a) always used, now applied to a metric that actually measures the thing being demoted to.
+
+**(b) Structural richness gains a floor: `richness ≥ 1` is now a gate, not only a score term.**
+Once the richness-counting bug in (e) below is fixed, a richness-zero definition is reliably a
+pure delegation or projection — `toFinset l := Multiset.toFinset l`, `Equiv.symm := ...` — the
+exact population this whole redesign has targeted since batch 1's `Finset.range`/`Nat.Prime`
+finding (§1). The length band (§3b) was supposed to catch this population but demonstrably
+doesn't catch all of it: batch 2 included 23 richness-zero candidates (44% of its eligible set)
+that cleared the length band comfortably. Richness is a direct measurement of the thing length
+only approximates, so it becomes the more precise gate for the same population, while remaining
+(above the floor) the dominant preference-score term per §4.1 — a floor and a score term are not
+redundant here, the same way the docstring floor (§3c) and docstring substance (§4.2) coexist
+without conflict. Because richness's own counting had a real bug at the time of batch 2 (item
+(e)), this gate is introduced only once that bug is fixed — gating on a miscounted metric would
+have reintroduced exactly the kind of measurement-error-masquerading-as-selection-decision this
+whole document exists to prevent. As a blind-spot watch going forward, each batch's review will
+enumerate the richness-zero *exclusions* this gate produces with a one-line characterization of
+each (pure delegation, projection, or genuinely notation-hidden structure the counter still can't
+see) — the last category is the gate's known failure mode, and tracking its rate is how a future
+recalibration would be triggered.
+
+**(c) The top-N cutoff is abolished.** The manifest now contains exactly two populations:
+*eligible* (passed every gate, ranked by the preference score in full — no cutoff) and *excluded*
+(with the specific gate(s) that fired). Baking a batch size into the mining artifact was a
+category confusion: how many tasks a downstream consumer wants is a *consumption* decision — made
+by whoever draws from the ranked eligible set, at stage-2 slicing or corpus-assembly time, and
+potentially different for different consumers of the same manifest — not a property of the
+mining artifact itself. Under the old top-N design, a candidate could be gate-eligible and still
+excluded for a reason that had nothing to do with it ("ranked 53rd, below top 52") purely because
+of how many other candidates happened to also be eligible that batch, a fact §2's original
+framing ("no metric can compensate for another... every exclusion records which gate fired") never
+actually intended: outranking was never a gate, and it should never have looked like one in the
+manifest. There is no "outranked" category anymore. This also resolves the awkwardness batch 2's
+own review had to name explicitly (§4 there: "this edge list is empty... nothing was
+ranked-and-cut") — a symptom of top-N answering a question the mining stage was never positioned
+to answer.
+
+**(d) The common-vocabulary list widens.** Batch 2 (Finding B and its own §5) found genuine
+Combinatorics-territory candidates excluded by `dependency_vocabulary` because their natural
+dependencies (`Multiset`, `Sym`, `Polynomial`-adjacent machinery for generating functions) simply
+weren't on a list tuned against the original five foundational corners. `COMMON_VOCABULARY_MODULES`
+now includes `Multiset`, `Sym`, basic `Polynomial`, and a broader `Order`/`Algebra` slice (see
+`miner/config.py` for the exact entries this round added). This list is expected to keep growing
+empirically, corner by corner, as each widened batch's review reports its `dependency_vocabulary`
+exclusions — the same iterate-on-the-manifest workflow §2 established for every other threshold
+here, not a one-time correction.
+
+**(e) Two batch-2 measurement bugs, now fixed, cross-referenced here for the record.** First,
+the `dependency_vocabulary` gate's false-failure mechanism (batch 2's Finding B): short,
+unqualified, lowercase bound-variable tokens surviving in `referenced_constants` (a known noise
+source of that extraction — see `miner.verify`'s module docstring) were colliding with unrelated
+real Mathlib declarations that happen to share the same short bare name, so a definition's own
+local variable names could resolve to an exotic module and fail the gate for a dependency it
+never had. `Pairwise` and `Set.Pairwise` — both genuine, richly-mentioned candidates in batch
+1 — were batch 2's clearest casualties of this bug. Second, richness's textual `=>`-counting
+(batch 2's §5, item 3): `=>` was counted as a conditional/match-arm marker without distinguishing
+a genuine pattern-match arm from a `where`-block field assignment or an anonymous-constructor
+lambda body, so several `Equiv.*` equivalence-proof definitions (`Equiv.prodAssoc`,
+`Equiv.Set.univ`, `Equiv.sumCongr`, `Equiv.swap`, among batch 2's own top 10) scored artificially
+high on richness for structure that had nothing to do with their actual mathematical content.
+Both are infrastructure fixes to existing measurements, not new design decisions, and are
+implemented — not merely diagnosed — in the round that carries this revision.
