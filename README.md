@@ -7,7 +7,10 @@ misreadings the true object must refute), all certified through the Lean kernel 
 kernel computation (`decide`) or by a kernel-checked proof, depending on the fact. See
 `docs/design/reward_structure_2026-07-21.md` §2 for the three fact types (decidable casework,
 membership facts, and global theorem facts adjudicated by a prover agent); most mined objects
-are expected to lean heavily on the latter two, not on `decide` alone.
+are expected to lean heavily on the latter two, not on `decide` alone. Candidate definitions
+are mined from Mathlib and selected via hard eligibility gates plus a small preference score
+dominated by structural richness, not a weighted sum — see
+`docs/design/definition_selection_2026-07-21.md` for the design of record.
 
 ## Status
 

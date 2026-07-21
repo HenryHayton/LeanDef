@@ -40,6 +40,15 @@ builds a kernel-adjudicated signal for definitional faithfulness.
   (1) fidelity = fraction of true fact suite certified, (2) separation = fraction of mutant
   suites refuted. Vacuous defs pass all facts but kill no mutants; empty defs kill all
   mutants but fail the facts. Only the intended object scores well on both.
+- Mining candidate definitions from Mathlib uses **gates-then-preference-score selection**,
+  not a weighted sum: see `docs/design/definition_selection_2026-07-21.md` for the design of
+  record. Hard eligibility gates (mention floor, length band, docstring floor, dependency
+  vocabulary tier, anti-plumbing name patterns, non-`none` fact supply) define the includable
+  set; a small preference score dominated by structural richness (a proxy for how many
+  distinguishable ways a definition can be misread) orders only what survives the gates. This
+  supersedes miner stage 1's single weighted score of quality/in-degree/dependency-footprint,
+  which was found to select for fundamental, memorized-verbatim vocabulary rather than
+  content worth training or evaluating on.
 - All checking runs through the **Lean REPL**, driven from Python via **LeanInteract**
   (`lean-interact` on PyPI, github.com/augustepoiroux/LeanInteract). Cold Mathlib import
   takes ~1 minute; the REPL holds a warm environment in memory after that. Per-check cost
