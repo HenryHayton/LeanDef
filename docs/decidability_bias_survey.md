@@ -1,5 +1,9 @@
 # Decidability-bias survey
 
+*Snapshot of 21 July 2026. Findings 1–4 addressed in commit 73ad95d (schema v1 freeze +
+harness conformance); finding 5 remains a standing caution for future prover work. Preserved
+unedited below as the historical record.*
+
 Read-only survey of `harness/` for places the current implementation structurally assumes
 "every fact resolves via `decide`," per the task that requested it. **No code was changed as
 part of this survey** — findings only. See `docs/design/reward_structure_2026-07-21.md` §2 for

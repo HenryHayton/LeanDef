@@ -2,20 +2,10 @@
 
 Enforces `docs/design/task_schema_v1.md` exactly -- that document is the frozen spec; this
 module is its mechanical check. Errors are specific and reference the offending field by
-path, since this validator is the miner's debugging interface (no miner exists yet -- see
-the task that introduced this module; this is deliberately structural-only).
+path, since this validator is the miner's debugging interface (no miner exists yet).
 
-Out of scope, by the schema doc's own framing, not an oversight:
-- The domain-containment rule ("every fact must lie inside `constraint` or be a stated
-  convention point") requires semantic understanding of the Lean constraint and each fact's
-  statement -- the schema doc itself calls this a "mechanical, at authoring time" check,
-  i.e. a miner-pipeline responsibility, not a static JSON-shape check. Not implemented here.
-- The "Validation manifest" section's five conditions (facts actually proved/decided against
-  the ground truth, axiom baseline actually computed rather than typed in) are claims about
-  *how* a task was produced, not about the shape of task.json. This module checks that the
-  required provenance fields (`validation_run_id` etc.) are present; it cannot and does not
-  verify that a validation run actually happened.
-- dossier.md/task.json prose-consistency checking (also semantic, also a miner concern).
+This module is structural only; see the schema doc's "v1 clarifications" section
+("status of structural vs. semantic validation") for what that does and does not cover.
 """
 
 import json
@@ -162,7 +152,7 @@ def _validate_fact(fact: object, index: int) -> str:
     _require_str(fact, "statement", context)
 
     if fact_type == "membership":
-        _require_field(fact, "instance", context)
+        _require_str(fact, "instance", context)
         polarity = _require_str(fact, "polarity", context)
         _require(
             polarity in POLARITIES,

@@ -19,7 +19,7 @@ class Fact:
     type: str  # "casework" | "membership" | "global"
     mechanism: str  # "decide" | "proof"
     statement: str
-    instance: object | None = None
+    instance: str | None = None  # always a Lean term string -- see task_schema_v1.md "v1 clarifications"
     polarity: str | None = None  # "accept" | "reject"
     violated_property: str | None = None  # required when polarity == "reject"
 

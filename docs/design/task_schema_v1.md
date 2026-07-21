@@ -104,3 +104,25 @@ A task is shippable only with a recorded validation run demonstrating:
 4. dossier/domain consistency check passed;
 5. the axiom baseline was computed, not assumed.
 Tasks without a manifest enter no dataset.
+
+## v1 clarifications
+
+*Clarifications resolve underspecified fields; they change no frozen decision.
+Each is dated. Anything that would alter a decision above requires v2.*
+
+**2026-07-21 — `instance` representation.** The `instance` field of a
+membership fact is always a Lean term string (e.g. `"[1, 2, 3]"`,
+`"⟨3, by norm_num⟩"`), never structured data. Rationale: the fact `statement`
+must reference the instance as a Lean term anyway, so any second
+representation would duplicate authority over the same object (anti-drift
+rule). The term must elaborate in the task's pinned environment; verifying
+this is part of authoring-time validation (validation manifest, item 3),
+alongside the domain-containment rule it naturally accompanies.
+
+**2026-07-21 — status of structural vs. semantic validation.** The
+`harness/task_schema.py` validator enforces the *structural* rules of this
+schema (fields, types, compatibility constraints). Semantic rules — domain
+containment of facts, instance elaboration, and everything in the validation
+manifest — are authoring-time checks owned by the mining/authoring pipeline
+and are recorded per-task in the validation manifest. A task passing the
+structural validator is well-formed, not yet shippable.

@@ -110,6 +110,15 @@ def test_membership_fact_missing_polarity_fails(valid_data):
         validate_task_data(valid_data)
 
 
+def test_membership_fact_non_string_instance_fails(valid_data):
+    for fact in valid_data["facts"]:
+        if fact["type"] == "membership":
+            fact["instance"] = ["1", "2", "3"]
+            break
+    with pytest.raises(TaskSchemaError, match="instance"):
+        validate_task_data(valid_data)
+
+
 def test_membership_reject_missing_violated_property_fails(valid_data):
     for fact in valid_data["facts"]:
         if fact["type"] == "membership" and fact["polarity"] == "reject":
