@@ -175,3 +175,46 @@ lemma b_eq (n m : Nat) : dist n m = dist m n := dist_comm n m
     assert "b_eq" in statements[1] and "dist n m = dist m n" in statements[1]
     # the proof term after `:=` on the second theorem must not leak into its statement
     assert "dist_comm" not in statements[1]
+
+
+# --- Regression tests for the six real collisions found in the batch-1 review (harvest
+# batch 1 review, "data-quality flag"): unicode subscript suffixes were silently dropped by
+# the old identifier regex, causing e.g. `image₂` to be scanned as `image` and collide with
+# the real `Finset.image`. Each of these must now resolve to its own, distinct, full name.
+
+
+def test_image2_does_not_collide_with_image():
+    text = "namespace Finset\ndef image (f : α → β) (s : Finset α) : Finset β := sorry\nend Finset\n"
+    hits = scan_text(text, "Data/Finset/Image.lean")
+    assert [h.name for h in hits] == ["Finset.image"]
+
+    text2 = "namespace Finset\ndef image₂ (f : α → β → γ) (s : Finset α) (t : Finset β) : Finset γ := sorry\nend Finset\n"
+    hits2 = scan_text(text2, "Data/Finset/NAry.lean")
+    assert [h.name for h in hits2] == ["Finset.image₂"]
+
+
+def test_semiconj2_does_not_collide_with_semiconj():
+    text = "namespace Function\ndef Semiconj (f : α → β) (ga : α → α) (gb : β → β) : Prop := sorry\nend Function\n"
+    hits = scan_text(text, "Logic/Function/Conjugate.lean")
+    assert [h.name for h in hits] == ["Function.Semiconj"]
+
+    text2 = "namespace Function\ndef Semiconj₂ (f : α → β) (ga : α → α → α) (gb : β → β → β) : Prop := sorry\nend Function\n"
+    hits2 = scan_text(text2, "Logic/Function/Conjugate.lean")
+    assert [h.name for h in hits2] == ["Function.Semiconj₂"]
+
+
+def test_map2_variants_do_not_collide_with_map():
+    variants = ["map₂Left'", "map₂Right'", "map₂Left", "map₂Right"]
+    for variant in variants:
+        text = f"namespace List\ndef {variant} (f : α → β → γ) : List γ := sorry\nend List\n"
+        hits = scan_text(text, "Data/List/Defs.lean")
+        assert [h.name for h in hits] == [f"List.{variant}"], f"failed for {variant}"
+
+
+def test_subscript_digit_and_letter_are_id_rest_characters():
+    """Direct check of the character-class fix itself (not just the specific collisions
+    above): both the numeric-subscript range (₀-₉) and the subscript-letter range
+    (e.g. ₐ, ᵢ, ⱼ) that Lean's own `isSubScriptAlnum` accepts must be captured."""
+    text = "def foo₂ : Nat := 0\ndef barₐ : Nat := 0\ndef bazᵢ : Nat := 0\n"
+    hits = scan_text(text, "Scratch.lean")
+    assert [h.name for h in hits] == ["foo₂", "barₐ", "bazᵢ"]

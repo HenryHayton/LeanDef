@@ -5,6 +5,17 @@ Estimates, per verified definition, how much material for each of the three fact
 fact text at all -- only a rough supply estimate to help rank candidates for a later,
 LLM-driven stage. Coarse tiers (none | thin | rich) with the raw numbers alongside, per the
 task that introduced this module: never just a tier with no way to audit it.
+
+**A `Prop`-valued, decidable definition can legitimately be both casework-rich and
+membership-rich at once** (e.g. `Nat.Prime`). This is deliberate, not a bug: at this stage we
+only estimate *supply* -- whether the machinery exists to check concrete instances of the
+predicate at all. Whether a specific instance ends up authored as a casework fact
+(`Nat.Prime 7`, a bare pointwise check) or a membership fact (`Nat.Prime 7` as an "accept"
+instance, paired with a tagged "reject" near-miss) is a judgment call about how to *use* that
+supply -- made per-fact by the stage-2 fact-authoring agent, not something stage 1's
+verification data can or should disambiguate. The two tiers here answer different questions
+("can casework work at all" / "can membership classification work at all") that happen to
+have the same answer for a decidable predicate.
 """
 
 from dataclasses import dataclass
@@ -48,10 +59,26 @@ class SupplyProxies:
     classifies_structure: bool
 
 
+def _is_concretely_checkable(v: VerifiedDef) -> bool:
+    """Whether a concrete instance of this definition can actually be checked -- via either
+    of the two mechanisms `miner.verify` measures. Mechanism `eval` (concrete, non-`Prop`
+    return type): requires `output_decidable_eq`, since casework/membership facts for these
+    compare *output values* for equality. Mechanism `decide` (`Prop`-valued, and Lean's own
+    `#eval`-decide-fallback succeeded, i.e. individually decidable in practice): sufficient on
+    its own -- `DecidableEq Prop` is not a real instance and was never a meaningful gate here
+    (previously this function *did* require it literally, which is why `Nat.Prime` -- despite
+    being genuinely decidable -- came out `casework_tier = none` in harvest batch 1)."""
+    if v.exec_mechanism == "eval":
+        return v.output_decidable_eq is True
+    if v.exec_mechanism == "decide":
+        return True
+    return False
+
+
 def _casework_tier(v: VerifiedDef) -> SupplyTier:
     if not v.included or not v.elaborates:
         return SupplyTier.NONE
-    if v.executable is not True or v.output_decidable_eq is not True:
+    if not _is_concretely_checkable(v):
         return SupplyTier.NONE
     if not v.explicit_arg_types:
         # A nullary computable constant still gives exactly one case -- thin, not rich:
@@ -78,7 +105,7 @@ def _membership_tier(v: VerifiedDef) -> tuple[SupplyTier, bool, bool]:
     structure_shaped = _classifies_structure(v.explicit_arg_types, v.return_type)
     if not predicate_shaped and not structure_shaped:
         return SupplyTier.NONE, predicate_shaped, structure_shaped
-    if predicate_shaped and v.executable is True and v.output_decidable_eq is True:
+    if predicate_shaped and _is_concretely_checkable(v):
         return SupplyTier.RICH, predicate_shaped, structure_shaped
     return SupplyTier.THIN, predicate_shaped, structure_shaped
 

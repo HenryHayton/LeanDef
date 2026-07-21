@@ -20,9 +20,27 @@ _NAMESPACE_RE = re.compile(r"^namespace\s+(\S+)\s*$")
 _SECTION_RE = re.compile(r"^section(?:\s+(\S+))?\s*$")
 _END_RE = re.compile(r"^end(?:\s+(\S+))?\s*$")
 
+# Identifier character class, matching Lean 4's actual grammar (`isIdFirst`/`isIdRest` in
+# Init/Meta/Defs.lean of the pinned toolchain: c.isAlpha/isAlphanum, `_`, `'`, `!`, `?`, plus
+# `isLetterLike` -- Greek, Coptic, Latin-1 supplement, Latin Extended-A, the "letter-like"
+# block (ℕ ℤ etc.) -- and `isSubScriptAlnum` -- U+2080-2089 numeric subscripts (₀-₉),
+# U+2090-209C and U+1D62-1D6A subscript letters (ₐ ᵢ ⱼ ...), U+2C7C (ⱼ)).
+#
+# Previously this used a plain `[A-Za-z0-9_'!?.]` class, which silently truncated any name
+# with a unicode subscript suffix -- `image₂` became `image`, colliding with the real
+# `Finset.image`, and similarly for `Semiconj₂` and four `map₂...` variants. Confirmed
+# empirically that Python's `\w` (Unicode word-character class) already covers Lean's
+# `isAlpha`/`isAlphanum`, all the Greek/Latin-extended/letter-like-block ranges, AND both
+# subscript ranges (they're Unicode categories Lm/No, which `\w` matches) -- so `\w` plus the
+# punctuation Lean additionally allows (`'`, `!`, `?`) is a correct, cheap fix requiring no
+# manual Unicode range listing. `.` is kept (not part of a single Lean identifier, but needed
+# here to capture already-dotted names like `_root_.Foo.bar` as one token, same as before).
+_ID_FIRST = r"[^\W\d]"  # a \w character that isn't a digit (Lean disallows a leading digit)
+_ID_REST = r"[\w'!?.]"
+
 _DEF_RE = re.compile(
     r"^(?P<prefix>(?:private\s+|protected\s+|noncomputable\s+)*)def\s+"
-    r"(?P<name>[A-Za-z_][A-Za-z0-9_'!?.]*)"
+    rf"(?P<name>{_ID_FIRST}{_ID_REST}*)"
 )
 
 # Recognized starts of a new top-level command -- used to decide where a captured

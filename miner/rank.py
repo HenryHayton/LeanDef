@@ -1,4 +1,4 @@
-"""Ranking and manifest emission.
+"""Ranking, curation, and manifest emission.
 
 Score prefers high in-degree (mention count), low dependency footprint (best-available
 proxy: count of referenced constants -- see `miner.verify`'s module docstring for why this
@@ -7,13 +7,20 @@ a soft, tie-breaking preference only: well-rounded beats lopsided *at equal qual
 lopsided-and-excellent survives, per the task that introduced this module. Every component
 is stored in the manifest record alongside the final score -- never just a number with no
 way to audit it.
+
+After mechanical ranking, `build_manifest` applies human curation overrides (`CurationEntry`,
+normally loaded from `miner/curation.yaml` by the harvest orchestrator, not by this module --
+see `load_curation`) as a final pass. Every application is recorded on the affected record's
+`curation_applied` field, so curation's effect is auditable from the manifest alone.
 """
 
 import json
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from enum import Enum
 from pathlib import Path
+
+import yaml
 
 from miner.proxies import SupplyProxies, SupplyTier, compute_proxies
 from miner.verify import VerifiedDef
@@ -26,6 +33,41 @@ QUALITY_WEIGHT = 10.0
 IN_DEGREE_WEIGHT = 3.0
 DEPENDENCY_WEIGHT = 2.0
 BREADTH_WEIGHT = 1.0
+
+# Curation `demote`: a fixed penalty subtracted from the sort key only (never from the
+# recorded `score.total`, which stays the true, unpenalized value for auditability). A dial,
+# not a commitment -- large enough to move a mid-pack entry well down the list, small enough
+# that a sufficiently excellent lopsided entry could still survive it, consistent with how
+# `BREADTH_WEIGHT` is deliberately small relative to `QUALITY_WEIGHT` above.
+DEMOTE_PENALTY = 15.0
+
+DEFAULT_CURATION_PATH = Path(__file__).resolve().parent / "curation.yaml"
+
+_CURATION_ACTIONS = frozenset({"exclude", "demote", "note"})
+
+
+@dataclass(frozen=True)
+class CurationEntry:
+    name: str
+    action: str  # "exclude" | "demote" | "note"
+    reason: str
+
+
+def load_curation(path: Path | None = None) -> list[CurationEntry]:
+    """Load curation overrides from a YAML file (see `miner/curation.yaml` for the format
+    and the currently-seeded entries). Returns an empty list if the file doesn't exist --
+    curation is optional, not a hard dependency of the pipeline."""
+    path = path if path is not None else DEFAULT_CURATION_PATH
+    if not path.is_file():
+        return []
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    entries = []
+    for raw in data.get("entries", []):
+        action = raw["action"]
+        if action not in _CURATION_ACTIONS:
+            raise ValueError(f"{path}: unknown curation action {action!r} for {raw.get('name')!r}")
+        entries.append(CurationEntry(name=raw["name"], action=action, reason=raw["reason"].strip()))
+    return entries
 
 
 @dataclass(frozen=True)
@@ -70,7 +112,9 @@ class ManifestRecord:
     """One line of the harvest manifest. `included` means "selected into the final top-N
     set," not merely "passed verification" -- a verified-but-low-ranked definition is
     `included=False` with an exclusion_reason explaining it was outranked, not that
-    anything about it failed."""
+    anything about it failed. `curation_applied` is set (to `{"action": ..., "reason": ...}`)
+    whenever a `miner/curation.yaml` entry matched this name, regardless of which action --
+    including `note`, which otherwise leaves the record untouched."""
 
     name: str
     module_path: str
@@ -80,14 +124,21 @@ class ManifestRecord:
     verified: VerifiedDef
     proxies: SupplyProxies | None
     score: ScoreComponents | None
+    curation_applied: dict[str, str] | None = field(default=None)
 
 
 def build_manifest(
     verified_defs: list[VerifiedDef],
     theorem_mention_counts: dict[str, int] | None = None,
     top_n: int = 100,
+    curation: list[CurationEntry] | None = None,
 ) -> list[ManifestRecord]:
+    """`curation` is a list of already-loaded `CurationEntry` (see `load_curation`) -- this
+    function does no file I/O itself, so it stays trivially testable without the real
+    `miner/curation.yaml` on disk. Pass `None` (the default) for no curation at all."""
     theorem_mention_counts = theorem_mention_counts or {}
+    curation_by_name = {c.name: c for c in (curation or [])}
+
     scored: list[tuple[VerifiedDef, SupplyProxies, ScoreComponents]] = []
     failed_records: list[ManifestRecord] = []
 
@@ -103,6 +154,7 @@ def build_manifest(
                     verified=v,
                     proxies=None,
                     score=None,
+                    curation_applied=_curation_dict(curation_by_name.get(v.name)),
                 )
             )
             continue
@@ -110,10 +162,40 @@ def build_manifest(
         score = score_definition(proxies, dependency_count=len(v.referenced_constants))
         scored.append((v, proxies, score))
 
-    scored.sort(key=lambda t: t[2].total, reverse=True)
+    # Curation, final pass: pull "exclude" entries out of the ranking pool entirely (they can
+    # never be included, whatever their score); everything else (including "demote" and
+    # "note") stays in the pool and gets ranked, with "demote" applying a sort-only penalty.
+    curated_excluded: list[ManifestRecord] = []
+    remaining: list[tuple[VerifiedDef, SupplyProxies, ScoreComponents]] = []
+    for v, proxies, score in scored:
+        entry = curation_by_name.get(v.name)
+        if entry is not None and entry.action == "exclude":
+            curated_excluded.append(
+                ManifestRecord(
+                    name=v.name,
+                    module_path=v.module_path,
+                    included=False,
+                    exclusion_reason=entry.reason,
+                    rank=None,
+                    verified=v,
+                    proxies=proxies,
+                    score=score,
+                    curation_applied=_curation_dict(entry),
+                )
+            )
+        else:
+            remaining.append((v, proxies, score))
+
+    def sort_key(item: tuple[VerifiedDef, SupplyProxies, ScoreComponents]) -> float:
+        v, _, score = item
+        entry = curation_by_name.get(v.name)
+        penalty = DEMOTE_PENALTY if entry is not None and entry.action == "demote" else 0.0
+        return score.total - penalty
+
+    remaining.sort(key=sort_key, reverse=True)
 
     records: list[ManifestRecord] = []
-    for rank, (v, proxies, score) in enumerate(scored, start=1):
+    for rank, (v, proxies, score) in enumerate(remaining, start=1):
         in_top = rank <= top_n
         records.append(
             ManifestRecord(
@@ -125,10 +207,18 @@ def build_manifest(
                 verified=v,
                 proxies=proxies,
                 score=score,
+                curation_applied=_curation_dict(curation_by_name.get(v.name)),
             )
         )
+    records.extend(curated_excluded)
     records.extend(failed_records)
     return records
+
+
+def _curation_dict(entry: CurationEntry | None) -> dict[str, str] | None:
+    if entry is None:
+        return None
+    return {"action": entry.action, "reason": entry.reason}
 
 
 def _json_default(obj: object):

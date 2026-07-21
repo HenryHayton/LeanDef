@@ -104,9 +104,32 @@ class VerifiedDef:
     return_type: str = ""
     executable: bool | None = None  # None = not attempted (unsupported input type)
     executability_detail: str = ""
-    output_decidable_eq: bool | None = None
+    exec_mechanism: str = "none"  # "eval" | "decide" | "none" -- see verify_definition
+    output_decidable_eq: bool | None = None  # None when return_type == "Prop" (not meaningful there)
     referenced_constants: list[str] = field(default_factory=list)  # best-effort; see module docstring
     axioms: list[str] = field(default_factory=list)
+
+
+def _strip_universe_annotation(rest: str) -> str:
+    """Skip a leading universe-parameter annotation -- '.{u_1}' or '.{u₁, u₂}' -- that Lean's
+    `#check` output attaches directly to a polymorphic declaration's name, before any binder
+    groups or the return-type colon (e.g. `Pairwise.{u_1} {α : Type u_1} (r : ...) : Prop`).
+    Without this, arity parsing silently found zero binder groups for *any* universe-
+    polymorphic definition -- i.e. most of Mathlib -- because `_parse_binder_groups` bailed
+    out on the unexpected leading '.'; this was the real cause of the 0-explicit-argument
+    cases found reviewing harvest batch 1 (`Pairwise`, `Function.Bijective`, ...), not a
+    section-variable-specific quirk as first guessed there."""
+    if not rest.startswith(".{"):
+        return rest
+    depth = 0
+    for idx, ch in enumerate(rest):
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return rest[idx + 1 :]
+    return rest  # unbalanced braces -- give up, let the caller's parse fail visibly
 
 
 def _split_check_output(message: str, name: str) -> tuple[str, str] | None:
@@ -115,7 +138,7 @@ def _split_check_output(message: str, name: str) -> tuple[str, str] | None:
     type doesn't get mistaken for the top-level separator."""
     if not message.startswith(name):
         return None
-    rest = message[len(name) :]
+    rest = _strip_universe_annotation(message[len(name) :])
     depth = 0
     for idx, ch in enumerate(rest):
         if ch in _BRACKET_OPEN:
@@ -125,6 +148,33 @@ def _split_check_output(message: str, name: str) -> tuple[str, str] | None:
         elif ch == ":" and depth == 0:
             return rest[:idx].strip(), rest[idx + 1 :].strip()
     return None
+
+
+def _split_top_level_arrows(type_text: str) -> list[str]:
+    """Split a Lean type on top-level `→` arrows -- not ones nested inside brackets, e.g.
+    `Set (Nat → Nat)` stays whole, but `List α → List α` splits into two. Used to recover
+    trailing *anonymous* explicit arguments that `#check` shows as a bare arrow chain rather
+    than a named `(x : T)` group -- typically arguments injected via an enclosing `variable`
+    declaration rather than written in the `def`'s own header (see
+    `docs/harvest_review_batch1.md`'s `List.orderedInsert`/`List.kerase` examples: their true
+    arity, per `#check`, is higher than their source header alone shows)."""
+    parts: list[str] = []
+    depth = 0
+    current: list[str] = []
+    for ch in type_text:
+        if ch in _BRACKET_OPEN:
+            depth += 1
+            current.append(ch)
+        elif ch in _BRACKET_CLOSE:
+            depth -= 1
+            current.append(ch)
+        elif ch == "→" and depth == 0:
+            parts.append("".join(current).strip())
+            current = []
+        else:
+            current.append(ch)
+    parts.append("".join(current).strip())
+    return parts
 
 
 def _parse_binder_groups(binders_text: str) -> list[BinderGroup]:
@@ -238,10 +288,16 @@ def verify_definition(
         result.exclusion_reason = f"could not parse '#check' output: {info_messages!r}"
         return result
 
-    binders_text, return_type = split
+    binders_text, raw_return_type = split
     result.binder_groups = _parse_binder_groups(binders_text)
-    result.explicit_arg_types = _explicit_arg_types(result.binder_groups)
-    result.return_type = return_type
+
+    # The text after the last named binder group may itself be a bare arrow chain (trailing
+    # *anonymous* explicit arguments -- see `_split_top_level_arrows`'s docstring). All but
+    # the last segment are additional explicit argument types; the last segment is the true
+    # return type.
+    arrow_segments = _split_top_level_arrows(raw_return_type)
+    trailing_arg_types, result.return_type = arrow_segments[:-1], arrow_segments[-1]
+    result.explicit_arg_types = _explicit_arg_types(result.binder_groups) + trailing_arg_types
 
     unknown_types = [t for t in result.explicit_arg_types if t not in CANONICAL_INPUTS]
     if unknown_types:
@@ -254,9 +310,20 @@ def verify_definition(
         result.executable = eval_result.status is CheckStatus.PASSED
         result.executability_detail = "" if result.executable else eval_result.detail
 
-    decidable_cmd = f"example : DecidableEq ({return_type}) := inferInstance"
-    decidable_result = run_checked(server, Command(cmd=decidable_cmd, env=base_env), timeout=timeout)
-    result.output_decidable_eq = decidable_result.status is CheckStatus.PASSED
+    is_prop = result.return_type.strip() == "Prop"
+    if is_prop:
+        result.exec_mechanism = "decide" if result.executable is True else "none"
+        # DecidableEq(Prop) is not a real Mathlib instance, so this check is meaningless for
+        # every Prop-valued definition regardless of whether the *specific proposition* it
+        # produces is individually decidable -- see docs/harvest_review_batch1.md's
+        # Nat.Prime example and miner/proxies.py's module docstring. Skipped entirely rather
+        # than run-and-ignore, to save the (always-failing) REPL round-trip.
+        result.output_decidable_eq = None
+    else:
+        result.exec_mechanism = "eval" if result.executable is True else "none"
+        decidable_cmd = f"example : DecidableEq ({result.return_type}) := inferInstance"
+        decidable_result = run_checked(server, Command(cmd=decidable_cmd, env=base_env), timeout=timeout)
+        result.output_decidable_eq = decidable_result.status is CheckStatus.PASSED
 
     print_result = run_checked(server, Command(cmd=f"#print {hit.name}", env=base_env), timeout=timeout)
     if print_result.status is CheckStatus.PASSED and print_result.raw_response is not None:

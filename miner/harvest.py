@@ -8,7 +8,7 @@ from pathlib import Path
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 from miner import config as miner_cfg
-from miner.rank import ManifestRecord, build_manifest, write_manifest
+from miner.rank import DEFAULT_CURATION_PATH, ManifestRecord, build_manifest, load_curation, write_manifest
 from miner.scan import ScanHit, scan_all, scan_theorem_statements
 from miner.verify import verify_all_with_recovery
 
@@ -67,6 +67,7 @@ def harvest(
     output_path: Path | None = None,
     top_n: int = 100,
     verify_timeout: float | None = None,
+    curation_path: Path | None = None,
 ) -> list[ManifestRecord]:
     """Run the full stage-1 pipeline and write the manifest. Returns the records too, so
     callers (including tests) don't have to re-read the file they just wrote.
@@ -76,10 +77,14 @@ def harvest(
     expected to be fast decidable-scale checks, so a much shorter timeout still gives any
     genuinely fine definition plenty of headroom while bounding how long one pathological
     candidate (times a retry) can stall a big run.
+
+    `curation_path` defaults to the committed `miner/curation.yaml` (see `miner.rank`); pass
+    an explicit path (or a path to a nonexistent file) to run without the real overrides.
     """
     mathlib_root = mathlib_root if mathlib_root is not None else miner_cfg.MATHLIB_ROOT
     target_dirs = target_dirs if target_dirs is not None else miner_cfg.target_dirs(mathlib_root)
     output_path = output_path if output_path is not None else DEFAULT_OUTPUT_PATH
+    curation_path = curation_path if curation_path is not None else DEFAULT_CURATION_PATH
 
     hits = scan_all(target_dirs, mathlib_root)
     compute_mention_counts(hits, mathlib_root)
@@ -91,7 +96,8 @@ def harvest(
 
     verified = verify_all_with_recovery(server, base_import.env, hits, timeout=verify_timeout)
 
-    records = build_manifest(verified, theorem_mention_counts=theorem_counts, top_n=top_n)
+    curation = load_curation(curation_path)
+    records = build_manifest(verified, theorem_mention_counts=theorem_counts, top_n=top_n, curation=curation)
     write_manifest(records, output_path)
     return records
 

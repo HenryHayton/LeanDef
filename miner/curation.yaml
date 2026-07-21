@@ -1,0 +1,47 @@
+# Curation overrides for the harvest manifest.
+#
+# Human-editable. Applied by miner/rank.py as a final pass, after mechanical ranking, so a
+# human judgment call can override or annotate what the mechanical score alone produced.
+# Every application is recorded on the affected manifest record's `curation_applied` field
+# ({"action": ..., "reason": ...}), so this file's effect is auditable from the manifest
+# alone -- nothing here silently changes a result without leaving a trace.
+#
+# Each entry: {name, action, reason}
+#   name:   the fully-qualified Lean name (as it appears in the manifest's `name` field).
+#   action: one of
+#     exclude -- removed from the included top-N set regardless of its computed rank; the
+#               manifest record becomes `included: false` with this entry's `reason` as its
+#               `exclusion_reason`.
+#     demote  -- ranked lower than its mechanical score alone would place it (a fixed penalty
+#               applied to the sort key only; the recorded `score` components are left
+#               unchanged for auditability -- only the ordering is affected). May still end
+#               up included if the score was high enough to survive the penalty.
+#     note    -- ranking and inclusion are left untouched; `reason` is recorded on the
+#               manifest record for a human reader, e.g. to flag a relationship between two
+#               entries that the mechanical score can't see.
+#   reason: one-sentence rationale, always required.
+#
+# A name not found among the verified candidates is a silent no-op (no typo-checking is done
+# here); this file only affects candidates that survived verification.
+
+entries:
+  - name: Nat.digitsAux1
+    action: exclude
+    reason: >-
+      Docstring explicitly marks this "(Impl.)" -- an internal implementation-detail
+      auxiliary for `digits`, not a citizen definition in its own right. It ranked high only
+      on the strength of its supply-proxy numbers, not because it's a natural task target.
+
+  - name: Pairwise
+    action: note
+    reason: >-
+      Near-duplicate concept to Set.Pairwise (same shape: a relation holding pairwise,
+      restricted to a set). Kept in the manifest; noted so a reviewer decides whether both
+      are needed as separate mining targets or one subsumes the other.
+
+  - name: Set.Pairwise
+    action: note
+    reason: >-
+      Near-duplicate concept to Pairwise (see that entry's note). Kept in the manifest;
+      noted so a reviewer decides whether both are needed as separate mining targets or one
+      subsumes the other.
