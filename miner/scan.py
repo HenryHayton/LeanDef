@@ -250,28 +250,105 @@ def scan_all(target_dirs: list[Path], mathlib_root: Path) -> list[ScanHit]:
 
 _THEOREM_RE = re.compile(r"^(?:private\s+|protected\s+)*(?:theorem|lemma)\s+[A-Za-z_][A-Za-z0-9_'!?.]*")
 
+# Bracket-aware statement/proof split (docs/theorem_mention_audit.md H2): the naive
+# `text.split(":=", 1)[0]` cuts at the FIRST ":=" anywhere, but Lean 4's named-argument
+# application syntax -- `f (arg := value)` -- routinely appears *inside a theorem's own stated
+# type* (not just its proof), e.g. `lemma foo : Injective (bar (a := a)) := by ...`. The `:=`
+# inside `(a := a)` isn't the real statement/proof separator, so splitting there silently
+# discards everything after, including any candidate mention appearing later in the actual
+# statement. Confirmed to affect 1.82% of all Mathlib theorem/lemma statements (3212/176167)
+# in the audit. Fixed the same way `miner.verify._split_check_output` already splits `#check`
+# output on a bracket-depth-0 colon: only a `:=` at bracket depth 0 is the real separator.
+_BRACKET_OPEN = "({[⦃"
+_BRACKET_CLOSE = ")}]⦄"
 
-def scan_theorem_statements(text: str) -> list[str]:
-    """Extract the STATEMENT text (everything up to the first top-level `:=`) of every
-    `theorem`/`lemma` declaration in this source text. Used only to refine the global-fact
-    supply proxy (`miner.proxies`) by checking which theorem *statements* (not proofs, not
-    comments) mention a candidate name -- a sharper signal than a raw text mention count.
-    Not a general theorem scanner: proof bodies are discarded, and this is not meant to feed
-    anything beyond that one refinement.
+
+def _split_statement_at_top_level_assign(text: str) -> str:
+    """Return everything before the first `:=` at bracket depth 0. If no such `:=` exists
+    (bracket-unbalanced or genuinely absent), returns `text` unchanged -- same fallback
+    behavior as the old naive split had when `":=" not in text`."""
+    depth = 0
+    n = len(text)
+    i = 0
+    while i < n - 1:
+        ch = text[i]
+        if ch in _BRACKET_OPEN:
+            depth += 1
+        elif ch in _BRACKET_CLOSE:
+            depth -= 1
+        elif ch == ":" and text[i + 1] == "=" and depth == 0:
+            return text[:i]
+        i += 1
+    return text
+
+
+def _scan_theorem_statements_impl(text: str) -> list[tuple[str, str]]:
+    """Shared implementation: extracts (statement_text, namespace_prefix) for every
+    `theorem`/`lemma` declaration. `namespace_prefix` is the dot-joined stack of enclosing
+    `namespace` blocks active at that exact statement's point of declaration (empty string at
+    top level) -- mirrors `scan_text`'s own qualification convention exactly: `section`s still
+    push/pop the stack (to keep depth balanced against `end`) but only `namespace` entries
+    contribute to the prefix, matching how Lean itself only qualifies declarations by
+    enclosing `namespace`s, never by `section`s.
     """
     lines = text.split("\n")
     n = len(lines)
-    statements: list[str] = []
+    namespace_stack: list[tuple[str, str | None]] = []
+    results: list[tuple[str, str]] = []
     i = 0
     while i < n:
         stripped = lines[i].strip()
+        if not stripped:
+            i += 1
+            continue
+        ns_match = _NAMESPACE_RE.match(stripped)
+        if ns_match:
+            namespace_stack.append(("namespace", ns_match.group(1)))
+            i += 1
+            continue
+        sec_match = _SECTION_RE.match(stripped)
+        if sec_match:
+            namespace_stack.append(("section", sec_match.group(1)))
+            i += 1
+            continue
+        if _END_RE.match(stripped):
+            if namespace_stack:
+                namespace_stack.pop()
+            i += 1
+            continue
         if _THEOREM_RE.match(stripped):
             body_lines, j = _capture_indented_block(lines, i, n)
-            statement_text = "\n".join(body_lines)
-            if ":=" in statement_text:
-                statement_text = statement_text.split(":=", 1)[0]
-            statements.append(statement_text)
+            statement_text = _split_statement_at_top_level_assign("\n".join(body_lines))
+            ns_parts = [name for kind, name in namespace_stack if kind == "namespace" and name]
+            results.append((statement_text, ".".join(ns_parts)))
             i = j
             continue
         i += 1
-    return statements
+    return results
+
+
+def scan_theorem_statements(text: str) -> list[str]:
+    """Extract the STATEMENT text (everything up to the first top-level `:=`) of every
+    `theorem`/`lemma` declaration in this source text. Used to refine the global-fact
+    supply proxy (`miner.proxies`) by checking which theorem *statements* (not proofs, not
+    comments) mention a candidate name -- a sharper signal than a raw text mention count.
+    Not a general theorem scanner: proof bodies are discarded, and this is not meant to feed
+    anything beyond that one refinement. See `scan_theorem_statements_with_namespace` for the
+    namespace-aware variant `miner.harvest.compute_theorem_mention_counts` actually uses.
+    """
+    return [statement for statement, _ in _scan_theorem_statements_impl(text)]
+
+
+def scan_theorem_statements_with_namespace(text: str) -> list[tuple[str, str]]:
+    """Like `scan_theorem_statements`, but also returns the namespace prefix active at each
+    statement's point of declaration (docs/theorem_mention_audit.md H1): a theorem stated
+    inside `namespace Finset ... end Finset` mentions `Finset.pi` as bare `pi`, per ordinary
+    Lean namespace resolution, and the audit found this is the dominant reason
+    `theorem_mention_count` undercounts -- the qualified-name-only match used before this fix
+    missed the majority of real mentions. Used by
+    `miner.harvest.compute_theorem_mention_counts` to count a mention when a statement
+    contains either the candidate's fully-qualified name (anywhere) or its bare name from
+    within a matching namespace -- deliberately NOT an unscoped bare-name match, which the
+    audit quantified at up to 98% collision noise on short names (`pi`, `empty`, `fix`, ...).
+    """
+    return _scan_theorem_statements_impl(text)

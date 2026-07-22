@@ -2,7 +2,12 @@
 no real Mathlib files, no REPL. See tests/test_miner_harvest.py for the integration test
 against a real module."""
 
-from miner.scan import scan_text, scan_theorem_statements
+from miner.scan import (
+    _split_statement_at_top_level_assign,
+    scan_text,
+    scan_theorem_statements,
+    scan_theorem_statements_with_namespace,
+)
 
 
 def test_simple_def_with_docstring():
@@ -218,3 +223,152 @@ def test_subscript_digit_and_letter_are_id_rest_characters():
     text = "def foo₂ : Nat := 0\ndef barₐ : Nat := 0\ndef bazᵢ : Nat := 0\n"
     hits = scan_text(text, "Scratch.lean")
     assert [h.name for h in hits] == ["foo₂", "barₐ", "bazᵢ"]
+
+
+# --- _split_statement_at_top_level_assign (docs/theorem_mention_audit.md H2 fix) ---
+
+
+def test_bracket_aware_split_ignores_named_argument_assign():
+    """The audit's confirmed failing shape: a named-argument `(a := a)` inside the statement
+    itself must not be mistaken for the statement/proof separator."""
+    text = "lemma foo : Injective (bar (a := a)) := by simp"
+    result = _split_statement_at_top_level_assign(text)
+    assert result == "lemma foo : Injective (bar (a := a)) "
+    assert "Injective" in result
+    assert "by simp" not in result
+
+
+def test_bracket_aware_split_still_finds_top_level_assign_with_no_brackets():
+    text = "theorem a_eq (n : Nat) : dist n n = 0 := by simp [dist]"
+    result = _split_statement_at_top_level_assign(text)
+    assert result == "theorem a_eq (n : Nat) : dist n n = 0 "
+
+
+def test_theorem_statement_not_truncated_by_named_argument_syntax():
+    """End-to-end regression, via scan_theorem_statements: a mention appearing textually
+    *after* a named-argument `:=` inside the statement must still be captured, not discarded
+    by a premature split."""
+    text = "lemma birkhoffFinset_injective : Injective (birkhoffFinset (α := α)) ∧ dist_comm := by simp\n"
+    statements = scan_theorem_statements(text)
+    assert len(statements) == 1
+    assert "dist_comm" in statements[0]
+    assert "by simp" not in statements[0]
+
+
+# --- scan_theorem_statements_with_namespace (docs/theorem_mention_audit.md H1 fix) ---
+
+
+def test_namespace_prefix_recorded_for_statement_inside_namespace():
+    text = """\
+namespace Finset
+
+theorem pi_congr (s : Finset α) : True := trivial
+
+end Finset
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 1
+    statement, namespace_prefix = results[0]
+    assert namespace_prefix == "Finset"
+    assert "pi_congr" in statement
+
+
+def test_namespace_prefix_empty_at_top_level():
+    text = "theorem foo : True := trivial\n"
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 1
+    assert results[0][1] == ""
+
+
+def test_nested_namespaces_join_with_dots():
+    text = """\
+namespace Finset
+namespace Colex
+
+theorem initSeg_something : True := trivial
+
+end Colex
+end Finset
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 1
+    assert results[0][1] == "Finset.Colex"
+
+
+def test_named_section_does_not_contribute_to_namespace_prefix():
+    """A `section Foo` is scoping only -- Lean does not qualify declarations by it the way it
+    does by `namespace Foo`. A statement inside `section Finset ... end` (no real namespace)
+    must record an EMPTY prefix, not "Finset"."""
+    text = """\
+section Finset
+
+theorem something : True := trivial
+
+end
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 1
+    assert results[0][1] == ""
+
+
+def test_reopened_namespace_across_two_blocks_both_scoped_correctly():
+    text = """\
+namespace Finset
+
+theorem a_thm : True := trivial
+
+end Finset
+
+namespace Finset
+
+theorem b_thm : True := trivial
+
+end Finset
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 2
+    assert results[0][1] == "Finset"
+    assert results[1][1] == "Finset"
+
+
+def test_bare_pi_inside_finset_namespace_would_be_scoped_correctly_reproducing_the_audit_pattern():
+    """Reproduces the qualitative pattern behind the audit's Finset.pi finding (0 -> ~63):
+    several theorem statements inside `namespace Finset ... end Finset` mention `pi` bare,
+    never qualified -- all must be recorded with namespace_prefix == "Finset" so
+    miner.harvest.compute_theorem_mention_counts can count them toward `Finset.pi`."""
+    text = """\
+namespace Finset
+
+theorem pi_nonempty (s : Finset α) (t : ∀ a, Finset (β a)) : (s.pi t).Nonempty ↔ True := trivial
+
+theorem card_pi (s : Finset α) (t : ∀ a, Finset (β a)) : (s.pi t).card = 0 := trivial
+
+theorem mem_pi (s : Finset α) (t : ∀ a, Finset (β a)) : True := trivial
+
+end Finset
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 3
+    assert all(ns == "Finset" for _, ns in results)
+    assert all("pi" in statement for statement, _ in results)
+
+
+def test_bare_pi_in_unrelated_namespace_must_not_be_scoped_to_finset():
+    """Collision case: a bare `pi` mention inside an unrelated namespace (e.g. `Real`, where
+    `pi` means the mathematical constant) must record that OTHER namespace, not `Finset` --
+    this is what lets miner.harvest.compute_theorem_mention_counts avoid counting it toward
+    `Finset.pi`, the collision risk the audit quantified at up to 98% noise for unscoped bare
+    matching."""
+    text = """\
+namespace Real
+
+theorem pi_pos : 0 < pi := trivial
+
+end Real
+"""
+    results = scan_theorem_statements_with_namespace(text)
+    assert len(results) == 1
+    statement, namespace_prefix = results[0]
+    assert namespace_prefix == "Real"
+    assert namespace_prefix != "Finset"
+    assert "pi" in statement

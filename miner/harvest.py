@@ -12,7 +12,7 @@ from miner import config as miner_cfg
 from miner.depindex import build_declaration_index
 from miner.gates import GateConfig
 from miner.rank import DEFAULT_CURATION_PATH, ManifestRecord, build_manifest, load_curation, write_manifest
-from miner.scan import ScanHit, scan_all, scan_theorem_statements
+from miner.scan import ScanHit, scan_all, scan_theorem_statements_with_namespace
 from miner.verify import verify_all_with_recovery
 
 DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "harvest_manifest.jsonl"
@@ -57,19 +57,45 @@ def compute_theorem_mention_counts(hits: list[ScanHit], mathlib_root: Path) -> d
     occurrences, not proof bodies) anywhere in Mathlib mention each candidate's name.
 
     Scans every `.lean` file under `mathlib_root` -- previously scoped only to the scanned
-    `TARGET_MODULES` corpus, a known batch-1/2 limitation now fixed per the 22 July 2026
-    design-doc revision, since this count now backs a hard gate
+    `TARGET_MODULES` corpus, a known batch-1/2 limitation fixed per the 22 July 2026
+    design-doc revision, since this count backs a hard gate
     (`miner.config.THEOREM_MENTION_FLOOR`) and a corpus-scoped count would make a candidate's
     eligibility depend on which other corners happened to be scanned alongside it in the same
-    run, not on its true full-Mathlib supply. Measured cost: ~2s to scan all ~176k theorem
-    statements across ~8300 files, ~10-15s to match ~1000 candidate names against them --
-    comfortably cheap next to the REPL-verification stage, so no caching was added.
-    """
-    statement_texts: list[str] = []
-    for path in sorted(mathlib_root.rglob("*.lean")):
-        statement_texts.extend(scan_theorem_statements(path.read_text(encoding="utf-8")))
+    run, not on its true full-Mathlib supply.
 
-    return {hit.name: sum(1 for s in statement_texts if hit.name in s) for hit in hits}
+    **Namespace-scoped matching (docs/theorem_mention_audit.md H1, fixed here):** a statement
+    counts as a mention if it contains the candidate's fully-qualified name *anywhere*, OR its
+    bare name from within a namespace block that resolves to that candidate (i.e. the
+    statement's own namespace prefix, from `scan_theorem_statements_with_namespace`, equals the
+    candidate's). The audit found the qualified-name-only match (the entire count before this
+    fix) missed the majority of real mentions, since Lean's own namespace resolution makes
+    unqualified reference the *normal* way to mention something from inside its own namespace.
+    Deliberately NOT an unscoped bare-name match (a name matching anywhere as a bare
+    substring): the audit quantified that as up to 98% collision noise on short, common bare
+    names (`pi`, `empty`, `fix`, ...) -- an unscoped bare check would trade one measurement bug
+    for a worse one.
+
+    Cost: measured at recount time and reported by the caller; see
+    `docs/harvest_review_batch3_revision2.md` for the actual run's timing.
+    """
+    statement_records: list[tuple[str, str]] = []
+    for path in sorted(mathlib_root.rglob("*.lean")):
+        statement_records.extend(scan_theorem_statements_with_namespace(path.read_text(encoding="utf-8")))
+
+    counts: dict[str, int] = {}
+    for hit in hits:
+        qualified = hit.name
+        parts = qualified.split(".")
+        bare = parts[-1]
+        namespace_prefix = ".".join(parts[:-1])
+        count = 0
+        for statement_text, statement_namespace in statement_records:
+            if qualified in statement_text:
+                count += 1
+            elif namespace_prefix and statement_namespace == namespace_prefix and bare in statement_text:
+                count += 1
+        counts[hit.name] = count
+    return counts
 
 
 def harvest(
