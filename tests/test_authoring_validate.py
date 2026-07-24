@@ -25,6 +25,7 @@ from authoring.validate import (
     validate_global_fact,
     validate_membership_fact,
 )
+from harness.facts import FactProvenance
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 from tests.fixtures.authoring_facts import (
@@ -178,16 +179,42 @@ def test_unknown_fact_type_rejected_without_repl():
 # --- ProposedFact projection and ValidationRun reporting --------------------------------------
 
 
-def test_to_fact_drops_authoring_only_fields():
+def test_to_fact_carries_domain_inputs_and_anchors_but_drops_expected_type():
+    """Schema v1.1: domain_inputs and anchors now ship in task.json, so to_fact() carries them
+    through; expected_type remains the one authoring-only field (see authoring/facts.py's
+    module docstring and docs/design/task_schema_v1_1.md's Open points)."""
     pf = ProposedFact(
-        id="x", type="casework", mechanism="decide", statement="s",
+        id="x", type="global", mechanism="proof", statement="s",
         domain_inputs={"n": "1"}, anchors=["A"], expected_type="Nat",
     )
-    f = pf.to_fact()
-    assert (f.id, f.type, f.mechanism, f.statement) == ("x", "casework", "decide", "s")
+    f = pf.to_fact(validation_status="PROVISIONALLY_VALIDATED")
+    assert (f.id, f.type, f.mechanism, f.statement) == ("x", "global", "proof", "s")
     assert f.instance is None
     assert f.polarity is None
     assert f.violated_property is None
+    assert f.domain_inputs == {"n": "1"}
+    assert f.anchors == ["A"]
+    assert f.validation_status == "PROVISIONALLY_VALIDATED"
+    assert f.discharge is None
+    assert f.cached_script is None
+    assert f.axiom_closure is None
+    assert not hasattr(f, "expected_type")
+
+
+def test_to_fact_carries_discharge_evidence_when_certified():
+    pf = ProposedFact(id="y", type="casework", mechanism="decide", statement="s", domain_inputs={"n": "1"})
+    f = pf.to_fact(
+        validation_status="CERTIFIED",
+        provenance=FactProvenance(validation_run_id="run-1", note="ran fine"),
+        discharge={"tier": 1, "wall_clock_s": 0.01, "at": "authoring"},
+        cached_script="by decide",
+        axiom_closure=["propext"],
+    )
+    assert f.validation_status == "CERTIFIED"
+    assert f.provenance == FactProvenance(validation_run_id="run-1", note="ran fine")
+    assert f.discharge == {"tier": 1, "wall_clock_s": 0.01, "at": "authoring"}
+    assert f.cached_script == "by decide"
+    assert f.axiom_closure == ["propext"]
 
 
 def test_validation_run_counts_and_summary():

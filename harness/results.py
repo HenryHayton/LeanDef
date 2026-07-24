@@ -1,6 +1,6 @@
 """Result types shared across the verifier package.
 
-Status vocabulary is per-mechanism, per `docs/design/task_schema_v1.md` "Scoring semantics"
+Status vocabulary is per-mechanism, per `docs/design/task_schema_v1_1.md` "Scoring semantics"
 (and the underlying tri-state protocol in
 `docs/design/verifier_architecture_2026-07-20.md` §4):
 
@@ -129,7 +129,7 @@ class CandidateScore:
     @property
     def fidelity(self) -> float | None:
         """certified-passing / (total - UNKNOWN - ERRORED), per
-        docs/design/task_schema_v1.md "Scoring semantics". `None` if there's nothing to
+        docs/design/task_schema_v1_1.md "Scoring semantics". `None` if there's nothing to
         score (inadmissible, no facts) or nothing resolved (every fact UNKNOWN/ERRORED) --
         a fraction with a zero denominator isn't a 0% or 100% score, it's not a score."""
         if not self.admissible or not self.fact_results:

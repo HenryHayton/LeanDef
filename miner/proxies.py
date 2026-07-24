@@ -32,7 +32,7 @@ _PREDICATE_RETURN_TYPES = frozenset({"Prop", "Bool"})
 _STRUCTURE_HINT_TYPES = ("Finset", "Set", "List", "Multiset")
 
 # Global-supply tier boundaries (raw mention/theorem-mention count). A dial, not a
-# commitment -- see docs/design/task_schema_v1.md's own precedent for calling out tunable
+# commitment -- see docs/design/task_schema_v1_1.md's own precedent for calling out tunable
 # thresholds explicitly rather than burying them.
 GLOBAL_THIN_MIN = 1
 GLOBAL_RICH_MIN = 5

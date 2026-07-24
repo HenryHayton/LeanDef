@@ -1,9 +1,14 @@
-"""Tests for harness.task_schema against docs/design/task_schema_v1.md.
+"""Tests for harness.task_schema against docs/design/task_schema_v1_1.md.
 
 Uses a hand-authored fixture task (`tests/fixtures/tasks/is_sorted_v1/`) -- deliberately not
 the archived τ probe, to keep schema testing independent of that one worked example. Each
 violation test starts from a deep copy of the valid fixture's data and mutates exactly one
 thing, so a failure pinpoints which rule broke.
+
+The fixture itself covers all three fact types, including both a `PROVISIONALLY_VALIDATED`
+and a `CERTIFIED` global fact with anchors -- the shape schema v1 could not express -- so
+`test_valid_fixture_data_passes`/`test_valid_fixture_directory_passes` double as the
+end-to-end "a full three-fact-type v1.1 task validates" test.
 """
 
 import json
@@ -139,12 +144,6 @@ def test_populated_mutants_fails(valid_data):
         validate_task_data(valid_data)
 
 
-def test_non_null_prover_budget_fails(valid_data):
-    valid_data["prover_budget"] = {"seconds": 60}
-    with pytest.raises(TaskSchemaError, match="prover_budget"):
-        validate_task_data(valid_data)
-
-
 def test_missing_review_status_fails(valid_data):
     del valid_data["provenance"]["review_status"]
     with pytest.raises(TaskSchemaError, match="review_status"):
@@ -205,3 +204,194 @@ def test_fact_missing_provenance_fails(valid_data):
     del valid_data["facts"][0]["provenance"]
     with pytest.raises(TaskSchemaError, match="provenance"):
         validate_task_data(valid_data)
+
+
+def test_old_v1_schema_version_now_fails(valid_data):
+    """v1.1 is a breaking migration (schema doc Changelog): a v1 payload's version string is
+    no longer accepted, not even as a fallback."""
+    valid_data["schema_version"] = "1"
+    with pytest.raises(TaskSchemaError, match="schema_version"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: statement format by mechanism -------------------------------------------------
+
+
+def _fact(data: dict, fact_id: str) -> dict:
+    return next(f for f in data["facts"] if f["id"] == fact_id)
+
+
+def test_decide_statement_without_command_form_fails(valid_data):
+    _fact(valid_data, "casework_empty")["statement"] = "isSorted [] = true"
+    with pytest.raises(TaskSchemaError, match="full runnable command"):
+        validate_task_data(valid_data)
+
+
+def test_decide_statement_as_hash_command_passes(valid_data):
+    _fact(valid_data, "casework_empty")["statement"] = "#eval decide (isSorted [] = true)"
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_proof_statement_with_assignment_fails(valid_data):
+    _fact(valid_data, "global_singleton_or_reverse")["statement"] = (
+        "example : forall l : List Nat, isSorted l = true -> isSorted l.reverse = true := by sorry"
+    )
+    with pytest.raises(TaskSchemaError, match="bare Prop"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: domain.variables and per-fact domain_inputs ------------------------------------
+
+
+def test_domain_missing_variables_fails(valid_data):
+    del valid_data["domain"]["variables"]
+    with pytest.raises(TaskSchemaError, match="variables"):
+        validate_task_data(valid_data)
+
+
+def test_domain_variables_duplicate_fails(valid_data):
+    valid_data["domain"]["variables"] = ["l", "l"]
+    with pytest.raises(TaskSchemaError, match="unique"):
+        validate_task_data(valid_data)
+
+
+def test_domain_variables_non_string_entry_fails(valid_data):
+    valid_data["domain"]["variables"] = [1]
+    with pytest.raises(TaskSchemaError, match="variables"):
+        validate_task_data(valid_data)
+
+
+def test_casework_missing_domain_inputs_fails(valid_data):
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {}
+    with pytest.raises(TaskSchemaError, match="domain_inputs"):
+        validate_task_data(valid_data)
+
+
+def test_domain_inputs_key_not_in_domain_variables_fails(valid_data):
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"not_a_declared_variable": "[]"}
+    with pytest.raises(TaskSchemaError, match="domain.variables"):
+        validate_task_data(valid_data)
+
+
+def test_membership_domain_inputs_may_be_empty_when_domain_is_true_sentinel(valid_data):
+    """is_sorted_v1's domain constraint is the 'True' sentinel, so membership facts are not
+    required to bind domain_inputs (unlike casework, which always must)."""
+    _fact(valid_data, "membership_accept_ascending")["domain_inputs"] = {}
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_membership_missing_domain_inputs_fails_when_domain_non_trivial(valid_data):
+    valid_data["domain"]["constraint"] = "l.length > 0"
+    _fact(valid_data, "membership_accept_ascending")["domain_inputs"] = {}
+    with pytest.raises(TaskSchemaError, match="domain_inputs"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: anchors ------------------------------------------------------------------------
+
+
+def test_global_fact_missing_anchors_fails(valid_data):
+    _fact(valid_data, "global_singleton_or_reverse")["anchors"] = []
+    with pytest.raises(TaskSchemaError, match="anchor"):
+        validate_task_data(valid_data)
+
+
+def test_non_global_fact_with_anchors_fails(valid_data):
+    _fact(valid_data, "casework_empty")["anchors"] = ["Nat.add_comm"]
+    with pytest.raises(TaskSchemaError, match="anchors.*must be empty"):
+        validate_task_data(valid_data)
+
+
+def test_anchor_with_whitespace_fails(valid_data):
+    _fact(valid_data, "global_singleton_or_reverse")["anchors"] = ["Nat add_comm"]
+    with pytest.raises(TaskSchemaError, match="whitespace"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: validation_status ----------------------------------------------------------------
+
+
+def test_decide_fact_provisional_status_fails(valid_data):
+    _fact(valid_data, "casework_empty")["validation_status"] = "PROVISIONALLY_VALIDATED"
+    with pytest.raises(TaskSchemaError, match="no provisional state"):
+        validate_task_data(valid_data)
+
+
+def test_bad_validation_status_value_fails(valid_data):
+    _fact(valid_data, "casework_empty")["validation_status"] = "MAYBE"
+    with pytest.raises(TaskSchemaError, match="validation_status"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: discharge / cached_script / axiom_closure coherence -----------------------------
+
+
+def test_certified_proof_fact_without_discharge_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"] = None
+    with pytest.raises(TaskSchemaError, match="discharge.*must be non-null"):
+        validate_task_data(valid_data)
+
+
+def test_provisional_proof_fact_with_nonnull_discharge_fails(valid_data):
+    _fact(valid_data, "global_singleton_or_reverse")["discharge"] = {
+        "tier": 2, "wall_clock_s": 1.0, "at": "authoring",
+    }
+    with pytest.raises(TaskSchemaError, match="discharge.*must be null"):
+        validate_task_data(valid_data)
+
+
+def test_discharge_bad_tier_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["tier"] = 6
+    with pytest.raises(TaskSchemaError, match="tier"):
+        validate_task_data(valid_data)
+
+
+def test_discharge_bad_stage_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["at"] = "somewhere"
+    with pytest.raises(TaskSchemaError, match="'at'"):
+        validate_task_data(valid_data)
+
+
+def test_discharge_negative_wall_clock_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["wall_clock_s"] = -1
+    with pytest.raises(TaskSchemaError, match="wall_clock_s"):
+        validate_task_data(valid_data)
+
+
+def test_certified_proof_fact_without_cached_script_fails(valid_data):
+    fact = _fact(valid_data, "global_certified_example")
+    fact["cached_script"] = None
+    fact["axiom_closure"] = None
+    with pytest.raises(TaskSchemaError, match="cached_script.*must be non-null"):
+        validate_task_data(valid_data)
+
+
+def test_cached_script_without_axiom_closure_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["axiom_closure"] = None
+    with pytest.raises(TaskSchemaError, match="axiom_closure.*must be non-null"):
+        validate_task_data(valid_data)
+
+
+def test_axiom_closure_without_cached_script_fails(valid_data):
+    _fact(valid_data, "global_singleton_or_reverse")["axiom_closure"] = ["propext"]
+    with pytest.raises(TaskSchemaError, match="axiom_closure.*must be null"):
+        validate_task_data(valid_data)
+
+
+# --- v1.1: ladder_budget_override (optional, task-level) ------------------------------------
+
+
+def test_ladder_budget_override_must_be_object_when_present(valid_data):
+    valid_data["ladder_budget_override"] = "not an object"
+    with pytest.raises(TaskSchemaError, match="ladder_budget_override"):
+        validate_task_data(valid_data)
+
+
+def test_ladder_budget_override_may_be_a_populated_object(valid_data):
+    valid_data["ladder_budget_override"] = {"tier_2_timeout_s": 5}
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_ladder_budget_override_may_be_omitted_entirely(valid_data):
+    del valid_data["ladder_budget_override"]
+    validate_task_data(valid_data)  # must not raise

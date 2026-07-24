@@ -74,7 +74,7 @@ class ValidationOutcome:
     """The verdict for one proposed fact. `evidence` is a JSON-shaped dict carrying whatever
     execution evidence backs the verdict -- commands run, their status, elapsed time, any
     domain-containment sub-check -- which is exactly the material
-    `docs/design/task_schema_v1.md`'s validation manifest requires be recorded alongside a
+    `docs/design/task_schema_v1_1.md`'s validation manifest requires be recorded alongside a
     validated fact."""
 
     fact_id: str
@@ -179,7 +179,7 @@ def check_domain_containment(
     `"IN_DOMAIN"`, `"IN_DOMAIN_VIA_CONVENTION"`, `"OUT_OF_DOMAIN"`, `"DOMAIN_UNDECIDED"`, plus
     an evidence dict.
 
-    The schema's own validation rule (`task_schema_v1.md` "Validation rule") is "every fact
+    The schema's own validation rule (`task_schema_v1_1.md` "Validation rule") is "every fact
     ... must lie inside `constraint` OR be a stated convention point" -- not the constraint
     alone. This checker honors both halves: a fact whose inputs fail the raw constraint is
     still in-domain if they match a convention point's own (authoring-time-only) `predicate`

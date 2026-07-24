@@ -32,6 +32,7 @@ from authoring.validate import ReasonCode, Verdict
 
 CLOG_DOMAIN = DomainSpec(
     constraint="1 < b ∧ b ≤ 12 ∧ 1 < n",
+    variables=["b", "n"],
     conventions=[
         ConventionPoint(
             point="b ≤ 1",
@@ -162,7 +163,19 @@ def clog_fixture_set() -> tuple[DomainSpec, str, list[ProposedFact], dict[str, t
 
 # --- Monotone -------------------------------------------------------------------------------
 
-MONOTONE_DOMAIN = DomainSpec(constraint="True", conventions=[])
+MONOTONE_DOMAIN = DomainSpec(
+    constraint="True",
+    variables=["f"],
+    conventions=[
+        ConventionPoint(
+            point=None,
+            statement=None,
+            note="NONE_DECLARED: Monotone f is defined for every f between any two preorders, "
+            "with no restricted domain or junk-value edge case the way a partial/computable "
+            "definition like Nat.clog has",
+        )
+    ],
+)
 MONOTONE_NAME = "Monotone"
 
 _DIP_INSTANCE = "(fun n : Fin 3 => if n = 0 then (2 : Fin 3) else n)"

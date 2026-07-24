@@ -7,7 +7,7 @@ loop, and result collection identified there as generic are here; the specific f
 candidate bodies, and pinned signature are left as caller-supplied data.
 `archive/n1_tau/` itself is left untouched -- nothing in this module reads from it.
 
-Per `docs/design/reward_structure_2026-07-21.md` §2 and `docs/design/task_schema_v1.md`, a
+Per `docs/design/reward_structure_2026-07-21.md` §2 and `docs/design/task_schema_v1_1.md`, a
 fact declares its own `mechanism` (`decide` or `proof`) -- see `harness.facts.Fact`.
 `run_facts` dispatches on it: `decide` runs as a REPL command and reads PASSED/FAILED off
 `has_errors()`, exactly as before; `proof` has no adjudication path yet and raises
