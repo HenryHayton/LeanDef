@@ -98,7 +98,10 @@ def test_domain_containment_via_convention_point(mathlib_env):
 
 def test_domain_containment_undecided_when_predicate_is_not_decidable(mathlib_env):
     server, env = mathlib_env
-    domain = DomainSpec(constraint="Continuous f", conventions=[])
+    domain = DomainSpec(
+        constraint="Continuous f",
+        conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: not this test's concern")],
+    )
     verdict, _ = check_domain_containment(server, env, domain, {"f": "(fun x : ℝ => x)"})
     assert verdict == "DOMAIN_UNDECIDED"
 
