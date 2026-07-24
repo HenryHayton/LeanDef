@@ -62,6 +62,7 @@ class ReasonCode:
     MALFORMED_BAD_POLARITY = "MALFORMED_BAD_POLARITY"
     MALFORMED_MISSING_FIELD = "MALFORMED_MISSING_FIELD"
     MALFORMED_UNKNOWN_TYPE = "MALFORMED_UNKNOWN_TYPE"
+    MALFORMED_UNPARSEABLE_STATEMENT = "MALFORMED_UNPARSEABLE_STATEMENT"
     ANCHOR_NOT_FOUND = "ANCHOR_NOT_FOUND"
     PROPOSITION_DOES_NOT_ELABORATE = "PROPOSITION_DOES_NOT_ELABORATE"
     DOES_NOT_MENTION_PINNED_NAME = "DOES_NOT_MENTION_PINNED_NAME"
@@ -214,7 +215,24 @@ def check_domain_containment(
 
 def _run_statement(server: AutoLeanServer, env: int, fact: ProposedFact, *, timeout: float) -> ValidationOutcome:
     """Shared tail for casework and decidable-membership facts, once domain/elaboration
-    checks are clear: execute `fact.statement` against the true definition and classify."""
+    checks are clear: execute `fact.statement` against the true definition and classify.
+
+    Guards against an empty/missing `fact.statement` before constructing a `Command` --
+    `lean_interact.Command` requires a non-empty `cmd` string and raises an uncaught
+    `pydantic.ValidationError` otherwise, which must never escape a malformed proposal.
+
+    Within a `FAILED` result, a Lean parse error (the statement was never a well-formed
+    command) and a well-formed statement that's simply false are both reported by
+    `run_checked` as `FAILED` -- `CheckStatus` itself doesn't distinguish them. Empirically,
+    Lean's parse-error messages consistently contain "expected command" (e.g. `'unexpected
+    identifier; expected command'`), while a genuine `decide`-tactic falsity reads like
+    `'Tactic `decide` proved that the proposition ... is false'` -- confirmed against both a
+    known-false decidable statement and known-malformed inputs (bare Prop, markdown fence)
+    before relying on this substring check."""
+    if not fact.statement or not fact.statement.strip():
+        return ValidationOutcome(
+            fact.id, Verdict.REJECTED, ReasonCode.MALFORMED_MISSING_FIELD, detail="statement is empty or missing"
+        )
     check = run_checked(server, Command(cmd=fact.statement, env=env), timeout=timeout)
     evidence = {
         "command": fact.statement,
@@ -225,6 +243,10 @@ def _run_statement(server: AutoLeanServer, env: int, fact: ProposedFact, *, time
     if check.status is CheckStatus.PASSED:
         return ValidationOutcome(fact.id, Verdict.ACCEPTED, ReasonCode.CERTIFIED_TRUE_OF_GROUND_TRUTH, evidence=evidence)
     if check.status is CheckStatus.FAILED:
+        if "expected command" in check.detail:
+            return ValidationOutcome(
+                fact.id, Verdict.REJECTED, ReasonCode.MALFORMED_UNPARSEABLE_STATEMENT, detail=check.detail, evidence=evidence
+            )
         return ValidationOutcome(
             fact.id, Verdict.REJECTED, ReasonCode.FALSE_OF_GROUND_TRUTH, detail=check.detail, evidence=evidence
         )
@@ -342,6 +364,14 @@ def validate_membership_fact(
         "elapsed_s": elaborate_check.elapsed_s,
         "detail": elaborate_check.detail,
     }
+    if elaborate_check.status is CheckStatus.ERRORED:
+        return ValidationOutcome(
+            fact.id,
+            Verdict.REJECTED,
+            ReasonCode.ERRORED,
+            detail=elaborate_check.detail or "validation infrastructure failed during instance elaboration check",
+            evidence={"domain_check": domain_evidence, "elaboration": elaborate_evidence},
+        )
     if elaborate_check.status is not CheckStatus.PASSED:
         return ValidationOutcome(
             fact.id,

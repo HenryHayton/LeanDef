@@ -17,14 +17,16 @@ poisoning every test that runs after it. This module gets its own `mathlib_env` 
 separate instance) and keeps the two timeout-inducing tests at the very end of the file, after
 everything else that needs the environment to stay healthy.
 
-Some tests below are `xfail`: they demonstrate confirmed bugs in `authoring/validate.py`,
-found while writing this coverage, not fixed here (out of scope -- "test-and-fixture changes
-only" per the task that added this module). See each xfail's `reason=` for the one-line
-diagnosis.
+Coverage hardening surfaced three confirmed bugs (documented as `xfail` when this module was
+first written); a follow-up fix session closed all three in `authoring/validate.py` --
+`validate_membership_fact`'s instance-elaboration check now distinguishes `ERRORED` from
+`INSTANCE_DOES_NOT_ELABORATE`, `_run_statement` guards against an empty/missing statement
+before `Command` construction, and a decide-mechanism parse error is now reported under its own
+`MALFORMED_UNPARSEABLE_STATEMENT` reason code rather than folded into `FALSE_OF_GROUND_TRUTH`.
+No `xfail`s remain in this module.
 """
 
 import pytest
-from pydantic import ValidationError
 
 from authoring.facts import ConventionPoint, DomainSpec, ProposedFact
 from authoring.validate import (
@@ -119,25 +121,16 @@ def test_casework_missing_domain_inputs_binding_is_domain_undecided_not_missing_
 #   (MALFORMED_MISSING_ANCHORS). Not duplicated here.
 
 
-@pytest.mark.xfail(
-    raises=ValidationError,
-    strict=True,
-    reason="authoring.validate never checks fact.statement for presence; an empty statement "
-    "crashes with an uncaught pydantic.ValidationError from Command construction instead of "
-    "producing a ValidationOutcome. Confirmed bug, not fixed (test-and-fixture task).",
-)
-def test_casework_missing_statement_crashes_instead_of_returning_a_reason_code():
-    """BUG, xfail: an empty (missing) `statement` on a casework fact is never checked for
-    presence before being handed straight to `Command(cmd=fact.statement, ...)` in
-    `_run_statement` -- `lean_interact`'s `Command` model requires a non-empty string, so this
-    raises an uncaught `pydantic.ValidationError` out of `validate_casework_fact` instead of
-    returning a `ValidationOutcome` (e.g. `MALFORMED_MISSING_FIELD`). A malformed proposal
-    should never be able to kill a validation run outright -- confirmed empirically (not
-    assumed) against the real REPL plumbing; no REPL round-trip is actually needed to trigger
-    it, since the crash happens at Command-construction time before any request is sent --
-    hence `server=None` here (a `"True"` domain constraint short-circuits containment without
-    touching it, matching `check_domain_containment`'s own documented fast path, so this test
-    reaches the crash point rather than failing earlier on `None.run(...)`)."""
+def test_casework_missing_statement_returns_malformed_missing_field():
+    """An empty (missing) `statement` on a casework fact is guarded at the top of
+    `_run_statement`, before `Command(cmd=fact.statement, ...)` is ever constructed --
+    `lean_interact`'s `Command` model requires a non-empty string, so without the guard this
+    would raise an uncaught `pydantic.ValidationError` instead of returning a
+    `ValidationOutcome`. No REPL round-trip is needed to trigger the guard, since it fires
+    before any request is sent -- hence `server=None` here (a `"True"` domain constraint
+    short-circuits containment without touching it, matching `check_domain_containment`'s own
+    documented fast path, so this test reaches the guard rather than failing earlier on
+    `None.run(...)`)."""
     fact = ProposedFact(id="empty_statement", type="casework", mechanism="decide", statement="", domain_inputs={})
     outcome = validate_casework_fact(None, None, fact, TRUE_DOMAIN)
     assert outcome.verdict is Verdict.REJECTED
@@ -187,16 +180,13 @@ def test_adversarial_decide_mechanism_with_bare_prop_statement(mathlib_env):
     doc's own "status of structural vs. semantic validation" split. What actually happens:
     submitted as-is, the bare Prop is not a valid top-level Lean COMMAND, so the REPL reports a
     parse error (`response.has_errors()` -- a normal FAILED, not a timeout/ERRORED), which
-    `_run_statement` folds into `FALSE_OF_GROUND_TRUTH` same as a genuinely-false statement.
-    Not a crash, not silently accepted -- but worth naming precisely: a malformed-shape
-    statement and a genuinely-false one currently share one reason code. Documented, not
-    xfailed: this doesn't invert pass/fail (still correctly REJECTED) and there is no more
-    specific reason code to prefer it over -- see the report for this task's read on severity."""
+    `_run_statement` recognizes via the "expected command" substring and reports under
+    `MALFORMED_UNPARSEABLE_STATEMENT`, distinct from a genuinely-false well-formed statement."""
     server, env = mathlib_env
     fact = ProposedFact(id="bare_prop", type="casework", mechanism="decide", statement="Nat.clog 2 37 = 6", domain_inputs={"b": "2", "n": "37"})
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN)
     assert outcome.verdict is Verdict.REJECTED
-    assert outcome.reason_code == ReasonCode.FALSE_OF_GROUND_TRUTH
+    assert outcome.reason_code == ReasonCode.MALFORMED_UNPARSEABLE_STATEMENT
     assert "expected command" in outcome.evidence["execution"]["detail"]
 
 
@@ -219,8 +209,8 @@ def test_adversarial_proof_mechanism_with_decide_shaped_statement(mathlib_env):
 def test_adversarial_statement_with_markdown_fence(mathlib_env):
     """LLM output routinely wraps code in ```lean fences -- if that text leaks into a proposed
     fact's statement verbatim, it must not crash the validator. It doesn't: the backtick lines
-    are parse errors like any other malformed command, folded into FALSE_OF_GROUND_TRUTH
-    (same finding as the bare-Prop case above)."""
+    are parse errors like any other malformed command, reported under
+    `MALFORMED_UNPARSEABLE_STATEMENT` (same finding as the bare-Prop case above)."""
     server, env = mathlib_env
     fact = ProposedFact(
         id="markdown_fenced", type="casework", mechanism="decide",
@@ -229,7 +219,7 @@ def test_adversarial_statement_with_markdown_fence(mathlib_env):
     )
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN)
     assert outcome.verdict is Verdict.REJECTED
-    assert outcome.reason_code == ReasonCode.FALSE_OF_GROUND_TRUTH
+    assert outcome.reason_code == ReasonCode.MALFORMED_UNPARSEABLE_STATEMENT
 
 
 def test_adversarial_domain_inputs_references_undeclared_domain_variable(mathlib_env):
@@ -293,20 +283,13 @@ def test_casework_execution_error_is_errored_not_false(mathlib_env):
     assert outcome.reason_code == ReasonCode.ERRORED
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="validate_membership_fact's instance-elaboration check uses `status is not "
-    "CheckStatus.PASSED` as one blanket branch -- it never distinguishes a genuine REPL "
-    "timeout/error from a normal FAILED (instance really doesn't typecheck), so a timeout "
-    "here is misreported as INSTANCE_DOES_NOT_ELABORATE instead of ERRORED. Confirmed bug, "
-    "not fixed (test-and-fixture task).",
-)
 def test_membership_instance_elaboration_error_is_errored_not_does_not_elaborate(mathlib_env):
-    """BUG: same concern as the casework case above, for the membership instance-elaboration
-    check specifically -- a timeout there currently gets misreported as the instance being
-    malformed, not as validation infrastructure failing. Uses a deliberately expensive
-    `expected_type` (nested `Nat.rec` unfolding) to force a slow elaboration under a short
-    timeout; confirmed empirically to reproduce the timeout reliably before writing this test."""
+    """Same concern as the casework case above, for the membership instance-elaboration check
+    specifically -- a timeout there must be reported as validation infrastructure failing
+    (`ERRORED`), not as the instance being malformed (`INSTANCE_DOES_NOT_ELABORATE`). Uses a
+    deliberately expensive `expected_type` (nested `Nat.rec` unfolding) to force a slow
+    elaboration under a short timeout; confirmed empirically to reproduce the timeout reliably
+    before writing this test."""
     server, env = mathlib_env
     fact = ProposedFact(
         id="errored_membership", type="membership", mechanism="decide",
