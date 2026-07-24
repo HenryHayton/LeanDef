@@ -250,14 +250,70 @@ This generalizes: if any other download+extract dependency step fails after a `u
 (or similarly transient) first failure, check whether the archive already exists on disk before
 assuming a plain retry will re-extract it — it may not.
 
-### C.7 — cvc5 FFI fix
+### C.7 — cvc5 FFI fix (`--load-dynlib`, required for every hammer invocation)
 
-<!-- Filled in by the 2026-07-24 follow-up task (cvc5 SIGABRT fix). See that task's report /
-     this file's own changelog for what was found and applied. Placeholder kept here so a
-     from-scratch rebuild knows a fix step exists at this point in the sequence, even before
-     reading the details below. -->
+**Symptom:** any goal whose `hammer` search reaches the cvc5/SMT route crashes the whole `lean`
+process with SIGABRT: `libc++abi: terminating due to uncaught exception of type
+lean::exception: Could not find native implementation of external declaration
+'cvc5.TermManager.new' (symbols 'lp_cvc5_cvc5_TermManager_new___boxed' or
+'lp_cvc5_cvc5_TermManager_new')`.
 
-**[to be completed by Part 2/3 of this task below]**
+**Root cause, confirmed by direct inspection (`nm -D` on every built `.so`, cross-referenced
+against where the `extern_def`s actually live in source):**
+
+- `TermManager.new` (and every other cvc5 FFI entry point) is declared via `extern_def` directly
+  in the cvc5 package's top-level `cvc5.lean` (`.lake/packages/cvc5/cvc5.lean:360` and
+  throughout that file) — not in any of its submodules (`cvc5/{Init,Kind,ProofRule,SkolemId,
+  Types}.lean`).
+- The cvc5 package's `lakefile.lean` sets `precompileModules := true` and `moreLinkObjs := libs`
+  (the downloaded `libcadical.a`/`libcvc5.a`/`libgmp.a`/etc. plus the compiled `ffi.o` FFI glue)
+  on the `cvc5` `lean_lib` target. This correctly produces a combined native shared library,
+  `.lake/packages/cvc5/.lake/build/lib/libcvc5_cvc5.so` — confirmed to contain the missing
+  symbol (`nm -D libcvc5_cvc5.so | grep TermManager_new` finds it).
+- But `precompileModules := true` *also* generates a **separate, per-submodule** interpreter
+  plugin `.so` for each of the five submodules (`cvc5_cvc5_{Kind,ProofRule,SkolemId,Types,
+  Init}.so` under `.lake/build/lib/lean/`) — and critically, **no equivalent plugin `.so` is
+  generated for the top-level `cvc5` module itself**, which is the one that actually declares
+  the FFI symbols. None of the five submodule plugins contain `TermManager_new` either
+  (confirmed empty via the same `nm` search) — they're pure-Lean re-exports/enum wrappers with
+  no native code of their own.
+- `lake env lean <file>` (plain interpreted-script invocation, not a declared `lean_exe`
+  target) has no way to know it needs `libcvc5_cvc5.so` — Lake only auto-wires
+  `--load-dynlib`/rpath flags for targets it knows about at build time (declared `lean_exe`s),
+  not for ad-hoc script files. So the aggregate `.so` that has the symbol never gets loaded, and
+  the interpreter aborts the process outright (not a catchable Lean-level error) the moment it
+  hits the first `@[extern]` call.
+- This did **not** match a documented upstream issue — checked the `abdoo8080/lean-cvc5`,
+  `ufmg-smite/lean-smt`, and `JOSHCLUNE/LeanHammer` issue trackers for this exact error string;
+  nothing found. The generic Lean error hint ("set `supportInterpreter := true` in the relevant
+  `lean_exe` statement") pointed at the right *mechanism* (interpreter-mode native-symbol
+  loading) but not a directly applicable fix, since we have no `lean_exe` of our own in this
+  invocation path.
+
+**Fix applied (our own invocation convention — zero changes to any dependency source):** pass
+Lean's own `--load-dynlib` flag (`lean --help`: "load shared library to make its symbols
+available to the interpreter") pointing at the aggregate `.so`, on every `lake env lean`
+invocation that might reach the SMT route (i.e., every hammer smoke-test/goal invocation —
+cheap and harmless to include unconditionally even for goals that don't need it):
+
+```
+DYNLIB=$(pwd)/.lake/packages/cvc5/.lake/build/lib/libcvc5_cvc5.so
+lake env lean --load-dynlib="$DYNLIB" <file>.lean
+```
+
+No rebuild was required — `libcvc5_cvc5.so` already existed from the original `lake build
+Hammer`; this is purely an invocation-layer fix. **Anyone driving hammer from Python (the real
+ladder-worker, eventually) must pass this flag on every subprocess invocation** — it is not
+optional and not automatic.
+
+**Secondary, unrelated bug this surfaced:** the original smoke-test goal files only had
+`import Hammer`, not `import Mathlib`. Under the SIGABRT, this was invisible — the crash fired
+before any "unknown identifier" diagnostics could flush to stdout (fully-buffered stdio when
+redirected to a file loses unflushed output on abnormal process termination; stderr's abort
+message survived because C++'s `std::cerr`/`libc++abi`'s termination handler write
+unbuffered/immediately). Once the crash was fixed, goals referencing Mathlib identifiers
+(`Monotone`, etc.) without `import Mathlib` surfaced their *real*, mundane failure: unresolved
+identifiers, unrelated to cvc5. Fixed by adding `import Mathlib` to the goal files that need it.
 
 ### Versions to confirm after any rebuild
 
@@ -292,8 +348,21 @@ timeout (Hammer's `by hammer [lemmas] {options}` syntax has no timeout option of
 
 ```
 cd ~/verifier-lean
-timeout 60 lake env lean smoke_goals/goal1.lean
+DYNLIB=$(pwd)/.lake/packages/cvc5/.lake/build/lib/libcvc5_cvc5.so
+timeout 60 lake env lean --load-dynlib="$DYNLIB" smoke_goals/goal1.lean
 ```
+
+**`--load-dynlib` is required, not optional** — see Phase C.7 above. Without it, any goal whose
+`hammer` search reaches the cvc5/SMT route crashes the whole process with SIGABRT instead of
+failing gracefully. Every goal file that references Mathlib identifiers also needs its own
+`import Mathlib` (not just `import Hammer`) — easy to miss since the SIGABRT (before the fix)
+masked this as a separate-looking crash rather than a plain unresolved-identifier error.
+
+Expect real run-to-run timing variance from `hammer` — it's a portfolio search hitting an
+external, network-dependent premise-selection server plus multiple solver backends in
+parallel/race fashion. One goal (a plain `Monotone (fun n => n + 1)` fact) timed out at the
+full 60s budget on one run and proved in 6.5s on an immediate repeat, with no other change.
+Don't treat a single timeout as a hard failure without at least one retry.
 
 ---
 
@@ -316,3 +385,11 @@ left for "next time."
   issues found and fixed, first smoke test run: 2/6 goals proved via the Zipperposition/premise
   route, 2/6 crashed with a cvc5 FFI SIGABRT, 2/6 failed to elaborate (expected — context-
   stripped real Mathlib statements).
+- **2026-07-24 (cvc5 FFI fix)** — root cause: `lake env lean` never auto-loads the aggregate
+  cvc5 shared library for ad-hoc script interpretation (Phase C.7). Fixed by always passing
+  `--load-dynlib=.../libcvc5_cvc5.so`. Re-test: 4/7 goals proved (including the two
+  previously-crashing `Monotone`-shaped goals and a new linear-arithmetic goal added to confirm
+  cvc5 genuinely proves things when healthy, not merely stops crashing), 1/7 failed gracefully
+  with a clean "unsolved goals" message (no crash — a genuinely hard fact, not a defect), 2/7
+  still fail elaboration as expected (context-stripped real Mathlib statements, out of scope).
+  Zero SIGABRTs.
