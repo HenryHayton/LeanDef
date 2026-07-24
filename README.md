@@ -43,8 +43,9 @@ machine; re-run and update these numbers if they matter for planning later miles
 **Scope note:** every per-check row below is a `decide`/`#eval` call on a trivial arithmetic
 proposition, proving the REPL plumbing works — not a benchmark of "what a fact costs." Only
 decidable facts (reward-structure design §2.1) run this fast; membership facts that need a
-proof and global theorem facts (§2.2–§2.3) go through an LLM prover agent instead of `decide`
-and cost seconds to minutes, not milliseconds. No proof-based-fact timings exist yet.
+proof and global theorem facts (§2.2–§2.3) go through the adjudication ladder (decide → pinned
+tactics → hammer → equivalence → capped LLM prover) instead of `decide` and cost seconds to
+minutes, not milliseconds. No proof-based-fact timings exist yet.
 
 | Stage | Time |
 |---|---|

@@ -24,14 +24,14 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-REGION = "us-east-1"  # placeholder -- not yet confirmed against the company AWS account
+REGION = "eu-west-1"  # placeholder -- not yet confirmed against the company AWS account
 
 # Two pinned model ID slots (task instructions): dossier generation will use FLAGSHIP_MODEL_ID;
 # other stage-2 authoring calls use AUTHORING_MODEL_ID. Both hold the same placeholder for now
 # -- nothing yet distinguishes what "flagship" vs "authoring" should actually mean model-wise,
 # since no stage-2 prompt work exists yet (out of scope for this task).
-AUTHORING_MODEL_ID = "PLACEHOLDER-authoring-model-id"
-FLAGSHIP_MODEL_ID = "PLACEHOLDER-flagship-model-id"
+AUTHORING_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
+FLAGSHIP_MODEL_ID = "eu.anthropic.claude-sonnet-4-6"
 
 # When None: real Bedrock, resolved by boto3's own region-based endpoint resolution. When set
 # (a "http://host:port" string): every call goes to that URL instead, with no AWS
