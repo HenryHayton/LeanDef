@@ -1,0 +1,37 @@
+# This is the EC2 hammer environment's lakefile, NOT used by the Mac build.
+#
+# It is the box-local variant deployed to ~/verifier-lean/lakefile.toml on the rented x86
+# instance (see docs/ec2_runbook.md for the full deployment recipe and the reasoning behind
+# every line below). The only structural difference from the real lean/lakefile.toml is the
+# Hammer [[require]] block, inserted BEFORE the mathlib require block -- documented LeanHammer
+# practice: both share a dependency on `batteries`, and listing Hammer first avoids an
+# unnecessary Mathlib recompile.
+#
+# Do not edit lean/lakefile.toml to match this file. The Mac stays hammer-free (LeanHammer's
+# bundled Zipperposition ATP binary is x86-only; premise-selection memory spikes exceed what
+# the dev Mac is provisioned for) -- see docs/design/reward_structure_2026-07-21.md §3 for why
+# tier 3 of the adjudication ladder needs a rented machine at all.
+
+name = "definition_verifier"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["DefinitionVerifier"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "Hammer"
+git = "https://github.com/JOSHCLUNE/LeanHammer"
+rev = "v4.32.0"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.32.0"
+
+[[lean_lib]]
+name = "DefinitionVerifier"

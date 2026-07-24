@@ -30,3 +30,15 @@ don't leave it checked off in place.
   from the n=1 probe; converting it into a golden fixture under the frozen task schema would
   give the harness a known-answer regression test.
   **Trigger:** task schema v1.1 lands.
+- **Self-host the premise-selection server** (`hanwenzhu/lean-premise-server`). The EC2 hammer
+  box currently uses the public default (`http://leanpremise.net`, per the LeanHammer README —
+  documented as intended for individual use); self-hosting is a separate repo with its own
+  setup, materially more complex than using the default (`docs/ec2_runbook.md` Phase D).
+  **Trigger:** before the first real training round; until then the public server is used for
+  search only — cached-script replay (reward doc §3.2) has no server dependency, so nothing
+  downstream of a certified proof depends on the public server staying up.
+- **Elastic IP or SSM Session Manager for stable EC2 box addressing.** The hammer box's public
+  IP changes on every stop/start (`docs/ec2_runbook.md`), requiring a re-fetch (and a security-
+  group rule update) every session.
+  **Trigger:** if IP-refetch friction becomes a recurring cost (e.g. once sessions on this box
+  become frequent enough that the manual re-fetch/re-authorize steps add up).
