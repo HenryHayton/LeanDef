@@ -42,3 +42,37 @@ don't leave it checked off in place.
   group rule update) every session.
   **Trigger:** if IP-refetch friction becomes a recurring cost (e.g. once sessions on this box
   become frequent enough that the manual re-fetch/re-authorize steps add up).
+- **Two unexplained non-elaborating miner candidates.** `Tactic.NormNum.SquarefreeHelper`
+  (`Data/Nat/Squarefree.lean`) and `SimpleGraph.ErdosStone.filter`
+  (`Combinatorics/SimpleGraph/Extremal/ErdosStoneSimonovits.lean`) scan and qualify correctly
+  (confirmed against the real source — not `_root_.`, not a `/-!` phantom, not a universe-
+  annotation or `noncomputable section`/`public section` desync, not the dotted-namespace bug
+  below — every class diagnosed so far) but `#check` still fails for both under their
+  correctly-scanned name. Other declarations from the same two files elaborate fine, ruling out
+  a whole-file import problem; root cause not established
+  (`miner/output/non_elaborator_characterization.jsonl`, class `unexplained_correctly_scanned`).
+  **Trigger:** the next miner scan-layer task (another parser-bug fix, another non-elaborator
+  sweep, or a full-corpus mine into new territory).
+- **`miner.scan` mis-tracks dotted multi-component `namespace A.B.C` declarations.** Lean treats
+  `namespace A.B.C` as opening three nested namespaces (closable either as three separate
+  `end`s or via a combined `end A.B` etc.), but the scanner's namespace stack pushes it as ONE
+  opaque frame — correct for name *qualification* (string-joining one frame gives the same
+  result as joining three), but wrong for stack *depth*, so a source file that closes such a
+  namespace with multiple partial `end`s (e.g. `namespace Order.Frame.MinimalAxioms ... end
+  MinimalAxioms ... end Order.Frame`, the real shape in `Order/CompleteBooleanAlgebra.lean`,
+  `Order/Disjointed.lean`, `Order/Grade.lean`) desyncs the stack depth for whatever follows.
+  Found while investigating the `noncomputable section`/`public section` fix (2026-07-24
+  follow-up); confirmed harmless there — all 6 scanned candidates from the 3 affected files
+  still elaborate correctly (`elaborates=True`), and only one (`disjointed`) is in the 727
+  eligible set, unaffected — but the underlying stack-depth bug is real and could corrupt a
+  future candidate's qualified name in a file shaped differently. Not fixed (out of scope for
+  that task — it isn't a section-modifier variant).
+  **Trigger:** the next miner scan-layer task, or any non-elaborator investigation that
+  reproduces a namespace-tracking symptom not already covered by the fixed bug classes.
+- **Ladder worker's Lean invocations must pass `--load-dynlib=<cvc5 .so path>`** (see
+  `docs/ec2_runbook.md` Phase C.7) — `lake env lean` never auto-loads it for ad-hoc script
+  interpretation, and without it any cvc5/SMT-route goal SIGABRTs the whole process instead of
+  failing gracefully. Verify whether `LeanInteract`'s config surface supports injecting this
+  flag (or an equivalent env/subprocess-arg mechanism) before the ladder worker assumes it can
+  just shell out to `lean` the way the manual smoke test did.
+  **Trigger:** ladder worker build.

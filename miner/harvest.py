@@ -2,8 +2,10 @@
 manifest. `harvest()` is what both the integration test and `python -m miner.harvest` call.
 """
 
+import json
 import subprocess
 import time
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from harness.repl import get_warm_environment
@@ -12,10 +14,11 @@ from miner import config as miner_cfg
 from miner.depindex import build_declaration_index
 from miner.gates import GateConfig
 from miner.rank import DEFAULT_CURATION_PATH, ManifestRecord, build_manifest, load_curation, write_manifest
-from miner.scan import ScanHit, scan_all, scan_theorem_statements_with_namespace
+from miner.scan import ScanHit, scan_all, scan_theorem_declarations_with_namespace, scan_theorem_statements_with_namespace
 from miner.verify import verify_all_with_recovery
 
 DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "harvest_manifest.jsonl"
+DEFAULT_MENTION_NAMES_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "mention_names.jsonl"
 
 
 def compute_mention_counts(hits: list[ScanHit], mathlib_root: Path) -> None:
@@ -96,6 +99,83 @@ def compute_theorem_mention_counts(hits: list[ScanHit], mathlib_root: Path) -> d
                 count += 1
         counts[hit.name] = count
     return counts
+
+
+@dataclass(frozen=True)
+class MentionRecord:
+    """One mentioning theorem, for `compute_theorem_mentions` (bundled miner repairs task,
+    piece 1). Fully-qualified name + repo-relative source path (under the Mathlib package) +
+    the extracted statement text -- everything `compute_theorem_mention_counts` already
+    computes internally to decide a match, but previously discarded, keeping only the count."""
+
+    theorem_name: str
+    source_file: str
+    statement_text: str
+
+
+@dataclass
+class DefinitionMentions:
+    """The persisted output for one definition: every mentioning theorem, by name."""
+
+    name: str
+    mentions: list[MentionRecord] = field(default_factory=list)
+
+
+def compute_theorem_mentions(hits: list[ScanHit], mathlib_root: Path) -> dict[str, list[MentionRecord]]:
+    """Like `compute_theorem_mention_counts`, but returns the actual mentioning theorem
+    records (fully-qualified name, source file, statement text) instead of a bare count --
+    bundled miner repairs task, piece 1.
+
+    Uses the identical matching rule `compute_theorem_mention_counts` uses (qualified name
+    anywhere in the statement, or bare name from within a matching namespace -- see that
+    function's docstring) against the SAME full-corpus scan, so for any hit, `len(mentions) ==
+    compute_theorem_mention_counts(...)`'s count for that hit, by construction (both walk the
+    same `scan_theorem_declarations_with_namespace` records with the same condition) --
+    verified directly, not merely asserted, by the caller that cross-checks this against
+    `compute_theorem_mention_counts`'s own count and against the frozen batch-4 manifest (see
+    the task report for that verification's results and any individually-explained
+    discrepancies against the frozen, pre-parser-fix manifest).
+
+    Kept as its own full-corpus scan (like `miner.discharge.scan_all_theorem_statements`)
+    rather than threading through `compute_theorem_mention_counts`'s existing call site, for
+    the same reason that module gives: keeping this function's existing signature and callers
+    untouched. The extra full-tree scan is cheap (~17s per `docs/harvest_review_batch3.md` §0).
+    """
+    declarations: list[tuple[str, str, str, str]] = []  # (qualified_name, statement_text, namespace_prefix, source_file)
+    for path in sorted(mathlib_root.rglob("*.lean")):
+        module_path = str(path.relative_to(mathlib_root))
+        for qualified_name, statement_text, namespace_prefix in scan_theorem_declarations_with_namespace(
+            path.read_text(encoding="utf-8")
+        ):
+            declarations.append((qualified_name, statement_text, namespace_prefix, module_path))
+
+    mentions: dict[str, list[MentionRecord]] = {}
+    for hit in hits:
+        qualified = hit.name
+        parts = qualified.split(".")
+        bare = parts[-1]
+        namespace_prefix = ".".join(parts[:-1])
+        records: list[MentionRecord] = []
+        for theorem_name, statement_text, statement_namespace, source_file in declarations:
+            if qualified in statement_text:
+                records.append(MentionRecord(theorem_name, source_file, statement_text))
+            elif namespace_prefix and statement_namespace == namespace_prefix and bare in statement_text:
+                records.append(MentionRecord(theorem_name, source_file, statement_text))
+        mentions[hit.name] = records
+    return mentions
+
+
+def write_mention_names(mentions: dict[str, list[MentionRecord]], output_path: Path) -> None:
+    """Write the sidecar `mention_names.jsonl` -- one line per definition, keyed by its
+    fully-qualified name (option (a) of the task's two choices: a sidecar file, not a new
+    manifest field, so `harvest_manifest.jsonl` -- the frozen batch-4 selection artifact --
+    stays byte-identical; see the task report for the reasoning)."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8") as f:
+        for name in sorted(mentions):
+            record = DefinitionMentions(name=name, mentions=mentions[name])
+            f.write(json.dumps(asdict(record), ensure_ascii=False))
+            f.write("\n")
 
 
 def harvest(

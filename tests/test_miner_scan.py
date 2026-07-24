@@ -3,8 +3,13 @@ no real Mathlib files, no REPL. See tests/test_miner_harvest.py for the integrat
 against a real module."""
 
 from miner.scan import (
+    _find_module_doc_skip_lines,
+    _qualify_name,
+    _SECTION_RE,
     _split_statement_at_top_level_assign,
+    _THEOREM_RE,
     scan_text,
+    scan_theorem_declarations_with_namespace,
     scan_theorem_statements,
     scan_theorem_statements_with_namespace,
 )
@@ -353,6 +358,22 @@ end Finset
     assert all("pi" in statement for statement, _ in results)
 
 
+def test_scan_theorem_declarations_with_namespace_returns_qualified_name():
+    text = """\
+namespace Finset
+
+theorem pi_congr (s : Finset α) : True := trivial
+
+end Finset
+"""
+    results = scan_theorem_declarations_with_namespace(text)
+    assert len(results) == 1
+    name, statement, namespace_prefix = results[0]
+    assert name == "Finset.pi_congr"
+    assert namespace_prefix == "Finset"
+    assert "pi_congr" in statement
+
+
 def test_bare_pi_in_unrelated_namespace_must_not_be_scoped_to_finset():
     """Collision case: a bare `pi` mention inside an unrelated namespace (e.g. `Real`, where
     `pi` means the mathematical constant) must record that OTHER namespace, not `Finset` --
@@ -372,3 +393,382 @@ end Real
     assert namespace_prefix == "Real"
     assert namespace_prefix != "Finset"
     assert "pi" in statement
+
+
+# --- Bug A: `_root_.` namespace-escape prefix (bundled miner repairs task, batch-4 review §7(a)) --
+
+
+def test_qualify_name_strips_root_escape_and_ignores_namespace_stack():
+    assert _qualify_name("_root_.Foo.bar", ["Baz"]) == "Foo.bar"
+    assert _qualify_name("_root_.Foo.bar", []) == "Foo.bar"
+    assert _qualify_name("bar", ["Baz"]) == "Baz.bar"
+
+
+def test_root_escape_def_inside_namespace_is_not_doubly_qualified():
+    """Reproduces the exact real-corpus shape from the batch-4 review (§7(a)): `namespace
+    Finset ... def _root_.Equiv.Finset.prod ... end Finset` declares `Equiv.Finset.prod`, not
+    `Finset._root_.Equiv.Finset.prod` (the bug's old output) and not `Finset.Equiv.Finset.prod`
+    (what a naive "just drop the marker but still prepend" fix would wrongly produce)."""
+    text = """\
+namespace Finset
+
+/-- The product of `Finset.prod` reindexed through an equivalence. -/
+def _root_.Equiv.Finset.prod (e : α ≃ β) (s : Finset α) (f : β → γ) : γ :=
+  s.prod (f ∘ e)
+
+end Finset
+"""
+    hits = scan_text(text, "Data/Finset/Prod.lean")
+    assert len(hits) == 1
+    assert hits[0].name == "Equiv.Finset.prod"
+
+
+def test_root_escape_def_at_top_level_still_strips_marker():
+    """Even with an empty namespace stack, the literal `_root_.` marker itself must be
+    stripped -- it is not a valid part of the real declared name either way."""
+    text = "def _root_.Foo.bar (n : Nat) : Nat := n\n"
+    hits = scan_text(text, "Scratch.lean")
+    assert len(hits) == 1
+    assert hits[0].name == "Foo.bar"
+
+
+def test_root_escape_nested_namespace_only_the_marker_is_special():
+    text = """\
+namespace Outer
+namespace Inner
+
+def _root_.Escaped.name (n : Nat) : Nat := n
+def notEscaped (n : Nat) : Nat := n
+
+end Inner
+end Outer
+"""
+    hits = scan_text(text, "Scratch.lean")
+    assert {h.name for h in hits} == {"Escaped.name", "Outer.Inner.notEscaped"}
+
+
+def test_root_escape_theorem_name_qualification_shares_the_fix():
+    """Piece 1 adds theorem-name qualification fresh (no prior implementation existed to have
+    inherited the bug) -- built on the same `_qualify_name` helper `_capture_def` uses, so a
+    `_root_.`-escaped theorem is named correctly too."""
+    text = """\
+namespace Finset
+
+theorem _root_.Equiv.Finset.prod_congr (e : α ≃ β) : True := trivial
+
+end Finset
+"""
+    results = scan_theorem_declarations_with_namespace(text)
+    assert len(results) == 1
+    name, _, namespace_prefix = results[0]
+    assert name == "Equiv.Finset.prod_congr"
+    assert namespace_prefix == "Finset"  # matching rule (namespace-scoped bare mentions) unaffected
+
+
+# --- Bug B: `/-!` module-doc blocks scanned as code (batch-4 review §7(b)) ------------------
+
+
+def test_module_doc_block_def_example_is_not_reported():
+    """Acceptance test (task-specified shape): a `/-!` block containing an illustrative `def`
+    must not be reported, and a real `def` after the block must be."""
+    text = """\
+/-!
+# Some module
+
+Illustrative example:
+```
+def phantom (n : Nat) : Nat := n
+```
+-/
+
+def real (n : Nat) : Nat := n
+"""
+    hits = scan_text(text, "Scratch.lean")
+    assert [h.name for h in hits] == ["real"]
+
+
+def test_module_doc_block_reproduces_real_corpus_shape_nat_log():
+    """Reproduces `Data/Nat/Log.lean`'s real shape (found while investigating this task): a
+    `/-!` block, opened before `namespace Nat`, illustrates a tail-recursive `logTR` variant
+    and an `#eval` example -- neither is real code."""
+    text = """\
+/-!
+# Natural number logarithms
+
+Note a tail-recursive version of `Nat.log` is also possible:
+```
+def logTR (b n : ℕ) : ℕ :=
+  go b n
+```
+but performs worse for large numbers than `Nat.log`:
+```
+#eval Nat.logTR 2 (2 ^ 1000000)
+```
+-/
+
+namespace Nat
+
+def log (b n : ℕ) : ℕ := 0
+
+end Nat
+"""
+    hits = scan_text(text, "Data/Nat/Log.lean")
+    assert [h.name for h in hits] == ["Nat.log"]
+
+
+def test_module_doc_block_single_line_is_skipped():
+    """A `/-! ... -/` block fully on one line (real shape: `/-! ### Floor logarithm -/`) must
+    still be recognized and skipped -- depth must return to 0 within the same line, not require
+    a separate closing line."""
+    text = """\
+/-! ### Section header -/
+
+def real (n : Nat) : Nat := n
+"""
+    hits = scan_text(text, "Scratch.lean")
+    assert [h.name for h in hits] == ["real"]
+
+
+def test_module_doc_block_nested_comment_does_not_close_early():
+    """Lean block comments nest: a `/-!` block containing a genuinely nested `/- ... -/` must
+    not have its OWN span end at the nested comment's `-/` -- the outer block continues until
+    ITS matching close."""
+    text = """\
+/-!
+Outer doc, with a nested aside: /- inner note -/ still inside.
+def phantom (n : Nat) : Nat := n
+-/
+
+def real (n : Nat) : Nat := n
+"""
+    hits = scan_text(text, "Scratch.lean")
+    assert [h.name for h in hits] == ["real"]
+
+
+def test_module_doc_block_theorem_example_is_not_scanned_as_a_mention_source():
+    """The same `/-!` skip applies to the theorem scanner: an illustrative `theorem`-shaped
+    line inside a module-doc block must not be scanned as a real theorem statement (it would
+    otherwise inflate `theorem_mention_count` for whatever candidate name it happens to
+    illustrate)."""
+    text = """\
+/-!
+Illustrative:
+```
+theorem phantom_thm : Foo.bar = Foo.bar := rfl
+```
+-/
+
+theorem real_thm : True := trivial
+"""
+    results = scan_theorem_statements(text)
+    assert len(results) == 1
+    assert "real_thm" in results[0]
+
+
+def test_find_module_doc_skip_lines_directly():
+    text = "line0\n/-!\nline2\n-/\nline4\n"
+    lines = text.split("\n")
+    assert _find_module_doc_skip_lines(lines) == {1, 2, 3}
+
+
+def test_find_module_doc_skip_lines_unterminated_block_skips_to_end_of_file():
+    text = "line0\n/-!\nline2\nline3"
+    lines = text.split("\n")
+    assert _find_module_doc_skip_lines(lines) == {1, 2, 3}
+
+
+def test_module_doc_block_does_not_affect_docstring_handling():
+    """Regression guard: `/--` declaration docstrings (a completely different, already-handled
+    mechanism) must keep working normally alongside the new `/-!` handling."""
+    text = """\
+/-!
+Module overview.
+-/
+
+/-- Real docstring. -/
+def real (n : Nat) : Nat := n
+"""
+    hits = scan_text(text, "Scratch.lean")
+    assert len(hits) == 1
+    assert hits[0].name == "real"
+    assert hits[0].docstring == "Real docstring."
+
+
+# --- Universe-annotation trailing dot (bundled miner repairs follow-up task) -----------------
+
+
+def test_qualify_name_strips_spurious_trailing_dot():
+    assert _qualify_name("bitCasesOn.", ["Int"]) == "Int.bitCasesOn"
+    assert _qualify_name("Multiset.", []) == "Multiset"
+    # composes correctly with the _root_. fix: strip the trailing dot first, THEN check escape.
+    assert _qualify_name("_root_.Foo.bar.", ["Baz"]) == "Foo.bar"
+
+
+def test_universe_annotated_def_int_bitcaseson():
+    """Reproduces `Data/Int/Bitwise.lean`'s real shape: `def bitCasesOn.{u} {C : ...} ... :=
+    by ...` inside `namespace Int` -- previously scanned as `Int.bitCasesOn.` (trailing dot,
+    `Invalid field notation` at #check time)."""
+    text = """\
+namespace Int
+
+/-- Defines a function from `ℤ` conditionally. -/
+def bitCasesOn.{u} {C : ℤ → Sort u} (n) (h : ∀ b n, C (bit b n)) : C n := by
+  rw [← bit_decomp n]
+  apply h
+
+end Int
+"""
+    hits = scan_text(text, "Data/Int/Bitwise.lean")
+    assert len(hits) == 1
+    assert hits[0].name == "Int.bitCasesOn"
+
+
+def test_universe_annotated_def_equiv_optionequivsumpunit():
+    """Reproduces `Logic/Equiv/Option.lean`'s real shape: two universe parameters."""
+    text = """\
+namespace Equiv
+
+/-- `Option α` is equivalent to `α ⊕ PUnit` -/
+def optionEquivSumPUnit.{v, w} (α : Type w) : Option α ≃ α ⊕ PUnit.{v + 1} :=
+  ⟨fun o => o.elim (inr PUnit.unit) inl, fun s => s.elim some fun _ => none, id, id⟩
+
+end Equiv
+"""
+    hits = scan_text(text, "Logic/Equiv/Option.lean")
+    assert len(hits) == 1
+    assert hits[0].name == "Equiv.optionEquivSumPUnit"
+
+
+def test_universe_annotated_def_multiset_top_level():
+    """Reproduces `Data/Multiset/Defs.lean`'s real shape: the universe-annotated def is at
+    top level, declared BEFORE `namespace Multiset` opens -- no namespace to prepend at all."""
+    text = """\
+/-- `Multiset α` is the quotient of `List α` by list permutation. -/
+def Multiset.{u} (α : Type u) : Type u :=
+  Quotient (List.isSetoid α)
+
+namespace Multiset
+
+def ofList : List α → Multiset α := fun l => l
+
+end Multiset
+"""
+    hits = scan_text(text, "Data/Multiset/Defs.lean")
+    assert [h.name for h in hits] == ["Multiset", "Multiset.ofList"]
+
+
+def test_universe_annotated_def_option_traverse():
+    """Reproduces `Data/Option/Defs.lean`'s real shape."""
+    text = """\
+namespace Option
+
+protected def traverse.{u, v} {F : Type u → Type v} [Applicative F] {α : Type u} {β : Type u}
+    (f : α → F β) : Option α → F (Option β)
+  | none => pure none
+  | some x => some <$> f x
+
+end Option
+"""
+    hits = scan_text(text, "Data/Option/Defs.lean")
+    assert [h.name for h in hits] == ["Option.traverse"]
+
+
+def test_theorem_name_capture_had_the_identical_trailing_dot_defect():
+    """Verifies explicitly (per the follow-up task's instruction) that theorem-name capture
+    shares the def-name capture's defect: `_THEOREM_RE` uses the same `_ID_REST` class, so its
+    RAW captured group for a universe-annotated theorem also ends in a spurious `.` -- proven
+    directly against the regex, independent of the `_qualify_name` fix that then strips it."""
+    m = _THEOREM_RE.match("theorem foo.{u} {C : Sort u} (n : C) : C := n")
+    assert m is not None
+    assert m.group("name") == "foo."  # the raw defect, unfixed at the regex layer itself
+
+
+def test_universe_annotated_theorem_name_is_qualified_correctly_end_to_end():
+    """End-to-end: a universe-annotated theorem, scanned via `scan_theorem_declarations_with_namespace`
+    (piece 1's naming path, which calls the shared, now-fixed `_qualify_name`), gets the
+    correct name -- no trailing dot, whether or not `_root_.`-escaped."""
+    text = "namespace Foo\n\ntheorem bar.{u} {C : Sort u} (n : C) : C := n\n\nend Foo\n"
+    results = scan_theorem_declarations_with_namespace(text)
+    assert len(results) == 1
+    name, _, _ = results[0]
+    assert name == "Foo.bar"
+
+
+# --- `noncomputable section` / `public section` not matched by _SECTION_RE (bundled miner ----
+# --- repairs follow-up task) ------------------------------------------------------------------
+
+
+def test_noncomputable_section_reproduces_logic_function_basic_shape():
+    """Reproduces `Logic/Function/Basic.lean`'s real, confirmed-live shape: `namespace Function
+    ... noncomputable section Extend ... end Extend ...` -- before this fix, `noncomputable
+    section Extend` was never pushed, so `end Extend` wrongly popped `namespace Function`
+    instead, and every subsequent `def` (here, `afterExtend`) lost its `Function.` prefix."""
+    text = """\
+namespace Function
+
+def beforeExtend (a : Nat) : Nat := a
+
+noncomputable section Extend
+
+def extendHelper (a : Nat) : Nat := a
+
+end Extend
+
+def afterExtend (a : Nat) : Nat := a
+
+end Function
+"""
+    hits = scan_text(text, "Logic/Function/Basic.lean")
+    assert [h.name for h in hits] == ["Function.beforeExtend", "Function.extendHelper", "Function.afterExtend"]
+
+
+def test_public_section_reproduces_combinatorics_compactness_shape():
+    """Reproduces `Combinatorics/Compactness.lean`'s real, confirmed-live shape: a bare
+    `public section` (Lean's module-visibility marker, unrelated to `noncomputable`) later
+    closed by a bare `end` -- same desync mechanism, different modifier word. Also covers the
+    `@[expose] public section` form (the far more common real shape, e.g.
+    `Data/Nat/Log.lean`) in the same test, both must be recognized."""
+    text = """\
+namespace Outer
+
+public section
+
+def inSection (a : Nat) : Nat := a
+
+end
+
+def afterSection (a : Nat) : Nat := a
+
+end Outer
+"""
+    hits = scan_text(text, "Combinatorics/Compactness.lean")
+    assert [h.name for h in hits] == ["Outer.inSection", "Outer.afterSection"]
+
+
+def test_expose_attribute_prefixed_public_section_is_recognized():
+    text = "@[expose] public section\n\ndef top (a : Nat) : Nat := a\n"
+    hits = scan_text(text, "Scratch.lean")
+    assert [h.name for h in hits] == ["top"]
+
+
+def test_unattested_modifier_words_are_not_specially_handled():
+    """`private section`/`protected section`/`scoped section` were checked against the whole
+    Mathlib corpus and confirmed to never occur (0 matches each) -- not real Lean syntax. This
+    test documents that `_SECTION_RE` deliberately does NOT special-case them (nothing to
+    special-case): a line shaped like one is simply not recognized as a section opener, exactly
+    as before this fix, since there is no live example to fix against. `meta section` (48
+    corpus-wide occurrences, structurally identical risk) is real syntax but does not occur
+    within `TARGET_MODULES` -- also not specially handled, for the same "no live example in
+    scope" reason."""
+    for unrecognized in ("private section", "protected section", "scoped section", "meta section"):
+        assert _SECTION_RE.match(unrecognized) is None
+
+
+def test_section_name_capture_still_works_with_modifier_prefix():
+    """The optional section NAME (used for `end <name>` bookkeeping, though qualification
+    itself only ever reads `namespace` entries) must still be captured correctly alongside a
+    modifier prefix."""
+    m = _SECTION_RE.match("noncomputable section Extend")
+    assert m.group(1) == "Extend"
+    m2 = _SECTION_RE.match("public section")
+    assert m2.group(1) is None
