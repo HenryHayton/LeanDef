@@ -29,14 +29,10 @@ MAX_TOTAL_MEMORY = 0.95
 # axiom probe, warm-up imports) that are all decide/elaboration-scale today.
 DECIDE_TIMEOUT = 60.0
 
-# PROOF_TIMEOUT covers mechanism `proof`: reward-structure design §2.3 puts genuine proof
-# search at "seconds to minutes" per attempt, and the tri-state protocol
-# (verifier_architecture_2026-07-20.md §4) needs two attempts (fact, negation) per fact.
-# PLACEHOLDER VALUE, UNUSED until the prover scaffold exists -- nothing in this codebase
-# calls a prover yet (harness.scoring.run_facts raises NotImplementedError for mechanism
-# `proof`), so this number has not been validated against anything real. Revisit once real
-# prover-agent latency is known.
-PROOF_TIMEOUT = 300.0
+# mechanism `proof` timeouts: retired from here (was PROOF_TIMEOUT, an unused placeholder --
+# see docs/deferred.md's now-actioned entry). Superseded by ladder.budgets.LadderBudgets, per
+# docs/design/reward_structure_2026-07-21.md §7 ("One configuration object governs all ladder
+# execution... It replaces harness.config.PROOF_TIMEOUT").
 
 DEFAULT_WARMUP_TIMEOUT = 600.0  # 10 minutes: LeanREPLConfig/AutoLeanServer construction + imports
 

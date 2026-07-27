@@ -6,10 +6,6 @@ not a promise of when it'll happen — it's a tripwire, so that when the trigger
 gets picked up rather than re-discovered from scratch. Remove an entry once it's actioned;
 don't leave it checked off in place.
 
-- **`harness.config.PROOF_TIMEOUT` retirement.** Unused placeholder (`harness/config.py:39`),
-  superseded by the tiered adjudication ladder's per-tier budgets.
-  **Trigger:** the unified ladder-budget config (`docs/design/reward_structure_2026-07-21.md`
-  §7) lands.
 - **`docs/decidability_bias_survey.md` line ~137 prover-retry phrasing.** Describes retry cost
   in terms of "a prover agent's retry," pre-dating the adjudication ladder.
   **Trigger:** the next edit of that doc.
@@ -76,3 +72,14 @@ don't leave it checked off in place.
   flag (or an equivalent env/subprocess-arg mechanism) before the ladder worker assumes it can
   just shell out to `lean` the way the manual smoke test did.
   **Trigger:** ladder worker build.
+- **Bare-alias candidate bodies (e.g. `body = Nat.clog` verbatim) trip the admissibility
+  shadowing check rather than being scored as memorization** — decide handling.
+  **Trigger:** mini-trial design.
+- **`ladder.adjudicate.adjudicate_fact` never enforces `LadderBudgets.per_fact_total_wall_clock_s`
+  as a hard cutoff.** `Adjudication.wall_clock_s` records elapsed time per fact, but nothing
+  aggregates attempts across tiers and aborts once the per-fact ceiling is exceeded. Currently
+  harmless — tier 2's own per-tactic budgets sum to 110s, well under the 300s default — but
+  tier 3/4/5 landing with their own budgets could blow past the per-fact ceiling with nothing
+  to stop them.
+  **Trigger:** Session B, before tier 3 goes live; nothing aggregates attempts against
+  `LadderBudgets.per_fact_total_wall_clock_s`.

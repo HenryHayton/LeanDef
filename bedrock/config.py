@@ -55,7 +55,7 @@ RETRY_BASE_DELAY_S = 1.0  # backoff: RETRY_BASE_DELAY_S * 2**(attempt_index), at
 # Per-call HTTP timeouts (seconds). Bedrock's own default request timeout is much longer than
 # this project needs for short authoring prompts; kept explicit rather than relying on an SDK
 # default, per this codebase's standing rule that every network/REPL call passes an explicit
-# timeout (see `harness/config.py`'s own DECIDE_TIMEOUT/PROOF_TIMEOUT comment for the hang this
-# rule exists to prevent).
+# timeout (see `harness/config.py`'s own DECIDE_TIMEOUT comment for the hang this rule exists
+# to prevent).
 CONNECT_TIMEOUT_S = 10.0
 READ_TIMEOUT_S = 60.0
