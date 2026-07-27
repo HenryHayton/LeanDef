@@ -112,6 +112,17 @@ class ProposedFact:
     expected_type: str | None = None  # membership facts only: the type `instance` must
     # elaborate at.
 
+    # Contract §4.2 (self-citation rule): the model's own declaration that a global fact
+    # restates its anchor theorem near-verbatim. Authoring-time-only for now, like
+    # `expected_type` above but for a different reason: the schema home for a self-citation
+    # signal is `discharge.self_cited` (schema v1.1.1), and `discharge` stays `null` for every
+    # fact this pipeline ships (no ladder exists yet to produce a real discharge record) -- so
+    # there is currently nowhere downstream for this declaration to land. Collected and carried
+    # through the batch review (contract §7's "self-citation rates") so it isn't silently
+    # dropped; projecting it into a real `discharge.self_cited` is future work once discharge
+    # records exist.
+    self_restatement: bool = False
+
     def to_fact(
         self,
         *,

@@ -207,6 +207,27 @@ def test_fact_proposal_whole_call_json_failure_gets_row_1_retry(stub_server, tmp
     assert len(server.requests_received) == 2
 
 
+def test_fact_proposal_raw_name_leak_dropped_when_task_symbol_context_given(stub_server, tmp_path):
+    leaked = _fact_json("leak", statement="example : Nat.clog 2 37 = 6 := by decide")
+    first_response = json.dumps([leaked])
+    still_leaked = _fact_json("leak", statement="example : Nat.clog 2 37 = 6 := by decide")  # unfixed on retry
+    retry_response = json.dumps([still_leaked])
+
+    server = stub_server(
+        [ScriptedResponse(200, success_body(first_response)), ScriptedResponse(200, success_body(retry_response))]
+    )
+    client = _client(server, tmp_path)
+    result = run_fact_proposal_call(
+        client, "test-model",
+        pinned_signature="VTask.clog : Nat -> Nat -> Nat", dossier_md="d", mention_sidecar_excerpt="(none)",
+        classification="c", task_symbol="VTask.clog", forbidden_name="Nat.clog",
+    )
+    assert result.facts == []
+    assert len(result.dropped) == 1
+    assert result.dropped[0].reason_code == "MALFORMED_RAW_NAME_IN_STATEMENT"
+    assert len(server.requests_received) == 2  # the one row-3 retry, then terminal for that fact
+
+
 # --- Call budget --------------------------------------------------------------------------
 
 

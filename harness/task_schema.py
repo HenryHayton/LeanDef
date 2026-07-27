@@ -9,6 +9,7 @@ This module is structural only; see the schema doc's "v1 clarifications" section
 """
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -21,6 +22,9 @@ REVIEW_STATUSES = frozenset({"unreviewed", "agent_reviewed", "human_reviewed"})
 VALIDATION_STATUSES = frozenset({"CERTIFIED", "PROVISIONALLY_VALIDATED"})
 DISCHARGE_TIERS = frozenset({1, 2, 3, 4, 5})
 DISCHARGE_STAGES = frozenset({"authoring", "reward"})
+
+# Task-symbol convention (schema v1.1.2, contract §4.4): `VTask.<base>`, e.g. `VTask.clog`.
+TASK_SYMBOL_RE = re.compile(r"^VTask\.[A-Za-z_][A-Za-z0-9_']*$")
 
 
 class TaskSchemaError(ValueError):
@@ -371,7 +375,20 @@ def validate_task_data(data: dict) -> None:
         f"task.json: 'schema_version' must be {SCHEMA_VERSION!r}, got {schema_version!r}",
     )
 
-    _validate_signature(_require_field(data, "signature", "task.json"), "task.json")
+    signature_data = _require_field(data, "signature", "task.json")
+    _validate_signature(signature_data, "task.json")
+
+    task_symbol = _require_str(data, "task_symbol", "task.json")
+    _require(
+        TASK_SYMBOL_RE.match(task_symbol) is not None,
+        f"task.json: 'task_symbol' must match the VTask.<name> convention, got {task_symbol!r}",
+    )
+    _require(
+        signature_data.get("name") == task_symbol,
+        f"task.json: 'signature.name' ({signature_data.get('name')!r}) must equal "
+        f"'task_symbol' ({task_symbol!r}) -- schema v1.1.2's coherence rule (contract §4.4)",
+    )
+
     domain_constraint, domain_variables = _validate_domain(
         _require_field(data, "domain", "task.json"), "task.json"
     )

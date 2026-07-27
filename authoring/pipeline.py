@@ -2,12 +2,26 @@
 the orchestration session's report: "no top-level `author_task(...)` pipeline driver was
 built... left as the natural next step").
 
-`author_task` CHAINS the stations built across the prior two sessions -- `authoring.mentions`,
+`author_task` CHAINS the stations built across the prior sessions -- `authoring.mentions`,
 `authoring.orchestrate`'s per-call functions and `with_one_repair_cycle`, `authoring.consistency`,
-`authoring.roundtrip`, `authoring.emit` -- in contract order. It does not reimplement any of
-their logic; every retry/repair/error-classification rule it appears to apply is really just
-the composition of what those stations already do. Two genuine driver-layer decisions,
-documented where they're made below because the contract is silent on both:
+`authoring.roundtrip`, `authoring.emit`, `authoring.task_symbol` -- in contract order. It does
+not reimplement any of their logic; every retry/repair/error-classification rule it appears to
+apply is really just the composition of what those stations already do.
+
+**Task-symbol convention (contract §4.4)**, resolving this driver's own reported finding: every
+task authors under a task-local symbol, `VTask.<base name>` (`authoring.task_symbol.task_symbol_for`),
+never the real Mathlib name. The pinned signature, every fact statement, and every splice --
+both the TRUE definition's body (aliased under the symbol to build a fresh ground-truth
+environment: `def VTask.clog : T := Nat.clog`, via `harness.scoring.splice_candidate`, the same
+splice machinery round-trip already used) and the round-trip candidate body -- use the symbol.
+Because both splices originate independently from the SAME untouched `base_env` (never chained
+onto each other), neither can collide with the real declaration OR with each other -- this is
+what makes `round_trip_base_env` (the prior session's workaround) unnecessary; it has been
+retired. `authoring.parse.parse_facts`'s `forbidden_name` check enforces that the model never
+writes the real name into a fact statement in the first place.
+
+Three genuine driver-layer decisions, documented where they're made below because the contract
+is silent on all three:
 
 1. **`discharge`/`cached_script`/`axiom_closure` are always `null`.** No ladder exists (schema
    doc's own "Not built yet" note, unchanged this session); every accepted fact this driver
@@ -21,12 +35,17 @@ documented where they're made below because the contract is silent on both:
    repair, which does) -- matching the contract's own wording difference: row 6 says "with the
    failure shown," row 7 (round-trip) does not. The round-trip repair is a second, independent,
    equally-blind attempt.
+3. **`self_restatement` (contract §4.2) is collected and reported in the batch review, not
+   projected into a shipped `discharge.self_cited`.** Since `discharge` is always `null` (point
+   1), there is currently nowhere in a shipped task.json for it to land; see
+   `authoring.facts.ProposedFact.self_restatement`'s own docstring.
 
-No station's public interface was modified to build this driver. One adaptation was made to a
-non-code artifact: `authoring/prompts/dossier.txt` now specifies a parseable Worked-Examples
-convention (a `Claim: ...` bullet + optional fenced command) -- without it, `authoring.consistency`
-check (b) had nothing reliable to extract, and the prompt previously left this format
-unspecified. Flagged in the implementation report, not hidden here.
+No station's public interface was broken to build this driver -- `authoring.parse.parse_facts`
+and `authoring.orchestrate.run_fact_proposal_call` both gained new OPTIONAL keyword parameters
+(`task_symbol`/`forbidden_name`), backward compatible with every existing caller. One adaptation
+was made to a non-code artifact: `authoring/prompts/dossier.txt` specifies a parseable
+Worked-Examples convention (a `Claim: ...` bullet + optional fenced command) -- without it,
+`authoring.consistency` check (b) had nothing reliable to extract.
 """
 
 import json
@@ -57,6 +76,7 @@ from authoring.orchestrate import (
 )
 from authoring.parse import Classification, DossierPayload
 from authoring.roundtrip import RoundTripScore, score_round_trip_first_cut
+from authoring.task_symbol import task_symbol_for
 from authoring.validate import ValidationOutcome
 from bedrock.client import BedrockClient, BedrockClientError
 from harness import config as cfg
@@ -65,6 +85,7 @@ from harness.admissibility import _parse_axioms  # internal helper, reused delib
 from harness.facts import Fact, FactProvenance
 from harness.repl import run_checked
 from harness.results import CheckStatus
+from harness.scoring import splice_candidate
 from harness.signature import PinnedSignature
 from harness.task_schema import TaskSchemaError
 from miner.harvest import MentionRecord
@@ -81,10 +102,16 @@ class DefinitionInput:
     this from a real corpus (mining output, Mathlib source lookup) is out of scope for this
     driver -- no existing station does it, and building one wasn't asked for; callers (the
     end-to-end test, a future batch script) supply it via `PipelineConfig.resolve_definition`.
+
+    `name` is the REAL Mathlib name (e.g. `"Nat.clog"`) -- used to build the truth-splice alias
+    and as `authoring.parse.parse_facts`'s `forbidden_name`, never written into a statement
+    itself. The task symbol every statement/splice actually uses is derived from it
+    mechanically (`authoring.task_symbol.task_symbol_for`), not stored here.
     """
 
     name: str
-    signature_dict: dict  # schema shape: {name, type, imports}
+    signature_dict: dict  # schema shape: {name, type, imports} -- 'name' is informational only;
+    # the driver always splices/pins under the computed task symbol, never this value.
     definition_source: str
     docstring: str
     mention_records: list[MentionRecord] = field(default_factory=list)
@@ -92,32 +119,11 @@ class DefinitionInput:
 
 @dataclass(frozen=True)
 class PipelineConfig:
-    """`round_trip_base_env` is deliberately a SEPARATE environment id from `base_env`, found
-    necessary while building the end-to-end test, not anticipated in the original design:
-    `base_env` is the "ground truth" environment, where `definition_input.name` already exists
-    (mechanical validation, §3.4(b)'s worked-example execution, and the axiom baseline all need
-    it to). Round-trip scoring (`authoring.roundtrip.score_round_trip_first_cut`) SPLICES a
-    candidate under that SAME name -- against `base_env`, that splice fails outright with
-    "already declared" (confirmed empirically against real Mathlib: attempting to redeclare
-    `Nat.clog` in an environment that already has it produces exactly that error). Splicing
-    therefore needs its own environment where the name is NOT yet declared.
-
-    For a genuinely mined task pinned under its real Mathlib name, there is currently no way to
-    construct such an environment (Mathlib is one coherent import; there's no "import
-    everything except `Nat.clog`") -- this is flagged prominently in the implementation report
-    as an open architectural gap in the splice-based scoring layer (`harness.scoring`,
-    predating this session), not fixed here. For a task pinned under a name that is NOT already
-    part of the base import (the common case for anything that isn't literally re-deriving an
-    existing Mathlib declaration), `round_trip_base_env` is simply the import environment from
-    before the true definition was added to it.
-    """
-
     client: BedrockClient
     authoring_model_id: str
     flagship_model_id: str
     server: AutoLeanServer
     base_env: int
-    round_trip_base_env: int
     resolve_definition: Callable[[str], DefinitionInput]
     output_dir: Path = DEFAULT_OUTPUT_DIR
     batch_review_dir: Path = DEFAULT_OUTPUT_DIR
@@ -148,6 +154,7 @@ class TaskResult:
     validation_dropped_facts: list[ValidationOutcome] = field(default_factory=list)
     task_errored_facts: list[ValidationOutcome] = field(default_factory=list)
     convention_flags: list[ConventionMatchResult] = field(default_factory=list)
+    self_restatement_fact_ids: list[str] = field(default_factory=list)
     calls_made: int = 0
     input_tokens: int = 0
     output_tokens: int = 0
@@ -194,13 +201,14 @@ def _token_totals_since(log_path: Path, start_line: int) -> dict:
     return totals
 
 
-def _compute_axiom_baseline(server: AutoLeanServer, env: int, name: str, *, timeout: float | None) -> list[str]:
-    """`#print axioms <name>` on the TRUE definition (schema doc: "computed at authoring time
-    by `#print axioms` on the true definition"). Reuses `harness.admissibility._parse_axioms`
-    (an internal helper, not public API) rather than duplicating its two regexes -- both live
-    in this same project, not a third-party boundary."""
+def _compute_axiom_baseline(server: AutoLeanServer, env: int, task_symbol: str, *, timeout: float | None) -> list[str]:
+    """`#print axioms <task_symbol>` against the truth-splice environment (schema doc: "computed
+    at authoring time by `#print axioms` on the true definition" -- `task_symbol` in `env` IS
+    the true definition, aliased there by the truth splice). Reuses
+    `harness.admissibility._parse_axioms` (an internal helper, not public API) rather than
+    duplicating its two regexes -- both live in this same project, not a third-party boundary."""
     timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
-    check = run_checked(server, Command(cmd=f"#print axioms {name}", env=env), timeout=timeout)
+    check = run_checked(server, Command(cmd=f"#print axioms {task_symbol}", env=env), timeout=timeout)
     if check.status is not CheckStatus.PASSED or check.raw_response is None:
         return []
     info_messages = [m.data for m in check.raw_response.messages if m.severity == "info"]
@@ -249,6 +257,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
             validation_dropped_facts=partial.get("validation_dropped", []),
             task_errored_facts=partial.get("task_errored", []),
             convention_flags=partial.get("convention_flags", []),
+            self_restatement_fact_ids=partial.get("self_restatement", []),
             calls_made=budget.calls_made,
             input_tokens=tokens["input_tokens"],
             output_tokens=tokens["output_tokens"],
@@ -261,12 +270,25 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
         return _rotate("lookup", f"{type(e).__name__}: {e}")
     stage_records.append(StageRecord("lookup", "ok", calls_made=budget.calls_made))
 
-    pinned_signature = f"{definition_input.name} : {definition_input.signature_dict['type']}"
-    signature_obj = PinnedSignature(name=definition_input.name, type_sig=definition_input.signature_dict["type"])
+    task_symbol = task_symbol_for(definition_input.name)
+    pinned_signature = f"{task_symbol} : {definition_input.signature_dict['type']}"
+    signature_obj = PinnedSignature(name=task_symbol, type_sig=definition_input.signature_dict["type"])
 
     # --- mention retrieval ------------------------------------------------------------------
     mention_excerpt = render_mention_excerpt(definition_input.mention_records, cap=config.mention_cap)
     stage_records.append(StageRecord("mention_retrieval", "ok", calls_made=budget.calls_made))
+
+    # --- Truth splice (contract §4.4): alias the real definition under the task symbol -------
+    # `def VTask.clog : T := Nat.clog` -- the SAME splice machinery (harness.scoring.splice_candidate)
+    # round-trip candidates use, off the SAME untouched base_env, so this can never collide with
+    # the real declaration (a fresh VTask.* name) or with a later candidate splice (independent,
+    # also off base_env, never chained onto this one).
+    truth_cmd = signature_obj.splice(definition_input.name)
+    truth_splice = splice_candidate(config.server, config.base_env, truth_cmd, timeout=config.check_timeout)
+    if truth_splice.status is not CheckStatus.PASSED:
+        return _rotate("truth_splice", truth_splice.detail or "truth-side splice under the task symbol failed")
+    truth_env = truth_splice.env
+    stage_records.append(StageRecord("truth_splice", "ok", calls_made=budget.calls_made))
 
     # --- Call 1: classification --------------------------------------------------------------
     try:
@@ -304,7 +326,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
 
         holder["payload"] = payload
         consistency = check_dossier_consistency(
-            config.server, config.base_env, pinned_signature, payload.dossier_md, payload.domain,
+            config.server, truth_env, pinned_signature, payload.dossier_md, payload.domain,
             timeout=config.check_timeout,
         )
         holder["consistency"] = consistency
@@ -338,13 +360,14 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
             config.client, config.authoring_model_id,
             pinned_signature=pinned_signature, dossier_md=dossier_payload.dossier_md,
             mention_sidecar_excerpt=mention_excerpt, classification=classification_text, budget=budget,
+            task_symbol=task_symbol, forbidden_name=definition_input.name,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)
     stage_records.append(
         StageRecord(
             "fact_proposal", "ok",
-            detail=f"{len(proposal.facts)} proposed, {len(proposal.dropped)} format-dropped",
+            detail=f"{len(proposal.facts)} proposed, {len(proposal.dropped)} format/name-dropped",
             calls_made=budget.calls_made,
         )
     )
@@ -352,7 +375,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
     # --- Mechanical validation against ground truth (contract §6 rows 4-5) -------------------
     try:
         adjudication = adjudicate_proposed_facts(
-            config.server, config.base_env, proposal.facts, dossier_payload.domain, definition_input.name,
+            config.server, truth_env, proposal.facts, dossier_payload.domain, task_symbol,
             timeout=config.check_timeout,
         )
     except Exception as e:  # noqa: BLE001 -- REPL/infra issues here must not sink the batch
@@ -377,6 +400,8 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
         )
     )
 
+    self_restatement_ids = [f.id for f in adjudication.accepted if f.self_restatement]
+
     # mechanism alone determines validation_status -- see module docstring, decision 1.
     fact_list: list[Fact] = [
         f.to_fact(
@@ -390,6 +415,9 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
     ]
 
     # --- Call 4: blind round-trip generation + first-cut scoring, one repair cycle -----------
+    # Splices under `task_symbol` into the SAME untouched `base_env` the truth splice used --
+    # an independent splice, not chained onto `truth_env`, so it cannot collide with the truth
+    # alias declared there.
     rt_holder: dict = {}
 
     def round_trip_attempt():
@@ -403,7 +431,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
             return False, f"{type(e).__name__}: {e}"
 
         score = score_round_trip_first_cut(
-            config.server, config.round_trip_base_env, signature_obj, body, fact_list, check_timeout=config.check_timeout,
+            config.server, config.base_env, signature_obj, body, fact_list, check_timeout=config.check_timeout,
         )
         rt_holder["score"] = score
         rt_holder["body"] = body
@@ -427,6 +455,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
             stage, rt_outcome.detail,
             parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
             task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+            self_restatement=self_restatement_ids,
         )
     stage_records.append(StageRecord("round_trip_generation", "ok", calls_made=budget.calls_made))
     stage_records.append(StageRecord("round_trip_scoring", "ok", calls_made=budget.calls_made))
@@ -435,11 +464,12 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
     # --- Emit -----------------------------------------------------------------------------
     try:
         axiom_baseline = _compute_axiom_baseline(
-            config.server, config.base_env, definition_input.name, timeout=config.check_timeout
+            config.server, truth_env, task_symbol, timeout=config.check_timeout
         )
         emitted = emit_task(
             config.output_dir / definition_name,
             task_id=definition_name,
+            task_symbol=task_symbol,
             signature=definition_input.signature_dict,
             domain=dossier_payload.domain,
             axiom_baseline=axiom_baseline,
@@ -459,6 +489,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
             "emit", str(e),
             parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
             task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+            self_restatement=self_restatement_ids,
         )
     stage_records.append(StageRecord("emit", "ok", calls_made=budget.calls_made))
 
@@ -472,6 +503,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResu
         validation_dropped_facts=adjudication.dropped,
         task_errored_facts=adjudication.task_errored,
         convention_flags=consistency_result.flags,
+        self_restatement_fact_ids=self_restatement_ids,
         calls_made=budget.calls_made,
         input_tokens=tokens["input_tokens"],
         output_tokens=tokens["output_tokens"],
@@ -518,7 +550,7 @@ def render_batch_review(results: list[TaskResult]) -> str:
         if r.task_dir is not None:
             lines.append(f"- task dir: `{r.task_dir}`")
         if r.parser_rejected_facts:
-            lines.append("- facts rejected at the parser layer (statement-format, after the one retry):")
+            lines.append("- facts rejected at the parser layer (statement-format/raw-name, after the one retry):")
             for d in r.parser_rejected_facts:
                 lines.append(f"  - index {d.index} (id {d.fragment.get('id')!r}): {d.reason_code} -- {d.detail}")
         if r.validation_dropped_facts:
@@ -533,12 +565,15 @@ def render_batch_review(results: list[TaskResult]) -> str:
             lines.append("- dossier/domain consistency flags (§3.4(a), non-blocking):")
             for f in r.convention_flags:
                 lines.append(f"  - point {f.point!r}: {f.detail}")
-        lines.append(
-            "- self-restatement declarations: none recorded -- contract §4.2 names a "
-            "`self_restatement` field on global facts, but §4's own Call-3 output field list "
-            "(and `ProposedFact`, which it's pinned to \"exactly\") has no such field; see the "
-            "implementation report's contract-defect list."
-        )
+        if r.self_restatement_fact_ids:
+            lines.append(
+                "- self-restatement declarations (§4.2 -- discharge tier/cost for these facts "
+                "must not be read as a candidate-side estimate):"
+            )
+            for fact_id in r.self_restatement_fact_ids:
+                lines.append(f"  - `{fact_id}`")
+        else:
+            lines.append("- self-restatement declarations: none")
         if r.outcome == "ROTATED":
             lines.append("- stage-by-stage record (full where-it-died reconstruction):")
             for sr in r.stage_records:

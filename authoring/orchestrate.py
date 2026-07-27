@@ -165,9 +165,18 @@ class FactProposalResult:
 
 
 def _retry_rejected_facts(
-    client: BedrockClient, model_id: str, system: str, rejections: list[FactParseRejection], *, budget: CallBudget | None = None
+    client: BedrockClient,
+    model_id: str,
+    system: str,
+    rejections: list[FactParseRejection],
+    *,
+    budget: CallBudget | None = None,
+    parse_fn=parse_facts,
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
-    """Row 3's one retry, batched (see module docstring). Returns `(fixed, still_bad)`."""
+    """Row 3's one retry, batched (see module docstring). Returns `(fixed, still_bad)`.
+    `parse_fn` defaults to bare `parse_facts`; `run_fact_proposal_call` passes a closure
+    carrying `task_symbol`/`forbidden_name` (contract §4.4) so a "fixed" fact is held to the
+    same raw-name check as the original batch."""
     listing = "\n\n".join(
         f"Fact at index {r.index} (id {r.fragment.get('id')!r}) was rejected: {r.detail}\n"
         f"Original fact JSON: {json.dumps(r.fragment)}"
@@ -182,7 +191,7 @@ def _retry_rejected_facts(
     _charge(budget)
     response = client.send(system=system, user_message=retry_user, model_id=model_id)
     try:
-        fixed, still_bad = parse_facts(response.text)
+        fixed, still_bad = parse_fn(response.text)
     except ParseError:
         # The whole retry response was itself unusable. This WAS the one retry (row 3), so
         # every originally-rejected fact is now terminal -- dropped, not raised.
@@ -199,7 +208,12 @@ def run_fact_proposal_call(
     mention_sidecar_excerpt: str,
     classification: str,
     budget: CallBudget | None = None,
+    task_symbol: str | None = None,
+    forbidden_name: str | None = None,
 ) -> FactProposalResult:
+    """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
+    on both the initial parse and the row-3 per-fact retry, so a raw-Mathlib-name leak is caught
+    (and the offending fact dropped, not silently shipped) the same way on either path."""
     template = load_prompt_template("fact_proposal")
     system, user = template.render(
         pinned_signature=pinned_signature,
@@ -207,11 +221,15 @@ def run_fact_proposal_call(
         mention_sidecar_excerpt=mention_sidecar_excerpt,
         classification=classification,
     )
-    facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_facts, budget=budget)
+
+    def _parse(text: str):
+        return parse_facts(text, task_symbol=task_symbol, forbidden_name=forbidden_name)
+
+    facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget)
     if not rejections:
         return FactProposalResult(facts=facts, dropped=[])
 
-    fixed_facts, still_dropped = _retry_rejected_facts(client, model_id, system, rejections, budget=budget)
+    fixed_facts, still_dropped = _retry_rejected_facts(client, model_id, system, rejections, budget=budget, parse_fn=_parse)
     return FactProposalResult(facts=facts + fixed_facts, dropped=still_dropped)
 
 

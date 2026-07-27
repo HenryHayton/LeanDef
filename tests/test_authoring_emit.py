@@ -77,6 +77,10 @@ def _base_kwargs(task_dir, facts):
     return dict(
         task_dir=task_dir,
         task_id="emit_test_task",
+        task_symbol="VTask.emitTestFn",
+        # Deliberately a DIFFERENT name than task_symbol -- proves emit_task's own coherence
+        # enforcement (signature.name is always overwritten with task_symbol) rather than
+        # relying on the caller to have already gotten the two fields to agree.
         signature={"name": "emitTestFn", "type": "Nat -> Nat", "imports": []},
         domain=_minimal_domain(),
         axiom_baseline=["propext"],
@@ -164,3 +168,22 @@ def test_emit_ladder_budget_override_defaults_to_null(tmp_path):
     emit_task(**_base_kwargs(task_dir, [_casework_fact()]))
     written = json.loads((task_dir / "task.json").read_text())
     assert written["ladder_budget_override"] is None
+
+
+def test_emit_writes_task_symbol_and_forces_signature_name_to_match(tmp_path):
+    """Schema v1.1.2 coherence rule: signature.name must equal task_symbol. The caller's
+    signature dict here deliberately carries a DIFFERENT name ('emitTestFn', see
+    _base_kwargs) -- emit_task must overwrite it, not just pass it through."""
+    task_dir = tmp_path / "emit_test_task"
+    emit_task(**_base_kwargs(task_dir, [_casework_fact()]))
+    written = json.loads((task_dir / "task.json").read_text())
+    assert written["task_symbol"] == "VTask.emitTestFn"
+    assert written["signature"]["name"] == "VTask.emitTestFn"
+
+
+def test_emit_does_not_mutate_the_caller_supplied_signature_dict(tmp_path):
+    task_dir = tmp_path / "emit_test_task"
+    kwargs = _base_kwargs(task_dir, [_casework_fact()])
+    original_signature = kwargs["signature"]
+    emit_task(**kwargs)
+    assert original_signature["name"] == "emitTestFn"  # untouched, not overwritten in place

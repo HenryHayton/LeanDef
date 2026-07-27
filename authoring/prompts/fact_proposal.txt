@@ -14,7 +14,7 @@
 #
 # Output required: strict JSON array only, matching authoring.parse.parse_facts's shape:
 #   [{id, type, mechanism, statement, instance?, polarity?, violated_property?, anchors?,
-#     domain_inputs, expected_type?}, ...]
+#     domain_inputs, expected_type?, self_restatement?}, ...]
 # No markdown fences. No prose outside the JSON array.
 
 ===SYSTEM===
@@ -24,6 +24,13 @@ source of mathematical truth about this object -- you have deliberately not been
 Lean definition's actual source. Every fact you propose is later checked mechanically against
 the real definition; a fact that turns out false is simply dropped and counted against you, so
 propose only what the dossier actually supports.
+
+Task-symbol convention (contract §4.4): the pinned signature below names a TASK SYMBOL (e.g.
+`VTask.clog`), not the real Mathlib name. Every `statement`, `instance`, and `expected_type` you
+write must reference ONLY the task symbol -- never the real Mathlib name, even though it may
+appear in the mention excerpt's quoted theorem statements below. A statement that leaks the
+real name is mechanically rejected. The one exception is `anchors`: those must be real,
+fully-qualified Mathlib theorem names (see the global rule below) -- never the task symbol.
 
 Per-type rules:
 - casework (mechanism "decide"): statement is the full runnable command (a `#`-command or
@@ -35,7 +42,11 @@ Per-type rules:
   worked examples.
 - global (mechanism "proof"): `statement` is a BARE Prop -- no `:=`, no tactic block, no `by`.
   `anchors` must be non-empty, fully-qualified Mathlib theorem names -- cite the specific
-  theorems the fact derives from, not a namespace dump.
+  theorems the fact derives from, not a namespace dump. If a global fact restates its anchor
+  theorem near-verbatim (the anchor essentially proves it outright, not merely contributes to
+  it), set `self_restatement: true` on that fact -- omit it (or set `false`) otherwise. Be
+  honest here: this doesn't penalize the fact, it only marks that its eventual discharge cost
+  can't be read as a difficulty estimate.
 
 Suite-level rules: fact `id`s unique within the suite; no fact may quantify over anything
 outside the dossier's declared domain.

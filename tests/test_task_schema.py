@@ -57,6 +57,38 @@ def test_wrong_schema_version_fails(valid_data):
         validate_task_data(valid_data)
 
 
+# --- v1.1.2: task_symbol -----------------------------------------------------------------
+
+
+def test_missing_task_symbol_fails(valid_data):
+    del valid_data["task_symbol"]
+    with pytest.raises(TaskSchemaError, match="task_symbol"):
+        validate_task_data(valid_data)
+
+
+def test_task_symbol_bad_format_fails(valid_data):
+    valid_data["task_symbol"] = "isSorted"  # missing the VTask. prefix
+    with pytest.raises(TaskSchemaError, match="task_symbol"):
+        validate_task_data(valid_data)
+
+
+def test_task_symbol_wrong_namespace_fails(valid_data):
+    valid_data["task_symbol"] = "Task.isSorted"
+    with pytest.raises(TaskSchemaError, match="task_symbol"):
+        validate_task_data(valid_data)
+
+
+def test_task_symbol_signature_name_mismatch_fails(valid_data):
+    valid_data["task_symbol"] = "VTask.somethingElse"
+    with pytest.raises(TaskSchemaError, match="signature.name"):
+        validate_task_data(valid_data)
+
+
+def test_task_symbol_matching_signature_name_passes(valid_data):
+    assert valid_data["task_symbol"] == valid_data["signature"]["name"] == "VTask.isSorted"
+    validate_task_data(valid_data)  # must not raise
+
+
 def test_missing_conventions_fails(valid_data):
     del valid_data["domain"]["conventions"]
     with pytest.raises(TaskSchemaError, match="conventions"):

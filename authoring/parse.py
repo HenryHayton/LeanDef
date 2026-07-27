@@ -235,7 +235,13 @@ class FactParseRejection:
     detail: str
 
 
-def _parse_fact_entry(entry: object, index: int) -> ProposedFact | FactParseRejection:
+def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
+    return any(part is not None and forbidden_name in part for part in parts)
+
+
+def _parse_fact_entry(
+    entry: object, index: int, *, task_symbol: str | None = None, forbidden_name: str | None = None
+) -> ProposedFact | FactParseRejection:
     context = f"facts[{index}]"
     if not isinstance(entry, dict):
         raise ParseError(f"{context}: must be an object, got {entry!r}", reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE)
@@ -301,6 +307,13 @@ def _parse_fact_entry(entry: object, index: int) -> ProposedFact | FactParseReje
             )
         expected_type = _require_str(entry, "expected_type", context)
 
+    self_restatement = entry.get("self_restatement", False)
+    if not isinstance(self_restatement, bool):
+        raise ParseError(
+            f"{context}: 'self_restatement', if present, must be a boolean, got {self_restatement!r}",
+            reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+        )
+
     fact = ProposedFact(
         id=fact_id,
         type=fact_type,
@@ -312,7 +325,25 @@ def _parse_fact_entry(entry: object, index: int) -> ProposedFact | FactParseReje
         domain_inputs=dict(domain_inputs),
         anchors=list(anchors),
         expected_type=expected_type,
+        self_restatement=self_restatement,
     )
+
+    # Task-symbol pre-check (contract §4.4): the model must write every statement against the
+    # task symbol, never the real Mathlib name it may have seen in `definition_source`/
+    # docstring/mention-sidecar context. `anchors` is deliberately EXCLUDED -- anchors name
+    # real Mathlib theorems on purpose (contract's own "anchors still name real Mathlib
+    # theorems" scoping) and routinely contain the forbidden name as a substring of their own
+    # qualified name (e.g. `Nat.clog_pow` contains `Nat.clog`).
+    if forbidden_name is not None and _leaks_forbidden_name(forbidden_name, statement, instance, expected_type):
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT,
+            detail=(
+                f"{context}: statement/instance/expected_type must reference the task symbol "
+                f"{task_symbol!r}, not the real Mathlib name {forbidden_name!r}"
+            ),
+        )
 
     # Parser-layer statement-shape pre-check (contract §4.1), deliberately AFTER every
     # whole-call schema-shape check above so a format violation on an otherwise well-formed
@@ -341,12 +372,20 @@ def _parse_fact_entry(entry: object, index: int) -> ProposedFact | FactParseReje
     return fact
 
 
-def parse_facts(text: str) -> tuple[list[ProposedFact], list[FactParseRejection]]:
+def parse_facts(
+    text: str, *, task_symbol: str | None = None, forbidden_name: str | None = None
+) -> tuple[list[ProposedFact], list[FactParseRejection]]:
     """Parse Call 3's output array. Raises `ParseError` (whole-call, contract §6 rows 1-2) for
     malformed JSON or a schema-shape violation (missing/wrong-typed field, bad enum value,
     type/mechanism mismatch). Returns `(facts, rejections)` for the narrower per-fact
     statement-format pre-check (§4.1/§6 row 3) instead of raising, so one badly-shaped
-    statement doesn't discard an otherwise-good batch."""
+    statement doesn't discard an otherwise-good batch.
+
+    `forbidden_name` (contract §4.4), when supplied, rejects (per-fact, not whole-call) any
+    fact whose `statement`/`instance`/`expected_type` contains it -- the mechanical check that
+    the model wrote against `task_symbol`, not the real Mathlib name. Both default to `None`
+    (no check), backward compatible with callers that have no task-symbol context (or none
+    that's meaningful, e.g. a `provenance.source: "fresh"` task with no real name to forbid)."""
     try:
         data = json.loads(text)
     except json.JSONDecodeError as e:
@@ -361,7 +400,7 @@ def parse_facts(text: str) -> tuple[list[ProposedFact], list[FactParseRejection]
     rejections: list[FactParseRejection] = []
     seen_ids: set[str] = set()
     for i, entry in enumerate(data):
-        parsed = _parse_fact_entry(entry, i)
+        parsed = _parse_fact_entry(entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name)
         if isinstance(parsed, FactParseRejection):
             rejections.append(parsed)
             continue

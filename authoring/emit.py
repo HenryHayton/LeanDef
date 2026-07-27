@@ -80,6 +80,7 @@ def emit_task(
     task_dir: Path,
     *,
     task_id: str,
+    task_symbol: str,
     signature: dict,
     domain: DomainSpec,
     axiom_baseline: list[str],
@@ -102,13 +103,22 @@ def emit_task(
     already-named keys would duplicate the schema doc's own field list for no mechanical
     benefit. `mutants` is not a parameter: schema v1.1 fixes it at `[]` (RESERVED), so this
     function writes that literal rather than accepting a value nothing may legally set yet.
+
+    `task_symbol` (schema v1.1.2, contract §4.4) is REQUIRED and this function is the single
+    place that enforces the schema's coherence rule (`signature.name == task_symbol`): whatever
+    `name` key the caller's `signature` dict carries is overwritten with `task_symbol` before
+    writing, on a copy (the caller's dict is never mutated) -- since this emitter is the only
+    producer of task.json, this guarantees the rule holds for everything shipped through it,
+    rather than relying on every caller to keep two fields in sync by hand.
     """
     task_dir = Path(task_dir)
     task_dir.mkdir(parents=True, exist_ok=True)
+    signature = {**signature, "name": task_symbol}
 
     task_data = {
         "task_id": task_id,
         "schema_version": "1.1",
+        "task_symbol": task_symbol,
         "signature": signature,
         "domain": _domain_to_dict(domain),
         "axiom_baseline": list(axiom_baseline),

@@ -10,6 +10,37 @@ component — miner, scorer, definition-writer prompts — builds against this d
 consequential-work item 1. `harness/task_schema.py`, `harness/facts.py`, `authoring/facts.py`
 were updated in the same pass as this document — see repo history for that commit.*
 
+## Changelog: v1.1.1 → v1.1.2
+
+- **`task_symbol` (required string), new.** Per `docs/design/llm_io_contract_v1.md` §4.4 (the
+  task-symbol convention): every task carries a task-local symbol, `VTask.<base name>` (e.g.
+  `VTask.clog` for `Nat.clog`), used everywhere an object identity is needed — the pinned
+  signature, every fact statement, and every splice (the true definition's body, aliased under
+  the symbol to build the ground-truth environment, and any candidate body, round-trip or
+  real). *Rationale:* splicing a candidate under a name that already exists in the base
+  (Mathlib-imported) environment fails outright — confirmed empirically against real Mathlib,
+  `` `Nat.clog` has already been declared `` — which blocked round-trip scoring for any task
+  pinned under its real Mathlib name (found while building the driver session's end-to-end
+  test). The task symbol is guaranteed fresh (no real Mathlib declaration uses the `VTask.`
+  namespace), so splicing under it never collides, and truth-side validation and candidate
+  scoring become the same operation.
+- **Coherence rule: `signature.name` must equal `task_symbol`.** `signature.name` keeps its
+  existing role unchanged (it is what candidates and facts actually reference for splicing) —
+  `task_symbol` is the schema's own explicit, named assertion that a task follows the
+  convention, enforced by requiring the two fields to agree. `authoring.emit.emit_task` is the
+  single producer of task.json and enforces this by construction (overwrites `signature.name`
+  with `task_symbol` unconditionally), so nothing that ships through it can disagree.
+- **`task_symbol` format**: `VTask\.[A-Za-z_][A-Za-z0-9_']*` — anything else fails structural
+  validation.
+- This is a micro-addition in name only, decided so: unlike v1.1.1's `self_cited` (optional,
+  backward compatible), `task_symbol` is REQUIRED and breaks any pre-existing task.json that
+  lacks it — `tests/fixtures/tasks/is_sorted_v1/task.json` was updated in the same pass to stay
+  valid. `SCHEMA_VERSION`'s enforced string is left at `"1.1"` regardless, matching the v1.1.1
+  precedent, not because this change is non-breaking (it is) but because the project's own
+  versioning discipline for this document treats `v1.1.x` as the informal micro-revision track
+  and reserves a `v1.2`/`v2` frozen restatement for changes large enough to warrant one; this
+  one, while breaking, is a single field plus one coherence rule.
+
 ## Changelog: v1.1 → v1.1.1
 
 - **`discharge.self_cited` (optional boolean), new.** Per
@@ -135,7 +166,11 @@ All fields below are REQUIRED unless marked otherwise. A task missing any requir
 invalid and must be rejected by the validator.
 
 - `task_id` (string), `schema_version` (must be `"1.1"`).
-- `signature`: `{ name, type, imports }` — the pinned signature candidates must inhabit.
+- `task_symbol` (string, **new in v1.1.2**) — `VTask.<base name>` (e.g. `VTask.clog`), the
+  task-symbol convention (`docs/design/llm_io_contract_v1.md` §4.4). Must equal
+  `signature.name` exactly (coherence rule, see Changelog).
+- `signature`: `{ name, type, imports }` — the pinned signature candidates must inhabit. `name`
+  must equal `task_symbol` (above) — never the real Mathlib name for a mined task.
 - `domain`: the machine-readable scope of the specification:
   - `constraint` (string): a Lean-parsable predicate over the input variable(s), e.g.
     `"n ≥ 1"`, or `"True"` if genuinely unrestricted.

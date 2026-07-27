@@ -1,8 +1,9 @@
 {
   "task_id": "is_sorted_v1",
   "schema_version": "1.1",
+  "task_symbol": "VTask.isSorted",
   "signature": {
-    "name": "isSorted",
+    "name": "VTask.isSorted",
     "type": "List Nat -> Bool",
     "imports": []
   },
@@ -12,7 +13,7 @@
     "conventions": [
       {
         "point": "[]",
-        "statement": "isSorted [] = true",
+        "statement": "VTask.isSorted [] = true",
         "note": "the empty list is vacuously sorted"
       }
     ]
@@ -27,7 +28,7 @@
       "id": "casework_empty",
       "type": "casework",
       "mechanism": "decide",
-      "statement": "example : isSorted [] = true := by decide",
+      "statement": "example : VTask.isSorted [] = true := by decide",
       "domain_inputs": { "l": "[]" },
       "anchors": [],
       "validation_status": "CERTIFIED",
@@ -43,7 +44,7 @@
       "id": "casework_ascending",
       "type": "casework",
       "mechanism": "decide",
-      "statement": "example : isSorted [1, 2, 3] = true := by decide",
+      "statement": "example : VTask.isSorted [1, 2, 3] = true := by decide",
       "domain_inputs": { "l": "[1, 2, 3]" },
       "anchors": [],
       "validation_status": "CERTIFIED",
@@ -59,7 +60,7 @@
       "id": "casework_descending",
       "type": "casework",
       "mechanism": "decide",
-      "statement": "example : isSorted [3, 1, 2] = false := by decide",
+      "statement": "example : VTask.isSorted [3, 1, 2] = false := by decide",
       "domain_inputs": { "l": "[3, 1, 2]" },
       "anchors": [],
       "validation_status": "CERTIFIED",
@@ -75,7 +76,7 @@
       "id": "membership_accept_ascending",
       "type": "membership",
       "mechanism": "decide",
-      "statement": "example : isSorted [1, 2, 3] = true := by decide",
+      "statement": "example : VTask.isSorted [1, 2, 3] = true := by decide",
       "instance": "[1, 2, 3]",
       "polarity": "accept",
       "domain_inputs": { "l": "[1, 2, 3]" },
@@ -93,7 +94,7 @@
       "id": "membership_reject_adjacent_swap",
       "type": "membership",
       "mechanism": "decide",
-      "statement": "example : isSorted [2, 1, 3] = false := by decide",
+      "statement": "example : VTask.isSorted [2, 1, 3] = false := by decide",
       "instance": "[2, 1, 3]",
       "polarity": "reject",
       "violated_property": "ascending order violated between index 0 and 1",
@@ -112,7 +113,7 @@
       "id": "global_singleton_or_reverse",
       "type": "global",
       "mechanism": "proof",
-      "statement": "forall l : List Nat, isSorted l = true -> l.length <= 1 -> isSorted l.reverse = true",
+      "statement": "forall l : List Nat, VTask.isSorted l = true -> l.length <= 1 -> VTask.isSorted l.reverse = true",
       "domain_inputs": {},
       "anchors": ["List.Sorted.reverse_of_length_le_one"],
       "validation_status": "PROVISIONALLY_VALIDATED",
@@ -128,7 +129,7 @@
       "id": "global_certified_example",
       "type": "global",
       "mechanism": "proof",
-      "statement": "forall l : List Nat, isSorted l = true -> isSorted l.reverse = true -> l.length <= 1 ∨ l = l.reverse",
+      "statement": "forall l : List Nat, VTask.isSorted l = true -> VTask.isSorted l.reverse = true -> l.length <= 1 ∨ l = l.reverse",
       "domain_inputs": {},
       "anchors": ["List.Sorted.reverse_eq_of_reverse_sorted"],
       "validation_status": "CERTIFIED",

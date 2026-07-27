@@ -270,3 +270,92 @@ def test_parse_facts_valid_membership_fact_parses_clean():
     facts, rejections = parse_facts(json.dumps([entry]))
     assert rejections == []
     assert facts[0].expected_type == "Fin 3 → Fin 3"
+
+
+# --- task-symbol convention (contract §4.4): raw-name-leak rejection ----------------------
+
+
+def test_parse_facts_raw_name_in_statement_is_a_rejection_when_forbidden_name_given():
+    entry = {
+        "id": "leak", "type": "casework", "mechanism": "decide",
+        "statement": "example : Nat.clog 2 37 = 6 := by decide", "domain_inputs": {"b": "2", "n": "37"},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT
+    assert "VTask.clog" in rejections[0].detail
+
+
+def test_parse_facts_task_symbol_statement_is_clean_when_forbidden_name_given():
+    entry = {
+        "id": "clean", "type": "casework", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 37 = 6 := by decide", "domain_inputs": {"b": "2", "n": "37"},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_no_forbidden_name_check_when_not_supplied():
+    """Backward compatible: omitting task_symbol/forbidden_name (both default None) disables
+    the check entirely -- unaffected callers (or fresh, non-mined tasks) see no behavior change."""
+    entry = {
+        "id": "x", "type": "casework", "mechanism": "decide",
+        "statement": "example : Nat.clog 2 37 = 6 := by decide", "domain_inputs": {"b": "2", "n": "37"},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_raw_name_leak_in_instance_field_is_also_rejected():
+    entry = {
+        "id": "leak2", "type": "membership", "mechanism": "decide",
+        "statement": "example : Monotone (Nat.clog 2) := by decide",
+        "instance": "(Nat.clog 2)", "polarity": "accept", "expected_type": "Nat -> Nat",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
+    assert facts == []
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT
+
+
+def test_parse_facts_anchors_are_exempt_from_the_raw_name_check():
+    """Anchors legitimately (and routinely) contain the forbidden name as a substring of a
+    real Mathlib theorem's own qualified name -- 'Nat.clog_pow' contains 'Nat.clog'."""
+    entry = {
+        "id": "g1", "type": "global", "mechanism": "proof",
+        "statement": "∀ b n : ℕ, (1 < b ∧ 1 < n) → VTask.clog b n ≥ 0", "anchors": ["Nat.clog_pow"],
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
+    assert rejections == []
+    assert facts[0].anchors == ["Nat.clog_pow"]
+
+
+# --- self_restatement (contract §4.2) -------------------------------------------------------
+
+
+def test_parse_facts_self_restatement_true_is_parsed():
+    entry = {
+        "id": "g1", "type": "global", "mechanism": "proof",
+        "statement": "∀ b n : ℕ, VTask.clog b n ≥ 0", "anchors": ["Nat.clog_pow"], "self_restatement": True,
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert facts[0].self_restatement is True
+
+
+def test_parse_facts_self_restatement_defaults_to_false_when_absent():
+    entry = {"id": "g1", "type": "global", "mechanism": "proof", "statement": "∀ b n : ℕ, VTask.clog b n ≥ 0", "anchors": ["Nat.clog_pow"]}
+    facts, _ = parse_facts(json.dumps([entry]))
+    assert facts[0].self_restatement is False
+
+
+def test_parse_facts_self_restatement_non_bool_raises():
+    entry = {
+        "id": "g1", "type": "global", "mechanism": "proof",
+        "statement": "∀ b n : ℕ, VTask.clog b n ≥ 0", "anchors": ["Nat.clog_pow"], "self_restatement": "yes",
+    }
+    with pytest.raises(ParseError) as exc_info:
+        parse_facts(json.dumps([entry]))
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE

@@ -19,6 +19,12 @@
 # not itself contract-specified): each example is a `Claim: <text>` bullet; a bullet with a
 # runnable command is immediately followed by a fenced ```lean block containing exactly that
 # command. authoring.consistency.parse_worked_examples reads exactly this shape.
+#
+# Task-symbol convention (contract §4.4, added when authoring.task_symbol was built):
+# `pinned_signature` names the TASK SYMBOL (e.g. `VTask.clog`), not the real Mathlib name --
+# `definition_source`/`docstring`/`mention_sidecar_excerpt` below may still mention the real
+# name as background context, but everything the model WRITES (the Signature section, every
+# worked-example claim/command) must use the task symbol exclusively.
 
 ===SYSTEM===
 You are writing the authoritative informal dossier for a Mathlib definition, for an automated
@@ -33,10 +39,11 @@ alone. Write it in six required sections, in this fixed order:
    in this response (one prose sentence per convention point, or its NONE_DECLARED reason).
 4. Worked examples -- at least 2 where the regime admits them. Format EACH one as a bullet
    `- Claim: <one-line claim>`; for casework regimes, immediately follow that bullet with a
-   fenced Lean block containing the runnable command asserting the claim, e.g.:
-   - Claim: Nat.clog 2 37 = 6
+   fenced Lean block containing the runnable command asserting the claim, e.g., if the pinned
+   signature were `VTask.clog : Nat -> Nat -> Nat`:
+   - Claim: VTask.clog 2 37 = 6
      ```lean
-     example : Nat.clog 2 37 = 6 := by decide
+     example : VTask.clog 2 37 = 6 := by decide
      ```
    For regimes with no runnable command, the `Claim:` bullet alone is fine.
 5. Boundaries -- edge cases and the behaviour at them.
@@ -44,7 +51,10 @@ alone. Write it in six required sections, in this fixed order:
 
 Prohibitions: never quote or paraphrase the Lean definition's actual body or its distinctive
 implementation choices -- describe WHAT the object is, not HOW it is implemented. Never invent
-a domain restriction for a definition that is genuinely total.
+a domain restriction for a definition that is genuinely total. NEVER write the real Mathlib
+name into the dossier's Signature section or any worked-example claim/command, even though it
+may appear below in the docstring, definition source, or mention excerpt for context -- use
+only the pinned signature's own name (the task symbol) shown below.
 
 Also produce the machine-readable `domain` object in the same response: `constraint` (a
 Lean-parsable predicate over the input variable(s), or "True" if unrestricted), `variables`
