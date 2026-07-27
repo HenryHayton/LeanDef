@@ -111,7 +111,9 @@ One directory per task:
 mathematical meaning (what the object is, conventions as prose, worked examples). task.json
 owns everything machinery reads. The single deliberate overlap is the domain and its
 conventions, which appear in both; the machine-readable form is authoritative for validation,
-and an authoring-time consistency check confirms the prose states the same thing.
+and an authoring-time consistency check confirms the prose states the same thing. See
+`docs/design/llm_io_contract_v1.md` §3 for the dossier's required structure and §3.4 for this
+consistency check's specification.
 
 ## task.json fields
 
@@ -233,7 +235,7 @@ A task is shippable only with a recorded validation run demonstrating:
    a `discharge` record from the ladder;
 3. every fact in-domain per the domain validation rule, and every membership-fact instance
    elaborates in the pinned environment — unchanged from v1;
-4. dossier/domain consistency check passed — unchanged from v1;
+4. dossier/domain consistency check passed — specified in `docs/design/llm_io_contract_v1.md` §3.4;
 5. the axiom baseline was computed, not assumed — unchanged from v1.
 
 Tasks without a manifest enter no dataset — unchanged from v1.
