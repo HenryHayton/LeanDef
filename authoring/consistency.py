@@ -1,0 +1,256 @@
+"""Dossier/domain consistency checker (contract §3.4, §8 item 8 -- added retroactively to the
+contract's own inventory after the prior implementation session found it missing).
+
+Implements the three sub-checks exactly as specified:
+
+- (a) **Conventions↔prose matching**: every `domain.conventions` entry must have a matching
+  prose sentence in the dossier's Conventions section. Matcher: `entry.statement` as a
+  substring of that section, OR a keyword from `entry.note` appearing in it -- deliberately
+  crude, matching this codebase's established precedent for "mechanical where possible, not
+  over-engineered" text heuristics (`authoring.validate._global_domain_looks_unchecked`'s own
+  "crude proxy" is the model for this one). Failures FLAG, never reject (contract's own rule).
+- (b) **Executable worked examples**: the dossier's Worked Examples section is parsed for
+  `Claim: ...` bullets, each optionally followed by a fenced ` ```lean ` command block. A
+  bullet with a command executes that command against the TRUE definition (via
+  `harness.repl.run_checked`, the same plumbing `authoring.validate` uses); a bullet with no
+  command instead attempts the weaker check -- does the claim elaborate as a `Prop`? -- and
+  falls back to `UNCHECKED_PROSE_EXAMPLE` (not a rejection) if it doesn't, since elaboration
+  failure is ambiguous between "this actually was prose" and "malformed Lean," and the
+  contract's own instruction is to not reject on that ambiguity. A genuine `FAILED` execution
+  (not `ERRORED` -- infrastructure failure is never charged against the dossier) rejects.
+- (c) **Signature substring**: the raw pinned-signature string must appear verbatim inside the
+  dossier's Signature section (that section otherwise wraps it in explanatory prose -- whole-
+  section equality was never the check, per the contract's own 2026-07-26 clarification of
+  this exact sub-check). Failure rejects.
+
+**Section-parsing convention, not itself part of the contract**: `extract_sections` splits
+`dossier_md` on markdown ATX headers (`#`.."######"), matching against the six section names
+contract §3.1 names (tolerant of leading numbering, e.g. "## 3. Conventions" or "## Conventions"
+both resolve to `"conventions"`). The `Claim: ...` bullet + fenced-command convention for
+worked examples is likewise not contract-specified; `authoring/prompts/dossier.txt` was updated
+in the same pass to actually ask for it (see that file's own note on why) -- without a fixed
+convention, (b) has nothing reliable to parse.
+"""
+
+import re
+from dataclasses import dataclass, field
+
+from lean_interact import Command
+
+from authoring.facts import DomainSpec
+from harness import config as cfg
+from harness.repl import run_checked
+from harness.results import CheckStatus
+
+# --- Section extraction (pure text, no REPL) --------------------------------------------------
+
+_HEADER_LINE_RE = re.compile(r"^#{1,6}\s+(.*)$", re.MULTILINE)
+
+_SECTION_KEYS = {
+    "object": "object",
+    "signature": "signature",
+    "conventions": "conventions",
+    "worked examples": "worked_examples",
+    "boundaries": "boundaries",
+    "not to be confused with": "not_to_be_confused_with",
+}
+
+
+def _normalize_header(text: str) -> str:
+    text = text.strip().lower()
+    text = re.sub(r"^\d+[.)]\s*", "", text)  # strip leading "1. " / "1) " numbering
+    return text.strip()
+
+
+def extract_sections(dossier_md: str) -> dict[str, str]:
+    """Split `dossier_md` into `{section_key: body_text}` by markdown ATX headers, keyed by
+    the six names contract §3.1 fixes. Headers that don't match one of those six (or content
+    before the first recognized header) are ignored -- this is a best-effort reader of an
+    LLM-produced document, not a strict format validator."""
+    matches = list(_HEADER_LINE_RE.finditer(dossier_md))
+    sections: dict[str, str] = {}
+    for i, m in enumerate(matches):
+        key = _SECTION_KEYS.get(_normalize_header(m.group(1)))
+        if key is None:
+            continue
+        start = m.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(dossier_md)
+        sections[key] = dossier_md[start:end].strip()
+    return sections
+
+
+# === (a) Conventions <-> prose matching =========================================================
+
+_STOPWORDS = frozenset(
+    {"the", "a", "an", "is", "are", "for", "of", "to", "and", "or", "by", "in", "on", "at",
+     "this", "that", "with", "as", "its", "not", "has", "have", "was", "were", "over"}
+)
+
+
+def _note_keywords(note: str) -> list[str]:
+    words = re.findall(r"[A-Za-z][A-Za-z']+", note.lower())
+    return [w for w in words if len(w) >= 4 and w not in _STOPWORDS]
+
+
+@dataclass(frozen=True)
+class ConventionMatchResult:
+    point: str | None
+    matched: bool
+    matcher: str  # "sentinel_skip" | "statement_substring" | "note_keyword" | "no_match"
+    detail: str = ""
+
+
+def check_conventions_prose_match(domain: DomainSpec, dossier_md: str) -> list[ConventionMatchResult]:
+    conventions_text = extract_sections(dossier_md).get("conventions", "").lower()
+    results = []
+    for cp in domain.conventions:
+        if cp.point is None and cp.statement is None:
+            # NONE_DECLARED sentinel -- nothing concrete to match, same philosophy
+            # authoring.facts.ConventionPoint's own docstring states for this case.
+            results.append(ConventionMatchResult(point=None, matched=True, matcher="sentinel_skip"))
+            continue
+        if cp.statement and cp.statement.lower() in conventions_text:
+            results.append(ConventionMatchResult(point=cp.point, matched=True, matcher="statement_substring"))
+            continue
+        keywords = _note_keywords(cp.note)
+        hit = next((k for k in keywords if k in conventions_text), None)
+        if hit is not None:
+            results.append(
+                ConventionMatchResult(point=cp.point, matched=True, matcher="note_keyword", detail=f"matched keyword {hit!r}")
+            )
+        else:
+            results.append(
+                ConventionMatchResult(
+                    point=cp.point, matched=False, matcher="no_match",
+                    detail=f"no statement substring or note keyword for point {cp.point!r} found in the dossier's Conventions section",
+                )
+            )
+    return results
+
+
+# === (b) Executable worked examples ============================================================
+
+_CLAIM_BULLET_RE = re.compile(r"^\s*(?:[-*]|\d+[.)])\s*Claim:\s*(.+)\s*$", re.IGNORECASE | re.MULTILINE)
+# Both fence delimiters may be indented (a fenced block nested under a list bullet, as the
+# dossier prompt's own example shows) -- `[ \t]*` tolerates that on both the opening line
+# (after the language tag) and the closing line (before the backticks).
+_FENCE_RE = re.compile(r"```(?:lean4?)?[ \t]*\n(.*?)\n[ \t]*```", re.DOTALL)
+
+EXECUTED = "EXECUTED"
+ELABORATED = "ELABORATED"
+UNCHECKED_PROSE_EXAMPLE = "UNCHECKED_PROSE_EXAMPLE"
+EXECUTION_FAILED = "EXECUTION_FAILED"
+ERRORED = "ERRORED"
+MALFORMED_NO_WORKED_EXAMPLES = "MALFORMED_NO_WORKED_EXAMPLES"
+
+
+@dataclass(frozen=True)
+class WorkedExampleItem:
+    claim: str
+    command: str | None
+
+
+def parse_worked_examples(dossier_md: str) -> list[WorkedExampleItem]:
+    """`Claim: <text>` bullets in the Worked Examples section; a bullet immediately followed
+    (before the next bullet) by a fenced ` ```lean ` block carries that block as its runnable
+    command."""
+    text = extract_sections(dossier_md).get("worked_examples", "")
+    bullets = list(_CLAIM_BULLET_RE.finditer(text))
+    items = []
+    for i, m in enumerate(bullets):
+        claim = m.group(1).strip()
+        start = m.end()
+        end = bullets[i + 1].start() if i + 1 < len(bullets) else len(text)
+        chunk = text[start:end]
+        fence_m = _FENCE_RE.search(chunk)
+        items.append(WorkedExampleItem(claim=claim, command=fence_m.group(1).strip() if fence_m else None))
+    return items
+
+
+@dataclass(frozen=True)
+class WorkedExampleCheck:
+    claim: str
+    kind: str
+    detail: str = ""
+
+
+def check_worked_examples(server, env: int, dossier_md: str, *, timeout: float | None = None) -> list[WorkedExampleCheck]:
+    timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
+    items = parse_worked_examples(dossier_md)
+    if not items:
+        return [
+            WorkedExampleCheck(
+                claim="", kind=MALFORMED_NO_WORKED_EXAMPLES,
+                detail="no 'Claim: ...' bullets found in the dossier's Worked Examples section",
+            )
+        ]
+    checks: list[WorkedExampleCheck] = []
+    for item in items:
+        if item.command:
+            check = run_checked(server, Command(cmd=item.command, env=env), timeout=timeout)
+            if check.status is CheckStatus.PASSED:
+                checks.append(WorkedExampleCheck(item.claim, EXECUTED, detail=item.command))
+            elif check.status is CheckStatus.FAILED:
+                checks.append(WorkedExampleCheck(item.claim, EXECUTION_FAILED, detail=check.detail))
+            else:
+                checks.append(WorkedExampleCheck(item.claim, ERRORED, detail=check.detail))
+        else:
+            prop_cmd = f"#check ({item.claim} : Prop)"
+            check = run_checked(server, Command(cmd=prop_cmd, env=env), timeout=timeout)
+            if check.status is CheckStatus.PASSED:
+                checks.append(WorkedExampleCheck(item.claim, ELABORATED))
+            else:
+                checks.append(
+                    WorkedExampleCheck(
+                        item.claim, UNCHECKED_PROSE_EXAMPLE,
+                        detail="claim did not elaborate as a bare Prop; treated as prose, not rejected",
+                    )
+                )
+    return checks
+
+
+# === (c) Signature substring ====================================================================
+
+
+def check_signature_substring(pinned_signature: str, dossier_md: str) -> tuple[bool, str]:
+    section = extract_sections(dossier_md).get("signature", "")
+    ok = pinned_signature.strip() in section
+    detail = "" if ok else f"pinned signature {pinned_signature!r} not found verbatim in the dossier's Signature section"
+    return ok, detail
+
+
+# === Top-level ===================================================================================
+
+
+@dataclass(frozen=True)
+class ConsistencyCheckResult:
+    convention_matches: list[ConventionMatchResult] = field(default_factory=list)
+    worked_example_checks: list[WorkedExampleCheck] = field(default_factory=list)
+    signature_substring_ok: bool = False
+    signature_detail: str = ""
+
+    @property
+    def passed(self) -> bool:
+        """(b) and (c) reject; (a) only flags -- contract §3.4's own split."""
+        example_failure = any(
+            c.kind in (EXECUTION_FAILED, MALFORMED_NO_WORKED_EXAMPLES) for c in self.worked_example_checks
+        )
+        return self.signature_substring_ok and not example_failure
+
+    @property
+    def flags(self) -> list[ConventionMatchResult]:
+        return [m for m in self.convention_matches if not m.matched]
+
+
+def check_dossier_consistency(
+    server, env: int, pinned_signature: str, dossier_md: str, domain: DomainSpec, *, timeout: float | None = None
+) -> ConsistencyCheckResult:
+    convention_matches = check_conventions_prose_match(domain, dossier_md)
+    worked_example_checks = check_worked_examples(server, env, dossier_md, timeout=timeout)
+    signature_ok, signature_detail = check_signature_substring(pinned_signature, dossier_md)
+    return ConsistencyCheckResult(
+        convention_matches=convention_matches,
+        worked_example_checks=worked_example_checks,
+        signature_substring_ok=signature_ok,
+        signature_detail=signature_detail,
+    )

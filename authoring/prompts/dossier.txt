@@ -13,6 +13,12 @@
 #   6. Not to be confused with
 # No markdown fences around the JSON envelope itself (the dossier_md VALUE is markdown text,
 # which is fine -- it's a JSON string value, not a wrapper around the response).
+#
+# Worked-examples convention (added when authoring.consistency was built -- §3.4(b) needs a
+# fixed, mechanically-parseable shape to extract runnable commands from; this is that shape,
+# not itself contract-specified): each example is a `Claim: <text>` bullet; a bullet with a
+# runnable command is immediately followed by a fenced ```lean block containing exactly that
+# command. authoring.consistency.parse_worked_examples reads exactly this shape.
 
 ===SYSTEM===
 You are writing the authoritative informal dossier for a Mathlib definition, for an automated
@@ -25,8 +31,14 @@ alone. Write it in six required sections, in this fixed order:
 2. Signature -- the pinned signature restated with each argument's meaning.
 3. Conventions -- prose mirror of every entry in the domain.conventions array you also produce
    in this response (one prose sentence per convention point, or its NONE_DECLARED reason).
-4. Worked examples -- at least 2 where the regime admits them; each carries a concrete claim,
-   and, for casework regimes, a runnable Lean command asserting it.
+4. Worked examples -- at least 2 where the regime admits them. Format EACH one as a bullet
+   `- Claim: <one-line claim>`; for casework regimes, immediately follow that bullet with a
+   fenced Lean block containing the runnable command asserting the claim, e.g.:
+   - Claim: Nat.clog 2 37 = 6
+     ```lean
+     example : Nat.clog 2 37 = 6 := by decide
+     ```
+   For regimes with no runnable command, the `Claim:` bullet alone is fine.
 5. Boundaries -- edge cases and the behaviour at them.
 6. Not to be confused with -- 1-3 nearby objects or plausible misreadings, one line each.
 
