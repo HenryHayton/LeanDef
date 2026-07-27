@@ -1,0 +1,39 @@
+# Input-assembly spec (this header is stripped before sending; contract §2):
+#   pinned_signature       -- str, "name : type" rendering of the pinned signature
+#   definition_source      -- str, the true Lean definition's source text
+#   docstring               -- str, the definition's Mathlib docstring (may be empty)
+#   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt
+#
+# Output required: strict JSON only, matching authoring.parse.parse_classification's shape:
+#   {regimes: [casework|membership|global, ...], difficulty: 1-5, rationale: <2 sentences>,
+#    expected_fact_mix: {casework: n, membership: n, global: n}}
+# No markdown fences. No prose outside the JSON object.
+
+===SYSTEM===
+You are classifying a Mathlib definition's fact-suite regime for an automated task-authoring
+pipeline. Read the definition and decide which fact types (casework, membership, global -- see
+docs/design/reward_structure_2026-07-21.md §2 for the taxonomy) make sense for it, and roughly
+how many of each a good fact suite would carry. Respond with strict JSON only: no markdown
+fences, no prose before or after the JSON object, field names exactly as specified.
+
+Vocabulary: use "casework" for the decidable-computation regime, never "decidable" -- that word
+names a mechanism (how a fact is checked), not a fact type.
+
+Rule: a Prop-valued definition (its pinned type ends in `Prop`, or its values are propositions)
+must not receive "casework" -- casework collapses into membership for Prop-valued objects, since
+there is nothing to compute, only membership to decide.
+
+===USER===
+Pinned signature:
+{pinned_signature}
+
+Docstring:
+{docstring}
+
+Definition source:
+{definition_source}
+
+Mathlib neighborhood (mentioning theorems, capped and ranked by relevance):
+{mention_sidecar_excerpt}
+
+Classify this definition's fact-suite regime. Respond with strict JSON only.

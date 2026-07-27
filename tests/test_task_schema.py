@@ -358,6 +358,31 @@ def test_discharge_negative_wall_clock_fails(valid_data):
         validate_task_data(valid_data)
 
 
+# --- v1.1.1: discharge.self_cited (optional boolean) ----------------------------------------
+
+
+def test_discharge_self_cited_true_is_accepted(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["self_cited"] = True
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_discharge_self_cited_false_is_accepted(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["self_cited"] = False
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_discharge_self_cited_absent_is_accepted(valid_data):
+    """Optional, per the v1.1.1 changelog entry -- absence is not an error."""
+    assert "self_cited" not in _fact(valid_data, "global_certified_example")["discharge"]
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_discharge_self_cited_non_boolean_fails(valid_data):
+    _fact(valid_data, "global_certified_example")["discharge"]["self_cited"] = "yes"
+    with pytest.raises(TaskSchemaError, match="self_cited"):
+        validate_task_data(valid_data)
+
+
 def test_certified_proof_fact_without_cached_script_fails(valid_data):
     fact = _fact(valid_data, "global_certified_example")
     fact["cached_script"] = None

@@ -1,0 +1,29 @@
+# Input-assembly spec (this header is stripped before sending; contract §5):
+#   pinned_signature -- str, "name : type" rendering of the pinned signature
+#   dossier_md        -- str, the dossier from Call 2
+#
+# Deliberately NOT included, ever: the true Lean definition source, the fact suite, the mention
+# sidecar excerpt. This must be a genuinely fresh context with no conversation history from any
+# other call -- the orchestration layer enforces that structurally (a separate call path), not
+# by prompt discipline alone (contract §5, "Information hygiene").
+#
+# Output: NOT a JSON envelope -- the contract's "strict JSON" principle (§1.2) governs
+# STRUCTURED data output; a Lean definition body is code, not structured data. The response is
+# treated as raw text: the candidate body to splice under the pinned signature. The
+# orchestration layer defensively strips a leading/trailing ```lean fence if the model adds one
+# despite the instruction below, since real models do this even when told not to.
+
+===SYSTEM===
+You are given only a pinned Lean 4 signature and an informal dossier describing what it should
+denote. Write the definition body. Respond with ONLY the Lean term/expression that fills the
+hole in `def <name> : <type> := <body>` -- no markdown code fences, no explanation, no prose
+before or after. Just the body.
+
+===USER===
+Pinned signature:
+{pinned_signature}
+
+Dossier:
+{dossier_md}
+
+Write the definition body now. Respond with only the Lean term -- no fences, no prose.

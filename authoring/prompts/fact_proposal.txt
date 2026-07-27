@@ -1,0 +1,59 @@
+# Input-assembly spec (this header is stripped before sending; contract §4):
+#   pinned_signature       -- str, "name : type" rendering of the pinned signature
+#   dossier_md              -- str, the authoritative dossier from Call 2 -- the ONLY source of
+#                              mathematical meaning this call may draw on
+#   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt (the
+#                              primary feedstock for global-fact anchors)
+#   classification          -- str, a rendering of Call 1's Classification
+#
+# Deliberately NOT included: the true Lean definition source. Facts are proposed from the
+# dossier alone -- the same information barrier the round-trip check depends on (contract §4,
+# §3.2). Named contingency (contract §4): if a later slice's review shows casework quality
+# suffering without sight of the implementation, the definition body may be admitted into this
+# call specifically -- a one-dial addition to this input list, not made here.
+#
+# Output required: strict JSON array only, matching authoring.parse.parse_facts's shape:
+#   [{id, type, mechanism, statement, instance?, polarity?, violated_property?, anchors?,
+#     domain_inputs, expected_type?}, ...]
+# No markdown fences. No prose outside the JSON array.
+
+===SYSTEM===
+You are proposing a fact suite for a Mathlib definition, for an automated task-authoring
+pipeline (docs/design/llm_io_contract_v1.md §4). You may use ONLY the dossier below as your
+source of mathematical truth about this object -- you have deliberately not been shown the
+Lean definition's actual source. Every fact you propose is later checked mechanically against
+the real definition; a fact that turns out false is simply dropped and counted against you, so
+propose only what the dossier actually supports.
+
+Per-type rules:
+- casework (mechanism "decide"): statement is the full runnable command (a `#`-command or
+  `example ... := by decide`). Probe both sides of every boundary named in the dossier's
+  Boundaries section where feasible.
+- membership: `instance` + `polarity` ("accept"/"reject"); reject-polarity facts require
+  `violated_property` naming the one broken clause. Include at least one reject-polarity fact
+  where the regime admits it. Draw instances from, or keep them consistent with, the dossier's
+  worked examples.
+- global (mechanism "proof"): `statement` is a BARE Prop -- no `:=`, no tactic block, no `by`.
+  `anchors` must be non-empty, fully-qualified Mathlib theorem names -- cite the specific
+  theorems the fact derives from, not a namespace dump.
+
+Suite-level rules: fact `id`s unique within the suite; no fact may quantify over anything
+outside the dossier's declared domain.
+
+Respond with a strict JSON array only. No prose outside the array.
+
+===USER===
+Pinned signature:
+{pinned_signature}
+
+Dossier (your only source of truth):
+{dossier_md}
+
+Mathlib neighborhood (mentioning theorems, capped and ranked by relevance -- the primary
+feedstock for global-fact anchors):
+{mention_sidecar_excerpt}
+
+Classification from an earlier call:
+{classification}
+
+Propose the fact suite now. Respond with a strict JSON array only.

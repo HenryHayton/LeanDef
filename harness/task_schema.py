@@ -205,6 +205,12 @@ def _validate_discharge(discharge: object, context: str) -> None:
         at in DISCHARGE_STAGES,
         f"{context}.discharge: 'at' must be one of {sorted(DISCHARGE_STAGES)}, got {at!r}",
     )
+    if "self_cited" in discharge:
+        self_cited = discharge["self_cited"]
+        _require(
+            isinstance(self_cited, bool),
+            f"{context}.discharge: 'self_cited', if present, must be a boolean, got {self_cited!r}",
+        )
 
 
 def _validate_cached_script(cached_script: object, context: str) -> None:

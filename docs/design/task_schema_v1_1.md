@@ -10,6 +10,20 @@ component — miner, scorer, definition-writer prompts — builds against this d
 consequential-work item 1. `harness/task_schema.py`, `harness/facts.py`, `authoring/facts.py`
 were updated in the same pass as this document — see repo history for that commit.*
 
+## Changelog: v1.1 → v1.1.1
+
+- **`discharge.self_cited` (optional boolean), new.** Per
+  `docs/design/llm_io_contract_v1.md` §4.2 (the self-citation rule): a global fact that
+  restates its anchor theorem near-verbatim discharges trivially by citing that anchor, so its
+  recorded tier/cost must not be read as a candidate-side difficulty estimate (candidate-side
+  the citation breaks — the candidate is a fresh symbol — and the fact's true depth is unknown
+  until measured). `self_cited: true` marks this on the `discharge` record, alongside the real
+  integer `tier` — not as a distinct tier value, since `tier` stays pinned to integers 1–5
+  (2026-07-24 Clarification, unchanged). Omitted (or `false`) means "not flagged as
+  self-citing"; absence is not an error, matching every other optional field in this schema.
+  This is a micro-addition, not a new schema generation: every other v1.1 rule is unchanged,
+  hence "v1.1.1" rather than a v1.2 with its own full restatement.
+
 ## Changelog: v1 → v1.1
 
 - **Provisional status slot.** New required per-fact field `validation_status`
@@ -180,10 +194,12 @@ invalid and must be rejected by the validator.
       well-formed (elaborates, anchors resolve, in-domain) but not yet discharged — the
       reward-side ladder resolves it later.
   - `discharge` (object or `null`, **new in v1.1**) — `{ "tier": 1-5, "wall_clock_s": number,
-    "at": "authoring" | "reward" }` when present. Required non-null whenever mechanism is
-    `proof` and `validation_status` is `CERTIFIED`. Required `null` whenever `validation_status`
-    is `PROVISIONALLY_VALIDATED`. Optional either way for `decide` facts (tier-1 certification
-    is definitionally instant; recording it is not required).
+    "at": "authoring" | "reward", "self_cited": boolean (optional, new in v1.1.1) }` when
+    present. Required non-null whenever mechanism is `proof` and `validation_status` is
+    `CERTIFIED`. Required `null` whenever `validation_status` is `PROVISIONALLY_VALIDATED`.
+    Optional either way for `decide` facts (tier-1 certification is definitionally instant;
+    recording it is not required). `self_cited`, when present, must be a boolean — see the
+    Changelog's v1.1.1 entry (`docs/design/llm_io_contract_v1.md` §4.2) for what it records.
   - `cached_script` (string or `null`, **new in v1.1**) — the reconstructed proof script.
     Required non-null exactly when mechanism is `proof` and `validation_status` is `CERTIFIED`;
     required `null` when `validation_status` is `PROVISIONALLY_VALIDATED`.

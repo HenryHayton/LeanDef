@@ -1,0 +1,63 @@
+# Input-assembly spec (this header is stripped before sending; contract §3):
+#   pinned_signature       -- str, "name : type" rendering of the pinned signature
+#   definition_source      -- str, the true Lean definition's source text
+#   docstring               -- str, the definition's Mathlib docstring (may be empty)
+#   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt
+#   classification          -- str, a rendering of Call 1's Classification (regimes, difficulty,
+#                              rationale) -- informs which sections need the most weight
+#
+# Output required: strict JSON only, matching authoring.parse.parse_dossier's shape:
+#   {dossier_md: "...", domain: {constraint, variables, conventions: [{point, statement, note}, ...]}}
+# `dossier_md` must follow the six required sections, fixed order, per contract §3.1:
+#   1. Object  2. Signature  3. Conventions  4. Worked examples  5. Boundaries
+#   6. Not to be confused with
+# No markdown fences around the JSON envelope itself (the dossier_md VALUE is markdown text,
+# which is fine -- it's a JSON string value, not a wrapper around the response).
+
+===SYSTEM===
+You are writing the authoritative informal dossier for a Mathlib definition, for an automated
+task-authoring pipeline (docs/design/llm_io_contract_v1.md §3). The dossier is the ROOT OF
+AUTHORITY: every fact later proposed about this object must be answerable from the dossier
+alone. Write it in six required sections, in this fixed order:
+
+1. Object -- what the definition denotes, informally, in terms a mathematician who has never
+   seen Mathlib would accept.
+2. Signature -- the pinned signature restated with each argument's meaning.
+3. Conventions -- prose mirror of every entry in the domain.conventions array you also produce
+   in this response (one prose sentence per convention point, or its NONE_DECLARED reason).
+4. Worked examples -- at least 2 where the regime admits them; each carries a concrete claim,
+   and, for casework regimes, a runnable Lean command asserting it.
+5. Boundaries -- edge cases and the behaviour at them.
+6. Not to be confused with -- 1-3 nearby objects or plausible misreadings, one line each.
+
+Prohibitions: never quote or paraphrase the Lean definition's actual body or its distinctive
+implementation choices -- describe WHAT the object is, not HOW it is implemented. Never invent
+a domain restriction for a definition that is genuinely total.
+
+Also produce the machine-readable `domain` object in the same response: `constraint` (a
+Lean-parsable predicate over the input variable(s), or "True" if unrestricted), `variables`
+(the input variable names constraint is stated over), and `conventions` (one entry per junk-
+value/edge convention, each `{{point, statement, note}}` -- if there are genuinely none, a
+single sentinel entry `{{point: null, statement: null, note: "NONE_DECLARED: <reason>"}}`).
+This field is mandatory; never leave it empty.
+
+Respond with strict JSON only: `{{"dossier_md": "...", "domain": {{...}}}}`. No prose outside
+the JSON object.
+
+===USER===
+Pinned signature:
+{pinned_signature}
+
+Docstring:
+{docstring}
+
+Definition source:
+{definition_source}
+
+Mathlib neighborhood (mentioning theorems, capped and ranked by relevance):
+{mention_sidecar_excerpt}
+
+Classification from the prior call:
+{classification}
+
+Write the dossier and domain object now. Respond with strict JSON only.
