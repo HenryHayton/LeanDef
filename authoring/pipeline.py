@@ -227,22 +227,37 @@ def author_task(definition_name: str, config: PipelineConfig) -> TaskResult:
     a station's own terminal exception, budget exhaustion, an unexpected error -- is caught and
     turned into a `TaskResult(outcome="ROTATED", ...)` carrying the full stage-by-stage record,
     since `author_batch`'s whole contract depends on a single task never taking the batch down
-    with it."""
+    with it.
+
+    `budget`/`log_start_line` are created HERE, not inside `_author_task_inner`, specifically so
+    this function's own `except` branch can still report real spend on a crash that happens
+    deep inside a station -- `budget` is a mutable object `_author_task_inner` charges as it
+    goes, so even if an exception cuts the inner call short, `budget.calls_made` at the moment
+    of the crash is exactly how many calls were actually made, and `_token_totals_since` reads
+    directly from the log rather than from any state the crash might have skipped past. Before
+    this, an unexpected-error rotation silently reported zero calls/tokens even when a real,
+    billed Bedrock call had just succeeded moments earlier (confirmed 2026-07-28: a genuine
+    classification call spent 1773+257 tokens, then crashed in response parsing, and the
+    resulting `TaskResult` claimed 0 calls / 0 tokens)."""
+    budget = CallBudget(max_calls=config.max_calls_per_task)
+    log_start_line = _count_log_lines(config.client.log_path)
     try:
-        return _author_task_inner(definition_name, config)
+        return _author_task_inner(definition_name, config, budget, log_start_line)
     except Exception as e:  # noqa: BLE001 -- the batch-mode safety net; see docstring.
+        tokens = _token_totals_since(config.client.log_path, log_start_line)
         return TaskResult(
             definition_name=definition_name,
             outcome="ROTATED",
             rotated_at_stage="unexpected_error",
-            stage_records=[StageRecord(stage="unexpected_error", status="rotated", detail=f"{type(e).__name__}: {e}")],
+            stage_records=[StageRecord(stage="unexpected_error", status="rotated", detail=f"{type(e).__name__}: {e}", calls_made=budget.calls_made)],
+            calls_made=budget.calls_made,
+            input_tokens=tokens["input_tokens"],
+            output_tokens=tokens["output_tokens"],
         )
 
 
-def _author_task_inner(definition_name: str, config: PipelineConfig) -> TaskResult:
-    budget = CallBudget(max_calls=config.max_calls_per_task)
+def _author_task_inner(definition_name: str, config: PipelineConfig, budget: CallBudget, log_start_line: int) -> TaskResult:
     stage_records: list[StageRecord] = []
-    log_start_line = _count_log_lines(config.client.log_path)
     run_id = f"{definition_name}-{uuid.uuid4().hex[:8]}"
 
     def _rotate(stage: str, detail: str, **partial) -> TaskResult:

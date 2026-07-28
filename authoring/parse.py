@@ -22,8 +22,23 @@ production; tests call these functions directly with hand-written JSON strings.
   contract's row 3 ("the fact is dropped, suite may still ship") is a **per-fact** outcome, and
   a whole-call `ParseError` would incorrectly discard every fact in the batch over one bad
   statement.
+
+**Every parse entry point is hardened against malformed input of any shape** -- wrong types,
+dicts where strings were expected, extra nesting -- never raising a raw `TypeError`/`KeyError`/
+`AttributeError`. This is not theoretical: a real Bedrock response (2026-07-28) sent `regimes`
+as a list of `{type, description, estimated_count}` objects instead of the expected flat
+string array, and crashed `parse_classification` with `TypeError: unhashable type: 'dict'` --
+`authoring.orchestrate._call_llm_json`'s retry wrapper (contract §6 rows 1-2) only catches
+`ParseError`, so anything else escapes past the retry machinery and takes the whole task down.
+Individual checks are ordered so a type check always precedes anything that would crash on the
+wrong type (e.g. `isinstance(r, str)` before `r in REGIMES`, since checking set membership of
+an unhashable value raises `TypeError`); `@_hardened` on top of that is a last-resort net on
+each public entry point (`parse_classification`/`parse_dossier`/`parse_facts`), converting any
+`TypeError`/`KeyError`/`AttributeError`/`IndexError` that slips past the targeted checks into a
+`ParseError` too, so the property holds even for a shape nobody anticipated.
 """
 
+import functools
 import json
 import re
 from dataclasses import dataclass
@@ -65,10 +80,33 @@ class ParseError(Exception):
         super().__init__(detail)
 
 
+def _hardened(func):
+    """Last-resort net for a `parse_*` public entry point: any `TypeError`/`KeyError`/
+    `AttributeError`/`IndexError` that escapes the function's own targeted checks becomes a
+    `ParseError` instead -- see this module's docstring for why (a real crash this exact
+    pattern would have caught). `ParseError` itself passes through unchanged; anything else
+    (a genuine bug unrelated to malformed input, e.g. in `ProposedFact`'s own constructor)
+    still propagates, since blanket-catching `Exception` would mask those too."""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ParseError:
+            raise
+        except (TypeError, KeyError, AttributeError, IndexError) as e:
+            raise ParseError(
+                f"response did not match the expected shape ({type(e).__name__}: {e})",
+                reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+            ) from e
+
+    return wrapper
+
+
 def _parse_json_object(text: str) -> dict:
     try:
         data = json.loads(text)
-    except json.JSONDecodeError as e:
+    except (json.JSONDecodeError, TypeError) as e:
         raise ParseError(f"response was not valid JSON: {e}") from e
     if not isinstance(data, dict):
         raise ParseError(
@@ -79,6 +117,8 @@ def _parse_json_object(text: str) -> dict:
 
 
 def _require_field(data: dict, key: str, context: str) -> object:
+    if not isinstance(data, dict):
+        raise ParseError(f"{context}: expected an object, got {type(data).__name__}", reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE)
     if key not in data:
         raise ParseError(f"{context}: missing required field {key!r}", reason_code=ReasonCode.MALFORMED_MISSING_FIELD)
     return data[key]
@@ -105,14 +145,26 @@ class Classification:
     expected_fact_mix: dict[str, int]
 
 
+@_hardened
 def parse_classification(text: str) -> Classification:
     data = _parse_json_object(text)
     context = "classification response"
 
     regimes = _require_field(data, "regimes", context)
-    if not isinstance(regimes, list) or not regimes or not all(r in REGIMES for r in regimes):
+    # `isinstance(r, str)` MUST be checked before `r in REGIMES` -- `REGIMES` is a `frozenset`,
+    # and membership-testing an unhashable value (a dict, a list) against a set/frozenset
+    # raises `TypeError`, not a clean "not found." Confirmed the hard way: a real Bedrock
+    # response sent `regimes` as a list of `{type, description, estimated_count}` objects
+    # instead of flat strings (2026-07-28) and crashed exactly here before this ordering fix.
+    if (
+        not isinstance(regimes, list)
+        or not regimes
+        or not all(isinstance(r, str) for r in regimes)
+        or not all(r in REGIMES for r in regimes)
+    ):
         raise ParseError(
-            f"{context}: 'regimes' must be a non-empty array drawn from {sorted(REGIMES)}, got {regimes!r}",
+            f"{context}: 'regimes' must be a non-empty flat array of strings drawn from "
+            f"{sorted(REGIMES)} (not objects/descriptions), got {regimes!r}",
             reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
         )
 
@@ -186,6 +238,7 @@ def _parse_convention_entry(entry: object, index: int, context: str) -> Conventi
     return ConventionPoint(point=point, statement=statement, note=note, predicate=None)
 
 
+@_hardened
 def parse_dossier(text: str) -> DossierPayload:
     data = _parse_json_object(text)
     context = "dossier response"
@@ -236,7 +289,12 @@ class FactParseRejection:
 
 
 def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
-    return any(part is not None and forbidden_name in part for part in parts)
+    # `isinstance(part, str)` guards against a non-string, non-None `part` (a dict/list/int a
+    # caller forgot to type-check first) -- `x in 5` raises `TypeError`, `x in {...}`/`x in
+    # [...]` wouldn't crash but would check the wrong thing (dict keys / list elements, not
+    # substring containment). Defense in depth: `_parse_fact_entry` also type-checks
+    # `instance`/`expected_type` before this is ever called.
+    return any(isinstance(part, str) and forbidden_name in part for part in parts)
 
 
 def _parse_fact_entry(
@@ -292,6 +350,20 @@ def _parse_fact_entry(
     polarity = entry.get("polarity")
     violated_property = entry.get("violated_property")
     expected_type = entry.get("expected_type")
+    # Type-checked here for EVERY fact type (not just membership below, which re-requires them
+    # as non-empty strings) -- casework/global facts don't require `instance`/`expected_type`,
+    # but if present they still must be string-or-null, since `_leaks_forbidden_name` below
+    # (and the eventual `Fact` construction) both assume that.
+    if instance is not None and not isinstance(instance, str):
+        raise ParseError(
+            f"{context}: 'instance', if present, must be a string or null, got {instance!r}",
+            reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+        )
+    if expected_type is not None and not isinstance(expected_type, str):
+        raise ParseError(
+            f"{context}: 'expected_type', if present, must be a string or null, got {expected_type!r}",
+            reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+        )
     if fact_type == "membership":
         instance = _require_str(entry, "instance", context)
         polarity = _require_str(entry, "polarity", context)
@@ -372,6 +444,7 @@ def _parse_fact_entry(
     return fact
 
 
+@_hardened
 def parse_facts(
     text: str, *, task_symbol: str | None = None, forbidden_name: str | None = None
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
@@ -388,7 +461,7 @@ def parse_facts(
     that's meaningful, e.g. a `provenance.source: "fresh"` task with no real name to forbid)."""
     try:
         data = json.loads(text)
-    except json.JSONDecodeError as e:
+    except (json.JSONDecodeError, TypeError) as e:
         raise ParseError(f"response was not valid JSON: {e}") from e
     if not isinstance(data, list):
         raise ParseError(

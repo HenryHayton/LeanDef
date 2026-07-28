@@ -118,6 +118,37 @@ def test_classification_call_terminal_after_retry_also_fails(stub_server, tmp_pa
     assert len(server.requests_received) == 2  # exactly one retry, never a third attempt
 
 
+def test_classification_call_retries_once_on_malformed_shape_then_succeeds(stub_server, tmp_path):
+    """Reproduces the real 2026-07-28 incident end to end: a well-formed-JSON-but-wrong-shape
+    response (`regimes` as a list of objects, not strings -- exactly what a real Bedrock call
+    sent) must trigger the same one-retry-with-feedback path as malformed JSON, not crash the
+    whole call. Before this session's hardening, `parse_classification` raised a raw
+    `TypeError` here, which `_call_llm_json`'s `except ParseError` doesn't catch -- the retry
+    never fired at all."""
+    malformed_shape = json.dumps({
+        "regimes": [
+            {"type": "casework", "description": "...", "estimated_count": 10},
+            {"type": "membership", "description": "...", "estimated_count": 15},
+        ]
+    })
+    server = stub_server(
+        [
+            ScriptedResponse(200, success_body(malformed_shape)),
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ]
+    )
+    client = _client(server, tmp_path)
+    result = run_classification_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+    )
+    assert result.difficulty == 2
+    assert len(server.requests_received) == 2  # the retry fired -- a second call was actually made
+    retry_message = server.requests_received[1]["messages"][0]["content"]
+    assert "could not be used" in retry_message
+    assert "flat array of strings" in retry_message  # the specific, actionable feedback reached the retry prompt
+
+
 def test_dossier_call_succeeds_and_carries_domain(stub_server, tmp_path):
     server = stub_server([ScriptedResponse(200, success_body(DOSSIER_JSON))])
     client = _client(server, tmp_path)

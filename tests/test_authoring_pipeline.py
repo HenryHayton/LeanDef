@@ -302,6 +302,39 @@ def test_budget_exhaustion_mid_task_rotates_with_full_record(mathlib_env, stub_s
     assert result.calls_made == 2
 
 
+# --- Unexpected-error rotation must still report real spend ----------------------------------
+
+
+def test_unexpected_error_rotation_still_reports_calls_made_and_tokens(mathlib_env, stub_server, tmp_path, monkeypatch):
+    """A crash unrelated to malformed LLM output (some other bug entirely) still lands in
+    `author_task`'s outer catch-all -- but the classification call before it was real, billed,
+    and logged, and the resulting `TaskResult` must say so. Before this session's fix, the
+    outer `except` branch always returned `calls_made=0, input_tokens=0, output_tokens=0`
+    regardless of what had actually happened -- confirmed for real on 2026-07-28, where a
+    genuine classification call spent 1773+257 tokens and then a parsing bug (since fixed)
+    crashed before that spend was ever recorded on the `TaskResult`."""
+    server, env = mathlib_env
+    bedrock_server = stub_server([ScriptedResponse(200, success_body(CLASSIFICATION_JSON))])
+    config = _config(server, env, tmp_path, bedrock_server)
+
+    def _boom(*args, **kwargs):
+        raise RuntimeError("injected failure, unrelated to Bedrock or parsing")
+
+    monkeypatch.setattr("authoring.pipeline.run_dossier_call", _boom)
+
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "ROTATED"
+    assert result.rotated_at_stage == "unexpected_error"
+    assert "injected failure" in result.stage_records[-1].detail
+    # the classification call really happened (one HTTP request, one logged call) -- the
+    # TaskResult must reflect that, not report a crash-shaped zero.
+    assert len(bedrock_server.requests_received) == 1
+    assert result.calls_made == 1
+    assert result.input_tokens > 0
+    assert result.output_tokens > 0
+
+
 # --- Unhappy path 4: round-trip failure -> repair -> rotate ----------------------------------
 
 

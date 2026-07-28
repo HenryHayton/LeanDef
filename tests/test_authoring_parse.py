@@ -358,4 +358,109 @@ def test_parse_facts_self_restatement_non_bool_raises():
     }
     with pytest.raises(ParseError) as exc_info:
         parse_facts(json.dumps([entry]))
+
+
+# --- hardening: malformed input of any shape must raise ParseError, never a raw exception -----
+#
+# The real bug (2026-07-28): a genuine Bedrock response sent `regimes` as a list of
+# `{type, description, estimated_count}` objects instead of flat strings, and
+# `parse_classification` crashed with `TypeError: unhashable type: 'dict'` -- `r in REGIMES`
+# where `REGIMES` is a frozenset and `r` is a dict. `authoring.orchestrate._call_llm_json`'s
+# retry wrapper only catches `ParseError`, so this escaped past the designed retry (contract §6
+# rows 1-2) and took the whole task down. Every case below asserts `ParseError` specifically
+# (not just "raises something") -- a bare `pytest.raises(Exception)` would have passed even
+# before the fix, since `TypeError` is an `Exception` too.
+
+
+def test_parse_classification_regimes_as_real_logged_response_shape():
+    """The EXACT shape of the real 2026-07-28 Bedrock response that crashed this function."""
+    text = json.dumps({
+        "regimes": [
+            {"type": "casework", "description": "Concrete numeric evaluations.", "estimated_count": 10},
+            {"type": "membership", "description": "Boundary and structural facts.", "estimated_count": 15},
+            {"type": "global", "description": "Higher-level properties.", "estimated_count": 8},
+        ]
+    })
+    with pytest.raises(ParseError) as exc_info:
+        parse_classification(text)
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
+    assert "flat array of strings" in exc_info.value.detail
+
+
+@pytest.mark.parametrize(
+    "bad_classification",
+    [
+        {"regimes": {"casework": True}, "difficulty": 2, "rationale": "x", "expected_fact_mix": {}},
+        {"regimes": [1, 2, 3], "difficulty": 2, "rationale": "x", "expected_fact_mix": {}},
+        {"regimes": [["casework"]], "difficulty": 2, "rationale": "x", "expected_fact_mix": {}},
+        {"regimes": ["casework"], "difficulty": 2, "rationale": "x", "expected_fact_mix": ["casework", "membership"]},
+        {"regimes": ["casework"], "difficulty": "high", "rationale": "x", "expected_fact_mix": {}},
+        {"regimes": ["casework"], "difficulty": 2, "rationale": {"nested": "object"}, "expected_fact_mix": {}},
+        "just a bare string, not even an object",
+        ["a", "bare", "array"],
+        42,
+        None,
+    ],
+)
+def test_parse_classification_malformed_shape_battery_never_raises_raw_exception(bad_classification):
+    text = json.dumps(bad_classification)
+    with pytest.raises(ParseError):
+        parse_classification(text)
+
+
+@pytest.mark.parametrize(
+    "bad_dossier",
+    [
+        {"dossier_md": "# Object", "domain": ["not", "an", "object"]},
+        {"dossier_md": "# Object", "domain": {"constraint": "True", "variables": "not-a-list", "conventions": []}},
+        {"dossier_md": "# Object", "domain": {"constraint": "True", "variables": [], "conventions": ["not-an-object"]}},
+        {"dossier_md": "# Object", "domain": {"constraint": {"nested": True}, "variables": [], "conventions": [{"note": "x"}]}},
+        {"dossier_md": 12345, "domain": {}},
+        "a bare string",
+        [],
+    ],
+)
+def test_parse_dossier_malformed_shape_battery_never_raises_raw_exception(bad_dossier):
+    text = json.dumps(bad_dossier)
+    with pytest.raises(ParseError):
+        parse_dossier(text)
+
+
+@pytest.mark.parametrize(
+    "bad_entry",
+    [
+        "a bare string, not an object",
+        42,
+        ["nested", "array"],
+        {"id": "f1", "type": "global", "mechanism": "proof", "statement": "P", "anchors": ["A"], "instance": {"nested": "dict"}},
+        {"id": "f1", "type": "global", "mechanism": "proof", "statement": "P", "anchors": ["A"], "expected_type": ["a", "list"]},
+        {"id": "f1", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": ["not", "a", "dict"]},
+        {"id": "f1", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": {"n": 5}},
+        {"id": "f1", "type": "global", "mechanism": "proof", "statement": "P", "anchors": [{"nested": "dict"}]},
+        {"id": {"nested": "dict"}, "type": "casework", "mechanism": "decide", "statement": "#eval 1"},
+    ],
+)
+def test_parse_facts_malformed_entry_battery_never_raises_raw_exception(bad_entry):
+    text = json.dumps([bad_entry])
+    with pytest.raises(ParseError):
+        parse_facts(text)
+
+
+def test_parse_facts_top_level_not_a_list_of_any_kind():
+    with pytest.raises(ParseError):
+        parse_facts(json.dumps({"not": "a list"}))
+
+
+def test_parse_facts_instance_as_dict_is_a_structured_error_not_a_typeerror_from_name_leak_check():
+    """The specific gap this session's hardening closes: `instance`/`expected_type` weren't
+    type-checked before being fed to the raw-name-leak substring check, so a non-membership
+    fact with a dict `instance` could reach `forbidden_name in instance` -- a `TypeError` for
+    any non-string, non-container `part`, and a silently-wrong check for a dict/list one."""
+    entry = {
+        "id": "f1", "type": "global", "mechanism": "proof", "statement": "∀ n, P n",
+        "anchors": ["Real.Anchor"], "instance": {"weird": "shape"},
+    }
+    with pytest.raises(ParseError) as exc_info:
+        parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
     assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE

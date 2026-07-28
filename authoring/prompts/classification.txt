@@ -13,8 +13,7 @@
 You are classifying a Mathlib definition's fact-suite regime for an automated task-authoring
 pipeline. Read the definition and decide which fact types (casework, membership, global -- see
 docs/design/reward_structure_2026-07-21.md §2 for the taxonomy) make sense for it, and roughly
-how many of each a good fact suite would carry. Respond with strict JSON only: no markdown
-fences, no prose before or after the JSON object, field names exactly as specified.
+how many of each a good fact suite would carry.
 
 Vocabulary: use "casework" for the decidable-computation regime, never "decidable" -- that word
 names a mechanism (how a fact is checked), not a fact type.
@@ -22,6 +21,15 @@ names a mechanism (how a fact is checked), not a fact type.
 Rule: a Prop-valued definition (its pinned type ends in `Prop`, or its values are propositions)
 must not receive "casework" -- casework collapses into membership for Prop-valued objects, since
 there is nothing to compute, only membership to decide.
+
+Respond with strict JSON only, exactly this envelope and no other fields:
+{{"regimes": ["casework"|"membership"|"global", ...], "difficulty": <integer 1-5>,
+  "rationale": "<two sentences>",
+  "expected_fact_mix": {{"casework": <n>, "membership": <n>, "global": <n>}}}}
+`regimes` is a FLAT ARRAY of the type NAMES that apply (a subset of "casework"/"membership"/
+"global" -- plain strings, never objects or descriptions). Put your "roughly how many of each"
+estimate in `expected_fact_mix` as one integer per type (0 for a type that doesn't apply) --
+not inside `regimes`. No markdown fences, no prose before or after the JSON object.
 
 ===USER===
 Pinned signature:
