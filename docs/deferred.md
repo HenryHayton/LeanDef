@@ -100,3 +100,17 @@ don't leave it checked off in place.
   flags this).
   **Trigger:** the round-driver/training-loop task that actually runs candidates through the
   full ladder across a fact suite, not one fact at a time.
+- **Parse-time mirror for rule 5 (`domain_inputs` keys ⊆ `domain.variables`).** `harness.
+  task_schema._validate_fact` rejects a fact whose `domain_inputs` key isn't one of the task's
+  declared `domain.variables`; `authoring.parse.parse_facts` doesn't check this — it would need
+  the dossier's `domain.variables` threaded into `parse_facts` (not just `domain_constraint`,
+  which the 2026-07-28 enforcement session already added for the membership non-emptiness rule).
+  **Trigger:** the first `emit` rotation or review flag showing a fact with a wrong/unknown
+  domain-variable key in a real batch.
+- **Cross-retry duplicate-id detection (rule 12).** `authoring.parse.parse_facts` only dedupes
+  fact ids WITHIN one response; a fact from the original fact-proposal response and a fact from
+  its row-3 retry response can share an id undetected until `emit_task`'s schema validation.
+  Would need the original response's ids carried into the retry's `parse_facts` call.
+  **Trigger:** the first real duplicate-id occurrence in a real batch (used deliberately as the
+  test vehicle for the 2026-07-28 emit-rotation `round_trip_score`-preservation fix, so it's a
+  known, exercised gap, not a hypothetical one).
