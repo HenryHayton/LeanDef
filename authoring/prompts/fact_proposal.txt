@@ -39,21 +39,33 @@ mathematical content and to source anchor names; never reproduce a mention's sta
 verbatim (even with the name substituted) as your own `statement`. Write a fresh statement,
 grounded in the dossier, for the task symbol's own domain.
 
-Per-type rules:
-- casework (mechanism "decide"): statement is the full runnable command (a `#`-command or
-  `example ... := by decide`). Probe both sides of every boundary named in the dossier's
-  Boundaries section where feasible.
-- membership: `instance` + `polarity` ("accept"/"reject"); reject-polarity facts require
-  `violated_property` naming the one broken clause. Include at least one reject-polarity fact
-  where the regime admits it. Draw instances from, or keep them consistent with, the dossier's
-  worked examples.
-- global (mechanism "proof"): `statement` is a BARE Prop -- no `:=`, no tactic block, no `by`.
-  `anchors` must be non-empty, fully-qualified Mathlib theorem names -- cite the specific
-  theorems the fact derives from, not a namespace dump. If a global fact restates its anchor
-  theorem near-verbatim (the anchor essentially proves it outright, not merely contributes to
-  it), set `self_restatement: true` on that fact -- omit it (or set `false`) otherwise. Be
-  honest here: this doesn't penalize the fact, it only marks that its eventual discharge cost
-  can't be read as a difficulty estimate.
+Per-type rules -- every field listed below as REQUIRED must be present and non-empty on every
+fact of that type. A fact missing one is mechanically rejected before it is even checked against
+the dossier, so treat this as a hard format requirement, not a suggestion:
+
+- casework (mechanism "decide"): `statement` is REQUIRED and is the full runnable command (a
+  `#`-command or `example ... := by decide`). `domain_inputs` is REQUIRED and NON-EMPTY -- an
+  object mapping each concrete domain variable you instantiated to the value you used, e.g. for
+  a fact about `clog 2 8`: `"domain_inputs": {{"b": "2", "n": "8"}}`. Every casework fact names
+  concrete inputs somewhere in its statement -- `domain_inputs` is that same information,
+  structured for machine review, not optional metadata. Probe both sides of every boundary named
+  in the dossier's Boundaries section where feasible. Example casework fact:
+  `{{"id": "clog_2_8", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+- membership: `instance` and `polarity` ("accept"/"reject") are REQUIRED. Reject-polarity facts
+  additionally REQUIRE `violated_property` naming the one broken clause. `domain_inputs` is
+  REQUIRED and NON-EMPTY whenever the dossier's domain has any constraint narrower than
+  unrestricted. Include at least one reject-polarity fact where the regime admits it. Draw
+  instances from, or keep them consistent with, the dossier's worked examples. Example
+  membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "polarity": "accept", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+- global (mechanism "proof"): `statement` is REQUIRED and is a BARE Prop -- no `:=`, no tactic
+  block, no `by`. `anchors` is REQUIRED and NON-EMPTY: fully-qualified Mathlib theorem names --
+  cite the specific theorems the fact derives from, not a namespace dump. `anchors` must be
+  OMITTED or empty on casework/membership facts -- anchors are global-fact-only. If a global
+  fact restates its anchor theorem near-verbatim (the anchor essentially proves it outright, not
+  merely contributes to it), set `self_restatement: true` on that fact -- omit it (or set
+  `false`) otherwise. Be honest here: this doesn't penalize the fact, it only marks that its
+  eventual discharge cost can't be read as a difficulty estimate. Example global fact:
+  `{{"id": "clog_monotone", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, Monotone (VTask.clog b)", "anchors": ["Nat.clog_monotone"], "self_restatement": true}}`
 
 Suite-level rules: fact `id`s unique within the suite; no fact may quantify over anything
 outside the dossier's declared domain.

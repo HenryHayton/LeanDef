@@ -578,6 +578,44 @@ def test_round_trip_budget_exhaustion_mid_retry_loop_rotates_cleanly(mathlib_env
     assert len(bedrock_server.requests_received) == 5  # never exceeded the configured budget
 
 
+# --- Unhappy path 5: emit-stage schema rotation preserves a real round-trip score (2026-07-28) -
+
+
+def test_emit_stage_rotation_preserves_round_trip_score(mathlib_env, stub_server, tmp_path):
+    """Regression for the real 2026-07-28 clog run: a rotation discovered at `emit` (a stage
+    that runs AFTER round-trip scoring) must not discard a round trip that already fully
+    succeeded. The vehicle here is a duplicate fact id spanning the fact-proposal batch and its
+    row-3 retry -- `authoring.parse.parse_facts` only dedupes ids WITHIN one response, so this
+    still reaches `emit_task`'s schema validation today (a known, separate gap, not the one
+    this fix addresses) -- exactly what's needed to exercise the `except TaskSchemaError`
+    branch without depending on the domain_inputs gap this session's fix already closed."""
+    server, env = mathlib_env
+    dup_a = {"id": "dup_id", "type": "casework", "mechanism": "decide", "statement": f"example : {TASK_SYMBOL} 2 37 = 6 := by decide", "domain_inputs": {"b": "2", "n": "37"}}
+    bad_format = {"id": "bad_fmt", "type": "casework", "mechanism": "decide", "statement": f"{TASK_SYMBOL} 3 10 = 3", "domain_inputs": {"b": "3", "n": "10"}}  # triggers the row-3 retry
+    dup_b = {"id": "dup_id", "type": "casework", "mechanism": "decide", "statement": f"example : {TASK_SYMBOL} 3 10 = 3 := by decide", "domain_inputs": {"b": "3", "n": "10"}}  # retry response reuses "dup_id"
+
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(json.dumps([dup_a, bad_format]))),
+            ScriptedResponse(200, success_body(json.dumps([dup_b]))),
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "ROTATED"
+    assert result.rotated_at_stage == "emit"
+    assert "duplicate fact id" in result.stage_records[-1].detail
+    # the fix under test: round-trip already succeeded before the emit-stage rotation, and that
+    # must survive into the rotation record, not come back None.
+    assert result.round_trip_score is not None
+    assert result.round_trip_score.passed is True
+    assert result.round_trip_flag is None
+
+
 # --- author_batch: continue-on-rotation, batch review file -----------------------------------
 
 

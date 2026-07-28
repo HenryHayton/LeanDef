@@ -201,8 +201,8 @@ def test_parse_facts_membership_reject_missing_violated_property_raises():
 
 
 def test_parse_facts_duplicate_ids_within_one_response_raises():
-    entry1 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 1"}
-    entry2 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 2"}
+    entry1 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": {"n": "1"}}
+    entry2 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 2", "domain_inputs": {"n": "2"}}
     with pytest.raises(ParseError):
         parse_facts(json.dumps([entry1, entry2]))
 
@@ -464,3 +464,179 @@ def test_parse_facts_instance_as_dict_is_a_structured_error_not_a_typeerror_from
         parse_facts(json.dumps([entry]), task_symbol="VTask.clog", forbidden_name="Nat.clog")
     assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
     assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
+
+
+# --- Type-conditional required-field pre-checks (2026-07-28), mirroring ---------------------
+# `harness.task_schema._validate_fact` exactly -- see that module's docstring in
+# `authoring/pipeline.py`'s module docstring, decision 4, for why these exist: a real slice run
+# shipped 15/15 casework facts with an empty `domain_inputs` all the way to `emit_task` before
+# anything caught it.
+
+
+def test_parse_facts_casework_missing_domain_inputs_is_a_rejection():
+    entry = {"id": "cw1", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 8 = 3 := by decide"}
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_DOMAIN_INPUTS
+    assert "cw1" in rejections[0].detail
+    assert "domain_inputs" in rejections[0].detail
+
+
+def test_parse_facts_casework_with_domain_inputs_parses_clean():
+    entry = {
+        "id": "cw1", "type": "casework", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {"b": "2", "n": "8"},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_membership_missing_domain_inputs_is_a_rejection_when_domain_constrained():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : Monotone (fun n : Fin 3 => n) := by decide",
+        "instance": "(fun n : Fin 3 => n)", "polarity": "accept", "expected_type": "Fin 3 → Fin 3",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), domain_constraint="1 < b ∧ 1 < n")
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_DOMAIN_INPUTS
+    assert "m1" in rejections[0].detail
+
+
+def test_parse_facts_membership_missing_domain_inputs_ok_when_constraint_is_unrestricted():
+    """The schema's own carve-out (harness.task_schema._validate_fact): domain_inputs is not
+    required for membership when domain.constraint is the unrestricted 'True' sentinel."""
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : Monotone (fun n : Fin 3 => n) := by decide",
+        "instance": "(fun n : Fin 3 => n)", "polarity": "accept", "expected_type": "Fin 3 → Fin 3",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), domain_constraint="True")
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_membership_missing_domain_inputs_ok_when_domain_constraint_not_supplied():
+    """Backward compatible: a caller with no domain context yet (domain_constraint=None, the
+    default) does not enforce this check at all."""
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : Monotone (fun n : Fin 3 => n) := by decide",
+        "instance": "(fun n : Fin 3 => n)", "polarity": "accept", "expected_type": "Fin 3 → Fin 3",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_global_missing_anchors_is_a_rejection():
+    entry = {"id": "g1", "type": "global", "mechanism": "proof", "statement": "∀ n : ℕ, VTask.clog 2 n ≥ 0"}
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_ANCHORS
+    assert "g1" in rejections[0].detail
+
+
+def test_parse_facts_global_with_anchors_parses_clean():
+    entry = {"id": "g1", "type": "global", "mechanism": "proof", "statement": "∀ n : ℕ, VTask.clog 2 n ≥ 0", "anchors": ["Nat.clog_pos"]}
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_casework_with_anchors_is_a_rejection():
+    entry = {
+        "id": "cw1", "type": "casework", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {"b": "2", "n": "8"},
+        "anchors": ["Nat.clog_pow"],
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_ANCHORS_NOT_ALLOWED
+    assert "cw1" in rejections[0].detail
+
+
+def test_parse_facts_membership_with_anchors_is_a_rejection():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : Monotone (fun n : Fin 3 => n) := by decide",
+        "instance": "(fun n : Fin 3 => n)", "polarity": "accept", "expected_type": "Fin 3 → Fin 3",
+        "anchors": ["Foo.bar"],
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_ANCHORS_NOT_ALLOWED
+
+
+def test_parse_facts_regression_fifteen_casework_facts_all_missing_domain_inputs():
+    """The exact shape of the real 2026-07-28 clog incident: 15 well-formed casework facts,
+    statements all valid, domain_inputs entirely absent from every one. All 15 must come back
+    as rejections (not silently accepted with an empty dict), none as parsed facts."""
+    entries = [
+        {"id": f"clog_casework_{i}", "type": "casework", "mechanism": "decide", "statement": f"example : VTask.clog 2 {i} = 0 := by decide"}
+        for i in range(15)
+    ]
+    facts, rejections = parse_facts(json.dumps(entries))
+    assert facts == []
+    assert len(rejections) == 15
+    assert {r.reason_code for r in rejections} == {ReasonCode.MALFORMED_MISSING_DOMAIN_INPUTS}
+    assert {r.fragment["id"] for r in rejections} == {e["id"] for e in entries}
+
+
+# --- Drift guard: everything parse_facts accepts must also pass harness.task_schema's ---------
+# per-fact validation. If a future schema rule change adds a new type-conditional requirement
+# without a matching mirror here, this test is the one that goes red.
+
+
+def _minimal_fact_dict_for_schema(proposed, *, run_id: str = "drift-guard-run") -> dict:
+    """Wrap an already-parse-clean `ProposedFact` in the extra fields `emit_task` always adds
+    (validation_status/discharge/cached_script/axiom_closure/provenance) using the exact
+    convention `authoring/pipeline.py` decision 1 documents (decide -> CERTIFIED, proof ->
+    PROVISIONALLY_VALIDATED, discharge/cached_script/axiom_closure always null), then convert
+    via `authoring.emit._fact_to_dict` -- the exact reverse of `harness.facts.Fact.from_dict`
+    -- so this is the SAME shape a real shipped task.json fact would have."""
+    from authoring.emit import _fact_to_dict
+    from harness.facts import Fact, FactProvenance
+
+    validation_status = "CERTIFIED" if proposed.mechanism == "decide" else "PROVISIONALLY_VALIDATED"
+    fact = Fact(
+        id=proposed.id, type=proposed.type, mechanism=proposed.mechanism, statement=proposed.statement,
+        instance=proposed.instance, polarity=proposed.polarity, violated_property=proposed.violated_property,
+        domain_inputs=proposed.domain_inputs, anchors=proposed.anchors,
+        validation_status=validation_status, discharge=None, cached_script=None, axiom_closure=None,
+        provenance=FactProvenance(validation_run_id=run_id, note="drift-guard test fact"),
+    )
+    return _fact_to_dict(fact)
+
+
+@pytest.mark.parametrize(
+    "entry",
+    [
+        {"id": "cw1", "type": "casework", "mechanism": "decide", "statement": "example : VTask.isSorted [] = true := by decide", "domain_inputs": {"l": "[]"}},
+        {
+            "id": "m1", "type": "membership", "mechanism": "decide",
+            "statement": "example : VTask.isSorted [1] = true := by decide",
+            "instance": "[1]", "polarity": "accept", "expected_type": "List Nat",
+        },
+        {"id": "g1", "type": "global", "mechanism": "proof", "statement": "∀ l, VTask.isSorted l = VTask.isSorted l", "anchors": ["List.Sorted.refl"]},
+    ],
+    ids=["casework", "membership", "global"],
+)
+def test_a_fact_that_parses_clean_also_passes_schema_per_fact_validation(entry):
+    """For each fact type: build the minimal fact `parse_facts` accepts (with the fixture's own
+    domain, constraint 'True'/variables ['l']), wrap it exactly as `emit_task` would, and assert
+    `harness.task_schema._validate_fact` (the authoritative per-fact rule set this module's own
+    checks are supposed to mirror) raises nothing for it."""
+    from harness.task_schema import _validate_fact
+
+    facts, rejections = parse_facts(json.dumps([entry]), domain_constraint="True")
+    assert rejections == [], f"fact was unexpectedly rejected at parse time: {rejections}"
+    assert len(facts) == 1
+
+    fact_dict = _minimal_fact_dict_for_schema(facts[0])
+    _validate_fact(fact_dict, index=0, domain_constraint="True", domain_variables=["l"])  # must not raise

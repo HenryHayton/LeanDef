@@ -373,6 +373,44 @@ def test_fact_proposal_raw_name_leak_dropped_when_task_symbol_context_given(stub
     assert len(server.requests_received) == 2  # the one row-3 retry, then terminal for that fact
 
 
+def test_fact_proposal_regression_fifteen_casework_facts_missing_domain_inputs_recovered_by_one_batched_retry(stub_server, tmp_path):
+    """The exact real 2026-07-28 clog incident, reproduced end to end at orchestration level:
+    15 casework facts, statements all valid, domain_inputs entirely absent from every one.
+    Confirms (a) the batched row-3 retry fires exactly once and names all 15 rejected facts,
+    and (b) a corrected response recovers the full batch -- the fix this test guards is that
+    this failure shape is now caught HERE (cheap, one retry call) rather than surviving all the
+    way to `emit_task` after the whole task's real LLM/REPL spend is already gone."""
+    bad_entries = [
+        {"id": f"clog_casework_{i}", "type": "casework", "mechanism": "decide", "statement": f"example : VTask.clog 2 {i} = 0 := by decide"}
+        for i in range(15)
+    ]
+    first_response = json.dumps(bad_entries)
+    fixed_entries = [
+        {**e, "domain_inputs": {"b": "2", "n": str(i)}} for i, e in enumerate(bad_entries)
+    ]
+    retry_response = json.dumps(fixed_entries)
+
+    server = stub_server(
+        [ScriptedResponse(200, success_body(first_response)), ScriptedResponse(200, success_body(retry_response))]
+    )
+    client = _client(server, tmp_path)
+    result = run_fact_proposal_call(
+        client, "test-model",
+        pinned_signature="VTask.clog : Nat -> Nat -> Nat", dossier_md="d", mention_sidecar_excerpt="(none)",
+        classification="c", task_symbol="VTask.clog", forbidden_name="Nat.clog",
+    )
+    assert len(server.requests_received) == 2  # exactly one batched retry, not 15 individual ones
+    retry_message = server.requests_received[1]["messages"][0]["content"]
+    for i in range(15):
+        assert f"clog_casework_{i}" in retry_message
+    assert "domain_inputs" in retry_message
+
+    assert sorted(f.id for f in result.facts) == sorted(e["id"] for e in bad_entries)
+    assert result.dropped == []
+    for f in result.facts:
+        assert f.domain_inputs  # every recovered fact now genuinely carries domain_inputs
+
+
 # --- Call budget --------------------------------------------------------------------------
 
 

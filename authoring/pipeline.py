@@ -56,13 +56,25 @@ is silent on all three:
    projected into a shipped `discharge.self_cited`.** Since `discharge` is always `null` (point
    1), there is currently nowhere in a shipped task.json for it to land; see
    `authoring.facts.ProposedFact.self_restatement`'s own docstring.
+4. **Every type-conditional required-field rule `harness.task_schema._validate_fact` enforces is
+   mirrored at parse time (2026-07-28)**, not just discovered at `emit_task`. The real
+   2026-07-28 `Nat.clog` run rotated at `emit` after all 6 real LLM calls: 15/15 casework facts
+   had reached that point with an empty `domain_inputs` (silently defaulted by
+   `authoring.parse`, never checked by `authoring.validate`'s casework path, and never mentioned
+   as required by the fact-proposal prompt's casework rule text) and the schema validator
+   rejected the first one it saw. `authoring.parse.parse_facts` now rejects (per-fact, feeding
+   the existing batched row-3 retry -- see its own docstring) any fact missing a rule
+   `harness.task_schema` would reject it for: non-empty `domain_inputs` for casework and
+   domain-constrained membership, non-empty `anchors` for global, empty `anchors` for
+   non-global. The principle: no fact may reach `emit` missing anything `emit` will reject for.
 
 No station's public interface was broken to build this driver -- `authoring.parse.parse_facts`
 and `authoring.orchestrate.run_fact_proposal_call` both gained new OPTIONAL keyword parameters
-(`task_symbol`/`forbidden_name`), backward compatible with every existing caller. One adaptation
-was made to a non-code artifact: `authoring/prompts/dossier.txt` specifies a parseable
-Worked-Examples convention (a `Claim: ...` bullet + optional fenced command) -- without it,
-`authoring.consistency` check (b) had nothing reliable to extract.
+(`task_symbol`/`forbidden_name`, and as of 2026-07-28 `domain_constraint`), backward compatible
+with every existing caller. One adaptation was made to a non-code artifact:
+`authoring/prompts/dossier.txt` specifies a parseable Worked-Examples convention (a `Claim: ...`
+bullet + optional fenced command) -- without it, `authoring.consistency` check (b) had nothing
+reliable to extract.
 """
 
 import json
@@ -340,6 +352,13 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             calls_made=budget.calls_made,
             input_tokens=tokens["input_tokens"],
             output_tokens=tokens["output_tokens"],
+            # `round_trip_score`/`round_trip_flag` (2026-07-28 fix): a rotation that happens
+            # AFTER round-trip scoring already ran (currently only `emit`'s `TaskSchemaError`
+            # branch) must not discard that result -- confirmed lost in the real 2026-07-28
+            # clog run, where a fully-passing round trip was recorded as `None` because the
+            # `emit`-stage rotation never threaded it through.
+            round_trip_score=partial.get("round_trip_score"),
+            round_trip_flag=partial.get("round_trip_flag"),
         )
 
     # --- lookup ---------------------------------------------------------------------------
@@ -440,6 +459,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             pinned_signature=pinned_signature, dossier_md=dossier_payload.dossier_md,
             mention_sidecar_excerpt=mention_excerpt, classification=classification_text, budget=budget,
             task_symbol=task_symbol, forbidden_name=definition_input.name,
+            domain_constraint=dossier_payload.domain.constraint,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)
@@ -618,6 +638,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
             task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
             self_restatement=self_restatement_ids,
+            round_trip_score=round_trip_score, round_trip_flag=round_trip_flag,
         )
     stage_records.append(StageRecord("emit", "ok", calls_made=budget.calls_made))
 

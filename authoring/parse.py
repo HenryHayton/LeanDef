@@ -298,7 +298,8 @@ def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
 
 
 def _parse_fact_entry(
-    entry: object, index: int, *, task_symbol: str | None = None, forbidden_name: str | None = None
+    entry: object, index: int, *,
+    task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
 ) -> ProposedFact | FactParseRejection:
     context = f"facts[{index}]"
     if not isinstance(entry, dict):
@@ -400,6 +401,63 @@ def _parse_fact_entry(
         self_restatement=self_restatement,
     )
 
+    # Type-conditional required-field pre-check, mirroring `harness.task_schema._validate_fact`
+    # exactly (that module is the authoritative source of these rules -- see its own per-type
+    # branches). Added 2026-07-28 after a real slice run: 15/15 casework facts in one task
+    # reached `emit_task` with an empty `domain_inputs` (the fact-proposal prompt's per-type
+    # rules never told the model casework needed it), surviving every check up to that point
+    # because nothing before the final schema validator enforced non-emptiness. Per-fact, not
+    # whole-call, exactly like the statement-format pre-check below -- one bad fact must not
+    # discard an otherwise-good batch, and the batched row-3 retry (`_retry_rejected_facts`)
+    # already exists to recover from exactly this shape of rejection.
+    if fact_type == "casework" and not fact.domain_inputs:
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_MISSING_DOMAIN_INPUTS,
+            detail=(
+                f"{context}: casework fact {fact_id!r} is missing required non-empty "
+                "domain_inputs mapping each domain variable to the concrete value the fact uses"
+            ),
+        )
+    if (
+        fact_type == "membership"
+        and domain_constraint is not None
+        and domain_constraint.strip() != "True"
+        and not fact.domain_inputs
+    ):
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_MISSING_DOMAIN_INPUTS,
+            detail=(
+                f"{context}: membership fact {fact_id!r} is missing required non-empty "
+                "domain_inputs mapping each domain variable to the concrete value the fact uses "
+                f"(required because the task's domain constraint {domain_constraint!r} is not "
+                "the unrestricted 'True' sentinel)"
+            ),
+        )
+    if fact_type == "global" and not fact.anchors:
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_MISSING_ANCHORS,
+            detail=(
+                f"{context}: global fact {fact_id!r} is missing required non-empty anchors -- "
+                "cite at least one fully-qualified Mathlib theorem the fact derives from"
+            ),
+        )
+    if fact_type != "global" and fact.anchors:
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_ANCHORS_NOT_ALLOWED,
+            detail=(
+                f"{context}: {fact_type} fact {fact_id!r} must not set anchors (anchors are "
+                f"global-fact-only), got {fact.anchors!r}"
+            ),
+        )
+
     # Task-symbol pre-check (contract §4.4): the model must write every statement against the
     # task symbol, never the real Mathlib name it may have seen in `definition_source`/
     # docstring/mention-sidecar context. `anchors` is deliberately EXCLUDED -- anchors name
@@ -446,19 +504,27 @@ def _parse_fact_entry(
 
 @_hardened
 def parse_facts(
-    text: str, *, task_symbol: str | None = None, forbidden_name: str | None = None
+    text: str, *,
+    task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
     """Parse Call 3's output array. Raises `ParseError` (whole-call, contract §6 rows 1-2) for
     malformed JSON or a schema-shape violation (missing/wrong-typed field, bad enum value,
     type/mechanism mismatch). Returns `(facts, rejections)` for the narrower per-fact
-    statement-format pre-check (§4.1/§6 row 3) instead of raising, so one badly-shaped
-    statement doesn't discard an otherwise-good batch.
+    pre-checks (§4.1/§6 row 3) instead of raising, so one badly-shaped fact doesn't discard an
+    otherwise-good batch -- statement format, and (2026-07-28) every type-conditional required
+    field `harness.task_schema._validate_fact` enforces (non-empty `domain_inputs` for
+    casework/domain-constrained membership, non-empty `anchors` for global, empty `anchors`
+    for non-global): mirrored here so a fact missing one of these is caught and fed back to the
+    model at THIS cheap, batched-retry stage, not discovered at `emit_task` after every real
+    LLM/REPL cost for the task has already been spent.
 
     `forbidden_name` (contract §4.4), when supplied, rejects (per-fact, not whole-call) any
     fact whose `statement`/`instance`/`expected_type` contains it -- the mechanical check that
-    the model wrote against `task_symbol`, not the real Mathlib name. Both default to `None`
-    (no check), backward compatible with callers that have no task-symbol context (or none
-    that's meaningful, e.g. a `provenance.source: "fresh"` task with no real name to forbid)."""
+    the model wrote against `task_symbol`, not the real Mathlib name. `domain_constraint` (the
+    dossier's `domain.constraint`, already known by the time fact-proposal runs), when
+    supplied, gates the membership `domain_inputs` check the same way
+    `harness.task_schema._validate_fact` does. All three default to `None` (no check),
+    backward compatible with callers that have no such context yet."""
     try:
         data = json.loads(text)
     except (json.JSONDecodeError, TypeError) as e:
@@ -473,7 +539,9 @@ def parse_facts(
     rejections: list[FactParseRejection] = []
     seen_ids: set[str] = set()
     for i, entry in enumerate(data):
-        parsed = _parse_fact_entry(entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name)
+        parsed = _parse_fact_entry(
+            entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name, domain_constraint=domain_constraint
+        )
         if isinstance(parsed, FactParseRejection):
             rejections.append(parsed)
             continue

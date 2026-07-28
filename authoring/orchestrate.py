@@ -250,11 +250,14 @@ def run_fact_proposal_call(
     budget: CallBudget | None = None,
     task_symbol: str | None = None,
     forbidden_name: str | None = None,
+    domain_constraint: str | None = None,
     max_tokens: int | None = None,
 ) -> FactProposalResult:
     """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
     on both the initial parse and the row-3 per-fact retry, so a raw-Mathlib-name leak is caught
-    (and the offending fact dropped, not silently shipped) the same way on either path."""
+    (and the offending fact dropped, not silently shipped) the same way on either path.
+    `domain_constraint` (2026-07-28) threads through the same way, gating the membership
+    `domain_inputs` pre-check `parse_facts` mirrors from `harness.task_schema`."""
     template = load_prompt_template("fact_proposal")
     system, user = template.render(
         pinned_signature=pinned_signature,
@@ -265,7 +268,7 @@ def run_fact_proposal_call(
     max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["fact_proposal"]
 
     def _parse(text: str):
-        return parse_facts(text, task_symbol=task_symbol, forbidden_name=forbidden_name)
+        return parse_facts(text, task_symbol=task_symbol, forbidden_name=forbidden_name, domain_constraint=domain_constraint)
 
     facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget, max_tokens=max_tokens)
     if not rejections:
