@@ -165,39 +165,46 @@ def test_parse_facts_unknown_type_raises():
     assert exc_info.value.reason_code == ReasonCode.MALFORMED_UNKNOWN_TYPE
 
 
-def test_parse_facts_casework_wrong_mechanism_raises():
+def test_parse_facts_casework_wrong_mechanism_is_a_rejection():
+    """(2026-07-28, second pass): a type<->mechanism mismatch on one fact must not discard
+    the rest of an otherwise-good batch -- per-fact rejection, not a whole-call raise."""
     entry = {"id": "x", "type": "casework", "mechanism": "proof", "statement": "n = n"}
-    with pytest.raises(ParseError) as exc_info:
-        parse_facts(json.dumps([entry]))
-    assert exc_info.value.reason_code == ReasonCode.MALFORMED_BAD_MECHANISM
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_BAD_MECHANISM
 
 
-def test_parse_facts_global_wrong_mechanism_raises():
+def test_parse_facts_global_wrong_mechanism_is_a_rejection():
     entry = {"id": "x", "type": "global", "mechanism": "decide", "statement": "#eval 1"}
-    with pytest.raises(ParseError) as exc_info:
-        parse_facts(json.dumps([entry]))
-    assert exc_info.value.reason_code == ReasonCode.MALFORMED_BAD_MECHANISM
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_BAD_MECHANISM
 
 
-def test_parse_facts_membership_missing_instance_raises():
+def test_parse_facts_membership_missing_instance_is_a_rejection():
+    """(2026-07-28, second pass): was a whole-call raise; now per-fact, same principle."""
     entry = {
         "id": "x", "type": "membership", "mechanism": "decide",
-        "statement": "example : P := by decide", "polarity": "accept", "expected_type": "Nat",
+        "statement": "example : P := by decide", "polarity": "accept",
     }
-    with pytest.raises(ParseError) as exc_info:
-        parse_facts(json.dumps([entry]))
-    assert exc_info.value.reason_code == ReasonCode.MALFORMED_MISSING_FIELD
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_FIELD
 
 
-def test_parse_facts_membership_reject_missing_violated_property_raises():
+def test_parse_facts_membership_reject_missing_violated_property_is_a_rejection():
+    """(2026-07-28, second pass): was a whole-call raise; now per-fact, same principle."""
     entry = {
         "id": "x", "type": "membership", "mechanism": "decide",
         "statement": "example : P := by decide", "instance": "(0)", "polarity": "reject",
-        "expected_type": "Nat",
     }
-    with pytest.raises(ParseError) as exc_info:
-        parse_facts(json.dumps([entry]))
-    assert exc_info.value.reason_code == ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY
 
 
 def test_parse_facts_duplicate_ids_within_one_response_raises():
@@ -640,3 +647,60 @@ def test_a_fact_that_parses_clean_also_passes_schema_per_fact_validation(entry):
 
     fact_dict = _minimal_fact_dict_for_schema(facts[0])
     _validate_fact(fact_dict, index=0, domain_constraint="True", domain_variables=["l"])  # must not raise
+
+
+# --- Regression: the real 2026-07-28 gate incident (Nat.clog, second batch-50 attempt) --------
+#
+# The exact 27-fact response a real Bedrock call produced for Nat.clog's fact-proposal stage --
+# 12 casework, 7 membership (every one missing `expected_type`, which the parser at the time
+# demanded via a whole-call raise), 8 global. This single response rotated the task at
+# `fact_proposal` before Stage 2 of a planned 50-task batch could even start. Captured verbatim
+# from `bedrock/output/call_log.jsonl` at the time of the incident.
+
+_REAL_2026_07_28_GATE_RESPONSE = [
+    {"id": "clog_casework_2_8", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {"b": "2", "n": "8"}},
+    {"id": "clog_casework_2_9", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 9 = 4 := by decide", "domain_inputs": {"b": "2", "n": "9"}},
+    {"id": "clog_casework_10_100", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 10 100 = 2 := by decide", "domain_inputs": {"b": "10", "n": "100"}},
+    {"id": "clog_casework_10_101", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 10 101 = 3 := by decide", "domain_inputs": {"b": "10", "n": "101"}},
+    {"id": "clog_casework_base1", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 1 5 = 0 := by decide", "domain_inputs": {"b": "1", "n": "5"}},
+    {"id": "clog_casework_n1", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 1 = 0 := by decide", "domain_inputs": {"b": "2", "n": "1"}},
+    {"id": "clog_casework_n0", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 0 = 0 := by decide", "domain_inputs": {"b": "2", "n": "0"}},
+    {"id": "clog_casework_base0", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 0 7 = 0 := by decide", "domain_inputs": {"b": "0", "n": "7"}},
+    {"id": "clog_casework_pow_3_3", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 3 27 = 3 := by decide", "domain_inputs": {"b": "3", "n": "27"}},
+    {"id": "clog_casework_2_16", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 16 = 4 := by decide", "domain_inputs": {"b": "2", "n": "16"}},
+    {"id": "clog_casework_2_17", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 17 = 5 := by decide", "domain_inputs": {"b": "2", "n": "17"}},
+    {"id": "clog_casework_antitone_ex", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 4 16 ≤ VTask.clog 2 16 := by decide", "domain_inputs": {"b1": "4", "b2": "2", "n": "16"}},
+    {"id": "clog_mem_nle_pow", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 9 ∈ {k : ℕ | 9 ≤ 2 ^ k} := by decide", "instance": "VTask.clog 2 9", "polarity": "accept", "domain_inputs": {"b": "2", "n": "9"}},
+    {"id": "clog_mem_pow_exact", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ {k : ℕ | 2 ^ k = 8} := by decide", "instance": "VTask.clog 2 8", "polarity": "accept", "domain_inputs": {"b": "2", "n": "8"}},
+    {"id": "clog_mem_nonzero_for_large_n", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 9 ∈ {k : ℕ | 0 < k} := by decide", "instance": "VTask.clog 2 9", "polarity": "accept", "domain_inputs": {"b": "2", "n": "9"}},
+    {"id": "clog_mem_zero_base1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 1 100 ∈ ({0} : Set ℕ) := by decide", "instance": "VTask.clog 1 100", "polarity": "accept", "domain_inputs": {"b": "1", "n": "100"}},
+    {"id": "clog_mem_reject_wrong_value", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∉ {k : ℕ | k = 4} := by decide", "instance": "VTask.clog 2 8", "polarity": "reject", "violated_property": "clog 2 8 equals 3, not 4", "domain_inputs": {"b": "2", "n": "8"}},
+    {"id": "clog_mem_monotone_witness", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ {k : ℕ | k ≤ VTask.clog 2 9} := by decide", "instance": "VTask.clog 2 8", "polarity": "accept", "domain_inputs": {"b": "2", "n1": "8", "n2": "9"}},
+    {"id": "clog_mem_antitone_witness", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 4 64 ∈ {k : ℕ | k ≤ VTask.clog 2 64} := by decide", "instance": "VTask.clog 4 64", "polarity": "accept", "domain_inputs": {"b1": "4", "b2": "2", "n": "64"}},
+    {"id": "clog_one_left_global", "type": "global", "mechanism": "proof", "statement": "∀ n : ℕ, VTask.clog 1 n = 0", "anchors": ["Nat.clog_one_left"], "self_restatement": True},
+    {"id": "clog_one_right_global", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, VTask.clog b 1 = 0", "anchors": ["Nat.clog_one_right"], "self_restatement": True},
+    {"id": "clog_monotone_global", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, Monotone (VTask.clog b)", "anchors": ["Nat.clog_monotone"], "self_restatement": True},
+    {"id": "clog_pow_global", "type": "global", "mechanism": "proof", "statement": "∀ (b x : ℕ), 1 < b → VTask.clog b (b ^ x) = x", "anchors": ["Nat.clog_pow"], "self_restatement": True},
+    {"id": "clog_antitone_left_global", "type": "global", "mechanism": "proof", "statement": "∀ n : ℕ, AntitoneOn (fun b : ℕ => VTask.clog b n) (Set.Ioi 1)", "anchors": ["Nat.clog_antitone_left"], "self_restatement": True},
+    {"id": "clog_ge_log_global", "type": "global", "mechanism": "proof", "statement": "∀ (b n : ℕ), Nat.log b n ≤ VTask.clog b n", "anchors": ["Nat.log_le_clog"], "self_restatement": True},
+    {"id": "clog_zero_right_global", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, VTask.clog b 0 = 0", "anchors": ["Nat.clog_one_right", "Nat.clog_monotone"]},
+    {"id": "clog_le_pow_global", "type": "global", "mechanism": "proof", "statement": "∀ (b n : ℕ), 1 < b → n ≤ b ^ VTask.clog b n", "anchors": ["Nat.clog_pow", "Nat.clog_monotone"]},
+]
+
+
+def test_parse_facts_regression_real_2026_07_28_gate_incident_response_now_parses_clean():
+    assert len(_REAL_2026_07_28_GATE_RESPONSE) == 27
+    facts, rejections = parse_facts(json.dumps(_REAL_2026_07_28_GATE_RESPONSE))
+
+    assert rejections == [], f"real incident response should now parse with zero rejections, got: {rejections}"
+    assert len(facts) == 27
+
+    membership_facts = [f for f in facts if f.type == "membership"]
+    assert len(membership_facts) == 7
+    for f in membership_facts:
+        assert f.expected_type is None  # never supplied in the real response; now legitimately optional
+
+    casework_facts = [f for f in facts if f.type == "casework"]
+    assert len(casework_facts) == 12
+    global_facts = [f for f in facts if f.type == "global"]
+    assert len(global_facts) == 8

@@ -27,7 +27,10 @@ task.json fact entry -- see that document's "Open points" for why it stays autho
   `#check ((instance) : (expected_type))` elaboration probe and nothing downstream reads it
   again -- a `decide`-mechanism fact's `statement` already bakes the check in full, and a
   `proof`-mechanism fact's bare-Prop `statement` already carries the instance's type via the
-  term itself.
+  term itself. OPTIONAL as of 2026-07-28 (not a `harness.task_schema` requirement, confirmed by
+  that session's parser-vs-schema sweep) -- when absent, `authoring.validate
+  .validate_membership_fact` falls back to a plain `#check (instance)` elaboration probe rather
+  than rejecting the fact; sharper when present, never load-bearing when it isn't.
 """
 
 from dataclasses import dataclass, field

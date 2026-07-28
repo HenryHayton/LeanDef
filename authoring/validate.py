@@ -336,12 +336,12 @@ def validate_membership_fact(
             ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY,
             detail="reject-polarity membership facts require violated_property (schema §2.2 diagnostic tag)",
         )
-    if fact.instance is None or fact.expected_type is None:
+    if fact.instance is None:
         return ValidationOutcome(
             fact.id,
             Verdict.REJECTED,
             ReasonCode.MALFORMED_MISSING_FIELD,
-            detail="membership facts require both instance and expected_type",
+            detail="membership facts require 'instance'",
         )
 
     domain_verdict, domain_evidence = check_domain_containment(server, env, domain, fact.domain_inputs, timeout=timeout)
@@ -362,7 +362,16 @@ def validate_membership_fact(
             evidence={"domain_check": domain_evidence},
         )
 
-    elaborate_cmd = f"#check (({fact.instance}) : ({fact.expected_type}))"
+    # `expected_type` (2026-07-28: made optional at parse time, authoring-only) sharpens this
+    # probe into "does `instance` elaborate AT THIS TYPE" when given; without it, falls back to
+    # "does `instance` elaborate at all" -- strictly weaker, but a fact must never be rejected
+    # here for omitting a field that isn't actually required (that was exactly today's real
+    # incident's root cause, one layer up in `authoring.parse`).
+    elaborate_cmd = (
+        f"#check (({fact.instance}) : ({fact.expected_type}))"
+        if fact.expected_type is not None
+        else f"#check ({fact.instance})"
+    )
     elaborate_check = run_checked(server, Command(cmd=elaborate_cmd, env=env), timeout=timeout)
     elaborate_evidence = {
         "command": elaborate_cmd,

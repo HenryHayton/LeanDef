@@ -75,8 +75,9 @@ def mathlib_env():
 
 
 def test_membership_missing_instance_is_malformed_missing_field():
-    """The one case that genuinely produces `MALFORMED_MISSING_FIELD` today: `instance` (or
-    `expected_type`) absent on a membership fact."""
+    """The one case that genuinely produces `MALFORMED_MISSING_FIELD` today: `instance` absent
+    on a membership fact. `expected_type` absence is NOT this (2026-07-28: made optional --
+    `validate_membership_fact` falls back to a plain elaboration probe instead of rejecting)."""
     fact = ProposedFact(
         id="no_instance", type="membership", mechanism="decide", statement="whatever",
         instance=None, polarity="accept", expected_type="Nat",

@@ -32,6 +32,7 @@ from tests.fixtures.authoring_facts import (
     CLOG_DOMAIN,
     CLOG_NAME,
     MONOTONE_DOMAIN,
+    MONOTONE_NAME,
     clog_fixture_set,
     monotone_fixture_set,
 )
@@ -241,3 +242,25 @@ def test_validation_run_counts_and_summary():
 def test_convention_point_dataclass_defaults_to_no_predicate():
     cp = ConventionPoint(point="0", statement="tau 0 = 0", note="junk value")
     assert cp.predicate is None
+
+
+def test_membership_fact_with_no_expected_type_still_gets_accepted(mathlib_env):
+    """2026-07-28: `expected_type` is optional (not a schema requirement). A real membership
+    fact with it entirely absent must still reach a real verdict via the plain `#check
+    (instance)` elaboration-probe fallback, not bounce off `MALFORMED_MISSING_FIELD` the way it
+    did before this session's fix (the real 2026-07-28 gate incident's root cause)."""
+    server, env = mathlib_env
+    fact = ProposedFact(
+        id="monotone_no_expected_type",
+        type="membership",
+        mechanism="decide",
+        statement="example : Monotone (fun n : Fin 3 => n) := by decide",
+        instance="(fun n : Fin 3 => n)",
+        polarity="accept",
+        expected_type=None,
+    )
+    outcome = validate_membership_fact(server, env, fact, MONOTONE_DOMAIN)
+    assert outcome.verdict is Verdict.ACCEPTED
+    assert outcome.reason_code != ReasonCode.MALFORMED_MISSING_FIELD
+    # plain `#check (instance)`, not the type-ascribed `#check ((instance) : (expected_type))`
+    assert outcome.evidence["elaboration"]["command"] == "#check ((fun n : Fin 3 => n))"

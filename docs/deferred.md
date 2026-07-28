@@ -114,3 +114,17 @@ don't leave it checked off in place.
   **Trigger:** the first real duplicate-id occurrence in a real batch (used deliberately as the
   test vehicle for the 2026-07-28 emit-rotation `round_trip_score`-preservation fix, so it's a
   known, exercised gap, not a hypothetical one).
+- **Dossier convention-point parsing is looser than the schema, the same bug class in reverse.**
+  Found during the 2026-07-28 parser-vs-schema strictness sweep (the session that made
+  `expected_type` optional): `harness.task_schema._validate_conventions` requires a non-sentinel
+  convention entry's `point` AND `statement` to both be non-empty strings (the NONE_DECLARED
+  sentinel path requires BOTH null, no partial state); `authoring.parse._parse_convention_entry`
+  only rejects a JSON-shape violation (wrong type) and the case where BOTH are null without a
+  `NONE_DECLARED:`-prefixed note -- it silently accepts a MIXED entry (e.g. `point: null,
+  statement: "some prose"`), which then fails `emit_task`'s schema validation. Confirmed live:
+  `parse_dossier` accepts `{"point": null, "statement": "...", "note": "..."}`;
+  `harness.task_schema._validate_conventions` rejects the identical payload with "field 'point'
+  must be a non-empty string, got None". Not fixed this session (out of the fix session's
+  explicit scope, which was about the parser being STRICTER than schema, not looser).
+  **Trigger:** the first `emit` rotation whose `TaskSchemaError` names `domain.conventions`, or
+  the next authoring-pipeline task that revisits dossier/domain parsing.

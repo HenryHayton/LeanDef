@@ -66,6 +66,13 @@ _STANDALONE_BY_RE = re.compile(r"(?<![A-Za-z0-9_])by(?![A-Za-z0-9_])")
 
 
 def _proof_statement_has_tactic_shape(statement: str) -> bool:
+    # DELIBERATELY stricter than `harness.task_schema._validate_statement_format`, which only
+    # checks `":=" not in statement` for mechanism 'proof' -- confirmed by the 2026-07-28
+    # parser-vs-schema strictness sweep (the fix session that made `expected_type` optional and
+    # converted the remaining whole-call membership/mechanism raises to per-fact rejections).
+    # Swept and found to be the ONLY remaining stricter-than-schema case in this module; kept as
+    # is (contract §4.1 explicitly calls out the proof side as deliberately stricter than the
+    # decide side, unlike `_looks_like_decide_command` above, which is an exact schema mirror).
     return ":=" in statement or bool(_STANDALONE_BY_RE.search(statement))
 
 
@@ -318,15 +325,22 @@ def _parse_fact_entry(
             f"{context}: 'mechanism' must be one of {sorted(MECHANISMS)}, got {mechanism!r}",
             reason_code=ReasonCode.MALFORMED_BAD_MECHANISM,
         )
+    # Type<->mechanism coupling (2026-07-28, second pass): per-fact, not whole-call -- one
+    # fact's wrong mechanism for its own type must not discard the rest of an otherwise-good
+    # batch, same principle as the membership required-field checks below.
     if fact_type == "casework" and mechanism != "decide":
-        raise ParseError(
-            f"{context}: type 'casework' requires mechanism 'decide', got {mechanism!r}",
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
             reason_code=ReasonCode.MALFORMED_BAD_MECHANISM,
+            detail=f"{context}: casework fact {fact_id!r} requires mechanism 'decide', got {mechanism!r}",
         )
     if fact_type == "global" and mechanism != "proof":
-        raise ParseError(
-            f"{context}: type 'global' requires mechanism 'proof', got {mechanism!r}",
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
             reason_code=ReasonCode.MALFORMED_BAD_MECHANISM,
+            detail=f"{context}: global fact {fact_id!r} requires mechanism 'proof', got {mechanism!r}",
         )
 
     statement = _require_str(entry, "statement", context)
@@ -365,21 +379,6 @@ def _parse_fact_entry(
             f"{context}: 'expected_type', if present, must be a string or null, got {expected_type!r}",
             reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
         )
-    if fact_type == "membership":
-        instance = _require_str(entry, "instance", context)
-        polarity = _require_str(entry, "polarity", context)
-        if polarity not in POLARITIES:
-            raise ParseError(
-                f"{context}: 'polarity' must be one of {sorted(POLARITIES)}, got {polarity!r}",
-                reason_code=ReasonCode.MALFORMED_BAD_POLARITY,
-            )
-        if polarity == "reject" and not violated_property:
-            raise ParseError(
-                f"{context}: polarity 'reject' requires non-empty 'violated_property'",
-                reason_code=ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY,
-            )
-        expected_type = _require_str(entry, "expected_type", context)
-
     self_restatement = entry.get("self_restatement", False)
     if not isinstance(self_restatement, bool):
         raise ParseError(
@@ -457,6 +456,46 @@ def _parse_fact_entry(
                 f"global-fact-only), got {fact.anchors!r}"
             ),
         )
+
+    # Membership required-field checks (2026-07-28, second pass): moved from whole-call
+    # `_require_str` raises to per-fact `FactParseRejection`s -- the real 2026-07-28 gate run
+    # (Nat.clog) rotated at `fact_proposal` because ONE membership fact out of 27 proposed facts
+    # was missing `expected_type` (which `_require_str` demanded), and the whole-call
+    # `ParseError` this produced discarded all 27 -- including 12 clean casework and 8 clean
+    # global facts -- for one bad field on one fact. `instance`/`polarity`/`violated_property`
+    # (on reject-polarity) genuinely ARE schema-required for membership
+    # (`harness.task_schema._validate_fact`'s membership block), so they still gate -- just
+    # per-fact now, feeding the same batched row-3 retry as domain_inputs/anchors above.
+    # `expected_type` is deliberately NOT checked here at all (see below) -- it was never a
+    # schema requirement, only an authoring-layer one this session removed.
+    if fact_type == "membership":
+        if not fact.instance:
+            return FactParseRejection(
+                index=index,
+                fragment=entry,
+                reason_code=ReasonCode.MALFORMED_MISSING_FIELD,
+                detail=f"{context}: membership fact {fact_id!r} is missing required non-empty 'instance'",
+            )
+        if not isinstance(fact.polarity, str) or fact.polarity not in POLARITIES:
+            return FactParseRejection(
+                index=index,
+                fragment=entry,
+                reason_code=ReasonCode.MALFORMED_BAD_POLARITY,
+                detail=(
+                    f"{context}: membership fact {fact_id!r} has 'polarity' {fact.polarity!r}, "
+                    f"must be one of {sorted(POLARITIES)}"
+                ),
+            )
+        if fact.polarity == "reject" and not fact.violated_property:
+            return FactParseRejection(
+                index=index,
+                fragment=entry,
+                reason_code=ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY,
+                detail=(
+                    f"{context}: membership fact {fact_id!r} has polarity 'reject' but is "
+                    "missing required non-empty 'violated_property'"
+                ),
+            )
 
     # Task-symbol pre-check (contract §4.4): the model must write every statement against the
     # task symbol, never the real Mathlib name it may have seen in `definition_source`/

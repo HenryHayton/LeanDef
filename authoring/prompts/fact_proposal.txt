@@ -54,9 +54,11 @@ the dossier, so treat this as a hard format requirement, not a suggestion:
 - membership: `instance` and `polarity` ("accept"/"reject") are REQUIRED. Reject-polarity facts
   additionally REQUIRE `violated_property` naming the one broken clause. `domain_inputs` is
   REQUIRED and NON-EMPTY whenever the dossier's domain has any constraint narrower than
-  unrestricted. Include at least one reject-polarity fact where the regime admits it. Draw
+  unrestricted. `expected_type` is OPTIONAL -- authoring-only context (not mechanically
+  checked), worth including when it clarifies what `instance` is being checked against, but
+  never required. Include at least one reject-polarity fact where the regime admits it. Draw
   instances from, or keep them consistent with, the dossier's worked examples. Example
-  membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "polarity": "accept", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+  membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "expected_type": "ℕ", "polarity": "accept", "domain_inputs": {{"b": "2", "n": "8"}}}}`
 - global (mechanism "proof"): `statement` is REQUIRED and is a BARE Prop -- no `:=`, no tactic
   block, no `by`. `anchors` is REQUIRED and NON-EMPTY: fully-qualified Mathlib theorem names --
   cite the specific theorems the fact derives from, not a namespace dump. `anchors` must be
