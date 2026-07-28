@@ -121,6 +121,33 @@ def _dossier_json(worked_example_claim_2_37: str) -> str:
 GOOD_DOSSIER_JSON = _dossier_json(f"{TASK_SYMBOL} 2 37 = 6")
 BAD_EXAMPLE_DOSSIER_JSON = _dossier_json(f"{TASK_SYMBOL} 2 37 = 5")  # false claim -> EXECUTION_FAILED
 
+# Real-name-leak fixture: the Claim line correctly uses the task symbol, but the fenced command
+# leaks the real Mathlib name -- exactly the 2026-07-28 slice incident's shape (attempt 3's
+# `Claim: VTask.clog 2 8 = 3` next to `example : Nat.clog 2 8 = 3 := by decide`). This EXECUTES
+# cleanly against the true definition (real name, genuinely true there), so (b) alone would
+# never catch it -- only the new real-name-leak check does.
+LEAKED_NAME_DOSSIER_JSON = json.dumps(
+    {
+        "dossier_md": (
+            "# Object\nThe ceiling logarithm.\n\n"
+            f"# Signature\nThe pinned signature is `{PINNED_SIG}`.\n\n"
+            f"# Conventions\nFor b<=1 or n<=1, {TASK_SYMBOL} b n = 0 (junk value convention).\n\n"
+            f"# Worked examples\n- Claim: {TASK_SYMBOL} 2 37 = 6\n"
+            "  ```lean\n"
+            f"  example : {DEF_NAME} 2 37 = 6 := by decide\n"
+            "  ```\n\n"
+            "# Boundaries\nAt b<=1 or n<=1, junk value 0.\n\n"
+            "# Not to be confused with\nThe floor logarithm.\n"
+        ),
+        "domain": {
+            "constraint": "1 < b ∧ 1 < n", "variables": ["b", "n"],
+            "conventions": [
+                {"point": "b<=1 or n<=1", "statement": f"{TASK_SYMBOL} b n = 0 for b<=1 or n<=1", "note": "junk value convention"}
+            ],
+        },
+    }
+)
+
 GOOD_FACTS_JSON = json.dumps(
     [
         {"id": "f1", "type": "casework", "mechanism": "decide", "statement": f"example : {TASK_SYMBOL} 2 37 = 6 := by decide", "domain_inputs": {"b": "2", "n": "37"}},
@@ -226,6 +253,48 @@ def test_dossier_fails_both_attempts_rotates_at_dossier_consistency(mathlib_env,
     assert result.outcome == "ROTATED"
     assert result.rotated_at_stage == "dossier_consistency"
     assert result.task_dir is None
+
+
+def test_dossier_real_name_leak_feeds_the_repair_cycle_with_the_violation_quoted(mathlib_env, stub_server, tmp_path):
+    """The pipeline-level wiring for the new check (§3.4(d)): a leaking dossier response must
+    trigger the SAME repair cycle a worked-example failure does, with the specific violation
+    (not a generic message) appended to the retry prompt -- and if the repair also leaks,
+    rotate at `dossier_consistency`, same stage label as any other consistency failure."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(LEAKED_NAME_DOSSIER_JSON)),  # attempt 1: leaks
+            ScriptedResponse(200, success_body(LEAKED_NAME_DOSSIER_JSON)),  # attempt 2: leaks again
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "ROTATED"
+    assert result.rotated_at_stage == "dossier_consistency"
+    retry_prompt = bedrock_server.requests_received[2]["messages"][0]["content"]
+    assert "failed a mechanical check" in retry_prompt
+    assert DEF_NAME in retry_prompt  # the specific leaked name is quoted, not a generic message
+
+
+def test_dossier_real_name_leak_then_clean_repair_ships(mathlib_env, stub_server, tmp_path):
+    """The other direction at the pipeline level: a leak on attempt 1, a clean (task-symbol-
+    only) dossier on the repair attempt, ships normally."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(LEAKED_NAME_DOSSIER_JSON)),  # attempt 1: leaks
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),  # attempt 2: clean
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
 
 
 # --- Unhappy path 2: a fact rejected for format then retried --------------------------------

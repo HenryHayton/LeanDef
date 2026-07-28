@@ -38,6 +38,7 @@ from dataclasses import dataclass, field
 from lean_interact import Command
 
 from authoring.facts import DomainSpec
+from authoring.validate import ReasonCode
 from harness import config as cfg
 from harness.repl import run_checked
 from harness.results import CheckStatus
@@ -219,6 +220,32 @@ def check_signature_substring(pinned_signature: str, dossier_md: str) -> tuple[b
     return ok, detail
 
 
+# === (d) Real-name leak (round-trip information barrier) =======================================
+
+
+def check_no_real_name_leak(dossier_md: str, forbidden_name: str) -> tuple[bool, str]:
+    """The dossier must never contain the real Mathlib name, word-boundary matched, ANYWHERE
+    -- not just the Signature section `authoring.parse.parse_facts`'s own leak check covers for
+    fact statements. `check_worked_examples` (b) above cannot substitute for this: a worked-
+    example code block that (illegitimately) cites the real name instead of the task symbol
+    still EXECUTES successfully against the true definition -- the real name genuinely is valid
+    and true there -- so it registers as a clean `EXECUTED` pass either way. Confirmed
+    empirically, not hypothetically: the 2026-07-28 slice run's dossier attempt 3 leaked
+    `Nat.clog` into a worked-example command (`example : Nat.clog 2 8 = 3 := by decide`, next
+    to a `Claim:` line correctly using `VTask.clog`) and would have sailed through (b) as
+    EXECUTED had the response not separately been truncated by the max_tokens bug. This is the
+    contract's round-trip information barrier (§5, §4): the dossier is the ONLY thing the blind
+    round-trip call and the fact-proposal call ever see, so a leaked real name defeats the
+    whole point of testing whether the dossier ALONE determines the object."""
+    pattern = re.compile(r"\b" + re.escape(forbidden_name) + r"\b")
+    if pattern.search(dossier_md) is None:
+        return True, ""
+    return False, (
+        f"{ReasonCode.DOSSIER_LEAKS_REAL_NAME}: dossier contains the real Mathlib name "
+        f"{forbidden_name!r} -- must use the task symbol exclusively, everywhere in the dossier"
+    )
+
+
 # === Top-level ===================================================================================
 
 
@@ -228,14 +255,18 @@ class ConsistencyCheckResult:
     worked_example_checks: list[WorkedExampleCheck] = field(default_factory=list)
     signature_substring_ok: bool = False
     signature_detail: str = ""
+    real_name_leak_ok: bool = True
+    real_name_leak_detail: str = ""
 
     @property
     def passed(self) -> bool:
-        """(b) and (c) reject; (a) only flags -- contract §3.4's own split."""
+        """(b), (c), and (d) reject; (a) only flags -- contract §3.4's own split, (d) added
+        this session as an equally-rejecting check (an information-barrier violation, not a
+        soft prose-match miss)."""
         example_failure = any(
             c.kind in (EXECUTION_FAILED, MALFORMED_NO_WORKED_EXAMPLES) for c in self.worked_example_checks
         )
-        return self.signature_substring_ok and not example_failure
+        return self.signature_substring_ok and not example_failure and self.real_name_leak_ok
 
     @property
     def flags(self) -> list[ConventionMatchResult]:
@@ -243,14 +274,31 @@ class ConsistencyCheckResult:
 
 
 def check_dossier_consistency(
-    server, env: int, pinned_signature: str, dossier_md: str, domain: DomainSpec, *, timeout: float | None = None
+    server,
+    env: int,
+    pinned_signature: str,
+    dossier_md: str,
+    domain: DomainSpec,
+    *,
+    timeout: float | None = None,
+    forbidden_name: str | None = None,
 ) -> ConsistencyCheckResult:
+    """`forbidden_name` (the real Mathlib name, e.g. `"Nat.clog"`), when supplied, runs check
+    (d) above. Defaults to `None` (no check) -- backward compatible with callers that have no
+    real name to forbid (matching `authoring.parse.parse_facts`'s own `forbidden_name` default
+    convention)."""
     convention_matches = check_conventions_prose_match(domain, dossier_md)
     worked_example_checks = check_worked_examples(server, env, dossier_md, timeout=timeout)
     signature_ok, signature_detail = check_signature_substring(pinned_signature, dossier_md)
+    if forbidden_name is not None:
+        real_name_leak_ok, real_name_leak_detail = check_no_real_name_leak(dossier_md, forbidden_name)
+    else:
+        real_name_leak_ok, real_name_leak_detail = True, ""
     return ConsistencyCheckResult(
         convention_matches=convention_matches,
         worked_example_checks=worked_example_checks,
         signature_substring_ok=signature_ok,
         signature_detail=signature_detail,
+        real_name_leak_ok=real_name_leak_ok,
+        real_name_leak_detail=real_name_leak_detail,
     )

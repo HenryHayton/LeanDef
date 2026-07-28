@@ -14,12 +14,14 @@ from authoring.consistency import (
     UNCHECKED_PROSE_EXAMPLE,
     check_conventions_prose_match,
     check_dossier_consistency,
+    check_no_real_name_leak,
     check_signature_substring,
     check_worked_examples,
     extract_sections,
     parse_worked_examples,
 )
 from authoring.facts import ConventionPoint, DomainSpec
+from authoring.validate import ReasonCode
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 
@@ -133,6 +135,34 @@ def test_signature_substring_missing_fails_with_detail():
     assert "not found verbatim" in detail
 
 
+# --- (d) real-name leak, the round-trip information barrier (pure) -----------------------------
+
+
+def test_real_name_leak_detected_as_a_standalone_word():
+    dossier = "# Object\nThis computes the same thing as Nat.clog in Mathlib.\n"
+    ok, detail = check_no_real_name_leak(dossier, "Nat.clog")
+    assert not ok
+    assert ReasonCode.DOSSIER_LEAKS_REAL_NAME in detail
+    assert "Nat.clog" in detail
+
+
+def test_real_name_leak_absent_when_only_task_symbol_used():
+    dossier = "# Object\nVTask.clog computes the ceiling logarithm.\n"
+    ok, detail = check_no_real_name_leak(dossier, "Nat.clog")
+    assert ok
+    assert detail == ""
+
+
+def test_real_name_leak_check_is_word_boundary_not_bare_substring():
+    """`Nat.clog` must not false-positive merely because it's a substring of a longer,
+    unrelated-enough identifier -- word-boundary matched, per instruction, not a bare `in`
+    check (which is what `authoring.parse`'s fact-level leak check uses; this one is
+    deliberately stricter)."""
+    dossier = "# Object\nSee SomeOtherOuterNat.clogVariant for a related idea.\n"
+    ok, _ = check_no_real_name_leak(dossier, "Nat.clog")
+    assert ok  # no word boundary before "Nat" (preceded by "Outer", a word character)
+
+
 # --- (b) worked-example parsing (pure) ---------------------------------------------------------
 
 
@@ -241,3 +271,74 @@ def test_check_dossier_consistency_end_to_end_fails_on_bad_signature_and_bad_exa
     )
     result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
     assert not result.passed
+
+
+# --- (d) real-name leak, end to end: confirms (b) alone cannot catch this ----------------------
+
+
+def test_worked_example_check_alone_does_not_catch_a_real_name_leak_in_the_code_block(mathlib_env):
+    """Confirms the doubt raised in the 2026-07-27 slice report: a worked-example code block
+    that (illegitimately) cites the real name instead of the task symbol still EXECUTES
+    successfully, because the real name genuinely is true there -- `check_worked_examples`
+    alone has no way to tell this apart from a legitimate example. This is exactly what
+    happened in the real 2026-07-28 slice run's dossier attempt 3 (`Claim: VTask.clog 2 8 = 3`
+    immediately followed by `example : Nat.clog 2 8 = 3 := by decide`)."""
+    server, env = mathlib_env
+    dossier = (
+        "# Worked examples\n- Claim: VTask.clog 2 37 = 6\n"
+        "  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n"
+    )
+    checks = check_worked_examples(server, env, dossier)
+    assert checks[0].kind == EXECUTED  # confirmed: (b) alone sees this as a clean pass
+
+
+def test_check_dossier_consistency_rejects_a_dossier_that_leaks_the_real_name(mathlib_env):
+    """The fix: with `forbidden_name` supplied, the SAME leaking dossier from the test above
+    now fails `check_dossier_consistency` overall, even though its worked-example check alone
+    still (correctly, per that check's own job) reports EXECUTED."""
+    server, env = mathlib_env
+    domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
+    dossier = (
+        "# Signature\nThe pinned signature is `VTask.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Worked examples\n- Claim: VTask.clog 2 37 = 6\n"
+        "  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n"
+    )
+    result = check_dossier_consistency(
+        server, env, "VTask.clog : Nat -> Nat -> Nat", dossier, domain, forbidden_name="Nat.clog",
+    )
+    assert not result.passed
+    assert not result.real_name_leak_ok
+    assert ReasonCode.DOSSIER_LEAKS_REAL_NAME in result.real_name_leak_detail
+
+
+def test_check_dossier_consistency_passes_a_clean_task_symbol_only_dossier_with_forbidden_name_given(mathlib_env):
+    """Both directions, per instruction: a dossier that correctly uses ONLY the task symbol
+    must still pass cleanly once `forbidden_name` is supplied -- no false positive."""
+    server, env = mathlib_env
+    domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
+    dossier = (
+        "# Signature\nThe pinned signature is `VTask.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Worked examples\n- Claim: VTask.clog 2 37 = 6\n"
+        "  ```lean\n  example : VTask.clog 2 37 = 6 := by decide\n  ```\n"
+    )
+    result = check_dossier_consistency(
+        server, env, "VTask.clog : Nat -> Nat -> Nat", dossier, domain, forbidden_name="Nat.clog",
+    )
+    assert result.real_name_leak_ok
+    assert result.real_name_leak_detail == ""
+
+
+def test_check_dossier_consistency_no_forbidden_name_skips_the_leak_check(mathlib_env):
+    """Backward compatible: omitting `forbidden_name` (the default) never rejects on this
+    check alone, even for a dossier that would otherwise leak -- matching
+    `authoring.parse.parse_facts`'s own `forbidden_name=None` convention."""
+    server, env = mathlib_env
+    domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
+    dossier = (
+        "# Signature\nThe pinned signature is `Nat.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Worked examples\n- Claim: Nat.clog 2 37 = 6\n"
+        "  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n"
+    )
+    result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
+    assert result.real_name_leak_ok
+    assert result.passed

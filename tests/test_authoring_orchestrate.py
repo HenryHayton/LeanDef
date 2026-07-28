@@ -14,6 +14,7 @@ import json
 
 import pytest
 
+from authoring import config as authoring_cfg
 from authoring.orchestrate import (
     AuthoringCallFailed,
     CallBudget,
@@ -147,6 +148,119 @@ def test_classification_call_retries_once_on_malformed_shape_then_succeeds(stub_
     retry_message = server.requests_received[1]["messages"][0]["content"]
     assert "could not be used" in retry_message
     assert "flat array of strings" in retry_message  # the specific, actionable feedback reached the retry prompt
+
+
+def test_classification_call_sends_the_configured_max_tokens(stub_server, tmp_path):
+    server = stub_server([ScriptedResponse(200, success_body(CLASSIFICATION_JSON))])
+    client = _client(server, tmp_path)
+    run_classification_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+    )
+    assert server.requests_received[0]["max_tokens"] == authoring_cfg.AUTHORING_MAX_TOKENS["classification"]
+
+
+def test_dossier_call_uses_its_own_larger_max_tokens_ceiling(stub_server, tmp_path):
+    """Confirms per-call ceilings are actually per-call, not one shared default -- dossier's
+    (4096) must differ from classification's (1024)."""
+    server = stub_server([ScriptedResponse(200, success_body(DOSSIER_JSON))])
+    client = _client(server, tmp_path)
+    run_dossier_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        classification="(none)",
+    )
+    sent = server.requests_received[0]["max_tokens"]
+    assert sent == authoring_cfg.AUTHORING_MAX_TOKENS["dossier"]
+    assert sent != authoring_cfg.AUTHORING_MAX_TOKENS["classification"]
+
+
+def test_classification_call_retries_when_response_is_truncated_at_max_tokens(stub_server, tmp_path):
+    """The real 2026-07-28 incident's actual failure mode: a well-formed-so-far JSON prefix
+    that never closed, because the response hit its token ceiling mid-generation
+    (`stop_reason: "max_tokens"` on every one of 4 real dossier attempts). Must trigger the
+    same one-retry-with-feedback path as a parse failure, not be handed to `parse_fn` as if
+    complete -- a truncated document that happens to still be syntactically valid JSON (e.g.
+    cut off exactly at an array boundary) must not be silently accepted either."""
+    truncated = '{"regimes": ["casework"'  # genuinely incomplete -- would also fail to parse
+    server = stub_server(
+        [
+            ScriptedResponse(200, success_body(truncated, stop_reason="max_tokens")),
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ]
+    )
+    client = _client(server, tmp_path)
+    result = run_classification_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+    )
+    assert result.difficulty == 2
+    assert len(server.requests_received) == 2
+    retry_message = server.requests_received[1]["messages"][0]["content"]
+    assert "could not be used" in retry_message
+    assert "truncated" in retry_message
+    assert "max_tokens" in retry_message
+
+
+def test_classification_call_treats_max_tokens_truncation_as_malformed_even_if_json_parses():
+    """The stricter claim: truncation is checked BEFORE parsing is even attempted, so a
+    response that happens to be syntactically valid JSON (because the cut landed at a clean
+    boundary) is still rejected for having hit the ceiling -- never trusted as complete just
+    because `json.loads` wouldn't have complained."""
+    from authoring.orchestrate import _parse_llm_json_response
+    from authoring.parse import ParseError, parse_classification
+
+    class _FakeResponse:
+        stop_reason = "max_tokens"
+        text = json.dumps({"regimes": ["casework"], "difficulty": 1, "rationale": "x", "expected_fact_mix": {}})
+
+    with pytest.raises(ParseError) as exc_info:
+        _parse_llm_json_response(_FakeResponse(), parse_classification, max_tokens=1024)
+    assert "truncated" in exc_info.value.detail
+
+
+def test_classification_call_terminal_when_truncated_on_both_attempts(stub_server, tmp_path):
+    server = stub_server(
+        [
+            ScriptedResponse(200, success_body('{"regimes": [', stop_reason="max_tokens")),
+            ScriptedResponse(200, success_body('{"regimes": ["case', stop_reason="max_tokens")),
+        ]
+    )
+    client = _client(server, tmp_path)
+    with pytest.raises(AuthoringCallFailed) as exc_info:
+        run_classification_call(
+            client, "test-model",
+            pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        )
+    assert len(server.requests_received) == 2
+    assert "truncated" in str(exc_info.value)
+
+
+def test_json_parse_path_tolerates_a_wrapping_json_fence(stub_server, tmp_path):
+    """Real models fence JSON despite the explicit no-fence instruction about half the time,
+    per direct observation (2 of 4 real dossier responses in the 2026-07-28 slice run were
+    fenced, 2 weren't, no other change). Stop fighting it -- strip and parse, the same way
+    `_strip_markdown_fence` already tolerates it for Call 4's raw Lean-text response."""
+    fenced = "```json\n" + CLASSIFICATION_JSON + "\n```"
+    server = stub_server([ScriptedResponse(200, success_body(fenced))])
+    client = _client(server, tmp_path)
+    result = run_classification_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+    )
+    assert result.regimes == ["casework"]
+    assert len(server.requests_received) == 1  # no retry needed -- the fence alone isn't an error
+
+
+def test_json_parse_path_tolerates_a_bare_fence_with_no_language_tag(stub_server, tmp_path):
+    fenced = "```\n" + CLASSIFICATION_JSON + "\n```"
+    server = stub_server([ScriptedResponse(200, success_body(fenced))])
+    client = _client(server, tmp_path)
+    result = run_classification_call(
+        client, "test-model",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+    )
+    assert result.regimes == ["casework"]
 
 
 def test_dossier_call_succeeds_and_carries_domain(stub_server, tmp_path):
@@ -321,7 +435,7 @@ def test_round_trip_generation_call_never_receives_definition_source_or_facts(st
     import inspect
 
     sig = inspect.signature(run_round_trip_generation_call)
-    assert set(sig.parameters) == {"client", "model_id", "pinned_signature", "dossier_md", "budget"}
+    assert set(sig.parameters) == {"client", "model_id", "pinned_signature", "dossier_md", "budget", "max_tokens"}
 
 
 # --- Rows 6-7: generic repair-cycle primitive ----------------------------------------------

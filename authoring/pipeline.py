@@ -173,6 +173,8 @@ def _summarize_consistency_failure(result: ConsistencyCheckResult) -> str:
     parts = []
     if not result.signature_substring_ok:
         parts.append(f"signature check: {result.signature_detail}")
+    if not result.real_name_leak_ok:
+        parts.append(result.real_name_leak_detail)
     for c in result.worked_example_checks:
         if c.kind in ("EXECUTION_FAILED", "MALFORMED_NO_WORKED_EXAMPLES"):
             parts.append(f"worked example ({c.kind}) {c.claim!r}: {c.detail}")
@@ -342,7 +344,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         holder["payload"] = payload
         consistency = check_dossier_consistency(
             config.server, truth_env, pinned_signature, payload.dossier_md, payload.domain,
-            timeout=config.check_timeout,
+            timeout=config.check_timeout, forbidden_name=definition_input.name,
         )
         holder["consistency"] = consistency
         if consistency.passed:

@@ -8,3 +8,20 @@
 # `CallBudget`'s own bare fallback when nothing wires a budget in at all; this is the actual
 # per-task default `authoring.pipeline.author_task` uses.
 AUTHORING_MAX_CALLS_PER_TASK = 12
+
+# Per-call output-token ceilings, one per contract call. A dial, not a commitment -- like every
+# other threshold in this codebase. Confirmed necessary, not precautionary: `BedrockClient
+# .send`'s own bare default (1024) is what the real 2026-07-28 slice run used for EVERY call,
+# and every one of 4 real dossier-generation attempts hit `stop_reason: max_tokens` at exactly
+# that ceiling and got cut off mid-JSON-string -- a six-section dossier with worked examples
+# genuinely needs more room than a one-paragraph classification rationale does. Values here are
+# a first real-world-informed pass (dossier sized to comfortably clear the ~2300-character,
+# still-truncated real response observed; fact_proposal and round_trip sized by the same
+# "genuinely more content, more room" reasoning, not independently measured against a real
+# truncation the way dossier's number is).
+AUTHORING_MAX_TOKENS = {
+    "classification": 1024,
+    "dossier": 4096,
+    "fact_proposal": 8192,
+    "round_trip": 2048,
+}

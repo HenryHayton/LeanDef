@@ -20,15 +20,17 @@ class ScriptedResponse:
         self.body = body
 
 
-def success_body(text: str) -> dict:
-    """The Bedrock-Anthropic wire-format success body `bedrock.client._extract_text` reads."""
+def success_body(text: str, *, stop_reason: str = "end_turn") -> dict:
+    """The Bedrock-Anthropic wire-format success body `bedrock.client._extract_text` reads.
+    `stop_reason` defaults to `"end_turn"` (a normal completion); pass `"max_tokens"` to script
+    a truncated response for testing the truncation-as-malformed-response path."""
     return {
         "id": "msg_stub",
         "type": "message",
         "role": "assistant",
         "content": [{"type": "text", "text": text}],
         "model": "stub-model",
-        "stop_reason": "end_turn",
+        "stop_reason": stop_reason,
         "stop_sequence": None,
         "usage": {"input_tokens": 12, "output_tokens": 5},
     }

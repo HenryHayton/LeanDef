@@ -38,6 +38,7 @@ import re
 from dataclasses import dataclass, field
 
 from bedrock.client import BedrockClient
+from authoring import config as authoring_cfg
 from authoring.facts import ProposedFact
 from authoring.parse import (
     Classification,
@@ -50,6 +51,20 @@ from authoring.parse import (
 )
 from authoring.prompt_loader import load_prompt_template
 from authoring.validate import DomainSpec, ReasonCode, ValidationOutcome, Verdict, validate_fact
+
+# Real models routinely wrap JSON in a ```json (or bare ```) fence despite an explicit
+# instruction not to -- observed directly in the 2026-07-28 slice run (2 of 4 real dossier
+# responses fenced, 2 didn't, no other change) and already the documented reason
+# `_strip_markdown_fence` below exists for Call 4's Lean-text response. Stripped defensively
+# before every JSON parse attempt, the same way -- fighting the model into never fencing has a
+# ~50% real-world failure rate per that observation; tolerating it costs nothing.
+_JSON_FENCE_RE = re.compile(r"^```(?:json)?\s*\n(.*?)\n```\s*$", re.DOTALL)
+
+
+def _strip_json_fence(text: str) -> str:
+    text = text.strip()
+    m = _JSON_FENCE_RE.match(text)
+    return m.group(1).strip() if m else text
 
 # Per-task LLM call budget (contract §6: "a task consumes at most a bounded number of LLM
 # calls (configuration), and a task that exhausts its call budget rotates out"). A dial, not a
@@ -84,14 +99,32 @@ def _charge(budget: CallBudget | None) -> None:
         budget.charge()
 
 
-def _call_llm_json(client, system, user_message, *, model_id, parse_fn, budget=None):
+def _parse_llm_json_response(response, parse_fn, *, max_tokens: int):
+    """Shared by the initial attempt and the one retry in `_call_llm_json`/
+    `_retry_rejected_facts`: a response that hit its `max_tokens` ceiling is treated as
+    malformed -- structurally a `ParseError`, feeding the SAME one-retry path everything else
+    in rows 1-2 uses -- never handed to `parse_fn` as if it were complete. Confirmed necessary:
+    the real 2026-07-28 slice run's dossier responses truncated mid-JSON-string at exactly the
+    token ceiling every time, and `json.loads` failing on the resulting garbage was incidental,
+    not something to rely on (a truncation could in principle land on a syntactically-valid-but-
+    semantically-incomplete boundary). Fences are stripped before parsing either way -- see
+    `_strip_json_fence`'s own docstring."""
+    if response.stop_reason == "max_tokens":
+        raise ParseError(
+            f"response was truncated at the {max_tokens}-token limit (stop_reason=max_tokens) "
+            "before it completed -- a partial response is never parsed as if it were whole"
+        )
+    return parse_fn(_strip_json_fence(response.text))
+
+
+def _call_llm_json(client, system, user_message, *, model_id, parse_fn, budget=None, max_tokens: int = 1024):
     """Rows 1-2: send once; on `ParseError`, retry once with the error appended; raise
     `AuthoringCallFailed` if the retry also fails to parse. Returns whatever `parse_fn`
     returns."""
     _charge(budget)
-    response = client.send(system=system, user_message=user_message, model_id=model_id)
+    response = client.send(system=system, user_message=user_message, model_id=model_id, max_tokens=max_tokens)
     try:
-        return parse_fn(response.text)
+        return _parse_llm_json_response(response, parse_fn, max_tokens=max_tokens)
     except ParseError as e:
         retry_user = (
             f"{user_message}\n\n"
@@ -100,9 +133,9 @@ def _call_llm_json(client, system, user_message, *, model_id, parse_fn, budget=N
             "outside the JSON."
         )
         _charge(budget)
-        response2 = client.send(system=system, user_message=retry_user, model_id=model_id)
+        response2 = client.send(system=system, user_message=retry_user, model_id=model_id, max_tokens=max_tokens)
         try:
-            return parse_fn(response2.text)
+            return _parse_llm_json_response(response2, parse_fn, max_tokens=max_tokens)
         except ParseError as e2:
             raise AuthoringCallFailed(f"terminal after one retry: {e2.detail}") from e2
 
@@ -119,6 +152,7 @@ def run_classification_call(
     docstring: str,
     mention_sidecar_excerpt: str,
     budget: CallBudget | None = None,
+    max_tokens: int | None = None,
 ) -> Classification:
     template = load_prompt_template("classification")
     system, user = template.render(
@@ -127,7 +161,8 @@ def run_classification_call(
         docstring=docstring,
         mention_sidecar_excerpt=mention_sidecar_excerpt,
     )
-    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_classification, budget=budget)
+    max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["classification"]
+    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_classification, budget=budget, max_tokens=max_tokens)
 
 
 # === Call 2 -- Dossier generation ==============================================================
@@ -143,6 +178,7 @@ def run_dossier_call(
     mention_sidecar_excerpt: str,
     classification: str,
     budget: CallBudget | None = None,
+    max_tokens: int | None = None,
 ) -> DossierPayload:
     template = load_prompt_template("dossier")
     system, user = template.render(
@@ -152,7 +188,8 @@ def run_dossier_call(
         mention_sidecar_excerpt=mention_sidecar_excerpt,
         classification=classification,
     )
-    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_dossier, budget=budget)
+    max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["dossier"]
+    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_dossier, budget=budget, max_tokens=max_tokens)
 
 
 # === Call 3 -- Fact proposal ====================================================================
@@ -172,11 +209,13 @@ def _retry_rejected_facts(
     *,
     budget: CallBudget | None = None,
     parse_fn=parse_facts,
+    max_tokens: int | None = None,
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
     """Row 3's one retry, batched (see module docstring). Returns `(fixed, still_bad)`.
     `parse_fn` defaults to bare `parse_facts`; `run_fact_proposal_call` passes a closure
     carrying `task_symbol`/`forbidden_name` (contract §4.4) so a "fixed" fact is held to the
     same raw-name check as the original batch."""
+    max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["fact_proposal"]
     listing = "\n\n".join(
         f"Fact at index {r.index} (id {r.fragment.get('id')!r}) was rejected: {r.detail}\n"
         f"Original fact JSON: {json.dumps(r.fragment)}"
@@ -189,12 +228,13 @@ def _retry_rejected_facts(
         "before).\n\n" + listing
     )
     _charge(budget)
-    response = client.send(system=system, user_message=retry_user, model_id=model_id)
+    response = client.send(system=system, user_message=retry_user, model_id=model_id, max_tokens=max_tokens)
     try:
-        fixed, still_bad = parse_fn(response.text)
+        fixed, still_bad = _parse_llm_json_response(response, parse_fn, max_tokens=max_tokens)
     except ParseError:
-        # The whole retry response was itself unusable. This WAS the one retry (row 3), so
-        # every originally-rejected fact is now terminal -- dropped, not raised.
+        # The whole retry response was itself unusable (malformed JSON, wrong shape, or
+        # truncated at the token ceiling). This WAS the one retry (row 3), so every
+        # originally-rejected fact is now terminal -- dropped, not raised.
         return [], rejections
     return fixed, still_bad
 
@@ -210,6 +250,7 @@ def run_fact_proposal_call(
     budget: CallBudget | None = None,
     task_symbol: str | None = None,
     forbidden_name: str | None = None,
+    max_tokens: int | None = None,
 ) -> FactProposalResult:
     """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
     on both the initial parse and the row-3 per-fact retry, so a raw-Mathlib-name leak is caught
@@ -221,15 +262,18 @@ def run_fact_proposal_call(
         mention_sidecar_excerpt=mention_sidecar_excerpt,
         classification=classification,
     )
+    max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["fact_proposal"]
 
     def _parse(text: str):
         return parse_facts(text, task_symbol=task_symbol, forbidden_name=forbidden_name)
 
-    facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget)
+    facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget, max_tokens=max_tokens)
     if not rejections:
         return FactProposalResult(facts=facts, dropped=[])
 
-    fixed_facts, still_dropped = _retry_rejected_facts(client, model_id, system, rejections, budget=budget, parse_fn=_parse)
+    fixed_facts, still_dropped = _retry_rejected_facts(
+        client, model_id, system, rejections, budget=budget, parse_fn=_parse, max_tokens=max_tokens
+    )
     return FactProposalResult(facts=facts + fixed_facts, dropped=still_dropped)
 
 
@@ -288,7 +332,13 @@ def _strip_markdown_fence(text: str) -> str:
 
 
 def run_round_trip_generation_call(
-    client: BedrockClient, model_id: str, *, pinned_signature: str, dossier_md: str, budget: CallBudget | None = None
+    client: BedrockClient,
+    model_id: str,
+    *,
+    pinned_signature: str,
+    dossier_md: str,
+    budget: CallBudget | None = None,
+    max_tokens: int | None = None,
 ) -> str:
     """Contract §5: a fresh context, ONLY the dossier and pinned signature -- the caller is
     responsible for that information hygiene (this function takes exactly those two inputs and
@@ -296,8 +346,9 @@ def run_round_trip_generation_call(
     by accident)."""
     template = load_prompt_template("round_trip")
     system, user = template.render(pinned_signature=pinned_signature, dossier_md=dossier_md)
+    max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["round_trip"]
     _charge(budget)
-    response = client.send(system=system, user_message=user, model_id=model_id)
+    response = client.send(system=system, user_message=user, model_id=model_id, max_tokens=max_tokens)
     return _strip_markdown_fence(response.text)
 
 
