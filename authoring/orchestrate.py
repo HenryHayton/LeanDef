@@ -339,13 +339,33 @@ def run_round_trip_generation_call(
     dossier_md: str,
     budget: CallBudget | None = None,
     max_tokens: int | None = None,
+    previous_attempt: str | None = None,
+    previous_error: str | None = None,
 ) -> str:
     """Contract §5: a fresh context, ONLY the dossier and pinned signature -- the caller is
     responsible for that information hygiene (this function takes exactly those two inputs and
     nothing else, so it cannot leak the definition source, fact suite, or mention excerpt even
-    by accident)."""
+    by accident).
+
+    `previous_attempt`/`previous_error` (decided 2026-07-28, replacing the prior blind-retry
+    design): when BOTH are given, the user message gets a feedback block appended -- the ONLY
+    thing added is this call's OWN prior attempt and the Lean error it produced, never anything
+    from outside the round-trip context (no definition source, no fact suite, no fact-failure
+    detail -- the information barrier holds exactly as before, just with one more thing the
+    fresh context is allowed to see about ITSELF). Either both or neither must be given; a
+    caller passing just one gets a silent no-feedback prompt (backward compatible with a first
+    attempt, where both are `None`) -- not asserted here since `authoring.pipeline`'s own loop
+    is the only real caller and always passes both or neither together."""
     template = load_prompt_template("round_trip")
     system, user = template.render(pinned_signature=pinned_signature, dossier_md=dossier_md)
+    if previous_attempt is not None and previous_error is not None:
+        user = (
+            f"{user}\n\n"
+            "Your previous attempt is below, with the compiler's error -- fix it (restructure "
+            "the recursion if the error concerns termination).\n\n"
+            f"Previous attempt:\n{previous_attempt}\n\n"
+            f"Compiler error:\n{previous_error}"
+        )
     max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["round_trip"]
     _charge(budget)
     response = client.send(system=system, user_message=user, model_id=model_id, max_tokens=max_tokens)

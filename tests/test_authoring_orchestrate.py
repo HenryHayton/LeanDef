@@ -431,11 +431,42 @@ def test_round_trip_generation_strips_markdown_fence():
 
 def test_round_trip_generation_call_never_receives_definition_source_or_facts(stub_server, tmp_path):
     """Information-hygiene guarantee (contract §5): the function's own signature has no
-    parameter through which a definition source or fact suite could leak."""
+    parameter through which a definition source or fact suite could leak. `previous_attempt`/
+    `previous_error` (2026-07-28's feedback-carrying retry policy) are exempt from this claim
+    by design -- see the function's own docstring for why that's still within the barrier."""
     import inspect
 
     sig = inspect.signature(run_round_trip_generation_call)
-    assert set(sig.parameters) == {"client", "model_id", "pinned_signature", "dossier_md", "budget", "max_tokens"}
+    assert set(sig.parameters) == {
+        "client", "model_id", "pinned_signature", "dossier_md", "budget", "max_tokens",
+        "previous_attempt", "previous_error",
+    }
+
+
+def test_round_trip_generation_call_with_no_feedback_sends_the_plain_prompt(stub_server, tmp_path):
+    server = stub_server([ScriptedResponse(200, success_body("fun n => n + n"))])
+    client = _client(server, tmp_path)
+    run_round_trip_generation_call(client, "test-model", pinned_signature="rtDouble : Nat -> Nat", dossier_md="# Object\n...")
+    sent = server.requests_received[0]["messages"][0]["content"]
+    assert "Your previous attempt" not in sent
+
+
+def test_round_trip_generation_call_with_feedback_carries_prior_code_and_error_verbatim(stub_server, tmp_path):
+    """The 2026-07-28 policy's core mechanism: a retry must show the model its OWN previous
+    attempt and the exact Lean error it produced -- both verbatim, nothing paraphrased."""
+    server = stub_server([ScriptedResponse(200, success_body("fun n => n + n + 1"))])
+    client = _client(server, tmp_path)
+    prior_code = "fun n => let rec go (k : Nat) : Nat := go (k + 1)\n  go 0"
+    prior_error = "compile_error: fail to show termination for foo.go\nCould not find a decreasing measure."
+    run_round_trip_generation_call(
+        client, "test-model", pinned_signature="rtDouble : Nat -> Nat", dossier_md="# Object\n...",
+        previous_attempt=prior_code, previous_error=prior_error,
+    )
+    sent = server.requests_received[0]["messages"][0]["content"]
+    assert "Your previous attempt is below" in sent
+    assert prior_code in sent
+    assert prior_error in sent
+    assert "restructure the recursion if the error concerns termination" in sent
 
 
 # --- Rows 6-7: generic repair-cycle primitive ----------------------------------------------

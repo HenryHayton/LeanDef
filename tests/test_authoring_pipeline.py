@@ -180,6 +180,22 @@ FIXED_FACT_JSON = json.dumps(
 GOOD_ROUND_TRIP_BODY = "fun b n => Nat.clog b n"
 WRONG_ROUND_TRIP_BODY = "fun b n => 0"
 
+# A COMPILE failure whose error is purely a termination-checker complaint -- empirically
+# confirmed (2026-07-28 probe against the real warm Mathlib env) to produce a
+# "failed to infer structural recursion" / "Could not find a decreasing measure" error, matching
+# `authoring.pipeline._TERMINATION_ERROR_MARKERS`. Ignores `b`; only `n` matters for the
+# probe's fuel/accumulator shape, adapted here to the two-argument `Nat -> Nat -> Nat` signature.
+TERMINATION_FAILURE_ROUND_TRIP_BODY = (
+    "fun b n =>\n"
+    "  let rec go (k acc : Nat) : Nat :=\n"
+    "    if acc >= n then k else go (k + 1) (acc * 2)\n"
+    "  go 0 1"
+)
+
+# A COMPILE failure that is NOT termination-related -- an unknown identifier, so the error text
+# contains none of `_TERMINATION_ERROR_MARKERS`. Used for the mixed-failure test (d).
+UNKNOWN_IDENTIFIER_ROUND_TRIP_BODY = "fun b n => totallyUndefinedIdentifierXYZ b n"
+
 
 # --- Happy path -----------------------------------------------------------------------------
 
@@ -404,18 +420,22 @@ def test_unexpected_error_rotation_still_reports_calls_made_and_tokens(mathlib_e
     assert result.output_tokens > 0
 
 
-# --- Unhappy path 4: round-trip failure -> repair -> rotate ----------------------------------
+# --- Unhappy path 4: round-trip -- feedback-carrying retries, no-retry-on-fact-failure, --------
+# --- ship-with-flag on pure termination failure (2026-07-28 policy) ---------------------------
 
 
-def test_round_trip_failure_repairs_once_then_rotates(mathlib_env, stub_server, tmp_path):
+def test_round_trip_fact_failure_is_immediately_terminal(mathlib_env, stub_server, tmp_path):
+    """(e) A compiled-but-fact-failing attempt gets ZERO retries: the round-trip stage ends
+    after exactly one round-trip call, and the task rotates for review rather than regenerating.
+    `WRONG_ROUND_TRIP_BODY` ("fun b n => 0") compiles cleanly -- it's a fact failure, not a
+    compile failure."""
     server, env = mathlib_env
     bedrock_server = stub_server(
         [
             ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
             ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
             ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
-            ScriptedResponse(200, success_body(WRONG_ROUND_TRIP_BODY)),  # attempt 1: wrong
-            ScriptedResponse(200, success_body(WRONG_ROUND_TRIP_BODY)),  # attempt 2 (repair): still wrong
+            ScriptedResponse(200, success_body(WRONG_ROUND_TRIP_BODY)),  # compiles, fails facts
         ]
     )
     config = _config(server, env, tmp_path, bedrock_server)
@@ -423,9 +443,139 @@ def test_round_trip_failure_repairs_once_then_rotates(mathlib_env, stub_server, 
 
     assert result.outcome == "ROTATED"
     assert result.rotated_at_stage == "round_trip_scoring"
-    assert len(bedrock_server.requests_received) == 5  # confirms the one repair attempt happened
+    assert "no retry, per policy" in result.stage_records[-1].detail
+    assert len(bedrock_server.requests_received) == 4  # zero further round-trip calls beyond the one
     assert result.task_dir is None
+    assert result.round_trip_flag is None
     assert result.self_restatement_fact_ids == ["g1"]  # preserved through to the rotation record
+
+
+def test_round_trip_compile_failure_retries_with_feedback_and_succeeds_on_attempt_2(mathlib_env, stub_server, tmp_path):
+    """(b) part 1: a termination compile failure on attempt 1, success on attempt 2. The retry
+    request must carry the attempt-1 body and its compiler error verbatim."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1: fails to compile
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # attempt 2: succeeds
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_score is not None and result.round_trip_score.passed
+    assert result.round_trip_flag is None
+    assert len(bedrock_server.requests_received) == 5
+    retry_prompt = bedrock_server.requests_received[4]["messages"][0]["content"]
+    assert "Your previous attempt is below" in retry_prompt
+    assert TERMINATION_FAILURE_ROUND_TRIP_BODY in retry_prompt
+    assert "termination" in retry_prompt.lower()
+
+
+def test_round_trip_compile_failure_retries_with_feedback_and_succeeds_on_attempt_4(mathlib_env, stub_server, tmp_path):
+    """(b) part 2: three straight termination compile failures, success on the last permitted
+    (4th) attempt -- confirms the cap is inclusive, not off-by-one."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 2
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 3
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # attempt 4: succeeds
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_score is not None and result.round_trip_score.passed
+    assert result.round_trip_flag is None
+    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
+
+
+def test_round_trip_four_pure_termination_failures_ships_with_flag(mathlib_env, stub_server, tmp_path):
+    """(c) All 4 attempts fail to compile, every one purely on the termination checker: the task
+    SHIPS (not rotated), with `round_trip_flag` set on the TaskResult and surfaced in the batch
+    review."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 2
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 3
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 4
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flag == "UNVERIFIED_TERMINATION_ONLY"
+    assert result.task_dir is not None
+    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
+
+    review_text = render_batch_review([result])
+    assert "UNVERIFIED_TERMINATION_ONLY" in review_text
+
+
+def test_round_trip_mixed_compile_failures_rotates_not_flagged(mathlib_env, stub_server, tmp_path):
+    """(d) 4 compile failures, but NOT all termination-only (one is an unrelated unknown-
+    identifier error) -- ship-with-flag does not apply; the task rotates as before."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1: termination
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 2: termination
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 3: termination
+            ScriptedResponse(200, success_body(UNKNOWN_IDENTIFIER_ROUND_TRIP_BODY)),  # attempt 4: NOT termination
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "ROTATED"
+    assert result.rotated_at_stage == "round_trip_scoring"
+    assert result.round_trip_flag is None
+    assert result.task_dir is None
+    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
+
+
+def test_round_trip_budget_exhaustion_mid_retry_loop_rotates_cleanly(mathlib_env, stub_server, tmp_path):
+    """(f) budget interaction: with only enough budget for 2 of the 4 possible round-trip
+    attempts, the loop must stop and rotate at `round_trip_generation` on `CallBudgetExceeded`,
+    never exceeding the configured call budget."""
+    server, env = mathlib_env
+    # classification + dossier + facts = 3 calls, then 2 round-trip attempts = 5 total budget.
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 2
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server, max_calls_per_task=5)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "ROTATED"
+    assert result.rotated_at_stage == "round_trip_generation"
+    assert "CallBudgetExceeded" in result.stage_records[-1].detail
+    assert result.calls_made == 5
+    assert len(bedrock_server.requests_received) == 5  # never exceeded the configured budget
 
 
 # --- author_batch: continue-on-rotation, batch review file -----------------------------------

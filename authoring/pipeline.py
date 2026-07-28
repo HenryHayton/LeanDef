@@ -31,10 +31,27 @@ is silent on all three:
    return `ACCEPTED`, only `PROVISIONALLY_VALIDATED` at best, confirmed by reading both
    validators, not assumed). `validation_status` is therefore fully determined by
    `fact.mechanism` alone -- no verdict needs threading through from `AdjudicationResult`.
-2. **Round-trip repair carries no failure feedback into the retry** (unlike the dossier's
-   repair, which does) -- matching the contract's own wording difference: row 6 says "with the
-   failure shown," row 7 (round-trip) does not. The round-trip repair is a second, independent,
-   equally-blind attempt.
+2. **Round-trip retry policy (revised 2026-07-28, replacing the original blind-single-repair
+   design)**: the round-trip stage's third real attempt against `Nat.clog` (2026-07-28) failed
+   twice, byte-for-byte the same request both times (confirmed by diffing the two logged
+   request bodies), on a genuinely fixable Lean termination-checker issue -- exactly the
+   failure mode blind repair can never recover from. The policy now distinguishes two failure
+   kinds, matching `docs/design/llm_io_contract_v1.md` §5's updated text: a COMPILE failure
+   (fails admissibility) gets up to `authoring.config.ROUND_TRIP_MAX_COMPILE_ATTEMPTS` (4) total
+   attempts, each retry carrying the PREVIOUS attempt's code and Lean error verbatim as feedback
+   (`ladder.tier3`-style "give it what actually happened," not blind resampling) -- the
+   information barrier still holds, since only the round-trip's own prior attempt/error is
+   shown, never the definition source, fact suite, or fact-failure detail. If every one of the
+   4 attempts fails and every failure was PURELY a termination-checker error (never any other
+   admissibility reason, and never mixed), the task ships anyway with a
+   `ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY` flag -- termination-checking a fuel/measure-
+   based recursion is a genuinely separate, sometimes very hard problem from whether the
+   dossier determines the object, and failing only on it should not indict the task the way a
+   dossier-quality failure would. A FACT failure (compiles, but the fact suite doesn't pass)
+   gets NO retry at all: the stage ends immediately and the task rotates, flagged for review --
+   retrying against a fact failure would optimize the definition toward the facts rather than
+   the dossier, which is exactly the information-barrier violation the round-trip check exists
+   to catch, not something to paper over with another attempt.
 3. **`self_restatement` (contract §4.2) is collected and reported in the batch review, not
    projected into a shipped `discharge.self_cited`.** Since `discharge` is always `null` (point
    1), there is currently nowhere in a shipped task.json for it to land; see
@@ -160,6 +177,14 @@ class TaskResult:
     output_tokens: int = 0
     task_dir: Path | None = None
     round_trip_score: RoundTripScore | None = None
+    round_trip_flag: str | None = None  # e.g. ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY -- see
+    # `_is_termination_only_failure`'s own docstring for what this means and why it exists.
+    # No home in the emitted task.json's schema-validated `provenance` object was found for
+    # this (`harness.task_schema._validate_task_provenance` is permissive about extra keys, but
+    # nothing in the schema DOCUMENT sanctions one -- adding a key that merely happens to pass
+    # validation is exactly "inventing a schema field silently," which this session's task
+    # explicitly said not to do) -- lives only in `TaskResult` and the batch review for now; a
+    # real open question for whoever next revises schema v1.1, not resolved here.
 
 
 # === Internal helpers ============================================================================
@@ -179,6 +204,43 @@ def _summarize_consistency_failure(result: ConsistencyCheckResult) -> str:
         if c.kind in ("EXECUTION_FAILED", "MALFORMED_NO_WORKED_EXAMPLES"):
             parts.append(f"worked example ({c.kind}) {c.claim!r}: {c.detail}")
     return "; ".join(parts) if parts else "consistency check failed for an unspecified reason"
+
+
+# Round-trip ships anyway (flagged) when every compile-failure attempt was PURELY a
+# termination-checker error. Markers below are drawn from three real, independently-observed
+# Lean error texts (2026-07-28): the real slice run's own failure ("fail to show termination
+# for... failed to infer structural recursion:... Could not find a decreasing measure.... Please
+# use `termination_by`..."), plus two deliberately-provoked cases confirming Lean's termination
+# diagnostics come in more than one shape -- a `termination_by` clause present but wrong
+# ("failed to prove termination, possible solutions:... Use `decreasing_by`...") reads
+# completely differently from the "no termination_by at all" case, so a single fixed phrase
+# would have missed it. "termination" alone (case-insensitive) already covers all three
+# observed cases; the rest are redundant-but-safe backstops for phrasing this session hasn't
+# seen. None of Lean's other admissibility-failure vocabulary (sorry, axiom, name-shadowing)
+# plausibly contains any of these words, so this is not just convenient -- it doesn't fire on
+# an unrelated failure by coincidence either, as far as this session's evidence shows.
+_TERMINATION_ERROR_MARKERS = (
+    "termination",
+    "decreasing measure",
+    "structural recursion",
+    "decreasing_by",
+)
+
+# `RoundTripScore.admissibility_detail` is built (in `authoring.roundtrip
+# .score_round_trip_first_cut`) as `f"{verdict.failure.value}: {verdict.detail}"` when the
+# failure came from a real `check_admissibility` verdict -- `"compile_error: ..."` specifically
+# for `AdmissibilityFailure.COMPILE_ERROR` (never "sorry:"/"new_axiom:"/"name_shadowed:"), and
+# with NO such prefix at all for a splice-level `ERRORED` (an infrastructure hiccup, not the
+# model's code -- deliberately excluded from the termination-only carve-out below by this same
+# prefix check, since it isn't a "compile error" in the sense this policy means).
+ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY = "UNVERIFIED_TERMINATION_ONLY"
+
+
+def _is_termination_only_failure(admissibility_detail: str) -> bool:
+    if not admissibility_detail.startswith("compile_error:"):
+        return False
+    lowered = admissibility_detail.lower()
+    return any(marker in lowered for marker in _TERMINATION_ERROR_MARKERS)
 
 
 def _count_log_lines(log_path: Path) -> int:
@@ -431,52 +493,101 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         for f in adjudication.accepted
     ]
 
-    # --- Call 4: blind round-trip generation + first-cut scoring, one repair cycle -----------
+    # --- Call 4: blind round-trip generation + scoring -----------------------------------------
     # Splices under `task_symbol` into the SAME untouched `base_env` the truth splice used --
     # an independent splice, not chained onto `truth_env`, so it cannot collide with the truth
     # alias declared there.
-    rt_holder: dict = {}
+    #
+    # Retry policy (decided 2026-07-28, replacing the prior blind-single-repair design -- see
+    # module docstring, decision 2, and `docs/design/llm_io_contract_v1.md` §5): a COMPILE
+    # failure (fails admissibility) gets up to `ROUND_TRIP_MAX_COMPILE_ATTEMPTS` total attempts,
+    # each retry carrying the previous attempt's code and Lean error as feedback. A FACT failure
+    # (compiles, but the fact suite doesn't pass) is immediately terminal -- no retry at all,
+    # regardless of which attempt number produced it.
+    rt_attempts: list[tuple[str, RoundTripScore]] = []  # (body, score), one entry per real attempt
+    rt_call_failure_detail: str | None = None
 
-    def round_trip_attempt():
+    for _ in range(authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS):
+        if rt_attempts:
+            prev_body, prev_score = rt_attempts[-1]
+            feedback_kwargs = {"previous_attempt": prev_body, "previous_error": prev_score.admissibility_detail}
+        else:
+            feedback_kwargs = {}
         try:
             body = run_round_trip_generation_call(
                 config.client, config.authoring_model_id,
                 pinned_signature=pinned_signature, dossier_md=dossier_payload.dossier_md, budget=budget,
+                **feedback_kwargs,
             )
         except (CallBudgetExceeded, BedrockClientError) as e:
-            rt_holder["last_failure_kind"] = "call"
-            return False, f"{type(e).__name__}: {e}"
+            rt_call_failure_detail = f"{type(e).__name__}: {e}"
+            break
 
         score = score_round_trip_first_cut(
             config.server, config.base_env, signature_obj, body, fact_list, check_timeout=config.check_timeout,
         )
-        rt_holder["score"] = score
-        rt_holder["body"] = body
+        rt_attempts.append((body, score))
         if score.passed:
-            return True, "ok"
-        rt_holder["last_failure_kind"] = "scoring"
-        detail = (
-            f"admissible={score.admissible} ({score.admissibility_detail}); "
-            f"failing decide facts: {score.failing_decide_fact_ids}; "
-            f"failing global facts: {score.failing_global_fact_ids}"
-        )
-        return False, detail
+            break
+        if score.admissible:
+            # Compiled, but the fact suite failed -- immediately terminal (decided 2026-07-28):
+            # retrying against a fact failure would optimize the definition toward the facts
+            # rather than the dossier, defeating the information barrier the round-trip check
+            # exists to enforce. A compiled-but-fact-failing attempt IS the check working as
+            # intended, not a defect to route around.
+            break
+        # else: a compile failure -- loop continues (with feedback) up to the attempt cap.
 
-    def round_trip_repair():
-        return None  # no failure feedback carried into the retry -- see module docstring, decision 2
-
-    rt_outcome = with_one_repair_cycle(round_trip_attempt, round_trip_repair)
-    if not rt_outcome.passed:
-        stage = "round_trip_generation" if rt_holder.get("last_failure_kind") == "call" else "round_trip_scoring"
+    if rt_call_failure_detail is not None:
         return _rotate(
-            stage, rt_outcome.detail,
+            "round_trip_generation", rt_call_failure_detail,
             parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
             task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
             self_restatement=self_restatement_ids,
         )
+
+    last_body, last_score = rt_attempts[-1]
+    round_trip_flag: str | None = None
+
+    if not last_score.passed:
+        if last_score.admissible:
+            detail = (
+                "compiled but failed the fact suite (no retry, per policy): "
+                f"failing decide facts: {last_score.failing_decide_fact_ids}; "
+                f"failing global facts: {last_score.failing_global_fact_ids}"
+            )
+            return _rotate(
+                "round_trip_scoring", detail,
+                parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
+                task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+                self_restatement=self_restatement_ids,
+            )
+        # Every attempt was a compile failure -- the attempt cap is exhausted. Ships anyway,
+        # flagged, ONLY if every single one of those failures was purely a termination-checker
+        # error; any other (or mixed) compile failure still rotates as before.
+        if len(rt_attempts) == authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS and all(
+            _is_termination_only_failure(s.admissibility_detail) for _, s in rt_attempts
+        ):
+            round_trip_flag = ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY
+        else:
+            summary = "; ".join(f"attempt {i + 1}: {s.admissibility_detail}" for i, (_, s) in enumerate(rt_attempts))
+            return _rotate(
+                "round_trip_scoring", f"exhausted {len(rt_attempts)} compile attempt(s): {summary}",
+                parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
+                task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+                self_restatement=self_restatement_ids,
+            )
+
     stage_records.append(StageRecord("round_trip_generation", "ok", calls_made=budget.calls_made))
-    stage_records.append(StageRecord("round_trip_scoring", "ok", calls_made=budget.calls_made))
-    round_trip_score: RoundTripScore = rt_holder["score"]
+    stage_records.append(
+        StageRecord(
+            "round_trip_scoring",
+            "ok" if last_score.passed else "flagged",
+            detail="" if last_score.passed else f"shipped after {len(rt_attempts)} compile attempt(s), all termination-only ({round_trip_flag})",
+            calls_made=budget.calls_made,
+        )
+    )
+    round_trip_score: RoundTripScore = last_score
 
     # --- Emit -----------------------------------------------------------------------------
     try:
@@ -526,6 +637,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         output_tokens=tokens["output_tokens"],
         task_dir=emitted.task_dir,
         round_trip_score=round_trip_score,
+        round_trip_flag=round_trip_flag,
     )
 
 
@@ -566,6 +678,12 @@ def render_batch_review(results: list[TaskResult]) -> str:
         lines.append(f"- calls made: {r.calls_made}; tokens: {r.input_tokens} in / {r.output_tokens} out")
         if r.task_dir is not None:
             lines.append(f"- task dir: `{r.task_dir}`")
+        if r.round_trip_flag:
+            lines.append(
+                f"- **round-trip flag: `{r.round_trip_flag}`** -- shipped without a verified "
+                f"round-trip reconstruction (every compile attempt failed ONLY on Lean's "
+                f"termination checker; any other failure mode still rotates the task instead)"
+            )
         if r.parser_rejected_facts:
             lines.append("- facts rejected at the parser layer (statement-format/raw-name, after the one retry):")
             for d in r.parser_rejected_facts:

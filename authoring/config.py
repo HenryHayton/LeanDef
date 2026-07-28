@@ -25,3 +25,8 @@ AUTHORING_MAX_TOKENS = {
     "fact_proposal": 8192,
     "round_trip": 2048,
 }
+
+# Round-trip compile-failure retry cap (decided 2026-07-28, replacing the prior blind-single-
+# repair design -- see `authoring/pipeline.py`'s module docstring, decision 2, and
+# `docs/design/llm_io_contract_v1.md` §5). A dial, not a commitment.
+ROUND_TRIP_MAX_COMPILE_ATTEMPTS = 4
