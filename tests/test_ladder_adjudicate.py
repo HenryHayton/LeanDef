@@ -5,15 +5,18 @@ Real Mathlib environment: exercises the decide path, the proof path through tier
 exhaustion on a genuinely hard fact returning UNKNOWN with partial attempt records.
 """
 
+import time
+
 import pytest
 
 from harness.facts import Fact
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
-from ladder.adjudicate import adjudicate_fact
-from ladder.budgets import DEFAULT_LADDER_BUDGETS
+from ladder.adjudicate import BUDGET_EXHAUSTED_MARKER, adjudicate_fact
+from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
 from ladder.cache import ProofScriptCache, toolchain_pin
-from ladder.statuses import AdjudicationStatus, ElaborationStatus
+from ladder.statuses import AdjudicationStatus, ElaborationStatus, TierAttempt
+from ladder.tier2 import Tier2Result
 
 
 @pytest.fixture(scope="module")
@@ -96,7 +99,46 @@ def test_genuinely_hard_proof_fact_returns_unknown_with_partial_attempt_records(
     assert adjudication.elaboration is ElaborationStatus.ELABORATES
     assert adjudication.tier is None
     assert adjudication.script is None
-    assert len(adjudication.attempts) == len(DEFAULT_LADDER_BUDGETS.tier2_tactics)  # partial records survive
+    # tier 2's full ladder, then tier 3 (real as of Session B) -- on the Mac, with no Hammer
+    # project available, `hammer` isn't even a real tactic, so tier 3 comes back UNKNOWN too
+    # ("unknown tactic", not a crash and not ENV_DEATH) -- exactly the graceful degradation
+    # tier 3 is supposed to have when Hammer genuinely isn't available. Tier 4 is skipped (no
+    # truth_env/candidate_name/truth_name supplied), tier 5 is still a stub.
+    assert len(adjudication.attempts) == len(DEFAULT_LADDER_BUDGETS.tier2_tactics) + 1  # partial records survive
+    assert adjudication.attempts[-1].tier == 3
+    assert adjudication.attempts[-1].status is AdjudicationStatus.UNKNOWN
+
+
+def test_per_fact_ceiling_stops_tier2_from_reaching_tier3(mathlib_env, monkeypatch):
+    server, env = mathlib_env
+    # Real tactic search timing is not a reliable clock to race against: `exact?`'s discrimination
+    # tree gets built once per environment and reused, so a statement that's genuinely slow to
+    # discharge on a cold environment can come back near-instant on a warm one (observed directly
+    # while developing this test -- two consecutive real runs on the same "hard" statement came
+    # back 0.02s and 1.8s respectively, a ~90x spread with no other change). Racing a fixed or
+    # even a measured-then-halved ceiling against that is inherently flaky. Instead, keep the
+    # elaboration probe real (a single, reliably-fast `#check`) and replace tier 2 itself with a
+    # stand-in that sleeps a fixed, controlled duration -- this tests the LOOP's ceiling
+    # enforcement, not tier 2's own timing, which `test_ladder_tier2.py` already covers for real.
+    def _slow_fake_tier2(server, env, fact_id, canonical_statement, budgets, *, imports=None):
+        time.sleep(1.0)
+        dummy = TierAttempt(
+            tier=2, tactic="omega", status=AdjudicationStatus.UNKNOWN, elapsed_s=1.0, detail="fake, for ceiling test"
+        )
+        return Tier2Result(attempts=[dummy], winning=None, winning_theorem_name=None, winning_script=None, env=env)
+
+    monkeypatch.setattr("ladder.adjudicate.adjudicate_tier2", _slow_fake_tier2)
+
+    fact = _proof_fact("p5", "(2:ℕ) + 2 = 4")  # elaborates trivially and fast; tier 2 itself never runs for real
+    tight_budgets = LadderBudgets(per_fact_total_wall_clock_s=0.2)  # < the fake tier 2's 1.0s sleep
+
+    adjudication, _ = adjudicate_fact(fact, env, server, tight_budgets)
+
+    assert adjudication.status is AdjudicationStatus.UNKNOWN
+    assert adjudication.tier is None
+    assert BUDGET_EXHAUSTED_MARKER in adjudication.detail
+    assert len(adjudication.attempts) == 1  # the fake tier 2's one dummy attempt -- it DID run
+    assert adjudication.wall_clock_s >= tight_budgets.per_fact_total_wall_clock_s
 
 
 def test_non_elaborating_statement_short_circuits_with_no_tier_attempted(mathlib_env):

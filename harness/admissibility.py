@@ -44,7 +44,11 @@ from harness.signature import PinnedSignature
 # their own `baseline_axioms`.
 STANDARD_MATHLIB_AXIOMS: frozenset[str] = frozenset({"propext", "Classical.choice", "Quot.sound"})
 
-_AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]")
+_AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]", re.DOTALL)  # Lean's pretty-printer
+# wraps the axiom list onto multiple lines once it's long enough; `.` doesn't match `\n` by
+# default, so a wrapped list silently failed to parse (confirmed empirically, Ladder worker
+# Session B tier-cascade measurement, 2026-07-27, via `ladder.axiom_audit`'s identical regex --
+# fixed there and here together).
 _NO_AXIOMS_RE = re.compile(r"does not depend on any axioms")
 
 

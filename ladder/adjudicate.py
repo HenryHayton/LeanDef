@@ -1,9 +1,18 @@
 """The per-fact adjudication loop (reward doc §3). `adjudicate_fact` tries tiers in order per
 the fact's mechanism: decide-mechanism -> tier 1 only; proof-mechanism -> tiers 2..5 as
-available. Tiers 3-5 are interface stubs this session (`ladder.tier_stubs`), so a
-proof-mechanism fact tier 2 can't discharge simply ends UNKNOWN, not an exception --
-`NotImplementedError` from a stub tier is caught and treated as "this tier isn't available
-yet," never a crash, so Session A is usable standalone without Session B landing first.
+available. Tiers 1-4 are real as of Session B; tier 5 is still an interface stub
+(`ladder.tier_stubs`, waits on Bedrock entitlement regardless of session) -- its
+`NotImplementedError` is caught and treated as "this tier isn't available yet," never a crash.
+
+**Tier 4's scope in this loop is deliberately narrow.** The reward doc's tier 4 is a
+CANDIDATE-level operation ("attempt candidate = truth... success transfers the entire fact
+suite") -- a round driver would call it once per candidate, not once per fact. This function
+adjudicates one fact at a time and has no such driver yet, so tier 4 is offered here only as
+one more per-fact fallback attempt, and only when the caller supplies enough context to attempt
+it (`truth_env`/`candidate_name`/`truth_name`, all optional, all-or-nothing) -- omitting them
+(the default) simply skips tier 4 for that call, exactly as if it were still a stub. Whole-suite
+transfer on a single tier-4 success is NOT implemented here -- that requires a round-level
+driver this session doesn't build; flagged, not guessed at.
 
 **Cache-first** (reward doc §3.2): every proof-mechanism fact is looked up before any tier
 runs. A hit replays (never re-searches); a replay failure demotes the fact to UNKNOWN for this
@@ -20,6 +29,16 @@ rule ("A proof exceeding the permitted set fails certification... and is logged"
 **The two-stage split** (reward doc §10) is `Adjudication.elaboration` (does the bare Prop
 elaborate at all, via a `#check` probe with no proof attempt) versus `.status` (what the ladder
 did with it once it does) -- recorded on every proof-mechanism fact regardless of outcome.
+
+**Per-fact ceiling enforcement** (reward doc §7's "per-fact total wall-clock"; previously an
+unaggregated gap, `docs/deferred.md`): elapsed wall-clock since the fact's own adjudication
+began is checked at every tier boundary -- before tier 2 starts, and again before each
+subsequent tier is attempted. Once `LadderBudgets.per_fact_total_wall_clock_s` is exceeded, no
+further tier is attempted at all (not even a cheap/stub one): the fact returns UNKNOWN
+immediately with `BUDGET_EXHAUSTED_MARKER` in `Adjudication.detail`. This is a hard boundary
+check, not mid-tier preemption -- a single tier already running (e.g. tier 2's own tactic
+ladder, or a real tier 3/4 call) is not interrupted partway through; the ceiling only ever
+prevents the *next* tier from starting.
 """
 
 import time
@@ -35,7 +54,11 @@ from ladder.cache import CacheEntry, ProofScriptCache, replay, statement_hash, t
 from ladder.statuses import Adjudication, AdjudicationStatus, ElaborationStatus, TierAttempt
 from ladder.tier1 import adjudicate_tier1
 from ladder.tier2 import adjudicate_tier2
-from ladder.tier_stubs import adjudicate_tier3_hammer, adjudicate_tier4_equivalence, adjudicate_tier5_flagship
+from ladder.tier3 import adjudicate_tier3_hammer
+from ladder.tier4 import adjudicate_tier4_equivalence
+from ladder.tier_stubs import adjudicate_tier5_flagship
+
+BUDGET_EXHAUSTED_MARKER = "BUDGET_EXHAUSTED"
 
 
 def _probe_elaboration(server: AutoLeanServer, env: int, canonical_statement: str, budgets: LadderBudgets) -> ElaborationStatus:
@@ -48,6 +71,24 @@ def _probe_elaboration(server: AutoLeanServer, env: int, canonical_statement: st
     if check.status is CheckStatus.FAILED:
         return ElaborationStatus.DOES_NOT_ELABORATE
     return ElaborationStatus.UNKNOWN
+
+
+def _budget_exhausted(start: float, budgets: LadderBudgets) -> bool:
+    return time.perf_counter() - start >= budgets.per_fact_total_wall_clock_s
+
+
+def _budget_exhausted_adjudication(
+    fact: Fact, elaboration: ElaborationStatus, attempts: list[TierAttempt], budgets: LadderBudgets, start: float
+) -> Adjudication:
+    elapsed = time.perf_counter() - start
+    return Adjudication(
+        fact_id=fact.id, elaboration=elaboration, status=AdjudicationStatus.UNKNOWN, tier=None,
+        script=None, axiom_closure=None, wall_clock_s=elapsed, attempts=attempts,
+        detail=(
+            f"{BUDGET_EXHAUSTED_MARKER}: per-fact wall-clock ceiling "
+            f"({budgets.per_fact_total_wall_clock_s}s) exceeded -- no further tier attempted"
+        ),
+    )
 
 
 def _audit_and_finalize(
@@ -97,10 +138,19 @@ def adjudicate_fact(
     cache: ProofScriptCache | None = None,
     *,
     imports: list[str] | None = None,
+    truth_env: int | None = None,
+    candidate_name: str | None = None,
+    truth_name: str | None = None,
+    prop_valued: bool = False,
 ) -> tuple[Adjudication, int]:
     """Returns `(adjudication, current_env)` -- `current_env` may differ from the input `env`
     if tier 2's own recovery loop refreshed it; callers chaining multiple facts through the
-    same environment MUST carry it forward (see `ladder.tier2`'s module docstring)."""
+    same environment MUST carry it forward (see `ladder.tier2`'s module docstring).
+
+    `truth_env`/`candidate_name`/`truth_name` are optional and all-or-nothing: supply all three
+    to make tier 4 available for this call (see module docstring for the scoping this implies),
+    or omit them to skip tier 4 entirely."""
+    tier4_available = truth_env is not None and candidate_name is not None and truth_name is not None
     start = time.perf_counter()
 
     if fact.mechanism == "decide":
@@ -155,6 +205,9 @@ def adjudicate_fact(
 
     attempts: list[TierAttempt] = []
 
+    if _budget_exhausted(start, budgets):
+        return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
+
     tier2_result = adjudicate_tier2(server, env, fact.id, canonical_statement, budgets, imports=imports)
     attempts.extend(tier2_result.attempts)
     env = tier2_result.env
@@ -179,19 +232,74 @@ def adjudicate_fact(
             env,
         )
 
-    # Tiers 3-5: interface stubs this session. NotImplementedError means "not available yet,"
-    # not a crash -- falls through to UNKNOWN exactly as if the tier had simply failed to
-    # discharge the goal.
-    for stub_call in (
-        lambda: adjudicate_tier3_hammer(server, env, canonical_statement, fact.anchors, budgets, imports=imports),
-        lambda: adjudicate_tier4_equivalence(server, env, env, "candidate", "truth", budgets),
-        lambda: adjudicate_tier5_flagship(canonical_statement, fact.anchors, budgets),
-    ):
-        try:
-            attempt = stub_call()
-        except NotImplementedError:
-            continue
-        attempts.append(attempt)  # pragma: no cover -- unreachable this session (every stub raises)
+    # Tier 3 (real): hammer.
+    if _budget_exhausted(start, budgets):
+        return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
+
+    tier3_result = adjudicate_tier3_hammer(server, env, fact.id, canonical_statement, fact.anchors, budgets, imports=imports)
+    attempts.extend(tier3_result.attempts)
+    env = tier3_result.env
+
+    if tier3_result.winning is not None:
+        return (
+            _audit_and_finalize(
+                fact, canonical_statement, 3, tier3_result.winning_theorem_name, tier3_result.winning_script,
+                env, server, budgets, cache, pin, attempts, elaboration, start,
+            ),
+            env,
+        )
+    if any(a.status is AdjudicationStatus.ENV_DEATH for a in tier3_result.attempts):
+        elapsed = time.perf_counter() - start
+        return (
+            Adjudication(
+                fact_id=fact.id, elaboration=elaboration, status=AdjudicationStatus.ENV_DEATH, tier=None,
+                script=None, axiom_closure=None, wall_clock_s=elapsed, attempts=attempts,
+                detail="environment-death recovery exhausted its budget",
+            ),
+            env,
+        )
+
+    # Tier 4 (real, narrow scope -- see module docstring): only attempted if the caller
+    # supplied enough context; otherwise falls through exactly as if it were still a stub.
+    if tier4_available:
+        if _budget_exhausted(start, budgets):
+            return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
+
+        tier4_result = adjudicate_tier4_equivalence(
+            server, env, truth_env, candidate_name, truth_name, budgets,
+            prop_valued=prop_valued, fact_id=fact.id, imports=imports,
+        )
+        attempts.extend(tier4_result.attempts)
+        env = tier4_result.env
+
+        if tier4_result.winning is not None:
+            return (
+                _audit_and_finalize(
+                    fact, canonical_statement, 4, tier4_result.winning_theorem_name, tier4_result.winning_script,
+                    env, server, budgets, cache, pin, attempts, elaboration, start,
+                ),
+                env,
+            )
+        if any(a.status is AdjudicationStatus.ENV_DEATH for a in tier4_result.attempts):
+            elapsed = time.perf_counter() - start
+            return (
+                Adjudication(
+                    fact_id=fact.id, elaboration=elaboration, status=AdjudicationStatus.ENV_DEATH, tier=None,
+                    script=None, axiom_closure=None, wall_clock_s=elapsed, attempts=attempts,
+                    detail="environment-death recovery exhausted its budget",
+                ),
+                env,
+            )
+
+    # Tier 5: still an interface stub (waits on Bedrock entitlement regardless of session).
+    # NotImplementedError means "not available yet," not a crash.
+    if _budget_exhausted(start, budgets):
+        return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
+    try:
+        attempt = adjudicate_tier5_flagship(canonical_statement, fact.anchors, budgets)
+        attempts.append(attempt)  # pragma: no cover -- unreachable this session (the stub always raises)
+    except NotImplementedError:
+        pass
 
     elapsed = time.perf_counter() - start
     return (

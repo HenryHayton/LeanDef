@@ -9,7 +9,7 @@ from lean_interact import Command
 
 from harness.repl import get_warm_environment, run_checked
 from harness.results import CheckStatus
-from ladder.axiom_audit import PERMITTED_FACT_PROOF_AXIOMS, audit_proof_axioms
+from ladder.axiom_audit import PERMITTED_FACT_PROOF_AXIOMS, _parse_axioms, audit_proof_axioms
 
 
 @pytest.fixture(scope="module")
@@ -69,3 +69,18 @@ def test_excess_axiom_beyond_permitted_set_is_rejected(mathlib_env):
     assert not result.passed
     assert result.excess_axioms
     assert "excess axioms" in result.detail
+
+
+def test_parse_axioms_handles_a_pretty_printer_line_wrap():
+    """Regression test: Lean's `#print axioms` pretty-printer wraps the axiom list onto
+    multiple lines once it's long enough (a long declaration name plus 3 axioms is enough --
+    confirmed empirically, tier-cascade measurement, 2026-07-27). `_parse_axioms` must not
+    silently fail to parse a wrapped list -- that bug demoted genuinely CERTIFIED facts to
+    UNKNOWN with no other symptom."""
+    wrapped = "'__some_long_declaration_name' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"
+    assert _parse_axioms(wrapped) == frozenset({"propext", "Classical.choice", "Quot.sound"})
+
+
+def test_parse_axioms_still_handles_a_single_line_list():
+    single_line = "'__t_omega' depends on axioms: [propext, Quot.sound]"
+    assert _parse_axioms(single_line) == frozenset({"propext", "Quot.sound"})

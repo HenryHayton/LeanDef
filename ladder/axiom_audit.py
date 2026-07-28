@@ -26,7 +26,12 @@ from harness.results import CheckStatus
 
 PERMITTED_FACT_PROOF_AXIOMS: frozenset[str] = frozenset({"propext", "Classical.choice", "Quot.sound"})
 
-_AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]")
+_AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]", re.DOTALL)  # Lean's pretty-printer
+# wraps the axiom list onto multiple lines once it's long enough (a long declaration name plus
+# 3 axioms is enough to trigger it) -- confirmed empirically (tier-cascade measurement,
+# 2026-07-27): `.` doesn't match `\n` by default, so a wrapped list silently failed to parse and
+# demoted genuinely CERTIFIED facts to UNKNOWN ("could not parse `#print axioms` output").
+# `harness.admissibility`'s duplicate of this regex had the identical bug, fixed alongside this.
 _NO_AXIOMS_RE = re.compile(r"does not depend on any axioms")
 
 # Lean 4 reports a proof containing `sorry` as depending on the axiom `sorryAx` -- confirmed

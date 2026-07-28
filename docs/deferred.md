@@ -65,21 +65,38 @@ don't leave it checked off in place.
   that task — it isn't a section-modifier variant).
   **Trigger:** the next miner scan-layer task, or any non-elaborator investigation that
   reproduces a namespace-tracking symptom not already covered by the fixed bug classes.
-- **Ladder worker's Lean invocations must pass `--load-dynlib=<cvc5 .so path>`** (see
-  `docs/ec2_runbook.md` Phase C.7) — `lake env lean` never auto-loads it for ad-hoc script
-  interpretation, and without it any cvc5/SMT-route goal SIGABRTs the whole process instead of
-  failing gracefully. Verify whether `LeanInteract`'s config surface supports injecting this
-  flag (or an equivalent env/subprocess-arg mechanism) before the ladder worker assumes it can
-  just shell out to `lean` the way the manual smoke test did.
-  **Trigger:** ladder worker build.
 - **Bare-alias candidate bodies (e.g. `body = Nat.clog` verbatim) trip the admissibility
   shadowing check rather than being scored as memorization** — decide handling.
   **Trigger:** mini-trial design.
-- **`ladder.adjudicate.adjudicate_fact` never enforces `LadderBudgets.per_fact_total_wall_clock_s`
-  as a hard cutoff.** `Adjudication.wall_clock_s` records elapsed time per fact, but nothing
-  aggregates attempts across tiers and aborts once the per-fact ceiling is exceeded. Currently
-  harmless — tier 2's own per-tactic budgets sum to 110s, well under the 300s default — but
-  tier 3/4/5 landing with their own budgets could blow past the per-fact ceiling with nothing
-  to stop them.
-  **Trigger:** Session B, before tier 3 goes live; nothing aggregates attempts against
-  `LadderBudgets.per_fact_total_wall_clock_s`.
+- **Mined "mentions" have a very low standalone-elaboration rate (measured: 8.3%, 5/60) because
+  the miner doesn't capture per-mention `variable`/`section`/`namespace` context.** Confirmed by
+  manual inspection (`docs/tier_cascade_measurement_2026-07.md`): every inspected failure is
+  either a bare namespace self-reference (e.g. `clog` needing `Nat.clog`) or a free variable from
+  a file-scoped `variable` declaration the mined `statement_text` doesn't carry. Fact selection
+  cannot use raw mentions verbatim as anchor facts until this is solved (either the miner
+  captures the enclosing context per mention, or authoring-time synthesis reconstructs it).
+  **Trigger:** the next fact-selection/authoring task that wants to draw real Mathlib mentions
+  as anchor or global-fact candidates directly.
+- **Self-citation: reusing a library's own existing theorem as a fact trivially passes via
+  library-search tactics.** Measured 100% (5/5) on the tier-cascade run's certified facts —
+  `exact?`/hammer found and cited the statement's own source theorem every time it discharged
+  one. n=5 is too small to trust the *rate*, but the *mechanism* is structural: any fact that IS
+  a real existing Mathlib theorem will be found by anything that searches Mathlib. Needs a
+  design answer (mutation, non-verbatim restatement, or excluding raw mentions as fact sources
+  entirely) before mentions-as-facts is viable, independent of the context-stripping issue above.
+  **Trigger:** same as the context-stripping entry above — whichever fact-selection task
+  revisits using mined mentions directly.
+- **Retry-on-timeout usage isn't instrumented per attempt.** `TierAttempt` records status/
+  elapsed/detail but not whether the underlying `run_checked` call needed its retry budget —
+  `docs/tier_cascade_measurement_2026-07.md`'s "retry-flip count" ask couldn't be answered from
+  existing records. Would need `run_checked`/`CheckResult` to surface an attempt count.
+  **Trigger:** the next measurement or reliability review that specifically wants retry-rescue
+  data (moot for any run where nothing approaches its timeout budget, as this one didn't).
+- **`ladder.tier4`'s per-fact scoping is narrower than the reward doc's tier 4** (candidate-level
+  whole-suite transfer, reward doc §3) — this session's `adjudicate_fact` only offers tier 4 as
+  one more per-fact fallback when the caller supplies `truth_env`/`candidate_name`/`truth_name`;
+  a single tier-4 success does not transfer the rest of the candidate's fact suite, since that
+  needs a round-level driver this session doesn't build (`ladder/adjudicate.py`'s own docstring
+  flags this).
+  **Trigger:** the round-driver/training-loop task that actually runs candidates through the
+  full ladder across a fact suite, not one fact at a time.

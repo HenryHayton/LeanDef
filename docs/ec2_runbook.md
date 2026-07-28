@@ -366,6 +366,109 @@ Don't treat a single timeout as a hard failure without at least one retry.
 
 ---
 
+## Phase G — Python/ladder-worker bootstrap (Session B onward)
+
+Separate from Phase C's Lean/Hammer project (`~/verifier-lean/`, left in place, never renamed):
+the `ladder/`/`harness/` Python side lives in its own sync target, `~/definition-verifier/`, so
+the two never collide and the expensive Hammer build in `~/verifier-lean/.lake/` is never
+threatened by a Python-side resync. Every ladder-worker script that touches Lean explicitly
+passes `lean_project_dir=~/verifier-lean` (`harness.repl.get_warm_environment`'s own parameter)
+and `repo_root=~/verifier-lean` (`ladder.cache.toolchain_pin`'s own parameter) at the call site
+-- no source changes needed, both already accept overrides.
+
+### G.1 — sync the Python side
+
+From the Mac, excluding everything Lean/Hammer-specific (that stays in `~/verifier-lean/`),
+`bedrock/` (no bedrock work happens on this box, ever), and local-only clutter:
+
+```
+rsync -avz \
+  --exclude='.git/' --exclude='.venv/' --exclude='__pycache__/' --exclude='.pytest_cache/' \
+  --exclude='.ruff_cache/' --exclude='.DS_Store' \
+  --exclude='lean/.lake/' --exclude='lean/build/' \
+  --exclude='pickles/' --exclude='scratch/' --exclude='bedrock/' --exclude='archive/' \
+  --exclude='authoring/' --exclude='tasks/' \
+  -e "ssh -i ~/.ssh/verifier-hammer.pem" \
+  /Users/henryhayton/definition-verifier/ ubuntu@<ip>:~/definition-verifier/
+```
+
+`lean/` is included (minus `.lake/`) purely so `ladder.cache.toolchain_pin()`'s *default*
+(no-override) code path has real `lean/lean-toolchain` + `lean/lake-manifest.json` files to
+read on box, matching every other test that doesn't pass an explicit `repo_root` -- it is not
+built or used as a Lean project on the box; `~/verifier-lean/` is the one that actually runs.
+
+### G.1b — the --load-dynlib resolution (Session B, `docs/deferred.md` fired)
+
+`ladder.tier3`'s hammer calls need the cvc5 FFI fix (Phase C.7) applied to invocations driven
+through **LeanInteract**, not just raw `lake env lean` shell calls. Diagnosis, confirmed by
+reading the actual source (not assumed): `lean_interact.server.LeanServer.start()` launches the
+REPL binary with a hardcoded `Popen` argv (`[lake_path, "env", repl_binary_path]`, no room for
+extra flags) -- and even if it could pass extra argv, the REPL project's own `REPL/Main.lean`
+(`augustepoiroux/repl`, the fork LeanInteract drives) discards its `args` parameter entirely
+(`unsafe def main (_ : List String) : IO Unit`). **No CLI-flag injection path exists through
+LeanInteract at all.**
+
+**Fix**: `Lean.loadDynlib` (`Lean/LoadDynlib.lean` in core Lean -- "Equivalent to passing
+`--load-dynlib=path` to `lean`", the exact primitive `lean`'s own flag handler calls
+internally) is a plain `IO Unit` function, callable directly. `lean/repl_main.ec2.lean` (tracked
+in this repo, mirrors `lakefile.ec2.toml`'s own box-local-override convention) is a full
+replacement for `REPL/Main.lean` whose `main` calls it, reading the path from the
+`LEAN_INTERACT_LOAD_DYNLIB` environment variable (a no-op when unset, so this patched REPL is
+safe to use for every ladder tier, not just tier 3):
+
+```
+git clone https://github.com/augustepoiroux/repl.git ~/patched-repl
+cd ~/patched-repl
+git checkout v1.3.18_lean-toolchain-v4.32.0   # the exact per-Lean-version tag LeanInteract
+                                                # resolves for our pin -- NOT the bare `v1.3.18`
+                                                # tag, which points at a v4.8.0-rc1 toolchain
+cp ~/definition-verifier/lean/repl_main.ec2.lean REPL/Main.lean
+lake build
+```
+
+Python side -- set the env var before constructing the server, and point `local_repl_path` at
+the patched checkout:
+
+```python
+import os
+os.environ["LEAN_INTERACT_LOAD_DYNLIB"] = str(Path.home() / "verifier-lean" / ".lake" /
+    "packages" / "cvc5" / ".lake" / "build" / "lib" / "libcvc5_cvc5.so")
+config = LeanREPLConfig(
+    project=LocalProject(directory=str(Path.home() / "verifier-lean")),
+    local_repl_path=str(Path.home() / "patched-repl"),
+    build_repl=False,  # already built above
+)
+```
+
+**Verified empirically (2026-07-27, Session B)**: `Monotone (fun n => n + 1) := by hammer` --
+the exact goal that SIGABRTed pre-fix (Phase C.7) -- completed cleanly through this path, driven
+from Python, no crash, hammer found a real proof (`apply add_left_mono`).
+
+### G.2 — bootstrap `uv` and the Python env
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source $HOME/.local/bin/env
+uv python install 3.12
+cd ~/definition-verifier && uv sync
+```
+
+### G.3 — re-sync after every Mac-side edit
+
+Same `rsync` command as G.1, re-run after any Mac-side change to `ladder/`/`harness/`/`tests/`
+before running anything on the box — the box's copy is a snapshot, not live.
+
+### G.4 — box-only test marker convention
+
+New tier-3/tier-4 tests that need the box's Hammer-enabled Lean project are marked
+`@pytest.mark.box_only` (registered in `pyproject.toml`'s `[tool.pytest.ini_options]`). The
+Mac's regular `uv run pytest` run **deselects** them (`-m "not box_only"`); on the box, the
+same tests run with `-m box_only` (or no `-m` filter at all, since the box never runs the
+Mac-oriented default-`repo_root` tests that need `~/definition-verifier/lean` to be a *built*
+project).
+
+---
+
 ## Phase F — shutdown (always end here)
 
 ```
@@ -393,3 +496,17 @@ left for "next time."
   with a clean "unsolved goals" message (no crash — a genuinely hard fact, not a defect), 2/7
   still fail elaboration as expected (context-stripped real Mathlib statements, out of scope).
   Zero SIGABRTs.
+- **2026-07-27 (Ladder worker Session B)** — Python side bootstrapped (`uv`, Phase G), the
+  `--load-dynlib` fix ported to LeanInteract via a patched local REPL checkout (Phase G.1b,
+  `lean/repl_main.ec2.lean`), tiers 3-4 made real and wired into `ladder.adjudicate`. Existing
+  `~/verifier-lean`/Hammer build reused unchanged (survived the stop/start intact — confirmed
+  before doing any rebuild work). One real bug found and fixed during the tier-cascade
+  measurement: `#print axioms`'s pretty-printer wraps the axiom list across multiple lines once
+  it's long enough, and `_AXIOM_LIST_RE` (both `ladder.axiom_audit` and its duplicate in
+  `harness.admissibility`) used `.` without `re.DOTALL`, silently failing to parse wrapped lists
+  and demoting genuinely CERTIFIED facts to UNKNOWN — fixed in both places, regression-tested.
+  60-statement tier-cascade measurement run: see `docs/tier_cascade_measurement_2026-07.md`.
+  **Idle-autostop fired mid-session** (real, not simulated — `verifier-hammer-idle-autostop`,
+  ~20 min of Mac-side-only work between box interactions triggered it): confirms the alarm works
+  as designed; the box was simply restarted and work continued, IP re-fetched, no data lost
+  (`~/verifier-lean`/`~/patched-repl` persisted on the EBS volume through the stop/start).

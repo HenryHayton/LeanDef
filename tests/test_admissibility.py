@@ -14,7 +14,7 @@ bare-Lean tests in `test_lean_repl.py`.
 from lean_interact import Command
 
 from harness import Fact, PinnedSignature, score_candidate, score_spliced_candidate
-from harness.admissibility import AdmissibilityFailure, check_admissibility
+from harness.admissibility import AdmissibilityFailure, _parse_axioms, check_admissibility
 from harness.repl import run_checked
 from harness.results import CheckStatus
 
@@ -106,3 +106,13 @@ def test_expensive_check_errors_via_watchdog_instead_of_hanging(lean_server):
         retries=1,
     )
     assert result.status is CheckStatus.ERRORED
+
+
+def test_parse_axioms_handles_a_pretty_printer_line_wrap():
+    """Regression test: Lean's `#print axioms` pretty-printer wraps the axiom list onto
+    multiple lines once it's long enough. Discovered via `ladder.axiom_audit`'s identical
+    duplicated regex (Ladder worker Session B tier-cascade measurement, 2026-07-27) --
+    `_parse_axioms` here has the exact same pattern and the exact same bug, fixed alongside it.
+    No REPL needed: pure string parsing."""
+    wrapped = "'some_declaration' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"
+    assert _parse_axioms(wrapped) == frozenset({"propext", "Classical.choice", "Quot.sound"})
