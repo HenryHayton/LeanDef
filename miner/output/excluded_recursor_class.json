@@ -1,0 +1,82 @@
+{
+  "decision": "recursor_class_pseudo_gate",
+  "recorded": "2026-07-29",
+  "status": "pseudo_gate_provisional",
+  "summary": "6 batch-50 preflight exclusions, originally attributed to a mechanical pretty-printer proof-elision failure (printed type contains an unparseable `⋯`), reclassified after a 29 July 2026 characterization session showed the print failure is recoverable (`pp.proofs true` makes all 6 re-elaborate cleanly). The mechanical failure is therefore NOT the load-bearing reason these 6 stay excluded. The actual, recorded reason: all 6 are dependent recursion/elimination principles -- proof infrastructure whose content is Lean encoding rather than a described mathematical object. Dossiers would underdetermine little (the definition IS its own type signature), fact supply is near-tautological (defining equations collapse to self-restatements), and casework/membership regimes are vacuous for this shape. They rank well on the richness metric precisely because dependent binders/arrows are what that metric counts -- a known metric blind spot (see docs/deferred.md), not evidence these are good task targets.",
+  "provisional_note": "This is a curation call on 6 names (~1% of the 727-eligible corpus), not a coded miner gate. If eliminator/recursor-shaped definitions surface at meaningful scale in a wider harvest, this decision gets re-evaluated against that evidence rather than standing on today's small sample. See docs/deferred.md.",
+  "batch_50_context": "The 3 OTHER original preflight exclusions (WithTop.subtypeOrderIso: stuck typeclass metavariable; Equiv.sigmaSigmaSubtypeEq: REPL server crash on validation; Finset.sumLift₂: subscript character invalid as a Lean identifier for the task symbol) are unchanged by this decision and keep their original mechanical reasons -- they are not part of this quarantine file. The batch-50 selection remains 41 names.",
+  "names": [
+    {
+      "name": "Nat.leRec",
+      "module_path": "Data/Nat/Init.lean",
+      "description": "Recursion starting at an arbitrary base n rather than 0: given a value/proof for n and a step showing motive k -> motive (k+1) for every k >= n, produces motive m for any m >= n.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "pp.proofs true removes the ellipsis (prints Nat.le_refl n / Nat.le_succ_of_le h in place of ⋯); the resulting full text re-elaborates cleanly as `def VTask.leRec : <type> := sorry` against the warm environment. Verified 29 July 2026. The pretty-printer failure is therefore known-recoverable and is NOT why this name stays excluded.",
+      "curation_reason": "eliminator/recursor: content is encoding; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 2,
+      "manifest_richness_total": 12,
+      "manifest_return_shape": "value"
+    },
+    {
+      "name": "List.recNeNil",
+      "module_path": "Data/List/Induction.lean",
+      "description": "A dependent recursion principle for nonempty lists, handling the singleton case and the cons-onto-nonempty-tail case.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "pp.proofs true removes the ellipsis (prints List.cons_ne_nil x [] / List.cons_ne_nil x xs); re-elaborates cleanly. Verified 29 July 2026.",
+      "curation_reason": "eliminator/recursor: content is encoding; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 10,
+      "manifest_richness_total": 9,
+      "manifest_return_shape": "value"
+    },
+    {
+      "name": "SimpleGraph.Walk.mapToSubgraph",
+      "module_path": "Combinatorics/SimpleGraph/Connectivity/Subgraph.lean",
+      "description": "Maps a walk in a graph G to the corresponding walk in G's own induced subgraph.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "Structural variant of the same cause -- the elided proof term sits inside an anonymous-constructor Subtype literal in the return type, not a direct motive argument. pp.proofs true resolves it (prints the two named membership proofs); re-elaborates cleanly. Verified 29 July 2026.",
+      "curation_reason": "eliminator/recursor-adjacent: content is Lean-level re-typing of an existing walk, not an independently describable object; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 11,
+      "manifest_richness_total": 9,
+      "manifest_return_shape": "value"
+    },
+    {
+      "name": "Nat.decreasingInduction",
+      "module_path": "Data/Nat/Init.lean",
+      "description": "Downward induction on ℕ: given P(k+1) -> P(k) for every k < n, concludes P(n) -> P(m) for every m <= n.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "pp.proofs true removes the ellipsis (prints Nat.le_of_succ_le h / Nat.le_refl n); re-elaborates cleanly. Verified 29 July 2026.",
+      "curation_reason": "eliminator/recursor: content is encoding; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 12,
+      "manifest_richness_total": 8,
+      "manifest_return_shape": "value"
+    },
+    {
+      "name": "Int.leInduction",
+      "module_path": "Data/Int/Init.lean",
+      "description": "Induction on ℤ starting at a base m: given a proof for m and a step motive n -> motive (n+1) for every n >= m, concludes motive n for every n >= m.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "pp.proofs true removes the ellipsis (prints Int.le_refl m / Int.le_add_one hmn); re-elaborates cleanly. Verified 29 July 2026.",
+      "curation_reason": "eliminator/recursor: content is encoding; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 26,
+      "manifest_richness_total": 8,
+      "manifest_return_shape": "value"
+    },
+    {
+      "name": "Int.leInductionDown",
+      "module_path": "Data/Int/Init.lean",
+      "description": "Downward counterpart of Int.leInduction: induction from a base m going down, given a proof for m and a step motive n -> motive (n-1) for every n <= m.",
+      "mechanical_exclusion_reason": "pp_elision",
+      "mechanical_exclusion_recoverable": true,
+      "mechanical_exclusion_recovery_note": "pp.proofs true removes the ellipsis, but here it prints an auto-generated internal proof name (Int.leInductionDown._proof_2 n hnm) rather than a citable Mathlib lemma, since the source discharges that obligation with an inline `by lia` tactic rather than a named lemma. Confirmed this auto-generated name is a real, resolvable top-level declaration -- re-elaboration still passed. Verified 29 July 2026.",
+      "curation_reason": "eliminator/recursor: content is encoding; dossier underdetermines little; fact supply near-tautological",
+      "manifest_rank": 27,
+      "manifest_richness_total": 8,
+      "manifest_return_shape": "value"
+    }
+  ]
+}

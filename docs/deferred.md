@@ -128,3 +128,10 @@ don't leave it checked off in place.
   explicit scope, which was about the parser being STRICTER than schema, not looser).
   **Trigger:** the first `emit` rotation whose `TaskSchemaError` names `domain.conventions`, or
   the next authoring-pipeline task that revisits dossier/domain parsing.
+- **Recursor-class pseudo-gate: revisit if eliminator/recursor-shaped definitions appear at
+  meaningful scale in wider harvests** (trigger: full-corpus or widened-mine selection run);
+  decide then between a real coded gate, a curation policy, or admitting the class with a
+  different task design. Cross-ref `miner/output/excluded_recursor_class.json`.
+- **Richness metric blind spot: dependent binders/arrows inflate richness for
+  proof-infrastructure definitions** (`Nat.leRec` ranked 2). Trigger: same as above. Evidence:
+  batch-50 preflight + 29 July 2026 characterization report.
