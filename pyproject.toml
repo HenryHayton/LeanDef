@@ -20,6 +20,14 @@ build-backend = "hatchling.build"
 packages = ["harness"]
 
 [tool.pytest.ini_options]
+# `-m "not box_only"` (2026-07-29): makes the bare documented command (`uv run pytest -q`)
+# match reality -- every real session already ran with this filter by convention, never by
+# enforcement, and the 2026-07-29 audit's own bare `pytest -q` run surfaced exactly the gap:
+# 8 box_only tests errored (FileNotFoundError on an EC2-box-only path) instead of deselecting
+# cleanly. `-m box_only` still runs them explicitly when that's what's wanted (pytest's own
+# `-m` on the command line REPLACES addopts' `-m`, it doesn't AND with it -- confirmed by
+# running `-m box_only` against this exact config and seeing the box_only tests collected).
+addopts = "-m 'not box_only'"
 markers = [
     "box_only: needs the EC2 hammer box's Lean/Hammer environment (docs/ec2_runbook.md Phase G.4); deselected on the Mac.",
 ]

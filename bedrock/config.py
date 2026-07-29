@@ -59,3 +59,22 @@ RETRY_BASE_DELAY_S = 1.0  # backoff: RETRY_BASE_DELAY_S * 2**(attempt_index), at
 # to prevent).
 CONNECT_TIMEOUT_S = 10.0
 READ_TIMEOUT_S = 60.0
+
+# --- Pricing (2026-07-29) -------------------------------------------------------------------
+#
+# Rates for AUTHORING_MODEL_ID/FLAGSHIP_MODEL_ID (both currently the same pinned model). NOT
+# independently verified against a live AWS Bedrock pricing page, the account's Cost Explorer,
+# or an actual invoice line this session -- these are Anthropic's publicly published Claude
+# Sonnet API rates (the figure Bedrock has historically mirrored for Claude models), used as
+# the best available source without live AWS billing access. CONFIRM against the real AWS
+# Bedrock console before trusting this for anything beyond a rough order-of-magnitude estimate
+# -- rates change without notice, and Bedrock pricing can in principle diverge from direct-API
+# pricing by region or commitment tier. `PRICING_AS_OF` exists specifically so staleness is
+# visible at a glance rather than silently assumed current.
+PRICING_AS_OF = "2026-07-29"
+PRICING_SOURCE_NOTE = (
+    "Anthropic's publicly published Claude Sonnet API pricing as of PRICING_AS_OF, not an "
+    "AWS-verified rate -- see this section's own comment above."
+)
+PRICE_PER_1K_INPUT_TOKENS_USD = 0.003
+PRICE_PER_1K_OUTPUT_TOKENS_USD = 0.015
