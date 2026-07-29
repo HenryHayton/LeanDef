@@ -15,6 +15,7 @@ from authoring.consistency import (
     check_conventions_prose_match,
     check_dossier_consistency,
     check_no_real_name_leak,
+    check_round_trip_recalls_target,
     check_signature_substring,
     check_worked_examples,
     extract_sections,
@@ -161,6 +162,26 @@ def test_real_name_leak_check_is_word_boundary_not_bare_substring():
     dossier = "# Object\nSee SomeOtherOuterNat.clogVariant for a related idea.\n"
     ok, _ = check_no_real_name_leak(dossier, "Nat.clog")
     assert ok  # no word boundary before "Nat" (preceded by "Outer", a word character)
+
+
+# --- round-trip recalled-target detection (2026-07-29, pure) -----------------------------------
+
+
+def test_round_trip_recalls_target_detected_on_qualified_name():
+    body = "fun b n => Nat.clog b n"
+    assert check_round_trip_recalls_target(body, "Nat.clog") is True
+
+
+def test_round_trip_recalls_target_absent_when_only_task_symbol_used():
+    body = "fun b n => if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b (n - 1) + 1"
+    assert check_round_trip_recalls_target(body, "Nat.clog") is False
+
+
+def test_round_trip_recalls_target_is_word_boundary_not_bare_substring():
+    """`Nat.clog2` must NOT fire -- word-boundary matched, same semantics as (d)'s dossier
+    check (both now share `authoring.consistency._contains_real_name`)."""
+    body = "fun b n => Nat.clog2 b n"
+    assert check_round_trip_recalls_target(body, "Nat.clog") is False
 
 
 # --- (b) worked-example parsing (pure) ---------------------------------------------------------

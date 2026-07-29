@@ -87,7 +87,12 @@ from typing import Callable
 from lean_interact import AutoLeanServer, Command
 
 from authoring import config as authoring_cfg
-from authoring.consistency import ConsistencyCheckResult, ConventionMatchResult, check_dossier_consistency
+from authoring.consistency import (
+    ConsistencyCheckResult,
+    ConventionMatchResult,
+    check_dossier_consistency,
+    check_round_trip_recalls_target,
+)
 from authoring.emit import emit_task
 from authoring.facts import DomainSpec, ProposedFact
 from authoring.mentions import DEFAULT_MENTION_CAP, render_mention_excerpt
@@ -189,14 +194,22 @@ class TaskResult:
     output_tokens: int = 0
     task_dir: Path | None = None
     round_trip_score: RoundTripScore | None = None
-    round_trip_flag: str | None = None  # e.g. ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY -- see
-    # `_is_termination_only_failure`'s own docstring for what this means and why it exists.
-    # No home in the emitted task.json's schema-validated `provenance` object was found for
-    # this (`harness.task_schema._validate_task_provenance` is permissive about extra keys, but
+    round_trip_flags: list[str] = field(default_factory=list)  # e.g.
+    # [ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY, ROUND_TRIP_FLAG_RECALLED_TARGET] -- LIST,
+    # not a single value (renamed from `round_trip_flag: str | None` 2026-07-29): the two flags
+    # are orthogonal conditions that can both fire across a single round-trip attempt sequence
+    # (see `_author_task_inner`'s round-trip block for exactly how) -- see
+    # `_is_termination_only_failure`'s and `authoring.consistency.check_round_trip_recalls_target`'s
+    # own docstrings for what each means and why it exists. Confirmed safe to rename cleanly,
+    # not a backward-compat concern: grepped every emitted `task.json` (committed and
+    # scratchpad) plus `authoring/emit.py` itself for `round_trip_flag` before this rename --
+    # zero hits anywhere; this field has never been part of a shipped artifact. No home in the
+    # emitted task.json's schema-validated `provenance` object was found for it either
+    # (`harness.task_schema._validate_task_provenance` is permissive about extra keys, but
     # nothing in the schema DOCUMENT sanctions one -- adding a key that merely happens to pass
-    # validation is exactly "inventing a schema field silently," which this session's task
-    # explicitly said not to do) -- lives only in `TaskResult` and the batch review for now; a
-    # real open question for whoever next revises schema v1.1, not resolved here.
+    # validation is exactly "inventing a schema field silently," which an earlier session's
+    # task explicitly said not to do) -- lives only in `TaskResult` and the batch review for
+    # now; a real open question for whoever next revises schema v1.1, not resolved here.
 
 
 # === Internal helpers ============================================================================
@@ -246,6 +259,15 @@ _TERMINATION_ERROR_MARKERS = (
 # model's code -- deliberately excluded from the termination-only carve-out below by this same
 # prefix check, since it isn't a "compile error" in the sense this policy means).
 ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY = "UNVERIFIED_TERMINATION_ONLY"
+
+# Round-trip ships anyway (flagged) when the candidate body itself references the task's real
+# Mathlib name (decided 2026-07-29, after a real round-trip attempt against `Nat.clog` returned
+# the literal text `Nat.clog b n`). Detection is not a failure: a clean round-trip pass on a
+# recalled body is not evidence the dossier alone determines the object (the model may simply
+# have recalled the real answer from pretraining, not derived it) -- the check abstains where
+# it cannot measure, the same shape as the termination-only flag above. See
+# `authoring.consistency.check_round_trip_recalls_target` for the detection mechanism.
+ROUND_TRIP_FLAG_RECALLED_TARGET = "RECALLED_TARGET"
 
 
 def _is_termination_only_failure(admissibility_detail: str) -> bool:
@@ -352,13 +374,13 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             calls_made=budget.calls_made,
             input_tokens=tokens["input_tokens"],
             output_tokens=tokens["output_tokens"],
-            # `round_trip_score`/`round_trip_flag` (2026-07-28 fix): a rotation that happens
+            # `round_trip_score`/`round_trip_flags` (2026-07-28 fix): a rotation that happens
             # AFTER round-trip scoring already ran (currently only `emit`'s `TaskSchemaError`
             # branch) must not discard that result -- confirmed lost in the real 2026-07-28
             # clog run, where a fully-passing round trip was recorded as `None` because the
             # `emit`-stage rotation never threaded it through.
             round_trip_score=partial.get("round_trip_score"),
-            round_trip_flag=partial.get("round_trip_flag"),
+            round_trip_flags=partial.get("round_trip_flags", []),
         )
 
     # --- lookup ---------------------------------------------------------------------------
@@ -526,6 +548,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
     # regardless of which attempt number produced it.
     rt_attempts: list[tuple[str, RoundTripScore]] = []  # (body, score), one entry per real attempt
     rt_call_failure_detail: str | None = None
+    recalled_target = False  # set the moment ANY attempt's body names the real Mathlib name
 
     for _ in range(authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS):
         if rt_attempts:
@@ -543,10 +566,21 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             rt_call_failure_detail = f"{type(e).__name__}: {e}"
             break
 
+        # Checked BEFORE scoring (2026-07-29): detection doesn't skip scoring -- a recalled body
+        # still gets scored for the record (the score may be legitimately high, which is exactly
+        # the problem the flag exists to mark) -- it skips only the RETRY decision below.
+        if check_round_trip_recalls_target(body, definition_input.name):
+            recalled_target = True
+
         score = score_round_trip_first_cut(
             config.server, config.base_env, signature_obj, body, fact_list, check_timeout=config.check_timeout,
         )
         rt_attempts.append((body, score))
+        if recalled_target:
+            # No feedback resend, no further attempts, regardless of pass/fail/compile state --
+            # "detection is not a failure" (decided 2026-07-29): once the model has named the
+            # real target, more attempts can't make the signal any more trustworthy.
+            break
         if score.passed:
             break
         if score.admissible:
@@ -567,8 +601,11 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         )
 
     last_body, last_score = rt_attempts[-1]
-    round_trip_flag: str | None = None
+    round_trip_flags: list[str] = []
+    if recalled_target:
+        round_trip_flags.append(ROUND_TRIP_FLAG_RECALLED_TARGET)
 
+    scoring_detail = ""
     if not last_score.passed:
         if last_score.admissible:
             detail = (
@@ -576,34 +613,47 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
                 f"failing decide facts: {last_score.failing_decide_fact_ids}; "
                 f"failing global facts: {last_score.failing_global_fact_ids}"
             )
-            return _rotate(
-                "round_trip_scoring", detail,
-                parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
-                task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
-                self_restatement=self_restatement_ids,
-            )
-        # Every attempt was a compile failure -- the attempt cap is exhausted. Ships anyway,
-        # flagged, ONLY if every single one of those failures was purely a termination-checker
-        # error; any other (or mixed) compile failure still rotates as before.
-        if len(rt_attempts) == authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS and all(
-            _is_termination_only_failure(s.admissibility_detail) for _, s in rt_attempts
-        ):
-            round_trip_flag = ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY
+            if recalled_target:
+                # Never rotated once recall is detected (decided 2026-07-29) -- ships anyway,
+                # flagged; the fact-suite result is not evidence either way for a recalled body.
+                scoring_detail = f"shipped despite fact-suite failure ({detail}) -- round-trip candidate recalled the real Mathlib name, see RECALLED_TARGET flag"
+            else:
+                return _rotate(
+                    "round_trip_scoring", detail,
+                    parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
+                    task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+                    self_restatement=self_restatement_ids,
+                )
         else:
+            # Every attempt was a compile failure. Ships anyway, flagged, if EITHER: every
+            # single failure was purely a termination-checker error (attempt cap must be fully
+            # exhausted for this one), OR recall was detected (attempt cap need not be
+            # exhausted -- recall stops the loop early regardless of attempt count). Any other
+            # (or mixed) compile failure, with no recall, still rotates as before.
             summary = "; ".join(f"attempt {i + 1}: {s.admissibility_detail}" for i, (_, s) in enumerate(rt_attempts))
-            return _rotate(
-                "round_trip_scoring", f"exhausted {len(rt_attempts)} compile attempt(s): {summary}",
-                parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
-                task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
-                self_restatement=self_restatement_ids,
-            )
+            if len(rt_attempts) == authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS and all(
+                _is_termination_only_failure(s.admissibility_detail) for _, s in rt_attempts
+            ):
+                round_trip_flags.append(ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY)
+                scoring_detail = f"shipped after {len(rt_attempts)} compile attempt(s), all termination-only"
+            elif recalled_target:
+                scoring_detail = f"shipped despite {len(rt_attempts)} compile attempt(s) failing ({summary}) -- round-trip candidate recalled the real Mathlib name, see RECALLED_TARGET flag"
+            else:
+                return _rotate(
+                    "round_trip_scoring", f"exhausted {len(rt_attempts)} compile attempt(s): {summary}",
+                    parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
+                    task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
+                    self_restatement=self_restatement_ids,
+                )
+    elif recalled_target:
+        scoring_detail = "passed, but round-trip candidate recalled the real Mathlib name -- score is not evidence, see RECALLED_TARGET flag"
 
     stage_records.append(StageRecord("round_trip_generation", "ok", calls_made=budget.calls_made))
     stage_records.append(
         StageRecord(
             "round_trip_scoring",
-            "ok" if last_score.passed else "flagged",
-            detail="" if last_score.passed else f"shipped after {len(rt_attempts)} compile attempt(s), all termination-only ({round_trip_flag})",
+            "ok" if (last_score.passed and not round_trip_flags) else "flagged",
+            detail=scoring_detail,
             calls_made=budget.calls_made,
         )
     )
@@ -638,7 +688,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             parser_rejected=proposal.dropped, validation_dropped=adjudication.dropped,
             task_errored=adjudication.task_errored, convention_flags=consistency_result.flags,
             self_restatement=self_restatement_ids,
-            round_trip_score=round_trip_score, round_trip_flag=round_trip_flag,
+            round_trip_score=round_trip_score, round_trip_flags=round_trip_flags,
         )
     stage_records.append(StageRecord("emit", "ok", calls_made=budget.calls_made))
 
@@ -658,7 +708,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         output_tokens=tokens["output_tokens"],
         task_dir=emitted.task_dir,
         round_trip_score=round_trip_score,
-        round_trip_flag=round_trip_flag,
+        round_trip_flags=round_trip_flags,
     )
 
 
@@ -699,12 +749,29 @@ def render_batch_review(results: list[TaskResult]) -> str:
         lines.append(f"- calls made: {r.calls_made}; tokens: {r.input_tokens} in / {r.output_tokens} out")
         if r.task_dir is not None:
             lines.append(f"- task dir: `{r.task_dir}`")
-        if r.round_trip_flag:
-            lines.append(
-                f"- **round-trip flag: `{r.round_trip_flag}`** -- shipped without a verified "
-                f"round-trip reconstruction (every compile attempt failed ONLY on Lean's "
-                f"termination checker; any other failure mode still rotates the task instead)"
-            )
+        if r.round_trip_flags:
+            # Flag(s) and score always rendered together (decided 2026-07-29) -- a reader must
+            # never be able to see one without the other, since a flag is precisely what marks
+            # an otherwise-normal-looking score as non-evidence.
+            lines.append(f"- **round-trip flag(s): {', '.join(f'`{f}`' for f in r.round_trip_flags)}**")
+            if r.round_trip_score is not None:
+                lines.append(
+                    f"  - round-trip score (context only while a flag is set, not independent "
+                    f"evidence): passed={r.round_trip_score.passed}, admissible={r.round_trip_score.admissible}"
+                )
+            if ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY in r.round_trip_flags:
+                lines.append(
+                    "    - `UNVERIFIED_TERMINATION_ONLY`: shipped without a verified round-trip "
+                    "reconstruction (every compile attempt failed ONLY on Lean's termination "
+                    "checker; any other failure mode still rotates the task instead)"
+                )
+            if ROUND_TRIP_FLAG_RECALLED_TARGET in r.round_trip_flags:
+                lines.append(
+                    "    - `RECALLED_TARGET`: the round-trip candidate body referenced the "
+                    "task's real Mathlib name -- a clean pass above is not evidence the dossier "
+                    "alone determines the object (the model may simply have recalled the real "
+                    "definition's name from pretraining rather than derived it)"
+                )
         if r.parser_rejected_facts:
             lines.append("- facts rejected at the parser layer (statement-format/raw-name, after the one retry):")
             for d in r.parser_rejected_facts:

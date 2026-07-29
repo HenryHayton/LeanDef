@@ -223,6 +223,19 @@ def check_signature_substring(pinned_signature: str, dossier_md: str) -> tuple[b
 # === (d) Real-name leak (round-trip information barrier) =======================================
 
 
+def _contains_real_name(text: str, forbidden_name: str) -> bool:
+    """Word-boundary match of `forbidden_name` anywhere in `text`. The one shared matcher for
+    every "does this text contain the real Mathlib name" check in this codebase's authoring
+    layer -- `check_no_real_name_leak` (dossier body) and `check_round_trip_recalls_target`
+    (round-trip candidate body) both call this rather than each rolling their own regex.
+    Deliberately distinct from `authoring.parse._leaks_forbidden_name`'s plain substring match
+    (no word-boundary) -- that one is a per-fact statement/instance/expected_type check with its
+    own established semantics (2026-07-28 sweep confirmed it, see docs/deferred.md); this module
+    is the word-boundary family. Two matchers, not three -- nothing here adds a third variant."""
+    pattern = re.compile(r"\b" + re.escape(forbidden_name) + r"\b")
+    return pattern.search(text) is not None
+
+
 def check_no_real_name_leak(dossier_md: str, forbidden_name: str) -> tuple[bool, str]:
     """The dossier must never contain the real Mathlib name, word-boundary matched, ANYWHERE
     -- not just the Signature section `authoring.parse.parse_facts`'s own leak check covers for
@@ -237,13 +250,28 @@ def check_no_real_name_leak(dossier_md: str, forbidden_name: str) -> tuple[bool,
     contract's round-trip information barrier (§5, §4): the dossier is the ONLY thing the blind
     round-trip call and the fact-proposal call ever see, so a leaked real name defeats the
     whole point of testing whether the dossier ALONE determines the object."""
-    pattern = re.compile(r"\b" + re.escape(forbidden_name) + r"\b")
-    if pattern.search(dossier_md) is None:
+    if not _contains_real_name(dossier_md, forbidden_name):
         return True, ""
     return False, (
         f"{ReasonCode.DOSSIER_LEAKS_REAL_NAME}: dossier contains the real Mathlib name "
         f"{forbidden_name!r} -- must use the task symbol exclusively, everywhere in the dossier"
     )
+
+
+def check_round_trip_recalls_target(candidate_body: str, forbidden_name: str) -> bool:
+    """Word-boundary match of the real Mathlib name against a round-trip candidate BODY
+    (distinct from (d) above, which checks the dossier). Decided 2026-07-29, after a real
+    round-trip attempt against `Nat.clog` returned the literal text `Nat.clog b n` -- the model
+    recalling the true target's name from pretraining rather than deriving it from the dossier.
+    Unlike the dossier check, this is NOT a rejection -- see `authoring.pipeline`'s
+    `ROUND_TRIP_FLAG_RECALLED_TARGET`: detection ships the task, flagged, never retried, never
+    rotated, since a clean round-trip pass on a recalled body is not evidence the dossier alone
+    determines the object (the check abstains where it cannot measure). Full qualified name,
+    word-boundary, string-level only -- deliberately NOT resolving whether a bare base-name
+    reference (e.g. `clog` without the `Nat.` prefix) is a genuine reference to the real
+    declaration in the candidate's elaborated body; see the report this decision was recorded
+    in for why that's left unimplemented rather than guessed at."""
+    return _contains_real_name(candidate_body, forbidden_name)
 
 
 # === Top-level ===================================================================================

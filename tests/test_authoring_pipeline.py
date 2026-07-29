@@ -169,16 +169,29 @@ FIXED_FACT_JSON = json.dumps(
     [{"id": "bad1", "type": "casework", "mechanism": "decide", "statement": f"example : {TASK_SYMBOL} 3 10 = 3 := by decide", "domain_inputs": {"b": "3", "n": "10"}}]
 )
 
+# A genuine independent reimplementation -- compiles, passes the fact suite, and does NOT
+# reference the real target name `Nat.clog` anywhere (it uses `Nat.log`, the floor log, a
+# different real Mathlib function, as a helper) -- deliberately NOT the trivial `Nat.clog b n`
+# alias this fixture used before 2026-07-29: that literal text is exactly what a real round-trip
+# attempt against Nat.clog actually returned that day, and the new ROUND_TRIP_FLAG_RECALLED_TARGET
+# detection (authoring.consistency.check_round_trip_recalls_target) would now flag it -- which
+# would silently change what every "happy path" test using this fixture actually exercises.
+# This is the same body a real round-trip attempt shipped successfully earlier in that session.
+GOOD_ROUND_TRIP_BODY = "fun b n => if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b (n - 1) + 1"
+WRONG_ROUND_TRIP_BODY = "fun b n => 0"
+
 # The candidate body is spliced as `def VTask.clog : T := <body>` -- unlike fact statements,
 # NOTHING forbids a candidate body from referencing the real name internally (only
-# authoring.parse's fact-statement check does that, and candidate bodies never go through it).
+# authoring.parse's fact-statement check does that, and candidate bodies never go through it) --
+# EXCEPT, as of 2026-07-29, the round-trip stage's own mechanical
+# ROUND_TRIP_FLAG_RECALLED_TARGET detection, which is exactly what this fixture is FOR.
 # Deliberately an ETA-EXPANDED lambda, not a bare point-free alias (`"Nat.clog"`) -- confirmed
 # empirically that a bare alias makes Lean's declaration report for the splice list the real
 # `Nat.clog` alongside `VTask.clog`, which trips harness.admissibility's shadowing check as a
 # false positive ("candidate declared name(s) beyond the pinned 'VTask.clog': ['Nat.clog']").
-# The eta-expanded form does not trigger this.
-GOOD_ROUND_TRIP_BODY = "fun b n => Nat.clog b n"
-WRONG_ROUND_TRIP_BODY = "fun b n => 0"
+# The eta-expanded form does not trigger this -- it compiles and passes every fact cleanly,
+# which is exactly what makes it a realistic "legitimately high score, still not evidence" case.
+RECALLED_TARGET_ROUND_TRIP_BODY = "fun b n => Nat.clog b n"
 
 # A COMPILE failure whose error is purely a termination-checker complaint -- empirically
 # confirmed (2026-07-28 probe against the real warm Mathlib env) to produce a
@@ -187,6 +200,19 @@ WRONG_ROUND_TRIP_BODY = "fun b n => 0"
 # probe's fuel/accumulator shape, adapted here to the two-argument `Nat -> Nat -> Nat` signature.
 TERMINATION_FAILURE_ROUND_TRIP_BODY = (
     "fun b n =>\n"
+    "  let rec go (k acc : Nat) : Nat :=\n"
+    "    if acc >= n then k else go (k + 1) (acc * 2)\n"
+    "  go 0 1"
+)
+
+# Same termination-failure shape as above, PLUS a dead reference to the real target name (a
+# `let` binding nothing depends on) -- used to construct the ROUND_TRIP_FLAG_RECALLED_TARGET /
+# ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY coexistence test: recall is detected on the raw
+# text regardless of whether the body compiles, so this still fails to compile for the exact
+# same termination reason as `TERMINATION_FAILURE_ROUND_TRIP_BODY` while also naming `Nat.clog`.
+TERMINATION_FAILURE_WITH_RECALL_ROUND_TRIP_BODY = (
+    "fun b n =>\n"
+    "  let _named := Nat.clog\n"
     "  let rec go (k acc : Nat) : Nat :=\n"
     "    if acc >= n then k else go (k + 1) (acc * 2)\n"
     "  go 0 1"
@@ -446,7 +472,7 @@ def test_round_trip_fact_failure_is_immediately_terminal(mathlib_env, stub_serve
     assert "no retry, per policy" in result.stage_records[-1].detail
     assert len(bedrock_server.requests_received) == 4  # zero further round-trip calls beyond the one
     assert result.task_dir is None
-    assert result.round_trip_flag is None
+    assert result.round_trip_flags == []
     assert result.self_restatement_fact_ids == ["g1"]  # preserved through to the rotation record
 
 
@@ -468,7 +494,7 @@ def test_round_trip_compile_failure_retries_with_feedback_and_succeeds_on_attemp
 
     assert result.outcome == "SHIPPED", result.stage_records
     assert result.round_trip_score is not None and result.round_trip_score.passed
-    assert result.round_trip_flag is None
+    assert result.round_trip_flags == []
     assert len(bedrock_server.requests_received) == 5
     retry_prompt = bedrock_server.requests_received[4]["messages"][0]["content"]
     assert "Your previous attempt is below" in retry_prompt
@@ -496,13 +522,13 @@ def test_round_trip_compile_failure_retries_with_feedback_and_succeeds_on_attemp
 
     assert result.outcome == "SHIPPED", result.stage_records
     assert result.round_trip_score is not None and result.round_trip_score.passed
-    assert result.round_trip_flag is None
+    assert result.round_trip_flags == []
     assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
 
 
 def test_round_trip_four_pure_termination_failures_ships_with_flag(mathlib_env, stub_server, tmp_path):
     """(c) All 4 attempts fail to compile, every one purely on the termination checker: the task
-    SHIPS (not rotated), with `round_trip_flag` set on the TaskResult and surfaced in the batch
+    SHIPS (not rotated), with `round_trip_flags` set on the TaskResult and surfaced in the batch
     review."""
     server, env = mathlib_env
     bedrock_server = stub_server(
@@ -520,12 +546,121 @@ def test_round_trip_four_pure_termination_failures_ships_with_flag(mathlib_env, 
     result = author_task(DEF_NAME, config)
 
     assert result.outcome == "SHIPPED", result.stage_records
-    assert result.round_trip_flag == "UNVERIFIED_TERMINATION_ONLY"
+    assert result.round_trip_flags == ["UNVERIFIED_TERMINATION_ONLY"]
     assert result.task_dir is not None
     assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
 
     review_text = render_batch_review([result])
     assert "UNVERIFIED_TERMINATION_ONLY" in review_text
+
+
+# --- ROUND_TRIP_FLAG_RECALLED_TARGET (2026-07-29) ---------------------------------------------
+
+
+def test_round_trip_recalled_target_ships_immediately_no_further_attempts_charged(mathlib_env, stub_server, tmp_path):
+    """Detection on attempt 1 stops the retry loop immediately -- no feedback resend, no further
+    generation calls, even though 3 more scripted responses are queued and would otherwise be
+    consumed by the normal 4-attempt loop. The body also happens to compile and pass every fact
+    (a "legitimately high score") -- ships SHIPPED, flagged, with `round_trip_score.passed is
+    True`, which is exactly the case the flag exists to mark as non-evidence."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(RECALLED_TARGET_ROUND_TRIP_BODY)),  # attempt 1: recalls, then never retried
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # would be attempt 2 -- must never be sent
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # would be attempt 3 -- must never be sent
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # would be attempt 4 -- must never be sent
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == ["RECALLED_TARGET"]
+    assert result.round_trip_score is not None and result.round_trip_score.passed
+    assert result.task_dir is not None
+    assert len(bedrock_server.requests_received) == 4  # 3 non-rt calls + exactly 1 round-trip attempt
+    assert result.calls_made == 4  # no calls charged for the 3 unsent responses
+
+    review_text = render_batch_review([result])
+    assert "RECALLED_TARGET" in review_text
+    assert "passed=True" in review_text  # flag and score rendered together, per decision
+
+
+def test_round_trip_recalled_target_ships_despite_compile_failure_no_rotation(mathlib_env, stub_server, tmp_path):
+    """Detection overrides the normal compile-failure rotation path too -- 'never rotated' is
+    unconditional on detection, not contingent on the attempt also being termination-shaped."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            # Recalls the name AND fails to compile for an unrelated (non-termination) reason.
+            ScriptedResponse(200, success_body("Nat.clog b n")),  # no lambda -- unbound identifiers
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == ["RECALLED_TARGET"]
+    assert result.round_trip_score is not None and not result.round_trip_score.admissible
+    assert len(bedrock_server.requests_received) == 4  # exactly 1 round-trip attempt, no retry
+
+
+def test_round_trip_recalled_target_and_termination_only_flags_coexist(mathlib_env, stub_server, tmp_path):
+    """Recall detected only on the final (4th) attempt, with attempts 1-3 pure termination
+    failures and attempt 4 ALSO termination-shaped: both flags fire and both land in the list,
+    in the order [RECALLED_TARGET, UNVERIFIED_TERMINATION_ONLY]."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 2
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 3
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_WITH_RECALL_ROUND_TRIP_BODY)),  # attempt 4: both
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == ["RECALLED_TARGET", "UNVERIFIED_TERMINATION_ONLY"]
+    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + all 4 round-trip attempts
+
+    review_text = render_batch_review([result])
+    assert "RECALLED_TARGET" in review_text
+    assert "UNVERIFIED_TERMINATION_ONLY" in review_text
+
+
+def test_round_trip_non_recalled_body_unaffected_no_regression(mathlib_env, stub_server, tmp_path):
+    """A non-recalled body proceeds through the loop exactly as before 2026-07-29 -- explicit
+    regression guard for ceb1590's 4-attempt feedback path now that `GOOD_ROUND_TRIP_BODY` no
+    longer references the real name at all."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(TERMINATION_FAILURE_ROUND_TRIP_BODY)),  # attempt 1: fails
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),  # attempt 2: succeeds, clean
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == []
+    assert result.round_trip_score is not None and result.round_trip_score.passed
+    assert len(bedrock_server.requests_received) == 5
 
 
 def test_round_trip_mixed_compile_failures_rotates_not_flagged(mathlib_env, stub_server, tmp_path):
@@ -548,7 +683,7 @@ def test_round_trip_mixed_compile_failures_rotates_not_flagged(mathlib_env, stub
 
     assert result.outcome == "ROTATED"
     assert result.rotated_at_stage == "round_trip_scoring"
-    assert result.round_trip_flag is None
+    assert result.round_trip_flags == []
     assert result.task_dir is None
     assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
 
@@ -613,7 +748,7 @@ def test_emit_stage_rotation_preserves_round_trip_score(mathlib_env, stub_server
     # must survive into the rotation record, not come back None.
     assert result.round_trip_score is not None
     assert result.round_trip_score.passed is True
-    assert result.round_trip_flag is None
+    assert result.round_trip_flags == []
 
 
 # --- author_batch: continue-on-rotation, batch review file -----------------------------------
