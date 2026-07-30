@@ -145,7 +145,7 @@ def _real_config(server, env, tmp_path, bedrock_server) -> PipelineConfig:
     def _resolve(name: str) -> DefinitionInput:
         return DefinitionInput(
             name=DEF_NAME, signature_dict=SIGNATURE_DICT, definition_source="context only",
-            docstring="the ceiling logarithm",
+            docstring="the ceiling logarithm", return_shape="value",
             mention_records=[MentionRecord(theorem_name="Nat.clog_pow", source_file="Data/Nat/Log.lean", statement_text="Nat.clog b (b ^ n) = n")],
         )
 

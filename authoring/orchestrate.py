@@ -48,6 +48,7 @@ from authoring.parse import (
     parse_classification,
     parse_dossier,
     parse_facts,
+    validate_classification_against_shape,
 )
 from authoring.prompt_loader import load_prompt_template
 from authoring.validate import DomainSpec, ReasonCode, ValidationOutcome, Verdict, validate_fact
@@ -151,18 +152,31 @@ def run_classification_call(
     definition_source: str,
     docstring: str,
     mention_sidecar_excerpt: str,
+    return_shape: str,
     budget: CallBudget | None = None,
     max_tokens: int | None = None,
 ) -> Classification:
+    """`return_shape` ("value"|"prop"|"bundled", `miner.shape.classify_return_shape`'s own
+    vocabulary) is mechanical truth read off the pinned type, passed to the model as a stated
+    fact (§2's "Rule:" line references it directly) rather than left for the model to infer
+    from the pinned signature's own text. `parse_fn` wraps `parse_classification` with
+    `validate_classification_against_shape` so a response that contradicts `return_shape` (e.g.
+    'casework' regime on a Prop) is a `ParseError` -- feeding the same one-retry-then-terminal
+    machinery as a malformed-JSON response, not a silent pass-through."""
     template = load_prompt_template("classification")
     system, user = template.render(
         pinned_signature=pinned_signature,
         definition_source=definition_source,
         docstring=docstring,
         mention_sidecar_excerpt=mention_sidecar_excerpt,
+        return_shape=return_shape,
     )
     max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["classification"]
-    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_classification, budget=budget, max_tokens=max_tokens)
+
+    def parse_fn(text: str) -> Classification:
+        return validate_classification_against_shape(parse_classification(text), return_shape)
+
+    return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_fn, budget=budget, max_tokens=max_tokens)
 
 
 # === Call 2 -- Dossier generation ==============================================================

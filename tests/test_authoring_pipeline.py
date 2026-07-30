@@ -72,6 +72,7 @@ def _config(server, env, tmp_path, bedrock_server, *, max_calls_per_task=12, men
             signature_dict=SIGNATURE_DICT,
             definition_source=DEFINITION_SOURCE,
             docstring="the ceiling logarithm",
+            return_shape="value",
             mention_records=mention_records if mention_records is not None else SYNTHETIC_MENTIONS,
         )
 

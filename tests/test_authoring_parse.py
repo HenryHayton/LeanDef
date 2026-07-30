@@ -15,6 +15,7 @@ from authoring.parse import (
     parse_classification,
     parse_dossier,
     parse_facts,
+    validate_classification_against_shape,
 )
 from authoring.validate import ReasonCode
 
@@ -77,6 +78,58 @@ def test_parse_classification_missing_field_reports_missing_field_code():
     with pytest.raises(ParseError) as exc_info:
         parse_classification(text)
     assert exc_info.value.reason_code == ReasonCode.MALFORMED_MISSING_FIELD
+
+
+# --- validate_classification_against_shape (2026-07-30) ----------------------------------
+# Mechanization of contract §2's stated rule -- a Prop-valued definition must not receive
+# 'casework'. `authoring/prompts/classification.txt` states the SAME rule in prose (its own
+# "Rule:" line, checked in the drift-guard test below); this is the mechanical enforcement of
+# it, checked against `return_shape` rather than left to the model's own inference.
+
+
+def _classification(regimes: list[str]) -> Classification:
+    return Classification(regimes=regimes, difficulty=2, rationale="x", expected_fact_mix={})
+
+
+def test_validate_classification_against_shape_rejects_casework_on_prop():
+    with pytest.raises(ParseError) as exc_info:
+        validate_classification_against_shape(_classification(["casework"]), "prop")
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
+    assert "casework" in exc_info.value.detail
+    assert "prop" in exc_info.value.detail
+
+
+def test_validate_classification_against_shape_allows_membership_and_global_on_prop():
+    result = validate_classification_against_shape(_classification(["membership", "global"]), "prop")
+    assert result.regimes == ["membership", "global"]
+
+
+def test_validate_classification_against_shape_allows_casework_on_value():
+    result = validate_classification_against_shape(_classification(["casework"]), "value")
+    assert result.regimes == ["casework"]
+
+
+def test_validate_classification_against_shape_allows_casework_on_bundled():
+    """`bundled` (Equiv/Embedding/RingHom-shaped) is a separate return_shape from 'prop' --
+    the rule is specifically about Prop-valued objects, not anything non-'value'."""
+    result = validate_classification_against_shape(_classification(["casework"]), "bundled")
+    assert result.regimes == ["casework"]
+
+
+def test_classification_prompt_states_the_same_rule_the_parser_enforces():
+    """Drift guard: if `authoring/prompts/classification.txt`'s own 'Rule:' line is edited to
+    no longer state the Prop/casework rule (or the parser's enforcement above is removed),
+    this test catches the divergence -- prompt and parser must not silently drift apart."""
+    from authoring.prompt_loader import load_prompt_template
+
+    template = load_prompt_template("classification")
+    system, _ = template.render(
+        pinned_signature="x", definition_source="y", docstring="z",
+        mention_sidecar_excerpt="(none)", return_shape="prop",
+    )
+    assert "must not receive \"casework\"" in system
+    assert "{return_shape}" not in system  # the placeholder actually got substituted
+    assert "return shape is: prop" in system
 
 
 # --- parse_dossier -----------------------------------------------------------------------

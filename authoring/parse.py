@@ -201,6 +201,32 @@ def parse_classification(text: str) -> Classification:
     return Classification(regimes=list(regimes), difficulty=difficulty, rationale=rationale, expected_fact_mix=dict(mix))
 
 
+# `return_shape` vocabulary this mirrors -- deliberately not imported from `miner.shape` (the
+# authoring package has no dependency on `miner`; the three-string vocabulary itself is the
+# only thing shared, and is stable/closed, not worth a cross-package import for).
+_PROP_SHAPE = "prop"
+
+
+def validate_classification_against_shape(classification: Classification, return_shape: str) -> Classification:
+    """Parse-time mechanization of contract §2's stated rule ("a Prop-valued definition must
+    not receive 'casework' -- casework collapses into membership for Prop-valued objects,
+    since there is nothing to compute, only membership to decide"), checked against
+    `return_shape` (mechanical truth read off the pinned type, threaded in by
+    `authoring.orchestrate.run_classification_call`) rather than left to the model's own
+    inference from prose. Raises `ParseError` -- a contract §6 rows-1-2 shape (one retry, then
+    terminal for the call), the same machinery a malformed-JSON response already goes through,
+    since this is exactly that: a well-formed but contract-violating response, not a per-fact
+    concern (2c4b9e5's family) or a per-task concern (round-trip's flag family)."""
+    if return_shape == _PROP_SHAPE and "casework" in classification.regimes:
+        raise ParseError(
+            f"classification response: 'casework' is not valid for a Prop-valued definition "
+            f"(return_shape={return_shape!r}) -- casework collapses into membership for "
+            f"Prop-valued objects (contract §2); use 'membership' instead",
+            reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+        )
+    return classification
+
+
 # === Call 2 -- Dossier generation (contract §3) ================================================
 
 

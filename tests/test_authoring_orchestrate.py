@@ -78,7 +78,7 @@ def test_classification_call_succeeds_first_try(stub_server, tmp_path):
     result = run_classification_call(
         client, "test-model",
         pinned_signature="Nat.clog : Nat -> Nat -> Nat", definition_source="def clog := ...",
-        docstring="ceiling log", mention_sidecar_excerpt="(none)",
+        docstring="ceiling log", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.regimes == ["casework"]
     assert len(server.requests_received) == 1
@@ -94,7 +94,7 @@ def test_classification_call_retries_once_on_malformed_json_then_succeeds(stub_s
     client = _client(server, tmp_path)
     result = run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.difficulty == 2
     assert len(server.requests_received) == 2
@@ -114,7 +114,7 @@ def test_classification_call_terminal_after_retry_also_fails(stub_server, tmp_pa
     with pytest.raises(AuthoringCallFailed):
         run_classification_call(
             client, "test-model",
-            pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+            pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
         )
     assert len(server.requests_received) == 2  # exactly one retry, never a third attempt
 
@@ -141,7 +141,7 @@ def test_classification_call_retries_once_on_malformed_shape_then_succeeds(stub_
     client = _client(server, tmp_path)
     result = run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.difficulty == 2
     assert len(server.requests_received) == 2  # the retry fired -- a second call was actually made
@@ -155,7 +155,7 @@ def test_classification_call_sends_the_configured_max_tokens(stub_server, tmp_pa
     client = _client(server, tmp_path)
     run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert server.requests_received[0]["max_tokens"] == authoring_cfg.AUTHORING_MAX_TOKENS["classification"]
 
@@ -192,7 +192,7 @@ def test_classification_call_retries_when_response_is_truncated_at_max_tokens(st
     client = _client(server, tmp_path)
     result = run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.difficulty == 2
     assert len(server.requests_received) == 2
@@ -230,7 +230,7 @@ def test_classification_call_terminal_when_truncated_on_both_attempts(stub_serve
     with pytest.raises(AuthoringCallFailed) as exc_info:
         run_classification_call(
             client, "test-model",
-            pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+            pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
         )
     assert len(server.requests_received) == 2
     assert "truncated" in str(exc_info.value)
@@ -246,7 +246,7 @@ def test_json_parse_path_tolerates_a_wrapping_json_fence(stub_server, tmp_path):
     client = _client(server, tmp_path)
     result = run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.regimes == ["casework"]
     assert len(server.requests_received) == 1  # no retry needed -- the fence alone isn't an error
@@ -258,7 +258,7 @@ def test_json_parse_path_tolerates_a_bare_fence_with_no_language_tag(stub_server
     client = _client(server, tmp_path)
     result = run_classification_call(
         client, "test-model",
-        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)",
+        pinned_signature="x", definition_source="y", docstring="z", mention_sidecar_excerpt="(none)", return_shape="value",
     )
     assert result.regimes == ["casework"]
 
@@ -430,7 +430,7 @@ def test_classification_call_respects_exhausted_budget_before_sending(stub_serve
         run_classification_call(
             client, "test-model",
             pinned_signature="x", definition_source="y", docstring="z",
-            mention_sidecar_excerpt="(none)", budget=budget,
+            mention_sidecar_excerpt="(none)", return_shape="value", budget=budget,
         )
     assert len(server.requests_received) == 0  # budget checked before the call, not after
 
@@ -444,7 +444,7 @@ def test_classification_call_charges_two_on_a_retry(stub_server, tmp_path):
     run_classification_call(
         client, "test-model",
         pinned_signature="x", definition_source="y", docstring="z",
-        mention_sidecar_excerpt="(none)", budget=budget,
+        mention_sidecar_excerpt="(none)", return_shape="value", budget=budget,
     )
     assert budget.calls_made == 2
 

@@ -3,6 +3,11 @@
 #   definition_source      -- str, the true Lean definition's source text
 #   docstring               -- str, the definition's Mathlib docstring (may be empty)
 #   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt
+#   return_shape            -- str, "value"|"prop"|"bundled" (miner.shape.classify_return_shape),
+#                              mechanical truth read off the pinned type -- a STATED FACT, not
+#                              something to re-derive from the signature text below (2026-07-30:
+#                              a response whose regimes contradict it is mechanically rejected,
+#                              see authoring.parse.validate_classification_against_shape)
 #
 # Output required: strict JSON only, matching authoring.parse.parse_classification's shape:
 #   {regimes: [casework|membership|global, ...], difficulty: 1-5, rationale: <2 sentences>,
@@ -18,9 +23,13 @@ how many of each a good fact suite would carry.
 Vocabulary: use "casework" for the decidable-computation regime, never "decidable" -- that word
 names a mechanism (how a fact is checked), not a fact type.
 
-Rule: a Prop-valued definition (its pinned type ends in `Prop`, or its values are propositions)
-must not receive "casework" -- casework collapses into membership for Prop-valued objects, since
-there is nothing to compute, only membership to decide.
+This definition's return shape is: {return_shape} -- mechanically determined from its pinned
+type, given to you as fact; do not re-derive or second-guess it from the signature text below.
+
+Rule: a Prop-valued definition (return_shape "prop") must not receive "casework" -- casework
+collapses into membership for Prop-valued objects, since there is nothing to compute, only
+membership to decide. A response using "casework" when return_shape is "prop" is mechanically
+rejected, not merely discouraged.
 
 Respond with strict JSON only, exactly this envelope and no other fields:
 {{"regimes": ["casework"|"membership"|"global", ...], "difficulty": <integer 1-5>,

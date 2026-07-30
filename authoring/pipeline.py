@@ -148,6 +148,11 @@ class DefinitionInput:
     # the driver always splices/pins under the computed task symbol, never this value.
     definition_source: str
     docstring: str
+    return_shape: str  # "value" | "prop" | "bundled" (miner.shape.classify_return_shape's own
+    # vocabulary) -- mechanical truth read off the real pinned type, NOT something the
+    # classification call infers from prose (2026-07-30, docs/design/llm_io_contract_v1.md §2
+    # enforcement). Required, not defaulted: a caller that has no real corpus to read this from
+    # has no business authoring a task at all, so there is no honest default to fall back to.
     mention_records: list[MentionRecord] = field(default_factory=list)
 
 
@@ -415,7 +420,8 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
         classification = run_classification_call(
             config.client, config.authoring_model_id,
             pinned_signature=pinned_signature, definition_source=definition_input.definition_source,
-            docstring=definition_input.docstring, mention_sidecar_excerpt=mention_excerpt, budget=budget,
+            docstring=definition_input.docstring, mention_sidecar_excerpt=mention_excerpt,
+            return_shape=definition_input.return_shape, budget=budget,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("classification", f"{type(e).__name__}: {e}")
