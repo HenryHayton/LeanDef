@@ -300,8 +300,38 @@ def test_casework_missing_domain_inputs_fails(valid_data):
 
 
 def test_domain_inputs_key_not_in_domain_variables_fails(valid_data):
-    _fact(valid_data, "casework_empty")["domain_inputs"] = {"not_a_declared_variable": "[]"}
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"not_a_declared_variable": ["[]"]}
     with pytest.raises(TaskSchemaError, match="domain.variables"):
+        validate_task_data(valid_data)
+
+
+def test_domain_inputs_scalar_value_fails_schema_v1_1_3_requires_a_list(valid_data):
+    """Schema v1.1.3: `domain_inputs` values are lists, not bare strings -- the scalar shape
+    v1.1 accepted is no longer valid at the schema level (canonicalizing a scalar into a
+    single-element list is `authoring.parse`'s job, done before a fact ever reaches here)."""
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"l": "[]"}
+    with pytest.raises(TaskSchemaError, match="domain_inputs"):
+        validate_task_data(valid_data)
+
+
+def test_domain_inputs_multi_value_list_passes(valid_data):
+    """Schema v1.1.3: a list with more than one element is valid -- it means this fact
+    instantiates the variable at several points."""
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"l": ["[]", "[1]"]}
+    validate_task_data(valid_data)  # must not raise
+
+
+def test_domain_inputs_list_exceeding_cap_fails(valid_data):
+    from harness.task_schema import MAX_DOMAIN_INPUT_VALUES
+
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"l": [f"[{i}]" for i in range(MAX_DOMAIN_INPUT_VALUES + 1)]}
+    with pytest.raises(TaskSchemaError, match="domain_inputs"):
+        validate_task_data(valid_data)
+
+
+def test_domain_inputs_empty_list_value_fails(valid_data):
+    _fact(valid_data, "casework_empty")["domain_inputs"] = {"l": []}
+    with pytest.raises(TaskSchemaError, match="domain_inputs"):
         validate_task_data(valid_data)
 
 

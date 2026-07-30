@@ -48,14 +48,24 @@ Per-type rules -- every field listed below as REQUIRED must be present and non-e
 fact of that type. A fact missing one is mechanically rejected before it is even checked against
 the dossier, so treat this as a hard format requirement, not a suggestion:
 
+`domain_inputs` values are ALWAYS arrays of strings (never a bare string), one element per
+concrete point that variable takes in this fact -- almost always a single-element array (one
+concrete value), e.g. `"domain_inputs": {{"b": ["2"], "n": ["8"]}}`. When a single statement
+compares the definition at TWO OR MORE points of the SAME declared variable (a monotonicity or
+antitonicity probe, e.g. `VTask.clog 2 8 ≤ VTask.clog 2 9` -- two values of `n`), list them
+under that variable's OWN declared key, in order: `"n": ["8", "9"]`. NEVER invent a new key
+like `n1`/`n2` for the second point -- every `domain_inputs` key must be one of the domain
+variables named in the dossier's Signature, and a key that isn't is mechanically rejected. Cap:
+at most 3 values per variable. Every value you list, in every position, must also literally
+appear in the fact's own `statement` text -- a `domain_inputs` entry with nothing corresponding
+to it in the statement is mechanically rejected.
+
 - casework (mechanism "decide"): `statement` is REQUIRED and is the full runnable command (a
-  `#`-command or `example ... := by decide`). `domain_inputs` is REQUIRED and NON-EMPTY -- an
-  object mapping each concrete domain variable you instantiated to the value you used, e.g. for
-  a fact about `clog 2 8`: `"domain_inputs": {{"b": "2", "n": "8"}}`. Every casework fact names
-  concrete inputs somewhere in its statement -- `domain_inputs` is that same information,
-  structured for machine review, not optional metadata. Probe both sides of every boundary named
-  in the dossier's Boundaries section where feasible. Example casework fact:
-  `{{"id": "clog_2_8", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+  `#`-command or `example ... := by decide`). `domain_inputs` is REQUIRED and NON-EMPTY. Every
+  casework fact names concrete inputs somewhere in its statement -- `domain_inputs` is that same
+  information, structured for machine review, not optional metadata. Probe both sides of every
+  boundary named in the dossier's Boundaries section where feasible. Example casework fact:
+  `{{"id": "clog_2_8", "type": "casework", "mechanism": "decide", "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {{"b": ["2"], "n": ["8"]}}}}`
 - membership: `instance` and `polarity` ("accept"/"reject") are REQUIRED. Reject-polarity facts
   additionally REQUIRE `violated_property` naming the one broken clause. `domain_inputs` is
   REQUIRED and NON-EMPTY whenever the dossier's domain has any constraint narrower than
@@ -63,7 +73,10 @@ the dossier, so treat this as a hard format requirement, not a suggestion:
   checked), worth including when it clarifies what `instance` is being checked against, but
   never required. Include at least one reject-polarity fact where the regime admits it. Draw
   instances from, or keep them consistent with, the dossier's worked examples. Example
-  membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "expected_type": "ℕ", "polarity": "accept", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+  membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "expected_type": "ℕ", "polarity": "accept", "domain_inputs": {{"b": ["2"], "n": ["8"]}}}}`
+  A monotonicity probe is ONE statement instantiating `n` at two points, `8` and `9`, listed
+  under `n`'s own key rather than invented keys `n1`/`n2`. Example membership_multivalue fact:
+  `{{"id": "clog_mem_monotone_pair", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ≤ VTask.clog 2 9 := by decide", "instance": "VTask.clog 2 8 ≤ VTask.clog 2 9", "polarity": "accept", "domain_inputs": {{"b": ["2"], "n": ["8", "9"]}}}}`
 
   For a Prop-valued task, membership is the PRIMARY probe class -- there is no "casework" for a
   Prop (see the classification rule above), so the concrete casework-style probing you would

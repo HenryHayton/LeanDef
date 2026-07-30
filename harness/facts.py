@@ -39,8 +39,10 @@ class Fact:
     violated_property: str | None = None  # required when polarity == "reject"
 
     # Ladder-era fields (schema v1.1) -- see docs/design/task_schema_v1_1.md's Changelog.
-    domain_inputs: dict[str, str] = field(default_factory=dict)  # named domain variable ->
-    # concrete Lean term, e.g. {"b": "2", "n": "37"}.
+    domain_inputs: dict[str, list[str]] = field(default_factory=dict)  # named domain variable
+    # -> non-empty list of concrete Lean terms (schema v1.1.3, was str -> str in v1.1), e.g.
+    # {"b": ["2"], "n": ["8", "9"]} -- a multi-element list means this one fact instantiates
+    # that variable at several points, never several implicit facts.
     anchors: list[str] = field(default_factory=list)  # global facts only: named Mathlib
     # theorem(s) this fact cites, resolved in the pinned environment; [] for non-global facts.
     validation_status: str | None = None  # "CERTIFIED" | "PROVISIONALLY_VALIDATED"

@@ -650,6 +650,154 @@ def test_parse_facts_membership_missing_domain_inputs_ok_when_domain_constraint_
     assert len(facts) == 1
 
 
+# --- domain_inputs: schema v1.1.3 list-valued canonicalization + safeguards (2026-07-30) -----
+
+
+def test_parse_facts_domain_inputs_scalar_is_canonicalized_to_single_element_list():
+    entry = {
+        "id": "cw1", "type": "casework", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 = 3 := by decide", "domain_inputs": {"b": "2", "n": "8"},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert facts[0].domain_inputs == {"b": ["2"], "n": ["8"]}
+
+
+def test_parse_facts_domain_inputs_list_form_passes_through():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 ≤ VTask.clog 2 9 := by decide",
+        "instance": "VTask.clog 2 8 ≤ VTask.clog 2 9", "polarity": "accept",
+        "domain_inputs": {"b": ["2"], "n": ["8", "9"]},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert facts[0].domain_inputs == {"b": ["2"], "n": ["8", "9"]}
+
+
+def test_parse_facts_domain_inputs_empty_list_value_raises():
+    entry = {"id": "cw1", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": {"n": []}}
+    with pytest.raises(ParseError) as exc_info:
+        parse_facts(json.dumps([entry]))
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
+
+
+def test_parse_facts_domain_inputs_non_string_list_element_raises():
+    entry = {"id": "cw1", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": {"n": [8]}}
+    with pytest.raises(ParseError) as exc_info:
+        parse_facts(json.dumps([entry]))
+    assert exc_info.value.reason_code == ReasonCode.MALFORMED_SCHEMA_SHAPE
+
+
+# Rule 5's parse-time mirror. Real trigger (2026-07-30, "Rule-5 Mirror" build session): the
+# 41-name batch's Gate 1 re-run rotated at `emit_task` because a monotonicity-probing fact
+# needed two values of `n` and the model invented keys `n1`/`n2` instead -- see
+# docs/deferred.md's now-closed rule-5 entry and docs/design/task_schema_v1_1.md's v1.1.3
+# changelog. `_REAL_2026_07_30_MONOTONICITY_FACT` reproduces that exact fact, verbatim.
+
+_REAL_2026_07_30_MONOTONICITY_FACT_BAD = {
+    "id": "clog_mem_monotone_accept", "type": "membership", "mechanism": "decide",
+    "statement": "example : VTask.clog 2 8 ≤ VTask.clog 2 9 := by decide",
+    "instance": "VTask.clog 2 8 ≤ VTask.clog 2 9", "polarity": "accept",
+    "domain_inputs": {"b": "2", "n1": "8", "n2": "9"},
+}
+
+
+def test_parse_facts_domain_inputs_undeclared_key_is_a_rejection_reproducing_the_real_incident():
+    facts, rejections = parse_facts(
+        json.dumps([_REAL_2026_07_30_MONOTONICITY_FACT_BAD]), domain_variables=["b", "n"],
+    )
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_UNKNOWN_DOMAIN_VARIABLE
+    assert "n1" in rejections[0].detail and "n2" in rejections[0].detail
+    assert "['b', 'n']" in rejections[0].detail  # names the declared variables
+    assert "list" in rejections[0].detail.lower()  # names the actual fix, not just the violation
+
+
+def test_parse_facts_domain_inputs_correctly_reshaped_fact_parses_clean():
+    """The same real fact, rewritten in the canonical list form the rejection feedback asks
+    for -- proves the fix, not just the failure."""
+    fixed = {
+        **_REAL_2026_07_30_MONOTONICITY_FACT_BAD,
+        "domain_inputs": {"b": ["2"], "n": ["8", "9"]},
+    }
+    facts, rejections = parse_facts(json.dumps([fixed]), domain_variables=["b", "n"])
+    assert rejections == []
+    assert len(facts) == 1
+    assert facts[0].domain_inputs == {"b": ["2"], "n": ["8", "9"]}
+
+
+def test_parse_facts_domain_inputs_undeclared_key_not_checked_when_domain_variables_not_supplied():
+    """Backward compatible: domain_variables=None (the default) means no rule-5 check at all."""
+    facts, rejections = parse_facts(json.dumps([_REAL_2026_07_30_MONOTONICITY_FACT_BAD]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_domain_inputs_cap_safeguard_rejects_more_than_three_values():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 1 ≤ VTask.clog 2 2 ∧ VTask.clog 2 2 ≤ VTask.clog 2 3 ∧ VTask.clog 2 3 ≤ VTask.clog 2 4 := by decide",
+        "instance": "chain", "polarity": "accept",
+        "domain_inputs": {"b": ["2"], "n": ["1", "2", "3", "4"]},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_TOO_MANY_DOMAIN_INPUT_VALUES
+
+
+def test_parse_facts_domain_inputs_cap_safeguard_allows_exactly_three_values():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 1 ≤ VTask.clog 2 2 ∧ VTask.clog 2 2 ≤ VTask.clog 2 3 := by decide",
+        "instance": "chain", "polarity": "accept",
+        "domain_inputs": {"b": ["2"], "n": ["1", "2", "3"]},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_domain_inputs_semantic_presence_safeguard_rejects_value_not_in_statement():
+    entry = {
+        "id": "cw1", "type": "casework", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 = 3 := by decide",
+        "domain_inputs": {"b": ["2"], "n": ["8", "999"]},  # 999 never appears in the statement
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_DOMAIN_INPUT_NOT_IN_STATEMENT
+    assert "999" in rejections[0].detail
+
+
+def test_parse_facts_domain_inputs_semantic_presence_safeguard_allows_values_present_in_statement():
+    entry = {
+        "id": "m1", "type": "membership", "mechanism": "decide",
+        "statement": "example : VTask.clog 2 8 ≤ VTask.clog 2 9 := by decide",
+        "instance": "VTask.clog 2 8 ≤ VTask.clog 2 9", "polarity": "accept",
+        "domain_inputs": {"b": ["2"], "n": ["8", "9"]},
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_task_schema_doc_states_the_same_rule_5_the_parser_enforces():
+    """Drift guard: if docs/design/task_schema_v1_1.md's v1.1.3 changelog entry is edited to no
+    longer state the list-valued-domain_inputs / rule-5-mirror rule (or the parser enforcement
+    above is removed), this test catches the divergence."""
+    from harness.config import REPO_ROOT
+
+    doc_text = (REPO_ROOT / "docs" / "design" / "task_schema_v1_1.md").read_text(encoding="utf-8")
+    assert "v1.1.3" in doc_text
+    assert "non-empty lists of strings" in doc_text or "non-empty list" in doc_text
+    assert "Rule 5 closed" in doc_text
+    assert "MAX_DOMAIN_INPUT_VALUES" in doc_text
+
+
 def test_parse_facts_global_missing_anchors_is_a_rejection():
     entry = {"id": "g1", "type": "global", "mechanism": "proof", "statement": "∀ n : ℕ, VTask.clog 2 n ≥ 0"}
     facts, rejections = parse_facts(json.dumps([entry]))

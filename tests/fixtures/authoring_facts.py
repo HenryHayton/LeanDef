@@ -59,21 +59,21 @@ def clog_fixture_set() -> tuple[DomainSpec, str, list[ProposedFact], dict[str, t
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 2 37 = 6 := by decide",
-            domain_inputs={"b": "2", "n": "37"},
+            domain_inputs={"b": ["2"], "n": ["37"]},
         ),
         ProposedFact(
             id="clog_2_64",
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 2 64 = 6 := by decide",
-            domain_inputs={"b": "2", "n": "64"},
+            domain_inputs={"b": ["2"], "n": ["64"]},
         ),
         ProposedFact(
             id="clog_3_10",
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 3 10 = 3 := by decide",
-            domain_inputs={"b": "3", "n": "10"},
+            domain_inputs={"b": ["3"], "n": ["10"]},
         ),
         # -- valid casework, in-domain via a stated convention point (not the main constraint) --
         ProposedFact(
@@ -81,14 +81,14 @@ def clog_fixture_set() -> tuple[DomainSpec, str, list[ProposedFact], dict[str, t
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 5 1 = 0 := by decide",
-            domain_inputs={"b": "5", "n": "1"},
+            domain_inputs={"b": ["5"], "n": ["1"]},
         ),
         ProposedFact(
             id="clog_junk_b_eq_0",
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 0 37 = 0 := by decide",
-            domain_inputs={"b": "0", "n": "37"},
+            domain_inputs={"b": ["0"], "n": ["37"]},
         ),
         # -- bad: false of the ground truth (clog 2 37 is 6, not 5) --
         ProposedFact(
@@ -96,7 +96,7 @@ def clog_fixture_set() -> tuple[DomainSpec, str, list[ProposedFact], dict[str, t
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 2 37 = 5 := by decide",
-            domain_inputs={"b": "2", "n": "37"},
+            domain_inputs={"b": ["2"], "n": ["37"]},
         ),
         # -- bad: out of domain (b = 100 exceeds this task's b <= 12 authoring scope, and
         # isn't covered by either convention point) --
@@ -105,7 +105,7 @@ def clog_fixture_set() -> tuple[DomainSpec, str, list[ProposedFact], dict[str, t
             type="casework",
             mechanism="decide",
             statement="example : Nat.clog 100 37 = 1 := by decide",
-            domain_inputs={"b": "100", "n": "37"},
+            domain_inputs={"b": ["100"], "n": ["37"]},
         ),
         # -- valid global fact, no quantifier over the domain's variables at all (a concrete
         # base) -- the clean provisionally-validated path --

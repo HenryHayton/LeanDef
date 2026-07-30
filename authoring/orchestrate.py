@@ -272,6 +272,7 @@ def run_fact_proposal_call(
     forbidden_name: str | None = None,
     domain_constraint: str | None = None,
     decidability: str | None = None,
+    domain_variables: list[str] | None = None,
     max_tokens: int | None = None,
 ) -> FactProposalResult:
     """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
@@ -282,7 +283,9 @@ def run_fact_proposal_call(
     (2026-07-30, `authoring.preflight.probe_decidability`'s vocabulary -- `None` for a non-Prop
     task) is rendered into the prompt AND threads to `parse_facts`, so the model is told which
     mechanism to use for this Prop up front, and a fact that ignores that guidance is still
-    caught mechanically rather than trusted."""
+    caught mechanically rather than trusted. `domain_variables` (2026-07-30, schema v1.1.3, the
+    dossier's `domain.variables`) threads to `parse_facts` the same way -- rule 5's parse-time
+    mirror, gating `domain_inputs` keys to the declared set."""
     template = load_prompt_template("fact_proposal")
     system, user = template.render(
         pinned_signature=pinned_signature,
@@ -297,6 +300,7 @@ def run_fact_proposal_call(
         return parse_facts(
             text, task_symbol=task_symbol, forbidden_name=forbidden_name,
             domain_constraint=domain_constraint, decidability=decidability,
+            domain_variables=domain_variables,
         )
 
     facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget, max_tokens=max_tokens)

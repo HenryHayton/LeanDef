@@ -51,6 +51,11 @@ FACT_TYPES = frozenset({"casework", "membership", "global"})
 MECHANISMS = frozenset({"decide", "proof"})
 POLARITIES = frozenset({"accept", "reject"})
 
+# Schema v1.1.3 cap safeguard -- mirrors harness.task_schema.MAX_DOMAIN_INPUT_VALUES exactly
+# (kept as a separate constant rather than importing across the authoring/harness boundary,
+# matching this module's existing precedent of mirroring rather than importing schema rules).
+MAX_DOMAIN_INPUT_VALUES = 3
+
 # Mirrors harness.task_schema._validate_statement_format's decide-mechanism check exactly (the
 # parser layer's decide-side pre-check is not a stricter superset the way the proof-mechanism
 # check is -- contract §4.1 only calls out the proof side as deliberately stricter).
@@ -333,7 +338,7 @@ def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
 def _parse_fact_entry(
     entry: object, index: int, *,
     task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
-    decidability: str | None = None,
+    decidability: str | None = None, domain_variables: list[str] | None = None,
 ) -> ProposedFact | FactParseRejection:
     context = f"facts[{index}]"
     if not isinstance(entry, dict):
@@ -372,14 +377,29 @@ def _parse_fact_entry(
 
     statement = _require_str(entry, "statement", context)
 
-    domain_inputs = entry.get("domain_inputs", {})
-    if not isinstance(domain_inputs, dict) or not all(
-        isinstance(k, str) and isinstance(v, str) for k, v in domain_inputs.items()
-    ):
+    domain_inputs_raw = entry.get("domain_inputs", {})
+    if not isinstance(domain_inputs_raw, dict) or not all(isinstance(k, str) for k in domain_inputs_raw):
         raise ParseError(
-            f"{context}: 'domain_inputs', if present, must be an object of string -> string, got {domain_inputs!r}",
+            f"{context}: 'domain_inputs', if present, must be an object keyed by strings, got {domain_inputs_raw!r}",
             reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
         )
+    # Canonical-form safeguard (schema v1.1.3): a scalar string the model emits is normalized
+    # to a single-element list HERE, at parse time -- lists are the ONLY shape anything
+    # downstream of this function ever sees (ProposedFact, Fact, check_domain_containment),
+    # so no reader branches on shape. docs/design/task_schema_v1_1.md's v1.1.3 changelog entry
+    # is the design-of-record for this; the schema itself (harness.task_schema) requires the
+    # list shape outright and does not accept a bare scalar.
+    domain_inputs: dict[str, list[str]] = {}
+    for k, v in domain_inputs_raw.items():
+        if isinstance(v, str):
+            v = [v]
+        if not isinstance(v, list) or not v or not all(isinstance(x, str) and x for x in v):
+            raise ParseError(
+                f"{context}: 'domain_inputs' value for {k!r} must be a non-empty string or a "
+                f"non-empty array of non-empty strings, got {entry['domain_inputs'][k]!r}",
+                reason_code=ReasonCode.MALFORMED_SCHEMA_SHAPE,
+            )
+        domain_inputs[k] = v
 
     anchors = entry.get("anchors", [])
     if not isinstance(anchors, list) or not all(isinstance(a, str) and a for a in anchors):
@@ -426,6 +446,60 @@ def _parse_fact_entry(
         expected_type=expected_type,
         self_restatement=self_restatement,
     )
+
+    # Rule 5 (2026-07-30, parse-time mirror closing docs/deferred.md's entry of that name):
+    # every domain_inputs key must be one of the task's declared domain.variables, mirroring
+    # `harness.task_schema._validate_domain_inputs` exactly. Per-fact, not whole-call, same
+    # principle as every other domain_inputs check in this function. The real trigger (batch-41
+    # Gate 1, 2026-07-30 re-run): a monotonicity-probing fact needed TWO values of `n` and, with
+    # no schema-sanctioned way to say so, the model invented keys `n1`/`n2` -- caught only at
+    # `emit_task`, after the full task's spend was gone. The feedback below names the fix
+    # (a list under the declared key), not just the violation.
+    if domain_variables is not None:
+        bad_keys = sorted(k for k in fact.domain_inputs if k not in domain_variables)
+        if bad_keys:
+            return FactParseRejection(
+                index=index,
+                fragment=entry,
+                reason_code=ReasonCode.MALFORMED_UNKNOWN_DOMAIN_VARIABLE,
+                detail=(
+                    f"{context}: fact {fact_id!r} domain_inputs key(s) {bad_keys!r} are not "
+                    f"among the task's declared domain.variables {list(domain_variables)!r} -- "
+                    "to instantiate one variable at several points, use a list under its own "
+                    'declared key (e.g. "n": ["8", "9"]), not a new key per point'
+                ),
+            )
+
+    # Cap safeguard (schema v1.1.3): mirrors harness.task_schema.MAX_DOMAIN_INPUT_VALUES.
+    too_many = {k: v for k, v in fact.domain_inputs.items() if len(v) > MAX_DOMAIN_INPUT_VALUES}
+    if too_many:
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_TOO_MANY_DOMAIN_INPUT_VALUES,
+            detail=(
+                f"{context}: fact {fact_id!r} domain_inputs {sorted(too_many)} exceed the "
+                f"{MAX_DOMAIN_INPUT_VALUES}-value cap per variable"
+            ),
+        )
+
+    # Semantic-presence safeguard (schema v1.1.3): every listed value must literally occur in
+    # the fact's own statement text -- a string-level check, sufficient per this rule's own
+    # design (not a Lean-level check; catches a domain_inputs entry that doesn't correspond to
+    # anything the statement actually probes).
+    missing_in_statement = [
+        f"{k}={x!r}" for k, values in fact.domain_inputs.items() for x in values if x not in statement
+    ]
+    if missing_in_statement:
+        return FactParseRejection(
+            index=index,
+            fragment=entry,
+            reason_code=ReasonCode.MALFORMED_DOMAIN_INPUT_NOT_IN_STATEMENT,
+            detail=(
+                f"{context}: fact {fact_id!r} domain_inputs value(s) {missing_in_statement} do "
+                f"not literally occur in the fact's own statement {statement!r}"
+            ),
+        )
 
     # Type-conditional required-field pre-check, mirroring `harness.task_schema._validate_fact`
     # exactly (that module is the authoritative source of these rules -- see its own per-type
@@ -595,7 +669,7 @@ def _parse_fact_entry(
 def parse_facts(
     text: str, *,
     task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
-    decidability: str | None = None,
+    decidability: str | None = None, domain_variables: list[str] | None = None,
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
     """Parse Call 3's output array. Raises `ParseError` (whole-call, contract §6 rows 1-2) for
     malformed JSON or a schema-shape violation (missing/wrong-typed field, bad enum value,
@@ -615,8 +689,16 @@ def parse_facts(
     supplied, gates the membership `domain_inputs` check the same way
     `harness.task_schema._validate_fact` does. `decidability` (2026-07-30,
     `authoring.preflight.probe_decidability`'s vocabulary), when supplied, gates a
-    `mechanism: decide` membership fact to only `"decidable"` Props. All four default to `None`
-    (no check), backward compatible with callers that have no such context yet."""
+    `mechanism: decide` membership fact to only `"decidable"` Props. `domain_variables`
+    (2026-07-30, schema v1.1.3, the dossier's `domain.variables`), when supplied, gates
+    `domain_inputs` keys to the declared set -- rule 5's parse-time mirror, closing the
+    `docs/deferred.md` entry of that name (see `_parse_fact_entry`'s own comment for the real
+    incident that was its trigger). The cap (≤3 values per variable) and semantic-presence
+    (each value must occur in the fact's own statement) safeguards run unconditionally whenever
+    a fact has `domain_inputs` at all -- unlike rule 5, they need no external context to
+    evaluate, so there is no reason to gate them on `domain_variables` being supplied. All five
+    parameters default to `None` (no check for the ones that ARE gated), backward compatible
+    with callers that have no such context yet."""
     try:
         data = json.loads(text)
     except (json.JSONDecodeError, TypeError) as e:
@@ -634,6 +716,7 @@ def parse_facts(
         parsed = _parse_fact_entry(
             entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name,
             domain_constraint=domain_constraint, decidability=decidability,
+            domain_variables=domain_variables,
         )
         if isinstance(parsed, FactParseRejection):
             rejections.append(parsed)

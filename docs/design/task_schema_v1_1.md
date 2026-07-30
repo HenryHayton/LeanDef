@@ -10,6 +10,41 @@ component — miner, scorer, definition-writer prompts — builds against this d
 consequential-work item 1. `harness/task_schema.py`, `harness/facts.py`, `authoring/facts.py`
 were updated in the same pass as this document — see repo history for that commit.*
 
+## Changelog: v1.1.2 → v1.1.3
+
+- **`domain_inputs` values become non-empty lists of strings (max 3 elements), not bare strings.**
+  *Rationale:* a live gate rotation (the 41-name batch's report, and the "Rule-5 Mirror" build
+  session that fixed it — 2026-07-30) showed the v1.1 shape has no way to express a fact that
+  instantiates one declared variable at several concrete points — a monotonicity probe
+  (`VTask.clog 2 8 ≤ VTask.clog 2 9`) needs TWO values of `n`, and the model, with no
+  schema-sanctioned way to say so, invented new keys (`n1`, `n2`) that aren't in
+  `domain.variables`, caught only at `emit_task` after the full round-trip's spend was already
+  gone. **Canonical form**: lists are the ONLY shape in this schema and in every internal
+  representation downstream of authoring (`ProposedFact`, `Fact`) — a scalar string the model
+  emits is normalized to a single-element list at parse time
+  (`authoring.parse._parse_fact_entry`), so nothing that reads `domain_inputs` after that point
+  ever branches on shape. A multi-element list means the single statement is checked at every
+  listed point, never several implicit facts. **Semantics, stated explicitly**: each listed
+  value must literally occur in the fact's own `statement` text (a string-level check,
+  mechanically enforced both at parse time and, for defense in depth, nowhere else — this is
+  authoring-layer, not re-checked structurally by this schema). **Cap**: at most 3 values per
+  variable — a guard against runaway lists, enforced at both the schema level
+  (`harness.task_schema.MAX_DOMAIN_INPUT_VALUES`) and the authoring parser.
+- **Rule 5 closed.** `docs/deferred.md`'s "Parse-time mirror for rule 5 (`domain_inputs` keys ⊆
+  `domain.variables`)" entry — open since the 2026-07-28 parser-vs-schema strictness sweep — is
+  marked done as of this change: `authoring.parse.parse_facts` now threads `domain.variables`
+  through and rejects (per-fact, not whole-call) any `domain_inputs` key that isn't declared,
+  mirroring `harness.task_schema._validate_domain_inputs`'s pre-existing schema-level check
+  exactly. The rejection feedback names the declared variables AND the list syntax, so a model
+  that reaches for a new key (as the real incident's did) is told the actual fix, not just that
+  it was wrong.
+- **Breaking, `SCHEMA_VERSION` unchanged** — same `v1.1.x` micro-revision precedent as v1.1.2:
+  `tests/fixtures/tasks/is_sorted_v1/task.json` updated to the new list shape in the same pass;
+  the one previously-shipped real task.json (`Nat.clog`, from the 41-name batch's Gate 1) was
+  deleted rather than migrated, per this change's own build-session decision — it costs ~$0.10
+  to re-author under the fixed pipeline and there is no consumer yet that would need the old
+  file preserved.
+
 ## Changelog: v1.1.1 → v1.1.2
 
 - **`task_symbol` (required string), new.** Per `docs/design/llm_io_contract_v1.md` §4.4 (the
@@ -210,13 +245,19 @@ invalid and must be rejected by the validator.
       goal in a standard template (`theorem <fact_id> : <Prop> := by <attempt>`) at discharge
       time; the proof-script cache (reward doc §3.2) stores scripts against this bare-Prop
       statement's hash.
-  - `domain_inputs` (object, string → string, **new in v1.1**) — binds this fact's concrete
-    Lean-term inputs to the names declared in `domain.variables` (every key must be one of
-    them). Required non-empty for every `casework` fact. Required non-empty for `membership`
-    facts unless `domain.constraint` is the unrestricted `"True"` sentinel, in which case it
-    may be `{}`. For `global` facts it is always permitted to be `{}` (global facts state
-    behaviour over the domain in general; concrete instance bindings are what `casework` and
-    `membership` facts are for).
+  - `domain_inputs` (object, string → **non-empty array of strings, max 3 elements, changed in
+    v1.1.3** — was string → string in v1.1) — binds this fact's concrete Lean-term inputs to
+    the names declared in `domain.variables` (every key must be one of them). Required
+    non-empty for every `casework` fact. Required non-empty for `membership` facts unless
+    `domain.constraint` is the unrestricted `"True"` sentinel, in which case it may be `{}`.
+    For `global` facts it is always permitted to be `{}` (global facts state behaviour over the
+    domain in general; concrete instance bindings are what `casework` and `membership` facts
+    are for). A list with more than one element means this SINGLE statement instantiates that
+    variable at several concrete points (e.g. a monotonicity probe comparing the definition at
+    two values of `n`) — it is never shorthand for several separate facts, and every listed
+    value must literally occur in the fact's own `statement` text. See the v1.1.3 changelog
+    entry below for the full rationale and the single-element-list canonical form every
+    consumer of this field now assumes.
   - `anchors` (array of strings, **new in v1.1**) — required non-empty for `type: global`
     (fully-qualified Mathlib theorem names, no whitespace per entry — the tier-3 explicit
     premises, reward doc §3, tier 3). For `casework`/`membership` facts this must be `[]`.

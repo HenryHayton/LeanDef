@@ -100,13 +100,16 @@ don't leave it checked off in place.
   flags this).
   **Trigger:** the round-driver/training-loop task that actually runs candidates through the
   full ladder across a fact suite, not one fact at a time.
-- **Parse-time mirror for rule 5 (`domain_inputs` keys ⊆ `domain.variables`).** `harness.
-  task_schema._validate_fact` rejects a fact whose `domain_inputs` key isn't one of the task's
-  declared `domain.variables`; `authoring.parse.parse_facts` doesn't check this — it would need
-  the dossier's `domain.variables` threaded into `parse_facts` (not just `domain_constraint`,
-  which the 2026-07-28 enforcement session already added for the membership non-emptiness rule).
-  **Trigger:** the first `emit` rotation or review flag showing a fact with a wrong/unknown
-  domain-variable key in a real batch.
+- **DONE (2026-07-30) — Parse-time mirror for rule 5 (`domain_inputs` keys ⊆ `domain.variables`).**
+  Its own trigger fired for real: the 41-name batch's Gate 1 (`Nat.clog`, 2026-07-30 re-run,
+  post-reducibility-fix) rotated at `emit_task` because a monotonicity-probing membership fact
+  needed two values of `n` and, with no schema-sanctioned way to say so, the model invented
+  keys `n1`/`n2` — caught only after the task's full round-trip spend was gone. Fixed in the
+  same build session that found it: `authoring.parse.parse_facts` now threads `domain.variables`
+  through and rejects (per-fact) any undeclared `domain_inputs` key, mirroring
+  `harness.task_schema._validate_domain_inputs` exactly, with feedback naming the fix (schema
+  v1.1.3's new list-valued `domain_inputs` — `"n": ["8", "9"]` — rather than a new key per
+  point). See `docs/design/task_schema_v1_1.md`'s v1.1.3 changelog entry for the full design.
 - **Cross-retry duplicate-id detection (rule 12).** `authoring.parse.parse_facts` only dedupes
   fact ids WITHIN one response; a fact from the original fact-proposal response and a fact from
   its row-3 retry response can share an id undetected until `emit_task`'s schema validation.

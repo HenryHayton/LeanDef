@@ -29,7 +29,7 @@ def mathlib_env():
 
 
 def _decide_fact(fact_id: str, statement: str) -> Fact:
-    return Fact(id=fact_id, type="casework", mechanism="decide", statement=statement, domain_inputs={"n": "3"})
+    return Fact(id=fact_id, type="casework", mechanism="decide", statement=statement, domain_inputs={"n": ["3"]})
 
 
 def _global_fact(fact_id: str, statement: str, anchors=None) -> Fact:

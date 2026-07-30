@@ -80,19 +80,19 @@ def test_monotone_fixture_set_matches_expected_verdicts(mathlib_env):
 
 def test_domain_containment_in_domain(mathlib_env):
     server, env = mathlib_env
-    verdict, _ = check_domain_containment(server, env, CLOG_DOMAIN, {"b": "2", "n": "37"})
+    verdict, _ = check_domain_containment(server, env, CLOG_DOMAIN, {"b": ["2"], "n": ["37"]})
     assert verdict == "IN_DOMAIN"
 
 
 def test_domain_containment_out_of_domain(mathlib_env):
     server, env = mathlib_env
-    verdict, _ = check_domain_containment(server, env, CLOG_DOMAIN, {"b": "100", "n": "37"})
+    verdict, _ = check_domain_containment(server, env, CLOG_DOMAIN, {"b": ["100"], "n": ["37"]})
     assert verdict == "OUT_OF_DOMAIN"
 
 
 def test_domain_containment_via_convention_point(mathlib_env):
     server, env = mathlib_env
-    verdict, evidence = check_domain_containment(server, env, CLOG_DOMAIN, {"b": "5", "n": "1"})
+    verdict, evidence = check_domain_containment(server, env, CLOG_DOMAIN, {"b": ["5"], "n": ["1"]})
     assert verdict == "IN_DOMAIN_VIA_CONVENTION"
     assert evidence["matched_convention_point"] == "n ≤ 1"
 
@@ -103,7 +103,7 @@ def test_domain_containment_undecided_when_predicate_is_not_decidable(mathlib_en
         constraint="Continuous f",
         conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: not this test's concern")],
     )
-    verdict, _ = check_domain_containment(server, env, domain, {"f": "(fun x : ℝ => x)"})
+    verdict, _ = check_domain_containment(server, env, domain, {"f": ["(fun x : ℝ => x)"]})
     assert verdict == "DOMAIN_UNDECIDED"
 
 
@@ -189,14 +189,14 @@ def test_to_fact_carries_domain_inputs_and_anchors_but_drops_expected_type():
     module docstring and docs/design/task_schema_v1_1.md's Open points)."""
     pf = ProposedFact(
         id="x", type="global", mechanism="proof", statement="s",
-        domain_inputs={"n": "1"}, anchors=["A"], expected_type="Nat",
+        domain_inputs={"n": ["1"]}, anchors=["A"], expected_type="Nat",
     )
     f = pf.to_fact(validation_status="PROVISIONALLY_VALIDATED")
     assert (f.id, f.type, f.mechanism, f.statement) == ("x", "global", "proof", "s")
     assert f.instance is None
     assert f.polarity is None
     assert f.violated_property is None
-    assert f.domain_inputs == {"n": "1"}
+    assert f.domain_inputs == {"n": ["1"]}
     assert f.anchors == ["A"]
     assert f.validation_status == "PROVISIONALLY_VALIDATED"
     assert f.discharge is None
@@ -206,7 +206,7 @@ def test_to_fact_carries_domain_inputs_and_anchors_but_drops_expected_type():
 
 
 def test_to_fact_carries_discharge_evidence_when_certified():
-    pf = ProposedFact(id="y", type="casework", mechanism="decide", statement="s", domain_inputs={"n": "1"})
+    pf = ProposedFact(id="y", type="casework", mechanism="decide", statement="s", domain_inputs={"n": ["1"]})
     f = pf.to_fact(
         validation_status="CERTIFIED",
         provenance=FactProvenance(validation_run_id="run-1", note="ran fine"),

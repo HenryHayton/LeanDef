@@ -494,6 +494,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             task_symbol=task_symbol, forbidden_name=definition_input.name,
             domain_constraint=dossier_payload.domain.constraint,
             decidability=definition_input.decidability,
+            domain_variables=dossier_payload.domain.variables,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)

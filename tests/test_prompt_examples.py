@@ -88,11 +88,15 @@ def test_every_prompt_renders_cleanly(prompt_name):
     _rendered_system_prompt(prompt_name)  # must not raise
 
 
-def test_fact_proposal_prompt_has_exactly_one_example_per_fact_type():
+def test_fact_proposal_prompt_has_exactly_one_example_per_fact_type_plus_the_multivalue_extra():
+    """The three canonical per-type labels, plus (2026-07-30, schema v1.1.3) one additional
+    named example demonstrating list-valued `domain_inputs` at more than one point -- labeled
+    distinctly (`membership_multivalue`) so it doesn't collide with (and silently replace) the
+    plain `membership` example in the extraction dict below."""
     examples = _extract_json_examples(_rendered_system_prompt("fact_proposal"))
     labels = [label for label, _ in examples]
-    assert set(labels) == {"casework", "membership", "global"}, (
-        f"expected exactly one worked example per fact type, found labels: {labels}"
+    assert set(labels) == {"casework", "membership", "global", "membership_multivalue"}, (
+        f"expected exactly the three per-type examples plus the multivalue worked example, found labels: {labels}"
     )
 
 
@@ -112,3 +116,26 @@ def test_fact_proposal_prompt_example_parses_clean(fact_type):
         f"model imitating it would fail the same way: {rejections}"
     )
     assert len(facts) == 1
+
+
+def test_fact_proposal_prompt_multivalue_example_parses_clean_and_actually_demonstrates_the_syntax():
+    """The 2026-07-30 multivalue worked example: labeled `membership_multivalue` (extraction
+    label), but its `type` field must genuinely be `"membership"` (the real fact type a model
+    would emit), it must survive the real parser, AND it must actually contain a multi-element
+    domain_inputs list -- otherwise this test would pass even if the example silently regressed
+    to a single-value fact that no longer demonstrates anything new."""
+    examples = dict(_extract_json_examples(_rendered_system_prompt("fact_proposal")))
+    assert "membership_multivalue" in examples, "no membership_multivalue worked example found"
+
+    entry = json.loads(examples["membership_multivalue"])
+    assert entry.get("type") == "membership"
+
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == [], (
+        f"the prompt's own multivalue worked example was REJECTED by the real parser: {rejections}"
+    )
+    assert len(facts) == 1
+    assert any(len(v) > 1 for v in facts[0].domain_inputs.values()), (
+        "the multivalue example's domain_inputs has no entry with more than one value -- it no "
+        "longer demonstrates the syntax it's meant to"
+    )

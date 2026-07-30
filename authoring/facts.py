@@ -104,9 +104,11 @@ class ProposedFact:
     polarity: str | None = None  # "accept" | "reject" -- membership only
     violated_property: str | None = None  # required when polarity == "reject"
 
-    domain_inputs: dict[str, str] = field(default_factory=dict)  # named domain variable ->
-    # concrete Lean term, e.g. {"b": "2", "n": "37"}. Required (non-empty) for casework facts and
-    # for membership facts whose domain constraint isn't the unrestricted "True" sentinel.
+    domain_inputs: dict[str, list[str]] = field(default_factory=dict)  # named domain variable
+    # -> non-empty list of concrete Lean terms (schema v1.1.3), e.g. {"b": ["2"], "n": ["37"]}.
+    # Required (non-empty) for casework facts and for membership facts whose domain constraint
+    # isn't the unrestricted "True" sentinel. A multi-element list instantiates that variable
+    # at several points within this one fact -- see authoring.parse's canonicalization.
     anchors: list[str] = field(default_factory=list)  # global facts only: named Mathlib
     # theorem(s) this fact cites; each is resolved in the pinned environment.
 

@@ -69,6 +69,9 @@ class ReasonCode:
     MALFORMED_MISSING_DOMAIN_INPUTS = "MALFORMED_MISSING_DOMAIN_INPUTS"
     MALFORMED_ANCHORS_NOT_ALLOWED = "MALFORMED_ANCHORS_NOT_ALLOWED"
     MALFORMED_DECIDE_ON_UNDECIDABLE_PROP = "MALFORMED_DECIDE_ON_UNDECIDABLE_PROP"
+    MALFORMED_UNKNOWN_DOMAIN_VARIABLE = "MALFORMED_UNKNOWN_DOMAIN_VARIABLE"
+    MALFORMED_TOO_MANY_DOMAIN_INPUT_VALUES = "MALFORMED_TOO_MANY_DOMAIN_INPUT_VALUES"
+    MALFORMED_DOMAIN_INPUT_NOT_IN_STATEMENT = "MALFORMED_DOMAIN_INPUT_NOT_IN_STATEMENT"
     ANCHOR_NOT_FOUND = "ANCHOR_NOT_FOUND"
     PROPOSITION_DOES_NOT_ELABORATE = "PROPOSITION_DOES_NOT_ELABORATE"
     DOES_NOT_MENTION_PINNED_NAME = "DOES_NOT_MENTION_PINNED_NAME"
@@ -174,11 +177,34 @@ def _decide_bool(server: AutoLeanServer, env: int, expr: str, *, timeout: float)
     return None, evidence
 
 
+def _check_one_point(
+    server: AutoLeanServer, env: int, domain: DomainSpec, names: list[str], values: list[str], *, timeout: float,
+) -> tuple[str, dict]:
+    """The single-point containment check -- the ENTIRE pre-v1.1.3 body of
+    `check_domain_containment`, extracted unchanged so the multi-point loop below can reuse it
+    verbatim. Not a parallel path: this is the one place point-vs-constraint/convention logic
+    lives; `check_domain_containment` only adds the broadcasting loop around it."""
+    decided, evidence = _decide_bool(server, env, _apply_predicate(domain.constraint, names, values), timeout=timeout)
+    if decided is True:
+        return "IN_DOMAIN", evidence
+    if decided is False:
+        for cp in domain.conventions:
+            if cp.predicate is None:
+                continue
+            cp_decided, cp_evidence = _decide_bool(
+                server, env, _apply_predicate(cp.predicate, names, values), timeout=timeout
+            )
+            if cp_decided is True:
+                return "IN_DOMAIN_VIA_CONVENTION", {**evidence, "matched_convention_point": cp.point, **cp_evidence}
+        return "OUT_OF_DOMAIN", evidence
+    return "DOMAIN_UNDECIDED", evidence
+
+
 def check_domain_containment(
     server: AutoLeanServer,
     env: int,
     domain: DomainSpec,
-    inputs: dict[str, str],
+    inputs: dict[str, list[str]],
     *,
     timeout: float | None = None,
 ) -> tuple[str, dict]:
@@ -195,7 +221,16 @@ def check_domain_containment(
     every legitimate junk-value fact (e.g. the schema's own `n = 0` example) as OUT_OF_DOMAIN --
     flagged in this module's problems list as an interpretation call, since the task's own
     description of this checker only mentions the constraint predicate.
-    """
+
+    **Schema v1.1.3 (2026-07-30): `inputs` values are lists, extended per-element.** Every
+    value is a non-empty list (the canonical form `authoring.parse` normalizes to); a
+    single-element list broadcasts against a longer list under a different key (e.g.
+    `{"b": ["2"], "n": ["8", "9"]}` checks the points `(b=2, n=8)` and `(b=2, n=9)`, one `b` held
+    fixed across both). The fact is `IN_DOMAIN` only if EVERY point is -- checking short-circuits
+    at the first point that isn't, whose own inputs are named in the returned evidence. For the
+    overwhelmingly common single-point case (every list has exactly one element), the evidence
+    shape is UNCHANGED from pre-v1.1.3 (a flat dict, not wrapped in a point list) -- no existing
+    caller needs to branch on shape for the case it already handled."""
     timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
     if domain.constraint.strip() == "True":
         return "IN_DOMAIN", {"note": "domain constraint is the unrestricted 'True' sentinel"}
@@ -203,21 +238,34 @@ def check_domain_containment(
         return "DOMAIN_UNDECIDED", {"note": "no domain_inputs supplied for a non-trivial domain constraint"}
 
     names = list(inputs.keys())
-    values = list(inputs.values())
-    decided, evidence = _decide_bool(server, env, _apply_predicate(domain.constraint, names, values), timeout=timeout)
-    if decided is True:
-        return "IN_DOMAIN", evidence
-    if decided is False:
-        for cp in domain.conventions:
-            if cp.predicate is None:
-                continue
-            cp_decided, cp_evidence = _decide_bool(
-                server, env, _apply_predicate(cp.predicate, names, values), timeout=timeout
-            )
-            if cp_decided is True:
-                return "IN_DOMAIN_VIA_CONVENTION", {**evidence, "matched_convention_point": cp.point, **cp_evidence}
-        return "OUT_OF_DOMAIN", evidence
-    return "DOMAIN_UNDECIDED", evidence
+    lengths = {len(inputs[k]) for k in names}
+    non_broadcast_lengths = lengths - {1}
+    if len(non_broadcast_lengths) > 1:
+        return "DOMAIN_UNDECIDED", {
+            "note": f"domain_inputs list lengths do not broadcast: {{{', '.join(f'{k!r}: {len(inputs[k])}' for k in names)}}}"
+        }
+    n_points = non_broadcast_lengths.pop() if non_broadcast_lengths else 1
+
+    point_results: list[tuple[str, dict, dict]] = []  # (verdict, point_inputs, evidence)
+    for i in range(n_points):
+        values = [inputs[k][i] if len(inputs[k]) > 1 else inputs[k][0] for k in names]
+        verdict, evidence = _check_one_point(server, env, domain, names, values, timeout=timeout)
+        point_inputs = dict(zip(names, values))
+        point_results.append((verdict, point_inputs, evidence))
+        if verdict in ("OUT_OF_DOMAIN", "DOMAIN_UNDECIDED"):
+            if n_points == 1:
+                return verdict, evidence
+            return verdict, {
+                "failing_point": point_inputs, "n_points_checked": i + 1, "n_points_total": n_points, **evidence,
+            }
+
+    if n_points == 1:
+        return point_results[0][0], point_results[0][2]
+    overall = "IN_DOMAIN_VIA_CONVENTION" if any(v == "IN_DOMAIN_VIA_CONVENTION" for v, _, _ in point_results) else "IN_DOMAIN"
+    return overall, {
+        "points": [{"inputs": pi, "verdict": v, **e} for v, pi, e in point_results],
+        "n_points": n_points,
+    }
 
 
 def _run_statement(server: AutoLeanServer, env: int, fact: ProposedFact, *, timeout: float) -> ValidationOutcome:

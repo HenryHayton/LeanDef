@@ -161,13 +161,28 @@ def _validate_statement_format(mechanism: str, statement: str, context: str) -> 
         )
 
 
+MAX_DOMAIN_INPUT_VALUES = 3  # schema v1.1.3 cap safeguard, shared with authoring.parse's own
+# per-fact mirror of this same rule (docs/design/task_schema_v1_1.md's v1.1.3 changelog entry).
+
+
 def _validate_domain_inputs(domain_inputs: object, domain_variables: list[str], context: str) -> dict:
+    """Schema v1.1.3: every value is a non-empty LIST of non-empty strings -- the canonical
+    form (docs/design/task_schema_v1_1.md's v1.1.3 changelog entry). A scalar string is no
+    longer accepted here; normalizing a model's scalar output into a single-element list is
+    `authoring.parse`'s job, done before a fact ever reaches this validator, so nothing
+    downstream of authoring ever branches on shape. A multi-element list means this single
+    statement instantiates that variable at several points (e.g. a monotonicity probe
+    comparing the definition at two values of `n`) -- never shorthand for several facts."""
     _require(isinstance(domain_inputs, dict), f"{context}: 'domain_inputs' must be an object")
     for key, value in domain_inputs.items():
         _require(
-            isinstance(key, str) and isinstance(value, str) and value != "",
-            f"{context}.domain_inputs: every entry must be a non-empty string value keyed by "
-            f"a string, got {key!r}: {value!r}",
+            isinstance(key, str)
+            and isinstance(value, list)
+            and 1 <= len(value) <= MAX_DOMAIN_INPUT_VALUES
+            and all(isinstance(v, str) and v != "" for v in value),
+            f"{context}.domain_inputs: every entry must be a non-empty list (max "
+            f"{MAX_DOMAIN_INPUT_VALUES} elements) of non-empty strings, keyed by a string, "
+            f"got {key!r}: {value!r}",
         )
         _require(
             key in domain_variables,

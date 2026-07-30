@@ -145,7 +145,7 @@ def test_domain_undecided_end_to_end_casework_lands_in_flagged_bucket(mathlib_en
     server, env = mathlib_env
     fact = ProposedFact(
         id="undecided_casework", type="casework", mechanism="decide",
-        statement="example : True := trivial", domain_inputs={"f": "(fun x : ℝ => x)"},
+        statement="example : True := trivial", domain_inputs={"f": ["(fun x : ℝ => x)"]},
     )
     run = validate_facts(server, env, [fact], UNDECIDABLE_DOMAIN, "irrelevant")
     outcome = run.outcomes[0]
@@ -161,7 +161,7 @@ def test_domain_undecided_end_to_end_membership_lands_in_flagged_bucket(mathlib_
     fact = ProposedFact(
         id="undecided_membership", type="membership", mechanism="decide",
         statement="example : True := trivial", instance="(fun x : ℝ => x)", polarity="accept",
-        expected_type="ℝ → ℝ", domain_inputs={"f": "(fun x : ℝ => x)"},
+        expected_type="ℝ → ℝ", domain_inputs={"f": ["(fun x : ℝ => x)"]},
     )
     run = validate_facts(server, env, [fact], UNDECIDABLE_DOMAIN, "irrelevant")
     outcome = run.outcomes[0]
@@ -184,7 +184,7 @@ def test_adversarial_decide_mechanism_with_bare_prop_statement(mathlib_env):
     `_run_statement` recognizes via the "expected command" substring and reports under
     `MALFORMED_UNPARSEABLE_STATEMENT`, distinct from a genuinely-false well-formed statement."""
     server, env = mathlib_env
-    fact = ProposedFact(id="bare_prop", type="casework", mechanism="decide", statement="Nat.clog 2 37 = 6", domain_inputs={"b": "2", "n": "37"})
+    fact = ProposedFact(id="bare_prop", type="casework", mechanism="decide", statement="Nat.clog 2 37 = 6", domain_inputs={"b": ["2"], "n": ["37"]})
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN)
     assert outcome.verdict is Verdict.REJECTED
     assert outcome.reason_code == ReasonCode.MALFORMED_UNPARSEABLE_STATEMENT
@@ -216,7 +216,7 @@ def test_adversarial_statement_with_markdown_fence(mathlib_env):
     fact = ProposedFact(
         id="markdown_fenced", type="casework", mechanism="decide",
         statement="```lean\nexample : Nat.clog 2 37 = 6 := by decide\n```",
-        domain_inputs={"b": "2", "n": "37"},
+        domain_inputs={"b": ["2"], "n": ["37"]},
     )
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN)
     assert outcome.verdict is Verdict.REJECTED
@@ -233,7 +233,7 @@ def test_adversarial_domain_inputs_references_undeclared_domain_variable(mathlib
     server, env = mathlib_env
     fact = ProposedFact(
         id="undeclared_domain_var", type="casework", mechanism="decide",
-        statement="example : Nat.clog 2 37 = 6 := by decide", domain_inputs={"z": "5"},
+        statement="example : Nat.clog 2 37 = 6 := by decide", domain_inputs={"z": ["5"]},
     )
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN)
     assert outcome.verdict is Verdict.FLAGGED
@@ -248,8 +248,8 @@ def test_adversarial_duplicate_fact_ids_validated_independently_no_crash_no_sile
     sharing one `fact_id`. Confirms this is safe (no crash, no cross-contamination between the
     two) rather than asserting this module ought to catch it -- it correctly doesn't."""
     server, env = mathlib_env
-    true_fact = ProposedFact(id="dup", type="casework", mechanism="decide", statement="example : Nat.clog 2 37 = 6 := by decide", domain_inputs={"b": "2", "n": "37"})
-    false_fact = ProposedFact(id="dup", type="casework", mechanism="decide", statement="example : Nat.clog 2 37 = 5 := by decide", domain_inputs={"b": "2", "n": "37"})
+    true_fact = ProposedFact(id="dup", type="casework", mechanism="decide", statement="example : Nat.clog 2 37 = 6 := by decide", domain_inputs={"b": ["2"], "n": ["37"]})
+    false_fact = ProposedFact(id="dup", type="casework", mechanism="decide", statement="example : Nat.clog 2 37 = 5 := by decide", domain_inputs={"b": ["2"], "n": ["37"]})
     run = validate_facts(server, env, [true_fact, false_fact], CLOG_DOMAIN, CLOG_NAME)
     assert len(run.outcomes) == 2
     assert run.outcomes[0].fact_id == run.outcomes[1].fact_id == "dup"
@@ -277,7 +277,7 @@ def test_casework_execution_error_is_errored_not_false(mathlib_env):
     fact = ProposedFact(
         id="errored_casework", type="casework", mechanism="decide",
         statement="set_option maxRecDepth 4000000 in example : ∀ n < 500000, n + 0 = n := by decide",
-        domain_inputs={"b": "2", "n": "2"},
+        domain_inputs={"b": ["2"], "n": ["2"]},
     )
     outcome = validate_casework_fact(server, env, fact, CLOG_DOMAIN, timeout=2.0)
     assert outcome.verdict is Verdict.REJECTED
