@@ -4,16 +4,22 @@ real warm Mathlib environment (there's no ground truth to fake for "does this ac
 re-elaborate")."""
 
 import pytest
+from lean_interact import Command
 
 from authoring.preflight import (
+    DECIDABLE,
     FAIL_INVALID_SYMBOL,
     FAIL_PP_ELISION,
+    INDETERMINATE,
+    UNDECIDABLE,
+    _parse_binder_groups,
     check_output_to_pinned_type,
+    probe_decidability,
     run_preflight,
     write_preflight_json,
     load_preflight_json,
 )
-from harness.repl import get_warm_environment
+from harness.repl import get_warm_environment, run_checked
 from harness.results import CheckStatus
 
 
@@ -107,3 +113,91 @@ def test_write_and_load_preflight_json_round_trips(mathlib_env, tmp_path):
     assert loaded["Nat.clog"].status == "pass"
     assert loaded["Nat.leRec"].status == "fail"
     assert loaded["Nat.leRec"].category == FAIL_PP_ELISION
+
+
+# --- _parse_binder_groups (pure) -----------------------------------------------------------
+
+
+def test_parse_binder_groups_extracts_explicit_names_and_type():
+    groups = _parse_binder_groups("(n a b : ℕ) -> Prop")
+    assert groups == [("explicit", ["n", "a", "b"], "ℕ")]
+
+
+def test_parse_binder_groups_extracts_implicit_and_instance_kinds():
+    groups = _parse_binder_groups("{α : Type u} -> [Preorder α] -> (f : α → α) -> Prop")
+    assert groups == [
+        ("implicit", ["α"], "Type u"),
+        ("instance", [], "Preorder α"),
+        ("explicit", ["f"], "α → α"),
+    ]
+
+
+# --- probe_decidability (real REPL, and pure-string short-circuits) ------------------------
+
+
+def test_probe_decidability_indeterminate_for_curried_prop_tail(mathlib_env):
+    """`Relation.Map`-shaped: the printed return type is itself a further arrow ending in
+    `Prop`, not a bare `Prop` -- conservatively INDETERMINATE, never misjudged as decidable or
+    as not-Prop-valued. Short-circuits before any REPL call (checked via a no-op env: nothing
+    here should touch the server)."""
+    server, env = mathlib_env
+    decidability, detail = probe_decidability(
+        "Relation.Map", "(r : α → β → Prop) -> (f : α → γ) -> (g : β → δ) -> γ → δ → Prop",
+        "VTask.map", server, env,
+    )
+    assert decidability == INDETERMINATE
+    assert "curried" in detail or "Prop" in detail
+
+
+def test_probe_decidability_indeterminate_for_implicit_binder(mathlib_env):
+    """`Monotone`-shaped: an implicit type variable binder makes concrete instantiation
+    mechanically impossible -- INDETERMINATE, not guessed at."""
+    server, env = mathlib_env
+    decidability, detail = probe_decidability(
+        "Monotone", "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop",
+        "VTask.monotone", server, env,
+    )
+    assert decidability == INDETERMINATE
+    assert "implicit" in detail
+
+
+def test_probe_decidability_decidable_for_nat_modeq(mathlib_env):
+    server, env = mathlib_env
+    decidability, detail = probe_decidability("Nat.ModEq", "(n a b : ℕ) -> Prop", "VTask.modEqProbe", server, env)
+    assert decidability == DECIDABLE
+    assert "Decidable" in detail
+
+
+def test_probe_decidability_undecidable_for_a_genuine_non_instance_prop(mathlib_env):
+    """A proposition with plain ℕ binders but no `Decidable` instance anywhere (an unbounded
+    existential over ℕ) -- genuinely `UNDECIDABLE`, not `INDETERMINATE`: this probe DOES reach
+    the REPL and gets a real negative answer, unlike the two short-circuit cases above."""
+    server, env = mathlib_env
+    setup = run_checked(
+        server,
+        Command(cmd="def PreflightProbeUndecidable (n : ℕ) : Prop := ∃ m : ℕ, m > n ∧ Even m", env=env),
+        timeout=30.0,
+    )
+    assert setup.status is CheckStatus.PASSED, setup.detail
+
+    decidability, detail = probe_decidability(
+        "PreflightProbeUndecidable", "(n : ℕ) -> Prop", "VTask.probeUndecidable", server, setup.env,
+    )
+    assert decidability == UNDECIDABLE
+    assert detail  # a real Lean error message, not empty
+
+
+def test_run_preflight_records_decidability_for_prop_valued_pass(mathlib_env):
+    server, env = mathlib_env
+    results = run_preflight(["Nat.ModEq"], server, env)
+    assert results[0].status == "pass"
+    assert results[0].decidability == DECIDABLE
+
+
+def test_run_preflight_decidability_none_for_value_typed_pass(mathlib_env):
+    """The probe is only attempted for a bare-`Prop` return type -- `Nat.clog` is ℕ-valued, so
+    `decidability` stays `None`, not e.g. a misleading `INDETERMINATE`."""
+    server, env = mathlib_env
+    results = run_preflight(["Nat.clog"], server, env)
+    assert results[0].status == "pass"
+    assert results[0].decidability is None

@@ -19,6 +19,16 @@ deliberate, provisional, human decision. See that JSON file's own docstring-equi
 `summary`/`provisional_note` fields for the full reasoning; this module does not re-decide it,
 and a future caller finding a NEW `pp_elision` name here should not assume the same curation
 verdict applies without that same deliberation.
+
+**Decidability probe (2026-07-30)**: for every PASSing name whose pinned type ends in a bare
+`Prop`, `probe_decidability` additionally attempts to synthesize `Decidable` for a
+representative fully-applied instance, against a fresh `@[reducible]` splice of the real
+definition (`docs/design/llm_io_contract_v1.md` §4.4's reducibility fix -- this probe is one of
+its two consumers, alongside the truth/candidate splice itself). Recorded as `decidability`
+(`DECIDABLE`/`UNDECIDABLE`/`INDETERMINATE`) on `PreflightResult`; see `probe_decidability`'s own
+docstring for exactly which shapes are mechanically resolvable vs. `INDETERMINATE` (not guessed
+at). Feeds the classification and fact-proposal calls' decide-vs-proof guidance and the
+parse-time rule restricting `mechanism: decide` to `DECIDABLE` Props.
 """
 
 import re
@@ -36,6 +46,10 @@ FAIL_STUCK_METAVARIABLE = "stuck_metavariable"
 FAIL_CRASH = "crash"
 FAIL_INVALID_SYMBOL = "invalid_symbol"
 FAIL_OTHER = "other"
+
+DECIDABLE = "decidable"
+UNDECIDABLE = "undecidable"
+INDETERMINATE = "indeterminate"
 
 _UNIV_RE = re.compile(r"^\.\{[^}]*\}")
 
@@ -93,6 +107,93 @@ def check_output_to_pinned_type(check_text: str, real_name: str) -> str:
     return " -> ".join(parts)
 
 
+# --- Decidability probe (2026-07-30) -----------------------------------------------------
+#
+# Mechanical sizing of which Prop-valued names support decide-mechanism facts and executable
+# worked examples (only `decidable` ones can) vs. which are structural-only (`undecidable`,
+# `indeterminate`) -- see `docs/design/llm_io_contract_v1.md` §4.1/§4.4 and the 41-name batch's
+# Gate 2 (`Nat.ModEq`) report for why this matters. Deliberately minimal: only attempted for a
+# return type that is exactly `Prop` with NO further curried tail (`Relation.Map`-shaped
+# curried-Prop returns are conservatively treated as `indeterminate` here, not misclassified as
+# non-Prop -- see this probe's own docstring) and only when every explicit binder's type has a
+# known simple concrete value below; anything else is `indeterminate` rather than guessed at,
+# per this task's own explicit instruction.
+_SIMPLE_CONCRETE_VALUES: dict[str, str] = {
+    "ℕ": "0",  # the only type any of the batch-41 Prop-valued names' explicit binders actually
+    # use (confirmed by inspection, 2026-07-30) -- extend only when a real name needs another
+    # type, not speculatively for types nothing here has been run against.
+}
+
+
+def _parse_binder_groups(pinned_type: str) -> list[tuple[str, list[str], str]]:
+    """`(kind, names, type_text)` for each top-level bracketed binder group in a `pinned_type`
+    string built by `check_output_to_pinned_type` (bracket kind preserved there: `(` explicit,
+    `{` implicit, `[` instance). The trailing, unbracketed return-type fragment is not a binder
+    group and is not returned here -- callers read the return type from `pinned_type`'s own
+    tail (`pinned_type.split(" -> ")[-1]`) directly."""
+    groups: list[tuple[str, list[str], str]] = []
+    kind_by_char = {"(": "explicit", "{": "implicit", "[": "instance"}
+    for part in pinned_type.split(" -> "):
+        part = part.strip()
+        if not part or part[0] not in kind_by_char:
+            continue  # the trailing return-type fragment (never bracketed), or malformed input
+        kind = kind_by_char[part[0]]
+        inner = part[1:-1] if part and part[-1] in ")}]" else part[1:]
+        name_part, sep, type_part = inner.partition(":")
+        names = name_part.split() if sep else []
+        groups.append((kind, names, type_part.strip() if sep else name_part.strip()))
+    return groups
+
+
+def probe_decidability(
+    name: str, pinned_type: str, symbol: str, server: AutoLeanServer, env: int, *, timeout: float = 30.0
+) -> tuple[str, str]:
+    """Attempt to synthesize `Decidable` for a representative fully-applied instance of a
+    Prop-valued name, against a fresh `@[reducible]` splice of the REAL definition (the same
+    splice convention `harness.signature.PinnedSignature.splice` uses -- built directly here,
+    not via that helper, since this also needs a `#check (inferInstance : ...)` follow-up
+    command in the same environment, not just the splice itself).
+
+    Returns `(decidability, detail)`, `decidability` one of `DECIDABLE`/`UNDECIDABLE`/
+    `INDETERMINATE`. `INDETERMINATE` covers every case this probe cannot mechanically resolve
+    without guessing: a return type that isn't a bare `Prop` (including a further-curried
+    `... -> Prop` tail, e.g. `Relation.Map` -- conservatively not attempted, not misjudged),
+    any implicit/instance binder (no mechanically derivable concrete value), or an explicit
+    binder whose type isn't in `_SIMPLE_CONCRETE_VALUES`. Never raises for a REPL-level failure
+    (splice error, timeout) -- folded into `INDETERMINATE` with the detail preserved, since an
+    infrastructure hiccup here must not be confused with a genuine `UNDECIDABLE` verdict."""
+    tail = pinned_type.split(" -> ")[-1].strip()
+    if tail != "Prop":
+        return INDETERMINATE, (
+            "return type is not a bare 'Prop' (either not Prop-valued, or a further-curried "
+            f"tail this probe does not attempt): {tail!r}"
+        )
+
+    groups = _parse_binder_groups(pinned_type)
+    if any(kind in ("implicit", "instance") for kind, _, _ in groups):
+        return INDETERMINATE, "has implicit/instance binders -- no mechanically derivable concrete instantiation"
+
+    values: list[str] = []
+    for _, names, type_text in groups:
+        if type_text not in _SIMPLE_CONCRETE_VALUES:
+            return INDETERMINATE, f"explicit binder type {type_text!r} has no known simple concrete value"
+        values.extend([_SIMPLE_CONCRETE_VALUES[type_text]] * len(names))
+
+    splice_cmd = f"@[reducible] def {symbol} : {pinned_type} := {name}"
+    splice_check = run_checked(server, Command(cmd=splice_cmd, env=env), timeout=timeout)
+    if splice_check.status is not CheckStatus.PASSED:
+        return INDETERMINATE, f"reducible splice failed: {splice_check.detail}"
+
+    args = " ".join(values)
+    probe_cmd = f"#check (inferInstance : Decidable ({symbol} {args}))"
+    probe_check = run_checked(server, Command(cmd=probe_cmd, env=splice_check.env), timeout=timeout)
+    if probe_check.status is CheckStatus.PASSED:
+        return DECIDABLE, f"synthesized Decidable ({symbol} {args})"
+    if probe_check.status is CheckStatus.FAILED:
+        return UNDECIDABLE, probe_check.detail or "Decidable instance synthesis failed"
+    return INDETERMINATE, f"probe errored: {probe_check.detail}"
+
+
 @dataclass(frozen=True)
 class PreflightResult:
     name: str
@@ -101,6 +202,9 @@ class PreflightResult:
     detail: str = ""
     pinned_type: str | None = None  # only when status == "pass"
     task_symbol: str | None = None  # only when status == "pass"
+    decidability: str | None = None  # DECIDABLE|UNDECIDABLE|INDETERMINATE, only for a
+    # Prop-valued name that passed; None for anything else (never attempted).
+    decidability_detail: str = ""
 
 
 def _categorize(detail: str) -> str:
@@ -153,7 +257,14 @@ def run_preflight(names: list[str], server: AutoLeanServer, env: int, *, timeout
             results.append(PreflightResult(name, "fail", _categorize(vcheck.detail or ""), vcheck.detail, pinned_type, symbol))
             continue
 
-        results.append(PreflightResult(name, "pass", pinned_type=pinned_type, task_symbol=symbol))
+        decidability, decidability_detail = None, ""
+        if pinned_type.split(" -> ")[-1].strip() == "Prop":
+            decidability, decidability_detail = probe_decidability(name, pinned_type, symbol, server, env, timeout=timeout)
+
+        results.append(PreflightResult(
+            name, "pass", pinned_type=pinned_type, task_symbol=symbol,
+            decidability=decidability, decidability_detail=decidability_detail,
+        ))
     return results
 
 
