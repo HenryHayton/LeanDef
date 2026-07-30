@@ -1,0 +1,909 @@
+[
+  {
+    "name": "Monotone",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "fail to show termination for\n  VTask.Monotone\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of VTask.Monotone:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.Monotone` does not take any (non-fixed) arguments; failed to set reducibility status, `Monotone` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        64,
+        64
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "fail to show termination for\n  VTask.Monotone\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of VTask.Monotone:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.Monotone` does not take any (non-fixed) arguments; failed to set reducibility status, `Monotone` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation"
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Function.extend",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Function.extend', which is 'noncomputable'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        78,
+        78
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Function.extend', which is 'noncomputable'"
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Nat.findGreatest",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        78,
+        82
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "rotated",
+          "detail": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\n`VTask.findGreatest P n` returns the largest natural number `i` satisfying `i ≤ n` and `P i`, or `0` if no such positive `i` exists. It is a bounded maximisation operator: given a decidable predicate `P` on natural numbers and an upper bound `n`, it finds the greatest witness to `P` within `{0, 1, …, n}`, defaulting to `0` when no positive witness is present.\n\n## 2. Signature\n\n```\nVTask.findGreatest : (P : ℕ → Prop) -> [DecidablePred P] -> ℕ → ℕ\n```\n\n- `P : ℕ → Prop` — the decidable predicate whose witnesses we are searching for.\n- `[DecidablePred P]` — automatically-inferred evidence that `P` is decidable at every natural number, enabling computational evaluation.\n- `n : ℕ` — the inclusive upper bound of the search range `{0, 1, …, n}`.\n- **Returns** `ℕ` — the greatest `i ≤ n` with `P i`, or `0` if no such `i` exists (including the edge case where `P 0` holds but no larger witness does, and the case where `P` holds nowhere on `{1, …, n}`).\n\n## 3. Conventions\n\nWhen no `i` in `{1, 2, …, n}` satisfies `P`, the function returns `0`, regardless of whether `P 0` holds. In particular, `0` is returned both when `P` is false everywhere on `{0, …, n}` and when `P` is true only at `0`; these two situations are indistinguishable from the return value alone.\n\n## 4. Worked examples\n\n- Claim: For `P = (· = 3)` and `n = 5`, `VTask.findGreatest P 5 = 3` because `3 ≤ 5`, `P 3` holds, and no `i ∈ {4, 5}` satisfies `P`.\n  ```lean\n  example : VTask.findGreatest (· = 3) 5 = 3 := by decide\n  ```\n\n- Claim: For `P = (· % 2 = 0)` and `n = 7`, `VTask.findGreatest P 7 = 6` because `6` is even, `6 ≤ 7`, and `7` is odd.\n  ```lean\n  example : VTask.findGreatest (fun k => k % 2 = 0) 7 = 6 := by decide\n  ```\n\n- Claim: For `P = (fun _ => False)` and `n = 10`, `VTask.findGreatest P 10 = 0` because no natural number satisfies `False`.\n  ```lean\n  example : VTask.findGreatest (fun _ => False) 10 = 0 := by decide\n  ```\n\n- Claim: For `P = (· = 0)` and `n = 4`, `VTask.findGreatest P 4 = 0` because only `0` satisfies `P`, and the convention returns `0` (which is also the actual maximum witness here, but indistinguishable from the \"no positive witness\" case).\n  ```lean\n  example : VTask.findGreatest (· = 0) 4 = 0 := by decide\n  ```\n\n## 5. Boundaries\n\n- **`n = 0`**: The function always returns `0`, regardless of whether `P 0` holds. The search range collapses to `{0}`, and `0` is the only possible return value.\n- **`P` holds nowhere on `{1, …, n}`**: Returns `0`, even if `P 0` is true.\n- **`P` holds everywhere**: Returns `n`, since `n` is the largest element of the search range.\n- **`P (n+1)` holds**: The value at `n+1` is `n+1`, not the result for `n`, because the successor step checks `P (n+1)` first and returns it if true.\n- **Result is always `≤ n`**: The return value never exceeds the supplied upper bound.\n- **Monotonicity in `n`**: Increasing the upper bound can only maintain or increase the result; it never decreases.\n\n## 6. Not to be confused with\n\n- **`Nat.find`**: Finds the *least* natural number satisfying a predicate (with an existence hypothesis), whereas `VTask.findGreatest` finds the *greatest* within a bounded range and needs no existence proof.\n- **`Finset.sup`**: Computes the supremum of a function over a finite set, a more general algebraic construct; `VTask.findGreatest` is specifically tailored to the bounded-greatest-witness pattern on `ℕ` with a `0` default.\n- **`Nat.findGreatest` applied to a fixed `n` as a partial application**: One might confuse `VTask.findGreatest P` (a function `ℕ → ℕ`) with the single value `VTask.findGreatest P n`; the former is a whole monotone function, the latter is its evaluation at a specific bound."
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "n/a",
+        "check_result": "fail (unexpected error)",
+        "error_if_any": "AuthoringCallFailed: terminal after one retry: response was not valid JSON: Expecting ',' delimiter: line 1 column 280 (char 279)"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "DependsOn",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "fail to show termination for\n  VTask.DependsOn\nwith errors\nfailed to infer structural recursion:\nNot considering parameter ι of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter α of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.DependsOn:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.DependsOn` does not take any (non-fixed) arguments; failed to set reducibility status, `DependsOn` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        86,
+        86
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "fail to show termination for\n  VTask.DependsOn\nwith errors\nfailed to infer structural recursion:\nNot considering parameter ι of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter α of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.DependsOn:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.DependsOn` does not take any (non-fixed) arguments; failed to set reducibility status, `DependsOn` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation"
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Nat.binaryRec",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        92,
+        95
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "rotated",
+          "detail": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\n`VTask.binaryRec` is a recursion (and induction) principle for natural numbers phrased in terms of their binary digit decomposition. It says: to define a function (or prove a property) for every natural number, it is enough to supply a base case at zero and a step case that shows how to extend any value `motive n` to `motive (Nat.bit b n)` — the number formed by prepending the bit `b` to the binary representation of `n`. Every natural number can be reached from 0 by finitely many applications of `Nat.bit`, so this recursion is complete.\n\n## 2. Signature\n\n```\nVTask.binaryRec : {motive : ℕ → Sort u}\n               -> (zero : motive 0)\n               -> (bit  : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n))\n               -> (n : ℕ)\n               -> motive n\n```\n\n- `motive : ℕ → Sort u` — the type family (predicate, type function, …) being defined over all natural numbers; implicit.\n- `zero : motive 0` — the value (or proof) supplied for the base case `n = 0`.\n- `bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)` — the step case: given a bit `b`, a number `n`, and an already-constructed value for `n`, produce a value for `Nat.bit b n` (the number whose binary representation is `b` followed by the binary digits of `n`).\n- `n : ℕ` — the natural number at which the recursion is evaluated.\n- Return type: `motive n` — the result at `n`.\n\n## 3. Conventions\n\nWhen `bit false 0 zero` computes back to `zero` (i.e., when the step does not disturb the base case on the path `Nat.bit false 0 = 0`), the recursion equation `VTask.binaryRec zero bit (Nat.bit b n) = bit b n (VTask.binaryRec zero bit n)` holds unconditionally; otherwise a side condition `n = 0 → b = true` is required to guarantee it. This is a known design convention to avoid the equation firing on `Nat.bit false 0 = 0` and conflating base and step cases.\n\n## 4. Worked examples\n\n- Claim: `VTask.binaryRec zero bit 0 = zero` for any `zero` and `bit`.\n\n- Claim: `VTask.binaryRec zero bit 1 = bit true 0 zero`, because `1 = Nat.bit true 0`.\n\n- Claim: Applying `VTask.binaryRec` with `motive = fun _ => ℕ`, `zero = 0`, and `bit = fun b n acc => 2 * acc + if b then 1 else 0` reconstructs every natural number — i.e., the recursor can be used to write the identity function on `ℕ` by re-assembling binary digits.\n\n- Claim: For `n ≠ 0`, evaluating `VTask.binaryRec zero bit n` peels off the least-significant bit of `n` and recurses on `n / 2` (the right-shift of `n` by one position).\n\n## 5. Boundaries\n\n- **At `n = 0`:** The recursor immediately returns `zero` without invoking `bit` at all.\n- **At `n = 1`:** Since `1 = Nat.bit true 0`, the recursor calls `bit true 0 zero` and returns that.\n- **Equation at `Nat.bit false 0`:** `Nat.bit false 0 = 0`, so calling the recursor on `Nat.bit false 0` returns `zero`, not `bit false 0 zero`. This is the one subtle edge: `bit` is *not* called when the argument equals 0 via the `false`-bit path. The unconditional step equation therefore requires either that `bit false 0 zero = zero` or that the bit is `true` when `n = 0`.\n- **Termination:** Recursion terminates because `n >>> 1 < n` for all `n ≠ 0` (halving strictly decreases a positive number).\n\n## 6. Not to be confused with\n\n- `Nat.binaryRec'` — a variant that carries an extra hypothesis `n = 0 → b = true` into the step, avoiding the edge-case equation issue entirely.\n- `Nat.binaryRecFromOne` — a variant that has a separate base case for `1` (not just `0`), useful when the `false`-leading-bit ambiguity would otherwise be inconvenient.\n- `Nat.rec` — the standard Peano recursion on `ℕ` (successor/zero), which recurses one step at a time rather than by binary digit stripping.\n"
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 5,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "Int.leastOfBdd",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  Decidable (Q n)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `refine`; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.71\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; No goals to be solved; Application type mismatch: The argument\n  hk\nhas type\n  k < m\nbut is expected to have type\n  ?m.57 < Nat.find hQ\nin the application\n  Nat.find_min hQ hk; unexpected token 'have'; expected command; attempt 2: compile_error: Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  Decidable (Q n)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.70\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; No goals to be solved; No goals to be solved; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; attempt 3: compile_error: Unknown identifier `P`; Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.70\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; attempt 4: compile_error: Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\nmotive : (∃ z, P z) → Sort ?u.89\nh_1 : (z : ℤ) → (hz : P z) → motive ⋯\nHinh✝ : ∃ z, P z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; (kernel) declaration type mismatch, 'VTask.leastOfBdd._aux_1' has type\n  {P : ℤ → Prop} → [DecidablePred P] → (b : ℤ) → (ℕ → Prop) → (n : ℕ) → Decidable (P (b + ↑n))\nbut it is expected to have type\n  {P : ℤ → Prop} → [DecidablePred P] → ℤ → (Q : ℕ → Prop) → (n : ℕ) → Decidable (Q n)",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        95,
+        103
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "7 accepted, 7 dropped, 0 errored"
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "rotated",
+          "detail": "exhausted 4 compile attempt(s): attempt 1: compile_error: Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  Decidable (Q n)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `refine`; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.71\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; No goals to be solved; Application type mismatch: The argument\n  hk\nhas type\n  k < m\nbut is expected to have type\n  ?m.57 < Nat.find hQ\nin the application\n  Nat.find_min hQ hk; unexpected token 'have'; expected command; attempt 2: compile_error: Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  Decidable (Q n)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.70\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; No goals to be solved; No goals to be solved; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; attempt 3: compile_error: Unknown identifier `P`; Unknown identifier `P`; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP✝ : ℤ → Prop\nmotive : (∃ z, P✝ z) → Sort ?u.70\nh_1 : (z : ℤ) → (hz : P✝ z) → motive ⋯\nHinh✝ : ∃ z, P✝ z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred Q\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; attempt 4: compile_error: Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\nmotive : (∃ z, P z) → Sort ?u.89\nh_1 : (z : ℤ) → (hz : P z) → motive ⋯\nHinh✝ : ∃ z, P z\n⊢ motive Hinh✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil; (kernel) declaration type mismatch, 'VTask.leastOfBdd._aux_1' has type\n  {P : ℤ → Prop} → [DecidablePred P] → (b : ℤ) → (ℕ → Prop) → (n : ℕ) → Decidable (P (b + ↑n))\nbut it is expected to have type\n  {P : ℤ → Prop} → [DecidablePred P] → ℤ → (Q : ℕ → Prop) → (n : ℕ) → Decidable (Q n)"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\n`VTask.leastOfBdd` computes the **least integer satisfying a given decidable predicate**, given an explicit lower bound and a proof that the predicate is satisfied somewhere. It returns not just the integer, but a bundled proof that (a) the predicate holds at that integer and (b) it is a lower bound for every integer satisfying the predicate—i.e., it is truly the minimum of the predicate's extension.\n\n## 2. Signature\n\n```\nVTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }\n```\n\n- `P : ℤ → Prop` — the predicate whose least witness is sought (implicit).\n- `[DecidablePred P]` — instance ensuring `P` can be decided computably at every integer.\n- `b : ℤ` — an explicit lower bound: every integer satisfying `P` is ≥ `b`.\n- `Hb : ∀ (z : ℤ), P z → b ≤ z` — proof that `b` is indeed a lower bound for `P`.\n- `Hinh : ∃ z, P z` — proof that `P` is satisfied somewhere.\n- **Returns** `{ lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }` — a subtype pairing the least integer `lb` with the proof that `P lb` holds and that `lb ≤ z` for every `z` with `P z`.\n\n## 3. Conventions\n\nThe return value is independent of the particular lower bound `b` supplied: if two lower bounds `b` and `b'` are both valid for the same `P` and the same inhabitedness proof `Hinh`, then the coercions of `VTask.leastOfBdd b Hb Hinh` and `VTask.leastOfBdd b' Hb' Hinh` to `ℤ` are equal. The returned integer is the unique element that is both in the extension of `P` and a lower bound for that extension.\n\n## 4. Worked examples\n\n- Claim: For the predicate `P z := (3 ≤ z)` with lower bound `b = 0`, the least value returned is `3`.\n\n- Claim: For the predicate `P z := (z = -5 ∨ z = 2)` with lower bound `b = -10`, the least value returned is `-5`, satisfies `P`, and is ≤ every integer satisfying `P`.\n\n- Claim: The coercion of `VTask.leastOfBdd b Hb Hinh` to `ℤ` equals the coercion of `VTask.leastOfBdd b' Hb' Hinh` whenever both `b` and `b'` are valid lower bounds for `P` and `Hinh` is the same inhabitation proof—reflecting that the answer depends only on `P`, not on the choice of bound.\n\n## 5. Boundaries\n\n- The lower bound `b` may be any integer, including negative integers, zero, or even a value far below the actual minimum; the function still finds the true least element.\n- If the least element satisfying `P` equals `b` exactly, the function returns `b` itself.\n- The predicate `P` must be decidable; without `DecidablePred P`, the function cannot be used.\n- The function requires a witness `Hinh`; if `P` were empty, no least element would exist, but the type of `Hinh` prevents that case.\n- There is no upper bound requirement on the least value; it can be arbitrarily large as long as it exists.\n\n## 6. Not to be confused with\n\n- `Int.greatestOfBdd` — the dual function returning the *greatest* integer satisfying a predicate that is bounded above, not the least.\n- `Nat.find` — finds the least *natural number* satisfying a predicate; `VTask.leastOfBdd` works over all integers (including negatives) and returns a bundled subtype.\n- `sInf` on sets of integers — the conditionally complete lattice infimum, which is noncomputable; `VTask.leastOfBdd` is its computable counterpart for decidable predicates with an explicit bound."
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
+      }
+    ],
+    "status": "repaired_and_shipped"
+  },
+  {
+    "name": "List.prev",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; unsolved goals\ncase head\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx : α✝\nh : x ∈ l\nb : α✝\nrest : List α✝\n⊢ sorry (); attempt 2: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.41 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; attempt 3: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; attempt 4: compile_error: Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Missing cases:\n_",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        103,
+        111
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "20 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "15 accepted, 5 dropped, 0 errored"
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "rotated",
+          "detail": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; unsolved goals\ncase head\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx : α✝\nh : x ∈ l\nb : α✝\nrest : List α✝\n⊢ sorry (); attempt 2: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.41 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; attempt 3: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; attempt 4: compile_error: Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Missing cases:\n_"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.prev\n\n### 1. Object\n\n`VTask.prev` retrieves the *cyclic predecessor* of an element in a list. Given a list `l` and an element `x` known to belong to `l`, it returns the element that immediately precedes `x` when the list is read left-to-right with wraparound: the head of the list wraps around to the last element. The search is first-hit: only the first occurrence of `x` in `l` is considered; any later duplicates are ignored.\n\n### 2. Signature\n\n```\nVTask.prev : {α : Type u_1} -> [DecidableEq α] -> (l : List α) -> (x : α) -> x ∈ l → α\n```\n\n- `α` — the element type (implicit, inferred from the list).\n- `[DecidableEq α]` — instance required to compare elements for equality.\n- `l : List α` — the list in which to search.\n- `x : α` — the element whose predecessor is sought.\n- `x ∈ l` — proof that `x` is indeed in `l` (ensures the function is total).\n- **Returns** `α` — the cyclic predecessor of the first occurrence of `x` in `l`.\n\n### 3. Conventions\n\nWhen `l` is a singleton `[y]`, the only element is its own predecessor: `VTask.prev [y] x h = y` regardless of the value of `x` (the membership proof forces `x = y`). There is no separate junk value for the empty list because the membership proof `x ∈ []` is uninhabited, making the empty-list case unreachable.\n\n### 4. Worked examples\n\n- Claim: `VTask.prev [1, 2, 3] 2 (by simp) = 1` — the predecessor of `2` in a three-element list is `1`, the element immediately before it.\n\n- Claim: `VTask.prev [1, 2, 3] 1 (by simp) = 3` — because `1` is the head, its cyclic predecessor wraps to the last element `3`.\n\n- Claim: `VTask.prev [1, 2, 3, 2, 4] 2 (by simp) = 1` — the first occurrence of `2` is at index 1 (0-based), so its predecessor is `1`; the second occurrence at index 4 is ignored.\n\n- Claim: `VTask.prev [1, 1, 2] 1 (by simp) = 2` — the first `1` is the head, so its cyclic predecessor is the last element `2`.\n\n### 5. Boundaries\n\n- **Empty list**: The case `l = []` is unreachable because `x ∈ []` has no proof. The function handles it only to be well-typed; no junk value is ever actually produced.\n- **Singleton list `[y]`**: Returns `y` itself. The single element is simultaneously the head and the last element, so it wraps around to itself.\n- **Head element**: When `x` equals the head of a list of length ≥ 2, the predecessor is the last element of the list (`getLast`).\n- **Duplicate elements**: Only the first occurrence of `x` is matched. All further occurrences are invisible to the function.\n- **Result membership**: The returned value always belongs to `l`.\n\n### 6. Not to be confused with\n\n- `List.next` — the cyclic *successor* function; `VTask.prev` and `List.next` are inverses of each other on duplicate-free lists.\n- `List.getLast` — returns the unconditional last element of a list, not the cyclic predecessor of a specific element.\n- `List.nthTail` / `List.get` — index-based accessors that do not perform cyclic wraparound or element-based lookup.\n"
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.37 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; unsolved goals\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\nheq : l = []\nh : x = hd ∨ x ∈ tl\n⊢ False; unsolved goals\ncase inl\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\nheq : x = hd\n⊢ sorry (); attempt 2: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; unsolved goals\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\nheq : hd = x\nhempty : l = []\nh : x = hd ∨ x ∈ tl\n⊢ False; attempt 3: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; unsolved goals\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\n_heq : hd = x\nhempty : l = []\nh : x = hd ∨ x ∈ tl\n⊢ False; attempt 4: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "n/a",
+        "check_result": "fail (unexpected error)",
+        "error_if_any": "AuthoringCallFailed: terminal after one retry: dossier response.domain.conventions[0]: field 'note' must be a non-empty string, got None"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "Finset.sumLexLift",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 2: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 3: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 4: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        117,
+        125
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "17 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "13 accepted, 4 dropped, 0 errored"
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "rotated",
+          "detail": "exhausted 4 compile attempt(s): attempt 1: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 2: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 3: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝; attempt 4: compile_error: Type mismatch\n  Sum.inl a\nhas type\n  ?m.3 ⊕ ?m.6\nbut is expected to have type\n  α₁✝ → β₁✝ → Finset γ₁✝"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\n`VTask.sumLexLift` combines four two-argument finset-valued functions into a single function over disjoint-union (sum) types. Given functions that handle the \"left–left\", \"right–right\", \"left–right (left output)\", and \"left–right (right output)\" combinations of inputs, it produces a finset of tagged outputs in a way consistent with the lexicographic order on sum types: a \"right\" input can never dominate a \"left\" input, so the right-then-left case always yields the empty set.\n\n## 2. Signature\n\n```\nVTask.sumLexLift : {α₁ : Type u_1} -> {α₂ : Type u_2} -> {β₁ : Type u_3} -> {β₂ : Type u_4} -> {γ₁ : Type u_5} -> {γ₂ : Type u_6} -> (f₁ : α₁ → β₁ → Finset γ₁) -> (f₂ : α₂ → β₂ → Finset γ₂) -> (g₁ : α₁ → β₂ → Finset γ₁) -> (g₂ : α₁ → β₂ → Finset γ₂) -> α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂)\n```\n\n- `α₁, α₂, β₁, β₂, γ₁, γ₂` — implicit universe-polymorphic types; `α₁ ⊕ α₂` and `β₁ ⊕ β₂` are the input sum types and `γ₁ ⊕ γ₂` is the output sum type.\n- `f₁ : α₁ → β₁ → Finset γ₁` — handles both inputs from the left summand; its outputs are tagged `inl`.\n- `f₂ : α₂ → β₂ → Finset γ₂` — handles both inputs from the right summand; its outputs are tagged `inr`.\n- `g₁ : α₁ → β₂ → Finset γ₁` — handles a left first argument and right second argument; contributes `inl`-tagged outputs.\n- `g₂ : α₁ → β₂ → Finset γ₂` — handles a left first argument and right second argument; contributes `inr`-tagged outputs.\n- The last two arguments `α₁ ⊕ α₂` and `β₁ ⊕ β₂` are the actual inputs to case-split on.\n- Returns a `Finset (γ₁ ⊕ γ₂)` whose elements are tagged according to which constituent function produced them.\n\n## 3. Conventions\n\nThere are no junk-value or out-of-domain conventions to declare: the function is total over all inputs and all four component functions, with every branch returning a well-defined finite set (including the empty set for the `inr`/`inl` case).\n\n## 4. Worked Examples\n\n- Claim: When both arguments are left-injected, `VTask.sumLexLift f₁ f₂ g₁ g₂ (inl a) (inl b)` equals the image of `f₁ a b` under the `inl` embedding into `γ₁ ⊕ γ₂`.\n\n- Claim: When the first argument is `inr a` and the second is `inl b`, `VTask.sumLexLift f₁ f₂ g₁ g₂ (inr a) (inl b)` equals `∅`, for any choice of `f₁, f₂, g₁, g₂`, reflecting lexicographic order (a right element is never less than a left element).\n\n- Claim: When the first argument is `inl a` and the second is `inr b`, the result is the disjoint union of `g₁ a b` (embedded via `inl`) and `g₂ a b` (embedded via `inr`), so elements from both `γ₁` and `γ₂` can appear.\n\n- Claim: When both arguments are right-injected, `VTask.sumLexLift f₁ f₂ g₁ g₂ (inr a) (inr b)` equals the image of `f₂ a b` under the `inr` embedding into `γ₁ ⊕ γ₂`.\n\n## 5. Boundaries\n\n- **`inr`/`inl` case always returns `∅`**: When the first argument is `inr a` and the second is `inl b`, the result is always the empty finset regardless of the four component functions. This reflects the lexicographic convention that no right-tagged element precedes any left-tagged element.\n- **Empty component functions**: If all four component functions return empty finsets, `VTask.sumLexLift` returns `∅` for every input pair.\n- **Monotonicity**: If each component function is pointwise dominated by another (i.e., `f₁ a b ⊆ f₁' a b` for all `a, b`, and similarly for `f₂, g₁, g₂`), then the corresponding lifted functions are also pointwise dominated.\n- **The `g₁`/`g₂` distinction matters only in the `inl`/`inr` case**: `g₁` and `g₂` are ignored whenever the inputs are both left or both right or are right-then-left.\n\n## 6. Not to be confused with\n\n- **`Finset.disjSum`**: The binary operation combining two finsets into a `Finset (α ⊕ β)` by tagging all elements — used internally as a building block in the `inl`/`inr` case, but is not itself the lifted map.\n- **`Sum.Lex` / `SumLex` ordering**: The lexicographic order relation on `α ⊕ β`; `VTask.sumLexLift` is a function designed to respect this order, not the order relation itself.\n- **`Finset.map` with `Sum.inl` or `Sum.inr` embeddings**: Used internally to inject finsets from `γ₁` or `γ₂` into `γ₁ ⊕ γ₂`, but each such map handles only a single summand, not the full four-case structure.\n"
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.sumLexLift : {α₁ : Type u_1} -> {α₂ : Type u_2} -> {β₁ : Type u_3} -> {β₂ : Type u_4} -> {γ₁ : Type u_5} -> {γ₂ : Type u_6} -> (f₁ : α₁ → β₁ → Finset γ₁) -> (f₂ : α₂ → β₂ → Finset γ₂) -> (g₁ : α₁ → β₂ → Finset γ₁) -> (g₂ : α₁ → β₂ → Finset γ₂) -> α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂)' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.sumLexLift : {α₁ : Type u_1} -> {α₂ : Type u_2} -> {β₁ : Type u_3} -> {β₂ : Type u_4} -> {γ₁ : Type u_5} -> {γ₂ : Type u_6} -> (f₁ : α₁ → β₁ → Finset γ₁) -> (f₂ : α₂ → β₂ → Finset γ₂) -> (g₁ : α₁ → β₂ → Finset γ₁) -> (g₂ : α₁ → β₂ → Finset γ₂) -> α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂)' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
+      }
+    ],
+    "status": "repaired_and_shipped"
+  },
+  {
+    "name": "OrderHom.prevFixed",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: unknown tactic; attempt 2: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ →o α✝) → (x : α✝) → f x ≤ x → ↑(Function.fixedPoints ⇑f)\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 3: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (f (sSup s)) ≤ f (sSup s)\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.49} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\ncase a.left.a\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\ns : Set α✝ := ⋯\nhle : f (sSup s) ≤ x\n⊢ f (f (sSup s)) ≤ f (sSup s); Type mismatch\n  hle\nhas type\n  f (sSup s) ≤ x\nbut is expected to have type\n  f (sSup s) ≤ f (f (sSup s)); attempt 4: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (f (sSup s)) ≤ f (sSup s)\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.52} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\ncase left.a\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\ns : Set α✝ := ⋯\nhle : f (sSup s) ≤ x\n⊢ f (f (sSup s)) ≤ f (sSup s)",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        130,
+        138
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "8 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "4 accepted, 4 dropped, 0 errored"
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "rotated",
+          "detail": "exhausted 4 compile attempt(s): attempt 1: compile_error: unknown tactic; attempt 2: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ →o α✝) → (x : α✝) → f x ≤ x → ↑(Function.fixedPoints ⇑f)\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 3: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (f (sSup s)) ≤ f (sSup s)\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.49} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\ncase a.left.a\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\ns : Set α✝ := ⋯\nhle : f (sSup s) ≤ x\n⊢ f (f (sSup s)) ≤ f (sSup s); Type mismatch\n  hle\nhas type\n  f (sSup s) ≤ x\nbut is expected to have type\n  f (sSup s) ≤ f (f (sSup s)); attempt 4: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (f (sSup s)) ≤ f (sSup s)\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.52} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\ncase left.a\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\ns : Set α✝ := ⋯\nhle : f (sSup s) ≤ x\n⊢ f (f (sSup s)) ≤ f (sSup s)"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\nGiven a complete lattice `α`, a monotone self-map `f : α → α`, and a point `x` satisfying `f x ≤ x` (i.e., `x` is a pre-fixed point of `f`), `VTask.prevFixed f x hx` is the **greatest fixed point of `f` that is less than or equal to `x`**. It lives in the subtype `fixedPoints f`, so it carries a proof that `f` maps it to itself.\n\n## 2. Signature\n\n```\nVTask.prevFixed : {α : Type u} -> [CompleteLattice α] -> (f : α →o α) -> (x : α) -> (hx : f x ≤ x) -> ↑(Function.fixedPoints ⇑f)\n```\n\n- `α` — the ambient complete lattice (implicit).\n- `[CompleteLattice α]` — the complete lattice instance (synthesised automatically).\n- `f : α →o α` — the monotone self-map whose fixed points are sought.\n- `x : α` — a point serving as an upper bound; it must be a pre-fixed point.\n- `hx : f x ≤ x` — the proof that `x` is a pre-fixed point of `f`.\n- Return value — an element of the subtype `Function.fixedPoints f`, i.e., a point `p` together with the proof `f p = p`, satisfying `p ≤ x` and being the greatest such fixed point.\n\n## 3. Conventions\n\nThe result is packaged as a term of the subtype `↑(Function.fixedPoints ⇑f)`. To access the underlying element of `α`, coerce with `↑` or `.val`. The coercion is at most `x` (i.e., `↑(VTask.prevFixed f x hx) ≤ x`). No junk-value conventions apply because the hypothesis `hx` is required by the type; the function is only defined when a pre-fixed point is supplied.\n\n## 4. Worked examples\n\n- Claim: For the identity map on a complete lattice, `prevFixed id x hx` equals `x` (since every point is a fixed point of the identity and `x` itself is the greatest fixed point ≤ `x`).\n\n- Claim: For a constant map `f := fun _ => ⊥` on a complete lattice, `hx` holds for every `x` because `f x = ⊥ ≤ x`. In this case `prevFixed f x hx` equals `⊥`, the unique fixed point of `f`, and `⊥ ≤ x` as expected.\n\n- Claim: `↑(VTask.prevFixed f x hx) ≤ x` holds for any `f`, `x`, and `hx : f x ≤ x` — this is exactly `prevFixed_le`.\n\n- Claim: A fixed point `y` of `f` satisfies `y ≤ VTask.prevFixed f x hx` if and only if `↑y ≤ x` — this characterises `prevFixed f x hx` as the *greatest* fixed point below `x`.\n\n## 5. Boundaries\n\n- **When `x` is itself a fixed point** (`f x = x`, so `hx : f x ≤ x` holds trivially from `le_refl`): the result is `x` itself, viewed as a member of `fixedPoints f`.\n- **Bottom element**: if `x = ⊥` and `f ⊥ ≤ ⊥`, then `f ⊥ = ⊥`, so `⊥` is a fixed point and `prevFixed f ⊥ hx = ⊥`.\n- **When the only fixed point is `⊥`**: `prevFixed f x hx = ⊥` for every pre-fixed point `x`, since `⊥` is the only candidate.\n- The hypothesis `hx` is essential: if `f x > x` the function is simply not applicable (not in the domain of definition).\n\n## 6. Not to be confused with\n\n- **`OrderHom.nextFixed f x hx`** — the *least* fixed point of `f` that is *greater than or equal to* `x`, the dual construction requiring `x ≤ f x`.\n- **`OrderHom.gfp f`** — the greatest fixed point of `f` over the *entire* lattice, with no upper-bound constraint.\n- **`OrderHom.lfp f`** — the least fixed point of `f` over the entire lattice, again with no reference point `x`.\n"
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.prevFixed : {α : Type u} -> [CompleteLattice α] -> (f : α →o α) -> (x : α) -> (hx : f x ≤ x) -> ↑(Function.fixedPoints ⇑f)' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ →o α✝) → (x : α✝) → f x ≤ x → ↑(Function.fixedPoints ⇑f)\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (sSup {y | f y = y ∧ y ≤ x}) ≤ sSup {y | f y = y ∧ y ≤ x}\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.70} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\nhS : ∀ y ∈ {y | f y = y ∧ y ≤ x}, y ≤ x\nhSx : sSup {y | f y = y ∧ y ≤ x} ≤ x\n⊢ f (sSup {y | f y = y ∧ y ≤ x}) ≤ sSup {y | f y = y ∧ y ≤ x}; attempt 3: compile_error: Tactic `apply` failed: could not unify the conclusion of `@sSup_le`\n  sSup ?s ≤ ?a\nwith the goal\n  f (sSup {y | f y = y ∧ y ≤ x}) ≤ sSup {y | f y = y ∧ y ≤ x}\n\nNote: The full type of `@sSup_le` is\n  ∀ {α : Type ?u.55} [inst : CompleteSemilatticeSup α] {s : Set α} {a : α}, (∀ b ∈ s, b ≤ a) → sSup s ≤ a\n\nα✝ : Type u\ninst✝ : CompleteLattice α✝\nf : α✝ →o α✝\nx : α✝\nhx : f x ≤ x\nhSx : sSup {y | f y = y ∧ y ≤ x} ≤ x\n⊢ f (sSup {y | f y = y ∧ y ≤ x}) ≤ sSup {y | f y = y ∧ y ≤ x}; attempt 4: compile_error: Unknown identifier `hfS_le`"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
+      }
+    ],
+    "status": "repaired_and_shipped"
+  },
+  {
+    "name": "Function.Embedding.setValue",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `h3`; Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.196 = f ?m.197\nin the application\n  Function.Embedding.injective f hxy; Unknown identifier `h4`; Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh3 : ¬f y = b\nhxy : b = f y\ninst✝ : (a' : α✝) → Decidable (a' = x)\nh2 : ¬y = x\n⊢ x = y; Unknown identifier `h3`; Unknown identifier `h2`; Function expected at\n  h4\nbut this term has type\n  f x = b\n\nNote: Expected a function because this term is being applied to the argument\n  (hne ▸ rfl); Unknown identifier `h2`; Type mismatch\n  rfl\nhas type\n  ?m.249 = ?m.249\nbut is expected to have type\n  f a = b; attempt 3: compile_error: Application type mismatch: The argument\n  hxy\nhas type\n  b = if y = x then b else f x\nbut is expected to have type\n  f ?m.109 = f ?m.110\nin the application\n  Function.Embedding.injective f hxy; Application type mismatch: The argument\n  h3\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬(if y = x then b else f y) = b\nin the application\n  absurd (Eq.symm hxy) h3; Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  b = if x = y then b else f y\nbut is expected to have type\n  f ?m.151 = f ?m.152\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Application type mismatch: The argument\n  h3\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if x = y then b else f x) = b\nin the application\n  absurd hxy h3; Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh2 : ¬y = a\nh3 : f x = b\nh4 : f y = b\nhxy : True\n⊢ x = y; Application type mismatch: The argument\n  h1\nhas type\n  ¬x = a\nbut is expected to have type\n  ¬a = y\nin the application\n  absurd (Function.Embedding.injective f hxy) h1; Application type mismatch: The argument\n  h2\nhas type\n  ¬y = a\nbut is expected to have type\n  ¬a = x\nin the application\n  absurd (Function.Embedding.injective f (Eq.symm hxy)) h2; attempt 4: compile_error: Tactic `split_ifs` failed: no if-then-else conditions to split\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh3 : f y = b\ninst✝ : (a' : α✝) → Decidable (a' = x)\nh2 : ¬y = x\nhxy : b = f x\n⊢ x = y; Tactic `subst` failed: did not find equation for eliminating 'h2'\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : x = a\nh2 : ¬y = a\nh3 : ¬f y = b\nhxy : b = f y\n⊢ x = y; Tactic `split_ifs` failed: no if-then-else conditions to split\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : y = a\nhxy : f a = b\n⊢ x = y; unsolved goals\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : ¬y = a\nh6 : f y = b\nhxy : f a = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : ¬y = a\nh6 : ¬f y = b\nhxy : f a = f y\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝ : y = a\nhxy : f x = b\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : f y = b\nhxy : f x = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        145,
+        153
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "15 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "15 accepted, 0 dropped, 0 errored"
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "rotated",
+          "detail": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `h3`; Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.196 = f ?m.197\nin the application\n  Function.Embedding.injective f hxy; Unknown identifier `h4`; Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh3 : ¬f y = b\nhxy : b = f y\ninst✝ : (a' : α✝) → Decidable (a' = x)\nh2 : ¬y = x\n⊢ x = y; Unknown identifier `h3`; Unknown identifier `h2`; Function expected at\n  h4\nbut this term has type\n  f x = b\n\nNote: Expected a function because this term is being applied to the argument\n  (hne ▸ rfl); Unknown identifier `h2`; Type mismatch\n  rfl\nhas type\n  ?m.249 = ?m.249\nbut is expected to have type\n  f a = b; attempt 3: compile_error: Application type mismatch: The argument\n  hxy\nhas type\n  b = if y = x then b else f x\nbut is expected to have type\n  f ?m.109 = f ?m.110\nin the application\n  Function.Embedding.injective f hxy; Application type mismatch: The argument\n  h3\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬(if y = x then b else f y) = b\nin the application\n  absurd (Eq.symm hxy) h3; Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  b = if x = y then b else f y\nbut is expected to have type\n  f ?m.151 = f ?m.152\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Application type mismatch: The argument\n  h3\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if x = y then b else f x) = b\nin the application\n  absurd hxy h3; Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh2 : ¬y = a\nh3 : f x = b\nh4 : f y = b\nhxy : True\n⊢ x = y; Application type mismatch: The argument\n  h1\nhas type\n  ¬x = a\nbut is expected to have type\n  ¬a = y\nin the application\n  absurd (Function.Embedding.injective f hxy) h1; Application type mismatch: The argument\n  h2\nhas type\n  ¬y = a\nbut is expected to have type\n  ¬a = x\nin the application\n  absurd (Function.Embedding.injective f (Eq.symm hxy)) h2; attempt 4: compile_error: Tactic `split_ifs` failed: no if-then-else conditions to split\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh3 : f y = b\ninst✝ : (a' : α✝) → Decidable (a' = x)\nh2 : ¬y = x\nhxy : b = f x\n⊢ x = y; Tactic `subst` failed: did not find equation for eliminating 'h2'\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : x = a\nh2 : ¬y = a\nh3 : ¬f y = b\nhxy : b = f y\n⊢ x = y; Tactic `split_ifs` failed: no if-then-else conditions to split\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : y = a\nhxy : f a = b\n⊢ x = y; unsolved goals\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : ¬y = a\nh6 : f y = b\nhxy : f a = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh5 : ¬y = a\nh6 : ¬f y = b\nhxy : f a = f y\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝ : y = a\nhxy : f x = b\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : f y = b\nhxy : f x = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\n`VTask.setValue f a b` produces a new injective function (embedding) from `α` to `β` that agrees with `f` everywhere except possibly at `a` and at one other point. Specifically, the new embedding sends `a` to the prescribed target `b`. If `b` is not in the image of `f`, no other point is affected. If `b` is already the image of some other point `a'` under `f` (i.e., `f a' = b`), then that collision is resolved by swapping: `a` maps to `b` and `a'` maps to the old value `f a`. Every other point maps to its original image under `f`. The result is always a valid embedding (injective).\n\n## 2. Signature\n\n```\nVTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β\n```\n\n- `α`, `β`: the source and target sorts (implicit, inferred).\n- `f : α ↪ β`: the base embedding whose value at one point is to be changed.\n- `a : α`: the source point whose image is being reassigned.\n- `b : β`: the new prescribed image of `a`.\n- `[∀ a', Decidable (a' = a)]`: instance supplying decidable equality for membership-of-`a` checks on the source.\n- `[∀ a', Decidable (f a' = b)]`: instance supplying decidability of whether any source point maps to `b` under `f`.\n- Returns: a new embedding `α ↪ β`.\n\n## 3. Conventions\n\nThe modified embedding evaluates via a three-way case split at each source point `a'`:\n1. If `a' = a`, the result is `b` (the prescribed new image).\n2. If `a' ≠ a` but `f a' = b` (a collision exists), the result is `f a` (the swap case).\n3. If `a' ≠ a` and `f a' ≠ b`, the result is `f a'` (unchanged).\n\nNo domain restriction is imposed: `f`, `a`, and `b` are arbitrary, and the construction works even when `b = f a` (in which case the embedding is unchanged at `a` and no swap occurs).\n\n## 4. Worked examples\n\n- Claim: For any embedding `f`, `VTask.setValue f a b` maps `a` to `b`.\n\n  This is the primary defining property: the image of the distinguished point `a` is exactly the prescribed value `b`, regardless of what `f a` was.\n\n- Claim: If `c ≠ a` and `f c ≠ b`, then `VTask.setValue f a b c = f c`.\n\n  When a source point `c` is neither the changed point nor the collision point, its image is untouched.\n\n- Claim: If `f a' = b` for some `a' ≠ a`, then `VTask.setValue f a b a' = f a`.\n\n  The collision is resolved by the swap: the former pre-image of `b` is redirected to the old image `f a`.\n\n- Claim: `VTask.setValue f a (f c) c = f a` for any `c`.\n\n  When `b = f c` (prescribing the current image of another point `c`), the swap sends `c` to the original `f a`. This matches `setValue_right_apply_eq`.\n\n## 5. Boundaries\n\n- **`b = f a`**: If the new value equals the current image of `a`, then no actual change occurs: the modified embedding is extensionally equal to `f` everywhere.\n- **`b` not in the image of `f`**: No collision point exists, so only the value at `a` changes; all other points retain their images.\n- **`a` is the unique pre-image of `b`**: That is, `f a = b` already, so we are in the `b = f a` case above — the embedding is unchanged.\n- **Sorts (not just types)**: The definition works for general sorts `Sort u_1` and `Sort u_2`, not only `Type`.\n- **Decidability instances**: The two `Decidable` instance arguments are required for the case split to compute; they are provided as typeclass arguments and must be supplied by the caller (either explicitly or by inference).\n\n## 6. Not to be confused with\n\n- **`Function.Embedding.trans`**: Composes two embeddings end-to-end; does not modify a single-point value.\n- **`Function.Embedding.codRestrict`**: Restricts the codomain of an embedding to a subtype; does not change any image value.\n- **`Equiv.setValue` (if it exists)**: A similar point-swap construction on full bijections (equivalences) would additionally need to ensure the inverse is updated; `VTask.setValue` operates only on injections, not bijections."
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature \"VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β\" not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `hya`; Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.195 = f ?m.196\nin the application\n  Function.Embedding.injective f hxy; Application type mismatch: The argument\n  hxy\nhas type\n  b = f y\nbut is expected to have type\n  f ?m.210 = f ?m.211\nin the application\n  Function.Embedding.injective f hxy; Unknown identifier `hya`; Unknown identifier `hya`; Application type mismatch: The argument\n  hxy\nhas type\n  f a = f y\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhyb : ¬f x = b\nh✝ : y = a\nhxy : f x = b\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhyb : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : f y = b\nhxy : f x = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhyb : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y; attempt 3: compile_error: Tactic `subst` failed: did not find equation for eliminating 'hxa'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxy : f a = b\nhxa : ¬x = a\nhya : y = a\nhxb : f x = b\n⊢ False; Tactic `subst` failed: did not find equation for eliminating 'hxa'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhya : ¬y = a\nhxb : f x = b\nhyb : f y = b\n⊢ x = y; No goals to be solved; attempt 4: compile_error: Application type mismatch: The argument\n  hya\nhas type\n  ¬y = a\nbut is expected to have type\n  ¬x = y\nin the application\n  absurd (Eq.symm hyx) hya; Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxy : f a = f y\nhxa : ¬x = a\nhya : ¬y = a\nhxb : f x = b\nhyb : ¬f y = b\nthis : a = y\n⊢ x = y"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature \"VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β\" not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `h3`; Type mismatch\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f y = b; Unknown identifier `h4`; Application type mismatch: The argument\n  Function.Injective.ne (Function.Embedding.injective f) (Ne.symm ?m.219)\nhas type\n  f ?m.218 ≠ f ?m.217\nbut is expected to have type\n  f y ≠ b\nin the application\n  Ne.symm (Function.Injective.ne (Function.Embedding.injective f) (Ne.symm ?m.219)); Unknown identifier `h3`; Unknown identifier `h3`; Unknown identifier `h3`; Application type mismatch: The argument\n  hxy\nhas type\n  f x = b\nbut is expected to have type\n  f ?m.224 = f ?m.225\nin the application\n  Function.Embedding.injective f hxy; Unknown identifier `h3`; attempt 3: compile_error: Application type mismatch: The argument\n  hxy\nhas type\n  b = if y = x then b else f x\nbut is expected to have type\n  f ?m.106 = f ?m.107\nin the application\n  Function.Embedding.injective f hxy; Application type mismatch: The argument\n  hyb\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬(if y = x then b else f y) = b\nin the application\n  absurd (Eq.symm hxy) hyb; Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  b = if x = y then b else f y\nbut is expected to have type\n  f ?m.149 = f ?m.150\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Application type mismatch: The argument\n  hxb\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if x = y then b else f x) = b\nin the application\n  absurd hxy hxb; Invalid field `symm`: The environment does not contain `True.symm`, so it is not possible to project the field `symm` from an expression\n  hxy\nof type `True`; Application type mismatch: The argument\n  hxb\nhas type\n  f x = b\nbut is expected to have type\n  ¬f a = f y\nin the application\n  absurd hxy hxb; Application type mismatch: The argument\n  hyb\nhas type\n  f y = b\nbut is expected to have type\n  ¬f a = f x\nin the application\n  absurd (Eq.symm hxy) hyb; attempt 4: compile_error: Tactic `split_ifs` failed: no if-then-else conditions to split\n\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxy :\n  (fun x => if x = a then b else if f x = b then f a else f x) x =\n    (fun x => if x = a then b else if f x = b then f a else f x) y\n⊢ x = y"
+      },
+      {
+        "attempt_n": 5,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature \"VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β\" not found verbatim in the dossier's Signature section"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "SimpleGraph.replaceVertex",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'SimpleGraph.replaceVertex' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        153,
+        156
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "rotated",
+          "detail": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'SimpleGraph.replaceVertex' -- must use the task symbol exclusively, everywhere in the dossier"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\nGiven a simple graph `G` on vertex type `V` and two vertices `s` and `t`, `VTask.replaceVertex G s t` is the simple graph on the same vertex type obtained by *replacing* `t`'s neighbourhood with `s`'s neighbourhood. Concretely, in the new graph every edge incident to `t` is removed, and `t` is instead made adjacent to exactly those vertices that `s` is adjacent to in `G` — **except** that the edge `{s, t}` is always absent (whether or not it was present in `G`).\n\n## 2. Signature\n\n```\nVTask.replaceVertex : {V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V\n```\n\n- `V` — the (implicit) vertex type, inferred from context.\n- `G : SimpleGraph V` — the base graph whose structure is being modified.\n- `s : V` — the *source* vertex whose neighbourhood is donated to `t`.\n- `t : V` — the *target* vertex whose neighbourhood is replaced.\n- `[DecidableEq V]` — required instance so that vertex-equality tests can be computed.\n- Returns a `SimpleGraph V` on the same vertex set.\n\n## 3. Conventions\n\nThe `s–t` edge is unconditionally absent in the result: even if `G` contains the edge `{s, t}`, it does not appear in `VTask.replaceVertex G s t`. No other junk-value or boundary conventions are declared beyond what follows from the simple-graph axioms (irreflexivity and symmetry).\n\n## 4. Worked Examples\n\n- Claim: In `VTask.replaceVertex G s t`, the vertex `t` is adjacent to `w` (for `w ≠ t`) if and only if `s` is adjacent to `w` in `G`.\n\n- Claim: The edge `{s, t}` is never present in `VTask.replaceVertex G s t`, regardless of whether `G.Adj s t` holds.\n\n- Claim: For two vertices `v` and `w` both different from `t`, adjacency in `VTask.replaceVertex G s t` coincides with adjacency in `G`: `(VTask.replaceVertex G s t).Adj v w ↔ G.Adj v w` whenever `v ≠ t` and `w ≠ t`.\n\n- Claim: If `G` is `n`-clique-free, then `VTask.replaceVertex G s t` is also `n`-clique-free (the operation preserves clique-freeness for every clique size).\n\n## 5. Boundaries\n\n- **`s = t`**: When the source and target are the same vertex, the operation replaces `t`'s neighbourhood with `t`'s own neighbourhood (i.e., `G` itself), but the loop-free condition and the removal of the `s–t` = `t–t` self-loop (which was already absent in a simple graph) mean the result equals `G`.\n- **`t` isolated in `G`**: If `t` has no neighbours in `G`, the operation still replaces `t`'s neighbourhood with `s`'s neighbourhood; `t` gains the same neighbours as `s` except for `s` itself.\n- **`s` isolated in `G`**: If `s` has no neighbours in `G`, then after replacement `t` becomes isolated in the new graph.\n- **`G.Adj s t`**: The theorems `edgeSet_replaceVertex_of_adj` and `card_edgeFinset_replaceVertex_of_adj` apply; the formula involves subtracting 1 extra relative to the non-adjacent case because the `s–t` edge is present in `G` but excluded from the result.\n- **`¬G.Adj s t`**: The theorems `edgeSet_replaceVertex_of_not_adj` and `card_edgeFinset_replaceVertex_of_not_adj` apply without the extra subtraction.\n\n## 6. Not to be Confused With\n\n- **`SimpleGraph.replaceVertex G s t` with `s` and `t` swapped** — the operation is not symmetric: `replaceVertex G s t` gives `t` the neighbours of `s`, while `replaceVertex G t s` gives `s` the neighbours of `t`.\n- **Vertex contraction** — contraction of `s` and `t` merges the two vertices into one and takes the union of their neighbourhoods; `VTask.replaceVertex` keeps all vertices distinct and only reassigns `t`'s adjacencies.\n- **`SimpleGraph.map` / `SimpleGraph.comap`** — those operations transform the graph via a function on vertex types; `VTask.replaceVertex` leaves the vertex type unchanged and only modifies the adjacency relation.\n"
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.replaceVertex : {V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected 'else'; attempt 2: compile_error: unexpected identifier; expected 'else'; attempt 3: compile_error: unexpected identifier; expected 'else'; attempt 4: compile_error: unexpected identifier; expected 'else'"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.replaceVertex : {V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected 'else'; attempt 2: compile_error: unexpected identifier; expected 'else'; attempt 3: compile_error: unexpected identifier; expected 'else'; attempt 4: compile_error: unexpected identifier; expected 'else'"
+      },
+      {
+        "attempt_n": 5,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.replaceVertex : {V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'SimpleGraph.replaceVertex' -- must use the task symbol exclusively, everywhere in the dossier"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "Equiv.subtypePreimage",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "signature check: pinned signature 'VTask.subtypePreimage : {α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β)' not found verbatim in the dossier's Signature section",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        156,
+        160
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "rotated",
+          "detail": "signature check: pinned signature 'VTask.subtypePreimage : {α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β)' not found verbatim in the dossier's Signature section"
+        }
+      ],
+      "rejected_dossier_md": "## 1. Object\n\nGiven a predicate `p` on a type `α` and a fixed function `x₀` defined on the subtype `{a : α // p a}`, `VTask.subtypePreimage` constructs a canonical bijection (an equivalence of types) between two things:\n\n- The **left side**: the collection of all functions `x : α → β` whose restriction to the subtype `{a // p a}` equals `x₀` (i.e., functions that \"extend\" `x₀` to all of `α`).\n- The **right side**: the collection of all functions from the complementary subtype `{a // ¬p a}` to `β`.\n\nIntuitively, once `x₀` pins down the values of `x` on the `p`-part of `α`, the only remaining freedom is how `x` behaves on the `¬p`-part — and that freedom is exactly captured by an arbitrary function on `{a // ¬p a}`.\n\n## 2. Signature\n\n```\nVTask.subtypePreimage :\n  {α : Sort u_1}          -- the domain type\n  {β : Sort u_4}          -- the codomain type\n  (p : α → Prop)          -- the predicate splitting α into two subtypes\n  [DecidablePred p]       -- decidability of p, needed to define the inverse by cases\n  (x₀ : { a // p a } → β)  -- the fixed function on the p-subtype\n  → { x // x ∘ Subtype.val = x₀ }  -- subtype of global functions extending x₀\n    ≃\n    ({ a // ¬p a } → β)   -- functions on the complementary subtype\n```\n\n## 3. Conventions\n\nThe forward direction of the equivalence sends a global extension `x` (together with its proof) to its restriction to `{a // ¬p a}`, simply evaluating `x` at elements where `p` fails.\n\nThe inverse direction reconstructs a global function from a function `y : {a // ¬p a} → β` by using `x₀` on the `p`-part and `y` on the `¬p`-part; the predicate `DecidablePred p` makes this case split computable.\n\nThe proof obligations (left and right inverses) confirm that these two operations are mutually inverse, so the result is a genuine equivalence, not merely a pair of functions.\n\n## 4. Worked examples\n\n- Claim: For `α = Bool`, `p = id` (i.e., `p b = b`), `β = ℕ`, and `x₀` the constant `0` function on `{b // b = true}`, the forward map sends any extension `x` to its value on `⟨false, by simp⟩`, i.e., `x false`.\n\n- Claim: The inverse of `VTask.subtypePreimage p x₀` applied to a function `y : {a // ¬p a} → β`, when evaluated at a point `a` with `p a`, yields `x₀ ⟨a, h⟩`. (This is `Equiv.subtypePreimage_symm_apply_coe_pos`.)\n\n- Claim: The inverse of `VTask.subtypePreimage p x₀` applied to a function `y : {a // ¬p a} → β`, when evaluated at a point `a` with `¬p a`, yields `y ⟨a, h⟩`. (This is `Equiv.subtypePreimage_symm_apply_coe_neg`.)\n\n- Claim: The composition `(VTask.subtypePreimage p x₀).toFun ∘ (VTask.subtypePreimage p x₀).invFun` is the identity on `{a // ¬p a} → β`, witnessing the right inverse law.\n\n## 5. Boundaries\n\n- If `p` is the constantly-true predicate (all of `α` satisfies `p`), then `{a // ¬p a}` is empty, and the right-hand side is the unique function from the empty subtype; the equivalence then says there is exactly one extension of `x₀`, namely `x₀` itself (composed with the coercion).\n- If `p` is the constantly-false predicate, then `{a // p a}` is empty and `x₀` is the unique function from the empty subtype. The left side is all functions `x : α → β` (there is only one trivial restriction condition), and the equivalence is with all of `{a // ¬p a} → β = α → β`, which is total.\n- The type `α` may be any `Sort`, not just `Type`, so the construction works for propositions too.\n- The equivalence is definitionally well-typed for any `β : Sort u_4`, including propositional codomain.\n\n## 6. Not to be confused with\n\n- `Equiv.subtypeEquiv`: an equivalence between two subtypes induced by a bijection between the ambient types, not about function extension.\n- `Equiv.arrowCongr` / `Equiv.piCongrLeft`: reindex the domain of a function type via an equivalence, rather than splitting by a predicate and fixing values on one part.\n- `Equiv.subtypeEquivRight`: changes the predicate on a fixed type to get an equivalent subtype, rather than building an equivalence of function types."
+    },
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}'"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.subtypePreimage : {α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β)' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}'"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "signature check: pinned signature 'VTask.subtypePreimage : {α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β)' not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 5,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}'"
+      }
+    ],
+    "status": "escalate_to_human"
+  },
+  {
+    "name": "Set.PartiallyWellOrderedOn.IsMinBadSeq",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "LeanError: Unknown environment.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        160,
+        160
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "LeanError: Unknown environment."
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Equiv.piEquivPiSubtypeProd",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "LeanError: Unknown environment.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        160,
+        160
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "LeanError: Unknown environment."
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Equiv.ofLeftInverse",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "truth_splice",
+    "rotation_reason": "LeanError: Unknown environment.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        160,
+        160
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "rotated",
+          "detail": "LeanError: Unknown environment."
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  }
+]
