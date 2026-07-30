@@ -23,6 +23,7 @@ def test_classification_template_renders_with_its_declared_inputs():
         docstring="ceiling log",
         definition_source="def clog := ...",
         mention_sidecar_excerpt="- Nat.clog_pow: ...",
+        return_shape="value",
     )
     assert "Nat.clog" in user
     assert "casework" in system  # vocabulary note present, not "decidable"
