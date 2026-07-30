@@ -363,9 +363,15 @@ def author_task(definition_name: str, config: PipelineConfig) -> TaskResult:
         )
 
 
-def _author_task_inner(definition_name: str, config: PipelineConfig, budget: CallBudget, log_start_line: int) -> TaskResult:
-    stage_records: list[StageRecord] = []
-    run_id = f"{definition_name}-{uuid.uuid4().hex[:8]}"
+def _make_rotate(
+    definition_name: str, config: PipelineConfig, budget: CallBudget,
+    stage_records: list[StageRecord], log_start_line: int,
+) -> Callable[..., "TaskResult"]:
+    """Factory for the `_rotate` closure `_author_task_inner`/`_author_from_dossier` each need --
+    identical shape, different `stage_records` list, so a factory avoids duplicating the body
+    (2026-07-30, extracted for `authoring.cleanup`'s re-run-downstream-of-a-repaired-dossier
+    path, which needs `_author_from_dossier`'s own rotation bookkeeping to work exactly the same
+    way as a normal run's, not a reimplementation of it)."""
 
     def _rotate(stage: str, detail: str, **partial) -> TaskResult:
         stage_records.append(StageRecord(stage=stage, status="rotated", detail=detail, calls_made=budget.calls_made))
@@ -391,6 +397,14 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             round_trip_score=partial.get("round_trip_score"),
             round_trip_flags=partial.get("round_trip_flags", []),
         )
+
+    return _rotate
+
+
+def _author_task_inner(definition_name: str, config: PipelineConfig, budget: CallBudget, log_start_line: int) -> TaskResult:
+    stage_records: list[StageRecord] = []
+    run_id = f"{definition_name}-{uuid.uuid4().hex[:8]}"
+    _rotate = _make_rotate(definition_name, config, budget, stage_records, log_start_line)
 
     # --- lookup ---------------------------------------------------------------------------
     try:
@@ -484,6 +498,31 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             detail=f"{len(consistency_result.flags)} convention-prose flag(s)", calls_made=budget.calls_made,
         )
     )
+
+    return _author_from_dossier(
+        definition_name, config, budget, log_start_line, stage_records, run_id,
+        definition_input, task_symbol, pinned_signature, signature_obj, truth_env,
+        mention_excerpt, classification_text, dossier_payload, consistency_result,
+    )
+
+
+def _author_from_dossier(
+    definition_name: str, config: PipelineConfig, budget: CallBudget, log_start_line: int,
+    stage_records: list[StageRecord], run_id: str,
+    definition_input: DefinitionInput, task_symbol: str, pinned_signature: str, signature_obj: PinnedSignature,
+    truth_env: int, mention_excerpt: str, classification_text: str,
+    dossier_payload: DossierPayload, consistency_result: ConsistencyCheckResult,
+) -> TaskResult:
+    """Everything downstream of a dossier that has already passed `dossier_consistency`: fact
+    proposal -> mechanical validation -> round-trip -> emit. Factored out of `_author_task_inner`
+    (2026-07-30) so `authoring.cleanup`'s repair loop can re-run this EXACT chain against a
+    revised dossier -- fresh facts, fresh round-trip, fresh emit, never grafting old facts onto
+    a new dossier -- without reimplementing any of its retry/flag logic. `stage_records` is
+    APPENDED TO, not replaced: the caller passes in whatever stage history already exists
+    (lookup/mention_retrieval/truth_splice/classification/dossier/dossier_consistency for a
+    normal run; the cleanup repair loop's own history for a re-run), so a `TaskResult`'s
+    `stage_records` always reads as one continuous story regardless of which caller built it."""
+    _rotate = _make_rotate(definition_name, config, budget, stage_records, log_start_line)
 
     # --- Call 3: fact proposal ----------------------------------------------------------------
     try:

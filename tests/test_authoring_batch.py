@@ -11,6 +11,7 @@ import pytest
 
 from authoring.batch import BatchRefused, load_name_list, run_batch
 from authoring.pipeline import DefinitionInput, PipelineConfig
+from authoring.rotation_queue import NOT_AGENT_FIXABLE, load_queue
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClient
 from harness.repl import get_warm_environment
@@ -181,7 +182,7 @@ def test_credential_expiry_writes_resume_file_with_exactly_the_unprocessed_names
 
     result = run_batch(
         names_file, config, preflight_path=preflight_path, chunk_size=1,
-        credentials_check=fake_credentials_check,
+        credentials_check=fake_credentials_check, queue_path=tmp_path / "pending_safety_updates.json",
     )
 
     assert result.status == "credentials_expired"
@@ -215,6 +216,7 @@ def test_resuming_from_the_resume_file_does_not_rerun_processed_names(mathlib_en
     first = run_batch(
         names_file, config, preflight_path=preflight_path, chunk_size=1,
         credentials_check=lambda: (calls.__setitem__("n", calls["n"] + 1) or calls["n"] <= 2),
+        queue_path=tmp_path / "pending_safety_updates.json",
     )
     assert first.status == "credentials_expired"
     assert len(bedrock_server.requests_received) == 2
@@ -224,7 +226,7 @@ def test_resuming_from_the_resume_file_does_not_rerun_processed_names(mathlib_en
     config2 = _real_config(server, env, tmp_path, bedrock_server2)
     second = run_batch(
         first.resume_path, config2, preflight_path=preflight_path, chunk_size=1,
-        credentials_check=lambda: True,
+        credentials_check=lambda: True, queue_path=tmp_path / "pending_safety_updates.json",
     )
     assert second.status == "completed"
     assert len(second.results) == 1
@@ -247,7 +249,7 @@ def test_batch_review_written_and_carry_on_mode_never_halts(mathlib_env, stub_se
     config = _real_config(server, env, tmp_path, bedrock_server)
     result = run_batch(
         names_file, config, preflight_path=preflight_path, chunk_size=8,
-        credentials_check=lambda: True,
+        credentials_check=lambda: True, queue_path=tmp_path / "pending_safety_updates.json",
     )
 
     assert result.status == "completed"
@@ -256,3 +258,40 @@ def test_batch_review_written_and_carry_on_mode_never_halts(mathlib_env, stub_se
     assert result.review_path is not None
     assert result.review_path.exists()
     assert "Tasks: 2" in result.review_path.read_text()
+
+
+def test_run_batch_writes_a_rotation_queue_entry_for_every_rotation(mathlib_env, stub_server, tmp_path):
+    """The one mechanism, no manual bookkeeping (authoring.rotation_queue's own docstring):
+    `run_batch` must write a queue entry itself, without any caller-side wiring, every time
+    `author_task` comes back ROTATED."""
+    server, env = mathlib_env
+    names_file = tmp_path / "names.txt"
+    names_file.write_text("Nat.clog\nNat.clog\n")
+    preflight_path = tmp_path / "preflight.json"
+    preflight_path.write_text(json.dumps({"Nat.clog": {"status": "pass"}}))
+    queue_path = tmp_path / "pending_safety_updates.json"
+
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ]
+    )
+    config = _real_config(server, env, tmp_path, bedrock_server)
+    result = run_batch(
+        names_file, config, preflight_path=preflight_path, chunk_size=8,
+        credentials_check=lambda: True, queue_path=queue_path,
+    )
+
+    assert result.status == "completed"
+    entries = load_queue(queue_path)
+    assert len(entries) == 2  # both rotations (max_calls_per_task=1 forces every task to rotate)
+    for entry in entries:
+        assert entry["name"] == "Nat.clog"
+        # classification itself succeeds (it's the one call the budget allows); the dossier
+        # CALL then exceeds the budget -- CallBudgetExceeded rotates at "dossier", not
+        # "dossier_consistency" (that's the mechanical CHECK stage, a different rotation shape).
+        assert entry["rotation_stage"] == "dossier"
+        assert entry["category"] == NOT_AGENT_FIXABLE  # "dossier" (the call) isn't agent-fixable, only "dossier_consistency" (the check) is
+        assert entry["status"] == "pending"
+        assert entry["repair_log"] == []

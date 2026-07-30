@@ -23,7 +23,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-from authoring.pipeline import PipelineConfig, TaskResult, author_task, render_batch_review
+from authoring.pipeline import PipelineConfig, TaskResult, _count_log_lines, author_task, render_batch_review
+from authoring.rotation_queue import DEFAULT_QUEUE_PATH, append_rotation
 
 DEFAULT_CHUNK_SIZE = 8
 
@@ -110,13 +111,20 @@ def run_batch(
     chunk_size: int = DEFAULT_CHUNK_SIZE,
     resume_dir: Path | None = None,
     credentials_check: Callable[[], bool] = _default_credentials_alive,
+    queue_path: Path = DEFAULT_QUEUE_PATH,
 ) -> BatchRunResult:
     """Refuses to start (`BatchRefused`, no spend) if `preflight_path` doesn't cover every name
     in `names_file` with a passing entry, or if `curation_yaml_path` is given and any name is
     curated out. Otherwise runs `names` in chunks of `chunk_size`, checking `credentials_check()`
     before every chunk; on a failed check, writes the unprocessed-names resume file into
     `resume_dir` (default: alongside `names_file`) and returns with
-    `status="credentials_expired"` rather than continuing."""
+    `status="credentials_expired"` rather than continuing.
+
+    **Rotation queue (2026-07-30)**: every `ROTATED` result gets one entry appended to
+    `queue_path` (`authoring.rotation_queue.append_rotation`) -- the one mechanism, no manual
+    bookkeeping (see that module's own docstring). `queue_path` is a parameter, not hardcoded,
+    so tests can point it at a scratch file rather than the real
+    `authoring/output/pending_safety_updates.json`."""
     names = load_name_list(names_file)
     _validate_preflight_and_curation(names, preflight_path, curation_yaml_path)
 
@@ -151,9 +159,16 @@ def run_batch(
             )
 
         for name in chunk:
+            log_line_start = _count_log_lines(config.client.log_path)
             result = author_task(name, config)
             all_results.append(result)
             processed.append(name)
+            if result.outcome == "ROTATED":
+                log_line_end = _count_log_lines(config.client.log_path)
+                append_rotation(
+                    result, names_file, call_log_path=config.client.log_path,
+                    log_line_start=log_line_start, log_line_end=log_line_end, queue_path=queue_path,
+                )
 
     review_path = _write_partial_review(all_results, config)
     return BatchRunResult(
