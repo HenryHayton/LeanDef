@@ -153,6 +153,10 @@ class DefinitionInput:
     # classification call infers from prose (2026-07-30, docs/design/llm_io_contract_v1.md §2
     # enforcement). Required, not defaulted: a caller that has no real corpus to read this from
     # has no business authoring a task at all, so there is no honest default to fall back to.
+    decidability: str | None = None  # authoring.preflight.probe_decidability's vocabulary
+    # ("decidable"|"undecidable"|"indeterminate") -- unlike return_shape, genuinely optional:
+    # None is the correct, common value for every non-Prop task, not a caller oversight, so
+    # this is defaulted rather than required (2026-07-30, docs/design/llm_io_contract_v1.md §4.1).
     mention_records: list[MentionRecord] = field(default_factory=list)
 
 
@@ -443,7 +447,8 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
                 config.client, config.flagship_model_id,
                 pinned_signature=pinned_signature, definition_source=definition_input.definition_source,
                 docstring=definition_input.docstring, mention_sidecar_excerpt=mention_excerpt,
-                classification=classification_input, budget=budget,
+                classification=classification_input, decidability=definition_input.decidability,
+                budget=budget,
             )
         except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
             holder["last_failure_kind"] = "call"
@@ -488,6 +493,7 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             mention_sidecar_excerpt=mention_excerpt, classification=classification_text, budget=budget,
             task_symbol=task_symbol, forbidden_name=definition_input.name,
             domain_constraint=dossier_payload.domain.constraint,
+            decidability=definition_input.decidability,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)

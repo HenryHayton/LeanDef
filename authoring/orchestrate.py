@@ -191,9 +191,14 @@ def run_dossier_call(
     docstring: str,
     mention_sidecar_excerpt: str,
     classification: str,
+    decidability: str | None = None,
     budget: CallBudget | None = None,
     max_tokens: int | None = None,
 ) -> DossierPayload:
+    """`decidability` (2026-07-30, `authoring.preflight.probe_decidability`'s vocabulary --
+    `None` for a non-Prop task, rendered as `"not_applicable"`) governs whether the dossier's
+    Prop-valued worked examples may carry an executable command; see `dossier.txt`'s own
+    Worked-examples instruction."""
     template = load_prompt_template("dossier")
     system, user = template.render(
         pinned_signature=pinned_signature,
@@ -201,6 +206,7 @@ def run_dossier_call(
         docstring=docstring,
         mention_sidecar_excerpt=mention_sidecar_excerpt,
         classification=classification,
+        decidability=decidability if decidability is not None else "not_applicable",
     )
     max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["dossier"]
     return _call_llm_json(client, system, user, model_id=model_id, parse_fn=parse_dossier, budget=budget, max_tokens=max_tokens)
@@ -265,24 +271,33 @@ def run_fact_proposal_call(
     task_symbol: str | None = None,
     forbidden_name: str | None = None,
     domain_constraint: str | None = None,
+    decidability: str | None = None,
     max_tokens: int | None = None,
 ) -> FactProposalResult:
     """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
     on both the initial parse and the row-3 per-fact retry, so a raw-Mathlib-name leak is caught
     (and the offending fact dropped, not silently shipped) the same way on either path.
     `domain_constraint` (2026-07-28) threads through the same way, gating the membership
-    `domain_inputs` pre-check `parse_facts` mirrors from `harness.task_schema`."""
+    `domain_inputs` pre-check `parse_facts` mirrors from `harness.task_schema`. `decidability`
+    (2026-07-30, `authoring.preflight.probe_decidability`'s vocabulary -- `None` for a non-Prop
+    task) is rendered into the prompt AND threads to `parse_facts`, so the model is told which
+    mechanism to use for this Prop up front, and a fact that ignores that guidance is still
+    caught mechanically rather than trusted."""
     template = load_prompt_template("fact_proposal")
     system, user = template.render(
         pinned_signature=pinned_signature,
         dossier_md=dossier_md,
         mention_sidecar_excerpt=mention_sidecar_excerpt,
         classification=classification,
+        decidability=decidability if decidability is not None else "not_applicable",
     )
     max_tokens = max_tokens if max_tokens is not None else authoring_cfg.AUTHORING_MAX_TOKENS["fact_proposal"]
 
     def _parse(text: str):
-        return parse_facts(text, task_symbol=task_symbol, forbidden_name=forbidden_name, domain_constraint=domain_constraint)
+        return parse_facts(
+            text, task_symbol=task_symbol, forbidden_name=forbidden_name,
+            domain_constraint=domain_constraint, decidability=decidability,
+        )
 
     facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget, max_tokens=max_tokens)
     if not rejections:

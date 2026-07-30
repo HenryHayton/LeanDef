@@ -260,6 +260,64 @@ def test_parse_facts_membership_reject_missing_violated_property_is_a_rejection(
     assert rejections[0].reason_code == ReasonCode.MALFORMED_MISSING_VIOLATED_PROPERTY
 
 
+def test_parse_facts_membership_decide_on_undecidable_prop_is_a_rejection():
+    entry = {
+        "id": "x", "type": "membership", "mechanism": "decide",
+        "statement": "example : P 0 := by decide", "instance": "P 0", "polarity": "accept",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), decidability="undecidable")
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_DECIDE_ON_UNDECIDABLE_PROP
+
+
+def test_parse_facts_membership_decide_on_indeterminate_prop_is_also_a_rejection():
+    """`indeterminate` gates too -- a probe that couldn't determine decidability is not
+    permission to guess it can."""
+    entry = {
+        "id": "x", "type": "membership", "mechanism": "decide",
+        "statement": "example : P 0 := by decide", "instance": "P 0", "polarity": "accept",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), decidability="indeterminate")
+    assert facts == []
+    assert len(rejections) == 1
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_DECIDE_ON_UNDECIDABLE_PROP
+
+
+def test_parse_facts_membership_decide_on_decidable_prop_parses_clean():
+    entry = {
+        "id": "x", "type": "membership", "mechanism": "decide",
+        "statement": "example : P 0 := by decide", "instance": "P 0", "polarity": "accept",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), decidability="decidable")
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_membership_decide_when_decidability_not_supplied_parses_clean():
+    """`decidability=None` (default) means no check -- backward compatible with every existing
+    caller that has no such context (e.g. a value-typed task, where this never applies)."""
+    entry = {
+        "id": "x", "type": "membership", "mechanism": "decide",
+        "statement": "example : P 0 := by decide", "instance": "P 0", "polarity": "accept",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]))
+    assert rejections == []
+    assert len(facts) == 1
+
+
+def test_parse_facts_membership_proof_mechanism_unaffected_by_decidability():
+    """The gate is specifically about mechanism 'decide' -- a proof-mechanism membership fact
+    on an undecidable Prop is exactly the intended path, never rejected by this check."""
+    entry = {
+        "id": "x", "type": "membership", "mechanism": "proof",
+        "statement": "P 0", "instance": "P 0", "polarity": "accept",
+    }
+    facts, rejections = parse_facts(json.dumps([entry]), decidability="undecidable")
+    assert rejections == []
+    assert len(facts) == 1
+
+
 def test_parse_facts_duplicate_ids_within_one_response_raises():
     entry1 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 1", "domain_inputs": {"n": "1"}}
     entry2 = {"id": "dup", "type": "casework", "mechanism": "decide", "statement": "#eval 2", "domain_inputs": {"n": "2"}}

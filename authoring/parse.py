@@ -333,6 +333,7 @@ def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
 def _parse_fact_entry(
     entry: object, index: int, *,
     task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
+    decidability: str | None = None,
 ) -> ProposedFact | FactParseRejection:
     context = f"facts[{index}]"
     if not isinstance(entry, dict):
@@ -522,6 +523,29 @@ def _parse_fact_entry(
                     "missing required non-empty 'violated_property'"
                 ),
             )
+        # Decidability gate (2026-07-30, docs/design/llm_io_contract_v1.md §4.1/§4.4): a
+        # `mechanism: decide` membership fact needs a real `Decidable` instance to check against
+        # -- `decidability` (authoring.preflight.probe_decidability's own vocabulary, threaded
+        # in from DefinitionInput) is `None` for a non-Prop task (never gates: decide-mechanism
+        # membership facts on a value-typed object check decidable equality on the OUTPUT type,
+        # not this) or a live `"decidable"|"undecidable"|"indeterminate"` verdict for a
+        # Prop-valued one. Only `"decidable"` clears this -- `"indeterminate"` gates too, since
+        # a probe that couldn't determine decidability is not permission to guess it can.
+        if (
+            mechanism == "decide"
+            and decidability is not None
+            and decidability != "decidable"
+        ):
+            return FactParseRejection(
+                index=index,
+                fragment=entry,
+                reason_code=ReasonCode.MALFORMED_DECIDE_ON_UNDECIDABLE_PROP,
+                detail=(
+                    f"{context}: membership fact {fact_id!r} uses mechanism 'decide' but this "
+                    f"task's decidability probe reports {decidability!r}, not 'decidable' -- use "
+                    "mechanism 'proof' instead"
+                ),
+            )
 
     # Task-symbol pre-check (contract §4.4): the model must write every statement against the
     # task symbol, never the real Mathlib name it may have seen in `definition_source`/
@@ -571,6 +595,7 @@ def _parse_fact_entry(
 def parse_facts(
     text: str, *,
     task_symbol: str | None = None, forbidden_name: str | None = None, domain_constraint: str | None = None,
+    decidability: str | None = None,
 ) -> tuple[list[ProposedFact], list[FactParseRejection]]:
     """Parse Call 3's output array. Raises `ParseError` (whole-call, contract §6 rows 1-2) for
     malformed JSON or a schema-shape violation (missing/wrong-typed field, bad enum value,
@@ -588,8 +613,10 @@ def parse_facts(
     the model wrote against `task_symbol`, not the real Mathlib name. `domain_constraint` (the
     dossier's `domain.constraint`, already known by the time fact-proposal runs), when
     supplied, gates the membership `domain_inputs` check the same way
-    `harness.task_schema._validate_fact` does. All three default to `None` (no check),
-    backward compatible with callers that have no such context yet."""
+    `harness.task_schema._validate_fact` does. `decidability` (2026-07-30,
+    `authoring.preflight.probe_decidability`'s vocabulary), when supplied, gates a
+    `mechanism: decide` membership fact to only `"decidable"` Props. All four default to `None`
+    (no check), backward compatible with callers that have no such context yet."""
     try:
         data = json.loads(text)
     except (json.JSONDecodeError, TypeError) as e:
@@ -605,7 +632,8 @@ def parse_facts(
     seen_ids: set[str] = set()
     for i, entry in enumerate(data):
         parsed = _parse_fact_entry(
-            entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name, domain_constraint=domain_constraint
+            entry, i, task_symbol=task_symbol, forbidden_name=forbidden_name,
+            domain_constraint=domain_constraint, decidability=decidability,
         )
         if isinstance(parsed, FactParseRejection):
             rejections.append(parsed)

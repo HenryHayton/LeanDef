@@ -5,6 +5,7 @@ needs a real warm Mathlib environment, same pattern as `tests/test_authoring_val
 """
 
 import pytest
+from lean_interact import Command
 
 from authoring.consistency import (
     ELABORATED,
@@ -23,7 +24,7 @@ from authoring.consistency import (
 )
 from authoring.facts import ConventionPoint, DomainSpec
 from authoring.validate import ReasonCode
-from harness.repl import get_warm_environment
+from harness.repl import get_warm_environment, run_checked
 from harness.results import CheckStatus
 
 
@@ -255,6 +256,26 @@ def test_worked_example_no_command_and_non_elaborating_claim_is_unchecked_prose(
     dossier = "# Worked examples\n- Claim: this is just prose about the function, not Lean\n"
     checks = check_worked_examples(server, env, dossier)
     assert checks[0].kind == UNCHECKED_PROSE_EXAMPLE
+
+
+def test_worked_example_undecidable_prop_commandless_claim_checked_structurally_not_rejected(mathlib_env):
+    """Item 4.1 (2026-07-30): for an undecidable Prop, the dossier prompt now instructs the
+    model to omit the runnable command entirely -- this confirms the EXISTING commandless-claim
+    path (the `ELABORATED`/`UNCHECKED_PROSE_EXAMPLE` branch above) already does exactly the
+    'check structurally, don't execute' thing Item 4.1 asks for, against a genuinely undecidable
+    real Prop (an unbounded existential over ℕ -- no `Decidable` instance exists for it, the
+    same shape `authoring.preflight`'s own decidability-probe tests use), not a synthetic stand-in."""
+    server, env = mathlib_env
+    setup = run_checked(
+        server,
+        Command(cmd="def ConsistencyProbeUndecidable (n : ℕ) : Prop := ∃ m : ℕ, m > n ∧ Even m", env=env),
+        timeout=30.0,
+    )
+    assert setup.status is CheckStatus.PASSED, setup.detail
+
+    dossier = "# Worked examples\n- Claim: ConsistencyProbeUndecidable 5\n"
+    checks = check_worked_examples(server, setup.env, dossier)
+    assert checks[0].kind == ELABORATED  # elaborates as a Prop -- checked, not rejected, not executed
 
 
 def test_no_worked_examples_found_is_malformed(mathlib_env):

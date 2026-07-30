@@ -5,6 +5,11 @@
 #   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt (the
 #                              primary feedstock for global-fact anchors)
 #   classification          -- str, a rendering of Call 1's Classification
+#   decidability            -- str, "decidable"|"undecidable"|"indeterminate"|"not_applicable"
+#                              (authoring.preflight.probe_decidability's vocabulary; "not_applicable"
+#                              for a non-Prop task) -- governs whether mechanism "decide" is valid
+#                              for a membership fact on this Prop (2026-07-30, see the per-type
+#                              rules below); a fact that ignores this is mechanically rejected
 #
 # Deliberately NOT included: the true Lean definition source. Facts are proposed from the
 # dossier alone -- the same information barrier the round-trip check depends on (contract §4,
@@ -59,6 +64,18 @@ the dossier, so treat this as a hard format requirement, not a suggestion:
   never required. Include at least one reject-polarity fact where the regime admits it. Draw
   instances from, or keep them consistent with, the dossier's worked examples. Example
   membership fact: `{{"id": "clog_mem_1", "type": "membership", "mechanism": "decide", "statement": "example : VTask.clog 2 8 ∈ Set.Ici 0 := by decide", "instance": "VTask.clog 2 8", "expected_type": "ℕ", "polarity": "accept", "domain_inputs": {{"b": "2", "n": "8"}}}}`
+
+  For a Prop-valued task, membership is the PRIMARY probe class -- there is no "casework" for a
+  Prop (see the classification rule above), so the concrete casework-style probing you would
+  otherwise do belongs here instead, as accept/reject POLARITY PAIRS: for each boundary or
+  representative case in the dossier, propose a holds-instance (`polarity: "accept"`) alongside
+  a fails-instance (`polarity: "reject"`, with `violated_property`) exercising the same
+  boundary from the other side. `mechanism` for a membership fact on a Prop-valued task depends
+  on this task's decidability (given as a stated fact, see the input-assembly spec above):
+  "decidable" -- `mechanism: "decide"` as in the example above. "undecidable" or
+  "indeterminate" -- `mechanism: "proof"` instead (a bare-Prop `statement`, no `:=`/`by`, same
+  shape as a global fact's statement); a `"decide"` fact on a non-"decidable" Prop is
+  mechanically rejected, not merely discouraged.
 - global (mechanism "proof"): `statement` is REQUIRED and is a BARE Prop -- no `:=`, no tactic
   block, no `by`. `anchors` is REQUIRED and NON-EMPTY: fully-qualified Mathlib theorem names --
   cite the specific theorems the fact derives from, not a namespace dump. `anchors` must be
@@ -66,7 +83,12 @@ the dossier, so treat this as a hard format requirement, not a suggestion:
   fact restates its anchor theorem near-verbatim (the anchor essentially proves it outright, not
   merely contributes to it), set `self_restatement: true` on that fact -- omit it (or set
   `false`) otherwise. Be honest here: this doesn't penalize the fact, it only marks that its
-  eventual discharge cost can't be read as a difficulty estimate. Example global fact:
+  eventual discharge cost can't be read as a difficulty estimate. The same self-restatement
+  discipline applies to a Prop-valued task's own definitional unfolding, not just anchor
+  theorems: a fact stating nothing more than what the task symbol already says by definition
+  (e.g., for `VTask.ModEq n a b`, a fact whose content is just "`VTask.ModEq n a b ↔ a % n = b %
+  n`") is trivial by unfolding alone and must be marked `self_restatement: true` the same way --
+  it is not wrong to propose, but it must be marked, for the same honesty reason. Example global fact:
   `{{"id": "clog_monotone", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, Monotone (VTask.clog b)", "anchors": ["Nat.clog_monotone"], "self_restatement": true}}`
 
 Suite-level rules: fact `id`s unique within the suite; no fact may quantify over anything

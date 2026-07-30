@@ -28,8 +28,8 @@ from authoring.prompt_loader import PROMPTS_DIR, load_prompt_template
 # exact set `.render()` requires -- see each template's own USER section).
 _RENDER_INPUTS = {
     "classification": dict(pinned_signature="X : Nat", definition_source="def X := 0", docstring="d", mention_sidecar_excerpt="(none)", return_shape="value"),
-    "dossier": dict(pinned_signature="X : Nat", definition_source="def X := 0", docstring="d", mention_sidecar_excerpt="(none)", classification="c"),
-    "fact_proposal": dict(pinned_signature="X : Nat", dossier_md="# Object\n...", mention_sidecar_excerpt="(none)", classification="c"),
+    "dossier": dict(pinned_signature="X : Nat", definition_source="def X := 0", docstring="d", mention_sidecar_excerpt="(none)", classification="c", decidability="not_applicable"),
+    "fact_proposal": dict(pinned_signature="X : Nat", dossier_md="# Object\n...", mention_sidecar_excerpt="(none)", classification="c", decidability="not_applicable"),
     "round_trip": dict(pinned_signature="X : Nat", dossier_md="# Object\n..."),
 }
 

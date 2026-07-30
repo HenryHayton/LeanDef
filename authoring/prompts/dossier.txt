@@ -5,6 +5,11 @@
 #   mention_sidecar_excerpt -- str, output of authoring.mentions.render_mention_excerpt
 #   classification          -- str, a rendering of Call 1's Classification (regimes, difficulty,
 #                              rationale) -- informs which sections need the most weight
+#   decidability            -- str, "decidable"|"undecidable"|"indeterminate"|"not_applicable"
+#                              (authoring.preflight.probe_decidability's vocabulary; "not_applicable"
+#                              for a non-Prop task) -- governs whether a Prop-valued worked example
+#                              may carry an executable command (2026-07-30, see §4.1's Worked
+#                              examples instruction below)
 #
 # Output required: strict JSON only, matching authoring.parse.parse_dossier's shape:
 #   {dossier_md: "...", domain: {constraint, variables, conventions: [{point, statement, note}, ...]}}
@@ -46,6 +51,16 @@ alone. Write it in six required sections, in this fixed order:
      example : VTask.clog 2 37 = 6 := by decide
      ```
    For regimes with no runnable command, the `Claim:` bullet alone is fine.
+
+   This definition's decidability is: {decidability} -- mechanically determined, given to you
+   as fact. If "decidable", a Prop-valued worked example may carry an executable command as
+   above (`by decide` or `by native_decide`). If "undecidable" or "indeterminate", do NOT
+   attach a runnable command to any Prop-valued worked example -- Lean cannot execute a decide-
+   style check against it (there is no `Decidable` instance to find, or none that can be
+   mechanically confirmed), so a command there would only fail for a reason that has nothing to
+   do with whether your claim is true. Write the `Claim:` bullet alone; it is checked by
+   elaboration (does it parse as a `Prop`?), not execution. If "not_applicable" (this
+   definition is not Prop-valued), this paragraph does not apply.
 5. Boundaries -- edge cases and the behaviour at them.
 6. Not to be confused with -- 1-3 nearby objects or plausible misreadings, one line each.
 
