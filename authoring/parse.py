@@ -44,6 +44,7 @@ import re
 from dataclasses import dataclass
 
 from authoring.facts import ConventionPoint, DomainSpec, ProposedFact
+from authoring.namematch import SUBSTRING, any_name_occurs
 from authoring.validate import ReasonCode
 
 REGIMES = frozenset({"casework", "membership", "global"})
@@ -327,24 +328,14 @@ class FactParseRejection:
 
 
 def _leaks_forbidden_name(forbidden_name: str, *parts: str | None, task_symbol: str | None = None) -> bool:
-    # `isinstance(part, str)` guards against a non-string, non-None `part` (a dict/list/int a
-    # caller forgot to type-check first) -- `x in 5` raises `TypeError`, `x in {...}`/`x in
-    # [...]` wouldn't crash but would check the wrong thing (dict keys / list elements, not
-    # substring containment). Defense in depth: `_parse_fact_entry` also type-checks
-    # `instance`/`expected_type` before this is ever called.
-    #
-    # `task_symbol` (2026-07-31): for an UNNAMESPACED real name the task symbol CONTAINS it --
-    # `VTask.Monotone` contains `Monotone` -- so a plain substring test flags the very symbol
-    # every statement is required to use, rejecting 100% of facts (confirmed live: 12/12, 14/14
-    # and 15/15 for Monotone, DependsOn and memPartition, every one a correct `VTask.` usage).
-    # Occurrences of the task symbol are removed BEFORE the substring test, which keeps this
-    # matcher's deliberate strictness (no word boundaries -- see `docs/deferred.md` and
-    # `authoring.consistency._contains_real_name`, the word-boundary family) for everything
-    # else: a statement mixing both, e.g. `VTask.Monotone (Monotone f)`, still leaks.
-    def _strip(part: str) -> str:
-        return part.replace(task_symbol, "") if task_symbol else part
-
-    return any(isinstance(part, str) and forbidden_name in _strip(part) for part in parts)
+    """Thin alias kept for readability at this module's call site; the matcher itself lives in
+    `authoring.namematch` (2026-07-31 consolidation). `SUBSTRING` boundary mode preserves this
+    check's deliberately-stricter no-word-boundary semantics (2026-07-28 sweep, see
+    `docs/deferred.md`) -- that difference is now an explicit parameter rather than a separate
+    implementation. `task_symbol` is accepted for call-site clarity but no longer needed to
+    exclude the symbol: `name_occurs` excludes anything under `TASK_SYMBOL_PREFIX` by
+    construction, which also covers callers that never pass one."""
+    return any_name_occurs(parts, forbidden_name, boundary=SUBSTRING)
 
 
 def _parse_fact_entry(

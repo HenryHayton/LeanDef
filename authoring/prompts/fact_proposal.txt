@@ -37,6 +37,14 @@ appear in the mention excerpt's quoted theorem statements below. A statement tha
 real name is mechanically rejected. The one exception is `anchors`: those must be real,
 fully-qualified Mathlib theorem names (see the global rule below) -- never the task symbol.
 
+Referencing OTHER Mathlib declarations: allowed and often necessary -- the prohibition above is
+only about this task's own target. But every such reference must be FULLY QUALIFIED. Your
+statements are elaborated at the root namespace, NOT inside the namespace the definition source
+was written in, so a name that appears bare in that source will not resolve as written. If the
+source says `¬IsBadSeq r s g` because it sits inside `namespace Foo.Bar`, you must write
+`¬Foo.Bar.IsBadSeq r s g`. Copying an unqualified sibling name straight out of the definition
+source is a common and entirely avoidable way to lose a whole fact suite to `Unknown identifier`.
+
 The mention excerpt is reference evidence, not source text: theorems known to hold about this
 object, shown as extracted statements pulled out of their enclosing file (they may not compile
 standalone -- missing `variable`/`open` context is normal, not a defect). Use it to confirm

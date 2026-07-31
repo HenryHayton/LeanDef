@@ -280,6 +280,31 @@ ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY = "UNVERIFIED_TERMINATION_ONLY"
 # `authoring.consistency.check_round_trip_recalls_target` for the detection mechanism.
 ROUND_TRIP_FLAG_RECALLED_TARGET = "RECALLED_TARGET"
 
+# Round-trip ships anyway (flagged) when every compile attempt was exhausted and the failures
+# were NOT purely termination-related -- the general compile-exhaustion case the two flags above
+# don't cover. Adopted 31 July 2026 as a corpus-hardness decision, not a loosening: these tasks'
+# dossiers and fact suites already passed every upstream check, so the only thing unverified is
+# whether a fresh-context model can re-derive the definition in Lean. The 2026-07-31 failure
+# forensics found these failures cluster hard on bundled return types (`≃`, `↪`, structures) --
+# i.e. the flag marks definitions that are HARDER TO ENCODE, exactly the population the corpus
+# most needs to retain rather than silently filter out. Third instance of this codebase's
+# abstain-when-you-cannot-measure pattern (see the two flags above); the flag is data for the
+# mini-trial, never a defect marker. Rendered to humans as "harder" -- see `render_batch_review`.
+ROUND_TRIP_FLAG_UNVERIFIED_COMPILE = "ROUND_TRIP_UNVERIFIED_COMPILE"
+
+# Human-facing labels for round-trip flags. The mechanical constant stays the schema//code name;
+# only the batch review (and anything else showing a human a flag) uses these.
+ROUND_TRIP_FLAG_LABELS = {
+    ROUND_TRIP_FLAG_UNVERIFIED_COMPILE: "harder",
+}
+
+
+def render_round_trip_flag(flag: str) -> str:
+    """`harder (ROUND_TRIP_UNVERIFIED_COMPILE)` for a flag with a human label; the bare constant
+    otherwise. One helper so every human-facing surface renders flags identically."""
+    label = ROUND_TRIP_FLAG_LABELS.get(flag)
+    return f"{label} ({flag})" if label else flag
+
 
 def _is_termination_only_failure(admissibility_detail: str) -> bool:
     if not admissibility_detail.startswith("compile_error:"):
@@ -684,18 +709,27 @@ def _author_from_dossier(
                     self_restatement=self_restatement_ids,
                 )
         else:
-            # Every attempt was a compile failure. Ships anyway, flagged, if EITHER: every
-            # single failure was purely a termination-checker error (attempt cap must be fully
-            # exhausted for this one), OR recall was detected (attempt cap need not be
-            # exhausted -- recall stops the loop early regardless of attempt count). Any other
-            # (or mixed) compile failure, with no recall, still rotates as before.
+            # Every attempt was a compile failure. Since 31 July 2026 a FULLY EXHAUSTED attempt
+            # cap always ships (flagged) rather than rotating -- the only question is which
+            # flag: `UNVERIFIED_TERMINATION_ONLY` when every failure was purely Lean's
+            # termination checker (the narrower, older carve-out), otherwise the general
+            # `ROUND_TRIP_UNVERIFIED_COMPILE`. Recall is orthogonal and stacks: `RECALLED_TARGET`
+            # was already appended above, so an exhausted+recalled run carries both, exactly as
+            # termination-only+recall already did. A run that stopped EARLY without recall (a
+            # budget or infrastructure cut-off) has not established compile exhaustion at all
+            # and still rotates.
             summary = "; ".join(f"attempt {i + 1}: {s.admissibility_detail}" for i, (_, s) in enumerate(rt_attempts))
-            if len(rt_attempts) == authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS and all(
-                _is_termination_only_failure(s.admissibility_detail) for _, s in rt_attempts
-            ):
+            exhausted = len(rt_attempts) == authoring_cfg.ROUND_TRIP_MAX_COMPILE_ATTEMPTS
+            recall_note = " -- round-trip candidate also recalled the real Mathlib name, see RECALLED_TARGET flag" if recalled_target else ""
+            if exhausted and all(_is_termination_only_failure(s.admissibility_detail) for _, s in rt_attempts):
                 round_trip_flags.append(ROUND_TRIP_FLAG_UNVERIFIED_TERMINATION_ONLY)
-                scoring_detail = f"shipped after {len(rt_attempts)} compile attempt(s), all termination-only"
+                scoring_detail = f"shipped after {len(rt_attempts)} compile attempt(s), all termination-only{recall_note}"
+            elif exhausted:
+                round_trip_flags.append(ROUND_TRIP_FLAG_UNVERIFIED_COMPILE)
+                scoring_detail = f"shipped after {len(rt_attempts)} compile attempt(s) failing ({summary}) -- reconstruction unverified, see {ROUND_TRIP_FLAG_UNVERIFIED_COMPILE} flag{recall_note}"
             elif recalled_target:
+                # Recall stopped the loop early, so the cap was never exhausted -- ships on the
+                # recall flag alone (decided 2026-07-29).
                 scoring_detail = f"shipped despite {len(rt_attempts)} compile attempt(s) failing ({summary}) -- round-trip candidate recalled the real Mathlib name, see RECALLED_TARGET flag"
             else:
                 return _rotate(
@@ -812,7 +846,9 @@ def render_batch_review(results: list[TaskResult]) -> str:
             # Flag(s) and score always rendered together (decided 2026-07-29) -- a reader must
             # never be able to see one without the other, since a flag is precisely what marks
             # an otherwise-normal-looking score as non-evidence.
-            lines.append(f"- **round-trip flag(s): {', '.join(f'`{f}`' for f in r.round_trip_flags)}**")
+            lines.append(
+                f"- **round-trip flag(s): {', '.join(render_round_trip_flag(f) for f in r.round_trip_flags)}**"
+            )
             if r.round_trip_score is not None:
                 lines.append(
                     f"  - round-trip score (context only while a flag is set, not independent "
@@ -830,6 +866,13 @@ def render_batch_review(results: list[TaskResult]) -> str:
                     "task's real Mathlib name -- a clean pass above is not evidence the dossier "
                     "alone determines the object (the model may simply have recalled the real "
                     "definition's name from pretraining rather than derived it)"
+                )
+            if ROUND_TRIP_FLAG_UNVERIFIED_COMPILE in r.round_trip_flags:
+                lines.append(
+                    "    - **harder** (`ROUND_TRIP_UNVERIFIED_COMPILE`): dossier and fact suite "
+                    "passed every upstream check, but every round-trip compile attempt failed -- "
+                    "the reconstruction demands more Lean fluency than the round-trip model has. "
+                    "Retained deliberately as corpus-hardness signal, NOT a defect"
                 )
         if r.parser_rejected_facts:
             lines.append("- facts rejected at the parser layer (statement-format/raw-name, after the one retry):")

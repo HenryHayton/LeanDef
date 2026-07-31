@@ -19,7 +19,16 @@ from pathlib import Path
 
 import pytest
 
-from authoring.pipeline import DefinitionInput, PipelineConfig, author_batch, author_task, render_batch_review
+from authoring.pipeline import (
+    ROUND_TRIP_FLAG_RECALLED_TARGET,
+    ROUND_TRIP_FLAG_UNVERIFIED_COMPILE,
+    DefinitionInput,
+    PipelineConfig,
+    author_batch,
+    author_task,
+    render_batch_review,
+    render_round_trip_flag,
+)
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClient
 from harness.repl import get_warm_environment
@@ -693,9 +702,12 @@ def test_round_trip_non_recalled_body_unaffected_no_regression(mathlib_env, stub
     assert len(bedrock_server.requests_received) == 5
 
 
-def test_round_trip_mixed_compile_failures_rotates_not_flagged(mathlib_env, stub_server, tmp_path):
-    """(d) 4 compile failures, but NOT all termination-only (one is an unrelated unknown-
-    identifier error) -- ship-with-flag does not apply; the task rotates as before."""
+def test_round_trip_mixed_compile_failures_ships_with_the_harder_flag(mathlib_env, stub_server, tmp_path):
+    """(d) 4 compile failures, NOT all termination-only. BEHAVIOUR CHANGED 31 July 2026: this
+    used to rotate; it now ships with `ROUND_TRIP_UNVERIFIED_COMPILE` (rendered "harder").
+    Everything upstream already passed, so the only unverified proposition is whether a
+    fresh-context model can re-derive the definition in Lean -- rotating on that was selecting
+    the corpus toward easy-to-encode definitions, the opposite of the training goal."""
     server, env = mathlib_env
     bedrock_server = stub_server(
         [
@@ -711,11 +723,86 @@ def test_round_trip_mixed_compile_failures_rotates_not_flagged(mathlib_env, stub
     config = _config(server, env, tmp_path, bedrock_server)
     result = author_task(DEF_NAME, config)
 
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == [ROUND_TRIP_FLAG_UNVERIFIED_COMPILE]
+    assert result.task_dir is not None
+    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
+
+
+def test_round_trip_all_non_termination_compile_failures_ships_with_the_harder_flag(mathlib_env, stub_server, tmp_path):
+    """The pure case the flag exists for: every attempt fails on an ordinary (non-termination)
+    compile error -- the shape the 31 July forensics found clustering on bundled return types."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+        ]
+        + [ScriptedResponse(200, success_body(UNKNOWN_IDENTIFIER_ROUND_TRIP_BODY))] * 4
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert result.round_trip_flags == [ROUND_TRIP_FLAG_UNVERIFIED_COMPILE]
+    assert result.task_dir is not None
+    # Score and flag are adjacent in the review, and the flag renders with its human label.
+    review = render_batch_review([result])
+    assert "harder (ROUND_TRIP_UNVERIFIED_COMPILE)" in review
+    assert "round-trip score" in review
+
+
+def test_harder_flag_coexists_with_recalled_target(mathlib_env, stub_server, tmp_path):
+    """Recall is orthogonal to compile exhaustion and stacks with it, exactly as recall already
+    stacks with the termination-only flag: an exhausted run whose body also named the real
+    Mathlib declaration carries BOTH flags.
+
+    Recall detection BREAKS the retry loop immediately (2026-07-29 policy), so the attempt cap
+    is only ever exhausted when recall first appears on the LAST attempt -- scripted here as
+    three ordinary compile failures followed by a fourth that both recalls and fails to compile.
+    Recall on an earlier attempt ships on the recall flag alone, with the cap unexhausted; that
+    is the pre-existing behaviour and is deliberately unchanged."""
+    server, env = mathlib_env
+    recalled_but_broken = "fun b n => Nat.clog totallyUndefinedIdentifierXYZ b n"
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+        ]
+        + [ScriptedResponse(200, success_body(UNKNOWN_IDENTIFIER_ROUND_TRIP_BODY))] * 3
+        + [ScriptedResponse(200, success_body(recalled_but_broken))]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    assert set(result.round_trip_flags) == {
+        ROUND_TRIP_FLAG_UNVERIFIED_COMPILE, ROUND_TRIP_FLAG_RECALLED_TARGET
+    }, result.round_trip_flags
+
+
+def test_round_trip_fact_failure_path_is_unchanged_by_the_harder_flag(mathlib_env, stub_server, tmp_path):
+    """The flag is for COMPILE exhaustion only. A candidate that compiles but fails the fact
+    suite still ends the stage immediately and rotates -- unchanged, per the information-barrier
+    reason in contract §5."""
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(WRONG_ROUND_TRIP_BODY)),  # compiles, fails facts
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
     assert result.outcome == "ROTATED"
     assert result.rotated_at_stage == "round_trip_scoring"
-    assert result.round_trip_flags == []
+    assert ROUND_TRIP_FLAG_UNVERIFIED_COMPILE not in result.round_trip_flags
     assert result.task_dir is None
-    assert len(bedrock_server.requests_received) == 7  # 3 non-rt calls + 4 round-trip attempts
 
 
 def test_round_trip_budget_exhaustion_mid_retry_loop_rotates_cleanly(mathlib_env, stub_server, tmp_path):

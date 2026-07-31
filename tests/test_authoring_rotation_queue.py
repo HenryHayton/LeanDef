@@ -43,8 +43,12 @@ def test_classify_unexpected_error_is_not_agent_fixable():
     assert classify_rotation("unexpected_error", "KeyError: 'x'") == NOT_AGENT_FIXABLE
 
 
-def test_classify_mechanical_validation_is_not_agent_fixable():
-    assert classify_rotation("mechanical_validation", "no facts survived mechanical validation") == NOT_AGENT_FIXABLE
+def test_classify_mechanical_validation_is_agent_fixable():
+    """Flipped 31 July 2026: the conservative default assumed "no facts survived" meant bad
+    mathematics, but that verdict was routinely produced by REPL death (the validate_global_fact
+    ERRORED conflation) or by the raw-name matcher rejecting every fact for using the task
+    symbol. Multiset.Pi.cons carried it, was reclassified by hand, and shipped on attempt 1."""
+    assert classify_rotation("mechanical_validation", "no facts survived mechanical validation") == AGENT_FIXABLE
 
 
 # --- find_rejected_dossier_md (pure, fixture call log) ---------------------------------------

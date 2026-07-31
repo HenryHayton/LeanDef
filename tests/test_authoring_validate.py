@@ -348,3 +348,27 @@ def test_membership_fact_with_no_expected_type_still_gets_accepted(mathlib_env):
     assert outcome.reason_code != ReasonCode.MALFORMED_MISSING_FIELD
     # plain `#check (instance)`, not the type-ascribed `#check ((instance) : (expected_type))`
     assert outcome.evidence["elaboration"]["command"] == "#check ((fun n : Fin 3 => n))"
+
+
+# --- Matcher consolidation (2026-07-31): the pinned-name check ---------------------------------
+
+
+def test_global_fact_pinned_name_check_uses_identifier_boundaries():
+    """Migrated site: `pinned_name not in statement` became a shared-helper call with IDENTIFIER
+    boundaries and `exclude_task_symbol=False` (here the task symbol is what we WANT to find).
+    DELIBERATE TIGHTENING: a statement naming only a different symbol that happens to start with
+    this one no longer counts as mentioning it."""
+    mentions = ProposedFact(
+        id="m", type="global", mechanism="proof",
+        statement="∀ b n : ℕ, VTask.clog b n ≥ 0", anchors=["Nat.clog_pow"],
+    )
+    outcome = validate_global_fact(None, None, mentions, CLOG_DOMAIN, "VTask.clog")
+    assert outcome.reason_code != ReasonCode.DOES_NOT_MENTION_PINNED_NAME
+
+    impostor = ProposedFact(
+        id="i", type="global", mechanism="proof",
+        statement="∀ b n : ℕ, VTask.clog2 b n ≥ 0", anchors=["Nat.clog_pow"],
+    )
+    outcome2 = validate_global_fact(None, None, impostor, CLOG_DOMAIN, "VTask.clog")
+    assert outcome2.verdict is Verdict.REJECTED
+    assert outcome2.reason_code == ReasonCode.DOES_NOT_MENTION_PINNED_NAME

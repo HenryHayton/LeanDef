@@ -138,3 +138,28 @@ don't leave it checked off in place.
 - **Richness metric blind spot: dependent binders/arrows inflate richness for
   proof-infrastructure definitions** (`Nat.leRec` ranked 2). Trigger: same as above. Evidence:
   batch-50 preflight + 29 July 2026 characterization report.
+- **Namespace-relative sibling references: how a task names OTHER real Mathlib declarations.**
+  A mined definition's `definition_source` is shown to the model exactly as it appears in
+  Mathlib — i.e. written *inside* its enclosing namespace, so sibling declarations appear
+  unqualified. The task environment splices only the task's own symbol at the root namespace, so
+  those bare names do not resolve. Confirmed concretely (31 July 2026, $0 REPL probe against
+  `Set.PartiallyWellOrderedOn.IsMinBadSeq`, whose definition reads `¬IsBadSeq r s g`):
+  bare `IsBadSeq` → `Unknown identifier`; fully-qualified
+  `Set.PartiallyWellOrderedOn.IsBadSeq` → **resolves**; the companion's own task symbol
+  `VTask.IsBadSeq` → `Unknown identifier` (each task splices only itself, so a sibling task's
+  symbol is never in scope); a realistic global fact using the qualified companion → **elaborates
+  cleanly**; and the dossier leak check correctly **permits** the qualified companion, since it is
+  a genuinely different declaration from the task's target. So no capability is missing — the
+  machinery already supports everything such a task needs.
+  **Mitigated, not solved**: `authoring/prompts/fact_proposal.txt` now tells the model that
+  statements elaborate at the root namespace and that any other Mathlib declaration must be
+  fully qualified, with this exact case as the worked example. That is guidance, not a
+  guarantee. The open design question is whether the pipeline should instead *mechanically*
+  help — e.g. supply the enclosing namespace as an explicit input field, qualify the source
+  text before showing it, or `open` the namespace in the spliced environment (which risks
+  collisions and changes what "the task environment" means for every task). This will recur
+  for any definition mined from a family of mutually-referencing helpers, which is extremely
+  common in Mathlib.
+  **Trigger:** the second `mechanical_validation` rotation whose dropped facts are dominated by
+  `Unknown identifier` on a sibling name (the first is IsMinBadSeq, 31 July 2026), or the
+  pilot-100 mine, whichever comes first.

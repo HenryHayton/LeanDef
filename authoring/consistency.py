@@ -47,7 +47,7 @@ from dataclasses import dataclass, field
 from lean_interact import Command
 
 from authoring.facts import DomainSpec
-from authoring.task_symbol import TASK_SYMBOL_PREFIX
+from authoring.namematch import IDENTIFIER, name_occurs
 from authoring.validate import ReasonCode
 from harness import config as cfg
 from harness.repl import run_checked
@@ -266,41 +266,11 @@ def check_signature_injection(pinned_signature: str, dossier_md: str) -> tuple[b
 # === (d) Real-name leak (round-trip information barrier) =======================================
 
 
-# Lean identifier characters, for the boundary logic in `_contains_real_name`. Python's own `\w`
-# (and therefore `\b`) does NOT include `'`, but Lean identifiers routinely do -- `Equiv.ofLeftInverse'`
-# is a real declaration, entirely distinct from `Equiv.ofLeftInverse`. Using `\b` treated the `'`
-# as a boundary and so matched the shorter name inside the longer one, which is the same
-# false-positive class the suite already forbids for `Nat.clog` inside `Nat.clog2` (that one
-# happened to be caught only because digits ARE in `\w`).
-_LEAN_IDENT_CHAR = r"[A-Za-z0-9_']"
-
-
 def _contains_real_name(text: str, forbidden_name: str) -> bool:
-    """Identifier-boundary match of `forbidden_name` anywhere in `text`, EXCLUDING occurrences
-    that are part of the task symbol itself. The one shared matcher for every "does this text
-    contain the real Mathlib name" check in this codebase's authoring layer --
-    `check_no_real_name_leak` (dossier body) and `check_round_trip_recalls_target` (round-trip
-    candidate body) both call this rather than each rolling their own regex. Deliberately
-    distinct from `authoring.parse._leaks_forbidden_name`'s plain substring match (no
-    word-boundary) -- that one is a per-fact statement/instance/expected_type check with its own
-    established semantics (2026-07-28 sweep confirmed it, see docs/deferred.md); this module is
-    the identifier-boundary family. Two matchers, not three.
-
-    **Task-symbol exclusion (2026-07-31 fix).** For a real name with no namespace -- `Monotone`,
-    `DependsOn`, `memPartition` -- the task symbol IS the real name with a prefix
-    (`VTask.Monotone`), so a plain boundary match fires on the very symbol the model is required
-    to use. That made those dossiers structurally unshippable no matter how correct they were:
-    confirmed live on three separate names, where every single occurrence of the "leaked" name
-    was in fact a correctly-prefixed `VTask.` usage. A match immediately preceded by
-    `authoring.task_symbol.TASK_SYMBOL_PREFIX` is therefore never a leak. Bare occurrences, and
-    occurrences under any other prefix, still match."""
-    pattern = re.compile(
-        r"(?<!" + re.escape(TASK_SYMBOL_PREFIX) + r")"   # not the task symbol itself
-        r"(?<!" + _LEAN_IDENT_CHAR + r")"                # not the tail of a longer identifier
-        + re.escape(forbidden_name)
-        + r"(?!" + _LEAN_IDENT_CHAR + r")"               # not the head of a longer identifier
-    )
-    return pattern.search(text) is not None
+    """Thin alias kept for readability at this module's two call sites; the matcher itself lives
+    in `authoring.namematch` (2026-07-31 consolidation -- see that module for why three private
+    copies existed and what they each got wrong)."""
+    return name_occurs(text, forbidden_name, boundary=IDENTIFIER)
 
 
 def check_no_real_name_leak(dossier_md: str, forbidden_name: str) -> tuple[bool, str]:

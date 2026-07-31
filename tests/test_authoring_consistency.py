@@ -489,3 +489,44 @@ def test_check_dossier_consistency_no_forbidden_name_skips_the_leak_check(mathli
     result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
     assert result.real_name_leak_ok
     assert result.passed
+
+
+# --- Matcher consolidation (2026-07-31): one helper, three migrated sites --------------------
+#
+# Three private "does this text name this declaration" implementations had drifted apart and,
+# between them, carried the same self-trigger bug three times. They now share
+# `authoring.namematch.name_occurs`. These tests pin the per-site behaviour after migration;
+# the existing matcher tests above already cover the semantics themselves.
+
+
+def test_namematch_is_the_single_implementation_behind_the_consistency_checks():
+    """Site 1+2 (dossier leak, round-trip recalled-target): both go through the shared helper
+    with IDENTIFIER boundaries -- behaviour unchanged from before consolidation."""
+    from authoring.namematch import IDENTIFIER, name_occurs
+
+    for text, forbidden in [
+        ("VTask.Monotone f", "Monotone"),
+        ("Monotone f", "Monotone"),
+        ("fun b n => Nat.clog2 b n", "Nat.clog"),
+        ("Equiv.ofLeftInverse'", "Equiv.ofLeftInverse"),
+    ]:
+        expected = name_occurs(text, forbidden, boundary=IDENTIFIER)
+        assert check_no_real_name_leak(text, forbidden)[0] is (not expected)
+        assert check_round_trip_recalls_target(text, forbidden) is expected
+
+
+def test_namematch_substring_mode_preserves_the_parse_layer_semantics():
+    """Site 3 (per-fact raw-name leak) keeps its deliberately-stricter no-boundary behaviour,
+    now as an explicit SUBSTRING parameter rather than a separate implementation: a name glued
+    to more identifier characters still counts there, but NOT under IDENTIFIER mode."""
+    from authoring.namematch import IDENTIFIER, SUBSTRING, name_occurs
+
+    assert name_occurs("Nat.clog2 b", "Nat.clog", boundary=SUBSTRING) is True
+    assert name_occurs("Nat.clog2 b", "Nat.clog", boundary=IDENTIFIER) is False
+
+
+def test_namematch_rejects_an_unknown_boundary_mode():
+    from authoring.namematch import name_occurs
+
+    with pytest.raises(ValueError, match="boundary must be"):
+        name_occurs("x", "x", boundary="fuzzy")

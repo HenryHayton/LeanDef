@@ -32,6 +32,7 @@ from enum import Enum
 from lean_interact import AutoLeanServer, Command
 
 from authoring.facts import DomainSpec, ProposedFact
+from authoring.namematch import IDENTIFIER, name_occurs
 from harness import config as cfg
 from harness.repl import run_checked
 from harness.results import CheckStatus
@@ -506,7 +507,12 @@ def validate_global_fact(
             ReasonCode.MALFORMED_MISSING_ANCHORS,
             detail="global facts require at least one named Mathlib anchor theorem",
         )
-    if pinned_name not in fact.statement:
+    # Identifier-boundary, not bare `in` (2026-07-31 consolidation): `pinned_name` here IS the
+    # task symbol, so `exclude_task_symbol=False` -- its presence is what we are looking for, not
+    # a leak to guard against. Deliberate tightening: a statement mentioning only a DIFFERENT
+    # symbol that happens to start with this one (`VTask.clog2` for `VTask.clog`) no longer
+    # counts as mentioning it.
+    if not name_occurs(fact.statement, pinned_name, boundary=IDENTIFIER, exclude_task_symbol=False):
         return ValidationOutcome(
             fact.id,
             Verdict.REJECTED,

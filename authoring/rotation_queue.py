@@ -52,8 +52,19 @@ def classify_rotation(stage: str | None, reason: str) -> str:
     (as opposed to a compile exhaustion) is deliberately excluded from `AGENT_FIXABLE`: a
     fact-suite failure's "fix" would mean showing the repair call fact-validation outcomes,
     which the guardrails (`authoring.cleanup`'s own docstring) forbid -- there is no
-    guardrail-compliant way to make that category agent-fixable, so it isn't."""
-    if stage == "dossier_consistency":
+    guardrail-compliant way to make that category agent-fixable, so it isn't.
+
+    **`mechanical_validation` flipped to `AGENT_FIXABLE` (31 July 2026).** Its original
+    conservative default rested on the assumption that "no facts survived" meant the model's
+    mathematics was wrong -- unfixable by a dossier revision. That assumption died with the
+    `validate_global_fact` ERRORED-conflation fix: the verdict was frequently produced by REPL
+    death (and, separately, by the raw-name matcher rejecting 100% of facts for referencing the
+    task symbol), not by bad mathematics. Confirmed live: `Multiset.Pi.cons` carried this
+    verdict, was reclassified by hand, and shipped on the first repair attempt. The repair loop
+    still cannot loop blind on it -- `authoring.cleanup._feedback_text` returns None for this
+    stage, so it gets exactly ONE fresh attempt and then escalates rather than iterating on
+    feedback the guardrails forbid."""
+    if stage in ("dossier_consistency", "mechanical_validation"):
         return AGENT_FIXABLE
     if stage == "round_trip_scoring" and reason.strip().startswith("exhausted"):
         return AGENT_FIXABLE
