@@ -522,6 +522,24 @@ def validate_global_fact(
         "elapsed_s": prop_check.elapsed_s,
         "detail": prop_check.detail,
     }
+    # ERRORED is checked BEFORE the generic not-PASSED branch, matching
+    # `validate_membership_fact`'s own instance-elaboration handling above (2026-07-31 fix; this
+    # validator was the one outlier of the three). An ERRORED check is an infrastructure failure
+    # -- a dead/restarted REPL server reporting "Unknown environment", a timeout -- NOT evidence
+    # about the fact. Collapsing it into PROPOSITION_DOES_NOT_ELABORATE silently and permanently
+    # dropped the fact: `authoring.orchestrate.adjudicate_proposed_facts`'s row-5 machinery
+    # (retry once, then flag the whole task via `task_errored` rather than dropping) is gated on
+    # `reason_code == ReasonCode.ERRORED`, so a code this function never emitted meant that
+    # machinery could never fire here. Confirmed live: a real batch's global facts were all
+    # rejected as non-elaborating when the true cause was REPL death mid-validation.
+    if prop_check.status is CheckStatus.ERRORED:
+        return ValidationOutcome(
+            fact.id,
+            Verdict.REJECTED,
+            ReasonCode.ERRORED,
+            detail=prop_check.detail or "validation infrastructure failed during proposition elaboration check",
+            evidence={"proposition_check": prop_evidence},
+        )
     if prop_check.status is not CheckStatus.PASSED:
         return ValidationOutcome(
             fact.id,
@@ -533,6 +551,7 @@ def validate_global_fact(
 
     anchor_evidence = {}
     missing_anchors = []
+    errored_anchors = []
     for anchor in fact.anchors:
         anchor_cmd = f"#check {anchor}"
         anchor_check = run_checked(server, Command(cmd=anchor_cmd, env=env), timeout=timeout)
@@ -541,8 +560,21 @@ def validate_global_fact(
             "status": anchor_check.status.name,
             "detail": anchor_check.detail,
         }
-        if anchor_check.status is not CheckStatus.PASSED:
+        # Same ERRORED/FAILED split as the proposition check above: a REPL that died while
+        # resolving an anchor tells us nothing about whether that anchor exists, so it must not
+        # be reported as ANCHOR_NOT_FOUND.
+        if anchor_check.status is CheckStatus.ERRORED:
+            errored_anchors.append(anchor)
+        elif anchor_check.status is not CheckStatus.PASSED:
             missing_anchors.append(anchor)
+    if errored_anchors:
+        return ValidationOutcome(
+            fact.id,
+            Verdict.REJECTED,
+            ReasonCode.ERRORED,
+            detail=f"validation infrastructure failed while resolving anchor theorem(s): {errored_anchors}",
+            evidence={"proposition_check": prop_evidence, "anchor_checks": anchor_evidence},
+        )
     if missing_anchors:
         return ValidationOutcome(
             fact.id,

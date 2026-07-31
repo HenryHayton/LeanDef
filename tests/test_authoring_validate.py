@@ -173,6 +173,90 @@ def test_global_missing_pinned_name_rejected_without_repl():
     assert outcome.reason_code == ReasonCode.DOES_NOT_MENTION_PINNED_NAME
 
 
+# --- Global-fact ERRORED/FAILED split (2026-07-31 fix) ------------------------------------------
+#
+# A bogus `env` id against a real warm server reproduces Lean's own dead-server error text
+# ("LeanError: Unknown environment.") exactly, and is the established way this suite simulates
+# REPL death without killing a shared fixture (same technique as tests/test_authoring_batch.py).
+# Before this fix, `validate_global_fact` collapsed that infra failure into
+# PROPOSITION_DOES_NOT_ELABORATE, so `adjudicate_proposed_facts`' row-5 retry/flag machinery --
+# gated on ReasonCode.ERRORED -- could never fire for a global fact, and the fact was silently
+# dropped as if the model had proposed something invalid.
+
+BOGUS_ENV = 999_999
+
+_GLOBAL_FACT = ProposedFact(
+    id="g_infra", type="global", mechanism="proof",
+    statement="∀ b n : ℕ, Nat.clog b n ≥ 0", anchors=["Nat.clog_pow"],
+)
+
+
+def test_global_fact_repl_death_is_errored_not_rejected_as_non_elaborating(mathlib_env):
+    server, _env = mathlib_env
+    outcome = validate_global_fact(server, BOGUS_ENV, _GLOBAL_FACT, CLOG_DOMAIN, CLOG_NAME, timeout=30.0)
+    assert outcome.reason_code == ReasonCode.ERRORED, outcome.detail
+    assert "Unknown environment" in outcome.detail
+
+
+def test_global_fact_genuinely_non_elaborating_still_rejects(mathlib_env):
+    """The other direction: a real (live) environment plus a statement that genuinely does not
+    elaborate must still reject as PROPOSITION_DOES_NOT_ELABORATE -- the fix must not have
+    turned every rejection into an infra excuse."""
+    server, env = mathlib_env
+    fact = ProposedFact(
+        id="g_bad", type="global", mechanism="proof",
+        statement="∀ b n : ℕ, Nat.clog b n ≥ thisIdentifierDoesNotExist", anchors=["Nat.clog_pow"],
+    )
+    outcome = validate_global_fact(server, env, fact, CLOG_DOMAIN, CLOG_NAME, timeout=30.0)
+    assert outcome.verdict is Verdict.REJECTED
+    assert outcome.reason_code == ReasonCode.PROPOSITION_DOES_NOT_ELABORATE, outcome.detail
+
+
+def test_global_fact_anchor_repl_death_is_errored_not_anchor_not_found(mathlib_env):
+    """The anchor loop carried the same conflation: a REPL that dies while resolving an anchor
+    says nothing about whether that anchor exists, so it must not report ANCHOR_NOT_FOUND. The
+    proxy lets the proposition `#check` through to the real server, then kills every later call
+    -- the only way to reach the anchor loop with a dead server but a passing prop check."""
+    server, env = mathlib_env
+
+    class _DiesAfterFirstCall:
+        def __init__(self, real):
+            self._real = real
+            self._calls = 0
+
+        def run(self, request, timeout=None):
+            from lean_interact.interface import LeanError
+
+            self._calls += 1
+            if self._calls == 1:
+                return self._real.run(request, timeout=timeout)
+            return LeanError(message="Unknown environment.")
+
+        def __getattr__(self, item):
+            return getattr(self._real, item)
+
+    outcome = validate_global_fact(
+        _DiesAfterFirstCall(server), env, _GLOBAL_FACT, CLOG_DOMAIN, CLOG_NAME, timeout=30.0
+    )
+    assert outcome.reason_code == ReasonCode.ERRORED, outcome.detail
+    assert outcome.reason_code != ReasonCode.ANCHOR_NOT_FOUND
+
+
+def test_global_fact_repl_death_reaches_task_errored_not_dropped(mathlib_env):
+    """The payoff, end to end: with the reason code fixed, a REPL-dead global fact now flows
+    into `adjudicate_proposed_facts`' `task_errored` (row 5: flag the whole task) instead of
+    being silently dropped as a bad fact. This is the behaviour the fix exists to restore."""
+    from authoring.orchestrate import adjudicate_proposed_facts
+
+    server, _env = mathlib_env
+    result = adjudicate_proposed_facts(
+        server, BOGUS_ENV, [_GLOBAL_FACT], CLOG_DOMAIN, CLOG_NAME, timeout=30.0
+    )
+    assert result.task_errored, "REPL-death global fact must reach task_errored, not be dropped"
+    assert not result.dropped
+    assert result.task_errored[0].fact_id == "g_infra"
+
+
 def test_unknown_fact_type_rejected_without_repl():
     fact = ProposedFact(id="w", type="bogus", mechanism="decide", statement="whatever")
     outcome = validate_fact(None, None, fact, CLOG_DOMAIN, CLOG_NAME)

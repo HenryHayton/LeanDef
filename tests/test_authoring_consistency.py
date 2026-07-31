@@ -231,6 +231,58 @@ def test_round_trip_recalls_target_is_word_boundary_not_bare_substring():
     assert check_round_trip_recalls_target(body, "Nat.clog") is False
 
 
+# --- Task-symbol exclusion in the shared matcher (2026-07-31 fix) -------------------------------
+#
+# For an UNNAMESPACED real name, the task symbol is that name plus a prefix (`Monotone` ->
+# `VTask.Monotone`), so the old `\b`-based matcher fired on the very symbol the model is
+# required to use -- making those dossiers unshippable regardless of quality. Confirmed live on
+# three names (Monotone 9/9, DependsOn 14/14, memPartition 12/12 occurrences were all correct
+# `VTask.`-prefixed usage, zero genuine leaks). Both callers of the shared matcher are covered
+# below, since unnamespaced names are exactly where the two checks could interfere.
+
+
+@pytest.mark.parametrize("real_name", ["Monotone", "DependsOn", "memPartition"])
+def test_dossier_using_only_the_task_symbol_of_an_unnamespaced_name_is_not_a_leak(real_name):
+    dossier = (
+        f"# Object\n`VTask.{real_name} f` is the proposition that ...\n\n"
+        f"# Conventions\n`VTask.{real_name}` holds vacuously in that case.\n"
+    )
+    ok, detail = check_no_real_name_leak(dossier, real_name)
+    assert ok, detail
+
+
+@pytest.mark.parametrize("real_name", ["Monotone", "DependsOn", "memPartition"])
+def test_bare_unnamespaced_real_name_is_still_a_leak(real_name):
+    """The fix must not blind the check: a BARE occurrence (no `VTask.` prefix) still fails."""
+    dossier = f"# Object\nThis is the same thing Mathlib calls {real_name}.\n"
+    ok, detail = check_no_real_name_leak(dossier, real_name)
+    assert not ok
+    assert real_name in detail
+
+
+def test_primed_variant_is_a_different_declaration_and_not_a_leak():
+    """`Equiv.ofLeftInverse'` is a real declaration DISTINCT from `Equiv.ofLeftInverse`. Python's
+    `\\b` treats `'` as a boundary (unlike a digit), so the shorter name matched inside the
+    longer one -- the same false-positive class the `Nat.clog2` test above already forbids."""
+    dossier = "# Not to be confused with\n- `Equiv.ofLeftInverse'`: the unconditional variant.\n"
+    ok, detail = check_no_real_name_leak(dossier, "Equiv.ofLeftInverse")
+    assert ok, detail
+
+
+def test_exact_qualified_name_is_still_a_leak_even_when_a_primed_variant_is_also_present():
+    dossier = "# Object\nSee `Equiv.ofLeftInverse'` and also `Equiv.ofLeftInverse` itself.\n"
+    ok, _ = check_no_real_name_leak(dossier, "Equiv.ofLeftInverse")
+    assert not ok
+
+
+def test_round_trip_recalled_target_fires_on_bare_unnamespaced_name_but_not_the_task_symbol():
+    """Both directions for the OTHER caller of the shared matcher: RECALLED_TARGET must still
+    fire when a candidate body names the real unnamespaced declaration, and must NOT fire when
+    it correctly uses the task symbol."""
+    assert check_round_trip_recalls_target("fun f => Monotone f", "Monotone") is True
+    assert check_round_trip_recalls_target("fun f => VTask.Monotone f", "Monotone") is False
+
+
 # --- (b) worked-example parsing (pure) ---------------------------------------------------------
 
 

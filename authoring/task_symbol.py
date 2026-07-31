@@ -18,6 +18,11 @@ import re
 
 _BASE_NAME_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_']*$")
 
+# The one source of truth for the namespace every task symbol lives in. Read by
+# `authoring.consistency._contains_real_name`, which must not mistake a task symbol for a leak of
+# the real name it wraps (`VTask.Monotone` trivially contains `Monotone`) -- see that function.
+TASK_SYMBOL_PREFIX = "VTask."
+
 
 def task_symbol_for(mathlib_name: str) -> str:
     """`VTask.<base>`, where `<base>` is the last dotted component of `mathlib_name` (e.g.
@@ -25,4 +30,4 @@ def task_symbol_for(mathlib_name: str) -> str:
     base = mathlib_name.rsplit(".", 1)[-1]
     if not _BASE_NAME_RE.fullmatch(base):
         raise ValueError(f"cannot derive a task symbol from {mathlib_name!r}: base component {base!r} is not a valid Lean identifier")
-    return f"VTask.{base}"
+    return f"{TASK_SYMBOL_PREFIX}{base}"
