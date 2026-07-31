@@ -240,6 +240,65 @@ def test_repair_one_escalates_after_cap_exhausted(mathlib_env, stub_server, tmp_
     assert all(e["check_result"] == "fail (dossier_consistency)" for e in entry["repair_log"])
 
 
+# --- Infra-failure exemption (2026-07-31) -------------------------------------------------------
+#
+# A malformed-body 200 response (garbage bytes, not the Bedrock wire-format envelope) makes
+# `bedrock.client.BedrockClient.send` raise `BedrockMalformedResponseError` (a `BedrockClientError`
+# subclass) IMMEDIATELY, on the very first attempt -- confirmed from `bedrock/client.py`'s own
+# `send()`: this specific failure class is explicitly "not retried" at the client layer (a
+# garbled response is a parsing problem, not a transient one), so it never even reaches
+# `run_dossier_call`'s own internal ParseError-retry. Each garbage response therefore counts as
+# exactly ONE "infra failure occurrence" from `_run_dossier_call_with_infra_retry`'s point of view.
+
+
+def test_repair_one_single_infra_failure_is_retried_and_does_not_count_against_the_cap(mathlib_env, stub_server, tmp_path):
+    """One dossier-call infra failure (a malformed Bedrock response) is retried once,
+    transparently, inside the SAME attempt -- the retry succeeds, and the task ships on
+    attempt_n == 1 with no "infra" entry in the repair log, proving the hiccup never consumed
+    a slot out of MAX_REPAIR_ATTEMPTS."""
+    server, env = mathlib_env
+    bedrock_server = stub_server([
+        ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ScriptedResponse(200, b"not the Bedrock wire format at all"),  # dossier call: infra failure
+        ScriptedResponse(200, success_body(CLEAN_DOSSIER_JSON)),       # the infra retry -- succeeds
+        ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+        ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+    ])
+    config = _config(server, env, tmp_path, bedrock_server)
+    entry = _base_entry("DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.clog'")
+
+    result = repair_one(entry, config)
+
+    assert result.status == STATUS_REPAIRED_AND_SHIPPED
+    assert result.attempts_used == 1  # the infra hiccup did not consume a cap slot
+    assert len(entry["repair_log"]) == 1  # only the final "shipped" entry -- the retry logs nothing
+    assert entry["repair_log"][0]["check_result"] == "pass -- shipped"
+
+
+def test_repair_one_two_consecutive_infra_failures_escalates_labeled_infra(mathlib_env, stub_server, tmp_path):
+    """Two CONSECUTIVE infra failures on the same attempt -- the original call and its one
+    extra retry -- escalate immediately, exactly as any lone infra failure always did before
+    this exemption existed, but now clearly labeled "infra" rather than an opaque unexpected
+    error swallowing the whole repair budget."""
+    server, env = mathlib_env
+    bedrock_server = stub_server([
+        ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ScriptedResponse(200, b"garbage response 1"),  # dossier call: infra failure
+        ScriptedResponse(200, b"garbage response 2"),  # the infra retry: also fails
+    ])
+    config = _config(server, env, tmp_path, bedrock_server)
+    entry = _base_entry("DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.clog'")
+
+    result = repair_one(entry, config)
+
+    assert result.status == STATUS_ESCALATE_TO_HUMAN
+    assert result.attempts_used == 1  # escalated on the very first (and only) attempt_n
+    assert entry["status"] == STATUS_ESCALATE_TO_HUMAN
+    assert len(entry["repair_log"]) == 1
+    assert entry["repair_log"][0]["check_result"] == "fail (infra)"
+    assert "two consecutive infra failures" in entry["repair_log"][0]["error_if_any"]
+
+
 def test_run_cleanup_only_attempts_agent_fixable_pending_entries(mathlib_env, stub_server, tmp_path):
     server, env = mathlib_env
     bedrock_server = stub_server([

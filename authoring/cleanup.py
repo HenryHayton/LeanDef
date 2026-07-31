@@ -32,6 +32,14 @@ one per category.
    candidate's literal body) is never read by this module at all.
 5. **`not_agent_fixable` entries are never attempted.** `run_cleanup` filters to
    `category == AGENT_FIXABLE` before doing anything.
+
+**Infra-failure exemption (2026-07-31, `_run_dossier_call_with_infra_retry`).** A dossier call
+that fails on response-shape/infra grounds (malformed JSON, a null-field parse error -- Bedrock
+variance, not a real check failure) gets one extra retry that does NOT consume an attempt slot
+out of `MAX_REPAIR_ATTEMPTS`; only two CONSECUTIVE infra failures escalate (labeled `"infra"` in
+the repair log), same as any lone infra failure always did before this existed. Distinguishing
+this from a genuine mechanical-check failure matters because, before the fix, an infra blip on
+attempt 1 of 5 silently threw away the other 4 attempts' worth of real repair budget.
 """
 
 import time
@@ -42,7 +50,8 @@ from pathlib import Path
 from authoring import config as authoring_cfg
 from authoring.consistency import check_dossier_consistency, inject_pinned_signature
 from authoring.mentions import render_mention_excerpt
-from authoring.orchestrate import CallBudget, run_classification_call, run_dossier_call
+from authoring.orchestrate import AuthoringCallFailed, CallBudget, run_classification_call, run_dossier_call
+from authoring.parse import DossierPayload
 from authoring.pipeline import (
     PipelineConfig,
     StageRecord,
@@ -74,6 +83,21 @@ DEFAULT_RUN_BUDGET_USD = 4.0
 # Rotation stages/details eligible as repair feedback -- see module docstring guardrail 3.
 _COMPILE_FAILURE_PREFIXES = ("exhausted",)  # round_trip_scoring's compile-exhaustion detail
 
+# Infra-classified dossier-call failures (2026-07-31): malformed JSON, null-field parse errors
+# -- Bedrock response-shape variance, not a real mechanical-check failure -- `AuthoringCallFailed`
+# (contract §6 rows 1-2, raised only after `run_dossier_call`'s own internal one retry already
+# failed) and `BedrockClientError` (transport-level). Before this existed, either one propagated
+# straight out of `repair_one`'s attempt loop to the outer catch-all and escalated the WHOLE
+# name immediately -- burning every remaining attempt in `MAX_REPAIR_ATTEMPTS` on what was often
+# a one-off Bedrock hiccup, not a real defect in the dossier.
+_INFRA_FAILURE_EXCEPTIONS = (AuthoringCallFailed, BedrockClientError)
+
+
+class _InfraFailure(Exception):
+    """Two CONSECUTIVE infra-classified dossier-call failures within one repair attempt (see
+    `_run_dossier_call_with_infra_retry`) -- as opposed to a lone one, which is now retried
+    transparently and does not reach here at all."""
+
 
 def _feedback_text(result: TaskResult) -> str | None:
     """`None` means "not feedback-eligible" -- the caller must stop, not loop blind."""
@@ -92,6 +116,32 @@ def _task_cost(input_tokens: int, output_tokens: int) -> float:
     from bedrock import config as bedrock_cfg
 
     return input_tokens / 1000 * bedrock_cfg.PRICE_PER_1K_INPUT_TOKENS_USD + output_tokens / 1000 * bedrock_cfg.PRICE_PER_1K_OUTPUT_TOKENS_USD
+
+
+def _run_dossier_call_with_infra_retry(client, model_id, *, pinned_signature, definition_source,
+                                        docstring, mention_sidecar_excerpt, classification,
+                                        decidability, budget) -> DossierPayload:
+    """One EXTRA retry, on top of `run_dossier_call`'s own internal one (contract §6 rows 1-2),
+    reserved for a dossier call that fails on response-shape/infra grounds -- see
+    `_INFRA_FAILURE_EXCEPTIONS`'s own note. This retry does NOT consume a `repair_one` attempt
+    slot (`MAX_REPAIR_ATTEMPTS`) -- it happens entirely within one iteration of that loop.
+    Raises `_InfraFailure` only if BOTH this call and its retry fail on infra grounds; any other
+    exception (a real `CallBudgetExceeded`, for instance) propagates unchanged, since that is
+    never an infra blip worth retrying."""
+    call_kwargs = dict(
+        pinned_signature=pinned_signature, definition_source=definition_source, docstring=docstring,
+        mention_sidecar_excerpt=mention_sidecar_excerpt, classification=classification,
+        decidability=decidability, budget=budget,
+    )
+    try:
+        return run_dossier_call(client, model_id, **call_kwargs)
+    except _INFRA_FAILURE_EXCEPTIONS as e1:
+        try:
+            return run_dossier_call(client, model_id, **call_kwargs)
+        except _INFRA_FAILURE_EXCEPTIONS as e2:
+            raise _InfraFailure(
+                f"two consecutive infra failures: {type(e1).__name__}: {e1}; then {type(e2).__name__}: {e2}"
+            ) from e2
 
 
 @dataclass
@@ -144,13 +194,22 @@ def repair_one(entry: dict, config: PipelineConfig) -> CleanupResult:
                 f"{classification_text}\n\nNOTE: an earlier authoring attempt for this exact task "
                 f"failed a mechanical check and must be corrected this time: {feedback}"
             )
-            payload = run_dossier_call(
-                config.client, config.flagship_model_id,
-                pinned_signature=pinned_signature, definition_source=definition_input.definition_source,
-                docstring=definition_input.docstring, mention_sidecar_excerpt=mention_excerpt,
-                classification=classification_input, decidability=definition_input.decidability,
-                budget=budget,
-            )
+            try:
+                payload = _run_dossier_call_with_infra_retry(
+                    config.client, config.flagship_model_id,
+                    pinned_signature=pinned_signature, definition_source=definition_input.definition_source,
+                    docstring=definition_input.docstring, mention_sidecar_excerpt=mention_excerpt,
+                    classification=classification_input, decidability=definition_input.decidability,
+                    budget=budget,
+                )
+            except _InfraFailure as e:
+                entry["repair_log"].append({
+                    "attempt_n": attempt_n, "what_was_changed": "n/a (infra retry exhausted)",
+                    "check_result": "fail (infra)", "error_if_any": str(e),
+                })
+                entry["status"] = STATUS_ESCALATE_TO_HUMAN
+                tokens = _token_totals_since(config.client.log_path, log_start_line)
+                return CleanupResult(name, STATUS_ESCALATE_TO_HUMAN, attempt_n, _task_cost(tokens["input_tokens"], tokens["output_tokens"]))
             # Same mechanical injection pipeline.py's own dossier_attempt performs -- see
             # authoring.consistency's note; the repair loop generates a fresh dossier per
             # attempt, so this must run every time, not just once per name.
