@@ -17,14 +17,18 @@ specifically, since `harvest_manifest.jsonl` could in principle be stale relativ
 `curation.yaml` (confirmed a real, if minor, instance of exactly that drift on 2026-07-29,
 before this session's `miner/rank.py` re-run fixed it -- see that commit's report)."""
 
+import dataclasses
 import json
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
+from lean_interact import AutoLeanServer
+
 from authoring.pipeline import PipelineConfig, TaskResult, _count_log_lines, author_task, render_batch_review
 from authoring.rotation_queue import DEFAULT_QUEUE_PATH, append_rotation
+from harness.repl import is_unknown_environment_error
 
 DEFAULT_CHUNK_SIZE = 8
 
@@ -39,11 +43,16 @@ class BatchRefused(Exception):
 @dataclass(frozen=True)
 class BatchRunResult:
     results: list[TaskResult]
-    status: str  # "completed" | "credentials_expired"
+    status: str  # "completed" | "credentials_expired" | "repl_unrecoverable"
     review_path: Path | None
     resume_path: Path | None = None
     processed_names: list[str] = field(default_factory=list)
     unprocessed_names: list[str] = field(default_factory=list)
+    # REPL-death recoveries (2026-07-31): {"name": str, "input_tokens": int, "output_tokens": int}
+    # per dead attempt written off and retried -- visibility into spend that happened but whose
+    # TaskResult was superseded by a successful retry, so it's not silently invisible, without
+    # double-counting the name in `results`/`processed_names`.
+    repl_recoveries: list[dict] = field(default_factory=list)
 
 
 def load_name_list(names_file: Path) -> list[str]:
@@ -102,6 +111,18 @@ def _validate_preflight_and_curation(
             )
 
 
+def _write_resume_file(
+    names_file: Path, resume_dir: Path, unprocessed: list[str], reason: str,
+) -> Path:
+    resume_path = resume_dir / f"{Path(names_file).stem}_resume.txt"
+    resume_path.parent.mkdir(parents=True, exist_ok=True)
+    resume_path.write_text(
+        f"# Resume file: unprocessed names from {names_file} after {reason}.\n" + "\n".join(unprocessed) + "\n",
+        encoding="utf-8",
+    )
+    return resume_path
+
+
 def run_batch(
     names_file: Path,
     config: PipelineConfig,
@@ -112,6 +133,7 @@ def run_batch(
     resume_dir: Path | None = None,
     credentials_check: Callable[[], bool] = _default_credentials_alive,
     queue_path: Path = DEFAULT_QUEUE_PATH,
+    repl_warmup: Callable[[], tuple[AutoLeanServer, int]] | None = None,
 ) -> BatchRunResult:
     """Refuses to start (`BatchRefused`, no spend) if `preflight_path` doesn't cover every name
     in `names_file` with a passing entry, or if `curation_yaml_path` is given and any name is
@@ -124,13 +146,33 @@ def run_batch(
     `queue_path` (`authoring.rotation_queue.append_rotation`) -- the one mechanism, no manual
     bookkeeping (see that module's own docstring). `queue_path` is a parameter, not hardcoded,
     so tests can point it at a scratch file rather than the real
-    `authoring/output/pending_safety_updates.json`."""
+    `authoring/output/pending_safety_updates.json`.
+
+    **REPL death recovery (2026-07-31), `repl_warmup`**: a zero-argument callable returning a
+    fresh `(server, base_env)` (typically `lambda: get_warm_environment(max_total_memory=0.95)`)
+    -- OPTIONAL, `None` by default, so existing callers (and every test sharing one warm
+    `mathlib_env` fixture across many cases) are unaffected; a real production batch run should
+    always supply it. Three layers, all gated on `repl_warmup is not None`:
+    - **Prevent**: the server is killed and re-warmed at the start of every chunk (a real
+      Mathlib re-import, ~1 min -- capping the memory growth a long-running server accumulates
+      before it dies on its own).
+    - **Detect**: `harness.repl.is_unknown_environment_error` reads a rotated result's terminal
+      stage-record detail -- Lean's own "Unknown environment" text, the signature of a server
+      that died and silently restarted mid-task (every environment id it held is gone).
+    - **Recover**: on detection, re-warm (up to twice, since the first re-warm attempt can
+      itself land on a still-unhealthy process) and retry the SAME name once, fresh, against
+      the new environment; the dead attempt's real spend is not hidden (`repl_recoveries` on the
+      returned `BatchRunResult`) but its `TaskResult` is superseded, not double-counted in
+      `results`. Two consecutive re-warm failures stop the batch cleanly (`status=
+      "repl_unrecoverable"`, a resume file) -- a real machine problem, not a blip worth costing
+      more names to discover."""
     names = load_name_list(names_file)
     _validate_preflight_and_curation(names, preflight_path, curation_yaml_path)
 
     resume_dir = resume_dir if resume_dir is not None else Path(names_file).parent
     all_results: list[TaskResult] = []
     processed: list[str] = []
+    repl_recoveries: list[dict] = []
     chunks = [names[i:i + chunk_size] for i in range(0, len(names), chunk_size)]
 
     for chunk in chunks:
@@ -141,26 +183,65 @@ def run_batch(
             # membership filter would incorrectly drop every occurrence of a name that appears
             # more than once anywhere earlier in the list, not just the ones actually run.
             unprocessed = names[len(processed):]
-            # Plain one-name-per-line, matching `load_name_list`'s own input format -- a resume
-            # is just `run_batch(resume_path, ...)` again, no separate "resume mode" needed.
-            resume_path = resume_dir / f"{Path(names_file).stem}_resume.txt"
-            resume_path.parent.mkdir(parents=True, exist_ok=True)
-            resume_path.write_text(
-                f"# Resume file: unprocessed names from {names_file} after a credential check "
-                f"failed mid-batch.\n" + "\n".join(unprocessed) + "\n",
-                encoding="utf-8",
-            )
+            resume_path = _write_resume_file(names_file, resume_dir, unprocessed, "a credential check failed mid-batch")
             review_path = None
             if all_results:
                 review_path = _write_partial_review(all_results, config)
             return BatchRunResult(
                 results=all_results, status="credentials_expired", review_path=review_path,
                 resume_path=resume_path, processed_names=list(processed), unprocessed_names=unprocessed,
+                repl_recoveries=repl_recoveries,
             )
+
+        if repl_warmup is not None:
+            # Prevent: fresh server every chunk, caps memory growth before it dies on its own.
+            try:
+                config.server.kill()
+            except Exception:  # noqa: BLE001 -- best-effort; a dead server can't be killed twice
+                pass
+            new_server, new_env = repl_warmup()
+            config = dataclasses.replace(config, server=new_server, base_env=new_env)
 
         for name in chunk:
             log_line_start = _count_log_lines(config.client.log_path)
             result = author_task(name, config)
+
+            if repl_warmup is not None and result.outcome == "ROTATED" and result.stage_records and is_unknown_environment_error(result.stage_records[-1].detail):
+                # Detect + Recover: the dead attempt's spend is real and already logged in the
+                # call log (visible there, and in repl_recoveries below) -- written off here
+                # means its TaskResult is superseded by the retry, never appended to `results`.
+                repl_recoveries.append({
+                    "name": name, "input_tokens": result.input_tokens, "output_tokens": result.output_tokens,
+                })
+                recovered = False
+                for _ in range(2):  # up to two re-warm attempts before giving up
+                    try:
+                        config.server.kill()
+                    except Exception:  # noqa: BLE001
+                        pass
+                    try:
+                        new_server, new_env = repl_warmup()
+                        config = dataclasses.replace(config, server=new_server, base_env=new_env)
+                        recovered = True
+                        break
+                    except Exception:  # noqa: BLE001 -- re-warm itself failing is exactly what triggers the stop below
+                        continue
+                if not recovered:
+                    unprocessed = names[len(processed):]  # this name is still unprocessed -- never appended below
+                    resume_path = _write_resume_file(
+                        names_file, resume_dir, unprocessed,
+                        "the REPL server died and two consecutive re-warm attempts also failed",
+                    )
+                    review_path = _write_partial_review(all_results, config) if all_results else None
+                    return BatchRunResult(
+                        results=all_results, status="repl_unrecoverable", review_path=review_path,
+                        resume_path=resume_path, processed_names=list(processed), unprocessed_names=unprocessed,
+                        repl_recoveries=repl_recoveries,
+                    )
+                # Retry the whole task from its start, once, fresh -- its spliced environments
+                # died with the old server, so nothing about the dead attempt can be resumed.
+                result = author_task(name, config)
+
             all_results.append(result)
             processed.append(name)
             if result.outcome == "ROTATED":
@@ -173,7 +254,7 @@ def run_batch(
     review_path = _write_partial_review(all_results, config)
     return BatchRunResult(
         results=all_results, status="completed", review_path=review_path,
-        processed_names=list(processed), unprocessed_names=[],
+        processed_names=list(processed), unprocessed_names=[], repl_recoveries=repl_recoveries,
     )
 
 

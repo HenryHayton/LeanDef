@@ -5,6 +5,7 @@ fine for those. The credential-expiry/resume path needs a real chunk of the pipe
 run, so it uses the same real-Mathlib-REPL + loopback-stub pattern as `test_authoring_pipeline.py`.
 """
 
+import dataclasses
 import json
 
 import pytest
@@ -295,3 +296,159 @@ def test_run_batch_writes_a_rotation_queue_entry_for_every_rotation(mathlib_env,
         assert entry["category"] == NOT_AGENT_FIXABLE  # "dossier" (the call) isn't agent-fixable, only "dossier_consistency" (the check) is
         assert entry["status"] == "pending"
         assert entry["repair_log"] == []
+
+
+# === REPL death recovery (2026-07-31, the "Harness Fixes" session) ===========================
+#
+# `run_batch`'s "Prevent" layer unconditionally calls `config.server.kill()` at the START of
+# every chunk boundary, BEFORE any task runs, whenever `repl_warmup` is supplied -- including
+# on the very first chunk, on whatever server the config was constructed with. Every proxy
+# below therefore no-ops `.kill()` from the outset: passing the module-scoped `mathlib_env`
+# server in directly (unwrapped) would have it killed for real on the first chunk boundary and
+# break every other test in this file that shares the fixture.
+#
+# Death is simulated at the `.run()` level (a proxy that always returns Lean's own
+# "Unknown environment." error, confirmed to be the exact real message by driving a bogus env
+# id against a real warm server directly before writing these tests) rather than by actually
+# killing anything -- `repl_warmup` itself decides, call by call, whether the server it hands
+# back is the dying one or a healthy one, letting each test script exactly which chunk
+# boundary / which recovery attempt succeeds or fails.
+
+
+class _NonKillingProxy:
+    """Forwards everything to a real server except `.kill()`, which is swallowed -- protects
+    the shared `mathlib_env` fixture from `run_batch`'s own unconditional per-chunk kill."""
+
+    def __init__(self, real, *, on_kill=None):
+        self._real = real
+        self._on_kill = on_kill
+
+    def kill(self):
+        if self._on_kill is not None:
+            self._on_kill()
+
+    def __getattr__(self, item):
+        return getattr(self._real, item)
+
+
+class _DyingProxy:
+    """`.run()` always returns Lean's real "Unknown environment." error, regardless of the
+    request -- simulates a server that died and silently restarted. `.kill()` is swallowed."""
+
+    def kill(self):
+        pass
+
+    def run(self, request, timeout=None):
+        from lean_interact.interface import LeanError
+
+        return LeanError(message="Unknown environment.")
+
+
+def test_repl_death_mid_task_is_recovered_and_retried_not_rotated(mathlib_env, stub_server, tmp_path):
+    """Detect + recover: a truth_splice failure against a dead environment is NOT appended to
+    `results` as a genuine rotation -- `repl_warmup`'s second call supplies the REAL warm env,
+    the SAME name is retried once, and its (ordinary, budget-exhaustion) rotation is what
+    actually gets recorded -- proving the death itself was written off, not counted as this
+    name's outcome."""
+    server, env = mathlib_env
+    names_file = tmp_path / "names.txt"
+    names_file.write_text("Nat.clog\n")
+    preflight_path = tmp_path / "preflight.json"
+    preflight_path.write_text(json.dumps({"Nat.clog": {"status": "pass"}}))
+
+    bedrock_server = stub_server([ScriptedResponse(200, success_body(CLASSIFICATION_JSON))])
+    # `.server` must be non-killing even before `repl_warmup` runs -- the Prevent step kills
+    # whatever `config.server` already is at the START of the very first chunk, before it ever
+    # calls `repl_warmup`.
+    config = dataclasses.replace(_real_config(server, env, tmp_path, bedrock_server), server=_NonKillingProxy(server))
+
+    calls = {"n": 0}
+
+    def fake_warmup():
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return _DyingProxy(), env  # the chunk-boundary "fresh" server -- dies on first use
+        return _NonKillingProxy(server), env  # recovery -- the REAL warm environment
+
+    result = run_batch(
+        names_file, config, preflight_path=preflight_path, chunk_size=8,
+        credentials_check=lambda: True, repl_warmup=fake_warmup,
+        queue_path=tmp_path / "pending_safety_updates.json",
+    )
+
+    assert result.status == "completed"
+    assert len(result.results) == 1
+    # the retried attempt reached classification (real env) and then rotated on ordinary budget
+    # exhaustion (max_calls_per_task=1) -- NOT "truth_splice"/"Unknown environment" again.
+    assert result.results[0].rotated_at_stage != "truth_splice"
+    assert len(result.repl_recoveries) == 1
+    assert result.repl_recoveries[0]["name"] == "Nat.clog"
+
+
+def test_repl_death_two_consecutive_rewarm_failures_stops_cleanly_with_resume_file(mathlib_env, stub_server, tmp_path):
+    server, env = mathlib_env
+    names_file = tmp_path / "names.txt"
+    names_file.write_text("Nat.clog\nNat.choose\n")
+    preflight_path = tmp_path / "preflight.json"
+    preflight_path.write_text(json.dumps({"Nat.clog": {"status": "pass"}, "Nat.choose": {"status": "pass"}}))
+
+    bedrock_server = stub_server([])  # never reached -- dies before any Bedrock call matters
+    config = dataclasses.replace(_real_config(server, env, tmp_path, bedrock_server), server=_NonKillingProxy(server))
+
+    calls = {"n": 0}
+
+    def flaky_warmup():
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return _DyingProxy(), env  # the chunk-boundary "fresh" server -- dies on first use
+        raise RuntimeError("simulated: the machine itself is unhealthy")  # both re-warm attempts fail
+
+    result = run_batch(
+        names_file, config, preflight_path=preflight_path, chunk_size=8,
+        credentials_check=lambda: True, repl_warmup=flaky_warmup,
+        queue_path=tmp_path / "pending_safety_updates.json",
+    )
+
+    assert result.status == "repl_unrecoverable"
+    assert result.results == []  # the dying name never produced a countable result
+    assert result.unprocessed_names == ["Nat.clog", "Nat.choose"]
+    assert result.resume_path is not None and result.resume_path.exists()
+    assert load_name_list(result.resume_path) == ["Nat.clog", "Nat.choose"]
+
+
+def test_repl_warmup_restarts_the_server_at_every_chunk_boundary(mathlib_env, stub_server, tmp_path):
+    """Prevent: `repl_warmup` is called once per chunk (lifecycle assertion via a counting
+    stub), regardless of whether any task in that chunk ever hits a real death."""
+    server, env = mathlib_env
+    names_file = tmp_path / "names.txt"
+    names_file.write_text("Nat.clog\nNat.clog\n")  # 2 names, chunk_size=1 -> 2 chunk boundaries
+    preflight_path = tmp_path / "preflight.json"
+    preflight_path.write_text(json.dumps({"Nat.clog": {"status": "pass"}}))
+
+    bedrock_server = stub_server(
+        [ScriptedResponse(200, success_body(CLASSIFICATION_JSON)), ScriptedResponse(200, success_body(CLASSIFICATION_JSON))]
+    )
+    counters = {"warmup_calls": 0, "kill_calls": 0}
+
+    def _count_kill():
+        counters["kill_calls"] += 1
+
+    # healthy config -- no death expected; `.server` still non-killing so the very first
+    # chunk-boundary kill (before `repl_warmup` has run even once) is counted, not fatal.
+    config = dataclasses.replace(
+        _real_config(server, env, tmp_path, bedrock_server), server=_NonKillingProxy(server, on_kill=_count_kill)
+    )
+
+    def counting_warmup():
+        counters["warmup_calls"] += 1
+        return _NonKillingProxy(server, on_kill=_count_kill), env
+
+    result = run_batch(
+        names_file, config, preflight_path=preflight_path, chunk_size=1,
+        credentials_check=lambda: True, repl_warmup=counting_warmup,
+        queue_path=tmp_path / "pending_safety_updates.json",
+    )
+
+    assert result.status == "completed"
+    assert counters["warmup_calls"] == 2  # once per chunk boundary (2 chunks of 1 name each)
+    assert counters["kill_calls"] == 2  # the old server killed before each re-warm, including the very first

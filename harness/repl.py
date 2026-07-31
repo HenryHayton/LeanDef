@@ -29,6 +29,23 @@ class WarmupTimeoutError(RuntimeError):
     timeout, even after one retry against a freshly-cleared process tree."""
 
 
+UNKNOWN_ENVIRONMENT_MARKER = "Unknown environment"
+
+
+def is_unknown_environment_error(detail: str) -> bool:
+    """True when `detail` (a `CheckResult.detail`, or anything derived from one, e.g. a
+    `TaskResult` stage-record detail) is Lean's own "Unknown environment" error -- the class
+    `run_checked`'s own docstring names as unrecovered: once the underlying REPL server has
+    died and `AutoLeanServer` self-healed by restarting, every environment id from before the
+    restart (base env, any spliced candidate env) is gone, and a request against one fails fast
+    with exactly this message (2026-07-31, confirmed against a real batch run's 3 consecutive
+    casualties -- `authoring.batch.run_batch`'s own recovery logic is this function's caller).
+    Distinguishes "the REPL server itself died" from an ordinary Lean-level failure, which
+    should never be treated as a real rotation reason -- it's an infrastructure event, not
+    signal about the task."""
+    return UNKNOWN_ENVIRONMENT_MARKER in detail
+
+
 def _kill_stray_children(wait_timeout: float = 5.0) -> list[int]:
     """Kill every child process of the current process.
 
