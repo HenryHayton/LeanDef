@@ -325,6 +325,72 @@ def test_run_cleanup_only_attempts_agent_fixable_pending_entries(mathlib_env, st
     assert run_result.stopped_reason is None
 
 
+# --- REPL death detect + recover (2026-07-31, Part 0.1 of the "Failure Forensics" session) -----
+#
+# Regression for the real Equiv.subtypePreimage loss (completion session, 2026-07-31): a REPL
+# death during repair_one's truth-splice setup used to escalate the name immediately with 0 real
+# attempts, discarding the whole repair opportunity. Death simulated at the `.run()` level (a
+# proxy that always returns Lean's own "Unknown environment." error) rather than by actually
+# killing anything, mirroring tests/test_authoring_batch.py's own established pattern for this.
+
+
+class _DyingProxy:
+    """`.run()` always returns Lean's real "Unknown environment." error. `.kill()` is swallowed."""
+
+    def kill(self):
+        pass
+
+    def run(self, request, timeout=None):
+        from lean_interact.interface import LeanError
+
+        return LeanError(message="Unknown environment.")
+
+
+class _NonKillingProxy:
+    """Forwards everything to a real server except `.kill()`, which is swallowed -- protects
+    the shared `mathlib_env` fixture from being actually killed."""
+
+    def __init__(self, real):
+        self._real = real
+
+    def kill(self):
+        pass
+
+    def __getattr__(self, item):
+        return getattr(self._real, item)
+
+
+def test_run_cleanup_detects_repl_death_and_recovers_via_repl_warmup(mathlib_env, stub_server, tmp_path):
+    """`repl_warmup` detects the death (truth_splice setup fails with "Unknown environment"),
+    re-warms, and retries the SAME name once, fresh -- which ships. The dead attempt's own
+    repair_log entry is preserved (real signal, not hidden), same convention as run_batch."""
+    from authoring.rotation_queue import load_queue, save_queue
+
+    server, env = mathlib_env
+    bedrock_server = stub_server([
+        ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ScriptedResponse(200, success_body(CLEAN_DOSSIER_JSON)),
+        ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+        ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+    ])
+    config = _config(_DyingProxy(), env, tmp_path, bedrock_server)
+    queue_path = tmp_path / "queue.json"
+    save_queue([_base_entry("DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.clog'")], queue_path)
+
+    def rewarm():
+        return _NonKillingProxy(server), env
+
+    run_result = run_cleanup(config, queue_path=queue_path, run_budget_usd=4.0, repl_warmup=rewarm)
+
+    assert len(run_result.results) == 1
+    assert run_result.results[0].status == STATUS_REPAIRED_AND_SHIPPED
+    entries = load_queue(queue_path)
+    assert any(
+        e.get("check_result") == "fail" and "Unknown environment" in (e.get("error_if_any") or "")
+        for e in entries[0]["repair_log"]
+    )
+
+
 def test_run_cleanup_stops_at_budget_ceiling(tmp_path):
     """No REPL/Bedrock needed -- the budget check fires before the first name is even
     attempted, same "refuse before spending" shape as authoring.batch.run_batch."""

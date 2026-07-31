@@ -42,10 +42,14 @@ this from a genuine mechanical-check failure matters because, before the fix, an
 attempt 1 of 5 silently threw away the other 4 attempts' worth of real repair budget.
 """
 
+import dataclasses
 import time
 import uuid
 from dataclasses import dataclass, field, replace
 from pathlib import Path
+from typing import Callable
+
+from lean_interact import AutoLeanServer
 
 from authoring import config as authoring_cfg
 from authoring.consistency import check_dossier_consistency, inject_pinned_signature
@@ -73,6 +77,7 @@ from authoring.rotation_queue import (
 )
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClientError
+from harness.repl import is_unknown_environment_error
 from harness.results import CheckStatus
 from harness.scoring import splice_candidate
 from harness.signature import PinnedSignature
@@ -110,6 +115,24 @@ def _feedback_text(result: TaskResult) -> str | None:
     if stage in ("round_trip_generation", "round_trip_scoring") and detail.strip().startswith(_COMPILE_FAILURE_PREFIXES):
         return detail
     return None
+
+
+def _last_repair_log_shows_repl_death(entry: dict) -> bool:
+    """True when `entry["repair_log"]`'s LAST entry's `error_if_any` carries Lean's own
+    "Unknown environment" text (`harness.repl.is_unknown_environment_error`) -- REPL death can
+    surface at any of several REPL-touching points inside `repair_one` (the truth-splice setup,
+    `check_dossier_consistency`'s worked-example execution, or anything inside
+    `_author_from_dossier`'s downstream stages), all of which end up recorded as SOME
+    `repair_log` entry's `error_if_any` text -- so checking the last entry generically, rather
+    than one specific stage, catches all of them at the one place they're all guaranteed to
+    have been written down. Live-confirmed gap (2026-07-31): `Equiv.subtypePreimage`'s cleanup
+    attempt died this way during truth-splice setup and lost its whole run to it, uncaught,
+    since `repair_one`/`run_cleanup` had no detection at all before this."""
+    log = entry.get("repair_log") or []
+    if not log:
+        return False
+    detail = log[-1].get("error_if_any") or ""
+    return is_unknown_environment_error(detail)
 
 
 def _task_cost(input_tokens: int, output_tokens: int) -> float:
@@ -291,13 +314,26 @@ def run_cleanup(
     queue_path: Path = DEFAULT_QUEUE_PATH,
     run_budget_usd: float = DEFAULT_RUN_BUDGET_USD,
     credentials_check=None,
+    repl_warmup: Callable[[], tuple[AutoLeanServer, int]] | None = None,
 ) -> CleanupRunResult:
     """Iterate every `AGENT_FIXABLE` + `pending` entry in `queue_path`, repairing each in turn
     (`repair_one`), persisting the queue file after every single name (not batched -- a crash
     mid-run must not lose already-recorded repair_log entries). Stops before spending past
     `run_budget_usd` (checked before each name, using the running total so far) or, if
     `credentials_check` is supplied, before starting a name once credentials are no longer
-    live -- matching `authoring.batch.run_batch`'s own per-item credential-check convention."""
+    live -- matching `authoring.batch.run_batch`'s own per-item credential-check convention.
+
+    **REPL death detect + recover (2026-07-31), `repl_warmup`**: optional, `None` by default
+    (existing callers/tests unaffected). Unlike `authoring.batch.run_batch`, there is NO
+    proactive per-item restart here -- a cleanup run is typically a handful of names, and
+    forcing a ~1-minute Mathlib re-import before every one of them would cost far more than the
+    single real death this session ever observed bought back. Reactive only: if `repair_one`
+    escalates a name and its last repair_log entry shows Lean's "Unknown environment" text
+    (`_last_repair_log_shows_repl_death`), the server is re-warmed (up to 2 attempts, same as
+    `run_batch`) and `repair_one` is retried ONCE, fresh, for that same name -- its dead
+    attempt's repair_log entry stays (real signal that a death happened, not hidden), and the
+    retry's own entries are appended after it. Two consecutive re-warm failures stop the run
+    cleanly (`stopped_reason` set, real machine problem)."""
     entries = load_queue(queue_path)
     eligible_idxs = [i for i, e in enumerate(entries) if e["category"] == AGENT_FIXABLE and e["status"] == STATUS_PENDING]
 
@@ -311,6 +347,36 @@ def run_cleanup(
             break
 
         result = repair_one(entries[idx], config)
+
+        if (
+            repl_warmup is not None
+            and result.status == STATUS_ESCALATE_TO_HUMAN
+            and _last_repair_log_shows_repl_death(entries[idx])
+        ):
+            recovered = False
+            for _ in range(2):
+                try:
+                    config.server.kill()
+                except Exception:  # noqa: BLE001 -- best-effort; a dead server can't be killed twice
+                    pass
+                try:
+                    new_server, new_env = repl_warmup()
+                    config = dataclasses.replace(config, server=new_server, base_env=new_env)
+                    recovered = True
+                    break
+                except Exception:  # noqa: BLE001 -- re-warm itself failing is exactly what triggers the stop below
+                    continue
+            if not recovered:
+                run_result.stopped_reason = (
+                    f"the REPL server died and two consecutive re-warm attempts also failed, "
+                    f"before {entries[idx]['name']}"
+                )
+                save_queue(entries, queue_path)
+                break
+            # Retry the whole name from its start, once, fresh -- its dead attempt's repair_log
+            # entry stays (real signal), the retry appends its own on top of the same entry dict.
+            result = repair_one(entries[idx], config)
+
         run_result.results.append(result)
         run_result.total_spend_usd += result.spend_usd
         save_queue(entries, queue_path)
