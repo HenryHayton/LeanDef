@@ -2,33 +2,15 @@
   {
     "name": "Monotone",
     "batch": "authoring/batches/batch_2026-07-29.txt",
-    "rotation_stage": "truth_splice",
-    "rotation_reason": "fail to show termination for\n  VTask.Monotone\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of VTask.Monotone:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.Monotone` does not take any (non-fixed) arguments; failed to set reducibility status, `Monotone` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
-    "category": "not_agent_fixable",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Monotone' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
     "artifacts": {
       "task_dir": null,
-      "call_log_lines": [
-        64,
-        64
-      ],
-      "stage_records": [
-        {
-          "stage": "lookup",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "mention_retrieval",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "truth_splice",
-          "status": "rotated",
-          "detail": "fail to show termination for\n  VTask.Monotone\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #3 of VTask.Monotone:\n  it is unchanged in the recursive calls\nNot considering parameter #4 of VTask.Monotone:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.Monotone` does not take any (non-fixed) arguments; failed to set reducibility status, `Monotone` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation"
-        }
-      ],
-      "rejected_dossier_md": null
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": "## Object\n\n`VTask.Monotone f` is the proposition that the function `f` is order-preserving: whenever the input goes up (in the sense of the preorder on the domain), the output goes up (in the sense of the preorder on the codomain). More precisely, it asserts that for all elements `a` and `b` of the domain, if `a ≤ b` then `f a ≤ f b`.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.Monotone : {α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.Monotone : {α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop`\n\nThe type `α` is the domain type and `β` is the codomain type, both implicit. The `Preorder` instances on `α` and `β` supply the notions of `≤` used to state the condition. The explicit argument `f` is the function whose order-preservation is being asserted.\n\n## Conventions\n\nThere are no special junk-value or edge-case conventions: the predicate is a universally quantified proposition over all pairs `a b : α`, and it is vacuously true on any type `α` in which no pair satisfies `a ≤ b` (e.g., the empty type), but this follows from standard logic and requires no separate convention.\n\n## Worked examples\n\n- Claim: The identity function on any preordered type satisfies `VTask.Monotone id`, because `a ≤ b` immediately gives `id a ≤ id b`.\n\n- Claim: The constant function `fun _ => c` for a fixed element `c : β` satisfies `VTask.Monotone (fun _ => c)`, since `a ≤ b` implies `c ≤ c` by reflexivity of the preorder on `β`.\n\n- Claim: The function `fun n : ℕ => n + 1` satisfies `VTask.Monotone (fun n : ℕ => n + 1)`, because adding 1 preserves the natural number ordering.\n\n- Claim: If `f : α → β` and `g : β → γ` are both order-preserving (satisfy `VTask.Monotone`), then their composition `g ∘ f` also satisfies `VTask.Monotone (g ∘ f)`.\n\n## Boundaries\n\n- On a type with no comparable pairs (discrete preorder or empty type), the condition is vacuously satisfied by every function.\n- On a one-element type (or any type where equality is the only order relation), every function is trivially order-preserving.\n- The condition only requires the implication in one direction (`a ≤ b → f a ≤ f b`); the reverse implication (order-reflection) is a strictly stronger condition.\n- Because the preorders may be non-antisymmetric (i.e., genuine preorders rather than partial orders), two elements can satisfy both `a ≤ b` and `b ≤ a` without being equal, and `VTask.Monotone` must hold for all such pairs as well.\n\n## Not to be confused with\n\n- `VTask.StrictMono`: the strictly order-preserving variant, which requires `a < b → f a < f b` and is genuinely stronger when the orders are non-trivial.\n- `VTask.MonotoneOn`: the localised version, which requires order-preservation only for pairs drawn from a specified subset of the domain, not the whole domain.\n- `VTask.Antitone`: the order-reversing counterpart, asserting `a ≤ b → f b ≤ f a`.",
+      "note": "[history: this entry originally recorded {'old_rotation_stage': 'truth_splice', 'old_rotation_reason': 'fail to show termination for\\n  VTask.Monotone\\nwith errors\\nfailed to infer structural recursion:\\nNot considering parameter α of VTask.Monotone:\\n  it is unchanged in the recursive calls\\nNot considering parameter β of VTask.Monotone:\\n  it is unchanged in the recursive calls\\nNot considering parameter #3 of VTask.Monotone:\\n  it is unchanged in the recursive calls\\nNot considering parameter #4 of VTask.Monotone:\\n  it is unchanged in the recursive calls\\nno parameters suitable for structural recursion\\n\\nwell-founded recursion cannot be used, `VTask.Monotone` does not take any (non-fixed) arguments; failed to set reducibility status, `Monotone` is not a definition\\n\\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation', 'old_status': 'pending'}, from before Items 1-2 (this session's splice-collision/REPL-death fixes) were committed] Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase A, which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason/rejected_dossier_md reconstructed $0 from the real Bedrock call log by re-running check_dossier_consistency (the same function the pipeline itself calls) against the logged model response, post-injection."
     },
     "repair_log": [],
     "status": "pending"
@@ -158,33 +140,15 @@
   {
     "name": "DependsOn",
     "batch": "authoring/batches/batch_2026-07-29.txt",
-    "rotation_stage": "truth_splice",
-    "rotation_reason": "fail to show termination for\n  VTask.DependsOn\nwith errors\nfailed to infer structural recursion:\nNot considering parameter ι of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter α of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.DependsOn:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.DependsOn` does not take any (non-fixed) arguments; failed to set reducibility status, `DependsOn` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
-    "category": "not_agent_fixable",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'DependsOn' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
     "artifacts": {
       "task_dir": null,
-      "call_log_lines": [
-        86,
-        86
-      ],
-      "stage_records": [
-        {
-          "stage": "lookup",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "mention_retrieval",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "truth_splice",
-          "status": "rotated",
-          "detail": "fail to show termination for\n  VTask.DependsOn\nwith errors\nfailed to infer structural recursion:\nNot considering parameter ι of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter α of VTask.DependsOn:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.DependsOn:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.DependsOn` does not take any (non-fixed) arguments; failed to set reducibility status, `DependsOn` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation"
-        }
-      ],
-      "rejected_dossier_md": null
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": "## Object\n\n`VTask.DependsOn f s` is the proposition that the function `f`, which takes a dependent product `(i : ι) → α i` as input and returns a value in `β`, is \"supported on\" the index set `s`. Concretely, it asserts that the output of `f` is completely determined by the values of its input on indices belonging to `s`: if two inputs agree on every index in `s`, then `f` must give the same output on both. The predicate should be read as \"`f` potentially depends only on the variables indexed by `s`\"; it does **not** claim that `f` actually uses every element of `s`, only that no index outside `s` can affect the result.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.DependsOn : {ι : Type u_1} -> {α : ι → Type u_2} -> {β : Type u_3} -> (f : ((i : ι) → α i) → β) -> (s : Set ι) -> Prop\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.DependsOn : {ι : Type u_1} -> {α : ι → Type u_2} -> {β : Type u_3} -> (f : ((i : ι) → α i) → β) -> (s : Set ι) -> Prop`\n\n- `ι` is the index type ranging over the \"variables\" (implicit).\n- `α` is the dependent family of types giving each variable its value type (implicit).\n- `β` is the output type of `f` (implicit).\n- `f` is the function under examination: it consumes a choice of values for every index and produces a result in `β`.\n- `s` is the candidate support set — the subset of indices that is claimed to be sufficient to determine `f`'s output.\n\n## Conventions\n\n`VTask.DependsOn f s` is defined for every function `f` and every set `s` with no restriction; there are no junk-value conventions to declare.\n\n## Worked examples\n\n- Claim: For the constant function `fun (_ : (i : Fin 3) → Fin 5) => (7 : ℕ)`, `VTask.DependsOn` holds for the empty set, because the output never depends on any index at all.\n\n- Claim: `VTask.DependsOn f Set.univ` holds for every function `f`, because any two inputs that agree on all indices (i.e., all of `univ`) are equal, so `f` trivially agrees on them.\n\n- Claim: If `VTask.DependsOn f s` holds and `s ⊆ t`, then `VTask.DependsOn f t` also holds (monotonicity: enlarging the support set only weakens the hypothesis).\n\n- Claim: The projection `fun (x : (i : Fin 3) → ℕ) => x 0` satisfies `VTask.DependsOn` for the singleton `{0}`, since two inputs that agree at index `0` must give the same projection value.\n\n## Boundaries\n\n- **Empty set:** `VTask.DependsOn f ∅` is the strongest instance; it holds exactly when `f` is constant (outputs the same value on every input). Any two inputs vacuously agree on `∅`, so the condition forces `f x = f y` for all `x` and `y`.\n- **Universal set:** `VTask.DependsOn f Set.univ` always holds for any `f`, because two inputs agreeing on every index in `univ` are identical, making `f x = f y` a tautology.\n- **Monotonicity:** If the predicate holds for a small set `s`, it automatically holds for any superset `t ⊇ s`, since agreement on the larger set implies agreement on the smaller one.\n- **Constant functions:** A constant function satisfies `VTask.DependsOn` for the empty set and hence for every set, despite not genuinely \"using\" any index.\n- **Not injective in `s`:** The predicate does not record which specific indices in `s` are actually used; `f` may depend on a strict subset.\n\n## Not to be confused with\n\n- `Function.FactorsThrough`: a related predicate asserting that `f` factors through the restriction map to `s`; `VTask.DependsOn f s` is equivalent to `f` factoring through the restriction of the domain to `s`, but `FactorsThrough` is phrased in terms of an explicit intermediate function.\n- The notion of a function's **support** (where a function is nonzero): that concept applies to functions into an additive type and concerns where the output is nonzero, not which input indices affect the output.\n- **Independence**: a function being independent of a set of indices (i.e., `VTask.DependsOn f sᶜ`) is the complementary notion — the output does not change when those particular indices vary.",
+      "note": "[history: this entry originally recorded {'old_rotation_stage': 'truth_splice', 'old_rotation_reason': 'fail to show termination for\\n  VTask.DependsOn\\nwith errors\\nfailed to infer structural recursion:\\nNot considering parameter ι of VTask.DependsOn:\\n  it is unchanged in the recursive calls\\nNot considering parameter α of VTask.DependsOn:\\n  it is unchanged in the recursive calls\\nNot considering parameter β of VTask.DependsOn:\\n  it is unchanged in the recursive calls\\nno parameters suitable for structural recursion\\n\\nwell-founded recursion cannot be used, `VTask.DependsOn` does not take any (non-fixed) arguments; failed to set reducibility status, `DependsOn` is not a definition\\n\\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation', 'old_status': 'pending'}, from before Items 1-2 (this session's splice-collision/REPL-death fixes) were committed] Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase A, which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason/rejected_dossier_md reconstructed $0 from the real Bedrock call log by re-running check_dossier_consistency (the same function the pipeline itself calls) against the logged model response, post-injection."
     },
     "repair_log": [],
     "status": "pending"
@@ -928,33 +892,97 @@
   {
     "name": "Set.PartiallyWellOrderedOn.IsMinBadSeq",
     "batch": "authoring/batches/batch_2026-07-29.txt",
-    "rotation_stage": "truth_splice",
-    "rotation_reason": "LeanError: Unknown environment.",
+    "rotation_stage": "mechanical_validation",
+    "rotation_reason": "no facts survived mechanical validation",
     "category": "not_agent_fixable",
     "artifacts": {
       "task_dir": null,
-      "call_log_lines": [
-        160,
-        160
-      ],
-      "stage_records": [
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": null,
+      "dropped_facts_reconstruction": [
         {
-          "stage": "lookup",
-          "status": "ok",
-          "detail": ""
+          "id": "isminbadseq_vacuous_no_bad",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (n : ℕ) (f : ℕ → α), (∀ g : ℕ → α, ¬ IsBadSeq r s g) → VTask.IsMinBadSeq r rk s n f",
+          "type": "global"
         },
         {
-          "stage": "mention_retrieval",
-          "status": "ok",
-          "detail": ""
+          "id": "isminbadseq_exists_min_from_bad",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`; Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α), (∃ f : ℕ → α, IsBadSeq r s f) → ∃ g : ℕ → α, IsBadSeq r s g ∧ ∀ n : ℕ, VTask.IsMinBadSeq r rk s n g",
+          "type": "global"
         },
         {
-          "stage": "truth_splice",
-          "status": "rotated",
-          "detail": "LeanError: Unknown environment."
+          "id": "isminbadseq_pwo_iff",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α), s.PartiallyWellOrderedOn r ↔ ¬ ∃ f : ℕ → α, IsBadSeq r s f ∧ ∀ n : ℕ, VTask.IsMinBadSeq r rk s n f",
+          "type": "global"
+        },
+        {
+          "id": "isminbadseq_pwo_implies_no_minbad",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α), s.PartiallyWellOrderedOn r → ∀ f : ℕ → α, ¬ (IsBadSeq r s f ∧ ∀ n : ℕ, VTask.IsMinBadSeq r rk s n f)",
+          "type": "global"
+        },
+        {
+          "id": "isminbadseq_not_pwo_implies_exists_minbad",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α), ¬ s.PartiallyWellOrderedOn r → ∃ f : ℕ → α, IsBadSeq r s f ∧ ∀ n : ℕ, VTask.IsMinBadSeq r rk s n f",
+          "type": "global"
+        },
+        {
+          "id": "isminbadseq_def_unfold",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (n : ℕ) (f : ℕ → α), VTask.IsMinBadSeq r rk s n f ↔ ∀ g : ℕ → α, IsBadSeq r s g → (∀ m : ℕ, m < n → f m = g m) → rk (f n) ≤ rk (g n)",
+          "type": "global"
+        },
+        {
+          "id": "isminbadseq_accept_trivially_when_minrank",
+          "verdict": "REJECTED",
+          "reason_code": "INSTANCE_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `r`; Unknown identifier `rk`; Unknown identifier `s`; Unknown identifier `f`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (f : ℕ → α), (∀ g : ℕ → α, IsBadSeq r s g → rk (f 0) ≤ rk (g 0)) → VTask.IsMinBadSeq r rk s 0 f",
+          "type": "membership"
+        },
+        {
+          "id": "isminbadseq_reject_when_smaller_rank_exists",
+          "verdict": "REJECTED",
+          "reason_code": "INSTANCE_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `r`; Unknown identifier `rk`; Unknown identifier `s`; Unknown identifier `f`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (f g : ℕ → α), IsBadSeq r s g → rk (g 0) < rk (f 0) → ¬ VTask.IsMinBadSeq r rk s 0 f",
+          "type": "membership"
+        },
+        {
+          "id": "isminbadseq_monotone_all_n_implies_exists",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (f : ℕ → α), IsBadSeq r s f → (∀ n : ℕ, VTask.IsMinBadSeq r rk s n f) → ¬ s.PartiallyWellOrderedOn r",
+          "type": "global"
+        },
+        {
+          "id": "isminbadseq_independent_of_badness",
+          "verdict": "REJECTED",
+          "reason_code": "PROPOSITION_DOES_NOT_ELABORATE",
+          "detail": "Unknown identifier `IsBadSeq`",
+          "statement": "∀ {α : Type*} (r : α → α → Prop) (rk : α → ℕ) (s : Set α) (n : ℕ) (f : ℕ → α), (∀ g : ℕ → α, IsBadSeq r s g → (∀ m : ℕ, m < n → f m = g m) → rk (f n) ≤ rk (g n)) → VTask.IsMinBadSeq r rk s n f",
+          "type": "global"
         }
       ],
-      "rejected_dossier_md": null
+      "note": "[history: this entry originally recorded {'old_rotation_stage': 'truth_splice', 'old_rotation_reason': 'LeanError: Unknown environment.', 'old_status': 'pending'}, from before Items 1-2 (this session's splice-collision/REPL-death fixes) were committed] Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): same as above, reconstructed via authoring.orchestrate.adjudicate_proposed_facts against the logged fact-proposal response. See dropped_facts_reconstruction for the full per-fact rejection detail -- every one of the 10 proposed facts references the unqualified identifier `IsBadSeq`, which was never truth-spliced into this task's own environment (see the session report for the structural root cause: this definition is written in terms of a companion definition, Set.PartiallyWellOrderedOn.IsBadSeq, which is a SEPARATE task in this batch with its own, disjoint symbol)."
     },
     "repair_log": [],
     "status": "pending"
@@ -1003,33 +1031,79 @@
   {
     "name": "Equiv.ofLeftInverse",
     "batch": "authoring/batches/batch_2026-07-29.txt",
-    "rotation_stage": "truth_splice",
-    "rotation_reason": "LeanError: Unknown environment.",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Equiv.ofLeftInverse' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": "## 1. Object\n\nA computable equivalence (a bijection with explicit inverse data) between a type `α` and the image `Set.range f` of a function `f : α → β`, constructed from the assumption that `f` has a left-inverse — that is, there exists a function `f_inv` (which may depend on a proof that `α` is nonempty) such that `f_inv h (f a) = a` for every element `a : α`.\n\nBecause a function that has a left-inverse is necessarily injective, this equivalence witnesses that `α` bijects with exactly the set of elements of `β` in the image of `f`.\n\nThe unusual `Nonempty α`-guarded form of the left-inverse allows the construction to work even when `α` is empty (in which case `Set.range f` is the empty set and the equivalence is trivially valid), covering a case that analogous constructions in richer algebraic settings can ignore because their typeclasses already force non-emptiness.\n\n## 2. Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f)\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f)`\n\n- `α` is the source type (implicit), which may be empty.\n- `β` is the target type (implicit) into which `f` maps.\n- `f` is the function whose range becomes the right-hand side of the equivalence.\n- `f_inv` is a family of candidate left-inverses, one for each proof that `α` is nonempty; when `α` is empty this argument is never applied to an actual element.\n- `hf` is the proof that each member of this family is indeed a left-inverse of `f`: applying `f_inv h` after `f` returns the original element.\n\n## 3. Conventions\n\nWhen `α` is empty the range `Set.range f` is the empty subtype and the resulting equivalence is the unique equivalence between two empty types; no element of `f_inv` or `hf` is ever evaluated on a real input in this case.\n\n## 4. Worked examples\n\n- Claim: Applying `VTask.ofLeftInverse` to the inclusion `f : Fin 3 → ℕ` given by the coercion, with left-inverse that returns `⟨n % 3, …⟩`, gives an element of type `Fin 3 ≃ ↑(Set.range (Fin.val : Fin 3 → ℕ))`; the forward direction sends `⟨i, h⟩` to `⟨i, ⟨i, h⟩, rfl⟩`.\n\n- Claim: For `f : Empty → ℕ` (the unique function from the empty type), `VTask.ofLeftInverse f (fun h _ => h.elim) (fun h => h.elim)` is an equivalence of type `Empty ≃ ↑(Set.range f)`, where both sides are empty.\n\n- Claim: When `f` is the identity on `α`, supplying `f_inv h b := b` with `hf h a := rfl` gives an equivalence `α ≃ ↑(Set.range id)` whose forward map sends `a` to `⟨a, a, rfl⟩`.\n\n## 5. Boundaries\n\n- **`α` empty**: The equivalence is valid and both sides are empty subtypes. The guarded form of `f_inv` and `hf` is specifically designed to handle this case gracefully.\n- **`f` not injective**: The hypothesis `hf` forces injectivity implicitly (a left-inverse exists only for injective maps), so the construction is only applicable to injective `f`; no separate injectivity hypothesis is required.\n- **Duplicate witnesses**: If two different proofs `h₁ h₂ : Nonempty α` are supplied, `f_inv h₁` and `f_inv h₂` may differ as functions, but both are required to satisfy the left-inverse condition; the resulting equivalence picks one consistently.\n- **Sort generality**: `α` ranges over any `Sort` (including `Prop`), while `β` must be a `Type`.\n\n## 6. Not to be confused with\n\n- `Equiv.ofLeftInverse'`: the simpler variant where the left-inverse is an unconditional function `β → α` (no `Nonempty α` guard); requires `α` to be nonempty or the inverse to be defined everywhere unconditionally.\n- `Equiv.ofInjective`: constructs the same range-equivalence directly from an injectivity proof rather than from explicit left-inverse data; `VTask.ofLeftInverse` is equal to this when the two hypotheses are compatible.\n- `Function.LeftInverse`: the bare predicate asserting `g ∘ f = id`; not itself an equivalence, just the condition used as input here.\n",
+      "note": "[history: this entry originally recorded {'old_rotation_stage': 'truth_splice', 'old_rotation_reason': 'LeanError: Unknown environment.', 'old_status': 'pending'}, from before Items 1-2 (this session's splice-collision/REPL-death fixes) were committed] Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase A, which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason/rejected_dossier_md reconstructed $0 from the real Bedrock call log by re-running check_dossier_consistency (the same function the pipeline itself calls) against the logged model response, post-injection."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Filter.Germ.IsConstant",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: Unknown identifier `P.liftOn`; attempt 2: compile_error: Unknown identifier `P.liftOn'`; attempt 3: compile_error: Unknown identifier `P.liftOn`; attempt 4: compile_error: Unknown identifier `P.liftOn'`",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": null,
+      "note": "Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase C (16 previously-unattempted names), which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason recovered from the live run's own progress log (completion_progress.json), which WAS correctly serialized for phase C (unlike phase A, corrupted by a separate scratchpad-script bug in that session's resume step)."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Graph.banana",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "round_trip_scoring",
+    "rotation_reason": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: invalid {...} notation, expected type is not of the form (C ...)\n  α✝ → α✝ → Set β✝ → Graph α✝ β✝",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": null,
+      "note": "Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase C (16 previously-unattempted names), which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason recovered from the live run's own progress log (completion_progress.json), which WAS correctly serialized for phase C (unlike phase A, corrupted by a separate scratchpad-script bug in that session's resume step)."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "memPartition",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'memPartition' -- must use the task symbol exclusively, everywhere in the dossier",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": null,
+      "note": "Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase C (16 previously-unattempted names), which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason recovered from the live run's own progress log (completion_progress.json), which WAS correctly serialized for phase C (unlike phase A, corrupted by a separate scratchpad-script bug in that session's resume step)."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Multiset.Pi.cons",
+    "batch": "authoring/batches/batch_2026-07-29.txt",
+    "rotation_stage": "mechanical_validation",
+    "rotation_reason": "no facts survived mechanical validation",
     "category": "not_agent_fixable",
     "artifacts": {
       "task_dir": null,
-      "call_log_lines": [
-        160,
-        160
-      ],
-      "stage_records": [
-        {
-          "stage": "lookup",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "mention_retrieval",
-          "status": "ok",
-          "detail": ""
-        },
-        {
-          "stage": "truth_splice",
-          "status": "rotated",
-          "detail": "LeanError: Unknown environment."
-        }
-      ],
-      "rejected_dossier_md": null
+      "call_log_lines": null,
+      "stage_records": null,
+      "rejected_dossier_md": null,
+      "note": "Backfilled 2026-07-31 (Failure Forensics session, Part 0.2): this rotation happened during the completion session's phase C (16 previously-unattempted names), which called author_task directly (not authoring.batch.run_batch), so append_rotation never fired. rotation_reason recovered from the live run's own progress log (completion_progress.json), which WAS correctly serialized for phase C (unlike phase A, corrupted by a separate scratchpad-script bug in that session's resume step)."
     },
     "repair_log": [],
     "status": "pending"
