@@ -391,6 +391,49 @@ def test_run_cleanup_detects_repl_death_and_recovers_via_repl_warmup(mathlib_env
     )
 
 
+def test_repair_one_truth_splice_survives_an_unnamespaced_real_name(mathlib_env, stub_server, tmp_path):
+    """`repair_one` must root-qualify its truth-splice body (via `harness.scoring.splice_real_name`),
+    not emit a bare `def VTask.Monotone := Monotone` -- Lean resolves that body reference to the
+    declaration being elaborated (both end in `.Monotone`) and the termination checker kills it.
+    Live regression (2026-07-31): `authoring.pipeline`'s truth-splice was fixed for this, but
+    this sibling call site was missed, so Monotone/DependsOn/memPartition each failed at
+    attempt 0 -- before any LLM call -- for the whole life of the cleanup runner.
+
+    Uses the REAL `Monotone`, not a stand-in: the bug is specifically about a task symbol whose
+    base name equals an unnamespaced real declaration, which no synthetic fixture reproduces."""
+    server, env = mathlib_env
+    bedrock_server = stub_server([])  # must fail/succeed at the splice, before any Bedrock call
+    client = BedrockClient(endpoint_url=bedrock_server.url, log_path=tmp_path / "log.jsonl", sleep_fn=lambda s: None)
+
+    monotone_type = "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop"
+
+    def _resolve(name: str) -> DefinitionInput:
+        return DefinitionInput(
+            name="Monotone",
+            signature_dict={"name": "Monotone", "type": monotone_type, "imports": []},
+            definition_source="context only", docstring="monotone", return_shape="prop",
+            mention_records=[],
+        )
+
+    config = PipelineConfig(
+        client=client, authoring_model_id="m", flagship_model_id="m",
+        server=server, base_env=env, resolve_definition=_resolve,
+        output_dir=tmp_path / "output", batch_review_dir=tmp_path / "review",
+    )
+    entry = {**_base_entry("DOSSIER_LEAKS_REAL_NAME: ..."), "name": "Monotone"}
+
+    result = repair_one(entry, config)
+
+    # It will still escalate (the stub has no scripted responses, so the classification call
+    # fails) -- but it must NOT be the attempt-0 truth-splice failure, and specifically must not
+    # be a termination-checker error from a self-referential splice.
+    splice_failures = [
+        r for r in entry["repair_log"]
+        if r["attempt_n"] == 0 and "termination" in (r.get("error_if_any") or "").lower()
+    ]
+    assert not splice_failures, f"truth-splice self-reference regression: {splice_failures}"
+
+
 def test_run_cleanup_stops_at_budget_ceiling(tmp_path):
     """No REPL/Bedrock needed -- the budget check fires before the first name is even
     attempted, same "refuse before spending" shape as authoring.batch.run_batch."""

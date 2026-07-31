@@ -79,7 +79,7 @@ from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClientError
 from harness.repl import is_unknown_environment_error
 from harness.results import CheckStatus
-from harness.scoring import splice_candidate
+from harness.scoring import splice_real_name
 from harness.signature import PinnedSignature
 
 MAX_REPAIR_ATTEMPTS = 5
@@ -190,8 +190,18 @@ def repair_one(entry: dict, config: PipelineConfig) -> CleanupResult:
         signature_obj = PinnedSignature(name=task_symbol, type_sig=definition_input.signature_dict["type"])
         mention_excerpt = render_mention_excerpt(definition_input.mention_records, cap=config.mention_cap)
 
-        truth_cmd = signature_obj.splice(definition_input.name)
-        truth_splice = splice_candidate(config.server, config.base_env, truth_cmd, timeout=config.check_timeout)
+        # `splice_real_name`, NOT the body-agnostic `signature_obj.splice(...)` -- the latter
+        # emits `def VTask.Monotone := Monotone`, whose bare body reference Lean resolves to the
+        # declaration currently being elaborated (both names end in `.Monotone`), producing a
+        # self-referential definition that dies in the termination checker. `splice_real_name`
+        # root-qualifies (`:= _root_.Monotone`) and retries once as `noncomputable` when Lean
+        # asks for it. `authoring.pipeline`'s own truth-splice was fixed 2026-07-31; this
+        # sibling call site was missed, and every unnamespaced name (Monotone, DependsOn,
+        # memPartition -- exactly the ones whose task symbol shares the real name's base) failed
+        # here at attempt 0, before any LLM call, for the whole life of the cleanup runner.
+        truth_splice = splice_real_name(
+            config.server, config.base_env, signature_obj, definition_input.name, timeout=config.check_timeout
+        )
         if truth_splice.status is not CheckStatus.PASSED:
             entry["repair_log"].append({
                 "attempt_n": 0, "what_was_changed": "n/a (re-splicing the truth side to set up the repair)",
