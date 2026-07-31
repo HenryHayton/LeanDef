@@ -64,8 +64,15 @@
       ],
       "rejected_dossier_md": null
     },
-    "repair_log": [],
-    "status": "pending"
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "n/a -- harness fix (Item 1, truth-splice self-reference/noncomputable fix), not a dossier revision",
+        "check_result": "pass -- shipped on re-run after the harness fix",
+        "error_if_any": null
+      }
+    ],
+    "status": "repaired_and_shipped"
   },
   {
     "name": "Nat.findGreatest",
@@ -126,9 +133,27 @@
         "what_was_changed": "n/a",
         "check_result": "fail (unexpected error)",
         "error_if_any": "AuthoringCallFailed: terminal after one retry: response was not valid JSON: Expecting ',' delimiter: line 1 column 280 (char 279)"
+      },
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier; worked example (EXECUTION_FAILED) '`VTask.findGreatest P 0 = 0` for any `P` — the upper bound 0 forces the result to be 0.': Expected type must not contain free variables\n  VTask.findGreatest P 0 = 0\n\nHint: Use the `+revert` option to automatically clean up and revert free variables"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.findGreatest' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
       }
     ],
-    "status": "escalate_to_human"
+    "status": "repaired_and_shipped"
   },
   {
     "name": "DependsOn",
@@ -235,9 +260,33 @@
         "what_was_changed": "revised dossier",
         "check_result": "fail (dossier_consistency)",
         "error_if_any": "signature check: pinned signature 'VTask.binaryRec : {motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (dossier_consistency)",
+        "error_if_any": "DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.binaryRec' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
       }
     ],
-    "status": "escalate_to_human"
+    "status": "repaired_and_shipped"
   },
   {
     "name": "Int.leastOfBdd",
@@ -389,9 +438,33 @@
         "what_was_changed": "n/a",
         "check_result": "fail (unexpected error)",
         "error_if_any": "AuthoringCallFailed: terminal after one retry: dossier response.domain.conventions[0]: field 'note' must be a non-empty string, got None"
+      },
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Tactic `assumption` failed\n\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx : α✝\nh : x ∈ l\ny z : α✝\nrest : List α✝\nheq : x = y\n⊢ ¬x = y; Type mismatch\n  hmem\nhas type\n  x = z ∨ x ∈ rest\nbut is expected to have type\n  x ∈ z :: rest; attempt 2: compile_error: Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  List.not_mem_nil ?m.41\nhas type\n  False\nbut is expected to have type\n  x✝ ∉ []\nin the application\n  absurd h ⋯; Application type mismatch: The argument\n  List.not_mem_nil ?m.88\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Application type mismatch: The argument\n  h\nhas type\n  ¬y = a\nbut is expected to have type\n  ?m.166 ∈ ?m.164 :: ?m.165\nin the application\n  List.mem_cons.mp h; Application type mismatch: The argument\n  fun x1 x2 => x1 :: x2\nhas type\n  ?m.11 → List ?m.11 → List ?m.11\nbut is expected to have type\n  List α✝\nin the application\n  List.tail fun x1 x2 => x1 :: x2; attempt 3: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.17\nhas type\n  False\nbut is expected to have type\n  y ∉ []\nin the application\n  absurd hmem ⋯; Application type mismatch: The argument\n  List.not_mem_nil ?m.58\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; attempt 4: compile_error: Invalid field `elim`: The environment does not contain `List.Mem.elim`, so it is not possible to project the field `elim` from an expression\n  h\nof type `List.Mem y []`; Invalid field `elim`: The environment does not contain `List.Mem.elim`, so it is not possible to project the field `elim` from an expression\n  h\nof type `List.Mem x []`"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.38 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; unsolved goals\ncase head\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx : α✝\nh : x ∈ l\nrest : List α✝\n⊢ sorry (); attempt 2: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; attempt 3: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Application type mismatch: The argument\n  tgt\nhas type\n  α\nof sort `Type ?u.38` but is expected to have type\n  ?m.35 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil tgt; attempt 4: compile_error: Application type mismatch: The argument\n  List.not_mem_nil ?m.13\nhas type\n  False\nbut is expected to have type\n  x ∉ []\nin the application\n  absurd h ⋯; Application type mismatch: The argument\n  List.not_mem_nil ?m.37\nhas type\n  False\nbut is expected to have type\n  tgt ∉ []\nin the application\n  absurd hm ⋯"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Application type mismatch: The argument\n  List.cons_ne_nil hd tl\nhas type\n  hd :: tl ≠ []\nbut is expected to have type\n  l ≠ []\nin the application\n  l.getLast ⋯; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.37 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Tactic `assumption` failed\n\nα✝ : Type u_1\ninst✝ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\nheq : x = hd\n⊢ ¬x = hd; attempt 2: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Application type mismatch: The argument\n  target\nhas type\n  β\nof sort `Type ?u.41` but is expected to have type\n  ?m.35 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil target; Tactic `assumption` failed\n\nα✝ : Type u_1\ninst✝¹ : DecidableEq α✝\nl : List α✝\nx hd : α✝\ntl : List α✝\nh : x ∈ hd :: tl\nheq : ¬hd = x\nβ : Type u_1\ninst✝ : DecidableEq β\nprev : β\nremaining : List β\ntarget y : β\nys : List β\nheq2 : target = y\n⊢ ¬target = y; attempt 3: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α✝\nof sort `Type u_1` but is expected to have type\n  ?m.12 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; Unknown identifier `α`; attempt 4: compile_error: Application type mismatch: The argument\n  x\nhas type\n  α\nof sort `Type u_1` but is expected to have type\n  ?m.13 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil x; Application type mismatch: The argument\n  target\nhas type\n  α\nof sort `Type u_1` but is expected to have type\n  ?m.36 ∈ []\nof sort `Prop` in the application\n  List.not_mem_nil target; Application type mismatch: The argument\n  hy\nhas type\n  ¬y = target\nbut is expected to have type\n  ¬target = y\nin the application\n  absurd heq2 hy"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "pass -- shipped",
+        "error_if_any": null
       }
     ],
-    "status": "escalate_to_human"
+    "status": "repaired_and_shipped"
   },
   {
     "name": "Finset.sumLexLift",
@@ -650,6 +723,36 @@
         "what_was_changed": "revised dossier",
         "check_result": "fail (dossier_consistency)",
         "error_if_any": "signature check: pinned signature \"VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β\" not found verbatim in the dossier's Signature section"
+      },
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.203 = f ?m.204\nin the application\n  Function.Embedding.injective f hxy; Type mismatch\n  hxy\nhas type\n  b = f y\nbut is expected to have type\n  f y = b; Unknown identifier `hyb`; Tactic `subst` failed: did not find equation for eliminating 'hxa'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhyb : f x = b\nh✝ : y = a\nhxy : f a = b\n⊢ x = y; Unknown identifier `hya`; Unknown identifier `hya`; Unknown identifier `hya`; Application type mismatch: The argument\n  hxy\nhas type\n  f x = f a\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : ¬x = a\nhyb : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y; attempt 3: compile_error: Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxa : x = a\nhxb : y = a\nhxy : b = b\n⊢ x = y; Function expected at\n  hya\nbut this term has type\n  f y = b\n\nNote: Expected a function because this term is being applied to the argument\n  (f.injective hxy.symm); Unknown identifier `hyb`; Unknown identifier `hxb`; Unknown identifier `hxb.trans`; Application type mismatch: The argument\n  hyb\nhas type\n  f x = b\nbut is expected to have type\n  ¬?m.191\nin the application\n  absurd ?m.193 hyb; Unknown identifier `hxb`; invalid `▸` notation, the equality\n  hxy\nhas type \n  f a = f y\nbut neither side of the equality is mentioned in the type\n  ?m.194; Unknown identifier `hxb`; Unknown identifier `hxb`; attempt 4: compile_error: Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  f x = b\nbut is expected to have type\n  f y = f x\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Unknown identifier `hyb`; Unknown identifier `hya`; Unknown identifier `hxb.trans`; Unknown identifier `hxb.symm.trans`; Unknown identifier `hxb`; Type mismatch\n  hyb\nhas type\n  ¬f x = b\nbut is expected to have type\n  f a = b; Unknown identifier `hxb`"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.205 = f ?m.206\nin the application\n  Function.Embedding.injective f hxy; Tactic `subst` failed: did not find equation for eliminating 'h2'\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : x = a\nh2 : ¬y = a\nh3 : ¬f y = b\nhxy : b = f y\n⊢ x = y; Tactic `subst` failed: did not find equation for eliminating 'h1'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : f x = b\nh✝ : y = a\nhxy : f a = b\n⊢ x = y; Unknown identifier `h2`; Application type mismatch: The argument\n  hxy\nhas type\n  f a = f y\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝ : y = a\nhxy : f x = b\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : f y = b\nhxy : f x = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y; attempt 3: compile_error: Invalid field `symm`: The environment does not contain `Function.symm`, so it is not possible to project the field `symm` from an expression\n  h2\nof type `y = a → False`; Unknown identifier `a`; Invalid field `trans`: The environment does not contain `Function.trans`, so it is not possible to project the field `trans` from an expression\n  h4\nof type `True → False`; Application type mismatch: The argument\n  h4\nhas type\n  f y = f x\nbut is expected to have type\n  ¬f x = b\nin the application\n  absurd (Eq.symm hxy) h4; Tactic `subst` failed: did not find equation for eliminating 'h2'\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxy : b = f y\nh1 : x = a\nh2 : ¬y = a\nh3 : ¬f a = f y\nh4 : ¬True\n⊢ a = y; Unknown identifier `h4.symm`; invalid `▸` notation, expected result type of cast is \n  True\nhowever, the equality \n  h3\nof type \n  f x = b\ndoes not contain the expected result type on either the left or the right hand side; Tactic `subst` failed: did not find equation for eliminating 'h2'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh2 : ¬y = a\nh3 : f x = b\nh4 : f y = b\n⊢ x = y; Invalid field `trans`: The environment does not contain `Function.trans`, so it is not possible to project the field `trans` from an expression\n  h4\nof type `f y = b → False`; Application type mismatch: The argument\n  Eq.trans hxy ?m.334\nhas type\n  f a = ?m.333\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f (Eq.trans hxy ?m.334); Invalid field `symm`: The environment does not contain `Function.symm`, so it is not possible to project the field `symm` from an expression\n  h4\nof type `f y = b → False`; Application type mismatch: The argument\n  hxy\nhas type\n  f x = f a\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhxy : f x = f y\nh1 : ¬x = a\nh2 : ¬y = a\nh3 : ¬False\nh4 : ¬f y = b\n⊢ x = y; attempt 4: compile_error: Unknown identifier `a`; Unknown identifier `h4.symm.trans`; Unknown identifier `h2`; Invalid field `trans`: The environment does not contain `Function.trans`, so it is not possible to project the field `trans` from an expression\n  h1\nof type `x = a → False`; Unknown identifier `h3`; invalid `▸` notation, argument\n  h1\nhas type\n  ¬x = a\nequality expected; Unknown identifier `h2`; Unknown identifier `h2`"
+      },
+      {
+        "attempt_n": 3,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: invalid `▸` notation, expected result type of cast is \n  y = a\nhowever, the equality \n  h\nof type \n  ?m.88 = ?m.89\ndoes not contain the expected result type on either the left or the right hand side; Application type mismatch: The argument\n  hfyb\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬b = f y\nin the application\n  absurd hxy hfyb; invalid `▸` notation, expected result type of cast is \n  x = a\nhowever, the equality \n  h\nof type \n  ?m.126 = ?m.127\ndoes not contain the expected result type on either the left or the right hand side; No goals to be solved; Type mismatch\n  hfxb\nhas type\n  f x = b\nbut is expected to have type\n  f a = b; Type mismatch\n  hfyb\nhas type\n  f y = b\nbut is expected to have type\n  f a = b; Application type mismatch: The argument\n  hxy\nhas type\n  Eq.{u_1} x y\nbut is expected to have type\n  Eq.{u_2} (f x) (f y)\nin the application\n  Function.Embedding.injective f hxy; attempt 3: compile_error: Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  (if y = a then b else f a) = b\nbut is expected to have type\n  b = f a\nin the application\n  Eq.trans hfyb (Eq.symm hxy); Application type mismatch: The argument\n  hfyb\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬(if y = a then b else f y) = b\nin the application\n  absurd (Eq.symm hxy) hfyb; Application type mismatch: The argument\n  hxy\nhas type\n  (if x = a then b else f a) = b\nbut is expected to have type\n  b = f a\nin the application\n  Eq.trans hfxb hxy; Application type mismatch: The argument\n  hfxb\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if x = a then b else f x) = b\nin the application\n  absurd hxy hfxb; Application type mismatch: The argument\n  hfxb\nhas type\n  f x = b\nbut is expected to have type\n  f a = b\nin the application\n  Eq.trans (Eq.symm hxy) hfxb; Application type mismatch: The argument\n  hfyb\nhas type\n  f y = b\nbut is expected to have type\n  f a = b\nin the application\n  Eq.trans hxy hfyb; attempt 4: compile_error: Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  f a = b\nbut is expected to have type\n  b = f a\nin the application\n  Eq.trans hfyb (Eq.symm hxy); Application type mismatch: The argument\n  hxy\nhas type\n  f a = b\nbut is expected to have type\n  b = f a\nin the application\n  Eq.trans hfxb hxy; No goals to be solved; Application type mismatch: The argument\n  hfxb\nhas type\n  f x = b\nbut is expected to have type\n  f a = b\nin the application\n  Eq.trans (Eq.symm hxy) hfxb; Application type mismatch: The argument\n  hfyb\nhas type\n  f y = b\nbut is expected to have type\n  f a = b\nin the application\n  Eq.trans hxy hfyb"
+      },
+      {
+        "attempt_n": 4,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `h3`; Application type mismatch: The argument\n  hxy\nhas type\n  b = f x\nbut is expected to have type\n  f ?m.193 = f ?m.194\nin the application\n  Function.Embedding.injective f hxy; Unknown identifier `h4`; Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  f y = b\nbut is expected to have type\n  f ?m.217 = f ?m.216\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Unknown identifier `h3`; Unknown identifier `h3`; Application type mismatch: The argument\n  hxy\nhas type\n  f a = f y\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝ : y = a\nhxy : f x = b\n⊢ x = y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : f y = b\nhxy : f x = f a\n⊢ x = y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh4 : ¬f x = b\nh✝¹ : ¬y = a\nh✝ : ¬f y = b\nhxy : f x = f y\n⊢ x = y; attempt 3: compile_error: invalid `▸` notation, argument\n  h4\nhas type\n  ¬f y = b\nequality expected; `simp` made no progress; Tactic `subst` failed: did not find equation for eliminating 'h3'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh2 : f x = b\nh4 : f y = b\ninst✝ : (a' : α✝) → Decidable (a' = x)\nh3 : ¬y = x\nhxy : b = f x\n⊢ x = y; invalid `▸` notation, argument\n  h2\nhas type\n  ¬f x = b\nequality expected; `simp` made no progress; invalid `▸` notation, argument\n  h2\nhas type\n  ¬f x = b\nequality expected; Application type mismatch: The argument\n  hxy\nhas type\n  b = f a\nbut is expected to have type\n  f ?m.322 = f ?m.323\nin the application\n  Function.Embedding.injective f hxy; unsolved goals\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : x = a\nh2 : ¬f x = b\nh3 : ¬y = a\nh4 : f y = b\nhxy : b = f a\n⊢ ¬¬f x = b; Tactic `subst` failed: did not find equation for eliminating 'h3'\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : x = a\nh2 : ¬f x = b\nh3 : ¬y = a\nh4 : ¬f y = b\nhxy : b = f y\n⊢ x = y; Invalid rewrite argument: The pattern to be substituted is a metavariable (`?m.330`) in this equality\n  ?m.330 = ?m.329; Application type mismatch: The argument\n  hxy\nhas type\n  f a = b\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  f x\nin the target expression\n  True\n\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh2 : f x = b\nh3 : ¬y = a\nh4 : f y = b\nhxy : True\nh : f x = b\n⊢ False; Application type mismatch: The argument\n  hxy\nhas type\n  f a = f y\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f hxy; Tactic `subst` failed: did not find equation for eliminating 'h1'\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nh1 : ¬x = a\nh2 : ¬f x = b\nh3 : ¬y = a\nh4 : f y = b\nhxy : f x = f a\n⊢ x = y; Invalid rewrite argument: Expected an equality or iff proof or definition name, but `h ?a✝` is a proof of\n  False; No goals to be solved; attempt 4: compile_error: Application type mismatch: The argument\n  h\nhas type\n  f y = if y = x then b else f x\nbut is expected to have type\n  f y = f x\nin the application\n  Function.Embedding.injective f h; Application type mismatch: The argument\n  h4\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬(if y = x then b else f y) = b\nin the application\n  absurd (Eq.symm hxy) h4; Application type mismatch: The argument\n  h\nhas type\n  f x = if x = y then b else f y\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f h; Application type mismatch: The argument\n  h2\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if x = y then b else f x) = b\nin the application\n  absurd hxy h2; Type mismatch\n  h2\nhas type\n  f x = b\nbut is expected to have type\n  f a = b; Type mismatch\n  h4\nhas type\n  f y = b\nbut is expected to have type\n  f a = b"
+      },
+      {
+        "attempt_n": 5,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: Invalid `⟨...⟩` notation: The expected type\n  (f : α✝ ↪ β✝) → (a : α✝) → (b : β✝) → [(a' : α✝) → Decidable (a' = a)] → [(a' : α✝) → Decidable (f a' = b)] → α✝ ↪ β✝\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; attempt 2: compile_error: Unknown identifier `a`; Application type mismatch: The argument\n  h3\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬b = f y\nin the application\n  absurd hxy h3; Unknown identifier `h2`; Unknown identifier `h2`; Unknown identifier `h2`; Unknown identifier `h3`; Application type mismatch: The argument\n  h4\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬f a = f x\nin the application\n  absurd (Eq.symm hxy) h4; attempt 3: compile_error: Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  (if y = x then b else f x) = b\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); Application type mismatch: The argument\n  hfy\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬b = if y = x then b else f y\nin the application\n  absurd hxy hfy; Application type mismatch: The argument\n  hxy\nhas type\n  (if x = y then b else f y) = b\nbut is expected to have type\n  f y = f x\nin the application\n  Function.Embedding.injective f hxy; Application type mismatch: The argument\n  hfx\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬b = if x = y then b else f x\nin the application\n  absurd (Eq.symm hxy) hfx; Tactic `rfl` failed: The left-hand side\n  x\nis not definitionally equal to the right-hand side\n  y\n\ncase pos\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (a' = a)\ninst✝ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\nhx : ¬x = a\nhy : ¬y = a\nhfx : f x = b\nhfy : f y = b\nhxy : True\n⊢ x = y; Application type mismatch: The argument\n  hfy\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬f y = f a\nin the application\n  absurd (Eq.symm hxy) hfy; Application type mismatch: The argument\n  hfx\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬f x = f a\nin the application\n  absurd hxy hfx; attempt 4: compile_error: Application type mismatch: The argument\n  Eq.symm hxy\nhas type\n  (if y = x then b else if True then f x else b) = if True then b else if f x = b then f x else f x\nbut is expected to have type\n  f x = f y\nin the application\n  Function.Embedding.injective f (Eq.symm hxy); invalid `▸` notation, the equality\n  not_false_eq_true\nhas type \n  (¬False) = True\nbut neither side of the equality is mentioned in the type\n  ¬f y = b; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  if f y = b then ?m.132 else ?m.133\nin the target expression\n  (if True then b else if f x = b then f x else f x) = if False then f x else f y\n\ncase neg\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\nb : β✝\ninst✝¹ : (a' : α✝) → Decidable (f a' = b)\nx y : α✝\ninst✝ : (a' : α✝) → Decidable (a' = x)\nhy : ¬y = x\nhfy : ¬f y = b\nhxy : (if True then b else if f x = b then f x else f x) = if False then f x else f y\n⊢ x = y; Application type mismatch: The argument\n  hxy\nhas type\n  (if True then f y else b) = if True then b else if f y = b then f y else f y\nbut is expected to have type\n  f y = f x\nin the application\n  Function.Embedding.injective f hxy; invalid `▸` notation, the equality\n  not_false_eq_true\nhas type \n  (¬False) = True\nbut neither side of the equality is mentioned in the type\n  ¬f x = b; Application type mismatch: The argument\n  hfx\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬(if True then b else if f y = b then f y else f y) = if False then f y else f x\nin the application\n  absurd (Eq.symm hxy) hfx; Application type mismatch: The argument\n  hfy\nhas type\n  ¬f y = b\nbut is expected to have type\n  ¬f y = f a\nin the application\n  absurd (Eq.symm hxy) hfy; Application type mismatch: The argument\n  hfx\nhas type\n  ¬f x = b\nbut is expected to have type\n  ¬f x = f a\nin the application\n  absurd hxy hfx"
       }
     ],
     "status": "escalate_to_human"
@@ -725,6 +828,18 @@
         "what_was_changed": "revised dossier",
         "check_result": "fail (dossier_consistency)",
         "error_if_any": "signature check: pinned signature 'VTask.replaceVertex : {V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V' not found verbatim in the dossier's Signature section; DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'SimpleGraph.replaceVertex' -- must use the task symbol exclusively, everywhere in the dossier"
+      },
+      {
+        "attempt_n": 1,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (round_trip_scoring)",
+        "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected 'else'; attempt 2: compile_error: unexpected identifier; expected 'else'; attempt 3: compile_error: unexpected identifier; expected 'else'; attempt 4: compile_error: unexpected identifier; expected 'else'"
+      },
+      {
+        "attempt_n": 2,
+        "what_was_changed": "revised dossier",
+        "check_result": "fail (mechanical_validation, not feedback-eligible -- stopping, see guardrails)",
+        "error_if_any": "no facts survived mechanical validation"
       }
     ],
     "status": "escalate_to_human"
@@ -800,6 +915,12 @@
         "what_was_changed": "revised dossier",
         "check_result": "fail (round_trip_scoring)",
         "error_if_any": "exhausted 4 compile attempt(s): attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}'"
+      },
+      {
+        "attempt_n": 0,
+        "what_was_changed": "n/a (re-splicing the truth side to set up the repair)",
+        "check_result": "fail",
+        "error_if_any": "LeanError: Unknown environment."
       }
     ],
     "status": "escalate_to_human"
@@ -869,8 +990,15 @@
       ],
       "rejected_dossier_md": null
     },
-    "repair_log": [],
-    "status": "pending"
+    "repair_log": [
+      {
+        "attempt_n": 1,
+        "what_was_changed": "n/a -- harness fix (Item 1, truth-splice self-reference/noncomputable fix), not a dossier revision",
+        "check_result": "pass -- shipped on re-run after the harness fix",
+        "error_if_any": null
+      }
+    ],
+    "status": "repaired_and_shipped"
   },
   {
     "name": "Equiv.ofLeftInverse",
