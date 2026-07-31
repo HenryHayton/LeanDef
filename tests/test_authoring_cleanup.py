@@ -111,7 +111,9 @@ def _dossier_json(leak: bool) -> str:
     body_ref = DEF_NAME if leak else TASK_SYMBOL  # leaks the real name in the fenced command
     dossier_md = (
         "# Object\nThe ceiling logarithm.\n\n"
-        f"# Signature\nThe pinned signature is `{PINNED_SIG}`.\n\n"
+        # 2026-07-31: the model no longer restates the pinned signature (contract §3.4(c)) --
+        # `authoring.cleanup.repair_one` injects it mechanically, same as the normal pipeline.
+        "# Signature\nThe first argument is the base; the second is the value.\n\n"
         f"# Conventions\nFor b<=1 or n<=1, {TASK_SYMBOL} b n = 0 (junk value convention).\n\n"
         f"# Worked examples\n- Claim: {TASK_SYMBOL} 2 37 = 6\n"
         "  ```lean\n"
@@ -172,6 +174,31 @@ def test_repair_one_succeeds_on_first_repair_attempt(mathlib_env, stub_server, t
     assert result.shipped_task_dir is not None
     validated = validate_task_dir(result.shipped_task_dir)
     assert validated.data["task_id"] == DEF_NAME
+
+
+def test_repair_one_also_injects_the_signature_mechanically(mathlib_env, stub_server, tmp_path):
+    """`authoring.cleanup.repair_one` is the SECOND caller of `inject_pinned_signature` (the
+    other is `authoring.pipeline`'s normal dossier_attempt) -- confirms the repair loop's own
+    revised dossier gets the same mechanical treatment, not just the first-attempt path."""
+    from authoring.consistency import SIGNATURE_INJECTION_END, SIGNATURE_INJECTION_START
+    from pathlib import Path
+
+    server, env = mathlib_env
+    bedrock_server = stub_server([
+        ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+        ScriptedResponse(200, success_body(CLEAN_DOSSIER_JSON)),
+        ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+        ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+    ])
+    config = _config(server, env, tmp_path, bedrock_server)
+    entry = _base_entry("DOSSIER_LEAKS_REAL_NAME: dossier contains the real Mathlib name 'Nat.clog'")
+
+    result = repair_one(entry, config)
+
+    assert result.status == STATUS_REPAIRED_AND_SHIPPED
+    dossier_text = (Path(result.shipped_task_dir) / "dossier.md").read_text(encoding="utf-8")
+    expected_block = f"{SIGNATURE_INJECTION_START}\n{PINNED_SIG}\n{SIGNATURE_INJECTION_END}"
+    assert expected_block in dossier_text
 
 
 def test_repair_one_recovers_after_one_failed_attempt(mathlib_env, stub_server, tmp_path):

@@ -79,7 +79,7 @@ reliable to extract.
 
 import json
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Callable
@@ -92,6 +92,7 @@ from authoring.consistency import (
     ConventionMatchResult,
     check_dossier_consistency,
     check_round_trip_recalls_target,
+    inject_pinned_signature,
 )
 from authoring.emit import emit_task
 from authoring.facts import DomainSpec, ProposedFact
@@ -230,7 +231,7 @@ def _render_classification(c: Classification) -> str:
 
 def _summarize_consistency_failure(result: ConsistencyCheckResult) -> str:
     parts = []
-    if not result.signature_substring_ok:
+    if not result.signature_injection_ok:
         parts.append(f"signature check: {result.signature_detail}")
     if not result.real_name_leak_ok:
         parts.append(result.real_name_leak_detail)
@@ -471,6 +472,10 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
             holder["failure_note"] = None
             return False, f"{type(e).__name__}: {e}"
 
+        # Mechanical signature injection (contract §3.4(c), 2026-07-31): the model never wrote
+        # the pinned signature itself (dossier.txt's own prompt), so it's inserted here, once,
+        # before the dossier is used for anything else -- see authoring.consistency's own note.
+        payload = replace(payload, dossier_md=inject_pinned_signature(payload.dossier_md, pinned_signature))
         holder["payload"] = payload
         consistency = check_dossier_consistency(
             config.server, truth_env, pinned_signature, payload.dossier_md, payload.domain,

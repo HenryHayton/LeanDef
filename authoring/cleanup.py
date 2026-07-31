@@ -36,11 +36,11 @@ one per category.
 
 import time
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from authoring import config as authoring_cfg
-from authoring.consistency import check_dossier_consistency
+from authoring.consistency import check_dossier_consistency, inject_pinned_signature
 from authoring.mentions import render_mention_excerpt
 from authoring.orchestrate import CallBudget, run_classification_call, run_dossier_call
 from authoring.pipeline import (
@@ -151,6 +151,10 @@ def repair_one(entry: dict, config: PipelineConfig) -> CleanupResult:
                 classification=classification_input, decidability=definition_input.decidability,
                 budget=budget,
             )
+            # Same mechanical injection pipeline.py's own dossier_attempt performs -- see
+            # authoring.consistency's note; the repair loop generates a fresh dossier per
+            # attempt, so this must run every time, not just once per name.
+            payload = replace(payload, dossier_md=inject_pinned_signature(payload.dossier_md, pinned_signature))
             consistency = check_dossier_consistency(
                 config.server, truth_env, pinned_signature, payload.dossier_md, payload.domain,
                 timeout=config.check_timeout, forbidden_name=definition_input.name,

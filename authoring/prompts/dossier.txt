@@ -30,6 +30,12 @@
 # `definition_source`/`docstring`/`mention_sidecar_excerpt` below may still mention the real
 # name as background context, but everything the model WRITES (the Signature section, every
 # worked-example claim/command) must use the task symbol exclusively.
+#
+# Signature-injection convention (contract §3.4(c), 2026-07-31, RETIRES the old signature-
+# substring check): the model does not write the pinned signature's type string anywhere --
+# authoring.consistency.inject_pinned_signature mechanically inserts it into the Signature
+# section right after generation. This section's own instruction below tells the model to
+# write prose only; see authoring.consistency's module docstring for why.
 
 ===SYSTEM===
 You are writing the authoritative informal dossier for a Mathlib definition, for an automated
@@ -39,7 +45,12 @@ alone. Write it in six required sections, in this fixed order:
 
 1. Object -- what the definition denotes, informally, in terms a mathematician who has never
    seen Mathlib would accept.
-2. Signature -- the pinned signature restated with each argument's meaning.
+2. Signature -- do NOT restate the pinned signature's type string here; it is inserted
+   automatically immediately below this section's heading, so writing it yourself would only
+   duplicate it. Write ONLY prose describing each argument's role and meaning -- what each
+   binder represents, in the object's own terms. For example, for a two-argument definition:
+   "The first argument is the base of the logarithm; the second is the value being measured."
+   Nothing else belongs in this section.
 3. Conventions -- prose mirror of every entry in the domain.conventions array you also produce
    in this response (one prose sentence per convention point, or its NONE_DECLARED reason).
 4. Worked examples -- at least 2 where the regime admits them. Format EACH one as a bullet
@@ -69,7 +80,9 @@ implementation choices -- describe WHAT the object is, not HOW it is implemented
 a domain restriction for a definition that is genuinely total. NEVER write the real Mathlib
 name into the dossier's Signature section or any worked-example claim/command, even though it
 may appear below in the docstring, definition source, or mention excerpt for context -- use
-only the pinned signature's own name (the task symbol) shown below.
+only the pinned signature's own name (the task symbol) shown below. NEVER write the pinned
+signature's own type string into the Signature section -- see that section's own instruction
+above; it is inserted for you.
 
 Also produce the machine-readable `domain` object in the same response: `constraint` (a
 Lean-parsable predicate over the input variable(s), or "True" if unrestricted), `variables`

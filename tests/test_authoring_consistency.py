@@ -12,14 +12,17 @@ from authoring.consistency import (
     EXECUTED,
     EXECUTION_FAILED,
     MALFORMED_NO_WORKED_EXAMPLES,
+    SIGNATURE_INJECTION_END,
+    SIGNATURE_INJECTION_START,
     UNCHECKED_PROSE_EXAMPLE,
     check_conventions_prose_match,
     check_dossier_consistency,
     check_no_real_name_leak,
     check_round_trip_recalls_target,
-    check_signature_substring,
+    check_signature_injection,
     check_worked_examples,
     extract_sections,
+    inject_pinned_signature,
     parse_worked_examples,
 )
 from authoring.facts import ConventionPoint, DomainSpec
@@ -114,27 +117,70 @@ def test_convention_flags_never_appear_in_passed_computation_via_top_level_resul
     result = ConsistencyCheckResult(
         convention_matches=[ConventionMatchResult(point="0", matched=False, matcher="no_match")],
         worked_example_checks=[],
-        signature_substring_ok=True,
+        signature_injection_ok=True,
     )
     assert result.passed is True
     assert len(result.flags) == 1
 
 
-# --- (c) signature substring (pure) -----------------------------------------------------------
+# --- (c) signature injection (pure, 2026-07-31 -- retires the old substring check) -------------
 
 
-def test_signature_substring_present():
-    dossier = "# Signature\nThe pinned signature is `Nat.clog : Nat -> Nat -> Nat`, meaning...\n"
-    ok, detail = check_signature_substring("Nat.clog : Nat -> Nat -> Nat", dossier)
+def test_inject_pinned_signature_inserts_marker_block_right_after_the_header():
+    dossier = "# Signature\nThe first argument is the base.\n\n# Boundaries\nnone\n"
+    injected = inject_pinned_signature(dossier, "Nat.clog : Nat -> Nat -> Nat")
+    expected_block = f"{SIGNATURE_INJECTION_START}\nNat.clog : Nat -> Nat -> Nat\n{SIGNATURE_INJECTION_END}"
+    assert expected_block in injected
+    # inserted BEFORE the model's own prose, not appended after it
+    assert injected.index(SIGNATURE_INJECTION_START) < injected.index("The first argument")
+
+
+def test_inject_pinned_signature_tolerates_numbered_and_leveled_headers():
+    dossier = "## 2. Signature\nprose\n"
+    injected = inject_pinned_signature(dossier, "X : Nat")
+    assert f"{SIGNATURE_INJECTION_START}\nX : Nat\n{SIGNATURE_INJECTION_END}" in injected
+
+
+def test_inject_pinned_signature_raises_without_a_signature_header():
+    with pytest.raises(ValueError, match="no 'Signature' section header"):
+        inject_pinned_signature("# Object\nno signature section at all\n", "X : Nat")
+
+
+def test_inject_pinned_signature_raises_if_already_injected():
+    dossier = "# Signature\nprose\n"
+    once = inject_pinned_signature(dossier, "X : Nat")
+    with pytest.raises(ValueError, match="already contains an injected signature block"):
+        inject_pinned_signature(once, "X : Nat")
+
+
+def test_check_signature_injection_present_after_injection():
+    dossier = "# Signature\nThe first argument is the base.\n"
+    injected = inject_pinned_signature(dossier, "Nat.clog : Nat -> Nat -> Nat")
+    ok, detail = check_signature_injection("Nat.clog : Nat -> Nat -> Nat", injected)
     assert ok
     assert detail == ""
 
 
-def test_signature_substring_missing_fails_with_detail():
-    dossier = "# Signature\nSomething else entirely.\n"
-    ok, detail = check_signature_substring("Nat.clog : Nat -> Nat -> Nat", dossier)
+def test_check_signature_injection_missing_fails_with_detail():
+    dossier = "# Signature\nSomething else entirely, never injected.\n"
+    ok, detail = check_signature_injection("Nat.clog : Nat -> Nat -> Nat", dossier)
     assert not ok
-    assert "not found verbatim" in detail
+    assert "missing or modified" in detail
+
+
+def test_check_signature_injection_not_confused_by_a_wrong_signature_string_in_model_prose():
+    """A model that (against its own instructions) writes a WRONG signature-shaped string into
+    the Signature section must not accidentally satisfy the integrity check -- it looks for the
+    exact marker-delimited block `inject_pinned_signature` writes, not a bare substring search
+    that a coincidental (and wrong) signature-looking string could satisfy on its own."""
+    dossier_with_wrong_string = "# Signature\nThe pinned signature is `Nat.wrong : Bool -> Bool`.\n"
+    ok, _ = check_signature_injection("VTask.clog : Nat -> Nat -> Nat", dossier_with_wrong_string)
+    assert not ok  # the wrong string alone never satisfies the check
+
+    injected = inject_pinned_signature(dossier_with_wrong_string, "VTask.clog : Nat -> Nat -> Nat")
+    ok2, detail2 = check_signature_injection("VTask.clog : Nat -> Nat -> Nat", injected)
+    assert ok2  # the correct injected block passes, even alongside the leftover wrong string
+    assert detail2 == ""
 
 
 # --- (d) real-name leak, the round-trip information barrier (pure) -----------------------------
@@ -293,22 +339,26 @@ def test_check_dossier_consistency_end_to_end_passes_for_a_clean_dossier(mathlib
     )
     dossier = (
         "# Object\nThe ceiling logarithm.\n\n"
-        "# Signature\nThe pinned signature is `Nat.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Signature\nThe first argument is the base; the second is the value.\n\n"
         "# Conventions\nFor b <= 1 the junk value 0 is returned.\n\n"
         "# Worked examples\n- Claim: Nat.clog 2 37 = 6\n  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n\n"
         "# Boundaries\nAt b <= 1.\n\n"
         "# Not to be confused with\nNat.log.\n"
     )
+    dossier = inject_pinned_signature(dossier, "Nat.clog : Nat -> Nat -> Nat")  # the mechanical, single choke point
     result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
     assert result.passed
     assert result.flags == []
 
 
 def test_check_dossier_consistency_end_to_end_fails_on_bad_signature_and_bad_example(mathlib_env):
+    """No `inject_pinned_signature` call was made -- exactly what happens if a caller bypasses
+    the choke point (a real bug, since both authoring.pipeline and authoring.cleanup always
+    call it) -- (c) rejects, same as a genuinely wrong signature always did under the old check."""
     server, env = mathlib_env
     domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
     dossier = (
-        "# Signature\nWrong signature entirely.\n\n"
+        "# Signature\nWrong signature entirely, never injected.\n\n"
         "# Worked examples\n- Claim: Nat.clog 2 37 = 5\n  ```lean\n  example : Nat.clog 2 37 = 5 := by decide\n  ```\n"
     )
     result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
@@ -341,10 +391,11 @@ def test_check_dossier_consistency_rejects_a_dossier_that_leaks_the_real_name(ma
     server, env = mathlib_env
     domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
     dossier = (
-        "# Signature\nThe pinned signature is `VTask.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Signature\nprose only.\n\n"
         "# Worked examples\n- Claim: VTask.clog 2 37 = 6\n"
         "  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n"
     )
+    dossier = inject_pinned_signature(dossier, "VTask.clog : Nat -> Nat -> Nat")
     result = check_dossier_consistency(
         server, env, "VTask.clog : Nat -> Nat -> Nat", dossier, domain, forbidden_name="Nat.clog",
     )
@@ -359,10 +410,11 @@ def test_check_dossier_consistency_passes_a_clean_task_symbol_only_dossier_with_
     server, env = mathlib_env
     domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
     dossier = (
-        "# Signature\nThe pinned signature is `VTask.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Signature\nprose only.\n\n"
         "# Worked examples\n- Claim: VTask.clog 2 37 = 6\n"
         "  ```lean\n  example : VTask.clog 2 37 = 6 := by decide\n  ```\n"
     )
+    dossier = inject_pinned_signature(dossier, "VTask.clog : Nat -> Nat -> Nat")
     result = check_dossier_consistency(
         server, env, "VTask.clog : Nat -> Nat -> Nat", dossier, domain, forbidden_name="Nat.clog",
     )
@@ -377,10 +429,11 @@ def test_check_dossier_consistency_no_forbidden_name_skips_the_leak_check(mathli
     server, env = mathlib_env
     domain = DomainSpec(constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")])
     dossier = (
-        "# Signature\nThe pinned signature is `Nat.clog : Nat -> Nat -> Nat`.\n\n"
+        "# Signature\nprose only.\n\n"
         "# Worked examples\n- Claim: Nat.clog 2 37 = 6\n"
         "  ```lean\n  example : Nat.clog 2 37 = 6 := by decide\n  ```\n"
     )
+    dossier = inject_pinned_signature(dossier, "Nat.clog : Nat -> Nat -> Nat")
     result = check_dossier_consistency(server, env, "Nat.clog : Nat -> Nat -> Nat", dossier, domain)
     assert result.real_name_leak_ok
     assert result.passed

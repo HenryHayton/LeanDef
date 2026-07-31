@@ -18,10 +18,19 @@ Implements the three sub-checks exactly as specified:
   failure is ambiguous between "this actually was prose" and "malformed Lean," and the
   contract's own instruction is to not reject on that ambiguity. A genuine `FAILED` execution
   (not `ERRORED` -- infrastructure failure is never charged against the dossier) rejects.
-- (c) **Signature substring**: the raw pinned-signature string must appear verbatim inside the
-  dossier's Signature section (that section otherwise wraps it in explanatory prose -- whole-
-  section equality was never the check, per the contract's own 2026-07-26 clarification of
-  this exact sub-check). Failure rejects.
+- (c) **Signature injection integrity** (RETIRED signature-substring check, contract §3.4(c),
+  2026-07-31 -- see the changelog note in docs/design/llm_io_contract_v1.md): the model is no
+  longer asked to transcribe the pinned signature into the dossier's Signature section at all
+  -- 8 identical transcription failures across two live sessions (mostly on implicit-binder-
+  heavy signatures: Nat.binaryRec, Equiv.subtypePreimage, SimpleGraph.replaceVertex,
+  Function.Embedding.setValue) proved this was asking the wrong worker to do a machine's job.
+  `inject_pinned_signature` mechanically inserts the exact signature string into the dossier's
+  Signature section, immediately after generation, at the ONE choke point both
+  `authoring.pipeline` and `authoring.cleanup` call through; `check_signature_injection` is a
+  trivial integrity assertion (is the injected block still there, byte-exact?) rather than a
+  real check of model output -- the guarantee the old check existed to provide (round-trip
+  sees the exact signature) is now delivered by construction. Failure (which should only ever
+  mean a bug in the injection call site, never a model mistake) still rejects.
 
 **Section-parsing convention, not itself part of the contract**: `extract_sections` splits
 `dossier_md` on markdown ATX headers (`#`.."######"), matching against the six section names
@@ -210,13 +219,46 @@ def check_worked_examples(server, env: int, dossier_md: str, *, timeout: float |
     return checks
 
 
-# === (c) Signature substring ====================================================================
+# === (c) Signature injection (mechanical, 2026-07-31) ==========================================
+
+SIGNATURE_INJECTION_START = "<!-- PINNED-SIGNATURE:BEGIN -->"
+SIGNATURE_INJECTION_END = "<!-- PINNED-SIGNATURE:END -->"
 
 
-def check_signature_substring(pinned_signature: str, dossier_md: str) -> tuple[bool, str]:
-    section = extract_sections(dossier_md).get("signature", "")
-    ok = pinned_signature.strip() in section
-    detail = "" if ok else f"pinned signature {pinned_signature!r} not found verbatim in the dossier's Signature section"
+def _injected_signature_block(pinned_signature: str) -> str:
+    return f"{SIGNATURE_INJECTION_START}\n{pinned_signature.strip()}\n{SIGNATURE_INJECTION_END}"
+
+
+def inject_pinned_signature(dossier_md: str, pinned_signature: str) -> str:
+    """Mechanically inserts the exact pinned signature into `dossier_md`'s Signature section,
+    immediately after that section's header and before any model-authored prose -- the single
+    choke point `authoring.pipeline._author_task_inner` and `authoring.cleanup.repair_one` both
+    call right after `run_dossier_call` returns, before the dossier is used for anything else
+    (consistency check, round trip, fact proposal). `dossier.txt`'s own prompt tells the model
+    not to restate the signature itself, so this is the only place it ever enters the dossier.
+
+    Raises `ValueError` if `dossier_md` has no recognizable Signature header (`extract_sections`'
+    own header-matching, reused here rather than re-implemented) or already contains an injected
+    block (this must run exactly once, on fresh model output -- a second call on already-
+    injected text is a caller bug, not something to silently tolerate)."""
+    if SIGNATURE_INJECTION_START in dossier_md:
+        raise ValueError("dossier_md already contains an injected signature block -- inject_pinned_signature must run exactly once, on raw model output")
+    for m in _HEADER_LINE_RE.finditer(dossier_md):
+        if _SECTION_KEYS.get(_normalize_header(m.group(1))) == "signature":
+            insertion_point = m.end()
+            block = f"\n\n{_injected_signature_block(pinned_signature)}\n"
+            return dossier_md[:insertion_point] + block + dossier_md[insertion_point:]
+    raise ValueError("no 'Signature' section header found in dossier_md -- cannot inject pinned signature")
+
+
+def check_signature_injection(pinned_signature: str, dossier_md: str) -> tuple[bool, str]:
+    """Trivial integrity assertion, NOT a check of model output: is the exact, marker-delimited
+    block `inject_pinned_signature` writes still present, byte-exact, in `dossier_md`? Matches
+    on the marker-wrapped block specifically (not a bare substring search over the whole
+    document), so a dossier whose model-authored prose happens to ALSO mention the pinned-
+    signature text elsewhere is never confused with an intact injection."""
+    ok = _injected_signature_block(pinned_signature) in dossier_md
+    detail = "" if ok else f"injected signature block for {pinned_signature!r} missing or modified in dossier_md"
     return ok, detail
 
 
@@ -281,7 +323,7 @@ def check_round_trip_recalls_target(candidate_body: str, forbidden_name: str) ->
 class ConsistencyCheckResult:
     convention_matches: list[ConventionMatchResult] = field(default_factory=list)
     worked_example_checks: list[WorkedExampleCheck] = field(default_factory=list)
-    signature_substring_ok: bool = False
+    signature_injection_ok: bool = False
     signature_detail: str = ""
     real_name_leak_ok: bool = True
     real_name_leak_detail: str = ""
@@ -294,7 +336,7 @@ class ConsistencyCheckResult:
         example_failure = any(
             c.kind in (EXECUTION_FAILED, MALFORMED_NO_WORKED_EXAMPLES) for c in self.worked_example_checks
         )
-        return self.signature_substring_ok and not example_failure and self.real_name_leak_ok
+        return self.signature_injection_ok and not example_failure and self.real_name_leak_ok
 
     @property
     def flags(self) -> list[ConventionMatchResult]:
@@ -317,7 +359,7 @@ def check_dossier_consistency(
     convention)."""
     convention_matches = check_conventions_prose_match(domain, dossier_md)
     worked_example_checks = check_worked_examples(server, env, dossier_md, timeout=timeout)
-    signature_ok, signature_detail = check_signature_substring(pinned_signature, dossier_md)
+    signature_ok, signature_detail = check_signature_injection(pinned_signature, dossier_md)
     if forbidden_name is not None:
         real_name_leak_ok, real_name_leak_detail = check_no_real_name_leak(dossier_md, forbidden_name)
     else:
@@ -325,7 +367,7 @@ def check_dossier_consistency(
     return ConsistencyCheckResult(
         convention_matches=convention_matches,
         worked_example_checks=worked_example_checks,
-        signature_substring_ok=signature_ok,
+        signature_injection_ok=signature_ok,
         signature_detail=signature_detail,
         real_name_leak_ok=real_name_leak_ok,
         real_name_leak_detail=real_name_leak_detail,

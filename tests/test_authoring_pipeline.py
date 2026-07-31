@@ -96,7 +96,10 @@ CLASSIFICATION_JSON = json.dumps(
 def _dossier_json(worked_example_claim_2_37: str) -> str:
     dossier_md = (
         "# Object\nThe ceiling logarithm.\n\n"
-        f"# Signature\nThe pinned signature is `{PINNED_SIG}`.\n\n"
+        # 2026-07-31: the model no longer restates the pinned signature itself (contract
+        # §3.4(c)) -- `authoring.pipeline` injects it mechanically after this JSON is parsed,
+        # so this fixture's Signature section is prose-only, matching the real prompt convention.
+        "# Signature\nThe first argument is the base; the second is the value.\n\n"
         f"# Conventions\nFor b<=1 or n<=1, {TASK_SYMBOL} b n = 0 (junk value convention).\n\n"
         "# Worked examples\n"
         f"- Claim: {worked_example_claim_2_37}\n"
@@ -131,7 +134,7 @@ LEAKED_NAME_DOSSIER_JSON = json.dumps(
     {
         "dossier_md": (
             "# Object\nThe ceiling logarithm.\n\n"
-            f"# Signature\nThe pinned signature is `{PINNED_SIG}`.\n\n"
+            "# Signature\nThe first argument is the base; the second is the value.\n\n"
             f"# Conventions\nFor b<=1 or n<=1, {TASK_SYMBOL} b n = 0 (junk value convention).\n\n"
             f"# Worked examples\n- Claim: {TASK_SYMBOL} 2 37 = 6\n"
             "  ```lean\n"
@@ -255,6 +258,32 @@ def test_author_task_happy_path_ships_a_schema_valid_task(mathlib_env, stub_serv
     for fact in validated.data["facts"]:
         assert DEF_NAME not in fact["statement"]
         assert TASK_SYMBOL in fact["statement"]
+
+
+def test_shipped_dossier_md_contains_the_byte_exact_injected_signature_block(mathlib_env, stub_server, tmp_path):
+    """Item 3 (2026-07-31, contract §3.4(c)): the pipeline mechanically injects the pinned
+    signature into the dossier's Signature section, once, after the dossier call returns --
+    confirms the emitted `dossier.md` on disk actually carries that exact, marker-delimited
+    block, byte-exact, not just an in-memory artifact that never made it to what round-trip/
+    emit downstream consumers (and a human reviewer) actually see."""
+    from authoring.consistency import SIGNATURE_INJECTION_END, SIGNATURE_INJECTION_START
+
+    server, env = mathlib_env
+    bedrock_server = stub_server(
+        [
+            ScriptedResponse(200, success_body(CLASSIFICATION_JSON)),
+            ScriptedResponse(200, success_body(GOOD_DOSSIER_JSON)),
+            ScriptedResponse(200, success_body(GOOD_FACTS_JSON)),
+            ScriptedResponse(200, success_body(GOOD_ROUND_TRIP_BODY)),
+        ]
+    )
+    config = _config(server, env, tmp_path, bedrock_server)
+    result = author_task(DEF_NAME, config)
+
+    assert result.outcome == "SHIPPED", result.stage_records
+    dossier_text = (Path(result.task_dir) / "dossier.md").read_text(encoding="utf-8")
+    expected_block = f"{SIGNATURE_INJECTION_START}\n{PINNED_SIG}\n{SIGNATURE_INJECTION_END}"
+    assert expected_block in dossier_text
 
 
 # --- Unhappy path 1: dossier fails check (b) then repairs -----------------------------------
