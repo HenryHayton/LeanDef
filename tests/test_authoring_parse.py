@@ -438,6 +438,52 @@ def test_parse_facts_raw_name_leak_in_instance_field_is_also_rejected():
     assert rejections[0].reason_code == ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT
 
 
+@pytest.mark.parametrize("real_name", ["Monotone", "DependsOn", "memPartition"])
+def test_parse_facts_task_symbol_of_an_unnamespaced_name_is_not_a_raw_name_leak(real_name):
+    """For an UNNAMESPACED real name the task symbol CONTAINS it (`VTask.Monotone` contains
+    `Monotone`), so this plain-substring matcher flagged the very symbol every statement is
+    required to use. Live regression (2026-07-31): 100% of proposed facts were rejected this way
+    -- 12/12, 14/14 and 15/15 for these three names -- so `mechanical_validation` reported "no
+    facts survived" when in truth none had been allowed through the parser at all."""
+    entry = {
+        "id": "clean", "type": "global", "mechanism": "proof",
+        "statement": f"∀ f, VTask.{real_name} f → VTask.{real_name} f", "anchors": ["Nat.clog_pow"],
+    }
+    facts, rejections = parse_facts(
+        json.dumps([entry]), task_symbol=f"VTask.{real_name}", forbidden_name=real_name
+    )
+    assert rejections == [], rejections
+    assert len(facts) == 1
+
+
+@pytest.mark.parametrize("real_name", ["Monotone", "DependsOn", "memPartition"])
+def test_parse_facts_bare_unnamespaced_real_name_is_still_a_raw_name_leak(real_name):
+    """The fix must not blind the check: a BARE occurrence still rejects."""
+    entry = {
+        "id": "leak", "type": "global", "mechanism": "proof",
+        "statement": f"∀ f, {real_name} f → {real_name} f", "anchors": ["Nat.clog_pow"],
+    }
+    facts, rejections = parse_facts(
+        json.dumps([entry]), task_symbol=f"VTask.{real_name}", forbidden_name=real_name
+    )
+    assert facts == []
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT
+
+
+def test_parse_facts_statement_mixing_task_symbol_and_bare_real_name_still_leaks():
+    """Stripping the task symbol must not become a blanket exemption -- a statement that uses
+    the symbol correctly AND also names the real declaration is still a leak."""
+    entry = {
+        "id": "mixed", "type": "global", "mechanism": "proof",
+        "statement": "∀ f, VTask.Monotone f → Monotone f", "anchors": ["Nat.clog_pow"],
+    }
+    facts, rejections = parse_facts(
+        json.dumps([entry]), task_symbol="VTask.Monotone", forbidden_name="Monotone"
+    )
+    assert facts == []
+    assert rejections[0].reason_code == ReasonCode.MALFORMED_RAW_NAME_IN_STATEMENT
+
+
 def test_parse_facts_anchors_are_exempt_from_the_raw_name_check():
     """Anchors legitimately (and routinely) contain the forbidden name as a substring of a
     real Mathlib theorem's own qualified name -- 'Nat.clog_pow' contains 'Nat.clog'."""

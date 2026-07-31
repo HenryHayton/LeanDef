@@ -326,13 +326,25 @@ class FactParseRejection:
     detail: str
 
 
-def _leaks_forbidden_name(forbidden_name: str, *parts: str | None) -> bool:
+def _leaks_forbidden_name(forbidden_name: str, *parts: str | None, task_symbol: str | None = None) -> bool:
     # `isinstance(part, str)` guards against a non-string, non-None `part` (a dict/list/int a
     # caller forgot to type-check first) -- `x in 5` raises `TypeError`, `x in {...}`/`x in
     # [...]` wouldn't crash but would check the wrong thing (dict keys / list elements, not
     # substring containment). Defense in depth: `_parse_fact_entry` also type-checks
     # `instance`/`expected_type` before this is ever called.
-    return any(isinstance(part, str) and forbidden_name in part for part in parts)
+    #
+    # `task_symbol` (2026-07-31): for an UNNAMESPACED real name the task symbol CONTAINS it --
+    # `VTask.Monotone` contains `Monotone` -- so a plain substring test flags the very symbol
+    # every statement is required to use, rejecting 100% of facts (confirmed live: 12/12, 14/14
+    # and 15/15 for Monotone, DependsOn and memPartition, every one a correct `VTask.` usage).
+    # Occurrences of the task symbol are removed BEFORE the substring test, which keeps this
+    # matcher's deliberate strictness (no word boundaries -- see `docs/deferred.md` and
+    # `authoring.consistency._contains_real_name`, the word-boundary family) for everything
+    # else: a statement mixing both, e.g. `VTask.Monotone (Monotone f)`, still leaks.
+    def _strip(part: str) -> str:
+        return part.replace(task_symbol, "") if task_symbol else part
+
+    return any(isinstance(part, str) and forbidden_name in _strip(part) for part in parts)
 
 
 def _parse_fact_entry(
@@ -627,7 +639,9 @@ def _parse_fact_entry(
     # real Mathlib theorems on purpose (contract's own "anchors still name real Mathlib
     # theorems" scoping) and routinely contain the forbidden name as a substring of their own
     # qualified name (e.g. `Nat.clog_pow` contains `Nat.clog`).
-    if forbidden_name is not None and _leaks_forbidden_name(forbidden_name, statement, instance, expected_type):
+    if forbidden_name is not None and _leaks_forbidden_name(
+        forbidden_name, statement, instance, expected_type, task_symbol=task_symbol
+    ):
         return FactParseRejection(
             index=index,
             fragment=entry,
