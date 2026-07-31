@@ -46,3 +46,37 @@ class PinnedSignature:
         definition's own name for instance search, so reducibility was never the blocker there
         -- see the regression tests this change shipped with."""
         return f"@[reducible] def {self.name} : {self.type_sig} := {body}"
+
+    def splice_real_name(self, real_name: str, *, noncomputable: bool = False) -> str:
+        """The TRUTH-splice specifically: alias an EXISTING Mathlib declaration (`real_name`)
+        under this pinned signature -- as opposed to `splice`, which takes an arbitrary
+        candidate body expression (a round-trip attempt, a real candidate). Two things `splice`
+        alone gets wrong for this specific case, both confirmed empirically (2026-07-31, the
+        "Harness Fixes" session, against the 41-name batch's real `truth_splice` casualties):
+
+        1. **Root-qualification.** `real_name` is passed bare (e.g. `Monotone`, not
+           `_root_.Monotone`) whenever the real declaration lives at the top level with no
+           namespace prefix. `def VTask.Monotone := Monotone` then fails Lean's termination
+           checker with a baffling "well-founded recursion cannot be used" error -- not because
+           of any real recursion, but because Lean's name resolution for the bare `Monotone` in
+           the body matches the CURRENTLY-BEING-ELABORATED `VTask.Monotone` (both end in
+           `.Monotone`) instead of the real top-level one, producing a bogus self-referential
+           definition. Confirmed via a 4-name x 3-attribute-variant repro matrix that this has
+           nothing to do with `@[reducible]`/`abbrev` (identical failure under plain `def` too)
+           and via direct isolation that root-qualifying (`_root_.Monotone`) or renaming the
+           task symbol's own base name each independently fix it, while leaving every
+           already-working name (`Nat.clog`, `Nat.ModEq`, ...) unaffected -- `_root_.` is always
+           safe to prepend, so it is applied unconditionally here, not just for no-dot names.
+        2. **Noncomputability.** Some real declarations are noncomputable at an ALIAS site even
+           though their own source line carries no explicit `noncomputable` keyword (confirmed:
+           `Function.extend`'s body is `open scoped Classical in if h : ... then ... else ...`,
+           which Mathlib's own declaration is permitted to elaborate without the keyword, but a
+           downstream `def X := Function.extend` is not). This is NOT reliably detectable from
+           source text -- `miner.scan`'s own text-scan for a literal `noncomputable` prefix
+           would (and did, when checked directly against the real source line) miss this exact
+           case -- so `noncomputable` is a caller-supplied flag, discovered by trying without it
+           first and retrying with it on Lean's own specific compiler error
+           (`authoring.pipeline`'s truth-splice call site owns that retry; this method only
+           knows how to render the modifier when told to)."""
+        modifier = "noncomputable " if noncomputable else ""
+        return f"@[reducible] {modifier}def {self.name} : {self.type_sig} := _root_.{real_name}"

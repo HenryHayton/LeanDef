@@ -119,7 +119,7 @@ from harness.admissibility import _parse_axioms  # internal helper, reused delib
 from harness.facts import Fact, FactProvenance
 from harness.repl import run_checked
 from harness.results import CheckStatus
-from harness.scoring import splice_candidate
+from harness.scoring import splice_candidate, splice_real_name
 from harness.signature import PinnedSignature
 from harness.task_schema import TaskSchemaError
 from miner.harvest import MentionRecord
@@ -259,6 +259,7 @@ _TERMINATION_ERROR_MARKERS = (
     "structural recursion",
     "decreasing_by",
 )
+
 
 # `RoundTripScore.admissibility_detail` is built (in `authoring.roundtrip
 # .score_round_trip_first_cut`) as `f"{verdict.failure.value}: {verdict.detail}"` when the
@@ -426,8 +427,9 @@ def _author_task_inner(definition_name: str, config: PipelineConfig, budget: Cal
     # round-trip candidates use, off the SAME untouched base_env, so this can never collide with
     # the real declaration (a fresh VTask.* name) or with a later candidate splice (independent,
     # also off base_env, never chained onto this one).
-    truth_cmd = signature_obj.splice(definition_input.name)
-    truth_splice = splice_candidate(config.server, config.base_env, truth_cmd, timeout=config.check_timeout)
+    truth_splice = splice_real_name(
+        config.server, config.base_env, signature_obj, definition_input.name, timeout=config.check_timeout
+    )
     if truth_splice.status is not CheckStatus.PASSED:
         return _rotate("truth_splice", truth_splice.detail or "truth-side splice under the task symbol failed")
     truth_env = truth_splice.env

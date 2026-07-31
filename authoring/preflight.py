@@ -29,6 +29,17 @@ its two consumers, alongside the truth/candidate splice itself). Recorded as `de
 docstring for exactly which shapes are mechanically resolvable vs. `INDETERMINATE` (not guessed
 at). Feeds the classification and fact-proposal calls' decide-vs-proof guidance and the
 parse-time rule restricting `mechanism: decide` to `DECIDABLE` Props.
+
+**Full truth-splice (2026-07-31, the "Harness Fixes" session)**: the `:= sorry` check above
+only validates the TYPE reparses -- it never once spliced the REAL body. That gap is exactly
+what let `Monotone`/`DependsOn`/`Function.extend` through preflight clean and then rotate at
+`truth_splice` in a real, live, paid batch run (`harness.signature.PinnedSignature
+.splice_real_name`'s own docstring has the full root-cause story: a bare-unqualified-real-name
+self-reference collision for `Monotone`/`DependsOn`, a genuine noncomputability for
+`Function.extend`). Every PASSing name now also gets a real `splice_real_name` attempt (the
+exact same call `authoring.pipeline`'s truth-splice stage makes); a failure here is
+`FAIL_TRUTH_SPLICE`, at $0 (no Bedrock call was ever at risk), catching this whole failure
+class at selection time instead of mid-batch.
 """
 
 import re
@@ -40,9 +51,13 @@ from lean_interact import AutoLeanServer, Command
 from authoring.task_symbol import task_symbol_for
 from harness.repl import run_checked
 from harness.results import CheckStatus
+from harness.signature import PinnedSignature
+from harness.scoring import splice_real_name
 
 FAIL_PP_ELISION = "pp_elision"
 FAIL_STUCK_METAVARIABLE = "stuck_metavariable"
+FAIL_TRUTH_SPLICE = "truth_splice"  # 2026-07-31: the FULL real-body splice, distinct from the
+# type-only (":= sorry") check above -- see run_preflight's own note on why this exists.
 FAIL_CRASH = "crash"
 FAIL_INVALID_SYMBOL = "invalid_symbol"
 FAIL_OTHER = "other"
@@ -149,10 +164,11 @@ def probe_decidability(
     name: str, pinned_type: str, symbol: str, server: AutoLeanServer, env: int, *, timeout: float = 30.0
 ) -> tuple[str, str]:
     """Attempt to synthesize `Decidable` for a representative fully-applied instance of a
-    Prop-valued name, against a fresh `@[reducible]` splice of the REAL definition (the same
-    splice convention `harness.signature.PinnedSignature.splice` uses -- built directly here,
-    not via that helper, since this also needs a `#check (inferInstance : ...)` follow-up
-    command in the same environment, not just the splice itself).
+    Prop-valued name, against a fresh `@[reducible]` splice of the REAL definition
+    (`harness.scoring.splice_real_name` -- root-qualified and noncomputable-retry-aware, the
+    same call `run_preflight`'s own full truth-splice check and `authoring.pipeline`'s
+    truth-splice stage make, so this probe can't hit the bare-unqualified-name self-reference
+    bug `PinnedSignature.splice_real_name`'s docstring describes).
 
     Returns `(decidability, detail)`, `decidability` one of `DECIDABLE`/`UNDECIDABLE`/
     `INDETERMINATE`. `INDETERMINATE` covers every case this probe cannot mechanically resolve
@@ -179,8 +195,8 @@ def probe_decidability(
             return INDETERMINATE, f"explicit binder type {type_text!r} has no known simple concrete value"
         values.extend([_SIMPLE_CONCRETE_VALUES[type_text]] * len(names))
 
-    splice_cmd = f"@[reducible] def {symbol} : {pinned_type} := {name}"
-    splice_check = run_checked(server, Command(cmd=splice_cmd, env=env), timeout=timeout)
+    sig = PinnedSignature(name=symbol, type_sig=pinned_type)
+    splice_check = splice_real_name(server, env, sig, name, timeout=timeout)
     if splice_check.status is not CheckStatus.PASSED:
         return INDETERMINATE, f"reducible splice failed: {splice_check.detail}"
 
@@ -255,6 +271,20 @@ def run_preflight(names: list[str], server: AutoLeanServer, env: int, *, timeout
             continue
         if vcheck.status is not CheckStatus.PASSED:
             results.append(PreflightResult(name, "fail", _categorize(vcheck.detail or ""), vcheck.detail, pinned_type, symbol))
+            continue
+
+        # Full truth-splice (2026-07-31): the type-only check above says nothing about whether
+        # the REAL body splices under it -- exactly the gap that let Monotone/DependsOn/
+        # Function.extend through preflight clean. Real REPL check, real splice_real_name
+        # (root-qualified, noncomputable-retry-aware) -- the same call the pipeline itself
+        # makes, so a name that passes THIS is confirmed at $0, not discovered mid-batch.
+        sig = PinnedSignature(name=symbol, type_sig=pinned_type)
+        tcheck = splice_real_name(server, env, sig, name, timeout=timeout)
+        if tcheck.status is CheckStatus.ERRORED:
+            results.append(PreflightResult(name, "fail", FAIL_CRASH, tcheck.detail, pinned_type, symbol))
+            continue
+        if tcheck.status is not CheckStatus.PASSED:
+            results.append(PreflightResult(name, "fail", FAIL_TRUTH_SPLICE, tcheck.detail, pinned_type, symbol))
             continue
 
         decidability, decidability_detail = None, ""

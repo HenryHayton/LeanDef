@@ -32,10 +32,45 @@ __all__ = [
     "PinnedSignature",
     "Fact",
     "splice_candidate",
+    "splice_real_name",
     "run_facts",
     "score_candidate",
     "score_spliced_candidate",
 ]
+
+# Lean's own compiler error text for the noncomputability case `PinnedSignature.splice_real_name`'s
+# own docstring describes -- confirmed verbatim (2026-07-31) against a real failing case
+# (`Function.extend`): "failed to compile definition, consider marking it as 'noncomputable'
+# because it depends on '<name>', which is 'noncomputable'". Matched as a substring, not an
+# exact string, since `<name>` varies per declaration.
+_NONCOMPUTABLE_ERROR_MARKER = "consider marking it as 'noncomputable'"
+
+
+def splice_real_name(
+    server: AutoLeanServer,
+    base_env: int,
+    signature: PinnedSignature,
+    real_name: str,
+    *,
+    timeout: float | None = None,
+) -> CheckResult:
+    """Splice an EXISTING Mathlib declaration under `signature` (`PinnedSignature.splice_real_name`),
+    with the noncomputable retry that method's own docstring describes: try a plain (reducible)
+    alias first, and retry ONCE with `noncomputable` only on that specific compiler error --
+    never on any other failure (a genuine type/termination error retried with `noncomputable`
+    would just fail again, having burned a REPL round-trip for nothing). Lives here (not in
+    `authoring.pipeline`, where the truth-splice call site originally built this inline) so
+    `authoring.preflight`'s selection-time full-splice check can share it without pulling in
+    `authoring.pipeline`'s much heavier dependency graph (Bedrock, orchestrate, emit, ...) --
+    both callers need exactly this, nothing authoring-specific."""
+    cmd = signature.splice_real_name(real_name)
+    result = splice_candidate(server, base_env, cmd, timeout=timeout)
+    if result.status is CheckStatus.PASSED:
+        return result
+    if _NONCOMPUTABLE_ERROR_MARKER in (result.detail or ""):
+        retry_cmd = signature.splice_real_name(real_name, noncomputable=True)
+        return splice_candidate(server, base_env, retry_cmd, timeout=timeout)
+    return result
 
 
 def splice_candidate(

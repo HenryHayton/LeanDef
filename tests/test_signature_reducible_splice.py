@@ -22,6 +22,7 @@ from harness import Fact, PinnedSignature, score_candidate
 from harness.admissibility import AdmissibilityFailure, check_admissibility
 from harness.repl import get_warm_environment, run_checked
 from harness.results import CheckStatus
+from harness.scoring import splice_real_name
 
 CLOG_SIG = PinnedSignature(name=task_symbol_for("Nat.clog"), type_sig="Nat -> Nat -> Nat")
 CLOG_TRUE_BODY = "fun b n => if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b (n - 1) + 1"
@@ -120,3 +121,84 @@ def test_nat_clog_recalled_target_body_fails_the_same_way(mathlib_env):
     splice = run_checked(server, Command(cmd=cmd, env=env, declarations=True), timeout=30.0)
     assert splice.status is CheckStatus.FAILED
     assert "Unknown identifier" in (splice.detail or "")
+
+
+# === splice_real_name (2026-07-31, the "Harness Fixes" session) ================
+#
+# Root cause, confirmed by a real 4-name x 3-attribute-variant repro matrix (this session's
+# report has the full verbatim output): `Monotone`/`DependsOn` fail truth_splice under EVERY
+# attribute variant (plain def, @[reducible] def, abbrev) -- proving @[reducible] was never the
+# cause. The real cause: `def VTask.Monotone := Monotone` (bare, unqualified real name) resolves
+# the body's `Monotone` to the currently-being-elaborated `VTask.Monotone` itself, since both
+# end in `.Monotone` -- a bogus self-reference that fails the termination checker with a
+# misleading "well-founded recursion" error. `Function.extend` fails separately: it's
+# noncomputable at the alias site even though its own source line has no `noncomputable`
+# keyword (confirmed: it uses `open scoped Classical in` internally).
+
+
+def test_splice_real_name_root_qualifies():
+    sig = PinnedSignature(name="VTask.Monotone", type_sig="Nat -> Prop")
+    assert sig.splice_real_name("Monotone") == "@[reducible] def VTask.Monotone : Nat -> Prop := _root_.Monotone"
+
+
+def test_splice_real_name_noncomputable_modifier_ordering():
+    """Confirmed empirically (2026-07-31): `@[reducible] noncomputable def` is the only order
+    Lean accepts -- `noncomputable @[reducible] def` is a syntax error (attributes must precede
+    modifiers)."""
+    sig = PinnedSignature(name="VTask.extend", type_sig="Nat -> Nat")
+    cmd = sig.splice_real_name("Function.extend", noncomputable=True)
+    assert cmd == "@[reducible] noncomputable def VTask.extend : Nat -> Nat := _root_.Function.extend"
+
+
+@pytest.mark.parametrize(
+    "real_name,symbol,pinned_type",
+    [
+        ("Monotone", "VTask.Monotone", "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop"),
+        ("DependsOn", "VTask.DependsOn", "{ι : Type u_1} -> {α : ι → Type u_2} -> {β : Type u_3} -> (f : ((i : ι) → α i) → β) -> (s : Set ι) -> Prop"),
+    ],
+)
+def test_root_qualified_truth_splice_fixes_the_self_reference_collision(mathlib_env, real_name, symbol, pinned_type):
+    server, env = mathlib_env
+    sig = PinnedSignature(name=symbol, type_sig=pinned_type)
+    # The OLD (bug-reproducing) shape: bare unqualified real name.
+    bare_cmd = sig.splice(real_name)
+    bare = run_checked(server, Command(cmd=bare_cmd, env=env), timeout=30.0)
+    assert bare.status is CheckStatus.FAILED
+    assert "well-founded recursion" in (bare.detail or "")
+
+    # The FIX: root-qualified via splice_real_name.
+    fixed = run_checked(server, Command(cmd=sig.splice_real_name(real_name), env=env), timeout=30.0)
+    assert fixed.status is CheckStatus.PASSED, fixed.detail
+
+
+def test_splice_real_name_retries_with_noncomputable_on_the_specific_compiler_error(mathlib_env):
+    server, env = mathlib_env
+    sig = PinnedSignature(
+        name="VTask.extend",
+        type_sig="{α : Sort u_1} -> {β : Sort u_2} -> {γ : Sort u_3} -> (f : α → β) -> (g : α → γ) -> (j : β → γ) -> β → γ",
+    )
+    result = splice_real_name(server, env, sig, "Function.extend", timeout=30.0)
+    assert result.status is CheckStatus.PASSED, result.detail
+
+
+def test_splice_real_name_does_not_retry_on_an_unrelated_error(mathlib_env):
+    """The retry is specific to the noncomputable compiler error -- a genuinely different
+    failure (here: a deliberately wrong pinned type, an ordinary type mismatch) must come back
+    as ITSELF, not silently swapped for a noncomputable-retry's own (different, confusing)
+    error."""
+    server, env = mathlib_env
+    sig = PinnedSignature(name="VTask.badClog", type_sig="Bool -> Bool -> Bool")  # wrong type for Nat.clog
+    result = splice_real_name(server, env, sig, "Nat.clog", timeout=30.0)
+    assert result.status is not CheckStatus.PASSED
+    assert "noncomputable" not in (result.detail or "").lower()
+
+
+def test_splice_real_name_byte_identical_for_already_working_names(mathlib_env):
+    """Nat.clog and Nat.ModEq (both dotted, both already working) must behave identically under
+    the new root-qualified splice -- `_root_.` is always safe to prepend, never a behavior
+    change for a name that was never ambiguous."""
+    server, env = mathlib_env
+    clog_result = run_checked(server, Command(cmd=CLOG_SIG.splice_real_name("Nat.clog"), env=env), timeout=30.0)
+    assert clog_result.status is CheckStatus.PASSED, clog_result.detail
+    modeq_result = run_checked(server, Command(cmd=MODEQ_SIG.splice_real_name("Nat.ModEq"), env=env), timeout=30.0)
+    assert modeq_result.status is CheckStatus.PASSED, modeq_result.detail

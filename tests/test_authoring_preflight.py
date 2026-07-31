@@ -10,6 +10,7 @@ from authoring.preflight import (
     DECIDABLE,
     FAIL_INVALID_SYMBOL,
     FAIL_PP_ELISION,
+    FAIL_TRUTH_SPLICE,
     INDETERMINATE,
     UNDECIDABLE,
     _parse_binder_groups,
@@ -201,3 +202,30 @@ def test_run_preflight_decidability_none_for_value_typed_pass(mathlib_env):
     results = run_preflight(["Nat.clog"], server, env)
     assert results[0].status == "pass"
     assert results[0].decidability is None
+
+
+# === Full truth-splice (2026-07-31, the "Harness Fixes" session) ===============================
+#
+# Real, live regression: these three names passed the OLD type-only preflight clean and then
+# rotated at truth_splice in a real paid batch run -- exactly the gap the full truth-splice
+# check closes. Confirms both that preflight now catches this class at $0 (implicitly, since
+# these three now PASS under the fixed splice_real_name) and that the fix from
+# test_signature_reducible_splice.py is wired all the way through preflight, not just the
+# pipeline's own truth-splice stage.
+
+
+@pytest.mark.parametrize("name", ["Monotone", "DependsOn", "Function.extend"])
+def test_run_preflight_batch_casualties_now_pass_full_truth_splice(mathlib_env, name):
+    server, env = mathlib_env
+    results = run_preflight([name], server, env)
+    assert results[0].status == "pass", (results[0].category, results[0].detail)
+
+
+def test_fail_truth_splice_category_exists_and_is_distinct_from_pp_elision():
+    """A pure sanity check on the new category constant -- the real REPL-level FAIL_TRUTH_SPLICE
+    path itself is already exercised indirectly by every test_signature_reducible_splice.py
+    test covering `splice_real_name`'s own failure modes (the function `run_preflight`'s new
+    check calls directly); this just confirms the category is wired as its own distinct value,
+    not accidentally aliased to an existing one."""
+    assert FAIL_TRUTH_SPLICE not in (FAIL_PP_ELISION, FAIL_INVALID_SYMBOL)
+    assert FAIL_TRUTH_SPLICE == "truth_splice"
