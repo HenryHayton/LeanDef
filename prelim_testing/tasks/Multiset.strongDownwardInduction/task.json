@@ -1,0 +1,69 @@
+{
+  "task_id": "Multiset.strongDownwardInduction",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.strongDownwardInduction",
+  "signature": {
+    "name": "VTask.strongDownwardInduction",
+    "type": "{α : Type u_1} -> {p : Multiset α → Sort u_3} -> {n : ℕ} -> (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) -> (s : Multiset α) -> s.card ≤ n → p s",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "s.card ≤ n",
+    "variables": [
+      "s",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "When n = 0, only the empty multiset satisfies the cardinality bound; H is called with a vacuously-satisfied inductive hypothesis, so the result is computed without any recursive call.",
+        "note": "Grounding case of the well-founded recursion."
+      },
+      {
+        "point": "s.card = n",
+        "statement": "When s has cardinality exactly n, there is no strictly larger multiset of cardinality ≤ n, so H again receives a vacuous inductive hypothesis and no recursive calls are made.",
+        "note": "Top boundary of the induction; recursion is grounded here."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sdi_step_used_once",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Multiset α → Sort*} {n : ℕ} (H : ∀ t₁ : Multiset α, ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) (s : Multiset α) (hs : s.card ≤ n), VTask.strongDownwardInduction H s hs = H s (fun {t₂} ht hlt => VTask.strongDownwardInduction H t₂ ht) hs",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.strongDownwardInduction_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.strongDownwardInduction-e05770c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.strongDownwardInduction",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.strongDownwardInduction-e05770c7",
+    "review_status": "unreviewed"
+  }
+}

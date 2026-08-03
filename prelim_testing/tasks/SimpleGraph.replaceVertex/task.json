@@ -1,0 +1,527 @@
+{
+  "task_id": "SimpleGraph.replaceVertex",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.replaceVertex",
+  "signature": {
+    "name": "VTask.replaceVertex",
+    "type": "{V : Type u_1} -> (G : SimpleGraph V) -> (s t : V) -> [DecidableEq V] -> SimpleGraph V",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "s = t",
+        "statement": "When s = t, the operation replaces t's neighbourhood with itself and suppresses the s–t = t–t loop (already absent), so the graph is effectively unchanged.",
+        "note": "Junk-value regime: the definition is still well-typed and produces a valid simple graph."
+      },
+      {
+        "point": "s–t edge suppression",
+        "statement": "The edge between s and t is always absent in VTask.replaceVertex G s t, regardless of whether G.Adj s t holds.",
+        "note": "This is a structural convention of the construction, not an extra postcondition."
+      },
+      {
+        "point": "No loops",
+        "statement": "t is never adjacent to itself in VTask.replaceVertex G s t, consistent with the simple graph requirement.",
+        "note": "Inherited from the simple graph axioms applied to the defined adjacency predicate."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "replaceVertex_not_adj_st",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [DecidableEq V] (G : SimpleGraph V) (s t : V), ¬(VTask.replaceVertex G s t).Adj s t",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.not_adj_replaceVertex_same"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_adj_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [DecidableEq V] (G : SimpleGraph V) (s t v w : V), v ≠ t → w ≠ t → ((VTask.replaceVertex G s t).Adj v w ↔ G.Adj v w)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_replaceVertex_iff_of_ne"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_adj_t_ne_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [DecidableEq V] (G : SimpleGraph V) (s t w : V), w ≠ t → ((VTask.replaceVertex G s t).Adj t w ↔ G.Adj s w)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_replaceVertex_iff_of_ne_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_adj_s_ne_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [DecidableEq V] (G : SimpleGraph V) (s t w : V), w ≠ t → ((VTask.replaceVertex G s t).Adj s w ↔ G.Adj s w)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_replaceVertex_iff_of_ne_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_cliqueFree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [DecidableEq V] (G : SimpleGraph V) (s t : V) (n : ℕ), G.CliqueFree n → (VTask.replaceVertex G s t).CliqueFree n",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.CliqueFree.replaceVertex"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_fin3_complete_2adj1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 1 = true := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_fin3_complete_2not_adj0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 0 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_fin3_complete_0adj1_unchanged",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_fin3_complete_not_adj_st",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_fin3_complete_not_adj_tt",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 2 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_bot_makes_t_isolated",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊥ : SimpleGraph (Fin 3)) 0 2).Adj 2 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊥"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_bot_preserves_non_t",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊥ : SimpleGraph (Fin 3)) 0 2).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊥"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "replaceVertex_mem_not_adj_st_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 2",
+      "polarity": "accept"
+    },
+    {
+      "id": "replaceVertex_mem_adj_t_w_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 1",
+      "polarity": "accept"
+    },
+    {
+      "id": "replaceVertex_mem_adj_t_s_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 0 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 0",
+      "polarity": "reject",
+      "violated_property": "s and t are never adjacent in the result"
+    },
+    {
+      "id": "replaceVertex_mem_non_t_edges_preserved",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 0 1",
+      "polarity": "accept"
+    },
+    {
+      "id": "replaceVertex_mem_no_loop_t",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 2 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 0 2).Adj 2 2",
+      "polarity": "reject",
+      "violated_property": "no self-loops in a simple graph"
+    },
+    {
+      "id": "replaceVertex_mem_s_eq_t_unchanged",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 1 1).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "s": [
+          "1"
+        ],
+        "t": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊤ : SimpleGraph (Fin 3)) 1 1).Adj 0 1",
+      "polarity": "accept"
+    },
+    {
+      "id": "replaceVertex_mem_isolated_s_makes_t_isolated",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.replaceVertex (⊥ : SimpleGraph (Fin 3)) 0 2).Adj 2 1 := by decide",
+      "domain_inputs": {
+        "G": [
+          "⊥"
+        ],
+        "s": [
+          "0"
+        ],
+        "t": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.replaceVertex (⊥ : SimpleGraph (Fin 3)) 0 2).Adj 2 1",
+      "polarity": "reject",
+      "violated_property": "isolated source makes target isolated in result"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.replaceVertex",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.replaceVertex-cleanup1-d59c6eb4",
+    "review_status": "unreviewed"
+  }
+}

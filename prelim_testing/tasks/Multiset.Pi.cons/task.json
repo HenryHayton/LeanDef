@@ -1,0 +1,273 @@
+{
+  "task_id": "Multiset.Pi.cons",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cons",
+  "signature": {
+    "name": "VTask.cons",
+    "type": "{α : Type u_1} -> [DecidableEq α] -> {δ : α → Sort u_2} -> (m : Multiset α) -> (a : α) -> (b : δ a) -> (f : (a : α) → a ∈ m → δ a) -> (a' : α) -> a' ∈ a ::ₘ m → δ a'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "a",
+      "b",
+      "f",
+      "a'"
+    ],
+    "conventions": [
+      {
+        "point": "priority of b over f at a",
+        "statement": "When a' = a, VTask.cons m a b f returns b, regardless of whether a also belongs to m and regardless of what f would return for a.",
+        "note": "This is a deliberate design choice: the freshly supplied value takes precedence."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cons_same_string_nonempty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.cons ({1} : Multiset ℕ) 0 (99 : ℕ) (fun a _ => a) 0 (Multiset.mem_cons_self 0 {1}) = 99 := by decide",
+      "domain_inputs": {
+        "m": [
+          "{1}"
+        ],
+        "a": [
+          "0"
+        ],
+        "a'": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_ne_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.cons ({3} : Multiset ℕ) 0 (99 : ℕ) (fun a _ => a) 3 (Multiset.mem_cons_of_mem (Multiset.mem_singleton_self 3)) = 3 := by decide",
+      "domain_inputs": {
+        "m": [
+          "{3}"
+        ],
+        "a": [
+          "0"
+        ],
+        "a'": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_priority_over_f",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.cons ({7} : Multiset ℕ) 7 (100 : ℕ) (fun a _ => 0) 7 (Multiset.mem_cons_self 7 {7}) = 100 := by decide",
+      "domain_inputs": {
+        "m": [
+          "{7}"
+        ],
+        "a": [
+          "7"
+        ],
+        "a'": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_mem_delegate_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.cons ({2} : Multiset ℕ) 0 (99 : ℕ) (fun a _ => a + 1) 2 (Multiset.mem_cons_of_mem (Multiset.mem_singleton_self 2)) = 3 := by decide",
+      "domain_inputs": {
+        "m": [
+          "{2}"
+        ],
+        "a": [
+          "0"
+        ],
+        "a'": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.cons {2} 0 99 (fun a _ => a + 1) 2 (Multiset.mem_cons_of_mem (Multiset.mem_singleton_self 2))",
+      "polarity": "accept"
+    },
+    {
+      "id": "cons_mem_delegate_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.cons ({2} : Multiset ℕ) 0 (99 : ℕ) (fun a _ => a + 1) 2 (Multiset.mem_cons_of_mem (Multiset.mem_singleton_self 2)) = 99) := by decide",
+      "domain_inputs": {
+        "m": [
+          "{2}"
+        ],
+        "a": [
+          "0"
+        ],
+        "a'": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.cons {2} 0 99 (fun a _ => a + 1) 2 (Multiset.mem_cons_of_mem (Multiset.mem_singleton_self 2))",
+      "polarity": "reject",
+      "violated_property": "for a' ≠ a the result must equal f a', not b"
+    },
+    {
+      "id": "cons_same_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {δ : α → Sort*} (m : Multiset α) (a : α) (b : δ a) (f : ∀ a ∈ m, δ a) (h : a ∈ a ::ₘ m), VTask.cons m a b f a h = b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pi.cons_same"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_ne_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {δ : α → Sort*} {m : Multiset α} {a a' : α} {b : δ a} {f : ∀ a ∈ m, δ a} (h' : a' ∈ a ::ₘ m) (h : a' ≠ a), VTask.cons m a b f a' h' = f a' ((Multiset.mem_cons.1 h').resolve_left h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pi.cons_ne"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_eta_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {δ : α → Sort*} {m : Multiset α} {a : α} (g : ∀ a' ∈ a ::ₘ m, δ a'), VTask.cons m a (g a (Multiset.mem_cons_self a m)) (fun a' ha' => g a' (Multiset.mem_cons_of_mem ha')) = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pi.cons_eta"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {δ : α → Sort*} {a : α} {b : δ a} {m : Multiset α}, a ∉ m → Function.Injective (VTask.cons m a b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pi.cons_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cons_forall_rel_ext_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {δ : α → Sort*} {m : Multiset α} {a : α} {r : ∀ ⦃a⦄, δ a → δ a → Prop} {b₁ b₂ : δ a} {f₁ f₂ : ∀ a' ∈ m, δ a'}, r b₁ b₂ → (∀ (x : α) (hx : x ∈ m), r (f₁ x hx) (f₂ x hx)) → ∀ (x : α) (hx : x ∈ a ::ₘ m), r (VTask.cons m a b₁ f₁ x hx) (VTask.cons m a b₂ f₂ x hx)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pi.forall_rel_cons_ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.Pi.cons",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.Pi.cons-cleanup1-34f7fef0",
+    "review_status": "unreviewed"
+  }
+}

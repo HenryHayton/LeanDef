@@ -1,0 +1,265 @@
+{
+  "task_id": "Matroid.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (M : Matroid α) -> (f : α → β) -> (hf : Set.InjOn f M.E) -> Matroid β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "f",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total and well-defined for all valid inputs; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_ground_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E), (VTask.map M f hf).E = f '' M.E",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_image_indep_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_indep_of_indep",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (I : Set α), M.Indep I → (VTask.map M f hf).Indep (f '' I)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.Indep.map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_image_indep_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (I : Set α), I ⊆ M.E → ((VTask.map M f hf).Indep (f '' I) ↔ M.Indep I)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_image_indep_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_isBase_of_isBase",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (B : Set α), M.IsBase B → (VTask.map M f hf).IsBase (f '' B)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsBase.map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_image_isBase_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (B : Set α), B ⊆ M.E → ((VTask.map M f hf).IsBase (f '' B) ↔ M.IsBase B)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_image_isBase_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_eRk_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (X : Set α), X ⊆ M.E → (VTask.map M f hf).eRk (f '' X) = M.eRk X",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.eRk_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_isLoop_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (e : α), e ∈ M.E → ((VTask.map M f hf).IsLoop (f e) ↔ M.IsLoop e)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_isLoop_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_loops",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E), (VTask.map M f hf).loops = f '' M.loops",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_loops"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_isBasis_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (I X : Set α), I ⊆ M.E → X ⊆ M.E → ((VTask.map M f hf).IsBasis (f '' I) (f '' X) ↔ M.IsBasis I X)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_isBasis_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_image_subset_ground",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (I : Set α), M.Indep I → f '' I ⊆ (VTask.map M f hf).E",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.Indep.map",
+        "Matroid.Indep.subset_ground"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_non_image_not_base",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (B : Set α), B ⊆ M.E → M.IsBase B → ¬(VTask.map M f hf).IsBase (f '' B) → False",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.map_image_isBase_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "map_eRk_image_subset_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) (X Y : Set α), X ⊆ Y → Y ⊆ M.E → (VTask.map M f hf).eRk (f '' X) ≤ (VTask.map M f hf).eRk (f '' Y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.eRk_map",
+        "Matroid.eRk_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matroid.map-36fd8048",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matroid.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matroid.map-36fd8048",
+    "review_status": "unreviewed"
+  }
+}

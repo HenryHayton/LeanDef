@@ -1,0 +1,101 @@
+{
+  "task_id": "memPartition",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.memPartition",
+  "signature": {
+    "name": "VTask.memPartition",
+    "type": "{α : Type u_1} -> (f : ℕ → Set α) -> ℕ → Set (Set α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "base case",
+        "statement": "VTask.memPartition f 0 = {Set.univ} for all f, making the partition trivially the whole universe at depth 0.",
+        "note": "By definition."
+      },
+      {
+        "point": "empty pieces allowed",
+        "statement": "Pieces of the partition may be empty sets; no non-emptiness restriction is imposed on members of the collection.",
+        "note": "Occurs when f n = univ or f n = ∅ causes a difference or intersection to be empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "memPartition_generateFrom_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : ℕ → Set α) (n : ℕ), MeasurableSpace.generateFrom (VTask.memPartition f n) ≤ MeasurableSpace.generateFrom (VTask.memPartition f (n + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "MeasurableSpace.generateFrom_memPartition_le_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "memPartition-cleanup1-6028f4ef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "memPartition_generateFrom_iUnion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : ℕ → Set α), MeasurableSpace.generateFrom (⋃ n, VTask.memPartition f n) = MeasurableSpace.generateFrom (Set.range f)",
+      "domain_inputs": {},
+      "anchors": [
+        "MeasurableSpace.generateFrom_iUnion_memPartition"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "memPartition-cleanup1-6028f4ef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "memPartition_generateFrom_le_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : ℕ → Set α) (n : ℕ), MeasurableSpace.generateFrom (VTask.memPartition f n) ≤ MeasurableSpace.generateFrom (Set.range f)",
+      "domain_inputs": {},
+      "anchors": [
+        "MeasurableSpace.generateFrom_memPartition_le_range"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "memPartition-cleanup1-6028f4ef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "memPartition",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "memPartition-cleanup1-6028f4ef",
+    "review_status": "unreviewed"
+  }
+}

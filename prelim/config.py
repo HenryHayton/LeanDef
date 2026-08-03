@@ -29,6 +29,13 @@ CALL_LOG_PATH = OUTPUT_DIR / "call_log.jsonl"
 
 SAMPLES_DIR = OUTPUT_DIR / "samples"
 
+# The pinned input corpus: one directory per task, each with `dossier.md` + `task.json`.
+# Consolidated from the authoring pipeline's own scratch output dirs and TRACKED in git (unlike
+# `output/`) -- it is the experiment's input, it cost real Bedrock spend to produce, and prelim
+# testing is not reproducible without exactly these 41 dossiers. Overridable per run via
+# `$PRELIM_TASKS_DIR` (see `prelim.prompts.tasks_dir`).
+TASKS_DIR = REPO_ROOT / "prelim_testing" / "tasks"
+
 # --- Environment variable names (the whole configuration contract) ---------------------------
 ENV_ENDPOINT_URL = "PRELIM_ENDPOINT_URL"
 ENV_API_KEY = "PRELIM_API_KEY"

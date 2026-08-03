@@ -314,3 +314,81 @@ def test_call_log_records_a_non_retryable_failure(stub, tmp_path):
     assert len(lines) == 1
     assert lines[0]["outcome"] == "request_error"
     assert lines[0]["http_status"] == 400
+
+
+# --- /v1/completions support (Stage 2, Item 3) ---------------------------------------------------
+#
+# No model in the current table selects this path -- the 2026-08-03 card sweep found all six use
+# chat templates, including DeepSeek-Prover-V2, correcting Stage 1's assumption. It exists so a
+# model that turns out to need raw completions can be switched with a table edit, not a code
+# change, mid-run.
+
+
+def completion_body(text, *, finish_reason="stop", prompt_tokens=11, completion_tokens=4):
+    """The legacy OpenAI `/v1/completions` shape: text at choices[0].text, no message object."""
+    return {
+        "id": "cmpl-stub",
+        "object": "text_completion",
+        "created": 1754200000,
+        "model": "stub-model",
+        "choices": [{"index": 0, "text": text, "finish_reason": finish_reason, "logprobs": None}],
+        "usage": {
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": prompt_tokens + completion_tokens,
+        },
+    }
+
+
+def test_completion_style_sends_a_prompt_string_not_messages(stub, tmp_path):
+    server = stub([ScriptedResponse(200, completion_body("def f := 0"))])
+    result = generate(
+        "raw prompt text", temperature=0.5, max_tokens=32, model_name="m",
+        endpoint_style="completion", endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl",
+    )
+
+    sent = server.requests_received[0]
+    assert sent["prompt"] == "raw prompt text"
+    assert "messages" not in sent
+    assert result.text == "def f := 0"
+    assert result.finish_reason == "stop"
+    assert result.prompt_tokens == 11
+
+
+def test_completion_style_shares_the_retry_path(stub, tmp_path, no_sleep):
+    """One retry/logging path for both shapes -- the style flag selects only the wire format."""
+    slept, sleep_fn = no_sleep
+    server = stub([
+        ScriptedResponse(503, error_body("loading", code=503)),
+        ScriptedResponse(200, completion_body("recovered")),
+    ])
+    result = generate(
+        "p", temperature=0.5, max_tokens=32, model_name="m", endpoint_style="completion",
+        endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl", sleep_fn=sleep_fn,
+    )
+    assert result.text == "recovered"
+    assert result.attempts == 2
+
+
+def test_chat_style_still_sends_messages(stub, tmp_path):
+    server = stub()
+    _generate(server, tmp_path)
+    assert "messages" in server.requests_received[0]
+    assert "prompt" not in server.requests_received[0]
+
+
+def test_mismatched_prompt_type_is_rejected_before_any_request(stub, tmp_path):
+    server = stub()
+    with pytest.raises(PrelimClientError, match="requires a messages list"):
+        generate("a string", temperature=0.5, max_tokens=8, model_name="m",
+                 endpoint_style="chat", endpoint_url=server.url, log_path=tmp_path / "l.jsonl")
+    with pytest.raises(PrelimClientError, match="requires a prompt string"):
+        generate([{"role": "user", "content": "x"}], temperature=0.5, max_tokens=8, model_name="m",
+                 endpoint_style="completion", endpoint_url=server.url, log_path=tmp_path / "l.jsonl")
+    assert server.call_count == 0
+
+
+def test_unknown_endpoint_style_is_rejected(tmp_path):
+    with pytest.raises(PrelimClientError, match="endpoint_style"):
+        generate([], temperature=0.5, max_tokens=8, model_name="m", endpoint_style="grpc",
+                 endpoint_url="http://x", log_path=tmp_path / "l.jsonl")

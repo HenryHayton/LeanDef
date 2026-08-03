@@ -1,0 +1,169 @@
+{
+  "task_id": "DependsOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.DependsOn",
+  "signature": {
+    "name": "VTask.DependsOn",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_2} -> {β : Type u_3} -> (f : ((i : ι) → α i) → β) -> (s : Set ι) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.DependsOn is a universally quantified Prop that is well-defined for all inputs; there are no junk-value or boundary conventions beyond what is mathematically intrinsic to the definition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dependsOn_univ_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} (f : ((i : ι) → α i) → β), VTask.DependsOn f Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "dependsOn_univ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_const_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} (b : β), VTask.DependsOn (fun (_ : (i : ι) → α i) => b) ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "dependsOn_const"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_mono_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} {f : ((i : ι) → α i) → β} {s t : Set ι}, s ⊆ t → VTask.DependsOn f s → VTask.DependsOn f t",
+      "domain_inputs": {},
+      "anchors": [
+        "DependsOn.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_empty_constant_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} {f : ((i : ι) → α i) → β}, VTask.DependsOn f ∅ → ∀ (x y : (i : ι) → α i), f x = f y",
+      "domain_inputs": {},
+      "anchors": [
+        "DependsOn.empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_factors_through_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} {f : ((i : ι) → α i) → β} {s : Set ι}, VTask.DependsOn f s ↔ Function.FactorsThrough f (Set.restrict s)",
+      "domain_inputs": {},
+      "anchors": [
+        "dependsOn_iff_factorsThrough"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_const_superset_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} {β : Type} (b : β) (s : Set ι), VTask.DependsOn (fun (_ : (i : ι) → α i) => b) s",
+      "domain_inputs": {},
+      "anchors": [
+        "dependsOn_const",
+        "DependsOn.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "dependsOn_restrict_set_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} (s : Set ι), VTask.DependsOn (fun (x : ∀ i, α i) => (fun i : s => x i)) s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.dependsOn_restrict"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DependsOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DependsOn-cleanup2-18eb94a4",
+    "review_status": "unreviewed"
+  }
+}

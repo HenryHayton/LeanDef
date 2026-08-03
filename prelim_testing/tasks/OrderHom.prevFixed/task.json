@@ -1,0 +1,174 @@
+{
+  "task_id": "OrderHom.prevFixed",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prevFixed",
+  "signature": {
+    "name": "VTask.prevFixed",
+    "type": "{α : Type u} -> [CompleteLattice α] -> (f : α →o α) -> (x : α) -> (hx : f x ≤ x) -> ↑(Function.fixedPoints ⇑f)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "f x ≤ x",
+    "variables": [
+      "f",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on its stated domain (monotone maps and post-fixed points), and the complete lattice structure guarantees the greatest fixed point below x always exists; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prevFixed_val_le_x",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x), (VTask.prevFixed f x hx : α) ≤ x",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.prevFixed_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_greatest_fixed_below_x",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x) (y : Function.fixedPoints ⇑f), (y : α) ≤ x → y ≤ VTask.prevFixed f x hx",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.le_prevFixed"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x) (y : Function.fixedPoints ⇑f), y ≤ VTask.prevFixed f x hx ↔ (y : α) ≤ x",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.le_prevFixed_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_is_fixed_point",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x), f (VTask.prevFixed f x hx : α) = (VTask.prevFixed f x hx : α)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.prevFixed_le",
+        "OrderHom.le_prevFixed"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_post_fixed_itself",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x), f (VTask.prevFixed f x hx : α) ≤ (VTask.prevFixed f x hx : α)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.prevFixed_le",
+        "OrderHom.le_prevFixed"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_le_of_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x y : α) (hx : f x ≤ x) (hy : f y ≤ y), x ≤ y → VTask.prevFixed f x hx ≤ VTask.prevFixed f y hy",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.le_prevFixed",
+        "OrderHom.prevFixed_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "prevFixed_unique_greatest",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x) (y : Function.fixedPoints ⇑f), (y : α) ≤ x ↔ y ≤ VTask.prevFixed f x hx",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.le_prevFixed_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "OrderHom.prevFixed",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "OrderHom.prevFixed-cleanup3-1593b9f8",
+    "review_status": "unreviewed"
+  }
+}

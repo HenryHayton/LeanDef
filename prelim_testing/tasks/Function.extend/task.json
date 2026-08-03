@@ -1,0 +1,196 @@
+{
+  "task_id": "Function.extend",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.extend",
+  "signature": {
+    "name": "VTask.extend",
+    "type": "{α : Sort u_1} -> {β : Sort u_2} -> {γ : Sort u_3} -> (f : α → β) -> (g : α → γ) -> (j : β → γ) -> β → γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "j"
+    ],
+    "conventions": [
+      {
+        "point": "b in range of f",
+        "statement": "When ∃ a, f a = b, the result is g applied to a classically chosen preimage of b under f.",
+        "note": "This is well-defined (independent of the choice) iff g.FactorsThrough f."
+      },
+      {
+        "point": "b not in range of f",
+        "statement": "When no a satisfies f a = b, the result is j b.",
+        "note": "j serves as a junk value; callers who only care about the image of f may pass 0 or Classical.arbitrary."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "extend_empty_source",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Sort*} [IsEmpty α] (f : α → β) (g : α → γ) (j : β → γ), VTask.extend f g j = j",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.extend_of_isEmpty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_injective_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Sort*} {f : α → β} (hf : Function.Injective f) (g : α → γ) (j : β → γ) (a : α), VTask.extend f g j (f a) = g a",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.extend_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_factors_through_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Sort*} {f : α → β} {g : α → γ} (hfg : Function.FactorsThrough g f) (j : β → γ) (a : α), VTask.extend f g j (f a) = g a",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FactorsThrough.extend_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_factors_through_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Sort*} {f : α → β} {g : α → γ} (hfg : Function.FactorsThrough g f) (j : β → γ), VTask.extend f g j ∘ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FactorsThrough.extend_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_id_eq_g",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {γ : Sort*} (g : ℕ → γ) (j : ℕ → γ) (n : ℕ), VTask.extend id g j n = g n",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.extend_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_injective_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ α₂ α₃ γ : Sort*} {f₁₂ : α₁ → α₂} (h₁₂ : Function.Injective f₁₂) {f₂₃ : α₂ → α₃} (h₂₃ : Function.Injective f₂₃) (g : α₁ → γ) (e' : α₃ → γ), VTask.extend (f₂₃ ∘ f₁₂) g e' = VTask.extend f₂₃ (VTask.extend f₁₂ g (e' ∘ f₂₃)) e'",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.extend_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_subtype_val_in_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β γ : Type*} {p : β → Prop} {g : {x // p x} → γ} {j : β → γ} {b : β} (hb : p b), VTask.extend Subtype.val g j b = g ⟨b, hb⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.extend_val_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "extend_subtype_val_not_in_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β γ : Type*} {p : β → Prop} {g : {x // p x} → γ} {j : β → γ} {b : β} (hb : ¬p b), VTask.extend Subtype.val g j b = j b",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.extend_val_apply'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.extend-a7735da3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.extend",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.extend-a7735da3",
+    "review_status": "unreviewed"
+  }
+}

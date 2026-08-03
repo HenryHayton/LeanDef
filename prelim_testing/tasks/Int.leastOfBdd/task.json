@@ -1,0 +1,159 @@
+{
+  "task_id": "Int.leastOfBdd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.leastOfBdd",
+  "signature": {
+    "name": "VTask.leastOfBdd",
+    "type": "{P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "Hb",
+      "Hinh"
+    ],
+    "conventions": [
+      {
+        "point": "bound_not_required_to_satisfy_P",
+        "statement": "The lower bound `b` is not required to satisfy `P`; it only needs to be a value below all satisfiers.",
+        "note": "Any valid lower bound works; the result is independent of the specific bound chosen."
+      },
+      {
+        "point": "result_independent_of_bound",
+        "statement": "Two calls with different valid lower bounds `b` and `b'` for the same predicate `P` return subtypes whose underlying integers are definitionally equal.",
+        "note": "Captured by the theorem coe_leastOfBdd_eq in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "leastOfBdd_isLeast",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z) (Hinh : ∃ z : ℤ, P z), IsLeast {z | P z} (VTask.leastOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isLeast_coe_leastOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "leastOfBdd_bound_independence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b b' : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z) (Hb' : ∀ z : ℤ, P z → b' ≤ z) (Hinh : ∃ z : ℤ, P z), (VTask.leastOfBdd b Hb Hinh : ℤ) = (VTask.leastOfBdd b' Hb' Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.coe_leastOfBdd_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "leastOfBdd_eq_csInf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set ℤ) [DecidablePred (· ∈ s)] (b : ℤ) (Hb : ∀ z ∈ s, b ≤ z) (Hinh : ∃ z : ℤ, z ∈ s), sInf s = (VTask.leastOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.csInf_eq_leastOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "leastOfBdd_val_satisfies_P",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z) (Hinh : ∃ z : ℤ, P z), P (VTask.leastOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isLeast_coe_leastOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "leastOfBdd_lb_le_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z) (Hinh : ∃ z : ℤ, P z) (z : ℤ), P z → (VTask.leastOfBdd b Hb Hinh : ℤ) ≤ z",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isLeast_coe_leastOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "leastOfBdd_bound_le_lb",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → b ≤ z) (Hinh : ∃ z : ℤ, P z), b ≤ (VTask.leastOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isLeast_coe_leastOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Int.leastOfBdd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Int.leastOfBdd-cleanup2-40220d92",
+    "review_status": "unreviewed"
+  }
+}

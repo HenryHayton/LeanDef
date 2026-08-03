@@ -1,0 +1,98 @@
+{
+  "task_id": "Nat.bitCasesOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.bitCasesOn",
+  "signature": {
+    "name": "VTask.bitCasesOn",
+    "type": "{motive : ℕ → Sort u} -> (n : ℕ) -> (bit : (b : Bool) → (n : ℕ) → motive (Nat.bit b n)) -> motive n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "decomposition of n",
+        "statement": "The natural number n is decomposed as Nat.bit (n.testBit 0) (n >>> 1), so the 'bit' case function is always called with the least-significant bit of n and n right-shifted by one.",
+        "note": "This determines what arguments the 'bit' function receives for any given n."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bitCasesOn_bit_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {motive : ℕ → Sort*} (h : ∀ b n, motive (Nat.bit b n)) (b : Bool) (n : ℕ), VTask.bitCasesOn (Nat.bit b n) h = h b n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.bitCasesOn_bit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.bitCasesOn-ea1f8217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bitCasesOn_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {motive : ℕ → Sort*}, Function.Injective (fun H : ∀ b n, motive (Nat.bit b n) => fun n => VTask.bitCasesOn n H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.bit_cases_on_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.bitCasesOn-ea1f8217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bitCasesOn_inj_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {motive : ℕ → Sort*} (H₁ H₂ : ∀ b n, motive (Nat.bit b n)), ((fun n => VTask.bitCasesOn n H₁) = fun n => VTask.bitCasesOn n H₂) ↔ H₁ = H₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.bit_cases_on_inj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.bitCasesOn-ea1f8217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.bitCasesOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.bitCasesOn-ea1f8217",
+    "review_status": "unreviewed"
+  }
+}

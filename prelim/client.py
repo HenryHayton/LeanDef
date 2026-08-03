@@ -96,6 +96,27 @@ class GenerationResult:
     raw_response: dict = field(default_factory=dict)
 
 
+def _extract_completion(parsed: dict) -> tuple[str, str | None, int | None, int | None]:
+    """Same as `_extract`, for the legacy `/v1/completions` shape: the text lives at
+    `choices[0].text` rather than `choices[0].message.content`. Everything else (finish_reason,
+    optional usage) is identical, so only the one field differs.
+
+    Kept for models whose card documents raw-completion usage. As of the 2026-08-03 card sweep
+    all six candidates use chat templates -- including DeepSeek-Prover-V2, which corrects an
+    earlier assumption -- so nothing in the current table selects this path. It exists because
+    the cost of having it and not needing it is one small function, while the cost of needing it
+    mid-run is a dead night.
+    """
+    choice = parsed["choices"][0]
+    text = choice.get("text")
+    if text is None:
+        text = ""
+    if not isinstance(text, str):
+        raise TypeError(f"choices[0].text must be a string or null, got {type(text).__name__}")
+    usage = parsed.get("usage") or {}
+    return text, choice.get("finish_reason"), usage.get("prompt_tokens"), usage.get("completion_tokens")
+
+
 def _extract(parsed: dict) -> tuple[str, str | None, int | None, int | None]:
     """Pull (text, finish_reason, prompt_tokens, completion_tokens) out of an OpenAI-shaped
     chat-completion body. Raises KeyError/IndexError/TypeError on anything unexpected; the caller
@@ -175,11 +196,12 @@ def _log_attempt(
 
 
 def generate(
-    prompt_messages: list[dict],
+    prompt: list[dict] | str,
     *,
     temperature: float,
     max_tokens: int,
     model_name: str,
+    endpoint_style: str = "chat",
     timeout_s: float | None = None,
     endpoint_url: str | None = None,
     api_key: str | None = None,
@@ -188,16 +210,22 @@ def generate(
     log_path: Path | None = None,
     sleep_fn=time.sleep,
 ) -> GenerationResult:
-    """Send one chat-completion request and return the generation.
+    """Send one generation request and return the result.
 
-    `prompt_messages` is the OpenAI messages list (`[{"role": ..., "content": ...}, ...]`),
-    already built -- this module has no prompt logic. `endpoint_url`/`api_key` default to the
-    environment (`prelim.config`); passing them explicitly is for tests. `sleep_fn` is injectable
-    so retry tests don't actually wait out the backoff.
+    `prompt` is either the OpenAI messages list (`endpoint_style="chat"`, the default) or a
+    single prompt string (`endpoint_style="completion"`) -- already built; this module has no
+    prompt logic. `endpoint_url`/`api_key` default to the environment (`prelim.config`); passing
+    them explicitly is for tests. `sleep_fn` is injectable so retry tests don't wait out backoff.
+
+    `endpoint_url` is expected to name the matching route (`/v1/chat/completions` vs
+    `/v1/completions`); the style flag selects the request/response SHAPE, and does not rewrite
+    the URL -- guessing a caller's routing would be a surprising thing for a client to do.
 
     Raises `EndpointRequestError` (4xx, immediate), `EndpointMalformedResponseError` (2xx with an
     unreadable body, immediate), or `EndpointUnavailable` (retryable failures exhausted).
     """
+    if endpoint_style not in ("chat", "completion"):
+        raise PrelimClientError(f"endpoint_style must be 'chat' or 'completion', got {endpoint_style!r}")
     url = endpoint_url if endpoint_url is not None else cfg.endpoint_url()
     if not url:
         raise PrelimClientError(
@@ -209,10 +237,19 @@ def generate(
 
     request_body = {
         "model": model_name,
-        "messages": prompt_messages,
         "temperature": temperature,
         "max_tokens": max_tokens,
     }
+    if endpoint_style == "chat":
+        if not isinstance(prompt, list):
+            raise PrelimClientError("chat endpoint_style requires a messages list")
+        request_body["messages"] = prompt
+        extract_fn = _extract
+    else:
+        if not isinstance(prompt, str):
+            raise PrelimClientError("completion endpoint_style requires a prompt string")
+        request_body["prompt"] = prompt
+        extract_fn = _extract_completion
     headers = {"Content-Type": "application/json"}
     if key:
         # Absent/empty key => no header at all, not an empty one: vLLM is commonly keyless, and
@@ -247,7 +284,7 @@ def generate(
         if http_status == 200:
             try:
                 parsed = json.loads(body_bytes)
-                text, finish_reason, prompt_tokens, completion_tokens = _extract(parsed)
+                text, finish_reason, prompt_tokens, completion_tokens = extract_fn(parsed)
             except (json.JSONDecodeError, KeyError, IndexError, TypeError) as e:
                 _log_attempt(
                     log_path, attempt=attempt, max_attempts=max_attempts, model_name=model_name,

@@ -1,0 +1,373 @@
+{
+  "task_id": "Relation.CutExpand",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.CutExpand",
+  "signature": {
+    "name": "VTask.CutExpand",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (s' s : Multiset α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s'",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "membership_condition_omitted",
+        "statement": "The condition `a ∈ s` is not stated explicitly; it is implied by `s' + {a} = s + t` together with irreflexivity of `r` (which prevents `a ∈ t`).",
+        "note": "Avoids DecidableEq and simplifies verification for explicit multisets."
+      },
+      {
+        "point": "erase_avoided",
+        "statement": "The equivalent identity `s' + {a} = s + t` is used instead of `s' = s.erase a + t` so that no `DecidableEq` instance on `α` is required.",
+        "note": "cutExpand_iff recovers the erase formulation under DecidableEq and Irrefl."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cutexpand_wellfounded",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), WellFounded r → WellFounded (VTask.CutExpand r)",
+      "domain_inputs": {},
+      "anchors": [
+        "WellFounded.cutExpand"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_not_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) [Std.Irrefl r] (s : Multiset α), ¬ VTask.CutExpand r s ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.not_cutExpand_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_add_left_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t u : Multiset α), VTask.CutExpand r (s + t) (s + u) ↔ VTask.CutExpand r t u",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.cutExpand_add_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_add_right_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s' s t : Multiset α), VTask.CutExpand r (s' + t) (s + t) ↔ VTask.CutExpand r s' s",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.cutExpand_add_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_singleton_condition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Multiset α) (x : α), (∀ x' ∈ s, r x' x) → VTask.CutExpand r s {x}",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.cutExpand_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_closed_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) [Std.Irrefl r] (p : α → Prop), (∀ {a' a : α}, r a' a → p a → p a') → ∀ {s' s : Multiset α}, VTask.CutExpand r s' s → (∀ a ∈ s, p a) → ∀ a ∈ s', p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.cutExpand_closed"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_acc_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) [Std.Irrefl r] {a : α}, Acc r a → Acc (VTask.CutExpand r) {a}",
+      "domain_inputs": {},
+      "anchors": [
+        "Acc.cutExpand"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_zero_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (x : α), VTask.CutExpand r ∅ {x}",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.cutExpand_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "cutexpand_empty_source_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1} ∅",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "s'": [
+          "{1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1} ∅",
+      "polarity": "reject",
+      "violated_property": "No element exists in the empty source multiset to remove"
+    },
+    {
+      "id": "cutexpand_empty_replacement_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) ∅ {5}",
+      "domain_inputs": {
+        "s": [
+          "{5}"
+        ],
+        "s'": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) ∅ {5}",
+      "polarity": "accept"
+    },
+    {
+      "id": "cutexpand_singleton_singleton_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {2} {3}",
+      "domain_inputs": {
+        "s": [
+          "{3}"
+        ],
+        "s'": [
+          "{2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {2} {3}",
+      "polarity": "accept"
+    },
+    {
+      "id": "cutexpand_reflexive_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.CutExpand (· < · : ℕ → ℕ → Prop) {4} {4}",
+      "domain_inputs": {
+        "s": [
+          "{4}"
+        ],
+        "s'": [
+          "{4}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {4} {4}",
+      "polarity": "reject",
+      "violated_property": "Replacing element 4 with 4 would require 4 < 4, which is false by irreflexivity"
+    },
+    {
+      "id": "cutexpand_double_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1, 2} {3}",
+      "domain_inputs": {
+        "s": [
+          "{3}"
+        ],
+        "s'": [
+          "{1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1, 2} {3}",
+      "polarity": "accept"
+    },
+    {
+      "id": "cutexpand_pair_left_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1, 5} {3, 5}",
+      "domain_inputs": {
+        "s": [
+          "{3, 5}"
+        ],
+        "s'": [
+          "{1, 5}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) {1, 5} {3, 5}",
+      "polarity": "accept"
+    },
+    {
+      "id": "cutexpand_not_empty_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.CutExpand (· < · : ℕ → ℕ → Prop) ∅ ∅",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "s'": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.CutExpand-c971c7ea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.CutExpand (· < · : ℕ → ℕ → Prop) ∅ ∅",
+      "polarity": "reject",
+      "violated_property": "No element exists in the empty source multiset to remove"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Relation.CutExpand",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Relation.CutExpand-c971c7ea",
+    "review_status": "unreviewed"
+  }
+}

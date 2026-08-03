@@ -1,0 +1,134 @@
+{
+  "task_id": "Equiv.ofLeftInverse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLeftInverse",
+  "signature": {
+    "name": "VTask.ofLeftInverse",
+    "type": "{α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f_inv",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": "empty source type",
+        "statement": "When α is empty, the equivalence is still valid and well-typed; f_inv and hf are never evaluated, and Set.range f is also empty.",
+        "note": "The Nonempty α guard on f_inv and hf is precisely what makes this work in the empty case."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLeftInverse_toFun_coe_eq_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f) (a : α), ((VTask.ofLeftInverse f f_inv hf a) : β) = f a",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.ofLeftInverse_eq_ofInjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "ofLeftInverse_eq_ofInjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f), VTask.ofLeftInverse f f_inv hf = Equiv.ofInjective f ((isEmpty_or_nonempty α).elim (fun _ _ _ _ => Subsingleton.elim _ _) (fun h => (hf h).injective))",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.ofLeftInverse_eq_ofInjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "ofLeftInverse_symm_apply_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f) (a : α), (VTask.ofLeftInverse f f_inv hf).symm ⟨f a, a, rfl⟩ = a",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.ofLeftInverse_eq_ofInjective",
+        "Equiv.ofInjective_symm_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "ofLeftInverse_injective_toFun",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f), Function.Injective (VTask.ofLeftInverse f f_inv hf).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "ofLeftInverse_surjective_toFun",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f), Function.Surjective (VTask.ofLeftInverse f f_inv hf).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.surjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.ofLeftInverse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.ofLeftInverse-cleanup1-d74f06ab",
+    "review_status": "unreviewed"
+  }
+}

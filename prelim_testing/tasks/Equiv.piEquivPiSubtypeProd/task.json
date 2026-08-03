@@ -1,0 +1,342 @@
+{
+  "task_id": "Equiv.piEquivPiSubtypeProd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piEquivPiSubtypeProd",
+  "signature": {
+    "name": "VTask.piEquivPiSubtypeProd",
+    "type": "{α : Type u_9} -> (p : α → Prop) -> (β : α → Type u_10) -> [DecidablePred p] -> ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "β"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The equivalence is total and well-defined for all choices of α, p, β, and the DecidablePred instance; no junk-value or edge conventions are imposed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piEquivPiSubtypeProd_toFun_fst",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p] (f : (i : α) → β i) (i : {x // p x}), (VTask.piEquivPiSubtypeProd p β f).1 i = f i.val",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.piEquivPiSubtypeProd_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_toFun_snd",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p] (f : (i : α) → β i) (i : {x // ¬p x}), (VTask.piEquivPiSubtypeProd p β f).2 i = f i.val",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.piEquivPiSubtypeProd_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_symm_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p] (f : (i : α) → β i), (VTask.piEquivPiSubtypeProd p β).symm (VTask.piEquivPiSubtypeProd p β f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_roundtrip_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p] (x : ((i : {a // p a}) → β i) × ((i : {a // ¬p a}) → β i)), VTask.piEquivPiSubtypeProd p β ((VTask.piEquivPiSubtypeProd p β).symm x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.apply_symm_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_preimage_pi",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p] (s : ∀ i, Set (β i)), (VTask.piEquivPiSubtypeProd p β).symm ⁻¹' Set.pi Set.univ s = (Set.pi Set.univ fun i : {i // p i} => s i) ×ˢ Set.pi Set.univ fun i : {i // ¬p i} => s i",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.preimage_piEquivPiSubtypeProd_symm_pi"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p], Function.Bijective (VTask.piEquivPiSubtypeProd p β)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_accept_bool_nat",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ)).symm ((VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ)) (fun _ => 0)) = (fun _ => 0) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ)).symm ((VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ)) (fun _ => 0)) = (fun _ => 0)",
+      "polarity": "accept"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_fst_eval",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 42)).1 ⟨true, rfl⟩ = 42 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 42)).1 ⟨true, rfl⟩",
+      "polarity": "accept"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_snd_eval",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 7)).2 ⟨false, by decide⟩ = 7 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 7)).2 ⟨false, by decide⟩",
+      "polarity": "accept"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_fin4_even_fst_eval",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piEquivPiSubtypeProd (fun i : Fin 4 => Even i.val) (fun _ => Bool) (fun _ => true)).1 ⟨⟨2, by omega⟩, by decide⟩ = true := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun i : Fin 4 => Even i.val"
+        ],
+        "β": [
+          "fun _ => Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun i : Fin 4 => Even i.val) (fun _ => Bool) (fun _ => true)).1 ⟨⟨2, by omega⟩, by decide⟩",
+      "polarity": "accept"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_neq_wrong_fst",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 5)).1 ⟨true, rfl⟩ = 99) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => ℕ) (fun _ => 5)).1 ⟨true, rfl⟩ = 99",
+      "polarity": "reject",
+      "violated_property": "The first component evaluated at ⟨true, rfl⟩ should equal the original function value 5, not 99"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_symm_not_wrong",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => Bool)).symm ((fun _ => true), (fun _ => false)) = (fun _ => false)) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "β": [
+          "fun _ => Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.piEquivPiSubtypeProd (fun b : Bool => b = true) (fun _ => Bool)).symm ((fun _ => true), (fun _ => false)) = (fun _ => false)",
+      "polarity": "reject",
+      "violated_property": "The inverse of the equivalence must reconstruct the original function consistently from both components; the false-constant is not the correct reconstruction"
+    },
+    {
+      "id": "piEquivPiSubtypeProd_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p], Function.Injective (VTask.piEquivPiSubtypeProd p β)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "piEquivPiSubtypeProd_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) (β : α → Type*) [DecidablePred p], Function.Surjective (VTask.piEquivPiSubtypeProd p β)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.surjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.piEquivPiSubtypeProd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.piEquivPiSubtypeProd-1de17c90",
+    "review_status": "unreviewed"
+  }
+}

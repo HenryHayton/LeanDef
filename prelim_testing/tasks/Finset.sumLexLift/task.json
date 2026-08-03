@@ -1,0 +1,212 @@
+{
+  "task_id": "Finset.sumLexLift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumLexLift",
+  "signature": {
+    "name": "VTask.sumLexLift",
+    "type": "{α₁ : Type u_1} -> {α₂ : Type u_2} -> {β₁ : Type u_3} -> {β₂ : Type u_4} -> {γ₁ : Type u_5} -> {γ₂ : Type u_6} -> (f₁ : α₁ → β₁ → Finset γ₁) -> (f₂ : α₂ → β₂ → Finset γ₂) -> (g₁ : α₁ → β₂ → Finset γ₁) -> (g₂ : α₁ → β₂ → Finset γ₂) -> α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f₁",
+      "f₂",
+      "g₁",
+      "g₂",
+      "a",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "inr-then-inl case",
+        "statement": "When the first argument is `inr a` and the second is `inl b`, `VTask.sumLexLift f₁ f₂ g₁ g₂ (inr a) (inl b) = ∅` for all choices of component functions and inputs.",
+        "note": "This junk/boundary value reflects the lexicographic sum order convention: a right-tagged first element is never less than a left-tagged second element, so no interval elements exist."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumLexLift_inl_inl_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₁) (b : β₁), VTask.sumLexLift f₁ f₂ g₁ g₂ (Sum.inl a) (Sum.inl b) = (f₁ a b).map Function.Embedding.inl",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_inl_inl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_inr_inl_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₂) (b : β₁), VTask.sumLexLift f₁ f₂ g₁ g₂ (Sum.inr a) (Sum.inl b) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_inr_inl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_inl_inr_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₁) (b : β₂), VTask.sumLexLift f₁ f₂ g₁ g₂ (Sum.inl a) (Sum.inr b) = (g₁ a b).disjSum (g₂ a b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_inl_inr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_inr_inr_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₂) (b : β₂), VTask.sumLexLift f₁ f₂ g₁ g₂ (Sum.inr a) (Sum.inr b) = (f₂ a b).map ⟨Sum.inr, Sum.inr_injective⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_inr_inr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_mono_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ f₁' : α₁ → β₁ → Finset γ₁) (f₂ f₂' : α₂ → β₂ → Finset γ₂) (g₁ g₁' : α₁ → β₂ → Finset γ₁) (g₂ g₂' : α₁ → β₂ → Finset γ₂), (∀ a b, f₁ a b ⊆ f₁' a b) → (∀ a b, f₂ a b ⊆ f₂' a b) → (∀ a b, g₁ a b ⊆ g₁' a b) → (∀ a b, g₂ a b ⊆ g₂' a b) → ∀ (a : α₁ ⊕ α₂) (b : β₁ ⊕ β₂), VTask.sumLexLift f₁ f₂ g₁ g₂ a b ⊆ VTask.sumLexLift f₁' f₂' g₁' g₂' a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_mem_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (c : γ₁ ⊕ γ₂) (a : α₁ ⊕ α₂) (b : β₁ ⊕ β₂), c ∈ VTask.sumLexLift f₁ f₂ g₁ g₂ a b ↔ (∃ a₁ b₁ c₁, a = Sum.inl a₁ ∧ b = Sum.inl b₁ ∧ c = Sum.inl c₁ ∧ c₁ ∈ f₁ a₁ b₁) ∨ (∃ a₁ b₂ c₁, a = Sum.inl a₁ ∧ b = Sum.inr b₂ ∧ c = Sum.inl c₁ ∧ c₁ ∈ g₁ a₁ b₂) ∨ (∃ a₁ b₂ c₂, a = Sum.inl a₁ ∧ b = Sum.inr b₂ ∧ c = Sum.inr c₂ ∧ c₂ ∈ g₂ a₁ b₂) ∨ ∃ a₂ b₂ c₂, a = Sum.inr a₂ ∧ b = Sum.inr b₂ ∧ c = Sum.inr c₂ ∧ c₂ ∈ f₂ a₂ b₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.mem_sumLexLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_eq_empty_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₁ ⊕ α₂) (b : β₁ ⊕ β₂), VTask.sumLexLift f₁ f₂ g₁ g₂ a b = ∅ ↔ (∀ a₁ b₁, a = Sum.inl a₁ → b = Sum.inl b₁ → f₁ a₁ b₁ = ∅) ∧ (∀ a₁ b₂, a = Sum.inl a₁ → b = Sum.inr b₂ → g₁ a₁ b₂ = ∅ ∧ g₂ a₁ b₂ = ∅) ∧ (∀ a₂ b₂, a = Sum.inr a₂ → b = Sum.inr b₂ → f₂ a₂ b₂ = ∅)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.sumLexLift_eq_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_inl_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₁ ⊕ α₂) (b : β₁ ⊕ β₂) (c₁ : γ₁), Sum.inl c₁ ∈ VTask.sumLexLift f₁ f₂ g₁ g₂ a b ↔ (∃ a₁ b₁, a = Sum.inl a₁ ∧ b = Sum.inl b₁ ∧ c₁ ∈ f₁ a₁ b₁) ∨ (∃ a₁ b₂, a = Sum.inl a₁ ∧ b = Sum.inr b₂ ∧ c₁ ∈ g₁ a₁ b₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.inl_mem_sumLexLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "sumLexLift_inr_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α₁ β₁ γ₁ α₂ β₂ γ₂ : Type*} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) (a : α₁ ⊕ α₂) (b : β₁ ⊕ β₂) (c₂ : γ₂), Sum.inr c₂ ∈ VTask.sumLexLift f₁ f₂ g₁ g₂ a b ↔ (∃ a₁ b₂, a = Sum.inl a₁ ∧ b = Sum.inr b₂ ∧ c₂ ∈ g₂ a₁ b₂) ∨ (∃ a₂ b₂, a = Sum.inr a₂ ∧ b = Sum.inr b₂ ∧ c₂ ∈ f₂ a₂ b₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.inr_mem_sumLexLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.sumLexLift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.sumLexLift-cleanup3-41cafff1",
+    "review_status": "unreviewed"
+  }
+}

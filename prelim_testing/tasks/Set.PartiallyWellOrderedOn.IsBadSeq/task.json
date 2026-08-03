@@ -1,0 +1,240 @@
+{
+  "task_id": "Set.PartiallyWellOrderedOn.IsBadSeq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsBadSeq",
+  "signature": {
+    "name": "VTask.IsBadSeq",
+    "type": "{α : Type u_2} -> (r : α → α → Prop) -> (s : Set α) -> (f : ℕ → α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsBadSeq is a total predicate defined as a straightforward conjunction of two universally-quantified conditions; there are no junk-value conventions or special edge-case assignments."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isbadseq_pwo_iff_no_bad_seq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (r : α → α → Prop) (s : Set α), s.PartiallyWellOrderedOn r ↔ ∀ f, ¬ VTask.IsBadSeq r s f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.iff_forall_not_isBadSeq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "isbadseq_not_pwo_iff_exists",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (r : α → α → Prop) (s : Set α), ¬ s.PartiallyWellOrderedOn r ↔ ∃ f, VTask.IsBadSeq r s f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.iff_forall_not_isBadSeq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "isbadseq_empty_set_no_bad_seq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (r : α → α → Prop) (f : ℕ → α), ¬ VTask.IsBadSeq r ∅ f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.iff_forall_not_isBadSeq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "isbadseq_mem_const_lt_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsBadSeq (· < ·) (Set.univ : Set ℕ) (fun _ => 0)",
+      "domain_inputs": {
+        "r": [
+          "(· < ·)"
+        ],
+        "s": [
+          "Set.univ"
+        ],
+        "f": [
+          "fun _ => 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsBadSeq (· < ·) (Set.univ : Set ℕ) (fun _ => 0)",
+      "polarity": "accept"
+    },
+    {
+      "id": "isbadseq_mem_identity_lt_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBadSeq (· < ·) (Set.univ : Set ℕ) (fun n => n)",
+      "domain_inputs": {
+        "r": [
+          "(· < ·)"
+        ],
+        "s": [
+          "Set.univ"
+        ],
+        "f": [
+          "fun n => n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsBadSeq (· < ·) (Set.univ : Set ℕ) (fun n => n)",
+      "polarity": "reject",
+      "violated_property": "non-increase condition: for m=0, n=1 we have f 0 = 0 < 1 = f 1, so r (f 0) (f 1) holds"
+    },
+    {
+      "id": "isbadseq_mem_false_rel_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsBadSeq (fun _ _ => False) (Set.univ : Set ℕ) (fun _ => 0)",
+      "domain_inputs": {
+        "r": [
+          "fun _ _ => False"
+        ],
+        "s": [
+          "Set.univ"
+        ],
+        "f": [
+          "fun _ => 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsBadSeq (fun _ _ => False) (Set.univ : Set ℕ) (fun _ => 0)",
+      "polarity": "accept"
+    },
+    {
+      "id": "isbadseq_mem_true_rel_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBadSeq (fun _ _ => True) (Set.univ : Set ℕ) (fun _ => 0)",
+      "domain_inputs": {
+        "r": [
+          "fun _ _ => True"
+        ],
+        "s": [
+          "Set.univ"
+        ],
+        "f": [
+          "fun _ => 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsBadSeq (fun _ _ => True) (Set.univ : Set ℕ) (fun _ => 0)",
+      "polarity": "reject",
+      "violated_property": "non-increase condition: for any m < n, r (f m) (f n) = True holds, violating ¬ r (f m) (f n)"
+    },
+    {
+      "id": "isbadseq_mem_outside_set_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBadSeq (fun _ _ => False) (∅ : Set ℕ) (fun _ => 0)",
+      "domain_inputs": {
+        "r": [
+          "fun _ _ => False"
+        ],
+        "s": [
+          "∅"
+        ],
+        "f": [
+          "fun _ => 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsBadSeq (fun _ _ => False) (∅ : Set ℕ) (fun _ => 0)",
+      "polarity": "reject",
+      "violated_property": "range containment: f 0 = 0 is not in the empty set"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.PartiallyWellOrderedOn.IsBadSeq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.PartiallyWellOrderedOn.IsBadSeq-17e1d13f",
+    "review_status": "unreviewed"
+  }
+}

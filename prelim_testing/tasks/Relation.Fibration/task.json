@@ -1,0 +1,179 @@
+{
+  "task_id": "Relation.Fibration",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Fibration",
+  "signature": {
+    "name": "VTask.Fibration",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (rα : α → α → Prop) -> (rβ : β → β → Prop) -> (f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "rα",
+      "rβ",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Fibration is a universally quantified Prop with no junk-value or degenerate-input conventions; it is well-formed for all inputs and vacuously true when rβ is empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fibration_acc_transfer",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (rα : α → α → Prop) (rβ : β → β → Prop) (f : α → β), VTask.Fibration rα rβ f → ∀ a : α, Acc rα a → Acc rβ (f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Acc.of_fibration"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "fibration_isLowerSet_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [LE α] [LE β] (f : α → β), VTask.Fibration (· ≤ ·) (· ≤ ·) f → ∀ s : Set α, IsLowerSet s → IsLowerSet (f '' s)",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.Fibration.isLowerSet_image"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "fibration_iff_isLowerSet_image_Iic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [LE β] (f : α → β), VTask.Fibration (· ≤ ·) (· ≤ ·) f ↔ ∀ x : α, IsLowerSet (f '' Set.Iic x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.fibration_iff_isLowerSet_image_Iic"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "fibration_iff_image_Iic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), Monotone f → (VTask.Fibration (· ≤ ·) (· ≤ ·) f ↔ ∀ x : α, f '' Set.Iic x = Set.Iic (f x))",
+      "domain_inputs": {},
+      "anchors": [
+        "Relation.fibration_iff_image_Iic"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "fibration_comp_correct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (rα : α → α → Prop) (rβ : β → β → Prop) (rγ : γ → γ → Prop) (f : α → β) (g : β → γ), VTask.Fibration rα rβ f → VTask.Fibration rβ rγ g → VTask.Fibration rα rγ (g ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Acc.of_fibration"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "fibration_not_subrel_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Fibration (fun (n m : ℕ) => n < m) (fun (n m : ℕ) => n < m) (fun n => 2 * n)",
+      "domain_inputs": {
+        "f": [
+          "fun n => 2 * n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.Fibration (· < ·) (· < ·) (fun n : ℕ => 2 * n)",
+      "polarity": "reject",
+      "violated_property": "Every rβ-predecessor of f a must be in the image of f with a matching rα-predecessor; 1 < 2 = f 1 but 1 is not in the image of fun n => 2 * n"
+    },
+    {
+      "id": "fibration_id_no_containment_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Fibration (fun (n m : ℕ) => n + 2 = m) (fun (n m : ℕ) => n + 1 = m) id",
+      "domain_inputs": {
+        "f": [
+          "id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relation.Fibration-6213152e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.Fibration (fun n m : ℕ => n + 2 = m) (fun n m : ℕ => n + 1 = m) id",
+      "polarity": "reject",
+      "violated_property": "rβ is not contained in rα: 0 + 1 = 1 holds under rβ but the only rα-predecessor of 1 satisfying id n' = 0 would require n' + 2 = 1, which is impossible"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Relation.Fibration",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Relation.Fibration-6213152e",
+    "review_status": "unreviewed"
+  }
+}

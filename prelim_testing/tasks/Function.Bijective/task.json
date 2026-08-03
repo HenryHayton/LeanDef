@@ -1,0 +1,270 @@
+{
+  "task_id": "Function.Bijective",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Bijective",
+  "signature": {
+    "name": "VTask.Bijective",
+    "type": "{α : Sort u₁} -> {β : Sort u₂} -> (f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Bijective is a total predicate meaningful for every function in every universe; there are no junk-value or edge-case conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bijective_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*), VTask.Bijective (@id α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.bijective_id"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bijective_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β γ : Type*) (f : α → β) (g : β → γ), VTask.Bijective f → VTask.Bijective g → VTask.Bijective (g ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Bijective.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bijective_implies_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) (f : α → β), VTask.Bijective f → Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Bijective.injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bijective_implies_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) (f : α → β), VTask.Bijective f → Function.Surjective f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Bijective.surjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "bijective_id_mem_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Bijective (@id (Fin 3))",
+      "domain_inputs": {
+        "f": [
+          "@id (Fin 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "@id (Fin 3)",
+      "polarity": "accept"
+    },
+    {
+      "id": "bijective_swap_fin2_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Bijective (fun i : Fin 2 => if i = 0 then (1 : Fin 2) else 0)",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 2 => if i = 0 then (1 : Fin 2) else 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "fun i : Fin 2 => if i = 0 then (1 : Fin 2) else 0",
+      "polarity": "accept"
+    },
+    {
+      "id": "bijective_non_surjective_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Bijective (fun _ : Fin 1 => (0 : Fin 2))",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 1 => (0 : Fin 2)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "fun _ : Fin 1 => (0 : Fin 2)",
+      "polarity": "reject",
+      "violated_property": "surjectivity"
+    },
+    {
+      "id": "bijective_non_injective_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Bijective (fun _ : Fin 2 => (0 : Fin 1))",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 2 => (0 : Fin 1)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "fun _ : Fin 2 => (0 : Fin 1)",
+      "polarity": "reject",
+      "violated_property": "injectivity"
+    },
+    {
+      "id": "bijective_singleton_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Bijective (fun _ : Fin 1 => (0 : Fin 1))",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 1 => (0 : Fin 1)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "fun _ : Fin 1 => (0 : Fin 1)",
+      "polarity": "accept"
+    },
+    {
+      "id": "bijective_comp_fin3_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Bijective ((fun i : Fin 3 => if i = 0 then 1 else if i = 1 then 2 else 0) ∘ (fun i : Fin 3 => if i = 0 then 2 else if i = 1 then 0 else 1))",
+      "domain_inputs": {
+        "f": [
+          "(fun i : Fin 3 => if i = 0 then 1 else if i = 1 then 2 else 0) ∘ (fun i : Fin 3 => if i = 0 then 2 else if i = 1 then 0 else 1)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(fun i : Fin 3 => if i = 0 then 1 else if i = 1 then 2 else 0) ∘ (fun i : Fin 3 => if i = 0 then 2 else if i = 1 then 0 else 1)",
+      "polarity": "accept"
+    },
+    {
+      "id": "bijective_not_constant_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Bijective (fun _ : Fin 3 => (0 : Fin 3))",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 3 => (0 : Fin 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.Bijective-529599e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "fun _ : Fin 3 => (0 : Fin 3)",
+      "polarity": "reject",
+      "violated_property": "injectivity"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.Bijective",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.Bijective-529599e2",
+    "review_status": "unreviewed"
+  }
+}

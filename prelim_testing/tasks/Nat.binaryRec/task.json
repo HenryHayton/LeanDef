@@ -1,0 +1,274 @@
+{
+  "task_id": "Nat.binaryRec",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.binaryRec",
+  "signature": {
+    "name": "VTask.binaryRec",
+    "type": "{motive : ℕ → Sort u} -> (zero : motive 0) -> (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) -> (n : ℕ) -> motive n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.binaryRec zero bit 0 = zero; the base case value is returned directly.",
+        "note": "Stated as theorem binaryRec_zero in the Mathlib neighborhood."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.binaryRec zero bit 1 = bit true 0 zero, since 1 = Nat.bit true 0.",
+        "note": "Stated as theorem binaryRec_one in the Mathlib neighborhood."
+      },
+      {
+        "point": "Nat.bit false 0 = 0 ambiguity",
+        "statement": "The unfolding equation at Nat.bit b n requires either n ≠ 0 or b = true; when b = false and n = 0 the input collapses to 0 and the recursion returns zero rather than bit false 0 zero unless bit false 0 zero = zero holds.",
+        "note": "Stated as binaryRec_eq's side condition in the Mathlib neighborhood."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "binaryRec_bit_count_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 0 = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_bit_count_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 1 = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_bit_count_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 2 = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_bit_count_four",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 4 = 3 := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_mem_zero_returns_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 0 = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 0 = 0",
+      "polarity": "accept"
+    },
+    {
+      "id": "binaryRec_mem_zero_not_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 0 = 1) := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 0 = 1",
+      "polarity": "reject",
+      "violated_property": "at n = 0 the base case fires and returns zero, not 1"
+    },
+    {
+      "id": "binaryRec_mem_monotone_bit_count",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 1 ≤ VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1",
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 1 ≤ VTask.binaryRec (0 : ℕ) (fun _ _ acc => 1 + acc) 2",
+      "polarity": "accept"
+    },
+    {
+      "id": "binaryRec_zero_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (motive : ℕ → Sort*) (zero : motive 0) (bit : ∀ b n, motive n → motive (Nat.bit b n)), VTask.binaryRec zero bit 0 = zero",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.binaryRec_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_one_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (motive : ℕ → Sort*) (zero : motive 0) (bit : ∀ b n, motive n → motive (Nat.bit b n)), VTask.binaryRec zero bit 1 = bit true 0 zero",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.binaryRec_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_eq_unfolding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (motive : ℕ → Sort*) (zero : motive 0) (bit : ∀ b n, motive n → motive (Nat.bit b n)) (b : Bool) (n : ℕ), (bit false 0 zero = zero ∨ (n = 0 → b = true)) → VTask.binaryRec zero bit (Nat.bit b n) = bit b n (VTask.binaryRec zero bit n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.binaryRec_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "binaryRec_ne_zero_unfold",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (C : ℕ → Sort*) (z : C 0) (f : ∀ b n, C n → C (Nat.bit b n)) (n : ℕ), n ≠ 0 → VTask.binaryRec z f n = n.bit_bodd_div2 ▸ f n.bodd n.div2 (VTask.binaryRec z f n.div2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.binaryRec_of_ne_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.binaryRec",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.binaryRec-cleanup4-2c456ba1",
+    "review_status": "unreviewed"
+  }
+}

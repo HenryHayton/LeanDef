@@ -1,0 +1,118 @@
+{
+  "task_id": "Finset.strongInduction",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.strongInduction",
+  "signature": {
+    "name": "VTask.strongInduction",
+    "type": "{α : Type u_1} -> {p : Finset α → Sort u_4} -> (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) -> (s : Finset α) -> p s",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "H",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.strongInduction is a total function with no junk-value conventions; every input is meaningful and the recursion terminates by well-founded induction on finset cardinality."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strongInduction_global_unfolding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Finset α → Sort*} (H : ∀ s : Finset α, (∀ t : Finset α, t ⊂ s → p t) → p s) (s : Finset α), VTask.strongInduction H s = H s (fun t _ => VTask.strongInduction H t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.strongInduction_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.strongInduction-34c86f49",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "strongInduction_global_empty_base",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Finset α → Prop} (H : ∀ s : Finset α, (∀ t : Finset α, t ⊂ s → p t) → p s), VTask.strongInduction H ∅ = H ∅ (fun t ht => absurd ht (Finset.not_ssubset_empty t))",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.strongInduction_eq",
+        "Finset.not_ssubset_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.strongInduction-34c86f49",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "strongInduction_global_singleton_oracle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Finset α → Sort*} (H : ∀ s : Finset α, (∀ t : Finset α, t ⊂ s → p t) → p s) (a : α), VTask.strongInduction H {a} = H {a} (fun t _ => VTask.strongInduction H t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.strongInduction_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.strongInduction-34c86f49",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "strongInduction_global_sort_universe",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Finset α → Sort*} (H : ∀ s : Finset α, (∀ t : Finset α, t ⊂ s → p t) → p s) (s : Finset α), Nonempty (PLift (VTask.strongInduction H s = H s (fun t _ => VTask.strongInduction H t)))",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.strongInduction_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.strongInduction-34c86f49",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.strongInduction",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.strongInduction-34c86f49",
+    "review_status": "unreviewed"
+  }
+}

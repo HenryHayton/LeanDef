@@ -1,0 +1,112 @@
+{
+  "task_id": "Set.PartiallyWellOrderedOn.IsMinBadSeq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsMinBadSeq",
+  "signature": {
+    "name": "VTask.IsMinBadSeq",
+    "type": "{α : Type u_2} -> (r : α → α → Prop) -> (rk : α → ℕ) -> (s : Set α) -> (n : ℕ) -> (f : ℕ → α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "rk",
+      "s",
+      "n",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "vacuous_no_bad_competitors",
+        "statement": "If no bad sequence agrees with `f` on the first `n` terms and has smaller rank at position `n`, the predicate holds vacuously regardless of whether `f` is itself bad.",
+        "note": "The definition's consequent is negation of IsBadSeq, so absence of qualifying competitors makes it trivially true."
+      },
+      {
+        "point": "constant_rank_zero",
+        "statement": "If `rk` is identically `0`, then `VTask.IsMinBadSeq r rk s n f` holds for all `r`, `s`, `n`, `f` because the strict inequality `rk (g n) < rk (f n)` can never be satisfied.",
+        "note": "This is a degenerate case of the rank function making the minimality condition trivial."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isminbadseq_trivial_const_rank",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (r : α → α → Prop) (s : Set α) (n : ℕ) (f : ℕ → α), VTask.IsMinBadSeq r (fun _ => 0) s n f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.iff_not_exists_isMinBadSeq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsMinBadSeq-cleanup1-9828186e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "isminbadseq_accept_empty_set",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsMinBadSeq (fun (a b : ℕ) => a < b) id ∅ 0 (fun _ => 0)",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsMinBadSeq-cleanup1-9828186e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsMinBadSeq (fun (a b : ℕ) => a < b) id ∅ 0 (fun _ => 0)",
+      "polarity": "accept"
+    },
+    {
+      "id": "isminbadseq_accept_const_rank_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsMinBadSeq (fun (a b : ℕ) => a < b) (fun _ => 0) Set.univ 3 (fun _ => 42)",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn.IsMinBadSeq-cleanup1-9828186e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.IsMinBadSeq (fun (a b : ℕ) => a < b) (fun _ => 0) Set.univ 3 (fun _ => 42)",
+      "polarity": "accept"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.PartiallyWellOrderedOn.IsMinBadSeq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.PartiallyWellOrderedOn.IsMinBadSeq-cleanup1-9828186e",
+    "review_status": "unreviewed"
+  }
+}

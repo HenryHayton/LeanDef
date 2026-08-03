@@ -1,0 +1,196 @@
+{
+  "task_id": "Graph.banana",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.banana",
+  "signature": {
+    "name": "VTask.banana",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (u v : α) -> (edgeSet : Set β) -> Graph α β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "u",
+      "v",
+      "edgeSet"
+    ],
+    "conventions": [
+      {
+        "point": "edgeSet = ∅",
+        "statement": "When edgeSet is empty, VTask.banana u v ∅ has vertex set {u, v} and no edges, and equals the no-edge graph on {u, v}.",
+        "note": "The graph is still valid; it simply has no edges."
+      },
+      {
+        "point": "u = v",
+        "statement": "When u equals v, the vertex set collapses to a singleton and every edge in edgeSet becomes a loop at u rather than a link between two distinct vertices.",
+        "note": "IsLoopAt holds for every edge in this case; IsNonloopAt fails for every edge."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "banana_comm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β), VTask.banana u v edgeSet = VTask.banana v u edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_empty_eq_noEdge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α), VTask.banana u v (∅ : Set β) = Graph.noEdge {u, v} β",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_inc_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β) (e : β) (x : α), (VTask.banana u v edgeSet).Inc e x ↔ e ∈ edgeSet ∧ (x = u ∨ x = v)",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_inc"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_adj_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β) (x y : α), (VTask.banana u v edgeSet).Adj x y ↔ edgeSet.Nonempty ∧ s(x, y) = s(u, v)",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_adj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_isLoopAt_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β) (e : β) (x : α), (VTask.banana u v edgeSet).IsLoopAt e x ↔ e ∈ edgeSet ∧ x = u ∧ u = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_isLoopAt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_isNonloopAt_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β) (e : β) (x : α), (VTask.banana u v edgeSet).IsNonloopAt e x ↔ e ∈ edgeSet ∧ (x = u ∨ x = v) ∧ u ≠ v",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_isNonloopAt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_nonempty_edgeset_adj_comm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (edgeSet : Set β), edgeSet.Nonempty → (VTask.banana u v edgeSet).Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_adj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "banana_empty_no_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : Type*) (u v : α) (x y : α), ¬(VTask.banana u v (∅ : Set β)).Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.banana_adj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Graph.banana",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Graph.banana-cleanup1-314eadd4",
+    "review_status": "unreviewed"
+  }
+}

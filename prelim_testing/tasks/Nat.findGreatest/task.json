@@ -1,0 +1,523 @@
+{
+  "task_id": "Nat.findGreatest",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.findGreatest",
+  "signature": {
+    "name": "VTask.findGreatest",
+    "type": "(P : ℕ → Prop) -> [DecidablePred P] -> ℕ → ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0 or no positive witness",
+        "statement": "When no positive index i with 1 ≤ i ≤ n satisfies P i, VTask.findGreatest P n returns 0, regardless of the truth value of P 0.",
+        "note": "0 is the universal default/junk value for the 'no witness found' case."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "findGreatest_casework_always_false",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun _ => False) 10 = 0 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun _ => False"
+        ],
+        "n": [
+          "10"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_even_7",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i % 2 = 0) 7 = 6 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_eq_3_bound_5",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i = 3) 5 = 3 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i = 3"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_true_bound_0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun _ => True) 0 = 0 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun _ => True"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_bound_1_true",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun _ => True) 1 = 1 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun _ => True"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_no_witness_above_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i = 0) 5 = 0 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i = 0"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_witness_out_of_range",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i = 3) 2 = 0 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i = 3"
+        ],
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_casework_even_8",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i % 2 = 0) 8 = 8 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_mem_le_bound",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i % 2 = 0) 7 ≤ 7 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.findGreatest (fun i => i % 2 = 0) 7 ≤ 7",
+      "polarity": "accept"
+    },
+    {
+      "id": "findGreatest_mem_le_bound_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.findGreatest (fun i => i % 2 = 0) 7 > 7) := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.findGreatest (fun i => i % 2 = 0) 7 > 7",
+      "polarity": "reject",
+      "violated_property": "result must be ≤ n"
+    },
+    {
+      "id": "findGreatest_mem_spec_nonzero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (fun i => i % 2 = 0) (VTask.findGreatest (fun i => i % 2 = 0) 7) := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(fun i => i % 2 = 0) (VTask.findGreatest (fun i => i % 2 = 0) 7)",
+      "polarity": "accept"
+    },
+    {
+      "id": "findGreatest_mem_zero_when_no_positive_witness",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i = 0) 5 = 0 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i = 0"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.findGreatest (fun i => i = 0) 5",
+      "polarity": "accept"
+    },
+    {
+      "id": "findGreatest_mem_monotone_bound",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.findGreatest (fun i => i % 2 = 0) 7 ≤ VTask.findGreatest (fun i => i % 2 = 0) 8 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7",
+          "8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.findGreatest (fun i => i % 2 = 0) 7 ≤ VTask.findGreatest (fun i => i % 2 = 0) 8",
+      "polarity": "accept"
+    },
+    {
+      "id": "findGreatest_mem_is_greatest_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (fun i => i % 2 = 0) 7 := by decide",
+      "domain_inputs": {
+        "P": [
+          "fun i => i % 2 = 0"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(fun i => i % 2 = 0) 7",
+      "polarity": "reject",
+      "violated_property": "P does not hold at 7, which is strictly above findGreatest result 6"
+    },
+    {
+      "id": "findGreatest_global_le_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (n : ℕ), VTask.findGreatest P n ≤ n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_spec",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (m n : ℕ), m ≤ n → P m → P (VTask.findGreatest P n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_of_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (n m : ℕ), VTask.findGreatest P n = m → m ≠ 0 → P m",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_of_ne_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_is_greatest",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (n k : ℕ), VTask.findGreatest P n < k → k ≤ n → ¬P k",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_is_greatest"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_mono_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (m n : ℕ), m ≤ n → VTask.findGreatest P m ≤ VTask.findGreatest P n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_mono_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_eq_zero_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (k : ℕ), VTask.findGreatest P k = 0 ↔ ∀ n, 0 < n → n ≤ k → ¬P n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_eq_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_le_findGreatest",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (m n : ℕ), m ≤ n → P m → m ≤ VTask.findGreatest P n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.le_findGreatest"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "findGreatest_global_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℕ → Prop) [DecidablePred P] (n : ℕ), VTask.findGreatest P (n + 1) = if P (n + 1) then n + 1 else VTask.findGreatest P n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.findGreatest_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.findGreatest",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.findGreatest-cleanup3-6849d74d",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,494 @@
+{
+  "task_id": "Nat.divisors",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.divisors",
+  "signature": {
+    "name": "VTask.divisors",
+    "type": "(n : ℕ) -> Finset ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.divisors 0 = ∅",
+        "note": "Every natural number divides 0, so the true divisor set would be infinite; the empty finset is used as a junk value."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "divisors_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.divisors 0 = ∅ := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.divisors 1 = {1} := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.divisors 2 = {1, 2} := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_twelve",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.divisors 12 = {1, 2, 3, 4, 6, 12} := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_four",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.divisors 4 = {1, 2, 4} := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_card_twelve",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.divisors 12).card = 6 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_card_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.divisors 1).card = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_card_prime",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.divisors 7).card = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "mem_divisors_accept_6_12",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 6 ∈ VTask.divisors 12 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "6 ∈ VTask.divisors 12",
+      "polarity": "accept"
+    },
+    {
+      "id": "mem_divisors_reject_5_12",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 5 ∉ VTask.divisors 12 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "5 ∉ VTask.divisors 12",
+      "polarity": "reject",
+      "violated_property": "5 does not divide 12"
+    },
+    {
+      "id": "mem_divisors_accept_1_any",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 1 ∈ VTask.divisors 15 := by decide",
+      "domain_inputs": {
+        "n": [
+          "15"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "1 ∈ VTask.divisors 15",
+      "polarity": "accept"
+    },
+    {
+      "id": "mem_divisors_reject_0_any",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 0 ∉ VTask.divisors 12 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "0 ∉ VTask.divisors 12",
+      "polarity": "reject",
+      "violated_property": "0 is not a positive divisor"
+    },
+    {
+      "id": "mem_divisors_reject_in_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 1 ∉ VTask.divisors 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "1 ∉ VTask.divisors 0",
+      "polarity": "reject",
+      "violated_property": "divisors of 0 is empty by convention"
+    },
+    {
+      "id": "mem_divisors_accept_n_n",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 12 ∈ VTask.divisors 12 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "12 ∈ VTask.divisors 12",
+      "polarity": "accept"
+    },
+    {
+      "id": "mem_divisors_reject_larger",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 13 ∉ VTask.divisors 12 := by decide",
+      "domain_inputs": {
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "13 ∉ VTask.divisors 12",
+      "polarity": "reject",
+      "violated_property": "13 > 12 so cannot divide 12 as a proper divisor, and 13 does not divide 12"
+    },
+    {
+      "id": "divisors_card_monotone_pair",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.divisors 6).card ≤ (VTask.divisors 12).card := by decide",
+      "domain_inputs": {
+        "n": [
+          "6",
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "(VTask.divisors 6).card ≤ (VTask.divisors 12).card",
+      "polarity": "accept"
+    },
+    {
+      "id": "divisors_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Function.Injective VTask.divisors",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.divisors_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : ℕ, Nat.Prime p → VTask.divisors p = {1, p}",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Prime.divisors"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n d : ℕ), d ∈ VTask.divisors n ↔ d ∣ n ∧ 0 < d",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.mem_divisors"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_card_eq_one_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, (VTask.divisors n).card = 1 ↔ n = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.divisors_card_eq_one_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_n_mem_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 0 < n → n ∈ VTask.divisors n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.mem_divisors"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "divisors_one_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 0 < n → 1 ∈ VTask.divisors n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.one_mem_divisors"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.divisors-88c7309e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.divisors",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.divisors-88c7309e",
+    "review_status": "unreviewed"
+  }
+}

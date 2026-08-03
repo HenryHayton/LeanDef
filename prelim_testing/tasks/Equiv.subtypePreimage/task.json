@@ -1,0 +1,214 @@
+{
+  "task_id": "Equiv.subtypePreimage",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypePreimage",
+  "signature": {
+    "name": "VTask.subtypePreimage",
+    "type": "{α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "x₀"
+    ],
+    "conventions": [
+      {
+        "point": "forward_map",
+        "statement": "The forward direction of the equivalence restricts a constrained function x : α → β to its values on {a // ¬p a}, discarding the (fixed) behaviour on {a // p a}.",
+        "note": "This is the natural projection that forgets the pinned part."
+      },
+      {
+        "point": "inverse_map_on_positive",
+        "statement": "The inverse map, applied to y : {a // ¬p a} → β, produces a total function that on elements a with p a returns x₀ ⟨a, h⟩.",
+        "note": "Captured by VTask.subtypePreimage_symm_apply_coe_pos."
+      },
+      {
+        "point": "inverse_map_on_negative",
+        "statement": "The inverse map, applied to y : {a // ¬p a} → β, produces a total function that on elements a with ¬p a returns y ⟨a, h⟩.",
+        "note": "Captured by VTask.subtypePreimage_symm_apply_coe_neg."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypePreimage_symm_pos_branch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : Type} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β) (y : {a // ¬p a} → β) (a : α) (h : p a), ((VTask.subtypePreimage p x₀).symm y : α → β) a = x₀ ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.subtypePreimage_symm_apply_coe_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_symm_neg_branch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : Type} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β) (y : {a // ¬p a} → β) (a : α) (h : ¬p a), ((VTask.subtypePreimage p x₀).symm y : α → β) a = y ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.subtypePreimage_symm_apply_coe_neg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : Type} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β), Function.Bijective (VTask.subtypePreimage p x₀).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : Type} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β) (y : {a // ¬p a} → β), (VTask.subtypePreimage p x₀).toFun ((VTask.subtypePreimage p x₀).symm y) = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.toFun_as_coe",
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : Type} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β) (hx : {x : α → β // x ∘ Subtype.val = x₀}), (VTask.subtypePreimage p x₀).symm ((VTask.subtypePreimage p x₀).toFun hx) = hx",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.apply_symm_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_symm_pos_bool_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ((VTask.subtypePreimage (fun b : Bool => b = true) (fun _ => (0 : ℕ))).symm (fun _ => 42) : Bool → ℕ) true = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "x₀": [
+          "fun _ => (0 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_symm_neg_bool_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ((VTask.subtypePreimage (fun b : Bool => b = true) (fun _ => (0 : ℕ))).symm (fun _ => 42) : Bool → ℕ) false = 42 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "x₀": [
+          "fun _ => (0 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "subtypePreimage_fwd_bool_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.subtypePreimage (fun b : Bool => b = true) (fun _ => (0 : ℕ))) ⟨(fun b => if b = true then 0 else 7), by funext ⟨a, ha⟩; simp [ha]⟩ ⟨false, by decide⟩ = 7 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun b : Bool => b = true"
+        ],
+        "x₀": [
+          "fun _ => (0 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.subtypePreimage",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.subtypePreimage-cleanup1-c40e2f35",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "task_id": "Int.greatestOfBdd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.greatestOfBdd",
+  "signature": {
+    "name": "VTask.greatestOfBdd",
+    "type": "{P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → z ≤ b) -> (Hinh : ∃ z, P z) -> { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "b",
+      "Hb",
+      "Hinh"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on its (proof-constrained) domain; the hypotheses Hb and Hinh eliminate all degenerate inputs, so no junk-value conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "greatestOfBdd_bound_independence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b b' : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b) (Hb' : ∀ z : ℤ, P z → z ≤ b') (Hinh : ∃ z : ℤ, P z), (VTask.greatestOfBdd b Hb Hinh : ℤ) = (VTask.greatestOfBdd b' Hb' Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.coe_greatestOfBdd_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "greatestOfBdd_isGreatest",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b) (Hinh : ∃ z : ℤ, P z), IsGreatest {z | P z} (VTask.greatestOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isGreatest_coe_greatestOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "greatestOfBdd_val_le_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b) (Hinh : ∃ z : ℤ, P z), (VTask.greatestOfBdd b Hb Hinh : ℤ) ≤ b",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isGreatest_coe_greatestOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "greatestOfBdd_pred_holds_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b) (Hinh : ∃ z : ℤ, P z), P (VTask.greatestOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isGreatest_coe_greatestOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "greatestOfBdd_maximality_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ z : ℤ, P z → z ≤ b) (Hinh : ∃ z : ℤ, P z) (z : ℤ), P z → z ≤ (VTask.greatestOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.isGreatest_coe_greatestOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "greatestOfBdd_sSup_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set ℤ) [DecidablePred (· ∈ s)] (b : ℤ) (Hb : ∀ z ∈ s, z ≤ b) (Hinh : ∃ z : ℤ, z ∈ s), sSup s = (VTask.greatestOfBdd b Hb Hinh : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.csSup_eq_greatestOfBdd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.greatestOfBdd-43f0233f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Int.greatestOfBdd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Int.greatestOfBdd-43f0233f",
+    "review_status": "unreviewed"
+  }
+}

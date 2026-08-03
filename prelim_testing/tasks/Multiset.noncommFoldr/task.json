@@ -1,0 +1,246 @@
+{
+  "task_id": "Multiset.noncommFoldr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.noncommFoldr",
+  "signature": {
+    "name": "VTask.noncommFoldr",
+    "type": "{α : Type u_3} -> {β : Type u_4} -> (f : α → β → β) -> (s : Multiset α) -> (comm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)) -> (b : β) -> β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "comm",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "empty multiset",
+        "statement": "When `s = 0` (the empty multiset), `VTask.noncommFoldr f 0 h b = b` for any `f`, `h`, and `b`.",
+        "note": "Established by `Multiset.noncommFoldr_empty`."
+      },
+      {
+        "point": "list coercion",
+        "statement": "When `s` is a list `l` coerced to a multiset, `VTask.noncommFoldr f ↑l comm b = List.foldr f b l`.",
+        "note": "Established by `Multiset.noncommFoldr_coe`."
+      },
+      {
+        "point": "global left-commutativity",
+        "statement": "When `LeftCommutative f` holds globally, `VTask.noncommFoldr f s _ b` equals `Multiset.foldr f b s`.",
+        "note": "Established by `Multiset.noncommFoldr_eq_foldr`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "noncommFoldr_empty_7",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.noncommFoldr (fun (n : ℕ) acc => n + acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 7 = 7 := by decide",
+      "domain_inputs": {
+        "s": [
+          "(0 : Multiset ℕ)"
+        ],
+        "b": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_empty_0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.noncommFoldr (fun (n : ℕ) acc => n * acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 1 = 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "(0 : Multiset ℕ)"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_mem_result_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.noncommFoldr (fun (n : ℕ) acc => n + acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 7 = 7 := by decide",
+      "domain_inputs": {
+        "s": [
+          "(0 : Multiset ℕ)"
+        ],
+        "b": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.noncommFoldr (fun (n : ℕ) acc => n + acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 7",
+      "polarity": "accept"
+    },
+    {
+      "id": "noncommFoldr_mem_result_wrong_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.noncommFoldr (fun (n : ℕ) acc => n + acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 7 = 0) := by decide",
+      "domain_inputs": {
+        "s": [
+          "(0 : Multiset ℕ)"
+        ],
+        "b": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "instance": "VTask.noncommFoldr (fun (n : ℕ) acc => n + acc) (0 : Multiset ℕ) (by simp [Set.Pairwise]) 7 = 0",
+      "polarity": "reject",
+      "violated_property": "folding empty multiset must return initial accumulator b (= 7), not 0"
+    },
+    {
+      "id": "noncommFoldr_empty_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ → ℕ) (h : Set.Pairwise {x | x ∈ (0 : Multiset ℕ)} (fun x y => ∀ b, f x (f y b) = f y (f x b))) (b : ℕ), VTask.noncommFoldr f (0 : Multiset ℕ) h b = b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFoldr_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_coe_list",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : List ℕ) (comm : Set.Pairwise {x | x ∈ (↑l : Multiset ℕ)} (fun x y => ∀ b, (· + ·) x ((· + ·) y b) = (· + ·) y ((· + ·) x b))) (b : ℕ), VTask.noncommFoldr (· + ·) (↑l : Multiset ℕ) comm b = l.foldr (· + ·) b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFoldr_coe"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_cons_step",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ → ℕ) (s : Multiset ℕ) (a : ℕ) (h : Set.Pairwise {x | x ∈ a ::ₘ s} (fun x y => ∀ b, f x (f y b) = f y (f x b))) (h' : Set.Pairwise {x | x ∈ s} (fun x y => ∀ b, f x (f y b) = f y (f x b))) (b : ℕ), VTask.noncommFoldr f (a ::ₘ s) h b = f a (VTask.noncommFoldr f s h' b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFoldr_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_eq_foldr_leftcomm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ → ℕ) [h : LeftCommutative f] (s : Multiset ℕ) (b : ℕ), VTask.noncommFoldr f s (fun x _ y _ _ => h.left_comm x y) b = Multiset.foldr f b s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFoldr_eq_foldr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "noncommFoldr_singleton_eq_f_a_b",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β → β) (a : α) (h : Set.Pairwise {x | x ∈ ({a} : Multiset α)} (fun x y => ∀ b, f x (f y b) = f y (f x b))) (b : β), VTask.noncommFoldr f {a} h b = f a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFoldr_cons",
+        "Multiset.noncommFoldr_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.noncommFoldr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.noncommFoldr-19236bd9",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "task_id": "Monotone",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Monotone",
+  "signature": {
+    "name": "VTask.Monotone",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "constant functions",
+        "statement": "Every constant function satisfies VTask.Monotone, since for any fixed value c, c ≤ c holds by reflexivity.",
+        "note": "Follows from reflexivity of ≤ in any preorder."
+      },
+      {
+        "point": "empty domain",
+        "statement": "If the domain type α is empty, VTask.Monotone f holds vacuously for any f.",
+        "note": "Universal quantification over an empty type is trivially true."
+      },
+      {
+        "point": "discrete order",
+        "statement": "On a type with the discrete order (where a ≤ b iff a = b), every function satisfies VTask.Monotone because f a ≤ f a holds by reflexivity whenever a = b.",
+        "note": "The preorder assumption suffices; no additional structure is needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "monotone_id_prop",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.Monotone (id : ℕ → ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "monotone_id"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (b : β), VTask.Monotone (fun _ : α => b)",
+      "domain_inputs": {},
+      "anchors": [
+        "monotone_const"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] {f : α → β} {g : β → γ}, VTask.Monotone f → VTask.Monotone g → VTask.Monotone (g ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Monotone.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_unfolding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.Monotone f ↔ ∀ a b : α, a ≤ b → f a ≤ f b",
+      "domain_inputs": {},
+      "anchors": [
+        "monotone_iff_forall_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_nat_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.Monotone Nat.succ",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.succ_le_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_smul_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℕ), VTask.Monotone (fun n : ℕ => m * n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.mul_le_mul_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    },
+    {
+      "id": "monotone_le_comp_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] {f : α → β} {g : β → γ}, VTask.Monotone f → VTask.Monotone g → VTask.Monotone (fun x => g (f x))",
+      "domain_inputs": {},
+      "anchors": [
+        "Monotone.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monotone-cleanup1-49e965e5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      }
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Monotone",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Monotone-cleanup1-49e965e5",
+    "review_status": "unreviewed"
+  }
+}
