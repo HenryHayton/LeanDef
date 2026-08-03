@@ -54,6 +54,34 @@ def api_key() -> str | None:
     return value or None
 
 
+# --- The shared sampling regime (human-approved 2026-08-03) ------------------------------------
+#
+# ONE regime applied identically to every model. The cards' own recommendations vary widely
+# (Kimina 0.6, Goedel-Formalizer 0.9/top-k 20, Goedel-Prover 32k tokens) and are recorded per
+# model in `ModelSpec.card_sampling` for provenance -- but applying them would mean the
+# comparison measures each lab's tuning advice rather than the model. Deliberate trade-off: some
+# model may be mildly disadvantaged relative to its own recommended settings; that cost is
+# accepted in exchange for a comparison that means something.
+#
+# Two temperatures, 5 samples each: 0.7 is the conventional "best single answer" setting, 1.0
+# widens the distribution so pass@k has something to find. Splitting rather than taking 10 at one
+# temperature also makes temperature sensitivity itself visible per model, at no extra cost.
+SAMPLING_TEMPERATURES = (0.7, 1.0)
+SAMPLES_PER_TEMPERATURE = 5
+SAMPLES_PER_TASK = len(SAMPLING_TEMPERATURES) * SAMPLES_PER_TEMPERATURE  # 10
+TOP_P = 0.95
+MAX_TOKENS = 4096
+
+
+def temperature_for_sample(sample_index: int) -> float:
+    """Which temperature sample `i` uses. The first `SAMPLES_PER_TEMPERATURE` indices take the
+    first temperature, and so on -- a fixed, index-derived mapping so a resumed run reproduces
+    exactly the same regime without storing any extra state."""
+    if not 0 <= sample_index < SAMPLES_PER_TASK:
+        raise ValueError(f"sample_index must be in [0, {SAMPLES_PER_TASK}), got {sample_index}")
+    return SAMPLING_TEMPERATURES[sample_index // SAMPLES_PER_TEMPERATURE]
+
+
 # --- Retry / timeout dials --------------------------------------------------------------------
 #
 # Dials, not commitments -- same status as every other threshold in this codebase.

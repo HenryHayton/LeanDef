@@ -163,3 +163,16 @@ don't leave it checked off in place.
   **Trigger:** the second `mechanical_validation` rotation whose dropped facts are dominated by
   `Unknown identifier` on a sibling name (the first is IsMinBadSeq, 31 July 2026), or the
   pilot-100 mine, whichever comes first.
+- **Dossier "Not to be confused with" sections should name neighbour objects anonymously.**
+  Today those sections name real Mathlib declarations (`Nat.log`, `Int.greatestOfBdd`, ...) to
+  disambiguate the target. For a model with memorized Mathlib those names are localization
+  landmarks: being told the object is "not `Nat.log`, which rounds down" narrows the search to
+  `Nat.clog` without the model ever reasoning from the specification. The section should instead
+  describe the neighbour behaviourally and anonymously -- e.g. "a floor logarithm rounds down:
+  floor-log 2 9 = 3" -- preserving the disambiguation while removing the landmark. Measured
+  2026-08-03 (prelim testing Stage 2, report §4): **9 of the 41 dossiers name another batch
+  task's target**; 0 name their own (the leak check already forbids that). Accepted as-is for
+  prelim testing, since the exposure is identical across all models compared and identical to
+  what the pipeline's own round-trip check already saw -- it biases the absolute numbers, not
+  the ranking. **Trigger:** the next dossier-prompt revision, or pilot-100 authoring, whichever
+  comes first.

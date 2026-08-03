@@ -135,6 +135,27 @@ MODELS: dict[str, ModelSpec] = {
         ),
         card_sampling={},
     ),
+    "goedel-formalizer-v2-8b": ModelSpec(
+        slug="goedel-formalizer-v2-8b",
+        hf_name="Goedel-LM/Goedel-Formalizer-V2-8B",
+        endpoint_style=CHAT,
+        system_prompt=None,  # card's example is a bare user turn
+        lead_in="Please autoformalize the following natural language definition in Lean 4.",
+        tail="Think before you provide the Lean statement.",
+        card_url="https://huggingface.co/Goedel-LM/Goedel-Formalizer-V2-8B",
+        card_notes=(
+            "Added 2026-08-03 as the seventh model, to strengthen the autoformalizer column "
+            "where Herald is the lowest-confidence entry. Chat template, bare user turn, no "
+            "system message. Card's verbatim framing is 'Please autoformalize the following "
+            "natural language problem statement in Lean 4. Use the following theorem name: "
+            "{problem_name} ... Think before you provide the lean statement.' Adapted per the "
+            "Stage-2 method: 'problem statement'->'definition' (we want a definition, not a "
+            "theorem), and the theorem-name clause dropped since our shared block already pins "
+            "the exact symbol and signature. The 'think before' instruction is kept verbatim as "
+            "the tail -- it is this model's distinguishing feature per its own card."
+        ),
+        card_sampling={"temperature": 0.9, "top_k": 20, "top_p": 0.95, "max_tokens": 16384},
+    ),
     "qwen2.5-coder-7b-instruct": ModelSpec(
         slug="qwen2.5-coder-7b-instruct",
         hf_name="Qwen/Qwen2.5-Coder-7B-Instruct",

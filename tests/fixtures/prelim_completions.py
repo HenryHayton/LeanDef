@@ -113,12 +113,34 @@ Note that this uses well-founded recursion. You may need a `termination_by` clau
 your Lean version. Let me know if you'd like me to adjust it!
 """
 
+# Goedel-Formalizer-V2: its card's distinguishing feature is "think before you provide the lean
+# statement", so an explicit reasoning section precedes the fenced answer. Modelled on that
+# framing; note it is an autoformalizer, so like Kimina-Autoformalizer it may reach for a
+# statement-shaped output.
+GOEDEL_FORMALIZER = """\
+Let me think about this before writing the Lean statement.
+
+The object is a ceiling logarithm on ℕ. The dossier pins the signature as
+`VTask.clog : (b n : ℕ) -> ℕ` and specifies junk value 0 when the base is ≤ 1 or the argument
+is ≤ 1. So the formalization needs a total function with those two guard cases, and a recursive
+step that divides by the base rounding up.
+
+```lean4
+def VTask.clog (b n : ℕ) : ℕ :=
+  if 1 < b ∧ 1 < n then
+    VTask.clog b ((n + b - 1) / b) + 1
+  else
+    0
+```
+"""
+
 BY_MODEL = {
     "goedel-prover-v2-8b": GOEDEL,
     "deepseek-prover-v2-7b": DEEPSEEK,
     "kimina-prover-distill-7b": KIMINA_PROVER,
     "kimina-autoformalizer-7b": KIMINA_AUTOFORMALIZER,
     "herald-7b": HERALD,
+    "goedel-formalizer-v2-8b": GOEDEL_FORMALIZER,
     "qwen2.5-coder-7b-instruct": QWEN,
 }
 
