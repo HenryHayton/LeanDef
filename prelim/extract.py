@@ -155,8 +155,9 @@ def extract_definition(
     if not text.strip():
         return ExtractionFailure(NO_DEF_FOUND, "completion was empty", n_candidates=0)
 
+    regions = _candidate_regions(text)
     candidates: list[Extraction] = []
-    for region, from_fence in _candidate_regions(text):
+    for region, from_fence in regions:
         for m in _DECL_START_RE.finditer(region):
             code, truncated_trailing = _slice_declaration(region, m.start())
             if not code.strip():
@@ -170,6 +171,28 @@ def extract_definition(
                     truncated_trailing=truncated_trailing,
                 )
             )
+
+    if not candidates and any(from_fence for _, from_fence in regions):
+        # Fences existed but none contained a declaration -- rescan the WHOLE text.
+        #
+        # Live regression (2026-08-03): a reasoning-heavy model emitted EIGHT fenced blocks (its
+        # <think> section quotes several snippets before the answer). With an odd/interleaved
+        # number of fence delimiters the pair-matching drifts, so the block holding the real
+        # `def` lands BETWEEN two matched regions and was never scanned -- the model was scored
+        # `no_def_found` for output that plainly contained a definition. Falling back to the
+        # unfenced whole text costs nothing when fences worked (this branch is unreachable then)
+        # and rescues exactly this case. Fence-derived regions are still preferred first, so a
+        # model that fences correctly is unaffected.
+        for m in _DECL_START_RE.finditer(text):
+            code, truncated_trailing = _slice_declaration(text, m.start())
+            if code.strip():
+                candidates.append(
+                    Extraction(
+                        code=code, declared_name=m.group(1),
+                        renamed_symbol=not m.group(1).startswith("VTask."),
+                        from_fence=False, truncated_trailing=truncated_trailing,
+                    )
+                )
 
     if not candidates:
         # A `length` finish with no parseable declaration is a truncation, not a refusal --

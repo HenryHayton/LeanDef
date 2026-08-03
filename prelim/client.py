@@ -141,6 +141,64 @@ def _extract(parsed: dict) -> tuple[str, str | None, int | None, int | None]:
     return text, finish_reason, usage.get("prompt_tokens"), usage.get("completion_tokens")
 
 
+def _consume_sse(resp, endpoint_style: str) -> dict:
+    """Accumulate an SSE stream into the same dict shape the non-streaming path returns.
+
+    vLLM emits `data: {...}` lines carrying incremental deltas, then `data: [DONE]`. Deltas are
+    concatenated; `finish_reason` arrives on the chunk that has it; token counts arrive in a
+    final usage-only chunk (requested via `stream_options.include_usage`). The assembled dict
+    carries both the accumulated values under `_`-prefixed keys AND a reconstructed `choices`
+    array, so the raw_response stored for provenance still looks like a normal completion.
+
+    A malformed individual chunk is skipped rather than fatal: losing one delta degrades a
+    sample, whereas raising would discard a generation that is otherwise complete.
+    """
+    parts: list[str] = []
+    finish_reason = None
+    prompt_tokens = completion_tokens = None
+    model = ""
+
+    for raw in resp.iter_lines(decode_unicode=True):
+        if not raw or not raw.startswith("data:"):
+            continue
+        payload = raw[len("data:"):].strip()
+        if payload == "[DONE]":
+            break
+        try:
+            chunk = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        model = chunk.get("model") or model
+        usage = chunk.get("usage")
+        if usage:
+            prompt_tokens = usage.get("prompt_tokens", prompt_tokens)
+            completion_tokens = usage.get("completion_tokens", completion_tokens)
+        for choice in chunk.get("choices") or []:
+            if choice.get("finish_reason"):
+                finish_reason = choice["finish_reason"]
+            piece = (choice.get("delta") or {}).get("content") if endpoint_style == "chat" else choice.get("text")
+            if piece:
+                parts.append(piece)
+
+    text = "".join(parts)
+    return {
+        "_text": text,
+        "_finish_reason": finish_reason,
+        "_prompt_tokens": prompt_tokens,
+        "_completion_tokens": completion_tokens,
+        "object": "chat.completion" if endpoint_style == "chat" else "text_completion",
+        "model": model,
+        "streamed": True,
+        "choices": [{
+            "index": 0,
+            "finish_reason": finish_reason,
+            **({"message": {"role": "assistant", "content": text}} if endpoint_style == "chat"
+               else {"text": text}),
+        }],
+        "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens},
+    }
+
+
 def _error_message(body_bytes: bytes) -> str:
     """Best-effort human-readable message from an error body. Falls back to the raw text, so a
     non-JSON error body still produces a readable exception rather than a second, confusing
@@ -202,6 +260,11 @@ def generate(
     max_tokens: int,
     model_name: str,
     endpoint_style: str = "chat",
+    # Off by default: streaming is a DEPLOYMENT concern, not a property of the wire format,
+    # and this client should stay honest about talking plain OpenAI. `prelim.driver` turns it
+    # on because it knows it is going through RunPod's proxy, which 524s long non-streaming
+    # requests. Keeping the default off also keeps every non-streaming test meaningful.
+    stream: bool = False,
     timeout_s: float | None = None,
     endpoint_url: str | None = None,
     api_key: str | None = None,
@@ -250,6 +313,17 @@ def generate(
             raise PrelimClientError("completion endpoint_style requires a prompt string")
         request_body["prompt"] = prompt
         extract_fn = _extract_completion
+
+    if stream:
+        # Server-Sent Events. REQUIRED for long generations through RunPod's Cloudflare-backed
+        # proxy: a non-streaming request sends nothing until the whole completion is ready, and
+        # the proxy kills any connection that stays silent too long -- measured live as HTTP 524
+        # on an 8192-token request (~246s at the 33 tok/s this A40 sustains). Streaming keeps
+        # bytes flowing, so the proxy never sees an idle socket, at any cap or concurrency.
+        # `include_usage` asks vLLM for a final chunk carrying token counts, which the
+        # non-streaming path gets for free and provenance depends on.
+        request_body["stream"] = True
+        request_body["stream_options"] = {"include_usage": True}
     headers = {"Content-Type": "application/json"}
     if key:
         # Absent/empty key => no header at all, not an empty one: vLLM is commonly keyless, and
@@ -259,9 +333,21 @@ def generate(
     last_error_summary = ""
     for attempt in range(1, max_attempts + 1):
         start = time.perf_counter()
+        streamed: dict | None = None
         try:
-            resp = requests.post(url, json=request_body, headers=headers, timeout=timeout_s)
-            http_status, body_bytes, transport_error = resp.status_code, resp.content, None
+            if stream:
+                resp = requests.post(url, json=request_body, headers=headers,
+                                     timeout=timeout_s, stream=True)
+                http_status = resp.status_code
+                if http_status == 200:
+                    streamed = _consume_sse(resp, endpoint_style)
+                    body_bytes = b""
+                else:
+                    body_bytes = resp.content
+                transport_error = None
+            else:
+                resp = requests.post(url, json=request_body, headers=headers, timeout=timeout_s)
+                http_status, body_bytes, transport_error = resp.status_code, resp.content, None
         except requests.RequestException as e:
             # Covers read/connect timeouts, connection refused, DNS failures, chunked-encoding
             # errors from a dropped connection -- all transient by nature, all retryable.
@@ -283,8 +369,18 @@ def generate(
 
         if http_status == 200:
             try:
-                parsed = json.loads(body_bytes)
-                text, finish_reason, prompt_tokens, completion_tokens = extract_fn(parsed)
+                if streamed is not None:
+                    # Already assembled into the SAME shape the non-streaming path produces, so
+                    # everything downstream (GenerationResult, the sample file, provenance) is
+                    # byte-compatible and nothing else in the pipeline knows streaming happened.
+                    parsed = streamed
+                    text = parsed["_text"]
+                    finish_reason = parsed["_finish_reason"]
+                    prompt_tokens = parsed["_prompt_tokens"]
+                    completion_tokens = parsed["_completion_tokens"]
+                else:
+                    parsed = json.loads(body_bytes)
+                    text, finish_reason, prompt_tokens, completion_tokens = extract_fn(parsed)
             except (json.JSONDecodeError, KeyError, IndexError, TypeError) as e:
                 _log_attempt(
                     log_path, attempt=attempt, max_attempts=max_attempts, model_name=model_name,

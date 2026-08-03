@@ -95,12 +95,25 @@ def build_task_block(dossier_md: str, pinned_signature: str) -> str:
         "\n"
         "# Your task\n"
         "\n"
-        f"Write the complete Lean 4 definition of `{_symbol_of(pinned_signature)}` with exactly "
-        "this signature:\n"
+        f"Write the complete Lean 4 definition of `{_symbol_of(pinned_signature)}`. It must have "
+        "exactly this type:\n"
         "\n"
         "```lean\n"
         f"{pinned_signature}\n"
         "```\n"
+        "\n"
+        # Output-shape clause added 2026-08-03 after the first live smoke test. Kimina-Prover
+        # reasoned correctly, produced a fenced Lean block, and wrote the pinned signature line
+        # VERBATIM followed by match arms -- with no `def` keyword -- because "with exactly this
+        # signature" reads as "begin with exactly this text". The declaration was therefore
+        # unextractable and the model was scored a failure for what was really a prompt
+        # ambiguity. This clause states the required SHAPE explicitly. It adds no information
+        # about the object: the dossier, the symbol and the type are unchanged, and the clause is
+        # identical for every model, so the fairness invariant holds.
+        f"Your answer must be a complete Lean 4 declaration that begins with "
+        f"`def {_symbol_of(pinned_signature)}` (or `noncomputable def "
+        f"{_symbol_of(pinned_signature)}` if it cannot be computable) and includes the full "
+        "definition body after `:=`. Do not output the type line on its own.\n"
         "\n"
         "Mathlib is already imported. Output the definition and nothing else."
     )

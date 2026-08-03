@@ -392,3 +392,73 @@ def test_unknown_endpoint_style_is_rejected(tmp_path):
     with pytest.raises(PrelimClientError, match="endpoint_style"):
         generate([], temperature=0.5, max_tokens=8, model_name="m", endpoint_style="grpc",
                  endpoint_url="http://x", log_path=tmp_path / "l.jsonl")
+
+
+# --- streaming (added 2026-08-03, live-forced) ----------------------------------------------------
+#
+# Streaming is not a nicety here: RunPod's proxy returns HTTP 524 on any non-streaming request
+# that takes too long to produce its first byte, which at 8192 max_tokens (~246s on the run's
+# A40) is every long generation. These tests pin the accumulation so the sample format and
+# provenance stay byte-compatible with the non-streaming path.
+
+from prelim.stubserver import sse_stream
+
+
+def test_streaming_accumulates_deltas_into_one_completion(stub, tmp_path):
+    server = stub([ScriptedResponse(200, sse_stream("def VTask.clog := 0", prompt_tokens=41, completion_tokens=9))])
+    result = generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=True,
+                      endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl")
+
+    assert result.text == "def VTask.clog := 0"   # reassembled from 8-char chunks
+    assert result.finish_reason == "stop"
+    assert result.prompt_tokens == 41
+    assert result.completion_tokens == 9
+
+
+def test_streaming_request_sets_stream_and_usage_options(stub, tmp_path):
+    server = stub([ScriptedResponse(200, sse_stream("x"))])
+    generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=True,
+             endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl")
+
+    sent = server.requests_received[0]
+    assert sent["stream"] is True
+    assert sent["stream_options"] == {"include_usage": True}
+
+
+def test_streaming_and_non_streaming_produce_the_same_result_shape(stub, tmp_path):
+    """The whole point: nothing downstream may be able to tell which path ran."""
+    a = stub([ScriptedResponse(200, sse_stream("def f := 1", prompt_tokens=7, completion_tokens=3))])
+    b = stub([ScriptedResponse(200, chat_completion_body("def f := 1", prompt_tokens=7, completion_tokens=3))])
+    r1 = generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=True,
+                  endpoint_url=a.url, log_path=tmp_path / "l1.jsonl")
+    r2 = generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=False,
+                  endpoint_url=b.url, log_path=tmp_path / "l2.jsonl")
+
+    assert (r1.text, r1.finish_reason, r1.prompt_tokens, r1.completion_tokens) == \
+           (r2.text, r2.finish_reason, r2.prompt_tokens, r2.completion_tokens)
+    # raw_response stays completion-shaped so stored provenance is comparable across paths
+    assert r1.raw_response["choices"][0]["message"]["content"] == "def f := 1"
+
+
+def test_streaming_length_finish_reason_survives(stub, tmp_path):
+    server = stub([ScriptedResponse(200, sse_stream("truncated", finish_reason="length"))])
+    r = generate(MESSAGES, temperature=0.7, max_tokens=8, model_name="m", stream=True,
+                 endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl")
+    assert r.finish_reason == "length"
+
+
+def test_streaming_skips_a_malformed_chunk_rather_than_failing(stub, tmp_path):
+    """Losing one delta degrades a sample; raising would discard an otherwise complete one."""
+    good = sse_stream("abcdefgh", chunk_size=4).decode()
+    broken = good.replace('data: {"id": "chatcmpl-stub", "object": "chat.completion.chunk"', 'data: {NOT JSON', 1)
+    server = stub([ScriptedResponse(200, broken.encode())])
+    r = generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=True,
+                 endpoint_url=server.url, log_path=tmp_path / "call_log.jsonl")
+    assert "efgh" in r.text  # the surviving chunk still arrived
+
+
+def test_streaming_errors_still_raise_normally(stub, tmp_path):
+    server = stub([ScriptedResponse(400, error_body("bad params"))])
+    with pytest.raises(EndpointRequestError):
+        generate(MESSAGES, temperature=0.7, max_tokens=64, model_name="m", stream=True,
+                 endpoint_url=server.url, log_path=tmp_path / "l.jsonl", sleep_fn=lambda s: None)

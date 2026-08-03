@@ -27,11 +27,17 @@ def build(api_key: str | None = None, pod_id: str | None = None) -> str:
         raise SystemExit("pod_runner.py contains the heredoc terminator; change the terminator")
     out = setup.replace("__POD_RUNNER_PY__", runner.rstrip("\n"))
 
-    if api_key:
-        out = out.replace("PASTE_YOUR_API_KEY_HERE", api_key)
-    if pod_id:
-        out = out.replace("PASTE_YOUR_POD_ID_HERE", pod_id)
-    return out
+    # Substitute ONLY on the export lines, never globally: the placeholders also appear in the
+    # "did you forget to fill these in?" guard, and a global replace rewrites that guard into
+    # `if pod_id == <the real pod id>` -- i.e. it warns that the value is missing precisely when
+    # it is present. Found while preparing the live bundle, 2026-08-03.
+    lines = out.splitlines(keepends=True)
+    for i, line in enumerate(lines):
+        if api_key and line.startswith("export RUNPOD_API_KEY="):
+            lines[i] = f'export RUNPOD_API_KEY="${{RUNPOD_API_KEY:-{api_key}}}"\n'
+        elif pod_id and line.startswith("export RUNPOD_POD_ID="):
+            lines[i] = f'export RUNPOD_POD_ID="${{RUNPOD_POD_ID:-{pod_id}}}"\n'
+    return "".join(lines)
 
 
 def main() -> int:

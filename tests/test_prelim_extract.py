@@ -155,3 +155,25 @@ def test_extraction_is_deterministic(slug):
     a = extract_definition(slug, fx.BY_MODEL[slug])
     b = extract_definition(slug, fx.BY_MODEL[slug])
     assert a == b
+
+
+def test_many_fences_with_the_def_outside_a_matched_pair_still_extracts():
+    """Live regression 2026-08-03: a reasoning-heavy model emitted 8 fenced blocks; fence
+    pair-matching drifted and the block holding the real `def` fell between matched regions, so
+    it was scored `no_def_found` for output that plainly contained a definition."""
+    text = (
+        "<think>\n```lean\nsketch one\n```\nthinking\n```lean\nsketch two\n```\nmore\n"
+        "```\nnot even lean\n```\n</think>\n"
+        "```lean\nimport Mathlib\n\ndef VTask.clog (b n : ℕ) : ℕ := Nat.log b n + 1\n```\n"
+    )
+    result = extract_definition("kimina-prover-distill-7b", text)
+    assert isinstance(result, Extraction), result
+    assert result.declared_name == "VTask.clog"
+    assert "Nat.log b n + 1" in result.code
+
+
+def test_wellformed_single_fence_is_unaffected_by_the_fallback():
+    """The fallback must not change behaviour when fences work -- fenced regions stay preferred."""
+    result = extract_definition("herald-7b", fx.HERALD)
+    assert isinstance(result, Extraction)
+    assert result.from_fence is True

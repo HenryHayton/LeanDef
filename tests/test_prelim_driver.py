@@ -12,7 +12,7 @@ import pytest
 from prelim import config as cfg
 from prelim.driver import RunLog, run_model, run_prelim
 from prelim.podcontrol import PodControl, PodControlError
-from prelim.stubserver import ScriptedResponse, StubEndpointServer, chat_completion_body
+from prelim.stubserver import ScriptedResponse, StubEndpointServer, chat_completion_body, sse_stream
 
 GOOD = "```lean\ndef VTask.clog (b n : ℕ) : ℕ :=\n  if 1 < b ∧ 1 < n then VTask.clog b (n / b) + 1 else 0\n```"
 GARBAGE = "I'm afraid I can't help with that request."
@@ -50,9 +50,9 @@ def _run_log(paths):
 
 
 def test_run_model_generates_every_sample_and_stores_them(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     outcome = run_model(
-        "herald-7b", ["Nat.clog", "Nat.ModEq"], samples_per_task=2,
+        "goedel-formalizer-v2-8b", ["Nat.clog", "Nat.ModEq"], samples_per_task=2,
         samples_dir=paths["samples_dir"], endpoint_url=server.url,
         call_log_path=paths["call_log_path"], run_log=_run_log(paths), concurrency=4,
     )
@@ -60,34 +60,38 @@ def test_run_model_generates_every_sample_and_stores_them(stub, paths):
     assert outcome.status == "completed"
     assert outcome.completed == 4
     assert outcome.extraction_failures == 0
-    files = sorted(p.name for p in (paths["samples_dir"] / "herald-translator").rglob("sample_*.json"))
+    files = sorted(p.name for p in (paths["samples_dir"] / "goedel-formalizer-v2-8b").rglob("sample_*.json"))
     assert files == ["sample_00.json", "sample_00.json", "sample_01.json", "sample_01.json"]
 
 
 def test_stored_sample_carries_extraction_and_regime_provenance(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     run_model(
-        "herald-7b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
+        "goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
         endpoint_url=server.url, run_log=_run_log(paths),
     )
-    data = json.loads((paths["samples_dir"] / "herald-translator" / "Nat.clog" / "sample_00.json").read_text())
+    data = json.loads((paths["samples_dir"] / "goedel-formalizer-v2-8b" / "Nat.clog" / "sample_00.json").read_text())
 
     assert data["extra"]["extraction_ok"] is True
     assert data["extra"]["declared_name"] == "VTask.clog"
     assert data["extra"]["top_p"] == cfg.TOP_P
     assert data["extra"]["endpoint_style"] == "chat"
-    assert data["extra"]["card_sampling"] == {}  # Herald's card documents none
+    # Goedel-Formalizer's card DOES document sampling; it is recorded for provenance but
+    # deliberately not applied (one shared regime across the field -- see prelim.config).
+    assert data["extra"]["card_sampling"] == {"temperature": 0.9, "top_k": 20,
+                                              "top_p": 0.95, "max_tokens": 16384}
+    assert data["max_tokens"] == 8192  # the run's regime, not the card's 16384
     assert data["temperature"] == 0.7  # sample 0 -> first temperature
 
 
 def test_temperature_regime_is_applied_per_sample_index(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     run_model(
-        "herald-7b", ["Nat.clog"], samples_per_task=cfg.SAMPLES_PER_TASK,
+        "goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=cfg.SAMPLES_PER_TASK,
         samples_dir=paths["samples_dir"], endpoint_url=server.url, run_log=_run_log(paths),
     )
     temps = [
-        json.loads((paths["samples_dir"] / "herald-translator" / "Nat.clog" / f"sample_{i:02d}.json").read_text())["temperature"]
+        json.loads((paths["samples_dir"] / "goedel-formalizer-v2-8b" / "Nat.clog" / f"sample_{i:02d}.json").read_text())["temperature"]
         for i in range(cfg.SAMPLES_PER_TASK)
     ]
     assert temps == [0.7] * 5 + [1.0] * 5
@@ -97,9 +101,9 @@ def test_temperature_regime_is_applied_per_sample_index(stub, paths):
 
 
 def test_gate_failure_halts_that_model_only(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GARBAGE))])
+    server = stub([ScriptedResponse(200, sse_stream(GARBAGE))])
     outcome = run_model(
-        "herald-7b", ["Nat.clog"], samples_per_task=10, samples_dir=paths["samples_dir"],
+        "goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=10, samples_dir=paths["samples_dir"],
         endpoint_url=server.url, run_log=_run_log(paths),
     )
 
@@ -112,9 +116,9 @@ def test_gate_failure_halts_that_model_only(stub, paths):
 
 
 def test_gate_pass_proceeds_to_the_full_set(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     outcome = run_model(
-        "herald-7b", ["Nat.clog"], samples_per_task=5, samples_dir=paths["samples_dir"],
+        "goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=5, samples_dir=paths["samples_dir"],
         endpoint_url=server.url, run_log=_run_log(paths), concurrency=2,
     )
     assert outcome.status == "completed"
@@ -123,12 +127,12 @@ def test_gate_pass_proceeds_to_the_full_set(stub, paths):
 
 def test_gate_reuses_samples_already_on_disk_after_a_relaunch(stub, paths):
     """A relaunch must not spend fresh generations re-answering a settled question."""
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
-    run_model("herald-7b", ["Nat.clog"], samples_per_task=4, samples_dir=paths["samples_dir"],
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
+    run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=4, samples_dir=paths["samples_dir"],
               endpoint_url=server.url, run_log=_run_log(paths))
     first_pass_calls = server.call_count
 
-    outcome = run_model("herald-7b", ["Nat.clog"], samples_per_task=4, samples_dir=paths["samples_dir"],
+    outcome = run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=4, samples_dir=paths["samples_dir"],
                         endpoint_url=server.url, run_log=_run_log(paths))
     assert outcome.status == "completed"
     assert server.call_count == first_pass_calls  # nothing regenerated
@@ -138,15 +142,15 @@ def test_gate_reuses_samples_already_on_disk_after_a_relaunch(stub, paths):
 
 
 def test_relaunch_generates_only_the_missing_samples(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
-    run_model("herald-7b", ["Nat.clog"], samples_per_task=2, samples_dir=paths["samples_dir"],
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
+    run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=2, samples_dir=paths["samples_dir"],
               endpoint_url=server.url, run_log=_run_log(paths))
     assert server.call_count == 2
 
     # Simulate a crash that lost one sample.
-    (paths["samples_dir"] / "herald-translator" / "Nat.clog" / "sample_01.json").unlink()
+    (paths["samples_dir"] / "goedel-formalizer-v2-8b" / "Nat.clog" / "sample_01.json").unlink()
 
-    outcome = run_model("herald-7b", ["Nat.clog", "Nat.ModEq"], samples_per_task=2,
+    outcome = run_model("goedel-formalizer-v2-8b", ["Nat.clog", "Nat.ModEq"], samples_per_task=2,
                         samples_dir=paths["samples_dir"], endpoint_url=server.url,
                         run_log=_run_log(paths))
     assert outcome.completed == 4
@@ -154,13 +158,13 @@ def test_relaunch_generates_only_the_missing_samples(stub, paths):
 
 
 def test_corrupt_sample_is_regenerated_not_skipped(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
-    run_model("herald-7b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
+    run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
               endpoint_url=server.url, run_log=_run_log(paths))
-    path = paths["samples_dir"] / "herald-translator" / "Nat.clog" / "sample_00.json"
+    path = paths["samples_dir"] / "goedel-formalizer-v2-8b" / "Nat.clog" / "sample_00.json"
     path.write_text("{truncated", encoding="utf-8")
 
-    run_model("herald-7b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
+    run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=1, samples_dir=paths["samples_dir"],
               endpoint_url=server.url, run_log=_run_log(paths))
     assert json.loads(path.read_text())["completion"]  # regenerated, valid again
 
@@ -171,13 +175,13 @@ def test_corrupt_sample_is_regenerated_not_skipped(stub, paths):
 def test_a_failing_sample_costs_only_itself(stub, paths):
     """One 400 among many: that sample is lost, the rest still land."""
     server = stub([
-        ScriptedResponse(200, chat_completion_body(GOOD)),  # gate x3
-        ScriptedResponse(200, chat_completion_body(GOOD)),
-        ScriptedResponse(200, chat_completion_body(GOOD)),
+        ScriptedResponse(200, sse_stream(GOOD)),  # gate x3
+        ScriptedResponse(200, sse_stream(GOOD)),
+        ScriptedResponse(200, sse_stream(GOOD)),
         ScriptedResponse(400, {"error": {"message": "bad", "code": 400}}),  # one failure
-        ScriptedResponse(200, chat_completion_body(GOOD)),  # then fine again
+        ScriptedResponse(200, sse_stream(GOOD)),  # then fine again
     ])
-    outcome = run_model("herald-7b", ["Nat.clog"], samples_per_task=5,
+    outcome = run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=5,
                         samples_dir=paths["samples_dir"], endpoint_url=server.url,
                         run_log=_run_log(paths), concurrency=1)
 
@@ -190,18 +194,18 @@ def test_extraction_failure_is_recorded_but_does_not_gate(stub, paths):
     """A model that cannot produce an extractable def is reporting its score -- the sample is
     still stored, because discarding it would erase the measurement."""
     server = stub([
-        ScriptedResponse(200, chat_completion_body(GOOD)),
-        ScriptedResponse(200, chat_completion_body(GOOD)),
-        ScriptedResponse(200, chat_completion_body(GOOD)),
-        ScriptedResponse(200, chat_completion_body(GARBAGE)),
+        ScriptedResponse(200, sse_stream(GOOD)),
+        ScriptedResponse(200, sse_stream(GOOD)),
+        ScriptedResponse(200, sse_stream(GOOD)),
+        ScriptedResponse(200, sse_stream(GARBAGE)),
     ])
-    outcome = run_model("herald-7b", ["Nat.clog"], samples_per_task=4,
+    outcome = run_model("goedel-formalizer-v2-8b", ["Nat.clog"], samples_per_task=4,
                         samples_dir=paths["samples_dir"], endpoint_url=server.url,
                         run_log=_run_log(paths), concurrency=1)
 
     assert outcome.completed == 4
     assert outcome.extraction_failures == 1
-    data = json.loads((paths["samples_dir"] / "herald-translator" / "Nat.clog" / "sample_03.json").read_text())
+    data = json.loads((paths["samples_dir"] / "goedel-formalizer-v2-8b" / "Nat.clog" / "sample_03.json").read_text())
     assert data["extra"]["extraction_ok"] is False
     assert data["extra"]["extraction_failure_reason"] == "no_def_found"
     assert data["completion"] == GARBAGE  # kept verbatim
@@ -231,26 +235,26 @@ class _FakePod:
 
 
 def test_run_prelim_waits_for_each_model_then_advances(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     pod = _FakePod()
     result = run_prelim(
-        ["herald-7b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=1,
+        ["goedel-formalizer-v2-8b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=1,
         samples_dir=paths["samples_dir"], endpoint_url=server.url, pod=pod,
         run_log_path=paths["run_log_path"], summary_path=paths["summary_path"], echo=False,
     )
 
     assert [o.status for o in result.outcomes] == ["completed", "completed"]
-    assert pod.waited == ["FrenzyMath/Herald_translator", "Qwen/Qwen2.5-Coder-7B-Instruct"]
+    assert pod.waited == ["Goedel-LM/Goedel-Formalizer-V2-8B", "Qwen/Qwen2.5-Coder-7B-Instruct"]
     assert len(pod.advanced) == 2  # including the final advance that terminates the pod
     assert "final advance requested" in paths["run_log_path"].read_text()
 
 
 def test_pod_wait_failure_halts_the_whole_run(stub, paths):
     """The one failure that corrupts rather than reduces: generating against an unknown model."""
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
     pod = _FakePod(fail_wait_on="Qwen/Qwen2.5-Coder-7B-Instruct")
     result = run_prelim(
-        ["herald-7b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=1,
+        ["goedel-formalizer-v2-8b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=1,
         samples_dir=paths["samples_dir"], endpoint_url=server.url, pod=pod,
         run_log_path=paths["run_log_path"], summary_path=paths["summary_path"], echo=False,
     )
@@ -262,10 +266,10 @@ def test_pod_wait_failure_halts_the_whole_run(stub, paths):
 
 def test_gate_failure_does_not_stop_later_models(stub, paths):
     """One bad wrapper must not cost the others their night."""
-    server = stub([ScriptedResponse(200, chat_completion_body(GARBAGE))])
+    server = stub([ScriptedResponse(200, sse_stream(GARBAGE))])
     pod = _FakePod()
     result = run_prelim(
-        ["herald-7b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=3,
+        ["goedel-formalizer-v2-8b", "qwen2.5-coder-7b-instruct"], ["Nat.clog"], samples_per_task=3,
         samples_dir=paths["samples_dir"], endpoint_url=server.url, pod=pod,
         run_log_path=paths["run_log_path"], summary_path=paths["summary_path"], echo=False,
     )
@@ -276,15 +280,15 @@ def test_gate_failure_does_not_stop_later_models(stub, paths):
 
 
 def test_summary_is_written_with_per_model_outcomes(stub, paths):
-    server = stub([ScriptedResponse(200, chat_completion_body(GOOD))])
-    run_prelim(["herald-7b"], ["Nat.clog"], samples_per_task=2,
+    server = stub([ScriptedResponse(200, sse_stream(GOOD))])
+    run_prelim(["goedel-formalizer-v2-8b"], ["Nat.clog"], samples_per_task=2,
                samples_dir=paths["samples_dir"], endpoint_url=server.url,
                run_log_path=paths["run_log_path"], summary_path=paths["summary_path"], echo=False)
 
     payload = json.loads(paths["summary_path"].read_text())
-    assert payload["models"][0]["slug"] == "herald-7b"
+    assert payload["models"][0]["slug"] == "goedel-formalizer-v2-8b"
     assert payload["models"][0]["status"] == "completed"
-    assert payload["totals"]["herald-translator"] == 2
+    assert payload["totals"]["goedel-formalizer-v2-8b"] == 2
     assert payload["stopped_reason"] is None
     assert "ALL DONE" in paths["run_log_path"].read_text()
 

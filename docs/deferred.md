@@ -176,3 +176,15 @@ don't leave it checked off in place.
   what the pipeline's own round-trip check already saw -- it biases the absolute numbers, not
   the ranking. **Trigger:** the next dossier-prompt revision, or pilot-100 authoring, whichever
   comes first.
+- **Retry DeepSeek-Prover-V2 and Herald under a different tokenizer/vLLM configuration.** Both
+  were excluded from the 2026-08-03 prelim field as *excluded-unmeasured*, not as failures: under
+  vLLM 0.26.0 their output arrives byte-corrupted (raw BPE artifacts for space/newline; latin1-
+  rendered UTF-8) and the content ignores the prompt, returning memorised benchmark or web text.
+  One bounded rescue was attempted for DeepSeek (`--tokenizer-mode slow`, one sample) and failed
+  identically. Notably both are non-Qwen-family, while all three models that decode cleanly are
+  Qwen-derived -- so the suspicion is vLLM 0.26's detokenizer for these tokenizer types rather
+  than anything in this repo. **Untried options:** `--tokenizer-mode slow` for Herald (never
+  reached, it failed earlier on a context-length mismatch); pinning vLLM <= 0.25; or serving via
+  transformers directly to isolate vLLM. **Trigger:** a contested prelim winner (where a missing
+  prover-family baseline would change the conclusion), or a write-up that needs the standard
+  DeepSeek-Prover baseline for comparability.

@@ -34,6 +34,13 @@ class ModelSpec:
     lead_in: str = ""
     # Text placed AFTER the shared task block.
     tail: str = ""
+    # vLLM's --max-model-len for this model, and the generation cap we ask for. Both are
+    # per-model (added 2026-08-03) because they are MODEL PROPERTIES, not run policy: Herald is a
+    # 4096-context Llama and refuses to serve at 8192 at all, which killed the first smoke run.
+    # A single global value cannot be right for a set spanning 4k to 64k context.
+    # Invariant the table must preserve: max_tokens + longest prompt (~1300 tok) <= max_model_len.
+    max_model_len: int = 16384
+    max_tokens: int = 8192
     card_url: str = ""
     card_notes: str = ""
     card_sampling: dict = field(default_factory=dict)
@@ -61,25 +68,6 @@ MODELS: dict[str, ModelSpec] = {
         ),
         card_sampling={"max_new_tokens": 32768},
     ),
-    "deepseek-prover-v2-7b": ModelSpec(
-        slug="deepseek-prover-v2-7b",
-        hf_name="deepseek-ai/DeepSeek-Prover-V2-7B",
-        endpoint_style=CHAT,  # NOT completion -- see card_notes; corrects Stage 1's assumption
-        system_prompt=None,
-        lead_in="Complete the following Lean 4 code:",
-        tail=(
-            "Before producing the Lean 4 code, provide a detailed plan outlining the main steps "
-            "and strategies."
-        ),
-        card_url="https://huggingface.co/deepseek-ai/DeepSeek-Prover-V2-7B",
-        card_notes=(
-            "ASSUMPTION CORRECTED: the V2 card uses apply_chat_template with a single user turn, "
-            "not the raw-completion style V1.5 was known for. Endpoint style is therefore CHAT. "
-            "Same 'Complete the following Lean 4 code' + plan-first framing as Goedel (both "
-            "descend from the same DeepSeek-Prover lineage). No system message."
-        ),
-        card_sampling={"max_new_tokens": 8192},
-    ),
     "kimina-prover-distill-7b": ModelSpec(
         slug="kimina-prover-distill-7b",
         hf_name="AI-MO/Kimina-Prover-Preview-Distill-7B",
@@ -97,43 +85,6 @@ MODELS: dict[str, ModelSpec] = {
             "carries the equivalent headed sections, so only the instruction line is borrowed."
         ),
         card_sampling={"temperature": 0.6, "top_p": 0.95, "max_tokens": 8096},
-    ),
-    "kimina-autoformalizer-7b": ModelSpec(
-        slug="kimina-autoformalizer-7b",
-        hf_name="AI-MO/Kimina-Autoformalizer-7B",
-        endpoint_style=CHAT,
-        system_prompt="You are an expert in mathematics and Lean 4.",
-        lead_in="Please formalize the following definition in Lean 4.",
-        tail="",
-        card_url="https://huggingface.co/AI-MO/Kimina-Autoformalizer-7B",
-        card_notes=(
-            "Chat template, same system prompt as the Kimina prover. Card's user framing is "
-            "'Please autoformalize the following problem in Lean 4 with a header. Use the "
-            "following theorem names: ...'. Adapted: 'problem'->'definition' (we want a "
-            "definition, not a theorem stub) and the theorem-names clause dropped, since our "
-            "shared block already pins the exact symbol and signature. Note this model is trained "
-            "to emit statements ending in 'by sorry' -- a real risk of sorry-terminated output "
-            "that the extractor tolerates and scoring will catch."
-        ),
-        card_sampling={"temperature": 0.6, "top_p": 0.95, "max_tokens": 2048},
-    ),
-    "herald-7b": ModelSpec(
-        slug="herald-7b",
-        hf_name="FrenzyMath/Herald_translator",
-        endpoint_style=CHAT,
-        system_prompt=None,
-        lead_in="Translate the following definition into Lean 4.",
-        tail="",
-        card_url="https://huggingface.co/FrenzyMath/Herald_translator",
-        card_notes=(
-            "HF id VERIFIED as FrenzyMath/Herald_translator (Herald: A Natural Language Annotated "
-            "Lean 4 Dataset, ICLR 2025, arXiv 2410.10878). Card is THIN: it ships a chat template "
-            "and shows a bare user turn, but documents no system prompt and no sampling "
-            "recommendations. Wrapper is therefore deliberately neutral -- a 'translate this into "
-            "Lean 4' framing matching the model's stated translator purpose. Lowest-confidence "
-            "entry of the six; the live smoke test should scrutinise this one first."
-        ),
-        card_sampling={},
     ),
     "goedel-formalizer-v2-8b": ModelSpec(
         slug="goedel-formalizer-v2-8b",
@@ -171,6 +122,58 @@ MODELS: dict[str, ModelSpec] = {
         ),
         card_sampling={"max_new_tokens": 512},
     ),
+}
+
+
+
+# --- Excluded from the field, 2026-08-03, after live smoke testing -----------------------------
+#
+# Kept as a record rather than deleted: each exclusion is a result, and a later reader needs to
+# know the field was seven and why it became four. The distinction between the two REASONS is
+# load-bearing for how the write-up may talk about them.
+DROPPED_MODELS = {
+    "kimina-autoformalizer-7b": {
+        "hf_name": "AI-MO/Kimina-Autoformalizer-7B",
+        "reason": "task_mismatch",
+        "measured": True,   # a real finding about the model, safe to report as such
+        "detail": (
+            "Emits theorem STATEMENTS, not definitions. Predicted from its card in Stage 2 "
+            "('trained to emit statements ending in by sorry') and confirmed twice live: with "
+            "the original prompt it returned `theorem VTask_clog ... := by sorry` (65 tokens), "
+            "and with the sharpened output-shape prompt it wrapped the entire prompt in a Lean "
+            "comment and still returned a theorem (1122 tokens). This is the wrong instrument "
+            "for the task, not a model that performed badly at it -- no prompt change fixes it."
+        ),
+    },
+    "herald-7b": {
+        "hf_name": "FrenzyMath/Herald_translator",
+        "reason": "detokenizer_corruption",
+        "measured": False,  # EXCLUDED-UNMEASURED: we never got a fair reading of this model
+        "detail": (
+            "Output arrives byte-corrupted under vLLM 0.26 (latin1-rendered UTF-8), and the "
+            "content was unrelated training data -- the sample tail was Chinese SEO copy about a "
+            "phone launch. Also the only model with no documented chat template, a 4096 context "
+            "forcing a smaller token budget than the rest, and 26 GB on disk (2x the others). "
+            "This is an infrastructure failure on our side, NOT a measurement of the model: it "
+            "must not be reported as having performed poorly."
+        ),
+    },
+    "deepseek-prover-v2-7b": {
+        "hf_name": "deepseek-ai/DeepSeek-Prover-V2-7B",
+        "reason": "detokenizer_corruption",
+        "measured": False,  # EXCLUDED-UNMEASURED, same class as Herald
+        "detail": (
+            "Same byte-level corruption as Herald: output littered with raw BPE artifacts "
+            "(unicode 'G-dot'/'C-dot' for space/newline), and content that ignores the prompt "
+            "entirely (returned `theorem exercise_2_1_20` about Function.Injective -- memorised "
+            "benchmark text). One bounded rescue was attempted and pre-declared: re-served with "
+            "--tokenizer-mode slow, 2026-08-03, one sample -- still 170 artifact characters and "
+            "still no mention of the requested symbol. Dropped per that agreement without a "
+            "second theory. Note both corrupted models are non-Qwen-family; the three that "
+            "decode cleanly are all Qwen-derived, which points at vLLM 0.26's detokenizer rather "
+            "than at anything in this repo."
+        ),
+    },
 }
 
 MODEL_SLUGS = tuple(MODELS)

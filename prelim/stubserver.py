@@ -77,6 +77,32 @@ def chat_completion_body(
     }
 
 
+def sse_stream(text: str, *, finish_reason: str = "stop", chunk_size: int = 8,
+               prompt_tokens: int = 17, completion_tokens: int = 5,
+               model: str = "stub-model") -> bytes:
+    """A vLLM/OpenAI SSE stream: content deltas, then a finish chunk, then a usage-only chunk,
+    then `[DONE]`. Returned as raw bytes so the stub can send it verbatim -- the client's own
+    accumulation is what is under test, so the wire format must not be pre-digested."""
+    lines = []
+    for i in range(0, len(text), chunk_size):
+        lines.append("data: " + json.dumps({
+            "id": "chatcmpl-stub", "object": "chat.completion.chunk", "model": model,
+            "choices": [{"index": 0, "delta": {"content": text[i:i + chunk_size]},
+                         "finish_reason": None}],
+        }))
+    lines.append("data: " + json.dumps({
+        "id": "chatcmpl-stub", "object": "chat.completion.chunk", "model": model,
+        "choices": [{"index": 0, "delta": {}, "finish_reason": finish_reason}],
+    }))
+    lines.append("data: " + json.dumps({
+        "id": "chatcmpl-stub", "object": "chat.completion.chunk", "model": model, "choices": [],
+        "usage": {"prompt_tokens": prompt_tokens, "completion_tokens": completion_tokens,
+                  "total_tokens": prompt_tokens + completion_tokens},
+    }))
+    lines.append("data: [DONE]")
+    return ("\n\n".join(lines) + "\n\n").encode()
+
+
 def error_body(message: str, *, err_type: str = "BadRequestError", code: int = 400) -> dict:
     """vLLM's error shape (an OpenAI-style `error` object)."""
     return {"error": {"message": message, "type": err_type, "param": None, "code": code}}

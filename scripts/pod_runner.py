@@ -42,20 +42,40 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 # The seven models, in serving order. MUST match `prelim.models.MODELS` order -- the driver waits
 # for a specific hf_name before generating, so a mismatch stalls rather than corrupts, but a
 # stall at 2am still costs the night.
+# Four, not the original seven: DeepSeek and Herald produce byte-corrupted output under
+# vLLM 0.26, and Kimina-Autoformalizer emits theorem statements rather than definitions.
+# See prelim.models.DROPPED_MODELS for the evidence behind each exclusion.
 MODELS = [
     "Goedel-LM/Goedel-Prover-V2-8B",
-    "deepseek-ai/DeepSeek-Prover-V2-7B",
     "AI-MO/Kimina-Prover-Preview-Distill-7B",
-    "AI-MO/Kimina-Autoformalizer-7B",
-    "FrenzyMath/Herald_translator",
     "Goedel-LM/Goedel-Formalizer-V2-8B",
     "Qwen/Qwen2.5-Coder-7B-Instruct",
 ]
 
+# Per-model --max-model-len. A model whose config caps max_position_embeddings BELOW the value
+# we ask for refuses to start at all: Herald (4096) aborted the first live smoke run this way,
+# and because the driver can only wait for a model that never appears, one wrong number here
+# costs a 15-minute timeout and halts the whole run. Anything absent uses DEFAULT_MAX_MODEL_LEN.
+# Values verified from each model's own config.json on the pod, 2026-08-03.
+MAX_MODEL_LEN_BY_MODEL: dict[str, int] = {
+    # (Herald's 4096 entry removed with the model itself.) All four survivors take the default.
+}
+DEFAULT_MAX_MODEL_LEN = 16384
+
 VLLM_PORT = 8000
-CONTROL_PORT = 8001
-MAX_MODEL_LEN = 8192
-IDLE_TIMEOUT_S = 60 * 60  # 60 minutes with no vLLM traffic -> assume the Mac died, stop billing
+# 8500, not 8001 (changed 2026-08-03 during live setup). The RunPod PyTorch template ships an
+# nginx that already binds 0.0.0.0:8001 for its unused "vscode server" block, proxying it to
+# localhost:8000 -- so binding 8001 here fails with EADDRINUSE, and both exposed external ports
+# would otherwise land on vLLM. Setup repoints that one nginx proxy_pass at 8500, giving:
+#     external :8000 -> vLLM directly
+#     external :8001 -> nginx -> localhost:8500 -> this control server
+CONTROL_PORT = 8500
+# 90 minutes (raised from 60 on 2026-08-03, before the live run): the watchdog's activity signal
+# is control-server traffic, and the driver can legitimately spend a long stretch generating
+# against port 8000 without touching port 8001 -- long temperature-1.0 generations were measured
+# running close to the old 60-minute margin. 90 keeps the protection (a Mac that dies at 2am
+# still stops the meter within the hour and a half) while removing the false-positive risk.
+IDLE_TIMEOUT_S = 90 * 60
 WATCHDOG_POLL_S = 60
 
 
@@ -78,11 +98,15 @@ class Sequencer:
         self._lock = threading.Lock()
 
     def _spawn_vllm(self, hf_name: str) -> subprocess.Popen:
+        # Flags kept minimal and version-stable on purpose. `--disable-log-requests` was valid in
+        # vLLM 0.6.x but REMOVED by 0.26.0 (the version that actually installed on the pod,
+        # 2026-08-03), where it aborts startup with "unrecognized arguments". It only suppressed
+        # per-request log lines, which go to a file nobody reads during the run, so it is simply
+        # dropped rather than replaced -- fewer flags is fewer things to break on a version bump.
         cmd = [
             "vllm", "serve", hf_name,
             "--port", str(self.port),
-            "--max-model-len", str(MAX_MODEL_LEN),
-            "--disable-log-requests",
+            "--max-model-len", str(MAX_MODEL_LEN_BY_MODEL.get(hf_name, DEFAULT_MAX_MODEL_LEN)),
         ]
         log(f"launching: {' '.join(cmd)}")
         return subprocess.Popen(cmd)
@@ -151,17 +175,23 @@ def terminate_pod() -> bool:
               flush=True)
         return False
 
-    payload = json.dumps({"query": f'mutation {{ podTerminate(input: {{podId: "{pod_id}"}}) }}'}).encode()
+    # REST, not GraphQL (fixed 2026-08-03 after two live failures). The GraphQL
+    # `podTerminate` mutation returned HTTP 403 Forbidden for BOTH a read-scoped key and a
+    # write-scoped one -- i.e. the 403 was about the call, not the credential; that mutation
+    # appears to be retired. `DELETE /v1/pods/{id}` on RunPod's REST API is the current path, and
+    # a read-only `GET` on the same resource with the same Bearer auth was verified to return 200
+    # before switching. The DELETE itself is deliberately NOT exercised in testing: the only way
+    # to prove it is to destroy the pod.
     req = urllib.request.Request(
-        f"https://api.runpod.io/graphql?api_key={api_key}",
-        data=payload, headers={"Content-Type": "application/json"}, method="POST",
+        f"https://rest.runpod.io/v1/pods/{pod_id}",
+        headers={"Authorization": f"Bearer {api_key}"}, method="DELETE",
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
-            log(f"pod terminate requested; API replied {r.status}")
+            log(f"pod terminate requested via REST; API replied {r.status}")
             return True
     except (urllib.error.URLError, OSError) as e:
-        log(f"pod terminate FAILED: {e} -- TERMINATE MANUALLY")
+        log(f"pod terminate FAILED: {e} -- TERMINATE MANUALLY FROM THE DASHBOARD")
         return False
 
 

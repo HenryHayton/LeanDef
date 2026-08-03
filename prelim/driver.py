@@ -110,6 +110,10 @@ def _generate_and_store(
             max_tokens=max_tokens,
             model_name=spec.hf_name,
             endpoint_style=spec.endpoint_style,
+            # Streaming is mandatory against RunPod's proxy: it 524s any non-streaming
+            # request slow to produce its first byte, which at 8192 max_tokens (~246s on
+            # this A40) is every long generation. Measured live 2026-08-03.
+            stream=True,
             endpoint_url=endpoint_url,
             timeout_s=timeout_s,
             log_path=log_path,
@@ -126,6 +130,9 @@ def _generate_and_store(
         "top_p": cfg.TOP_P,
         "card_sampling": spec.card_sampling,
         "endpoint_style": spec.endpoint_style,
+        # Recorded so samples stay comparable within a run even though the budget is per-model
+        # (Herald's architecture caps it at 4096 context; everything else gets 16384/8192).
+        "max_model_len": spec.max_model_len,
     }
     if ok:
         extra.update(
@@ -188,7 +195,7 @@ def run_model(
     tasks_root: Path | None = None,
     endpoint_url: str | None = None,
     call_log_path: Path | None = None,
-    max_tokens: int = cfg.MAX_TOKENS,
+    max_tokens: int | None = None,   # None => the model's own spec.max_tokens
     timeout_s: float | None = None,
     concurrency: int = DEFAULT_CONCURRENCY,
     run_log: RunLog,
@@ -197,6 +204,9 @@ def run_model(
 ) -> ModelOutcome:
     """Generate one model's whole set. Returns without raising for any per-model failure."""
     spec = get_model(slug)
+    # Per-model budget unless the caller forces one. A single global cap cannot serve a set
+    # spanning 4k-64k context models (see ModelSpec.max_model_len).
+    max_tokens = spec.max_tokens if max_tokens is None else max_tokens
     pending = _pending_units(slug, tasks, samples_per_task, samples_dir)
     total = len(tasks) * samples_per_task
     already = total - len(pending)
@@ -298,7 +308,7 @@ def run_prelim(
     run_log_path: Path | None = None,
     summary_path: Path | None = None,
     pod: PodControl | None = None,
-    max_tokens: int = cfg.MAX_TOKENS,
+    max_tokens: int | None = None,
     timeout_s: float | None = None,
     concurrency: int = DEFAULT_CONCURRENCY,
     progress_interval_s: float = PROGRESS_INTERVAL_S,
@@ -399,7 +409,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--control-url", default=None, help="pod control server (port 8001); omit to skip pod handshakes")
     p.add_argument("--models-url", default=None, help="vLLM /v1/models URL; derived from --endpoint-url if omitted")
     p.add_argument("--smoke", action="store_true", help="1 task (Nat.clog) x 1 sample x every model")
-    p.add_argument("--max-tokens", type=int, default=cfg.MAX_TOKENS)
+    p.add_argument("--max-tokens", type=int, default=None, help="override the per-model default")
     args = p.parse_args(argv)
 
     tasks = args.tasks if args.tasks else available_tasks()

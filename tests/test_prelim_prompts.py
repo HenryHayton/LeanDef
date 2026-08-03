@@ -88,7 +88,7 @@ def test_leak_guard_would_actually_catch_a_leak():
     """Positive control: the guard is only meaningful if it fires when a name IS present.
     Without this, a broken matcher would make the test above vacuously green."""
     leaky = DOSSIER + "\nThis is the same thing Mathlib calls Nat.clog.\n"
-    text = prompt_text(assemble_prompt_from_parts("herald-7b", leaky, SIGNATURE))
+    text = prompt_text(assemble_prompt_from_parts("goedel-formalizer-v2-8b", leaky, SIGNATURE))
     assert name_occurs(text, "Nat.clog", boundary=IDENTIFIER)
 
 
@@ -140,9 +140,10 @@ def test_chat_models_produce_a_messages_list_with_the_documented_system_prompt(s
 def test_completion_style_model_produces_a_single_string(monkeypatch):
     """No model in the table currently uses this path (all six cards document chat templates),
     but the plumbing must work the moment one does."""
-    spec = get_model("herald-7b")
-    monkeypatch.setitem(MODELS, "herald-7b", type(spec)(**{**spec.__dict__, "endpoint_style": COMPLETION}))
-    prompt = assemble_prompt_from_parts("herald-7b", DOSSIER, SIGNATURE)
+    spec = get_model("goedel-formalizer-v2-8b")
+    monkeypatch.setitem(MODELS, "goedel-formalizer-v2-8b",
+                    type(spec)(**{**spec.__dict__, "endpoint_style": COMPLETION}))
+    prompt = assemble_prompt_from_parts("goedel-formalizer-v2-8b", DOSSIER, SIGNATURE)
 
     assert isinstance(prompt, str)
     assert SIGNATURE in prompt

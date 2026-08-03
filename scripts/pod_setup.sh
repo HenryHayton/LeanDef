@@ -6,12 +6,22 @@
 # does not need yet.
 set -euo pipefail
 
+# --- Hugging Face cache MUST live on the volume, and MUST be set before anything downloads ----
+# The 110 GB volume mounts at /workspace; the container's own disk is ~30 GB and HF's default
+# cache (~/.cache/huggingface) sits on it. Seven models at ~15 GB each would fill that disk and
+# kill the run mid-night. Set first, before pip and before any model is fetched.
+export HF_HOME=/workspace/hf
+export HUGGINGFACE_HUB_CACHE=/workspace/hf/hub
+mkdir -p "$HF_HOME" "$HUGGINGFACE_HUB_CACHE"
+echo "=== HF cache -> $HF_HOME (on the volume) ==="
+df -h /workspace | tail -1
+
 # --- FILL THESE IN before pasting -------------------------------------------------------------
-export RUNPOD_API_KEY="${RUNPOD_API_KEY:-PASTE_YOUR_API_KEY_HERE}"
+export RUNPOD_API_KEY="${RUNPOD_API_KEY:-PASTE_KEY_HERE}"
 export RUNPOD_POD_ID="${RUNPOD_POD_ID:-PASTE_YOUR_POD_ID_HERE}"
 # ----------------------------------------------------------------------------------------------
 
-if [[ "$RUNPOD_API_KEY" == "PASTE_YOUR_API_KEY_HERE" || "$RUNPOD_POD_ID" == "PASTE_YOUR_POD_ID_HERE" ]]; then
+if [[ "$RUNPOD_API_KEY" == "PASTE_KEY_HERE" || "$RUNPOD_POD_ID" == "PASTE_YOUR_POD_ID_HERE" ]]; then
   echo "!!! RUNPOD_API_KEY / RUNPOD_POD_ID not set -- the pod will NOT self-terminate."
   echo "!!! It will still run; you must terminate it manually from the dashboard."
   echo "!!! Ctrl-C now if you would rather set them first."
@@ -28,10 +38,6 @@ echo "=== writing pod_runner.py ==="
 cat > /workspace/pod_runner.py <<'PYEOF'
 __POD_RUNNER_PY__
 PYEOF
-
-echo "=== hugging face cache on the volume (survives pod restarts) ==="
-export HF_HOME=/workspace/hf
-mkdir -p "$HF_HOME"
 
 echo "=== starting pod_runner (control port 8001, vLLM port 8000) ==="
 cd /workspace
