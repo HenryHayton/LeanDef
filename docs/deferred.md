@@ -188,3 +188,20 @@ don't leave it checked off in place.
   transformers directly to isolate vLLM. **Trigger:** a contested prelim winner (where a missing
   prover-family baseline would change the conclusion), or a write-up that needs the standard
   DeepSeek-Prover baseline for comparability.
+- **`authoring.roundtrip` still splices candidates through the un-laddered path.** Stage A
+  (2026-08-04) gave the candidate splice the two rescues the truth side already had —
+  `_root_.` qualification and the `noncomputable` retry — via
+  `harness.scoring.splice_candidate_body`. `authoring/roundtrip.py:74-75` was deliberately NOT
+  migrated: it still calls `signature.splice(body)` + `splice_candidate` directly, so a
+  round-trip body needing either rescue fails to compile through no fault of the body. The
+  round-trip check decides whether an authored task ships, so this is a live authoring gap.
+  **Tested and NOT the explanation for the "harder" flags** (this is the interesting part):
+  the obvious hypothesis was that batch-41's six `ROUND_TRIP_UNVERIFIED_COMPILE` names failed
+  for want of exactly these rescues. Probed directly against live Mathlib (2026-08-04) — all
+  six alias-splice cleanly on the plain path, needing neither rescue. The mechanism also rules
+  itself out a priori: the self-reference collision requires the real declaration to be
+  reachable *bare*, i.e. top-level unnamespaced (`Monotone`, `DependsOn`), and all six are
+  namespaced (`Equiv.*`, `Function.Embedding.*`, `Filter.Germ.*`, `SimpleGraph.*`, `Graph.*`).
+  So the six remain genuine corpus-hardness signal, and the roundtrip gap is a real but
+  separate defect that has not yet been shown to have cost anything.
+  **Trigger:** the next authoring/round-trip task.
