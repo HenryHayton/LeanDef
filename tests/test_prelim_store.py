@@ -6,7 +6,6 @@ directions are tested, plus the two ways a file can look present without being d
 """
 
 import json
-import os
 
 import pytest
 

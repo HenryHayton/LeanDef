@@ -27,8 +27,9 @@ from authoring.consistency import (
 )
 from authoring.facts import ConventionPoint, DomainSpec
 from authoring.validate import ReasonCode
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus
+
 
 
 # --- extract_sections (pure) ----------------------------------------------------------------
@@ -317,14 +318,6 @@ def test_parse_worked_examples_empty_section_yields_no_items():
 
 
 # --- (b) worked-example execution (real Mathlib) ------------------------------------------------
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_worked_example_true_command_is_executed(mathlib_env):

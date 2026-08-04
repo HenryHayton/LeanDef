@@ -20,16 +20,9 @@ from authoring.preflight import (
     write_preflight_json,
     load_preflight_json,
 )
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus
 
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 # --- check_output_to_pinned_type (pure) --------------------------------------------------------

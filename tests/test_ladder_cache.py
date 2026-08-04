@@ -5,19 +5,10 @@ they just index/persist `CacheEntry` records). `replay` needs a real warm enviro
 it runs the cached script as a genuine kernel check.
 """
 
-import pytest
 
-from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 from ladder.cache import CacheEntry, ProofScriptCache, replay, statement_hash, toolchain_pin
 
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_statement_hash_is_stable_and_whitespace_insensitive():

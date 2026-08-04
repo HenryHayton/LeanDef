@@ -18,19 +18,11 @@ from pathlib import Path
 
 import pytest
 
-from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 from ladder.cache import ProofScriptCache, replay, toolchain_pin
 
+
 CACHE_PATH = Path(__file__).resolve().parent.parent / "ladder" / "output" / "tier3_test_cache.jsonl"
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_tier3_cache_entry_replays_on_the_mac_without_hammer(mathlib_env):

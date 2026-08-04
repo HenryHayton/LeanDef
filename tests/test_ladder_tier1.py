@@ -1,20 +1,10 @@
 """Tests for ladder.tier1 -- the thin wrapper over harness's existing decide machinery."""
 
-import pytest
 
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from ladder.budgets import DEFAULT_LADDER_BUDGETS
 from ladder.statuses import AdjudicationStatus
 from ladder.tier1 import adjudicate_tier1
 
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_true_decide_statement_certifies(mathlib_env):

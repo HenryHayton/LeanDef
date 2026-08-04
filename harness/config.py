@@ -10,11 +10,23 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LEAN_PROJECT_DIR = REPO_ROOT / "lean"
 
-# AutoLeanServer refuses to run once system-wide memory usage is above this fraction (default
-# 0.8) to protect against OOM. Raised here since dev laptops often sit above 80% used from
-# unrelated apps -- see CLAUDE.md "Known follow-ups": revisit once on a machine with more
-# headroom, or before the guard's protection actually matters.
-MAX_TOTAL_MEMORY = 0.95
+# AutoLeanServer refuses to start once system-wide memory usage is above this fraction.
+#
+# Back to lean_interact's own 0.8 default (2026-08-05), from the 0.95 this repo had been
+# carrying. The reason it was raised -- dev laptops sit above 80% from unrelated apps, so the
+# guard was a nuisance -- was real but is now outweighed: on 2026-08-04 the guard's protection
+# stopped being hypothetical. Several interrupted test runs stranded Mathlib servers (orphans
+# reparent to launchd and are not reaped by `harness.repl._kill_stray_children`, which only
+# reaps children of the current process); at 0.95 each subsequent run cheerfully started
+# ANOTHER ~2.5 GB server on an already-full machine instead of refusing, and six of them
+# reached 15.8 GB of 16 GB, forcing a hard restart. Refusing to start is the correct behaviour
+# there, and a `MemoryError` naming the real problem beats a wedged laptop.
+#
+# If this makes the suite refuse to run on a busy laptop, that is the guard working: close
+# something, or run `scripts/reap_repls.py` to clear strays from an earlier interrupted run.
+# The shared session-scoped fixture (`tests/conftest.py`) means one server now serves the whole
+# suite, so the headroom actually needed is far smaller than when this was raised.
+MAX_TOTAL_MEMORY = 0.8
 
 # Timeouts (seconds). Every REPL call in this package is expected to pass one of these
 # explicitly rather than relying on lean_interact's own default of no timeout at all -- see

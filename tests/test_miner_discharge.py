@@ -10,11 +10,8 @@ goal" -- so those tests share the same module-scoped `mathlib_env` fixture patte
 
 import json
 
-import pytest
 from lean_interact.interface import CommandResponse, LeanError, Message, Pos
 
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from miner import config as miner_cfg
 from miner.discharge import (
     DefinitionDischarge,
@@ -31,6 +28,7 @@ from miner.discharge import (
 )
 from miner.rank import ManifestRecord
 from miner.verify import VerifiedDef
+
 
 
 def _error_message(data: str) -> Message:
@@ -52,14 +50,6 @@ class _FakeServer:
         if not self.script:
             raise AssertionError(f"fake server ran out of scripted responses at call: {request.cmd!r}")
         return self.script.pop(0)
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 # --- find_mentioning_statements: pure, no REPL ------------------------------------------------

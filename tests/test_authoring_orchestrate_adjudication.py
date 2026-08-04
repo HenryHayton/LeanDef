@@ -9,25 +9,15 @@ instance is never shared with the fast, no-REPL orchestration tests, so a timeou
 poison them.
 """
 
-import pytest
 
 from authoring.facts import ConventionPoint, DomainSpec, ProposedFact
 from authoring.orchestrate import adjudicate_proposed_facts
 from authoring.validate import ReasonCode
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
+
 
 TRUE_DOMAIN = DomainSpec(
     constraint="True", variables=[], conventions=[ConventionPoint(point=None, statement=None, note="NONE_DECLARED: x")]
 )
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_adjudicate_accepts_true_facts_and_drops_false_ones_with_no_retry(mathlib_env):

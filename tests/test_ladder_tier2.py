@@ -8,15 +8,15 @@ scripted fake server instead (same pattern `tests/test_miner_verify_recovery.py`
 death isn't practical to provoke on demand.
 """
 
-import pytest
 from lean_interact import Command
 from lean_interact.interface import CommandResponse, LeanError, Message, Pos
 
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus
 from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
 from ladder.statuses import AdjudicationStatus
 from ladder.tier2 import adjudicate_tier2
+
 
 
 def _error_message(data: str) -> Message:
@@ -36,14 +36,6 @@ class _FakeServer:
         if not self.script:
             raise AssertionError(f"fake server ran out of scripted responses at call: {request.cmd!r}")
         return self.script.pop(0)
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 # --- real discharge: rfl wins immediately -------------------------------------------------

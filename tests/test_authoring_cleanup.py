@@ -18,11 +18,10 @@ from authoring.rotation_queue import (
 )
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClient
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from harness.task_schema import validate_task_dir
 from miner.harvest import MentionRecord
 from tests.fixtures.bedrock_stub import ScriptedResponse, StubBedrockServer, success_body
+
 
 DEF_NAME = "Nat.clog"
 TASK_SYMBOL = task_symbol_for(DEF_NAME)
@@ -67,14 +66,6 @@ def test_feedback_text_shipped_result_is_not_eligible():
 
 
 # --- repair_one / run_cleanup (real REPL + stub Bedrock) ---------------------------------------
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 @pytest.fixture

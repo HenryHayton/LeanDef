@@ -17,7 +17,6 @@ from pathlib import Path
 import pytest
 from lean_interact import AutoLeanServer, Command, LeanREPLConfig, LocalProject
 
-from harness.results import CheckStatus
 from ladder.axiom_audit import audit_proof_axioms
 from ladder.budgets import DEFAULT_LADDER_BUDGETS
 from ladder.cache import CacheEntry, ProofScriptCache, statement_hash, toolchain_pin

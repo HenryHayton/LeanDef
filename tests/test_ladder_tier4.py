@@ -9,7 +9,6 @@ from pathlib import Path
 import pytest
 from lean_interact import AutoLeanServer, Command, LeanREPLConfig, LocalProject
 
-from harness.results import CheckStatus
 from ladder.budgets import DEFAULT_LADDER_BUDGETS
 from ladder.statuses import AdjudicationStatus
 from ladder.tier4 import adjudicate_tier4_equivalence

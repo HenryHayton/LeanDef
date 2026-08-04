@@ -12,7 +12,7 @@ import pytest
 from prelim import config as cfg
 from prelim.driver import RunLog, run_model, run_prelim
 from prelim.podcontrol import PodControl, PodControlError
-from prelim.stubserver import ScriptedResponse, StubEndpointServer, chat_completion_body, sse_stream
+from prelim.stubserver import ScriptedResponse, StubEndpointServer, sse_stream
 
 GOOD = "```lean\ndef VTask.clog (b n : ℕ) : ℕ :=\n  if 1 < b ∧ 1 < n then VTask.clog b (n / b) + 1 else 0\n```"
 GARBAGE = "I'm afraid I can't help with that request."

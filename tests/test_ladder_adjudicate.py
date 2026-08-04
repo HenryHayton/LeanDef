@@ -7,24 +7,14 @@ exhaustion on a genuinely hard fact returning UNKNOWN with partial attempt recor
 
 import time
 
-import pytest
 
 from harness.facts import Fact
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from ladder.adjudicate import BUDGET_EXHAUSTED_MARKER, adjudicate_fact
 from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
 from ladder.cache import ProofScriptCache, toolchain_pin
 from ladder.statuses import AdjudicationStatus, ElaborationStatus, TierAttempt
 from ladder.tier2 import Tier2Result
 
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def _decide_fact(fact_id: str, statement: str) -> Fact:

@@ -24,7 +24,12 @@ def test_from_dict_reads_a_certified_casework_fact():
     assert f.id == "casework_empty"
     assert f.type == "casework"
     assert f.mechanism == "decide"
-    assert f.domain_inputs == {"l": "[]"}
+    # Schema v1.1.3 canonical form: every `domain_inputs` value is a LIST of strings, never a
+    # bare string (`harness.task_schema._validate_domain_inputs`). This assertion predated that
+    # change and went stale -- the fixture and all 454 values in the real 41-task corpus are
+    # lists. Normalizing a model's scalar output into a single-element list is
+    # `authoring.parse`'s job, upstream of here, so nothing at this layer sees a scalar.
+    assert f.domain_inputs == {"l": ["[]"]}
     assert f.anchors == []
     assert f.validation_status == "CERTIFIED"
     assert f.discharge is None

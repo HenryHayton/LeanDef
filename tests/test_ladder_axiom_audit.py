@@ -4,20 +4,12 @@ Needs a real, Mathlib-imported warm environment (`#print axioms` inspects a real
 declaration) -- same `mathlib_env` fixture pattern `tests/test_miner_discharge.py` established.
 """
 
-import pytest
 from lean_interact import Command
 
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus
 from ladder.axiom_audit import PERMITTED_FACT_PROOF_AXIOMS, _parse_axioms, audit_proof_axioms
 
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def _declare(server, env, cmd: str) -> int:

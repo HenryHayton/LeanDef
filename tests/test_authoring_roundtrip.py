@@ -9,23 +9,13 @@ mechanism by design) -- every test here includes at least one global fact precis
 that partitioning holds.
 """
 
-import pytest
 
 from harness.facts import Fact
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from harness.signature import PinnedSignature
 from authoring.roundtrip import score_round_trip_first_cut
 
+
 SIGNATURE = PinnedSignature(name="rtDouble", type_sig="Nat -> Nat")
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def _decide_fact(fact_id: str, statement: str) -> Fact:

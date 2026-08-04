@@ -10,7 +10,6 @@ in the suite to pay Mathlib's cold-import cost; see the task that introduced thi
 why (and the suite's reported runtime for the actual cost).
 """
 
-import pytest
 
 from authoring.facts import ConventionPoint, DomainSpec, ProposedFact
 from authoring.validate import (
@@ -26,24 +25,14 @@ from authoring.validate import (
     validate_membership_fact,
 )
 from harness.facts import FactProvenance
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from tests.fixtures.authoring_facts import (
+
     CLOG_DOMAIN,
     CLOG_NAME,
     MONOTONE_DOMAIN,
-    MONOTONE_NAME,
     clog_fixture_set,
     monotone_fixture_set,
 )
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def _assert_matches_expected(run: ValidationRun, expected: dict[str, tuple[Verdict, str]]) -> None:

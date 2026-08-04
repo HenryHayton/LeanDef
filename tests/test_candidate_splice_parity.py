@@ -20,11 +20,12 @@ Split deliberately:
 import pytest
 from lean_interact.interface import CommandResponse, Message, Pos
 
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus, SplicePath
 from harness.scoring import splice_candidate_body, splice_real_name
 from harness.signature import PinnedSignature
 from lean_interact import Command
+
 
 # The two real Lean error strings the retries key on. `well-founded recursion` is asserted
 # verbatim against live Mathlib in `test_bare_self_reference_really_does_fail_this_way`.
@@ -257,14 +258,6 @@ def test_plain_splice_is_unchanged_for_existing_single_argument_callers():
 
 
 # --- real Lean: the error shapes the triggers depend on ---------------------------------------
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_bare_self_reference_really_does_fail_this_way(mathlib_env):

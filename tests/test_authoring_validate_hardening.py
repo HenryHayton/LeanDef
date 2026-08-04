@@ -40,6 +40,7 @@ from authoring.validate import (
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 
+
 CLOG_DOMAIN = DomainSpec(
     constraint="1 < b ∧ b ≤ 12 ∧ 1 < n",
     variables=["b", "n"],

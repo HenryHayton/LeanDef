@@ -27,7 +27,13 @@ packages = ["harness"]
 # cleanly. `-m box_only` still runs them explicitly when that's what's wanted (pytest's own
 # `-m` on the command line REPLACES addopts' `-m`, it doesn't AND with it -- confirmed by
 # running `-m box_only` against this exact config and seeing the box_only tests collected).
-addopts = "-m 'not box_only'"
+addopts = "-m 'not box_only and not mathlib'"
 markers = [
     "box_only: needs the EC2 hammer box's Lean/Hammer environment (docs/ec2_runbook.md Phase G.4); deselected on the Mac.",
+    # `mathlib` (2026-08-05): needs a warm Mathlib environment (~1 min cold import, ~2.5 GB).
+    # Deselected by default so the bare `uv run pytest` stays a seconds-long feedback loop and
+    # a heavy run is always a deliberate act. Run them with `-m mathlib`, everything with
+    # `-m 'not box_only'`. Same rationale as `box_only`, different resource: these DO run on
+    # the Mac, they are just expensive enough that opting in beats opting out.
+    "mathlib: needs a warm Mathlib environment; slow and memory-hungry, deselected by default.",
 ]

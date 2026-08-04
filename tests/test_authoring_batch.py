@@ -15,10 +15,9 @@ from authoring.pipeline import DefinitionInput, PipelineConfig
 from authoring.rotation_queue import NOT_AGENT_FIXABLE, load_queue
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClient
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from miner.harvest import MentionRecord
 from tests.fixtures.bedrock_stub import ScriptedResponse, StubBedrockServer, success_body
+
 
 DEF_NAME = "Nat.clog"
 TASK_SYMBOL = task_symbol_for(DEF_NAME)
@@ -117,14 +116,6 @@ def test_load_name_list_ignores_blank_lines_and_comments(tmp_path):
 
 
 # --- Credential-expiry / resume path (real REPL + loopback stub) --------------------------------
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 @pytest.fixture

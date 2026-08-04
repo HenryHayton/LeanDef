@@ -27,15 +27,13 @@ from authoring.pipeline import (
     author_batch,
     author_task,
     render_batch_review,
-    render_round_trip_flag,
 )
 from authoring.task_symbol import task_symbol_for
 from bedrock.client import BedrockClient
-from harness.repl import get_warm_environment
-from harness.results import CheckStatus
 from harness.task_schema import validate_task_dir
 from miner.harvest import DefinitionMentions, MentionRecord
 from tests.fixtures.bedrock_stub import ScriptedResponse, StubBedrockServer, success_body
+
 
 DEF_NAME = "Nat.clog"
 TASK_SYMBOL = task_symbol_for(DEF_NAME)  # "VTask.clog"
@@ -46,16 +44,6 @@ DEFINITION_SOURCE = "Nat.clog (b n : ℕ) : ℕ -- the real Mathlib ceiling log 
 SYNTHETIC_MENTIONS = [
     MentionRecord(theorem_name="Nat.clog_pow", source_file="Data/Nat/Log.lean", statement_text="Nat.clog b (b ^ n) = n"),
 ]
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    """Just the plain warm environment -- no pre-splice needed. `author_task`'s own
-    truth-splice stage aliases `VTask.clog := Nat.clog` internally, off this untouched base."""
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 @pytest.fixture

@@ -20,9 +20,10 @@ from lean_interact import Command
 from authoring.task_symbol import task_symbol_for
 from harness import Fact, PinnedSignature, score_candidate
 from harness.admissibility import AdmissibilityFailure, check_admissibility
-from harness.repl import get_warm_environment, run_checked
+from harness.repl import run_checked
 from harness.results import CheckStatus
 from harness.scoring import splice_real_name
+
 
 CLOG_SIG = PinnedSignature(name=task_symbol_for("Nat.clog"), type_sig="Nat -> Nat -> Nat")
 CLOG_TRUE_BODY = "fun b n => if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b (n - 1) + 1"
@@ -32,14 +33,6 @@ CLOG_FACTS = [
 ]
 
 MODEQ_SIG = PinnedSignature(name=task_symbol_for("Nat.ModEq"), type_sig="(n a b : ℕ) -> Prop")
-
-
-@pytest.fixture(scope="module")
-def mathlib_env():
-    server, import_result = get_warm_environment()
-    assert import_result.status is CheckStatus.PASSED, import_result.detail
-    yield server, import_result.env
-    server.kill()
 
 
 def test_splice_emits_reducible_attribute():
