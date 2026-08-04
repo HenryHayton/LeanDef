@@ -128,17 +128,36 @@ def check_admissibility(
                 detail="candidate body contains `sorry`",
             )
 
-        declared = {d.name for d in splice_response.declarations} | {
-            d.full_name for d in splice_response.declarations
-        }
-        if declared and declared != {signature.name}:
-            extra = declared - {signature.name}
+        # Policy unchanged and still strict: the candidate must declare EXACTLY ONE thing, and
+        # that thing must be the pinned name. Only the way a declaration is identified changed
+        # (2026-08-05), because taking the union of `name` and `full_name` misread aliases.
+        #
+        # For an ordinary body the REPL reports name == full_name == the pinned name. But for a
+        # body that is a bare reference to an existing constant -- `def VTask.clog := Nat.clog`
+        # -- it reports `name='VTask.clog', full_name='Nat.clog'`: `full_name` resolves to the
+        # alias TARGET, which is metadata about what the single declaration points at, not a
+        # second declaration. Unioning the two fields therefore invented a phantom extra name
+        # and rejected the candidate as shadowing something it had not declared.
+        #
+        # Measured on the real prelim field: 5 of 1040 extractable candidates are bare aliases
+        # (`Nat.choose` x4, `n.divisors`), and those four are verbatim-correct recalled targets
+        # that should score 1.0 -- so the misread landed precisely on the RECALLED_TARGET
+        # subpopulation, biasing the one comparison the run exists to make. (A further 108
+        # alias-shaped bodies are `sorry`, which the check above already catches, correctly.)
+        #
+        # A declaration counts as "the pinned one" if EITHER field names it; anything else, and
+        # any second declaration at all, still fails exactly as before.
+        declarations = list(splice_response.declarations)
+        unexpected = [
+            d for d in declarations if signature.name not in (d.name, d.full_name)
+        ]
+        if unexpected or len(declarations) > 1:
+            names = sorted({d.full_name or d.name for d in (unexpected or declarations)})
             return AdmissibilityVerdict(
                 passed=False,
                 failure=AdmissibilityFailure.NAME_SHADOWED,
                 detail=(
-                    f"candidate declared name(s) beyond the pinned '{signature.name}': "
-                    f"{sorted(extra)}"
+                    f"candidate declared name(s) beyond the pinned '{signature.name}': {names}"
                 ),
             )
 
