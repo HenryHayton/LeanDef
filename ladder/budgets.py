@@ -11,7 +11,7 @@ the tactic set overlaps: this module's tier-2 tactic set is a superset (adds the
 real discharge rather than a corpus-wide measurement sweep.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -83,3 +83,36 @@ class LadderBudgets:
 
 
 DEFAULT_LADDER_BUDGETS = LadderBudgets()
+
+
+# Membership-shaped extension (adopted 2026-08-06 after the Stage C pilot's follow-up probe).
+#
+# The pilot discharged 14/14 global facts and 1/6 membership facts. The global successes were
+# largely `exact?` finding the fact's ANCHOR THEOREM on Mathlib's shelf -- a lookup, not a proof
+# search. Membership facts are bespoke concrete claims with no library twin, so lookup cannot
+# help them: they need the definition UNFOLDED and the resulting concrete goal discharged.
+#
+# Re-running the five non-discharges with unfolding tactics recovered 4/5, every one via the
+# same shape -- `simp [<task symbol>, <real name>]` -- in ~0.6 s for all five. So the membership
+# gap was never a proof-search deficiency; the tactic set simply never unfolded the definition.
+#
+# BOTH names are unfolded because the splice is `@[reducible] def VTask.X := _root_.Real`: naming
+# only the task symbol can resolve to the alias without reaching the real definition's body.
+#
+# Built per fact rather than pinned globally, since the symbols differ per task. Appended AFTER
+# the standard set so the cheap pinned tactics still run first and nothing already working
+# changes order.
+def with_membership_tactics(
+    budgets: LadderBudgets, task_symbol: str, real_name: str | None = None
+) -> LadderBudgets:
+    """`budgets` with definition-unfolding tactics appended to its tier-2 set."""
+    names = task_symbol if not real_name else f"{task_symbol}, {real_name}"
+    extension = (
+        TacticBudget(f"simp [{names}]", 15.0),
+        TacticBudget(f"simp [{names}] <;> omega", 15.0),
+        TacticBudget(f"simp [{names}] <;> decide", 15.0),
+        TacticBudget("tauto", 10.0),
+        TacticBudget(f"constructor <;> simp [{names}]", 15.0),
+        TacticBudget(f"simp only [{names}] <;> aesop", 30.0, heavy=True),
+    )
+    return replace(budgets, tier2_tactics=budgets.tier2_tactics + extension)

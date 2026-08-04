@@ -92,3 +92,68 @@ the earlier number should not be quoted as a property of the ladder.
 `scoring_output/pilot_script_ledger.jsonl` (fact id → tactic → script) and to the previously
 non-existent `ladder/output/proof_script_cache.jsonl`. **`task.json` was not mutated**; folding
 these back into the corpus is a separate, deliberate step after prelim.
+
+---
+
+## Amendment (2026-08-06): what the 14/14 actually measures
+
+**The global-fact successes are anchor LOOKUP, not proving ability.** Global facts were mined as
+short restatements anchored to existing Mathlib theorems. On the truth splice the task symbol is
+defeq to the real definition, so `exact?` finds the anchor theorem on the shelf. The 14/14 is
+evidence the facts are **well-anchored**, not evidence the ladder can construct hard proofs.
+Membership facts failed precisely because they are bespoke concrete claims with no library twin.
+
+### Standing caveat — do not extrapolate this number
+
+**Tier-2 discharge measured on Mathlib-anchored facts must not be extrapolated to unanchored
+corpora.** On never-formalized definitions (the future `Def_Wiki` / `Def_ArXiv` credible core)
+there is no shelf, `exact?` is likely useless, and the hammer — which *constructs* proofs rather
+than finding them — is the designated tool. **Re-pilot on the first fresh-source batch before
+budgeting its certification.** The hammer is parked for the prelim, not deleted.
+
+### Membership-tactic experiment: 4/5 recovered, extension adopted
+
+The pilot's five non-discharges were re-run with definition-unfolding tactics
+(`scripts/membership_tactic_probe.py`):
+
+| fact | outcome |
+|---|---|
+| `Pi.Lex/lex_accept_pivot0` | recovered — `simp [VTask.Lex, Pi.Lex]` |
+| `Relation.CutExpand/cutexpand_empty_source_reject` | recovered — `simp [VTask.CutExpand, Relation.CutExpand]` |
+| `Relation.Map/map_lt_accept` | recovered — `simp [VTask.Map, Relation.Map]` |
+| `Set.PartiallyWellOrderedOn.IsBadSeq/…` | recovered — `simp [VTask.IsBadSeq, …IsBadSeq]` |
+| `Relation.Fibration/fibration_not_subrel_reject` | **still UNKNOWN** |
+
+**4/5, every one via the same shape, in ~0.6 s for all five combined.** The membership gap was
+never a proof-search deficiency — the pinned tactic set simply never unfolded the definition.
+Both names must be unfolded: the splice is `@[reducible] def VTask.X := _root_.Real`, so naming
+only the task symbol can resolve to the alias without reaching the real body.
+
+Adopted uniformly as `ladder.budgets.with_membership_tactics`, **appended** after the pinned set
+so cheap-first ordering is preserved and nothing already discharging changes behaviour.
+
+The survivor is a **negated** higher-order claim (`¬ VTask.Fibration …`), which needs a
+counterexample exhibited rather than a goal simplified — a genuinely different shape, and a fair
+thing for the ladder not to get.
+
+### Revised discharge estimate
+
+| | sampled | corpus-weighted |
+|---|--:|--:|
+| Pilot as run | 15/20 = 75% | ~90% |
+| **With the membership extension** | **19/20 = 95%** | **~98%** |
+
+`0.88 × 100% + 0.12 × 83% ≈ 98%`. The "no hammer for prelim" trigger is not marginal.
+
+### Required Stage E view (build it with Stage E)
+
+**Proof-fact UNKNOWN rate split by verbatim vs non-verbatim candidates** (dedup hash vs the real
+definition is a cheap verbatim proxy). On a *candidate* splice the anchor theorem only applies if
+the candidate unfolds to match the truth — so `exact?` works for memorizers and may fail on
+correct-but-rephrased candidates. Proof-fact UNKNOWNs would then correlate with **phrasing, not
+wrongness**, flattering memorizers if unwatched.
+
+**If non-verbatim correct candidates drown in UNKNOWNs at Stage E, that is the trigger that
+reopens the hammer early** — not truth-side coverage. Stage D is untouched by any of this:
+decide facts are kernel computation, indifferent to phrasing and to proof search entirely, which
+is exactly why the decide component is the pre-registered clean backbone.

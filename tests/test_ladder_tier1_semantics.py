@@ -198,3 +198,36 @@ def test_a_stuck_decidable_instance_is_unknown_not_errored():
 def test_the_stuck_marker_does_not_swallow_a_genuine_refutation():
     """Precision: a kernel-false verdict must still win, since both mention `decide`."""
     assert classify_decide_failure(KERNEL_FALSE) is AdjudicationStatus.FAILED
+
+
+# --- membership tactic extension (adopted 2026-08-06) -----------------------------------------
+
+def test_membership_extension_appends_without_reordering_the_pinned_set():
+    """The pinned cheap-first ordering must survive: the extension is APPENDED, so nothing that
+    already discharged changes which tactic wins or how long it takes to get there."""
+    from ladder.budgets import DEFAULT_LADDER_BUDGETS, with_membership_tactics
+
+    base = DEFAULT_LADDER_BUDGETS.tier2_tactics
+    extended = with_membership_tactics(DEFAULT_LADDER_BUDGETS, "VTask.Map", "Relation.Map").tier2_tactics
+
+    assert extended[: len(base)] == base
+    assert len(extended) > len(base)
+
+
+def test_membership_extension_unfolds_both_names():
+    """The splice is `@[reducible] def VTask.X := _root_.Real`, so naming only the task symbol
+    can resolve to the alias without reaching the real definition's body. The pilot's 4/5
+    recoveries all named both."""
+    from ladder.budgets import DEFAULT_LADDER_BUDGETS, with_membership_tactics
+
+    tactics = [t.tactic for t in with_membership_tactics(
+        DEFAULT_LADDER_BUDGETS, "VTask.Map", "Relation.Map").tier2_tactics]
+    assert any("simp [VTask.Map, Relation.Map]" == t for t in tactics)
+
+
+def test_membership_extension_works_without_a_real_name():
+    from ladder.budgets import DEFAULT_LADDER_BUDGETS, with_membership_tactics
+
+    tactics = [t.tactic for t in with_membership_tactics(
+        DEFAULT_LADDER_BUDGETS, "VTask.Map").tier2_tactics]
+    assert any("simp [VTask.Map]" == t for t in tactics)
