@@ -15,11 +15,20 @@ exist there regardless of which copy of its source text we scanned it from.
 import json
 import shutil
 
+import pytest
+
 from miner import config as miner_cfg
 from miner.harvest import harvest
 
 
-def test_harvest_over_single_module_produces_valid_manifest(tmp_path):
+# Marked explicitly, not by fixture use: `miner.harvest.harvest` calls `get_warm_environment`
+# INTERNALLY, so this test starts a full Mathlib server (~5.7 GB) without ever requesting the
+# `mathlib_env` fixture that `conftest.pytest_collection_modifyitems` keys on. Left unmarked it
+# ran in the "fast" suite and, under a full run, contended with the shared session server --
+# 11.4 GB on a 16 GB laptop, which is enough to make its elaboration time out and the assertion
+# fail intermittently. The marker is the honest label: this test needs Mathlib.
+@pytest.mark.mathlib
+def test_harvest_over_single_module_produces_valid_manifest(tmp_path, exclusive_lean):
     scratch_root = tmp_path / "mathlib_scratch"
     scan_dir = scratch_root / "Data" / "Nat"
     scan_dir.mkdir(parents=True)

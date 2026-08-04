@@ -157,6 +157,23 @@ def mathlib_env(_mathlib_manager):
     return _mathlib_manager.get()
 
 
+@pytest.fixture
+def exclusive_lean(_mathlib_manager):
+    """Release the shared Mathlib server for the duration of this test.
+
+    For the handful of tests whose code under test starts its OWN server internally --
+    `miner.harvest.harvest` calls `get_warm_environment` itself and takes no server argument.
+    Two concurrent warm Mathlib servers are ~11.4 GB, which a 16 GB laptop cannot hold: the
+    second one's elaboration times out and the test fails intermittently, only under a full run.
+
+    Closing the shared server costs the next Mathlib test one cold import (~40 s), which is why
+    this is opt-in per test rather than the default. The manager re-warms on demand, so nothing
+    else needs to know this happened.
+    """
+    _mathlib_manager.close()
+    yield
+
+
 def pytest_collection_modifyitems(items):
     """Mark every test that requests `mathlib_env` with the `mathlib` marker.
 

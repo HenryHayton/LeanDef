@@ -39,7 +39,9 @@ class TaskOutcome:
     skipped: int = 0         # already complete on disk
     unextractable: int = 0   # no definition to score
     equivalence_hits: int = 0
+    admissibility: dict = field(default_factory=dict)  # failure kind -> count (None = admitted)
     wall_s: float = 0.0
+    per_candidate_s: float = 0.0
     errors: list[str] = field(default_factory=list)
 
 
@@ -60,6 +62,11 @@ class ServerHandle:
         self._since_recycle = 0
         self._recycle_every = recycle_every
         self.recycles = 0
+        # Counted and surfaced, not merely handled. A nonzero value is the early warning that a
+        # run's ERROR population may be contaminated: a mid-run restart invalidates every
+        # environment id, so verdicts recorded around one say nothing about their candidates.
+        # Free to record; on the box it is the difference between trusting a number and not.
+        self.env_probe_fires = 0
 
     @staticmethod
     def _rss_gb() -> float:
@@ -91,6 +98,7 @@ class ServerHandle:
             self._server, Command(cmd="example : True := trivial", env=self._env), timeout=30.0
         )
         if is_unknown_environment_error(probe.detail or ""):
+            self.env_probe_fires += 1
             return "environment invalidated by a server restart"
         if self._since_recycle >= self._recycle_every:
             return f"{self._since_recycle} candidates since last recycle"
@@ -176,6 +184,8 @@ def score_task(
             continue
 
         outcome.scored += 1
+        kind = payload.get("admissibility_failure") or "admitted"
+        outcome.admissibility[kind] = outcome.admissibility.get(kind, 0) + 1
         if payload.get("equivalence_certified"):
             outcome.equivalence_hits += 1
 
@@ -198,6 +208,7 @@ def score_task(
                 outcome.fanned_out += 1
 
     outcome.wall_s = time.perf_counter() - started
+    outcome.per_candidate_s = outcome.wall_s / outcome.scored if outcome.scored else 0.0
     return outcome
 
 
@@ -227,7 +238,9 @@ def score_model_tasks(
             print(
                 f"[scoring] {model_slug}/{task_name}: scored={outcome.scored} "
                 f"fanned={outcome.fanned_out} skipped={outcome.skipped} "
-                f"equiv={outcome.equivalence_hits} {outcome.wall_s:.1f}s",
+                f"equiv={outcome.equivalence_hits} {outcome.wall_s:.1f}s "
+                f"({outcome.per_candidate_s:.1f}s/cand) adm={outcome.admissibility} "
+                f"env_probe_fires={handle.env_probe_fires}",
                 file=sys.stderr, flush=True,
             )
     finally:

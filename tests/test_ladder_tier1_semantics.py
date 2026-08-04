@@ -169,3 +169,32 @@ def test_a_healthy_true_statement_is_unaffected_by_the_classifier(mathlib_env):
     attempt = adjudicate_tier1(server, env, "example : (3:ℕ) * 3 = 9 := by decide", DEFAULT_LADDER_BUDGETS)
     assert attempt.status is AdjudicationStatus.CERTIFIED
     assert attempt.detail == ""
+
+
+# --- the stuck-instance sibling (found by integration, 2026-08-05) --------------------------------
+
+STUCK_DECIDABLE = (
+    "Tactic `decide` failed for proposition\n  VTask.clog 2 8 = 3\nbecause its `Decidable` instance\n"
+    "  instDecidableEqNat (VTask.clog 2 8) 3\ndid not reduce to `isTrue` or `isFalse`.\n\n"
+    "After unfolding the instances `instDecidableEqBool`, `instDecidableEqNat`, `Bool.decEq`, "
+    "`Classical.propDecidable`, `Nat.decEq`, and `Nat.decLe`, reduction got stuck at the "
+    "`Decidable` instance\n  match h : (VTask.clog 2 8).beq 3 with\n  | true => isTrue ⋯\n"
+    "  | false => isFalse ⋯"
+)
+
+
+def test_a_stuck_decidable_instance_is_unknown_not_errored():
+    """A NONCOMPUTABLE candidate (`sInf`, `Classical.propDecidable`) type-checks and HAS a
+    `Decidable` instance, but the instance cannot evaluate. Semantically identical to a missing
+    one: untestable through this splice, no evidence about the proposition, and no amount of
+    retrying will change it.
+
+    Found by the Stage B smoke, not by the original probe -- 14 facts on one real candidate were
+    landing in the ERRORED default, mis-reported as broken machinery and burning a retry each.
+    """
+    assert classify_decide_failure(STUCK_DECIDABLE) is AdjudicationStatus.UNKNOWN
+
+
+def test_the_stuck_marker_does_not_swallow_a_genuine_refutation():
+    """Precision: a kernel-false verdict must still win, since both mention `decide`."""
+    assert classify_decide_failure(KERNEL_FALSE) is AdjudicationStatus.FAILED

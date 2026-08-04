@@ -65,9 +65,18 @@ don't leave it checked off in place.
   that task — it isn't a section-modifier variant).
   **Trigger:** the next miner scan-layer task, or any non-elaborator investigation that
   reproduces a namespace-tracking symptom not already covered by the fixed bug classes.
-- **Bare-alias candidate bodies (e.g. `body = Nat.clog` verbatim) trip the admissibility
-  shadowing check rather than being scored as memorization** — decide handling.
-  **Trigger:** mini-trial design.
+- **DONE (2026-08-05) — Bare-alias candidate bodies are now SCORED, not rejected.** The
+  trigger (mini-trial design) fired at Stage B. `check_admissibility` unioned each declaration's
+  `name` and `full_name`, and `full_name` resolves to the alias TARGET for a body that is a bare
+  reference to an existing constant (`def VTask.choose := Nat.choose` reports
+  `name='VTask.choose', full_name='Nat.choose'`), inventing a phantom second declaration.
+  **Resolution: score them.** These are the memorization population the run exists to measure,
+  not tampering, and excluding them would misclassify a verbatim-correct answer as inadmissible.
+  Measured incidence: **5 of 1040** extractable prelim candidates, of which four are
+  verbatim-correct `Nat.choose` — i.e. concentrated precisely on the `RECALLED_TARGET` slice the
+  results table reports on, so the misclassification was not merely rare but biased. A
+  declaration now counts as the pinned one when EITHER field names it; a second declaration, or
+  a single declaration of some other name, still fails exactly as before.
 - **Mined "mentions" have a very low standalone-elaboration rate (measured: 8.3%, 5/60) because
   the miner doesn't capture per-mention `variable`/`section`/`namespace` context.** Confirmed by
   manual inspection (`docs/tier_cascade_measurement_2026-07.md`): every inspected failure is

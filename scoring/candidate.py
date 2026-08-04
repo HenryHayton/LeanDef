@@ -37,7 +37,7 @@ from lean_interact import AutoLeanServer
 from harness.admissibility import check_admissibility
 from harness.facts import Fact
 from harness.results import CheckStatus, SpliceOutcome
-from harness.scoring import splice_candidate_body, splice_real_name
+from harness.scoring import splice_candidate_declaration, splice_real_name
 from harness.signature import PinnedSignature
 from ladder.adjudicate import adjudicate_fact
 from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
@@ -153,7 +153,7 @@ def score_candidate_body(
     server: AutoLeanServer,
     base_env: int,
     signature: PinnedSignature,
-    body: str,
+    declaration: str,
     facts: list[Fact],
     *,
     truth_real_name: str | None = None,
@@ -162,7 +162,9 @@ def score_candidate_body(
     imports: list[str] | None = None,
     try_equivalence: bool = True,
 ) -> dict:
-    """Score one candidate body. Returns the verdict payload (the caller adds sample identity).
+    """Score one candidate. `declaration` is the model's full Lean declaration, as extracted.
+
+    Returns the verdict payload (the caller adds sample identity).
 
     `truth_real_name` enables the equivalence fast path; omit it to force the per-fact walk
     (which is what the adversarial and per-fact tests do). Never raises on a candidate's
@@ -194,8 +196,11 @@ def score_candidate_body(
         else:
             result["truth_splice_failed"] = (truth_splice.detail or "")[:500]
 
-    # 2. Candidate splice, on top of the truth env so both are co-resident.
-    outcome: SpliceOutcome = splice_candidate_body(server, env_for_candidate, signature, body)
+    # 2. Candidate splice, on top of the truth env so both are co-resident. The candidate's own
+    #    DECLARATION is spliced verbatim (with `@[reducible]` merged in) rather than rebuilt from
+    #    a body expression -- see `harness.scoring.splice_candidate_declaration`. The pinned type
+    #    is therefore enforced by the kernel in step 3 (`WRONG_TYPE`), not by construction.
+    outcome: SpliceOutcome = splice_candidate_declaration(server, env_for_candidate, signature, declaration)
     result["splice_path"] = outcome.path.value
     result["splice_retries"] = outcome.retries_consumed
     if not outcome.succeeded:

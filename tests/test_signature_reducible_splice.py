@@ -72,21 +72,29 @@ def test_shadowing_check_unaffected_by_reducible_attribute_normal_candidate(math
     assert verdict.failure is not AdmissibilityFailure.NAME_SHADOWED, verdict.detail
 
 
-def test_bare_alias_candidate_still_trips_shadowing_after_reducible_splice(mathlib_env):
-    """The one regression this change could plausibly have caused silently (docs/deferred.md's
-    "bare-alias candidate bodies... trip the admissibility shadowing check" note): a candidate
-    body that is just the real name, unapplied (`body = "Nat.clog"`, not `"Nat.clog b n"`),
-    makes LeanInteract's declaration report list the real name alongside the pinned one -- this
-    is what currently keeps a verbatim-copy candidate from silently passing admissibility.
-    Confirmed this still fires under the new `@[reducible]` splice, not just the old plain one."""
+def test_bare_alias_candidate_is_now_SCORED_not_rejected(mathlib_env):
+    """Reversed deliberately on 2026-08-05 (`docs/deferred.md`, trigger "mini-trial design"
+    fired at Stage B).
+
+    This test previously asserted the opposite, on the reasoning that a bare-alias body
+    (`body = "Nat.clog"`, unapplied) is a verbatim copy and should not silently pass
+    admissibility. The mechanism was `full_name` resolving to the alias TARGET, which made the
+    declaration look like two declarations. The decision is now to SCORE such candidates:
+    verbatim recall is the memorization population the run exists to MEASURE, and recording it
+    as inadmissible misclassifies a correct answer as tampering. Measured incidence: 5 of 1040
+    extractable prelim candidates, four of them verbatim-correct `Nat.choose` -- concentrated on
+    exactly the `RECALLED_TARGET` slice the results table reports on.
+
+    A second declaration, or a declaration of some other name, still fails -- see
+    `tests/test_admissibility.py` and `tests/test_scoring_candidate.py`.
+    """
     server, env = mathlib_env
     cmd = CLOG_SIG.splice("Nat.clog")  # bare, point-free -- NOT "Nat.clog b n"
     splice = run_checked(server, Command(cmd=cmd, env=env, declarations=True), timeout=30.0)
     assert splice.status is CheckStatus.PASSED, splice.detail
 
     verdict = check_admissibility(server, splice.env, CLOG_SIG, splice_response=splice.raw_response, timeout=30.0)
-    assert not verdict.passed
-    assert verdict.failure is AdmissibilityFailure.NAME_SHADOWED, verdict.detail
+    assert verdict.failure is not AdmissibilityFailure.NAME_SHADOWED, verdict.detail
 
 
 def test_nat_clog_admissibility_and_facts_byte_identical_under_reducible_splice(mathlib_env):

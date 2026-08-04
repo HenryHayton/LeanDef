@@ -57,6 +57,7 @@ class AdmissibilityFailure(Enum):
     SORRY = "sorry"
     NEW_AXIOM = "new_axiom"
     NAME_SHADOWED = "name_shadowed"
+    WRONG_TYPE = "wrong_type"  # compiled fine, but does not have the pinned type
     ERRORED = "errored"
 
 
@@ -128,17 +129,53 @@ def check_admissibility(
                 detail="candidate body contains `sorry`",
             )
 
-        declared = {d.name for d in splice_response.declarations} | {
-            d.full_name for d in splice_response.declarations
-        }
-        if declared and declared != {signature.name}:
-            extra = declared - {signature.name}
+        # Exactly one declaration, and it must BE the pinned name. Unchanged in intent; the
+        # alias carve-out below is the one deliberate relaxation (2026-08-05).
+        #
+        # `full_name` resolves to the alias TARGET for a body that is a bare reference to an
+        # existing constant (`def VTask.choose := Nat.choose` reports
+        # `name='VTask.choose', full_name='Nat.choose'`). Unioning both fields therefore invented
+        # a phantom second declaration and rejected verbatim recall as tampering. That was the
+        # open question at `docs/deferred.md`'s "bare-alias candidate bodies ... rather than being
+        # scored as memorization"; its trigger fired at Stage B and the decision is to SCORE
+        # them -- they are the memorization population the run measures, not tampering. Measured
+        # incidence: 5 of 1040 extractable prelim candidates, four of them verbatim-correct
+        # `Nat.choose`, i.e. concentrated exactly on the RECALLED_TARGET slice we report on.
+        #
+        # A declaration counts as the pinned one when EITHER field names it. Everything else --
+        # a second declaration, or a single declaration of some other name -- still fails.
+        declarations = list(splice_response.declarations)
+        unexpected = [d for d in declarations if signature.name not in (d.name, d.full_name)]
+        if unexpected or len(declarations) > 1:
+            names = sorted({d.full_name or d.name for d in (unexpected or declarations)})
             return AdmissibilityVerdict(
                 passed=False,
                 failure=AdmissibilityFailure.NAME_SHADOWED,
                 detail=(
-                    f"candidate declared name(s) beyond the pinned '{signature.name}': "
-                    f"{sorted(extra)}"
+                    f"candidate declared name(s) beyond the pinned '{signature.name}': {names}"
+                ),
+            )
+
+        # Type conformance. Under declaration-verbatim splicing the candidate writes its OWN
+        # signature, so the pinned type is no longer guaranteed by construction and has to be
+        # checked. `#check (name : type)` rather than `example : type := name`, confirmed
+        # against live Lean: the `example` form additionally COMPILES the definition and so
+        # fails on any noncomputable candidate with "consider marking it as 'noncomputable'" --
+        # which would have produced a systematic false WRONG_TYPE against exactly the
+        # classical-construction population. `#check` only elaborates, and still catches wrong
+        # arity and wrong result type (both verified).
+        type_probe = run_checked(
+            server,
+            Command(cmd=f"#check ({signature.name} : {signature.type_sig})", env=candidate_env),
+            timeout=timeout,
+        )
+        if type_probe.status is not CheckStatus.PASSED:
+            return AdmissibilityVerdict(
+                passed=False,
+                failure=AdmissibilityFailure.WRONG_TYPE,
+                detail=(
+                    f"does not have the pinned type '{signature.type_sig}': "
+                    f"{(type_probe.detail or '').strip()[:600]}"
                 ),
             )
 

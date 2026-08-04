@@ -15,6 +15,7 @@ kernel-certified negative result". Only one of them is. Probed against live Math
 |-------------------------------------------------|--------------------------------|----------|
 | ``Tactic `decide` proved ... is false``          | the proposition IS false       | FAILED   |
 | ``failed to synthesize`` + ``Decidable (...)``   | untestable through this splice | UNKNOWN  |
+| ``did not reduce to `isTrue` or `isFalse` ``     | instance stuck (noncomputable) | UNKNOWN  |
 | ``Unknown identifier`` / ``Unknown constant``    | broken splice                  | ERRORED  |
 | ``maximum recursion depth`` / ``timeout``        | computation blew up            | ERRORED  |
 | ``failed to synthesize instance of type class``  | malformed statement            | ERRORED  |
@@ -56,6 +57,23 @@ _KERNEL_FALSE_MARKERS = ("proved that the proposition", "is false")
 # which are malformed statements rather than undecidable ones.
 _NO_DECIDABLE_MARKERS = ("failed to synthesize", "Decidable")
 
+# The SIBLING case, found by integration on 2026-08-05 and not on the original table: the
+# `Decidable` instance EXISTS but is stuck. Lean says:
+#
+#     Tactic `decide` failed for proposition
+#       VTask.clog 2 8 = 3
+#     because its `Decidable` instance
+#       instDecidableEqNat (VTask.clog 2 8) 3
+#     did not reduce to `isTrue` or `isFalse`.
+#
+# This is what a NONCOMPUTABLE candidate does to a decide fact -- a body built on `sInf` or
+# `Classical.propDecidable` type-checks and has an instance, but the instance cannot evaluate.
+# Semantically identical to a missing instance: untestable through THIS splice, no evidence
+# about the proposition, and no amount of retrying will change it. It was previously landing in
+# the ERRORED default, which both mis-reported it as broken machinery and spent a wasted retry
+# on every occurrence. Measured on the smoke: 14 facts on a single noncomputable candidate.
+_STUCK_DECIDABLE_MARKER = "did not reduce to `isTrue` or `isFalse`"
+
 
 def classify_decide_failure(detail: str) -> AdjudicationStatus:
     """Read a decide command's error text and say what it is evidence of.
@@ -68,6 +86,8 @@ def classify_decide_failure(detail: str) -> AdjudicationStatus:
     if all(marker in text for marker in _KERNEL_FALSE_MARKERS):
         return AdjudicationStatus.FAILED
     if all(marker in text for marker in _NO_DECIDABLE_MARKERS):
+        return AdjudicationStatus.UNKNOWN
+    if _STUCK_DECIDABLE_MARKER in text:
         return AdjudicationStatus.UNKNOWN
     # Everything else -- unknown identifier, recursion depth, deterministic timeout, type-class
     # failure, and anything Lean invents later -- is broken machinery, not a refutation.

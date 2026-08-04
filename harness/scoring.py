@@ -34,13 +34,14 @@ from harness.results import (
     SpliceOutcome,
     SplicePath,
 )
-from harness.signature import PinnedSignature
+from harness.signature import PinnedSignature, reducible_declaration
 
 __all__ = [
     "PinnedSignature",
     "Fact",
     "splice_candidate",
     "splice_candidate_body",
+    "splice_candidate_declaration",
     "splice_real_name",
     "SpliceOutcome",
     "SplicePath",
@@ -197,6 +198,73 @@ def splice_candidate_body(
         seen.add(state)
         root_q, noncomp = state
         cmd = signature.splice(qualified_body if root_q else body, noncomputable=noncomp)
+        result = splice_candidate(server, base_env, cmd, timeout=timeout)
+        attempts.append(SpliceAttempt(paths[state], cmd, result.status, result.detail or ""))
+        if plain_result is None:
+            plain_result, plain_cmd = result, cmd
+
+        if result.status is CheckStatus.PASSED:
+            return SpliceOutcome(result=result, path=paths[state], cmd_text=cmd, attempts=attempts)
+        if result.status is CheckStatus.ERRORED:
+            break
+
+        if not noncomp and _needs_noncomputable(result.detail):
+            state = (root_q, True)
+        elif not root_q and may_qualify and _looks_like_self_reference(result.detail):
+            state = (True, noncomp)
+        else:
+            state = None
+
+    return SpliceOutcome(
+        result=plain_result, path=SplicePath.PLAIN, cmd_text=plain_cmd, attempts=attempts
+    )
+
+
+def splice_candidate_declaration(
+    server: AutoLeanServer,
+    base_env: int,
+    signature: PinnedSignature,
+    decl_text: str,
+    *,
+    timeout: float | None = None,
+) -> SpliceOutcome:
+    """Splice a candidate's own DECLARATION verbatim, with `@[reducible]` applied.
+
+    The real-candidate path since 2026-08-05. `splice_candidate_body` builds the declaration
+    from a body expression, which is what `authoring.roundtrip` supplies; the prelim prompt
+    instead asks models for a complete declaration, and 1040 of 1040 extractable candidates are
+    one. Parsing them back into bodies would be fragile against implicit/instance binders,
+    equation-style definitions and `where` clauses, and every parse failure would be another
+    differential-by-output-style false negative -- the bug class Stage A and the tier-1 fix
+    exist to remove. The pinned type is instead enforced by kernel check in
+    `harness.admissibility` (`WRONG_TYPE`), which is strictly stronger than construction.
+
+    Runs the SAME bounded four-state ladder as `splice_candidate_body`
+    (plain -> noncomputable -> root-qualified -> both), on declaration text: `@[reducible]` is
+    merged into the model's own attribute group rather than stacked (stacking is a Lean syntax
+    error), and root-qualification rewrites only the body region, since a declaration always
+    spells its own task symbol in its header.
+    """
+    timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
+    qualified, n_rewrites = signature.root_qualified_declaration(decl_text)
+    may_qualify = n_rewrites > 0 and not signature.declaration_references_self_explicitly(decl_text)
+
+    paths = {
+        (False, False): SplicePath.PLAIN,
+        (False, True): SplicePath.NONCOMPUTABLE,
+        (True, False): SplicePath.ROOT_QUALIFIED,
+        (True, True): SplicePath.ROOT_QUALIFIED_NONCOMPUTABLE,
+    }
+    attempts: list[SpliceAttempt] = []
+    plain_result: CheckResult | None = None
+    plain_cmd = ""
+    state: tuple[bool, bool] | None = (False, False)
+    seen: set[tuple[bool, bool]] = set()
+
+    while state is not None and state not in seen:
+        seen.add(state)
+        root_q, noncomp = state
+        cmd = reducible_declaration(qualified if root_q else decl_text, noncomputable=noncomp)
         result = splice_candidate(server, base_env, cmd, timeout=timeout)
         attempts.append(SpliceAttempt(paths[state], cmd, result.status, result.detail or ""))
         if plain_result is None:

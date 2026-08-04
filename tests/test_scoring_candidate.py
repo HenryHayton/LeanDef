@@ -29,15 +29,19 @@ from scoring.verdicts import DECIDE, PROOF, Verdict, check_mechanism_invariant
 CLOG = PinnedSignature(name="VTask.clog", type_sig="(b n : ℕ) -> ℕ")
 TRUTH = "Nat.clog"
 
-# The real definition as a candidate would express it. Eta-expanded, NOT the bare alias
-# `_root_.Nat.clog`: a bare alias deliberately trips the admissibility shadowing check, which is
-# how this repo currently declines to score a verbatim copy as a definition (docs/deferred.md,
-# "bare-alias candidate bodies ... rather than being scored as memorization", trigger: mini-trial
-# design). Eta-expanded is still definitionally equal to the truth, so the equivalence fast path
-# closes it by `rfl` exactly as a genuine near-verbatim candidate would.
-VERBATIM = "fun b n => Nat.clog b n"
-# Off by one: agrees nowhere interesting. `clog 2 8 = 3` becomes 4.
-WRONG = "fun b n => Nat.log b n + 1"
+# Candidates are full DECLARATIONS, matching what the prelim prompt asks models for and what
+# 1040 of 1040 extractable field candidates actually are.
+VERBATIM = "def VTask.clog (b n : ℕ) : ℕ := Nat.clog b n"
+# Floor+1 where the truth is ceiling: differs exactly on the powers of the base.
+WRONG = "def VTask.clog (b n : ℕ) : ℕ := Nat.log b n + 1"
+# Compiles as Lean, but is not the pinned type -- the WRONG_TYPE population.
+WRONG_ARITY = "def VTask.clog (b : ℕ) : ℕ := b"
+WRONG_RESULT = "def VTask.clog (b n : ℕ) : Prop := b = n"
+# A bare alias: `full_name` reports the TARGET, which used to read as a phantom second
+# declaration. Scored, not rejected, since 2026-08-05 (deferred.md trigger fired).
+BARE_ALIAS = "def VTask.clog : (b n : ℕ) -> ℕ := Nat.clog"
+NONCOMPUTABLE = "noncomputable def VTask.clog (b n : ℕ) : ℕ := Nat.log b n + 1"
+WITH_ATTRIBUTE = "@[simp] def VTask.clog (b n : ℕ) : ℕ := Nat.clog b n"
 
 # Real decide facts from prelim_testing/tasks/Nat.clog/task.json.
 FACT_TRUE = Fact(
@@ -246,7 +250,7 @@ def test_tier_attempts_are_persisted_for_timing_calibration(mathlib_env):
 
 def test_a_non_compiling_candidate_yields_a_record_not_an_exception(mathlib_env):
     server, env = mathlib_env
-    record = score_candidate_body(server, env, CLOG, "this is not lean at all", [FACT_TRUE], budgets=FAST)
+    record = score_candidate_body(server, env, CLOG, "def VTask.clog := this is not lean", [FACT_TRUE], budgets=FAST)
 
     assert not record["admissible"]
     assert record["admissibility_failure"] == "compile_error"
@@ -273,3 +277,105 @@ def test_every_fact_verdict_satisfies_the_mechanism_invariant_on_real_data(mathl
     for fv in record["fact_verdicts"]:
         check_mechanism_invariant(fv["mechanism"], Verdict(fv["verdict"]))
         assert fv["mechanism"] in (DECIDE, PROOF)
+
+
+# --- declaration-verbatim splicing (2026-08-05) ---------------------------------------------------
+
+
+def test_wrong_arity_is_wrong_type_not_compile_error(mathlib_env):
+    """`WRONG_TYPE` is its own failure kind: Stage F's funnel needs "valid Lean, wrong type"
+    separated from "broken Lean". Under construction-based splicing this case was impossible --
+    the harness wrote the signature -- so the check only became necessary once the candidate
+    started supplying its own."""
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, WRONG_ARITY, [FACT_TRUE], budgets=FAST)
+
+    assert not record["admissible"]
+    assert record["admissibility_failure"] == "wrong_type"
+    assert "pinned type" in record["admissibility_detail"]
+    assert record["fact_verdicts"] == []
+
+
+def test_wrong_result_type_is_also_wrong_type(mathlib_env):
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, WRONG_RESULT, [FACT_TRUE], budgets=FAST)
+    assert record["admissibility_failure"] == "wrong_type"
+
+
+def test_broken_lean_is_still_compile_error_not_wrong_type(mathlib_env):
+    """The two failure kinds must stay distinguishable in the funnel."""
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, "def VTask.clog := ???", [FACT_TRUE], budgets=FAST)
+    assert record["admissibility_failure"] == "compile_error"
+
+
+def test_a_noncomputable_candidate_is_admissible_and_scores(mathlib_env):
+    """`noncomputable` is load-bearing and must survive verbatim splicing.
+
+    This is also the regression guarding the type probe's form: `example : T := VTask.clog`
+    COMPILES the definition and so fails every noncomputable candidate with "consider marking it
+    as 'noncomputable'". `#check (VTask.clog : T)` only elaborates. Had the probe used the
+    `example` form, every classical-construction candidate would have been recorded WRONG_TYPE.
+    """
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, NONCOMPUTABLE, [FACT_TRUE], budgets=FAST)
+
+    assert record["admissible"], record["admissibility_detail"]
+    assert record["fact_verdicts"], "a noncomputable candidate must still be scored"
+
+
+def test_reducible_takes_effect_through_the_declaration_path(mathlib_env):
+    """`@[reducible]` is why a `Decidable` instance resolves THROUGH the splice (the `Nat.ModEq`
+    case that motivated it). Verbatim splicing must not lose it: a Prop-valued candidate whose
+    decidability comes from unfolding the definition has to remain decide-able."""
+    modeq = PinnedSignature(name="VTask.ModEq", type_sig="(n a b : ℕ) -> Prop")
+    fact = Fact(
+        id="modeq_1_4_mod_3", type="casework", mechanism="decide",
+        statement="example : VTask.ModEq 3 1 4 := by decide",
+        domain_inputs={"n": ["3"]}, anchors=[],
+    )
+    server, env = mathlib_env
+    record = score_candidate_body(
+        server, env, modeq, "def VTask.ModEq (n a b : ℕ) : Prop := a % n = b % n", [fact], budgets=FAST
+    )
+
+    assert record["admissible"], record["admissibility_detail"]
+    # If `@[reducible]` were lost, this would be UNKNOWN (no Decidable instance through the splice).
+    assert [fv["verdict"] for fv in record["fact_verdicts"]] == ["pass"], record["fact_verdicts"]
+
+
+def test_a_model_supplied_attribute_is_preserved_by_merging(mathlib_env):
+    """`@[reducible] @[simp] def` is a Lean syntax error; `@[reducible, simp] def` is not. The
+    model's own attributes are merged, not stacked."""
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, WITH_ATTRIBUTE, [FACT_TRUE], budgets=FAST)
+    assert record["admissible"], record["admissibility_detail"]
+
+
+def test_a_bare_alias_candidate_is_scored_not_rejected(mathlib_env):
+    """The deferred-trigger decision (2026-08-05): verbatim recall is the memorization population
+    we measure, not tampering. Rejecting it as NAME_SHADOWED would misclassify a correct answer
+    as inadmissible, and it lands precisely on the RECALLED_TARGET slice."""
+    server, env = mathlib_env
+    record = score_candidate_body(server, env, CLOG, BARE_ALIAS, [FACT_TRUE], budgets=FAST)
+
+    assert record["admissible"], record["admissibility_detail"]
+    assert [fv["verdict"] for fv in record["fact_verdicts"]] == ["pass"]
+
+
+def test_a_second_declaration_is_still_rejected(mathlib_env):
+    """Name enforcement carries more weight now that construction no longer guarantees it."""
+    server, env = mathlib_env
+    smuggled = f"{VERBATIM}\n\ntheorem VTask.sneaky : 1 = 1 := rfl"
+    record = score_candidate_body(server, env, CLOG, smuggled, [FACT_TRUE], budgets=FAST)
+    assert not record["admissible"]
+    assert record["admissibility_failure"] == "name_shadowed"
+
+
+def test_a_declaration_of_the_wrong_name_is_rejected(mathlib_env):
+    server, env = mathlib_env
+    record = score_candidate_body(
+        server, env, CLOG, "def VTask.somethingElse (b n : ℕ) : ℕ := 0", [FACT_TRUE], budgets=FAST
+    )
+    assert not record["admissible"]
+    assert record["admissibility_failure"] == "name_shadowed"

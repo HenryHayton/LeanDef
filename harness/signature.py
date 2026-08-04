@@ -30,6 +30,69 @@ def root_qualify(name: str) -> str:
     return f"_root_.{name}"
 
 
+
+# The head of a Lean declaration: optional attribute groups, optional modifiers, the keyword,
+# then the declared name. Used to locate where a declaration's HEADER ends and its body begins,
+# which is what lets root-qualification rewrite only the body (see `root_qualified_declaration`).
+_DECL_HEAD_RE = re.compile(
+    r"^\s*((?:@\[[^\]]*\][ \t]*)*)"                                    # 1: attribute groups
+    r"((?:private[ \t]+|protected[ \t]+|noncomputable[ \t]+|partial[ \t]+|unsafe[ \t]+)*)"  # 2: modifiers
+    r"(def|abbrev|instance)[ \t]+"                                       # 3: keyword
+    r"([A-Za-z_][A-Za-z0-9_.']*)",                                        # 4: declared name
+)
+
+
+def reducible_declaration(decl_text: str, *, noncomputable: bool = False) -> str:
+    """Return `decl_text` with `@[reducible]` applied, preserving whatever the model wrote.
+
+    Splicing a candidate's declaration VERBATIM (2026-08-05) replaced the old
+    `PinnedSignature.splice(body)` construction for real candidate scoring: the prelim prompt
+    asks models for a complete declaration, not a body expression, and parsing declarations back
+    into bodies is fragile against implicit/instance binders, equation-style definitions and
+    `where` clauses -- every parse failure would be another differential-by-output-style false
+    negative. The pinned type is enforced by kernel check instead of by construction, which is
+    strictly stronger: it accepts a defeq-but-differently-phrased signature the constructor could
+    never have expressed.
+
+    Two mechanics, both confirmed against live Lean rather than assumed:
+
+    - **Attributes MERGE, they do not stack.** `@[reducible] @[simp] def` is a syntax error
+      ("unexpected token '@['"); `@[reducible, simp] def` is fine. So `reducible` is folded into
+      the model's first attribute group when it has one.
+    - **`noncomputable` goes after the attributes**, the only order Lean accepts. It is inserted
+      only when asked for and not already present -- a model that wrote it keeps it, since it is
+      load-bearing for classical constructions.
+    """
+    m = _DECL_HEAD_RE.match(decl_text)
+    if m is None:
+        # Not a recognisable declaration head. Prepend and let Lean produce the honest error
+        # rather than silently mangling text we do not understand.
+        return f"@[reducible] {decl_text}"
+
+    attrs, modifiers = m.group(1).strip(), m.group(2)
+    rest = decl_text[m.end(2):]
+
+    if attrs:
+        inner = attrs.strip()[2:-1].strip() if attrs.startswith("@[") and attrs.endswith("]") else None
+        merged = f"@[reducible, {inner}]" if inner else f"@[reducible] {attrs}"
+    else:
+        merged = "@[reducible]"
+
+    if noncomputable and "noncomputable" not in modifiers:
+        modifiers = f"noncomputable {modifiers.strip()} ".replace("  ", " ")
+    return f"{merged} {modifiers.strip()} {rest.strip()}".replace("  ", " ").strip()
+
+
+def declaration_body_offset(decl_text: str) -> int:
+    """Index just past the declared name -- everything after it is body/binders.
+
+    Root-qualification must not touch the header: a declaration always spells its own task
+    symbol there (`def VTask.clog ...`), so treating the header as a self-reference would make
+    `references_self_explicitly` true for every candidate and disable the rescue entirely.
+    """
+    m = _DECL_HEAD_RE.match(decl_text)
+    return m.end(4) if m else 0
+
 @dataclass(frozen=True)
 class PinnedSignature:
     """A task's pinned definition name and type -- the hole a candidate body fills.
@@ -90,6 +153,24 @@ class PinnedSignature:
         pattern = rf"(?<!{LEAN_IDENT_CHAR})(?<!\.){re.escape(self.base_name)}(?!{LEAN_IDENT_CHAR})(?!\.)"
         rewritten, n = re.subn(pattern, root_qualify(self.base_name), body)
         return rewritten, n
+
+    def declaration_references_self_explicitly(self, decl_text: str) -> bool:
+        """`references_self_explicitly`, but skipping the declaration HEADER.
+
+        A declaration always spells its own task symbol in its head (`def VTask.clog ...`), so
+        checking the whole text would report every candidate as deliberately self-referential
+        and permanently disable the root-qualification rescue. Only a mention in the BODY is
+        evidence of intended recursion.
+        """
+        offset = declaration_body_offset(decl_text)
+        return self.references_self_explicitly(decl_text[offset:])
+
+    def root_qualified_declaration(self, decl_text: str) -> tuple[str, int]:
+        """`root_qualified_body` applied to the body region only, for the same reason: the
+        header's own `VTask.clog` is the declaration being made, not a reference to rewrite."""
+        offset = declaration_body_offset(decl_text)
+        rewritten, n = self.root_qualified_body(decl_text[offset:])
+        return decl_text[:offset] + rewritten, n
 
     def splice(self, body: str, *, noncomputable: bool = False) -> str:
         """Render `@[reducible] def <name> : <type> := <body>` for a well-formed, single-
