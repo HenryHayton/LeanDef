@@ -25,14 +25,25 @@ from harness import config as cfg
 from harness.admissibility import check_admissibility
 from harness.facts import Fact
 from harness.repl import run_checked
-from harness.results import CandidateScore, CheckResult, CheckStatus, FactResult
+from harness.results import (
+    CandidateScore,
+    CheckResult,
+    CheckStatus,
+    FactResult,
+    SpliceAttempt,
+    SpliceOutcome,
+    SplicePath,
+)
 from harness.signature import PinnedSignature
 
 __all__ = [
     "PinnedSignature",
     "Fact",
     "splice_candidate",
+    "splice_candidate_body",
     "splice_real_name",
+    "SpliceOutcome",
+    "SplicePath",
     "run_facts",
     "score_candidate",
     "score_spliced_candidate",
@@ -44,6 +55,49 @@ __all__ = [
 # because it depends on '<name>', which is 'noncomputable'". Matched as a substring, not an
 # exact string, since `<name>` varies per declaration.
 _NONCOMPUTABLE_ERROR_MARKER = "consider marking it as 'noncomputable'"
+
+# Error shapes that mean "a bare reference in the body resolved to the declaration currently
+# being elaborated" -- the self-reference collision `PinnedSignature.splice_real_name`'s
+# docstring documents on the truth side. Lean never says "self-reference": the collision
+# manufactures a bogus recursive definition, so what surfaces is a TERMINATION complaint.
+#
+# `well-founded recursion` is the shape confirmed verbatim against real Mathlib (2026-07-31,
+# the 4-name x 3-attribute repro matrix; asserted in `tests/test_signature_reducible_splice.py`).
+# `failed to show termination` is Lean 4's other standard phrasing for the same class. Both are
+# matched case-insensitively as substrings.
+#
+# Kept DELIBERATELY narrow, per this stage's brief: prefer failing to rescue an exotic case
+# over rescuing one that should not be rescued. A genuinely recursive candidate that fails its
+# own termination proof produces these same strings, which is exactly why matching the error is
+# necessary but NOT sufficient -- `_can_root_qualify` adds two further guards before any rewrite.
+_SELF_REFERENCE_ERROR_MARKERS = ("well-founded recursion", "failed to show termination")
+
+
+def _needs_noncomputable(detail: str) -> bool:
+    return _NONCOMPUTABLE_ERROR_MARKER in (detail or "")
+
+
+def _looks_like_self_reference(detail: str) -> bool:
+    lowered = (detail or "").lower()
+    return any(marker in lowered for marker in _SELF_REFERENCE_ERROR_MARKERS)
+
+
+def _can_root_qualify(signature: PinnedSignature, body: str) -> bool:
+    """Whether rewriting `body`'s bare self-references is permissible AT ALL.
+
+    Two guards, both required, both conservative:
+
+    1. The body must not name the task symbol in full (`VTask.Monotone`). That spelling is an
+       unambiguous declaration of intent to recurse, and a candidate that means to recurse and
+       fails its termination proof must be allowed to fail on its own terms.
+    2. There must be something to rewrite -- at least one bare `base_name` occurrence. Without
+       one, a termination error is a real termination error, and the retry would re-send byte-
+       identical text for a guaranteed-identical failure.
+    """
+    if signature.references_self_explicitly(body):
+        return False
+    _, n = signature.root_qualified_body(body)
+    return n > 0
 
 
 def splice_real_name(
@@ -90,6 +144,79 @@ def splice_candidate(
     """
     timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
     return run_checked(server, Command(cmd=cmd_text, env=base_env, declarations=True), timeout=timeout)
+
+
+def splice_candidate_body(
+    server: AutoLeanServer,
+    base_env: int,
+    signature: PinnedSignature,
+    body: str,
+    *,
+    timeout: float | None = None,
+) -> SpliceOutcome:
+    """Splice a candidate BODY, retrying the two rescues the truth side already had.
+
+    This is the candidate-side counterpart to `splice_real_name` (2026-08-04). Both
+    protections previously existed only on the truth path, and both silently convert a correct
+    candidate into a `COMPILE_ERROR` admissibility failure -- differentially, since they punish
+    exactly the Lean-fluent output styles that reference real declarations by their bare names
+    or reach for classical constructions.
+
+    The ladder, bounded at four attempts and never looping:
+
+        plain -> noncomputable -> root_qualified -> root_qualified+noncomputable
+
+    Each step is taken ONLY when the previous attempt's error specifically calls for it
+    (`_needs_noncomputable` / `_looks_like_self_reference` plus `_can_root_qualify`), so a
+    candidate needing nothing costs exactly one round-trip. The two triggers are independent
+    and can fire in either order -- a body that needs both converges on the fourth state from
+    either direction -- and a `seen` set makes re-entering a state impossible.
+
+    An ERRORED attempt (timeout, dead REPL) stops the ladder immediately: that is an
+    infrastructure event, not evidence about the candidate, and retrying a variant against a
+    server that may have just died would only confuse the diagnosis.
+    """
+    timeout = timeout if timeout is not None else cfg.DECIDE_TIMEOUT
+    qualified_body, _ = signature.root_qualified_body(body)
+    may_qualify = _can_root_qualify(signature, body)
+
+    paths = {
+        (False, False): SplicePath.PLAIN,
+        (False, True): SplicePath.NONCOMPUTABLE,
+        (True, False): SplicePath.ROOT_QUALIFIED,
+        (True, True): SplicePath.ROOT_QUALIFIED_NONCOMPUTABLE,
+    }
+
+    attempts: list[SpliceAttempt] = []
+    plain_result: CheckResult | None = None
+    plain_cmd = ""
+    state: tuple[bool, bool] | None = (False, False)
+    seen: set[tuple[bool, bool]] = set()
+
+    while state is not None and state not in seen:
+        seen.add(state)
+        root_q, noncomp = state
+        cmd = signature.splice(qualified_body if root_q else body, noncomputable=noncomp)
+        result = splice_candidate(server, base_env, cmd, timeout=timeout)
+        attempts.append(SpliceAttempt(paths[state], cmd, result.status, result.detail or ""))
+        if plain_result is None:
+            plain_result, plain_cmd = result, cmd
+
+        if result.status is CheckStatus.PASSED:
+            return SpliceOutcome(result=result, path=paths[state], cmd_text=cmd, attempts=attempts)
+        if result.status is CheckStatus.ERRORED:
+            break
+
+        if not noncomp and _needs_noncomputable(result.detail):
+            state = (root_q, True)
+        elif not root_q and may_qualify and _looks_like_self_reference(result.detail):
+            state = (True, noncomp)
+        else:
+            state = None
+
+    return SpliceOutcome(
+        result=plain_result, path=SplicePath.PLAIN, cmd_text=plain_cmd, attempts=attempts
+    )
 
 
 def run_facts(
@@ -151,18 +278,25 @@ def score_candidate(
     baseline_axioms: frozenset[str] | None = None,
     check_timeout: float | None = None,
 ) -> CandidateScore:
-    """Splice a well-formed (single-declaration) candidate body, then score it. Convenience
-    wrapper around `score_spliced_candidate` for the common case; use that function directly
-    to score a candidate whose command text isn't a simple `PinnedSignature.splice(body)`."""
-    return score_spliced_candidate(
+    """Splice a well-formed (single-declaration) candidate body, then score it.
+
+    Routes through `splice_candidate_body`, so a candidate needing `noncomputable` or
+    root-qualification is rescued rather than failed at the admissibility gate, and the
+    winning path is recorded on `CandidateScore.splice_outcome`. Use `score_spliced_candidate`
+    directly for a candidate whose command text is NOT a simple `PinnedSignature.splice(body)`
+    -- that path has no body to rewrite and so runs no ladder.
+    """
+    check_timeout = check_timeout if check_timeout is not None else cfg.DECIDE_TIMEOUT
+    outcome = splice_candidate_body(server, base_env, signature, body, timeout=check_timeout)
+    return _score_from_splice(
         server,
-        base_env,
-        signature.splice(body),
+        outcome.result,
         signature,
         facts,
         label=label,
         baseline_axioms=baseline_axioms,
         check_timeout=check_timeout,
+        splice_outcome=outcome,
     )
 
 
@@ -185,15 +319,40 @@ def score_spliced_candidate(
     mechanism-`proof` fact -- there is nothing to catch that with yet.
     """
     check_timeout = check_timeout if check_timeout is not None else cfg.DECIDE_TIMEOUT
-
     splice_result = splice_candidate(server, base_env, cmd_text, timeout=check_timeout)
+    return _score_from_splice(
+        server,
+        splice_result,
+        signature,
+        facts,
+        label=label,
+        baseline_axioms=baseline_axioms,
+        check_timeout=check_timeout,
+        splice_outcome=None,
+    )
 
+
+def _score_from_splice(
+    server: AutoLeanServer,
+    splice_result: CheckResult,
+    signature: PinnedSignature,
+    facts: list[Fact],
+    *,
+    label: str,
+    baseline_axioms: frozenset[str] | None,
+    check_timeout: float,
+    splice_outcome: SpliceOutcome | None,
+) -> CandidateScore:
+    """Gate-then-score an already-spliced candidate. Shared by both public entry points so the
+    admissibility/fact sequence exists once; they differ only in how the splice was produced
+    (raw command text vs the retry ladder)."""
     if splice_result.status is CheckStatus.ERRORED:
         return CandidateScore(
             label=label,
             splice=splice_result,
             admissible=False,
             admissibility_detail=splice_result.detail or "splice errored",
+            splice_outcome=splice_outcome,
         )
 
     verdict = check_admissibility(
@@ -205,11 +364,18 @@ def score_spliced_candidate(
         timeout=check_timeout,
     )
     if not verdict.passed:
+        detail = f"{verdict.failure.value}: {verdict.detail}"
+        # Retry errors are SECONDARY: `splice_result` is already the plain attempt's on total
+        # failure, so `admissibility_detail` leads with the honest primary diagnostic and the
+        # rescue attempts are appended behind it rather than displacing it.
+        if splice_outcome is not None and splice_outcome.retries_consumed:
+            detail = f"{detail} [rescues attempted: {'; '.join(splice_outcome.secondary_details[1:])}]"
         return CandidateScore(
             label=label,
             splice=splice_result,
             admissible=False,
-            admissibility_detail=f"{verdict.failure.value}: {verdict.detail}",
+            admissibility_detail=detail,
+            splice_outcome=splice_outcome,
         )
 
     fact_results = run_facts(server, splice_result.env, facts, decide_timeout=check_timeout)
@@ -219,4 +385,5 @@ def score_spliced_candidate(
         admissible=True,
         admissibility_detail="",
         fact_results=fact_results,
+        splice_outcome=splice_outcome,
     )

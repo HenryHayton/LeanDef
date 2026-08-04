@@ -33,15 +33,16 @@ parameter instead of three separate functions:
 
 import re
 
+# `LEAN_IDENT_CHAR` is imported, not restated (2026-08-04): `harness.signature` needs the
+# identical notion of "glued to more identifier characters" for root-qualification, and this
+# module's own docstring is a record of what duplicated matchers cost last time. `authoring`
+# already depends on `harness` (see `authoring.pipeline`), so this direction adds no cycle.
 from authoring.task_symbol import TASK_SYMBOL_PREFIX
+from harness.signature import LEAN_IDENT_CHAR as _LEAN_IDENT_CHAR
 
 IDENTIFIER = "identifier"
 SUBSTRING = "substring"
 
-# Characters that may appear inside a Lean identifier. Deliberately NOT Python's `\w`: Lean
-# allows a trailing prime, and treating `'` as a boundary is what made `Equiv.ofLeftInverse`
-# match inside `Equiv.ofLeftInverse'`.
-_LEAN_IDENT_CHAR = r"[A-Za-z0-9_']"
 
 
 def name_occurs(

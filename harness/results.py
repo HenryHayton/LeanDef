@@ -59,6 +59,62 @@ class CheckResult:
         return self.status is CheckStatus.ERRORED
 
 
+class SplicePath(Enum):
+    """Which of the four enumerated splice attempts produced a result.
+
+    Ordering is `plain -> noncomputable -> root_qualified -> both`, each step taken ONLY when
+    the previous attempt's error specifically calls for it, so the common case costs exactly
+    one REPL round-trip and the worst case is bounded at four.
+    """
+
+    PLAIN = "plain"
+    NONCOMPUTABLE = "noncomputable"
+    ROOT_QUALIFIED = "root_qualified"
+    ROOT_QUALIFIED_NONCOMPUTABLE = "root_qualified+noncomputable"
+
+
+@dataclass(frozen=True)
+class SpliceAttempt:
+    """One attempt in the ladder, kept whether it won or lost."""
+
+    path: SplicePath
+    cmd_text: str
+    status: CheckStatus
+    detail: str
+
+
+@dataclass(frozen=True)
+class SpliceOutcome:
+    """The candidate-splice ladder's full outcome -- designed so Stage B can persist it
+    per candidate by reading `path.value`, `retries_consumed` and `succeeded` directly.
+
+    `result` is the CheckResult callers should score against. On success it is the winning
+    attempt's. **On total failure it is the PLAIN attempt's**, deliberately: the plain error
+    is the honest primary diagnostic ("this candidate does not compile"), and surfacing a
+    retry's error instead would pollute the failure funnel with noise from a rescue that was
+    never going to apply. Every attempt's error is still available in `attempts`.
+    """
+
+    result: CheckResult
+    path: SplicePath
+    cmd_text: str
+    attempts: list[SpliceAttempt] = field(default_factory=list)
+
+    @property
+    def succeeded(self) -> bool:
+        return self.result.status is CheckStatus.PASSED
+
+    @property
+    def retries_consumed(self) -> int:
+        """Attempts beyond the first. 0 on the common path."""
+        return max(len(self.attempts) - 1, 0)
+
+    @property
+    def secondary_details(self) -> list[str]:
+        """Every non-winning attempt's error, for logging as secondary diagnostics."""
+        return [f"{a.path.value}: {a.detail}" for a in self.attempts if a.status is not CheckStatus.PASSED]
+
+
 @dataclass(frozen=True)
 class FactResult:
     """The outcome of adjudicating one fact, of either mechanism. `status` is a
@@ -125,6 +181,15 @@ class CandidateScore:
     admissible: bool
     admissibility_detail: str
     fact_results: list[FactResult] = field(default_factory=list)
+    splice_outcome: SpliceOutcome | None = None
+    """Which splice path won and what the retries cost (2026-08-04).
+
+    `None` when the candidate was spliced from raw command text (`score_spliced_candidate`),
+    where there is no body to rewrite and therefore no ladder to run. Populated by
+    `score_candidate`. Stage B persists `splice_outcome.path.value` and `.retries_consumed`
+    per candidate: a rescued candidate is a materially different observation from one that
+    compiled plainly, and the rescue rate is itself a measurement of model output style.
+    """
 
     @property
     def fidelity(self) -> float | None:
