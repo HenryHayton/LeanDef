@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid argument: Variable `findGreatest` is not a proposition or let-declaration; unsolved goals\nP : ℕ → Prop\ninst✝ : DecidablePred P\nn✝ n : ℕ\nih : ∀ m < 0, findGreatest P m = if m = 0 then 0 else if P m then m else findGreatest P (m - 1)\n⊢ findGreatest P 0 = 0; unsolved goals\ncase pos\nP : ℕ → Prop\ninst✝ : DecidablePred P\nn✝¹ n✝ n : ℕ\nih : ∀ m ≤ n, findGreatest P m = if m = 0 then 0 else if P m then m else findGreatest P (m - 1)\nh✝ : P (n + 1)\n⊢ findGreatest P (n + 1) = n + 1\n\ncase neg\nP : ℕ → Prop\ninst✝ : DecidablePred P\nn✝¹ n✝ n : ℕ\nih : ∀ m ≤ n, findGreatest P m = if m = 0 then 0 else if P m then m else findGreatest P (m - 1)\nh✝ : ¬P (n + 1)\n⊢ findGreatest P (n + 1) =\n    if n = 0 then 0\n    else if P n then n else if n - 1 = 0 then 0 else if P (n - 1) then n - 1 else findGreatest P (n - 1 - 1); Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  findGreatest P n\nin the target expression\n  ℕ\n\nP : ℕ → Prop\ninst✝ : DecidablePred P\nn : ℕ\nh_main : ∀ (n : ℕ), findGreatest P n = if n = 0 then 0 else if P n then n else findGreatest P (n - 1)\nh₂ : findGreatest P n = if n = 0 then 0 else if P n then n else findGreatest P (n - 1)\n⊢ ℕ",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 5.672,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Nat.findGreatest",
+  "sample_index": 4,
+  "candidate_hash": "0a8ee8a18ecf7b24",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.findGreatest (P : ℕ → Prop) [DecidablePred P] : ℕ → ℕ := by\n  intro n\n  have h_main : ∀ n, VTask.findGreatest P n = if n = 0 then 0 else if P n then n else VTask.findGreatest P (n - 1) := by\n    intro n\n    induction n using Nat.strong_induction_on with\n    | h n ih =>\n      match n with\n      | 0 =>\n        -- Base case: n = 0\n        simp [VTask.findGreatest]\n      | n + 1 =>\n        -- Inductive step: n + 1\n        have h₁ : VTask.findGreatest P (n + 1) = if (n + 1) = 0 then 0 else if P (n + 1) then n + 1 else VTask.findGreatest P ((n + 1) - 1) := by\n          by_cases h₂ : (n + 1) = 0\n          · -- Case: n + 1 = 0 (impossible since n + 1 ≥ 1)\n            exfalso\n            simp_all\n          · -- Case: n + 1 ≠ 0\n            have h₃ : (n + 1) - 1 = n := by\n              simp [Nat.sub_eq_zero_iff_le]\n              <;> omega\n            simp [h₂, h₃]\n            <;> split_ifs <;> simp_all [Nat.succ_eq_add_one, Nat.sub_add_cancel]\n            <;> try omega\n            <;> try aesop\n        simp_all [Nat.succ_eq_add_one, Nat.sub_add_cancel]\n        <;> split_ifs <;> simp_all [Nat.succ_eq_add_one, Nat.sub_add_cancel]\n        <;> try omega\n        <;> try aesop\n  -- Use the recursive definition to compute the value of VTask.findGreatest P n\n  have h₂ : VTask.findGreatest P n = if n = 0 then 0 else if P n then n else VTask.findGreatest P (n - 1) := by\n    apply h_main\n  -- Simplify the expression using the recursive definition\n  rw [h₂]\n  <;> split_ifs <;> simp_all [Nat.succ_eq_add_one, Nat.sub_add_cancel]\n  <;> try omega\n  <;> try aesop",
+  "temperature": 0.7
+}

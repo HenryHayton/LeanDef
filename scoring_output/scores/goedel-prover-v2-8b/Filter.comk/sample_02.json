@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to synthesize instance of type class\n  Membership (Set (Set α)) (Set (Set α))\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `aesop` failed, made no progress\nInitial goal:\n  α : Type u_1\n  p : Set α → Prop\n  hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s\n  h1 : p ∅\n  h2 : ∀ (t : Set α), p t → ∀ s ⊆ t, p s\n  h3 : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)\n  h : sorry ()\n  h₅ : p Set.univ\n  ⊢ False; Unknown constant `Filter.ofSet`; Unknown constant `Filter.ofSet`; unsolved goals\nα : Type u_1\np : Set α → Prop\nhe : p ∅\nhmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s\nhunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)\nh1 : p ∅\nh2 : ∀ (t : Set α), p t → ∀ s ⊆ t, p s\nh3 : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)\nh4 : sorry → False\n⊢ Filter α",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.176,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Filter.comk",
+  "sample_index": 2,
+  "candidate_hash": "c209f0d8ade4f85f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk {α : Type u_1} (p : Set α → Prop) (he : p ∅) (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α := by\n  have h1 : p ∅ := he\n  have h2 : ∀ (t : Set α), p t → ∀ s ⊆ t, p s := hmono\n  have h3 : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t) := hunion\n  have h4 : (∅ : Set (Set α)) ∈ {s : Set α | p sᶜ} → False := by\n    intro h\n    have h₁ : p (∅ : Set α)ᶜ := by simpa using h\n    have h₂ : p (∅ : Set α)ᶜ := h₁\n    have h₃ : p (∅ : Set α)ᶜ := h₂\n    have h₄ : p (∅ : Set α)ᶜ := h₃\n    have h₅ : p (∅ : Set α)ᶜ := h₄\n    simp at h₅\n    <;> simp_all [Set.compl_empty]\n    <;> aesop\n  \n  have h5 : Filter.ofSet {s : Set α | p sᶜ} = Filter.ofSet {s : Set α | p sᶜ} := by rfl\n  \n  have h6 : Filter.ofSet {s : Set α | p sᶜ} = Filter.ofSet {s : Set α | p sᶜ} := by rfl\n  \n  classical\n  exact Filter.ofSet {s : Set α | p sᶜ}",
+  "temperature": 0.7
+}

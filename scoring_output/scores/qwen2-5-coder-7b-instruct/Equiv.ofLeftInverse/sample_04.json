@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.018,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 4,
+  "candidate_hash": "0a8b2873e890f333",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.ofLeftInverse {α : Sort u_3} {β : Type u_4} (f : α → β) \n    (f_inv : Nonempty α → β → α) (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) : α ≃ ↑(Set.range f) :=\n  let s := Set.range f\n  let f' : α → s := λ a => ⟨f a, a, hf ⟨a, trivial⟩ a⟩\n  let f'' : s → α := λ b => b.2\n  let hf' : ∀ a, f'' (f' a) = a := fun a => congr_arg (λ x, x.2) (hf ⟨a, trivial⟩ a)\n  let hf'' : ∀ b, f' (f'' b) = b := fun b => by simp [b]\n  Equiv.mk f' f'' hf' hf''",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to synthesize instance of type class\n  LeftCommutative f\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  noncommFoldr f s comm b\nin the target expression\n  β\n\nα : Type u_3\nβ : Type u_4\nf : α → β → β\ns : Multiset α\ncomm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)\nb : β\nh_main : noncommFoldr f s comm b = sorry\n⊢ β; fail to show termination for\n  VTask.noncommFoldr\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nNot considering parameter β of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nNot considering parameter f of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nNot considering parameter s of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nNot considering parameter comm of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nNot considering parameter b of VTask.noncommFoldr:\n  it is unchanged in the recursive calls\nno parameters suitable for structural recursion\n\nwell-founded recursion cannot be used, `VTask.noncommFoldr` does not take any (non-fixed) arguments; failed to set reducibility status, `noncommFoldr` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.018,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Multiset.noncommFoldr",
+  "sample_index": 1,
+  "candidate_hash": "84b012acfd73f40a",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.noncommFoldr {α : Type u_3} {β : Type u_4} (f : α → β → β) (s : Multiset α) (comm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)) (b : β) : β := by\n  have h_main : VTask.noncommFoldr f s comm b = Multiset.foldr f b s := by\n    -- We need to show that VTask.noncommFoldr f s comm b is equal to Multiset.foldr f b s.\n    -- This is a placeholder for the actual proof, which would involve detailed reasoning about the properties of the fold operation.\n    -- In a real implementation, we would use the commutativity condition to show that the order of folding does not matter.\n    -- However, for the purpose of this proof sketch, we are assuming that the commutativity condition ensures the fold is well-defined.\n    rfl\n  \n  rw [h_main]\n  <;> simp [Multiset.foldr]\n  <;> aesop",
+  "temperature": 0.7
+}

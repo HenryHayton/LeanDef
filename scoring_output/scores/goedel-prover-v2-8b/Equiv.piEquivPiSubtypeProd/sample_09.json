@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `Function.funext_iff`; Insufficient number of fields for `⟨...⟩` constructor: Constructor `Equiv.mk` has 4 explicit field, but only 2 were provided; Unknown identifier `Function.funext_iff`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.047,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 9,
+  "candidate_hash": "5e20a2d832b01bb2",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n    ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) := by\n  have h_main : ∀ (f : (i : α) → β i), (let g₁ : (i : { x // p x }) → β ↑i := fun i => f i.val; let g₂ : (i : { x // ¬p x }) → β ↑i := fun i => f i.val; (g₁, g₂)) = ((fun i : { x // p x } => f i.val), (fun i : { x // ¬p x } => f i.val)) := by\n    intro f\n    simp [Function.funext_iff]\n    <;>\n    aesop\n  \n  refine' ⟨_, _⟩\n  · -- Prove the forward direction: (i : α) → β i → ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i)\n    intro f\n    refine' ⟨fun i => f i.val, fun i => f i.val⟩\n  · -- Prove the backward direction: ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) → (i : α) → β i\n    intro g\n    have h₁ : (let g₁ : (i : { x // p x }) → β ↑i := fun i => g.1 i; let g₂ : (i : { x // ¬p x }) → β ↑i := fun i => g.2 i; (g₁, g₂)) = (g.1, g.2) := by\n      simp [Function.funext_iff]\n      <;>\n      aesop\n    refine' fun x => if h : p x then g.1 ⟨x, h⟩ else g.2 ⟨x, _⟩\n    · -- Prove that ¬p x implies ¬p x\n      tauto\n  <;>\n  simp_all [Function.funext_iff]\n  <;>\n  aesop",
+  "temperature": 1.0
+}

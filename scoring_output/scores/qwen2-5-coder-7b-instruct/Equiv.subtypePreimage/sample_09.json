@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `begin`; unexpected token 'let'; expected command; Invalid `end`: There is no current scope to end\n\nNote: Scopes are introduced using `namespace` and `section`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.005,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 9,
+  "candidate_hash": "52862de8581dc903",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.subtypePreimage {α : Sort u_1} {β : Sort u_4} (p : α → Prop) [DecidablePred p] (x₀ : { a // p a } → β) :\n    { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β) :=\nbegin\n  let I := { a // ¬p a },\n      J := { a // p a },\n      f : { x // x ∘ Subtype.val = x₀ } → I → β := λ x i, x.val,\n      g : I → { x // x ∘ Subtype.val = x₀ } := λ i, ⟨i, by simp [x₀]⟩,\n      f_inv : ({ a // ¬p a } → β) → J → β := λ y j, y j,\n      g_inv : J → ({ a // ¬p a } → β) := λ j, λ i, if p i then x₀ ⟨i, rfl⟩ else (f_inv y i),\n  refine Equiv.ofBijective (λ x i, f x i) (λ y j, g_inv y j) _ _,\n  { intros x i j hij, rw hij, refl },\n  { intros y j hj, induction j, rw hj, exact g j },\nend",
+  "temperature": 1.0
+}

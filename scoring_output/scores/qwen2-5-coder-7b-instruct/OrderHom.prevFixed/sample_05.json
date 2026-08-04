@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'; Invalid `end`: There is no current scope to end\n\nNote: Scopes are introduced using `namespace` and `section`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.006,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "OrderHom.prevFixed",
+  "sample_index": 5,
+  "candidate_hash": "a74d5b59ce284949",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.prevFixed {α : Type u} [CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x) : Function.fixedPoints f :=\nbegin\n  refine ⟨_, λ hfx, le_trans hfx hx⟩,\n  let g := λ y, f y - y,\n  have g_le_zero : ∀ y, g y ≤ 0 := λ y, sub_le_sub_right (f.le_fixed_of_le_fixed hfx hfx) (sub_self _),\n  have zero_le_g : g x ≥ 0 := sub_nonneg_left (f x) (by simp [hx]),\n  exact lt_or_eq_of_le_of_le (lt_of_le_not_le g_le_zero zero_le_g) (eq_of_sub_eq_zero $ by rw sub_zero)\nend",
+  "temperature": 1.0
+}

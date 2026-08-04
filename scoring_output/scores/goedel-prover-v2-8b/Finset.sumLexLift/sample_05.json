@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `intro`; unexpected token 'have'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.006,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.sumLexLift",
+  "sample_index": 5,
+  "candidate_hash": "a16a9fcd087c7283",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.sumLexLift {α₁ : Type u_1} {α₂ : Type u_2} {β₁ : Type u_3} {β₂ : Type u_4} {γ₁ : Type u_5} {γ₂ : Type u_6} (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) : α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂) :=\n  intro a b\n  have h_main : VTask.sumLexLift f₁ f₂ g₁ g₂ a b = match a, b with\n    | inl a, inl b =>\n      (f₁ a b).image (fun c => inl c)\n    | inr a, inl b =>\n      ∅\n    | inl a, inr b =>\n      (g₁ a b).image (fun c => inl c) + (g₂ a b).image (fun c => inr c)\n    | inr a, inr b =>\n      (f₂ a b).image (fun c => inr c)\n  sorry",
+  "temperature": 1.0
+}

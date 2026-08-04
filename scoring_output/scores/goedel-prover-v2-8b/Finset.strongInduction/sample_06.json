@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "fail to show termination for\n  VTask.strongInduction\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.strongInduction:\n  it is unchanged in the recursive calls\nNot considering parameter p of VTask.strongInduction:\n  it is unchanged in the recursive calls\nNot considering parameter H of VTask.strongInduction:\n  it is unchanged in the recursive calls\nCannot use parameter s:\n  the type Finset α does not have a `.brecOn` recursor\n\n\nfailed to prove termination, possible solutions:\n  - Use `have`-expressions to prove the remaining goals\n  - Use `termination_by` to specify a different well-founded relation\n  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal\nα : Type u_1\np : Finset α → Sort u_4\nH : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s\ns : Finset α\nh₁ : ((t : Finset α) → t ⊂ s → p t) → p s := fun oracle => H s oracle\nt : Finset α\nht : t ⊂ s\n⊢ sizeOf t < sizeOf s; failed to set reducibility status, `strongInduction` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.114,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 6,
+  "candidate_hash": "bf05ac641d416d27",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) → (s : Finset α) → p s := by\n  intro α p H s\n  have h_main : p s := by\n    -- Use the given step function H to produce p s by providing an oracle that satisfies the inductive hypothesis.\n    have h₁ : ((t : Finset α) → t ⊂ s → p t) → p s := by\n      intro oracle\n      -- Use the step function H to produce p s.\n      exact H s oracle\n    -- Apply H to s with the oracle that provides VTask.strongInduction H t for all t ⊂ s.\n    have h₂ : ((t : Finset α) → t ⊂ s → p t) := by\n      intro t ht\n      -- Use the recursive call to VTask.strongInduction H t to satisfy the oracle.\n      exact VTask.strongInduction H t\n    -- Use the oracle to get p s.\n    exact h₁ h₂\n  exact h_main",
+  "temperature": 1.0
+}

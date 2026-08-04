@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  fun α r s f => ?m.6\nhas type\n  (α : α✝ → α✝ → Prop) → (r : Set α✝) → (s : ℕ → α✝) → (f : ?m.7 α r s) → ?m.8 α r s f\nbut is expected to have type\n  (α✝ → α✝ → Prop) → Set α✝ → (ℕ → α✝) → Prop\nthe following variables have been introduced by the implicit lambda feature\n  α✝ : Type u_2\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.025,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Set.PartiallyWellOrderedOn.IsBadSeq",
+  "sample_index": 9,
+  "candidate_hash": "7444a43784cbf485",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.IsBadSeq : {α : Type u_2} → (r : α → α → Prop) → (s : Set α) → (f : ℕ → α) → Prop := fun α r s f => by\n  have h_main : ∀ n, f n ∈ s ∧ ∀ m n, m < n → ¬(r (f m) (f n)) → True := by\n    intro n\n    constructor\n    · -- Prove f n ∈ s (this part is trivial, as we are just constructing a proof term)\n      exact by tauto\n    · -- Prove ∀ m n, m < n → ¬(r (f m) (f n)) → True (this part is also trivial)\n      intro m n h₁ h₂\n      trivial\n  \n  -- Define VTask.IsBadSeq as the conjunction of the two conditions\n  exact fun α r s f => (∀ n, f n ∈ s) ∧ (∀ m n, m < n → ¬(r (f m) (f n)))\n  <;> simp_all\n  <;> aesop",
+  "temperature": 1.0
+}

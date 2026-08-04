@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "type expected, got\n  (α : l✝.Germ β✝); Unknown identifier `simpa`; unexpected token 'using'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.023,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Filter.Germ.IsConstant",
+  "sample_index": 2,
+  "candidate_hash": "4903b42daddc7408",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.IsConstant : {α : Type u_1} -> {β : Type u_2} -> {l : Filter α} -> (P : l.Germ β) -> Prop := fun α β l P =>\n  have h_main : ∃ (b : β), ∀ᶠ (x : α) in l, P.val x = b := by\n    refine' ⟨P.val (Classical.choose P.prop), _⟩\n    have h₁ : P.val (Classical.choose P.prop) = P.val (Classical.choose P.prop) := rfl\n    exact P.choose_spec\n  -- We have shown that there exists a constant b such that P.val is eventually equal to b.\n  -- Now, we need to use this to prove the final result.\n  simpa [Filter.EventuallyEq] using h_main",
+  "temperature": 0.7
+}

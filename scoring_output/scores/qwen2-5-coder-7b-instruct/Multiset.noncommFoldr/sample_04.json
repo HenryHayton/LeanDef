@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `s`; Unknown identifier `s`; Invalid dotted identifier notation: The expected type of `.empty` could not be determined\n\nHint: Using one of these would be unambiguous:\n  [apply] `AbsConvex.empty`\n  [apply] `Absorbs.empty`\n  [apply] `AntivaryOn.empty`\n  [apply] `Array.empty`\n  [apply] `ByteArray.empty`\n  [apply] `ByteSlice.empty`\n  [apply] `ChartedSpace.empty`\n  [apply] `Computation.empty`\n  [apply] `CountableInfClosed.empty`\n  [apply] `CountableSupClosed.empty`\n  [apply] `DependsOn.empty`\n  [apply] `Diffeomorph.empty`\n  [apply] `DifferentiableWithinAt.empty`\n  [apply] `DirSupClosed.empty`\n  [apply] `DirSupClosedOn.empty`\n  [apply] `DirSupInacc.empty`\n  [apply] `DirSupInaccOn.empty`\n  [apply] `FinEnum.empty`\n  [apply] `Finpartition.empty`\n  [apply] `Finset.empty`\n  [apply] `FloatArray.empty`\n  [apply] `HasFDerivWithinAt.empty`\n  [apply] `Homeomorph.empty`\n  [apply] `IsAntichain.empty`\n  [apply] `IsChain.empty`\n  [apply] `IsCompactOpenCovered.empty`\n  [apply] `IsGδ.empty`\n  [apply] `IsManifold.empty`\n  [apply] `IsMeagre.empty`\n  [apply] `IsProperSemilinearSet.empty`\n  [apply] `IsRetrocompact.empty`\n  [apply] `IsSemilinearSet.empty`\n  [apply] `MeasurableSet.empty`\n  [apply] `MonovaryOn.empty`\n  [apply] `Ordnode.empty`\n  [apply] `PSet.empty`\n  [apply] `Primcodable.empty`\n  [apply] `SingularManifold.empty`\n  [apply] `Subarray.empty`\n  [apply] `ZFSet.empty`\n  [apply] `AddAction.IsBlock.empty`\n  [apply] `Aesop.BaseRuleSet.empty`\n  [apply] `Aesop.EMap.empty`\n  [apply] `Aesop.ForwardRuleMatches.empty`\n  [apply] `Aesop.GlobalRuleSet.empty`\n  [apply] `Aesop.LocalRuleSet.empty`\n  [apply] `Aesop.RuleStatsTotals.empty`\n  [apply] `Aesop.Stats.empty`\n  [apply] `Aesop.Substitution.empty`\n  [apply] `Aesop.UnorderedArraySet.empty`\n  [apply] `AlgebraicGeometry.LocallyRingedSpace.empty`\n  [apply] `AlgebraicGeometry.Scheme.empty`\n  [apply] `Batteries.BinaryHeap.empty`\n  [apply] `Batteries.BinomialHeap.empty`\n  [apply] `Batteries.DList.empty`\n  [apply] `Batteries.HashMap",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.165,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Multiset.noncommFoldr",
+  "sample_index": 4,
+  "candidate_hash": "5e28c63f70400985",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.noncommFoldr : {α : Type u_3} -> {β : Type u_4} -> (f : α → β → β) -> (s : Multiset α) -> (comm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)) -> (b : β) -> β :=\nmatch s with\n| .empty => b\n| .insert x s' =>\n  let rec go (acc : β) (s'' : Multiset α) : β :=\n    match s'' with\n    | .empty => acc\n    | .insert y s''' =>\n      let new_acc := f y acc;\n      go new_acc s'''\n  go b s'",
+  "temperature": 0.7
+}

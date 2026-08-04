@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'; Invalid `end`: There is no current scope to end\n\nNote: Scopes are introduced using `namespace` and `section`; unexpected token 'have'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.009,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 2,
+  "candidate_hash": "fd6043ee15a84756",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n    ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n  let pi_pos := λ f, λ i : { x // p x }, f i\n  let pi_neg := λ f, λ i : { x // ¬p x }, f i\n  let pi_total := λ f, (pi_pos f, pi_neg f)\n  let pi_split := λ (g : { x // p x } → β ↑x) (h : { x // ¬p x } → β ↑x), λ i, match i with | ⟨x, hp⟩ => if hp then g ⟨x, hp⟩ else h ⟨x, hp⟩ end\n  have pi_total_inj : Injective pi_total :=\n    assume f g h,\n    by rw [← pi_total_injective]; congr' <;> apply h\n  have pi_split_surj : Surjective pi_split :=\n    assume f,\n    by refine pi_split (λ x, f x.1 (by simp)) (λ x, f x.1 (by simp)); intros i; cases i; congr'\n  pi_total_inj.pi_split_surj",
+  "temperature": 0.7
+}

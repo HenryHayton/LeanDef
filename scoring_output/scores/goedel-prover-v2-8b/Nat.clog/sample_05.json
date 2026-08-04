@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Function expected at\n  Nat.lt_pow_self ?m.119\nbut this term has type\n  ?m.117 < ?m.118 ^ ?m.117\n\nNote: Expected a function because this term is being applied to the argument\n  _; omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  0 ≤ c ≤ 1\n  a ≥ 2\nwhere\n a := ↑b\n c := ↑?m.118",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.037,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Nat.clog",
+  "sample_index": 5,
+  "candidate_hash": "fdeb9475c9aaf7b9",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.clog (b n : ℕ) : ℕ := if h : b ≤ 1 then 0 else Nat.find (show ∃ k, n ≤ b ^ k from by\n  have h₁ : ∃ k, n ≤ b ^ k := by\n    -- We need to show that there exists a k such that n ≤ b ^ k.\n    -- We can choose k = n as a candidate.\n    use n\n    have h₂ : n ≤ b ^ n := by\n      -- We need to prove that n ≤ b ^ n.\n      -- This is true because b ≥ 2 and n ≥ 1 implies b ^ n ≥ n.\n      -- We handle the case when n = 0 separately.\n      cases n with\n      | zero =>\n        -- If n = 0, then b ^ 0 = 1 ≥ 0.\n        simp\n      | succ n =>\n        -- For n ≥ 1, we use the fact that b ≥ 2.\n        have h₃ : 2 ≤ b := by omega\n        have h₄ : n.succ ≤ b ^ n.succ := by\n          -- We use the fact that b ≥ 2 to show that n ≤ b ^ n.\n          exact Nat.le_of_lt (Nat.lt_pow_self (by omega) _)\n        exact h₄\n    exact h₂\n  exact h₁\n)",
+  "temperature": 1.0
+}

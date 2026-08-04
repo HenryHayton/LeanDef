@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "splice_path": "noncomputable",
+  "splice_retries": 1,
+  "admissible": false,
+  "admissibility_failure": "wrong_type",
+  "admissibility_detail": "does not have the pinned type '{α : Sort u_1} -> {β : Sort u_2} -> {γ : Sort u_3} -> (f : α → β) -> (g : α → γ) -> (j : β → γ) -> β → γ': Type mismatch\n  VTask.extend\nhas type\n  (?m.1 → ?m.2) → (?m.1 → ?m.3) → (?m.2 → ?m.3) → ?m.2 → ?m.3\nbut is expected to have type\n  (α✝ → β✝) → (α✝ → γ✝) → (β✝ → γ✝) → β✝ → γ✝",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": true,
+  "wall_time_s": 0.084,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Function.extend",
+  "sample_index": 3,
+  "candidate_hash": "f9d41f3629ecb564",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.extend (f : α → β) (g : α → γ) (j : β → γ) (b : β) : γ := by\n  have h_main : (∃ (a : α), f a = b) → γ := by\n    intro h\n    have h₁ : ∃ (a : α), f a = b := h\n    have h₂ : g (Classical.choose h₁) = g (Classical.choose h₁) := rfl\n    have h₃ : f (Classical.choose h₁) = b := Classical.choose_spec h₁\n    exact g (Classical.choose h₁)\n  \n  have h_main₂ : (¬∃ (a : α), f a = b) → γ := by\n    intro h\n    have h₁ : ¬∃ (a : α), f a = b := h\n    have h₂ : j b = j b := rfl\n    exact j b\n  \n  have h_final : γ := by\n    by_cases h : ∃ (a : α), f a = b\n    · -- Case: ∃ (a : α), f a = b\n      have h₁ : γ := h_main h\n      exact h₁\n    · -- Case: ¬∃ (a : α), f a = b\n      have h₁ : γ := h_main₂ h\n      exact h₁\n  \n  by_cases h : ∃ (a : α), f a = b\n  · -- Case: ∃ (a : α), f a = b\n    exact h_main h\n  · -- Case: ¬∃ (a : α), f a = b\n    exact h_main₂ h",
+  "temperature": 0.7
+}

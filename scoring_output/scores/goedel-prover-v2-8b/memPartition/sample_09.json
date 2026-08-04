@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  f\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ℕ → Set ?m.4\nof sort `Type u_1` in the application\n  memPartition f; Application type mismatch: The argument\n  f\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ℕ → Set ?m.16\nof sort `Type u_1` in the application\n  memPartition f; Function expected at\n  f\nbut this term has type\n  ℕ\n\nNote: Expected a function because this term is being applied to the argument\n  k; Function expected at\n  f\nbut this term has type\n  ℕ\n\nNote: Expected a function because this term is being applied to the argument\n  k; Application type mismatch: The argument\n  f\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ℕ → Set ?m.41\nof sort `Type u_1` in the application\n  memPartition f; Unknown identifier `simp_all`; Invalid argument: Variable `memPartition` is not a proposition or let-declaration; Tactic `aesop` failed, made no progress\nInitial goal:\n  α✝ : Type u_1\n  α : ℕ → Set α✝\n  f : ℕ\n  n : Set α✝\n  ⊢ memPartition (sorry ()) 0 = {Set.univ}; Application type mismatch: The argument\n  f\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ℕ → Set ?m.54\nof sort `Type u_1` in the application\n  memPartition f; Function expected at\n  f\nbut this term has type\n  ℕ\n\nNote: Expected a function because this term is being applied to the argument\n  k; Function expected at\n  f\nbut this term has type\n  ℕ\n\nNote: Expected a function because this term is being applied to the argument\n  k; Application type mismatch: The argument\n  f\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ℕ → Set ?m.79\nof sort `Type u_1` in the application\n  memPartition f; Invalid argument: Variable `memPartition` is not a proposition or let-declaration; unsolved goals\nα_1 : Type u_1\nα : ℕ → Set α_1\nf : ℕ\nn : Set α_1\nk : ℕ\nh₀ : memPartition (sorry ()) 0 = {Set.univ}\n⊢ sorry (); unexpected token '<;>'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.178,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "memPartition",
+  "sample_index": 9,
+  "candidate_hash": "a96e092ce26fa75f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.memPartition : {α : Type u_1} → (f : ℕ → Set α) → ℕ → Set (Set α) :=\n  fun α f n =>\n    have h₀ : VTask.memPartition f 0 = {Set.univ} := by\n      simp [VTask.memPartition]\n      <;> aesop\n  \n    have h₁ : ∀ (k : ℕ), VTask.memPartition f (k + 1) = (fun s ↦ (s ∩ f k, s \\ f k)) '' VTask.memPartition f k := by\n      intro k\n      have h₂ : VTask.memPartition f (k + 1) = (fun s ↦ (s ∩ f k, s \\ f k)) '' VTask.memPartition f k := by\n        simp [VTask.memPartition]\n        <;> aesop\n      exact h₂\n  \n    simp_all [VTask.memPartition]\n    <;> aesop",
+  "temperature": 1.0
+}

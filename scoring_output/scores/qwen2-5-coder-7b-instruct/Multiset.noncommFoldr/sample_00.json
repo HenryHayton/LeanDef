@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to elaborate eliminator, invalid motive\n  fun x => ((a : ?m.14) → (s : ?m.19 a) → (ih : ?m.20 a s) → ?m.21 a s ih) → β; Type mismatch\n  b\nhas type\n  β\nof sort `Type u_4` but is expected to have type\n  ∀ (s : Multiset α), ?m.11 s → ?m.11 (x✝ ::ₘ s)\nof sort `Prop`; Invalid field notation: Type of\n  s\nis not known; cannot resolve field `foldl`\n\nHint: Consider replacing the field projection with a call to one of the following:\n  • `AList.foldl`\n  • `Array.foldl`\n  • `ByteArray.foldl`\n  • `ByteSlice.foldl`\n  • `CliffordAlgebra.foldl`\n  • `Fin.foldl`\n  • `Finmap.foldl`\n  • `FloatArray.foldl`\n  • `List.foldl`\n  • `Multiset.foldl`\n  • `Ordnode.foldl`\n  • `String.foldl`\n  • `Traversable.foldl`\n  • `Vector.foldl`\n  • `Aesop.EMap.foldl`\n  • `Aesop.OrderedHashSet.foldl`\n  • `Batteries.AssocList.foldl`\n  • `Lean.AssocList.foldl`\n  • `Lean.LocalContext.foldl`\n  • `Lean.PersistentArray.foldl`\n  • `Lean.PersistentHashMap.foldl`\n  • `RBTree.RBMap.foldl`\n  • `RBTree.RBNode.foldl`\n  • `RBTree.RBSet.foldl`\n  • `Std.DTreeMap.foldl`\n  • `Std.ExtDTreeMap.foldl`\n  • `Std.ExtTreeMap.foldl`\n  • `Std.ExtTreeSet.foldl`\n  • `Std.Slice.foldl`\n  • `Std.TreeMap.foldl`\n  • `Std.TreeSet.foldl`\n  • `String.Internal.foldl`\n  • `String.Legacy.foldl`\n  • `String.Slice.foldl`\n  • `Substring.Raw.foldl`\n  • `Lean.SubExpr.Pos.foldl`\n  • `Mathlib.Notation3.BoundValueType.foldl`\n  • `RBTree.RBNode.Stream.foldl`\n  • `Std.DTreeMap.Raw.foldl`\n  • `Std.TreeMap.Raw.foldl`\n  • `Std.TreeSet.Raw.foldl`\n  • `Substring.Raw.Legacy.foldl`\n  • `Substring.Raw.Valid.foldl`\n  • `Substring.Raw.ValidFor.foldl`\n  • `Std.DHashMap.Internal.AssocList.foldl`\n  • `Std.DTreeMap.Internal.Impl.foldl`; Type mismatch\n  b\nhas type\n  β\nof sort `Type u_4` but is expected to have type\n  ?m.11 0\nof sort `Prop`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.166,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Multiset.noncommFoldr",
+  "sample_index": 0,
+  "candidate_hash": "73ce202d91e2df31",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.noncommFoldr {α : Type u_3} {β : Type u_4} (f : α → β → β) (s : Multiset α) (comm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)) (b : β) : β :=\n  s.induction_on b (fun _ => b)\n    (fun a s ih =>\n      s.foldl (fun acc x => f x acc) (ih (comm a))\n        (by\n          intros x hx y hy hxy\n          rw [hxy]\n          unfold foldl\n          simp [comm]))",
+  "temperature": 0.7
+}

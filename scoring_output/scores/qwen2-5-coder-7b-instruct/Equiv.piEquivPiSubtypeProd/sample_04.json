@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid `⟨...⟩` notation: The expected type `α` is not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nα : Type u_9\np : α → Prop\nβ : α → Type u_10\ninst✝ : DecidablePred p\nπ₁ : ((i : α) → β i) → ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n  fun f => (fun i => f ↑i, fun i => f ↑i)\nπ₂ : ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) → (i : α) → β i := fun g i => sorry\ng : (i : α) → β i\n⊢ π₂ (π₁ g) = g; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nα : Type u_9\np : α → Prop\nβ : α → Type u_10\ninst✝ : DecidablePred p\nπ₁ : ((i : α) → β i) → ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n  fun f => (fun i => f ↑i, fun i => f ↑i)\nπ₂ : ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) → (i : α) → β i := fun g i => sorry\nf : ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i)\n⊢ π₁ (π₂ f) = f",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.017,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 4,
+  "candidate_hash": "0400fb5fe2755e22",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n    ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n  let π₁ : ((i : α) → β i) → ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n    λ f => (λ i => f (i.1), λ i => f (i.1))\n  let π₂ : ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) → ((i : α) → β i) :=\n    λ g => λ i => match i with | ⟨_, hp⟩ => if hp then g.fst ⟨i, hp⟩ else g.snd ⟨i, hp⟩\n  Equiv.mk π₁ π₂\n    (λ g => by\n      intro i\n      dsimp\n      simp only [match_case_x]\n      split_ifs <;> simp)\n    (λ f => by\n      intro g\n      dsimp\n      simp only [match_case_x]\n      split_ifs <;> simp)",
+  "temperature": 0.7
+}

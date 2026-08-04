@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 9,
+  "candidate_hash": "a71ba1a78726f62d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ (z : ℤ), P z → z ≤ b) (Hinh : ∃ z, P z) : { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub } :=\nlet ⟨a, Ha⟩ := Hinh in\nlet rec go (z : ℤ) (h : ∀ (w : ℤ), w < z → ¬ P w) : { ub : ℤ // P ub ∧ ∀ (w : ℤ), P w → w ≤ ub } :=\n  match h b with\n  | false => sorry\n  | true =>\n    let rec findGreatest (z : ℤ) : ℤ :=\n      if P z then findGreatest (z + 1)\n      else z\n    let ub := findGreatest (max a b) in\n    let hb : ∀ (w : ℤ), P w → w ≤ ub :=\n      λ w hw, le_trans (le_max_left _ _) (Hb w hw)\n    ⟨ub, And.intro Ha hb⟩\ngo a (λ w hw, h w (by linarith))",
+  "temperature": 1.0
+}

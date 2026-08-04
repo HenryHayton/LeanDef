@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid pattern variable: Variable name must be atomic, but `EmptyCollection.emptyCollection._@.1931251827._hygCtx._hyg.33` has multiple components",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.005,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 1,
+  "candidate_hash": "c302cb55389efa4e",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongInduction {α : Type u_1} {p : Finset α → Sort u_4} \n    (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) \n    (s : Finset α) : p s :=\n  match s with\n  | ∅ => H ∅ fun _ _ => absurd (by simp)\n  | insert x s' =>\n    let h := H s' fun t ht => \n      match t with\n      | ∅ => absurd (by simp)\n      | insert y t' =>\n        if x = y then h t' (subset_insert_of_subset_right ht) \n        else h t' (subset_trans ht (insert_not_mem_self y))\n    h s' (subset.refl s')",
+  "temperature": 0.7
+}

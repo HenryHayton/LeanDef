@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Function expected at\n  x.property\nbut this term has type\n  ↑x ∘ Subtype.val = x₀\n\nNote: Expected a function because this term is being applied to the argument\n  y.2; Application type mismatch: The argument\n  h\nhas type\n  p a\nbut is expected to have type\n  ¬p a\nin the application\n  ⟨a, h⟩; Application type mismatch: The argument\n  h\nhas type\n  ¬p a\nof sort `Prop` but is expected to have type\n  Bool\nof sort `Type` in the application\n  !h; Application type mismatch: The argument\n  x\nhas type\n  { x // x ∘ Subtype.val = x₀ }\nbut is expected to have type\n  { a // ¬p a } → β\nin the application\n  G x; `simp` made no progress; `simp` made no progress; Tactic `apply` failed: could not unify the conclusion of `@Subtype.eq`\n  ?a1 = ?a2\nwith the goal\n  ?m.74 ≃ ?m.75\n\nNote: The full type of `@Subtype.eq` is\n  ∀ {α : Sort ?u.93} {p : α → Prop} {a1 a2 : { x // p x }}, ↑a1 = ↑a2 → a1 = a2\n\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\ninst✝ : DecidablePred p\nx₀ : { a // p a } → β\nF : { x // x ∘ Subtype.val = x₀ } → { a // ¬p a } → β := fun x y => sorry\nG : ({ a // ¬p a } → β) → { x // x ∘ Subtype.val = x₀ } := fun y => sorry\nH₁ : ∀ (x : { a // ¬p a } → β), F (G x) = x := fun x => sorry\nH₂ : ∀ (y : { x // x ∘ Subtype.val = x₀ }), G (F y) = y := fun y => sorry\n⊢ ?m.74 ≃ ?m.75; Unknown identifier `Injective.mk_of_left_injective`; stuck at solving universe constraint\n  max (?u.83 + 1) (?u.84 + 1) =?= max 1 (imax u_1 u_4)\nwhile trying to unify\n  { x // x ∘ Subtype.val = x₀ } : Sort (max 1 (imax u_1 u_4))\nwith\n  { x // x ∘ Subtype.val = x₀ } : Sort (max 1 (imax u_1 u_4)); stuck at solving universe constraint\n  ?u.90 + 1 =?= max 1 (imax u_1 u_4)\nwhile trying to unify\n  { x // x ∘ Subtype.val = x₀ } : Sort (max 1 (imax u_1 u_4))\nwith\n  { x // x ∘ Subtype.val = x₀ } : Sort (max 1 (imax u_1 u_4)); stuck at solving universe constraint\n  ?u.91 + 1 =?= imax (max 1 u_1) u_4\nwhile trying to unify\n  { a // ¬p a } → β : Sort (imax (max 1 u_1) u_4)\nwith\n  { a // ¬p a } → β : Sort (imax (max 1 u_1) u_4)",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.06,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 6,
+  "candidate_hash": "6fe3c5a662028ed3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.subtypePreimage {α : Sort u_1} {β : Sort u_4} (p : α → Prop) [DecidablePred p] (x₀ : { a // p a } → β) :\n  { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β) :=\n  let F : { x // x ∘ Subtype.val = x₀ } → ({ a // ¬p a } → β) := λ x =>\n    fun y => x.2 y.2\n  let G : ({ a // ¬p a } → β) → { x // x ∘ Subtype.val = x₀ } := λ y =>\n    fun a =>\n      if h : p a then\n        y ⟨a, h⟩\n      else\n        y ⟨a, not h⟩\n  let H₁ : ∀ x, F (G x) = x := λ x =>\n    by simp\n  let H₂ : ∀ y, G (F y) = y := λ y =>\n    by simp\n  Equiv.ofBijective (fun x => (F x, G x)) (by refine' (Injective.mk_of_left_injective _ H₁); exact fun x y ih => congr_arg F ih)\n  |>\n  Equiv.trans (Equiv.prodCongr (by apply Subtype.eq) (Equiv.refl _))\n  |>\n  Equiv.symm",
+  "temperature": 1.0
+}

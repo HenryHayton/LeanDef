@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "overloaded, errors \n  3:8 Unknown identifier `univ`\n  \n  invalid {...} notation, expected type is not of the form (C ...)\n    Set (Set α); Invalid pattern: Expected a constructor or constant marked with `[match_pattern]`\n\nHint: Using one of these would be valid:\n  [apply] `ChainClosure.succ`\n  [apply] `HasSmallInductiveDimensionLT.succ`\n  [apply] `Nat.succ`\n  [apply] `ChainClosure.below.succ`\n  [apply] `Holor.CPRankMax.succ`\n  [apply] `Lean.Level.succ`\n  [apply] `Nat.Partrec.succ`\n  [apply] `Nat.Primrec.succ`\n  [apply] `Nat.Primrec'.succ`\n  [apply] `Nat.RecursiveIn.succ`\n  [apply] `WType.Natα.succ`\n  [apply] `Holor.CPRankMax.below.succ`\n  [apply] `Nat.Partrec.Code.succ`\n  [apply] `Nat.Partrec.below.succ`\n  [apply] `Nat.Primrec.below.succ`\n  [apply] `Nat.Primrec'.below.succ`\n  [apply] `Nat.RecursiveIn.below.succ`\n  [apply] `Turing.PartrecToTM2.Λ'.succ`\n  [apply] `Turing.ToPartrec.Code.succ`\n  [apply] `Mathlib.Meta.Nat.UnifyZeroOrSuccResult.succ`; unexpected token '('; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.25,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "memPartition",
+  "sample_index": 0,
+  "candidate_hash": "7518d283ddb49e2c",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.memPartition {α : Type u_1} (f : ℕ → Set α) (n : ℕ) : Set (Set α) :=\nmatch n with\n| 0 => {univ}\n| succ n' =>\n  let prev_partition := VTask.memPartition f n';\n  let rec refine_partition (p : Set α) (acc : List (Set α)) : List (Set α) :=\n    match p with\n    | ∅ => acc\n    | s =>\n      let s_f_n := s ∩ f n';\n      let s_not_f_n := s \\ f n';\n      refine_partition s_f_n (refine_partition s_not_f_n (acc ++ [s_f_n] ++ [s_not_f_n]))\n  prev_partition.bind(refine_partition)",
+  "temperature": 0.7
+}

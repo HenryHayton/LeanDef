@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `α`; Unknown identifier `β₁`; Unknown identifier `β₂`; Unknown identifier `α`; Unknown identifier `β₂`; Unknown identifier `β₁`; `to_fun` is not a field of structure `Equiv`; `inv_fun` is not a field of structure `Equiv`; Type mismatch\n  fun f a => ?m.17\nhas type\n  (f : (a : α✝) → β₁✝ a) → (a : ?m.18 f) → ?m.19 f a\nbut is expected to have type\n  Function.LeftInverse ?m.13 ?m.12; Type mismatch\n  fun g a => ?m.24\nhas type\n  (g : (a : α✝) → β₂✝ a) → (a : ?m.25 g) → ?m.26 g a\nbut is expected to have type\n  Function.RightInverse ?m.13 ?m.12; Fields missing: `toFun`, `invFun`\n\nHint: Add missing fields:\n  \n  ̲ ̲t̲o̲F̲u̲n̲ ̲:̲=̲ ̲_̲\n  ̲ ̲i̲n̲v̲F̲u̲n̲ ̲:̲=̲ ̲_̲; `simp` made no progress; `simp` made no progress",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.041,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.piCongrRight",
+  "sample_index": 9,
+  "candidate_hash": "d5ba62735b84e1b3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piCongrRight : {α : Sort u_1} -> {β₁ : α → Sort u_9} -> {β₂ : α → Sort u_10} -> (F : (a : α) → β₁ a ≃ β₂ a) -> ((a : α) → β₁ a) ≃ ((a : α) → β₂ a) :=\nfun F =>\nlet f_to_g : (a : α) → β₁ a → β₂ a :=\n  fun a b => (F a).toFun b\nlet g_to_f : (a : α) → β₂ a → β₁ a :=\n  fun a b => (F a).invFun b\n{\n  to_fun := f_to_g,\n  inv_fun := g_to_f,\n  left_inv := fun f a => by simp [(F a).left_inv],\n  right_inv := fun g a => by simp [(F a).right_inv]\n}",
+  "temperature": 1.0
+}

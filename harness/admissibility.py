@@ -51,6 +51,41 @@ _AXIOM_LIST_RE = re.compile(r"depends on axioms:\s*\[(.*?)\]", re.DOTALL)  # Lea
 # fixed there and here together).
 _NO_AXIOMS_RE = re.compile(r"does not depend on any axioms")
 
+# Universe variables named in a pinned type (`Type u_1`, `Sort u`, ...). A `def` auto-binds
+# these; a bare `#check (name : <type>)` does NOT, and fails with "unknown universe level `u`".
+# Found the hard way (2026-08-06): the type probe rejected perfectly correct candidates for
+# `Monotone` -- 7 of 7 -- and 32 of the 41 tasks carry universe variables, so unfixed this would
+# have manufactured false WRONG_TYPE across 78% of the corpus and read as a model failure.
+# `Type*` is deliberately not matched: it is a wildcard, not a named universe.
+_UNIVERSE_RE = re.compile(r"(?:Type|Sort)\s+([A-Za-z_][A-Za-z0-9_]*)")
+
+
+def universe_names(type_sig: str) -> list[str]:
+    """Universe variables named in `type_sig`, in first-appearance order."""
+    seen: list[str] = []
+    for m in _UNIVERSE_RE.finditer(type_sig or ""):
+        name = m.group(1)
+        if name not in seen:
+            seen.append(name)
+    return seen
+
+
+def type_probe_command(signature: PinnedSignature) -> str:
+    """The command that checks a candidate has the pinned type.
+
+    `#check (name : type)` rather than `example : type := name`: the `example` form additionally
+    COMPILES the definition and so fails every noncomputable candidate with "consider marking it
+    as 'noncomputable'", which would have produced systematic false WRONG_TYPE against exactly
+    the classical-construction population. `#check` only elaborates, and still catches wrong
+    arity and wrong result type (both verified against live Lean).
+
+    Prefixed with a `universe` declaration when the pinned type names universe variables -- see
+    `_UNIVERSE_RE`.
+    """
+    universes = universe_names(signature.type_sig)
+    prefix = f"universe {' '.join(universes)}\n" if universes else ""
+    return f"{prefix}#check ({signature.name} : {signature.type_sig})"
+
 
 class AdmissibilityFailure(Enum):
     COMPILE_ERROR = "compile_error"
@@ -165,9 +200,7 @@ def check_admissibility(
         # classical-construction population. `#check` only elaborates, and still catches wrong
         # arity and wrong result type (both verified).
         type_probe = run_checked(
-            server,
-            Command(cmd=f"#check ({signature.name} : {signature.type_sig})", env=candidate_env),
-            timeout=timeout,
+            server, Command(cmd=type_probe_command(signature), env=candidate_env), timeout=timeout
         )
         if type_probe.status is not CheckStatus.PASSED:
             return AdmissibilityVerdict(

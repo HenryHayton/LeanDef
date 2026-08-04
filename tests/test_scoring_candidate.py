@@ -379,3 +379,51 @@ def test_a_declaration_of_the_wrong_name_is_rejected(mathlib_env):
     )
     assert not record["admissible"]
     assert record["admissibility_failure"] == "name_shadowed"
+
+
+# --- universe-variable type probe (2026-08-06 regression) ------------------------------------------
+
+
+def test_universe_names_are_extracted_but_not_the_wildcard():
+    from harness.admissibility import universe_names
+
+    assert universe_names("{α : Type u} -> {β : Type v} -> Prop") == ["u", "v"]
+    assert universe_names("{α : Sort u_1} -> {β : Type u_1} -> Prop") == ["u_1"]  # deduped, ordered
+    assert universe_names("(b n : ℕ) -> ℕ") == []
+    assert universe_names("{α : Type*} -> Prop") == []  # a wildcard, not a named universe
+
+
+def test_a_universe_polymorphic_candidate_is_admissible(mathlib_env):
+    """THE regression. A bare `#check (name : type)` does not bind the universe variables a
+    `def` auto-binds, so the probe failed with "unknown universe level `u`" and rejected
+    perfectly correct candidates as WRONG_TYPE.
+
+    Measured before the fix: 7 of 7 `Monotone` candidates rejected, and 32 of the 41 tasks carry
+    universe variables -- so this would have manufactured false WRONG_TYPE across 78% of the
+    corpus and read as a model failure rather than a harness one.
+    """
+    server, env = mathlib_env
+    sig = PinnedSignature(
+        name="VTask.Monotone",
+        type_sig="{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop",
+    )
+    decl = ("def VTask.Monotone {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : α → β) : Prop := "
+            "∀ a b : α, a ≤ b → f a ≤ f b")
+    record = score_candidate_body(server, env, sig, decl, [], budgets=FAST)
+
+    assert record["admissible"], record["admissibility_detail"]
+    assert record["admissibility_failure"] is None
+
+
+def test_a_genuinely_wrong_type_is_still_rejected_under_universe_binding(mathlib_env):
+    """The fix must not blunt the check: binding the universes cannot make a mismatch pass."""
+    server, env = mathlib_env
+    sig = PinnedSignature(
+        name="VTask.Monotone",
+        type_sig="{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop",
+    )
+    record = score_candidate_body(
+        server, env, sig, "def VTask.Monotone (n : ℕ) : ℕ := n", [], budgets=FAST
+    )
+    assert not record["admissible"]
+    assert record["admissibility_failure"] == "wrong_type"

@@ -46,7 +46,12 @@ def worker_count() -> int:
 # candidate-count belt: a full pass is a far longer server lifetime than any test session.
 SERVER_GROWTH_FACTOR = 1.5
 SERVER_ABSOLUTE_CAP_GB = 10.0
-RECYCLE_EVERY_N_CANDIDATES = 50
+# The candidate-count belt is a backstop, not the primary control -- growth-from-baseline is.
+# Set from measurement (2026-08-06): a cold Mathlib import costs ~40 s on the Mac, so a belt of
+# 50 adds ~0.8 s/candidate against a measured ~0.9 s/candidate of actual work, i.e. it would
+# roughly DOUBLE the run for protection the RSS check already provides. 300 keeps a bound on
+# unbounded server lifetime without paying for it on every batch.
+RECYCLE_EVERY_N_CANDIDATES = 300
 
 # One retry for infrastructure failures (ENV_DEATH/ERRORED) before a fact is recorded ERROR.
 INFRA_RETRY_ATTEMPTS = 1

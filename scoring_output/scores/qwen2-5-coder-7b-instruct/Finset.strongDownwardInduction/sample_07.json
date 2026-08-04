@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `elim`: The environment does not contain `Bool.elim`, so it is not possible to project the field `elim` from an expression\n  false\nof type `Bool`; Unknown constant `Finset.insert`\n\nNote: Inferred this name from the expected resulting type of `.insert`:\n  Finset α",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.012,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 7,
+  "candidate_hash": "dba09ac27e617c17",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.strongDownwardInduction {α : Type u_1} {p : Finset α → Sort u_4} {n : ℕ} \n  (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁) \n  (s : Finset α) (hs : s.card ≤ n) : p s :=\nmatch s with\n| .empty => H .empty (fun _ _ _ => false.elim (by omega)) hs\n| .insert x s' =>\n  let IH := fun t₂ hst' hleqhn htsub =>\n    match hst' with\n    | .subset_insert hx' hss' => \n      let H' := fun hst'' hlleqhn htsup => H t₂ (fun ht''' hltleqn htsup' => HT''') hleqhn htsup\n      H s' (fun hs' hleqhn' hssub' => H' (fun ht' hltleqn' htsup' => HT')) hleqhn' hssub'\n  H s IH hs",
+  "temperature": 1.0
+}

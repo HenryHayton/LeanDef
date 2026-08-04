@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid pattern: Expected a constructor or constant marked with `[match_pattern]`\n\nHint: Using one of these would be valid:\n  [apply] `ChainClosure.succ`\n  [apply] `HasSmallInductiveDimensionLT.succ`\n  [apply] `Nat.succ`\n  [apply] `ChainClosure.below.succ`\n  [apply] `Holor.CPRankMax.succ`\n  [apply] `Lean.Level.succ`\n  [apply] `Nat.Partrec.succ`\n  [apply] `Nat.Primrec.succ`\n  [apply] `Nat.Primrec'.succ`\n  [apply] `Nat.RecursiveIn.succ`\n  [apply] `WType.Natα.succ`\n  [apply] `Holor.CPRankMax.below.succ`\n  [apply] `Nat.Partrec.Code.succ`\n  [apply] `Nat.Partrec.below.succ`\n  [apply] `Nat.Primrec.below.succ`\n  [apply] `Nat.Primrec'.below.succ`\n  [apply] `Nat.RecursiveIn.below.succ`\n  [apply] `Turing.PartrecToTM2.Λ'.succ`\n  [apply] `Turing.ToPartrec.Code.succ`\n  [apply] `Mathlib.Meta.Nat.UnifyZeroOrSuccResult.succ`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.25,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Nat.evenOddRec",
+  "sample_index": 8,
+  "candidate_hash": "c77ec1c6259c887d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.evenOddRec {P : ℕ → Sort u_1} (h0 : P 0) (h_even : (n : ℕ) → P n → P (2 * n)) (h_odd : (n : ℕ) → P n → P (2 * n + 1)) (n : ℕ) : P n :=\nmatch n with\n| 0 => h0\n| succ m =>\n  match m with\n  | 0 => h_even 0 h0\n  | succ k =>\n    match (m : Fin 2) with\n    | Fin.zero => h_even (succ k) (VTask.evenOddRec h0 h_even h_odd (succ k))\n    | Fin.one => h_odd (succ k) (VTask.evenOddRec h0 h_even h_odd (succ k))",
+  "temperature": 1.0
+}

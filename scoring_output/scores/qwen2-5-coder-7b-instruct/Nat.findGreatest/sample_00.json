@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "fail to show termination for\n  VTask.findGreatest.findGreatest'\nwith errors\nfailed to infer structural recursion:\nNot considering parameter P of VTask.findGreatest.findGreatest':\n  it is unchanged in the recursive calls\nNot considering parameter dec_pred of VTask.findGreatest.findGreatest':\n  it is unchanged in the recursive calls\nNot considering parameter n of VTask.findGreatest.findGreatest':\n  it is unchanged in the recursive calls\nCannot use parameter i:\n  failed to eliminate recursive application\n    findGreatest.findGreatest' P dec_pred n (i + 1)\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n          i n - i\n1) 6:7-28 ?     ≤\nPlease use `termination_by` to specify a decreasing measure.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.328,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Nat.findGreatest",
+  "sample_index": 0,
+  "candidate_hash": "d55328c202d0a158",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.findGreatest : (P : ℕ → Prop) -> [DecidablePred P] -> ℕ → ℕ :=\nfun P dec_pred n =>\n  let rec findGreatest' (i : ℕ) : ℕ :=\n    if i > n then 0\n    else if P i then i\n    else findGreatest' (i + 1)\n  findGreatest' 0",
+  "temperature": 0.7
+}

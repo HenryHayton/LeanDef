@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "don't know how to synthesize placeholder for argument `n`\ncontext:\nmotive : ℕ → Sort u\nn : ℕ\n⊢ ℕ\n\nNote: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be; don't know how to synthesize placeholder for argument `b`\ncontext:\nmotive : ℕ → Sort u\nn : ℕ\n⊢ Bool\n\nNote: Because this declaration's type has been explicitly provided, all parameter types and holes (e.g., `_`) in its header are resolved before its body is processed; information from the declaration body cannot be used to infer what these values should be; Type mismatch\n  bit false 0\nhas type\n  motive (Nat.bit (?m.3 0) (?m.4 0))\nbut is expected to have type\n  motive 0; Type mismatch\n  bit true 0\nhas type\n  motive (Nat.bit (?m.3 1) (?m.4 1))\nbut is expected to have type\n  motive 1; Type mismatch\n  bit b m\nhas type\n  motive (Nat.bit (?m.3 x✝) (?m.4 x✝))\nbut is expected to have type\n  motive x✝; failed to synthesize instance of type class\n  HAndThen ℕ ℕ ℕ\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.028,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Nat.bitCasesOn",
+  "sample_index": 9,
+  "candidate_hash": "8658eba158591420",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.bitCasesOn {motive : ℕ → Sort u} (n : ℕ) (bit : Bool → ℕ → motive (Nat.bit _ _)) : motive n :=\n  match n with\n  | 0 => bit false 0\n  | 1 => bit true 0\n  | _ =>\n    let b := n.testBit 0\n    let m := n >> 1\n    bit b m",
+  "temperature": 1.0
+}

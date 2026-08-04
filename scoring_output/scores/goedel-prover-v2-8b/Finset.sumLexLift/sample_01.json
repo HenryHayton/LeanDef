@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid `⟨...⟩` notation: The expected type `α₁ ⊕ α₂` has more than one constructor\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; Case tag `rhs` not found.\n\nNote: There are no cases to select.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.016,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.sumLexLift",
+  "sample_index": 1,
+  "candidate_hash": "b5f8b1e12108f6be",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.sumLexLift (f₁ : α₁ → β₁ → Finset γ₁) (f₂ : α₂ → β₂ → Finset γ₂) (g₁ : α₁ → β₂ → Finset γ₁) (g₂ : α₁ → β₂ → Finset γ₂) : α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂) := by\n  intro a b\n  match a, b with\n  | ⟨a₁, _⟩, ⟨b₁, _⟩ => -- Case: a = inl a₁, b = inl b₁\n    -- Use f₁ to get Finset γ₁ and map each element to inl\n    have h₁ : f₁ a₁ b₁ = f₁ a₁ b₁ := rfl\n    have h₂ : (f₁ a₁ b₁).image (fun c => inl c) = (f₁ a₁ b₁).image (fun c => inl c) := rfl\n    have h₃ : (f₁ a₁ b₁).image (fun c => inl c) ⊆ (f₁ a₁ b₁).image (fun c => inl c) := by simp\n    -- Use the image to construct the finset\n    have h₄ : (f₁ a₁ b₁).image (fun c => inl c) = (f₁ a₁ b₁).image (fun c => inl c) := rfl\n    -- The actual construction is not needed here\n    simp_all [Finset.sum_image]\n    <;> aesop\n  | ⟨a₁, _⟩, ⟨b₂, _⟩ => -- Case: a = inl a₁, b = inr b₂\n    -- Use g₁ and g₂ to get Finset γ₁ and Finset γ₂\n    have h₁ : g₁ a₁ b₂ = g₁ a₁ b₂ := rfl\n    have h₂ : g₂ a₁ b₂ = g₂ a₁ b₂ := rfl\n    -- Use the disjoint union to construct the finset\n    have h₃ : (g₁ a₁ b₂).image (fun c => inl c) ∪ (g₂ a₁ b₂).image (fun c => inr c) = (g₁ a₁ b₂).image (fun c => inl c) ∪ (g₂ a₁ b₂).image (fun c => inr c) := rfl\n    -- The actual construction is not needed here\n    simp_all [Finset.sum_image]\n    <;> aesop\n  | ⟨a₂, _⟩, ⟨b₁, _⟩ => -- Case: a = inr a₂, b = inl b₁\n    -- The result is empty\n    simp\n  | ⟨a₂, _⟩, ⟨b₂, _⟩ => -- Case: a = inr a₂, b = inr b₂\n    -- Use f₂ to get Finset γ₂ and map each element to inr\n    have h₁ : f₂ a₂ b₂ = f₂ a₂ b₂ := rfl\n    have h₂ : (f₂ a₂ b₂).image (fun c => inr c) = (f₂ a₂ b₂).image (fun c => inr c) := rfl\n    have h₃ : (f₂ a₂ b₂).image (fun c => inr c) ⊆ (f₂ a₂ b₂).image (fun c => inr c) := by simp\n    -- Use the image to construct the finset\n    have h₄ : (f₂ a₂ b₂).image (fun c => inr c) = (f₂ a₂ b₂).image (fun c => inr c) := rfl\n    -- The actual construction is not needed here\n    simp_all [Finset.sum_image]\n    <;> aesop",
+  "temperature": 0.7
+}

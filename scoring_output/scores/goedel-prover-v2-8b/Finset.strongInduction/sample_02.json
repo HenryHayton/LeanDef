@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  strongInduction ?m.20\nhas type\n  (s : Finset ?m.17) → ?m.18 s\nof sort `Sort (imax (u_1 + 1) u_4)` but is expected to have type\n  p t\nof sort `Sort u_4`; Application type mismatch: The argument\n  t\nhas type\n  Finset α\nof sort `Type u_1` but is expected to have type\n  (s : Finset ?m.17) → ((t : Finset ?m.17) → t ⊂ s → ?m.18 t) → ?m.18 s\nof sort\n  Sort (imax (u_1 + 1) (imax (u_1 + 1) u_4) u_4)\nin the application\n  strongInduction t",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.087,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 2,
+  "candidate_hash": "069fae07b59729a2",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) -> (s : Finset α) -> p s := by\n  intro α p H s\n  have h : p s := by\n    have h₁ : p s := H s (fun t ht => VTask.strongInduction t)\n    exact h₁\n  exact h",
+  "temperature": 0.7
+}

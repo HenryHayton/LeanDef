@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.008,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 5,
+  "candidate_hash": "078b0695d9541304",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.subtypePreimage {α : Sort u_1} {β : Sort u_4} (p : α → Prop) (hdec : DecidablePred p) (x₀ : {a // p a} → β) :\n    {x // x ∘ Subtype.val = x₀} ≃ ({a // ¬p a} → β) :=\n  let f : {x // x ∘ Subtype.val = x₀} → {a // ¬p a} → β := λ x y, x.val y\n  let g : {a // ¬p a} → β → {x // x ∘ Subtype.val = x₀} := λ y x, ⟨x, λ a, by\n    cases hdec a; simp [p, x₀, f]; tauto\n  ⟩\n  let hf : ∀ x, f x ∘ g x = id :=\n    λ x, by\n      ext y\n      dsimp\n      rw [g]\n      simp\n  let hg : ∀ y, g y ∘ f y = id :=\n    λ y, by\n      ext x\n      dsimp\n      rw [f]\n      simp\n  Equiv.ofBijective (λ x, ⟨x, g (Subtype.val x), hf x⟩) (λ y, ⟨y, f (Subtype.val y), hg y⟩)\n    (by\n      intros ⟨x, hx⟩\n      use [x, hx, hg x])\n    (by\n      intros ⟨y, hy⟩\n      use [y, hy, hf y]))",
+  "temperature": 1.0
+}

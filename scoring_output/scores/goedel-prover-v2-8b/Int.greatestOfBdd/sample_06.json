@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  h₁\nhas type\n  ∃ z, P z\nbut is expected to have type\n  ∃ b, ∀ (z : ℤ), ?m.47 z → z ≤ b\nin the application\n  Int.exists_greatest_of_bdd h₁; Application type mismatch: The argument\n  hub\nhas type\n  ub ∈ upperBounds {z | P z}\nbut is expected to have type\n  P ub\nin the application\n  And.intro hub; Application type mismatch: The argument\n  hz\nhas type\n  P z\nof sort `Prop` but is expected to have type\n  ℤ\nof sort `Type` in the application\n  hub' hz; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHineh : ∃ z, P z\nh_main : ∃ ub, P ub ∧ ∀ (z : ℤ), P z → z ≤ ub\n⊢ { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub }",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.04,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 6,
+  "candidate_hash": "e81d0e8fdcd30de7",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ (z : ℤ), P z → z ≤ b) (Hineh : ∃ z, P z) : { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub } := by\n  have h_main : ∃ (ub : ℤ), P ub ∧ ∀ (z : ℤ), P z → z ≤ ub := by\n    classical\n    -- Use the lemma `Int.exists_greatest_of_bdd` to find the greatest element\n    obtain ⟨z₀, hz₀⟩ := Hineh\n    have h₁ : ∃ (z : ℤ), P z := ⟨z₀, hz₀⟩\n    have h₂ : BddAbove {z : ℤ | P z} := by\n      use b\n      rintro z hz\n      exact Hb z hz\n    -- Apply `Int.exists_greatest_of_bdd` to get the greatest element\n    obtain ⟨ub, hub, hub'⟩ := Int.exists_greatest_of_bdd h₁ h₂\n    exact ⟨ub, hub, fun z hz => hub' hz⟩\n  \n  obtain ⟨ub, hub₁, hub₂⟩ := h_main\n  exact ⟨ub, hub₁, hub₂⟩",
+  "temperature": 1.0
+}

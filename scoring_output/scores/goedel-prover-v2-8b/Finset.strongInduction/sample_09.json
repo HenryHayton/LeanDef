@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  fun α p H s => ?m.8\nhas type\n  (α : (s : Finset α✝) → ((t : Finset α✝) → t ⊂ s → p✝ t) → p✝ s) →\n    (p : Finset α✝) → (H : ?m.9 α p) → (s : ?m.10 α p H) → ?m.11 α p H s\nbut is expected to have type\n  ((s : Finset α✝) → ((t : Finset α✝) → t ⊂ s → p✝ t) → p✝ s) → (s : Finset α✝) → p✝ s\nthe following variables have been introduced by the implicit lambda feature\n  α✝ : Type u_1\n  p✝ : Finset α✝ → Sort u_4\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.035,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 9,
+  "candidate_hash": "ccfcb94acf311c0f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) -> (s : Finset α) -> p s := fun α p H s => by\n  have h_main : p s := by\n    have h₁ : ∀ (s : Finset α), p s := by\n      intro s\n      classical\n      -- Use the well-founded induction principle for Finset\n      have h₂ : WellFounded (· ⊂ ·) := Finset.wf_lt\n      -- Define the strong induction function\n      have h₃ : p s := by\n        -- Use the well-founded induction principle for Finset\n        exact h₂.induction_on s (fun t _ => by\n          -- Base case: when t = ∅, the induction hypothesis is vacuously true\n          have h₄ : p t := by\n            -- Use the given step function H\n            have h₅ : p t := by\n              -- Use the given step function H\n              exact h₂.induction_on t (fun u _ => by\n                -- Base case: when u = ∅, the induction hypothesis is vacuously true\n                exfalso\n                simp_all [Finset.not_subset_iff]\n                <;> aesop\n              ) (by\n                -- Inductive step: assume the statement holds for all u ⊂ t, prove for t\n                intro u hu\n                simp_all [Finset.not_subset_iff]\n                <;> aesop\n              )\n            exact h₅\n          exact h₄\n        ) (by\n          -- Inductive step: assume the statement holds for all u ⊂ t, prove for t\n          intro t ht\n          have h₅ : p t := by\n            have h₆ : p t := by\n              -- Use the given step function H\n              exact h₂.induction_on t (fun u _ => by\n                -- Base case: when u = ∅, the induction hypothesis is vacuously true\n                exfalso\n                simp_all [Finset.not_subset_iff]\n                <;> aesop\n              ) (by\n                -- Inductive step: assume the statement holds for all u ⊂ t, prove for t\n                intro u hu\n                simp_all [Finset.not_subset_iff]\n                <;> aesop\n              )\n            exact h₆\n          exact h₅\n        )\n      exact h₃\n    exact h₁ s\n  exact h_main",
+  "temperature": 1.0
+}

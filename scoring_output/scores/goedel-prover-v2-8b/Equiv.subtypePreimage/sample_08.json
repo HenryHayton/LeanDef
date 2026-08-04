@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Insufficient number of fields for `⟨...⟩` constructor: Constructor `Equiv.mk` has 4 explicit field, but only 2 were provided; type expected, got\n  (↑x ↑a : β); type expected, got\n  (↑x ↑a : β); unsolved goals\ncase refine'_1\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\ninst✝ : DecidablePred p\nx₀ : { a // p a } → β\nx : { x // x ∘ Subtype.val = x₀ }\n⊢ { a // ¬p a } → β",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.027,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 8,
+  "candidate_hash": "bc79f7eff91dbdd3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.subtypePreimage (α : Sort u_1) (β : Sort u_4) (p : α → Prop) [DecidablePred p] (x₀ : { a // p a } → β) : { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β) := by\n  apply Equiv.symm\n  apply Equiv.symm\n  refine' ⟨fun x ↦ _, fun y ↦ ⟨_, _⟩⟩\n  have h_forward : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  have h_backward : ∀ (y : {a : α // ¬p a} → β), (∃ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a = y a)) := by\n    intro y\n    have h₁ : ∃ (x : α → β), x ∘ Subtype.val = x₀ := by\n      refine' ⟨fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by simpa using h⟩, _⟩\n      ext a\n      by_cases h : p a\n      · -- Case: p a is true\n        simp [h, Subtype.val_mk]\n        <;> aesop\n      · -- Case: p a is false\n        simp [h, Subtype.val_mk]\n        <;> aesop\n    obtain ⟨x, hx⟩ := h₁\n    refine' ⟨⟨x, hx⟩, _⟩\n    intro a\n    by_cases h : p a\n    · -- Case: p a is true\n      simp_all [Subtype.val_mk]\n      <;> aesop\n    · -- Case: p a is false\n      simp_all [Subtype.val_mk]\n      <;> aesop\n  \n  have h_inverse : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  have h_main : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  -- Define the forward direction\n  have h_forward_def : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  -- Define the backward direction\n  have h_backward_def : ∀ (y : {a : α // ¬p a} → β), (∃ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a = y a)) := by\n    intro y\n    have h₁ : ∃ (x : α → β), x ∘ Subtype.val = x₀ := by\n      refine' ⟨fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by simpa using h⟩, _⟩\n      ext a\n      by_cases h : p a\n      · -- Case: p a is true\n        simp [h, Subtype.val_mk]\n        <;> aesop\n      · -- Case: p a is false\n        simp [h, Subtype.val_mk]\n        <;> aesop\n    obtain ⟨x, hx⟩ := h₁\n    refine' ⟨⟨x, hx⟩, _⟩\n    intro a\n    by_cases h : p a\n    · -- Case: p a is true\n      simp_all [Subtype.val_mk]\n      <;> aesop\n    · -- Case: p a is false\n      simp_all [Subtype.val_mk]\n      <;> aesop\n  \n  -- Prove that the two directions are inverses of each other\n  have h_main_def : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  -- Define the final equivalence\n  refine' ⟨fun x ↦ _, fun y ↦ ⟨_, _⟩⟩\n  have h₁ : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  have h₂ : ∀ (y : {a : α // ¬p a} → β), (∃ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a = y a)) := by\n    intro y\n    have h₃ : ∃ (x : α → β), x ∘ Subtype.val = x₀ := by\n      refine' ⟨fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by simpa using h⟩, _⟩\n      ext a\n      by_cases h : p a\n      · -- Case: p a is true\n        simp [h, Subtype.val_mk]\n        <;> aesop\n      · -- Case: p a is false\n        simp [h, Subtype.val_mk]\n        <;> aesop\n    obtain ⟨x, hx⟩ := h₃\n    refine' ⟨⟨x, hx⟩, _⟩\n    intro a\n    by_cases h : p a\n    · -- Case: p a is true\n      simp_all [Subtype.val_mk]\n      <;> aesop\n    · -- Case: p a is false\n      simp_all [Subtype.val_mk]\n      <;> aesop\n  have h₃ : ∀ (x : {x : α → β // x ∘ Subtype.val = x₀}), (∀ (a : {a : α // ¬p a}), x.1 a) = (∀ (a : {a : α // ¬p a}), x.1 a) := by\n    intro x\n    rfl\n  \n  -- Simplify the proof using the given lemmas\n  simp_all [Function.funext_iff, Subtype.ext_iff, Function.comp_apply]\n  <;> aesop",
+  "temperature": 1.0
+}

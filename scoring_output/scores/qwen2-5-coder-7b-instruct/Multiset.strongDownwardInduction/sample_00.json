@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid pattern variable: Variable name must be atomic, but `nat.zero` has multiple components",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.012,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 0,
+  "candidate_hash": "6172372449fa8e26",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Multiset α → Sort u_3} {n : ℕ} \n    (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁)\n    (s : Multiset α) (hs : s.card ≤ n) : p s :=\nmatch hs with\n| nat.zero =>\n  H s fun _ _ => absurd (ne_empty_of_card_zero s) (by simp [card_zero])\n| nat.succ _ =>\n  let rec go (t : Multiset α) (ht : t.card ≤ n) : p t :=\n    match t with\n    | mset.empty => absurd (eq_empty_of_card_zero mset.empty) (by simp [card_zero])\n    | mset.insert x m =>\n      let h := ne_empty_of_card_one m;\n      let h' := card_insert_le ht;\n      let h'' := lt_of_le_of_lt h' (lt_of_lt_of_le h h');\n      H t fun t2 ht2 h3 => go t2 ht2\n  go s hs",
+  "temperature": 0.7
+}

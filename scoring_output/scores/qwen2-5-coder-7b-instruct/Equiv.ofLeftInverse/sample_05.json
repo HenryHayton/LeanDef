@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nb : β\n⊢ Nonempty α",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.289,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 5,
+  "candidate_hash": "f178ab6733830e96",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.ofLeftInverse {α : Sort u_3} {β : Type u_4} (f : α → β) \n    (f_inv : Nonempty α → β → α) (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) : α ≃ ↑(Set.range f) :=\n  let inv : β → α :=\n    fun b =>\n      match f_inv (Classical.choice (by simp)) with\n      | Some x => x\n  let inj : Injective f := \n    assume a1 a2 H,\n    show f a1 = f a2, from hf (Classical.choice (by simp)) H\n  Equiv.mk (λ a => ⟨f a, a, inj a⟩) inv\n    (assume b,\n      have b_val ∈ Set.range f, from Set.mem_range.mp b,\n      exists (a : α) (H : f a = b_val),\n        by simpa using Set.mem_range.mpr b_val,\n      match this with\n      | (a, H) => (some a, by rw [← H, inj a], by refl))\n    (assume a,\n      have b_val ∈ Set.range f, from Set.mem_range.mp a.property,\n      exists (b : β) (H : f_inv (Classical.choice (by simp)) b = b_val),\n        by simpa using Set.mem_range.mpr b_val,\n      match this with\n      | (b, H) => (some b, by rw [← H, inj b], by refl))",
+  "temperature": 1.0
+}

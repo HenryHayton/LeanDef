@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `isEmpty`: The environment does not contain `Finset.isEmpty`, so it is not possible to project the field `isEmpty` from an expression\n  ss\nof type `Finset α`; Unknown identifier `isEmpty_not_empty`; Invalid field `subsets`: The environment does not contain `Finset.subsets`, so it is not possible to project the field `subsets` from an expression\n  ss\nof type `Finset α`; Invalid field notation: Type of\n  ts\nis not known; cannot resolve field `filter`\n\nHint: Consider replacing the field projection with a call to one of the following:\n  • `Array.filter`\n  • `DFinsupp.filter`\n  • `FilterBasis.filter`\n  • `Finset.filter`\n  • `Finsupp.filter`\n  • `IsAddUnit.filter`\n  • `IsUnit.filter`\n  • `List.filter`\n  • `MLList.filter`\n  • `Multiset.filter`\n  • `Nondet.filter`\n  • `Option.filter`\n  • `Ordnode.filter`\n  • `PMF.filter`\n  • `SummationFilter.filter`\n  • `UniformFun.filter`\n  • `Aesop.PersistentHashSet.filter`\n  • `Aesop.UnorderedArraySet.filter`\n  • `BoxIntegral.Prepartition.filter`\n  • `BoxIntegral.TaggedPrepartition.filter`\n  • `Filter.IsBasis.filter`\n  • `Lean.NameHashSet.filter`\n  • `Lean.NameMap.filter`\n  • `Lean.NameSet.filter`\n  • `Lean.PersistentArray.filter`\n  • `Lean.Syntax.filter`\n  • `List.IsInfix.filter`\n  • `List.IsPrefix.filter`\n  • `List.IsSuffix.filter`\n  • `List.Nodup.filter`\n  • `List.Pairwise.filter`\n  • `List.Perm.filter`\n  • `List.Sublist.filter`\n  • `List.Subperm.filter`\n  • `Multiset.Nodup.filter`\n  • `RBTree.RBMap.filter`\n  • `RBTree.RBSet.filter`\n  • `Std.DHashMap.filter`\n  • `Std.DTreeMap.filter`\n  • `Std.ExtDHashMap.filter`\n  • `Std.ExtDTreeMap.filter`\n  • `Std.ExtHashMap.filter`\n  • `Std.ExtHashSet.filter`\n  • `Std.ExtTreeMap.filter`\n  • `Std.ExtTreeSet.filter`\n  • `Std.HashMap.filter`\n  • `Std.HashSet.filter`\n  • `Std.Iter.filter`\n  • `Std.IterM.filter`\n  • `Std.TreeMap.filter`\n  • `Std.TreeSet.filter`\n  • `Stream'.WSeq.filter`\n  • `BoxIntegral.IntegrationParams.MemBaseSet.filter`\n  • `Lean.LibrarySuggestions.Config.filter`\n  • `S",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.085,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 5,
+  "candidate_hash": "82ef1f4929243348",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.strongInduction {α : Type u_1} {p : Finset α → Sort u_4}\n  (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s)\n  (s : Finset α) : p s :=\n  let rec go (ss : Finset α) : p ss :=\n    if ss.isEmpty then H ss fun t h => absurd h isEmpty_not_empty\n    else\n      let ts := ss.subsets;\n      let oracle : ∀ t : Finset α, t ⊂ ss → p t := fun t h =>\n        go (ts.filter fun x => x ⊂ ss ∧ x ≠ t) t (h.trans $ Finset.mem_filter.2 ⟨_, rfl⟩);\n      H ss oracle\n  go s",
+  "temperature": 1.0
+}

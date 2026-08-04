@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "fail to show termination for\n  VTask.strongDownwardInduction\nwith errors\nfailed to infer structural recursion:\nNot considering parameter α of VTask.strongDownwardInduction:\n  it is unchanged in the recursive calls\nNot considering parameter p of VTask.strongDownwardInduction:\n  it is unchanged in the recursive calls\nNot considering parameter n of VTask.strongDownwardInduction:\n  it is unchanged in the recursive calls\nNot considering parameter H of VTask.strongDownwardInduction:\n  it is unchanged in the recursive calls\nNot considering parameter hs of VTask.strongDownwardInduction:\n  its type is an inductive datatype\n    s.card.le n\n  and the datatype parameter\n    s.card\n  depends on the function parameter\n    s\n  which is not fixed.\nCannot use parameter s:\n  the type Finset α does not have a `.brecOn` recursor\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n            s #1\n1) 11:10-46 ?  ?\n\n#1: n - s.card\n\nPlease use `termination_by` to specify a decreasing measure.; failed to set reducibility status, `strongDownwardInduction` is not a definition\n\nNote: Use `set_option allowUnsafeReducibility true` to override reducibility status validation",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.635,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 2,
+  "candidate_hash": "b054de1586c15b2b",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Finset α → Sort u_4} {n : ℕ} (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁) (s : Finset α) (hs : s.card ≤ n) : p s := by\n  have h_main : p s := by\n    classical\n    -- Use strong induction on the cardinality of s\n    have h₁ : ∀ (t : Finset α), t.card ≤ n → p t := by\n      intro t ht\n      -- Use the strong induction principle to prove the statement\n      have h₂ : ∀ (s : Finset α), s.card ≤ n → p s := by\n        intro s hs\n        -- Use the strong induction principle to prove the statement\n        apply VTask.strongDownwardInduction H s hs\n      -- Apply the strong induction principle to the current set t\n      apply h₂\n      <;> assumption\n    -- Apply the strong induction principle to the current set s\n    apply h₁\n    <;> assumption\n  -- Apply the main result to the current set s\n  exact h_main",
+  "temperature": 0.7
+}

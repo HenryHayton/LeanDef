@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "don't know how to synthesize implicit argument `a`\n  @rfl\n    ((t₂ :\n        (t₁ : Multiset ?m.27) →\n          ({t₂ : Multiset ?m.27} → t₂.card ≤ ?m.28 → t₁ < t₂ → ?m.29 t₂) → t₁.card ≤ ?m.28 → ?m.29 t₁) →\n      (ht₂_card_le_n : Multiset ?m.27) → ?m.30 t₂ ht₂_card_le_n → ht₂_card_le_n.card ≤ ?m.28 → ?m.29 ht₂_card_le_n)\n    fun t₂ ht₂_card_le_n hs_lt_t₂ => strongDownwardInduction t₂ ht₂_card_le_n\ncontext:\nα : Type u_1\np : Multiset α → Sort u_3\nn : ℕ\nH : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁\ns : Multiset α\nhs_card_le_n h₁ : s.card ≤ n\n⊢ (t₂ :\n      (t₁ : Multiset ?m.27) →\n        ({t₂ : Multiset ?m.27} → t₂.card ≤ ?m.28 → t₁ < t₂ → ?m.29 t₂) → t₁.card ≤ ?m.28 → ?m.29 t₁) →\n    (ht₂_card_le_n : Multiset ?m.27) → ?m.30 t₂ ht₂_card_le_n → ht₂_card_le_n.card ≤ ?m.28 → ?m.29 ht₂_card_le_n; don't know how to synthesize implicit argument `α`\n  @rfl\n    ((t₂ :\n        (t₁ : Multiset ?m.27) →\n          ({t₂ : Multiset ?m.27} → t₂.card ≤ ?m.28 → t₁ < t₂ → ?m.29 t₂) → t₁.card ≤ ?m.28 → ?m.29 t₁) →\n      (ht₂_card_le_n : Multiset ?m.27) → ?m.30 t₂ ht₂_card_le_n → ht₂_card_le_n.card ≤ ?m.28 → ?m.29 ht₂_card_le_n)\n    fun t₂ ht₂_card_le_n hs_lt_t₂ => strongDownwardInduction t₂ ht₂_card_le_n\ncontext:\nα : Type u_1\np : Multiset α → Sort u_3\nn : ℕ\nH : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁\ns : Multiset α\nhs_card_le_n h₁ : s.card ≤ n\n⊢ Sort (imax (imax (u_1 + 1) (imax (u_1 + 1) u_3) u_3) (u_1 + 1) ?u.41 u_3); don't know how to synthesize implicit argument `α`\n  @Eq\n    ((t₂ :\n        (t₁ : Multiset ?m.27) →\n          ({t₂ : Multiset ?m.27} → t₂.card ≤ ?m.28 → t₁ < t₂ → ?m.29 t₂) → t₁.card ≤ ?m.28 → ?m.29 t₁) →\n      (ht₂_card_le_n : Multiset ?m.27) → ?m.30 t₂ ht₂_card_le_n → ht₂_card_le_n.card ≤ ?m.28 → ?m.29 ht₂_card_le_n)\n    (fun t₂ ht₂_card_le_n hs_lt_t₂ => strongDownwardInduction t₂ ht₂_card_le_n) fun t₂ ht₂_card_le_n hs_lt_t₂ =>\n    strongDownwardInduction t₂ ht₂_card_le_n\nc",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.031,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 8,
+  "candidate_hash": "c12656509d5b86a0",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Multiset α → Sort u_3} {n : ℕ} (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) (s : Multiset α) (hs_card_le_n : s.card ≤ n) : p s := by\n  have h_main : p s := by\n    have h₁ : s.card ≤ n := hs_card_le_n\n    have h₂ : (fun t₂ ht₂_card_le_n hs_lt_t₂ => VTask.strongDownwardInduction t₂ ht₂_card_le_n) = (fun t₂ ht₂_card_le_n hs_lt_t₂ => VTask.strongDownwardInduction t₂ ht₂_card_le_n) := rfl\n    have h₃ : (fun t₂ ht₂_card_le_n hs_lt_t₂ => VTask.strongDownwardInduction t₂ ht₂_card_le_n) = (fun t₂ ht₂_card_le_n hs_lt_t₂ => VTask.strongDownwardInduction t₂ ht₂_card_le_n) := rfl\n    -- Apply the inductive hypothesis H to s with the recursive definition\n    have h₄ : p s := H s (fun t₂ ht₂_card_le_n hs_lt_t₂ => VTask.strongDownwardInduction t₂ ht₂_card_le_n) h₁\n    exact h₄\n  exact h_main",
+  "temperature": 1.0
+}

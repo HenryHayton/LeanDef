@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.028,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 7,
+  "candidate_hash": "2af4ea64eda99856",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f) :=\nlet f_range := Set.range f\nlet forward : α → f_range :=\n  λ a =>\n    let ⟨ha, _, _⟩ := a\n    ⟨f a, ha, fun b hb => congr_arg f hb⟩\nlet backward : f_range → α :=\n  λ b =>\n    match b with\n    | ⟨y, _, hy⟩ =>\n      let ha := Classical.some (Nonempty α)\n      let inv_y := f_inv ha y\n      have H : f inv_y = y := hf ha inv_y\n      congr_arg (f_inv ha) H\nhave forward_injective : Injective forward :=\n  assume a1 a2 ha1a2,\n  let ⟨_, _, h⟩ := a1\n  let ⟨_, _, k⟩ := a2\n  calc\n    f a1 = f a2 ↔ h y = k y : by rw [←congr_arg f ha1a2]\n    ... ↔ a1 = a2     : by simp [hy, hk]\nhave backward_surjective : Surjective backward :=\n  assume b,\n  cases b with y hy hp,\n  have h := hf (Classical.some (Nonempty α)) y,\n  let inv_y := f_inv (Classical.some (Nonempty α)) y,\n  show backward (forward inv_y) = b,\n  simp [hp, hy, h],\nexact Equiv.mk forward backward forward_injective backward_surjective",
+  "temperature": 1.0
+}

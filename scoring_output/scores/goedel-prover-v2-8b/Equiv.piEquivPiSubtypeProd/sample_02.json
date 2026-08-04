@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token '('; expected '_' or identifier",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.02,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 2,
+  "candidate_hash": "df6e2a760b71fbaa",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] : ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) := by\n  have h_forward : ∀ (f : (i : α) → β i), ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) := by\n    intro f\n    refine' ⟨fun i => f i.val, fun i => f i.val⟩\n  \n  have h_inverse : ∀ ((f₁ : (i : { x // p x }) → β ↑i) × (f₂ : (i : { x // ¬p x }) → β ↑i)), (i : α) → β i := by\n    intro h\n    have h₁ : (i : α) → β i := by\n      intro i\n      by_cases h₂ : p i\n      · -- Case: p i is true\n        have h₃ : (⟨i, h₂⟩ : {x // p x}) = ⟨i, h₂⟩ := rfl\n        have h₄ : f₁ ⟨i, h₂⟩ = f₁ ⟨i, h₂⟩ := rfl\n        exact f₁ ⟨i, h₂⟩\n      · -- Case: p i is false\n        have h₃ : (⟨i, by simpa using h₂⟩ : {x // ¬p x}) = ⟨i, by simpa using h₂⟩ := rfl\n        have h₄ : f₂ ⟨i, by simpa using h₂⟩ = f₂ ⟨i, by simpa using h₂⟩ := rfl\n        exact f₂ ⟨i, by simpa using h₂⟩\n    exact h₁\n  \n  have h_main : ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) := by\n    apply Equiv.ofHomEq (fun f => h_forward f)\n    ext f\n    have h₁ : (f : (i : α) → β i) = f := rfl\n    have h₂ : (h_inverse (h_forward f) : (i : α) → β i) = f := by\n      funext i\n      by_cases h₃ : p i\n      · -- Case: p i is true\n        have h₄ : f i = f i := rfl\n        have h₅ : (h_inverse (h_forward f) i : β i) = f i := by\n          simp [h_forward, h₃]\n          <;> simp_all [Subtype.mk.injEq]\n          <;> aesop\n        exact h₅\n      · -- Case: p i is false\n        have h₄ : f i = f i := rfl\n        have h₅ : (h_inverse (h_forward f) i : β i) = f i := by\n          simp [h_forward, h₃]\n          <;> simp_all [Subtype.mk.injEq]\n          <;> aesop\n        exact h₅\n    simp_all [Equiv.ext_iff]\n    <;> aesop\n  \n  exact h_main",
+  "temperature": 0.7
+}

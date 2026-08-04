@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "overloaded, errors \n  3:9 Unknown identifier `univ`\n  \n  invalid {...} notation, expected type is not of the form (C ...)\n    Set (Set α); invalid {...} notation, expected type is not of the form (C ...)\n  Set (Set α)",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "memPartition",
+  "sample_index": 8,
+  "candidate_hash": "507e64e93e0b4f03",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.memPartition {α : Type u_1} (f : ℕ → Set α) (n : ℕ) : Set (Set α) :=\nmatch n with\n| 0 => { univ }\n| n + 1 =>\n  let prev_partition := VTask.memPartition f n;\n  let rec splitPartition (prev_sets : Set (Set α)) : Set (Set α) :=\n    match prev_sets with\n    | {} => {}\n    | s :: ss =>\n      let s_intersect_fn := s ∩ f n;\n      let s_diff_fn := s \\ f n;\n      insert s_intersect_fn (insert s_diff_fn (splitPartition ss))\n  splitPartition prev_partition",
+  "temperature": 1.0
+}

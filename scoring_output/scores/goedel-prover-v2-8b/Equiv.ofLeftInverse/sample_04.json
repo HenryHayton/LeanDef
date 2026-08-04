@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 1,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nh : Nonempty α\nh₁ h₃ : Function.Injective f\nh₄ : ∀ b ∈ Set.range f, ∃ a, f a = b\na : α\n⊢ f_inv h (f a) = a; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nh : Nonempty α\nh₁ h₃ : Function.Injective f\nh₄ : ∀ b ∈ Set.range f, ∃ a, f a = b\na : α\n⊢ f a ∈ Set.range f; type class instance expected\n  α ≃ Empty; type class instance expected\n  α ≃ ↑∅; failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Classical.propDecidable', which is 'noncomputable'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [
+    "noncomputable: unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nh : Nonempty α\nh₁ h₃ : Function.Injective f\nh₄ : ∀ b ∈ Set.range f, ∃ a, f a = b\na : α\n⊢ f_inv h (f a) = a; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nh : Nonempty α\nh₁ h₃ : Function.Injective f\nh₄ : ∀ b ∈ Set.range f, ∃ a, f a = b\na : α\n⊢ f a ∈ Set.range f; type class instance expected\n  α ≃ Empty; type class instance expected\n  α ≃ ↑∅"
+  ],
+  "wall_time_s": 0.251,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 4,
+  "candidate_hash": "d7ee5a4485bb037a",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f) := by\n  intro α β f f_inv hf\n  have h_main : α ≃ ↑(Set.range f) := by\n    by_cases h : Nonempty α\n    · -- Case: α is nonempty\n      have h₁ : Function.Injective f := by\n        intro a₁ a₂ h₂\n        have h₃ : f_inv h (f a₁) = a₁ := by\n          apply hf h\n          <;> simp [Function.LeftInverse]\n        have h₄ : f_inv h (f a₂) = a₂ := by\n          apply hf h\n          <;> simp [Function.LeftInverse]\n        have h₅ : f_inv h (f a₁) = f_inv h (f a₂) := by rw [h₂]\n        rw [h₃, h₄] at h₅\n        exact h₅\n      -- Construct the equivalence\n      have h₂ : α ≃ ↑(Set.range f) := by\n        -- Forward direction: a ↦ ⟨f a, _⟩\n        -- Backward direction: ⟨b, _⟩ ↦ f_inv h b\n        have h₃ : Function.Injective f := h₁\n        have h₄ : ∀ (b : β), b ∈ Set.range f → ∃ (a : α), f a = b := by\n          intro b hb\n          rcases hb with ⟨a, rfl⟩\n          exact ⟨a, rfl⟩\n        -- Use the injectivity of f to construct the equivalence\n        have h₅ : α ≃ Set.range f := by\n          -- Use the fact that f is injective to construct the equivalence\n          refine' {\n            toFun := fun a => ⟨f a, _⟩\n            invFun := fun ⟨b, hb⟩ => f_inv h b\n            left_inv := by\n              intro a\n              simp [Function.LeftInverse]\n            right_inv := by\n              intro ⟨b, hb⟩\n              have h₆ : ∃ (a : α), f a = b := h₄ b hb\n              rcases h₆ with ⟨a, ha⟩\n              have h₇ : f_inv h (f a) = a := by\n                apply hf h\n                <;> simp [Function.LeftInverse]\n              simp_all [Set.mem_range]\n              <;> aesop\n          }\n        exact h₅\n      exact h₂\n    · -- Case: α is empty\n      have h₁ : IsEmpty α := by\n        simpa [Nonempty] using h\n      -- Since α is empty, the equivalence is trivial\n      have h₂ : α ≃ ↑(Set.range f) := by\n        have h₃ : α ≃ Empty := by\n          exact inferInstance\n        have h₄ : Set.range f = ∅ := by\n          have h₅ : ∀ (b : β), b ∉ Set.range f := by\n            intro b hb\n            rcases hb with ⟨a, rfl⟩\n            exact h₁.elim a\n          ext b\n          simp [Set.mem_range, h₅]\n        rw [h₄]\n        exact inferInstance\n      exact h₂\n  exact h_main",
+  "temperature": 0.7
+}

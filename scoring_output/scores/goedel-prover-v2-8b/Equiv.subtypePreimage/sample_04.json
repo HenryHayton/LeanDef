@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided; No goals to be solved; Tactic `tauto` failed\n\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\nhp : DecidablePred p\nx₀ : { a // p a } → β\ny : { a // ¬p a } → β\na : α\n⊢ ¬p a; Tactic `tauto` failed\n\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\nhp : DecidablePred p\nx₀ : { a // p a } → β\ny : { a // ¬p a } → β\na : α\n⊢ ¬p a; Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 2 were provided; No goals to be solved; unsolved goals\ncase toFun\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\nhp : DecidablePred p\nx₀ : { a // p a } → β\n⊢ { x // x ∘ Subtype.val = x₀ } → { a // ¬p a } → β\n\ncase invFun\nα : Sort u_1\nβ : Sort u_4\np : α → Prop\nhp : DecidablePred p\nx₀ : { a // p a } → β\n⊢ ({ a // ¬p a } → β) → { x // x ∘ Subtype.val = x₀ }",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.045,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 4,
+  "candidate_hash": "926701456eb99f76",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.subtypePreimage : {α : Sort u_1} -> {β : Sort u_4} -> (p : α → Prop) -> [DecidablePred p] -> (x₀ : { a // p a } → β) -> { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β) := by\n  intro α β p hp x₀\n  have h_main : { x // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } → β) := by\n    constructor\n    · -- Forward direction: { x // x ∘ Subtype.val = x₀ } → ({ a // ¬p a } → β)\n      intro x\n      have h₁ : x.1 ∘ Subtype.val = x₀ := x.2\n      have h₂ : ∀ (a : α), ¬p a → x.1 a = x.1 a := by intro a _; rfl\n      refine' ⟨fun a ha => x.1 a, _⟩\n      -- Prove that the function is well-defined and satisfies the required property\n      have h₃ : x.1 ∘ Subtype.val = x₀ := x.2\n      simp_all [Function.funext_iff]\n      <;>\n      aesop\n    · -- Backward direction: ({ a // ¬p a } → β) → { x // x ∘ Subtype.val = x₀ }\n      intro y\n      have h₁ : ∀ (a : α), p a → (y (⟨a, by tauto⟩ : {a // ¬p a})) = (y (⟨a, by tauto⟩ : {a // ¬p a})) := by\n        intro a ha\n        rfl\n      refine' ⟨fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by tauto⟩, _⟩\n      -- Prove that the function satisfies the required property\n      have h₂ : (fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by tauto⟩) ∘ Subtype.val = x₀ := by\n        ext ⟨a, ha⟩\n        simp [ha, Subtype.val_mk]\n        <;> aesop\n      exact h₂\n  exact h_main",
+  "temperature": 0.7
+}

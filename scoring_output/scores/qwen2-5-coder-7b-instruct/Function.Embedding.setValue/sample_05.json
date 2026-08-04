@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.254,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 5,
+  "candidate_hash": "90b67248cc8d0101",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β :=\nfun f a b dec_a dec_b =>\nlet rec aux (h : a' = a) : α ↪ β :=\n  match h with\n  | eq.rec _ h' => λ a'' _, if h' then b else f a''\n| _ => λ a'', if dec_b a'' then f a'' else f a''\nin\n{ toFun := aux,\n  inj' := fun x y hxy => \n    match hxy with\n    | eq.refl => dec_a x\n    | eq.symm h' =>\n      let hb := dec_b y;\n      match hb with\n      | isTrue hby => dec_a x\n      | isFalse hby => false.elim $ aux (eq.symm h') x (dec_a y)\n}",
+  "temperature": 1.0
+}

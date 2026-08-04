@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `obtain`; unsolved goals\nP : ℤ → Prop\ninst : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nw : ℤ\nh : P w\n⊢ {z | P z}.Nonempty\n\nP : ℤ → Prop\ninst : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nw : ℤ\nh : P w\n⊢ BddBelow {z | P z}; Unknown constant `Int.csInf_le`; unexpected token ':='; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.195,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 1,
+  "candidate_hash": "a9bcc9c0c0e6549c",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd (P : ℤ → Prop) [DecidablePred P] (b : ℤ) (Hb : ∀ (z : ℤ), P z → b ≤ z) (Hinh : ∃ z, P z) : { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } :=\n  have h_main : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n    classical\n    -- We use the classical least element of the set {z : ℤ | P z}\n    have h₁ : ∃ z, P z := Hinh\n    -- We use the fact that P is decidable to find the least element\n    have h₂ : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n      -- We use the fact that P is decidable to find the least element\n      classical\n      -- We use the fact that P is decidable to find the least element\n      use sInf { z : ℤ | P z }\n      have h₃ : P (sInf { z : ℤ | P z }) := by\n        -- Prove that the least element satisfies P\n        have h₄ : P (sInf { z : ℤ | P z }) := by\n          -- Use the fact that P is decidable to find the least element\n          have h₅ : P (sInf { z : ℤ | P z }) := by\n            -- Prove that the least element satisfies P\n            have h₆ : sInf { z : ℤ | P z } ∈ { z : ℤ | P z } := by\n              -- Prove that the least element is in the set\n              apply Int.csInf_mem\n              <;> aesop\n            exact h₆\n          exact h₅\n        exact h₄\n      have h₄ : ∀ (z : ℤ), P z → sInf { z : ℤ | P z } ≤ z := by\n        -- Prove that the least element is less than or equal to any element in the set\n        intro z hz\n        have h₅ : sInf { z : ℤ | P z } ≤ z := by\n          -- Use the fact that P is decidable to find the least element\n          apply Int.csInf_le\n          <;> aesop\n        exact h₅\n      exact ⟨h₃, h₄⟩\n    exact h₂\n  obtain ⟨lb, hlb₁, hlb₂⟩ := h_main\n  exact ⟨lb, hlb₁, hlb₂⟩",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.129,
+  "model_slug": "goedel-prover-v2-8b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 5,
+  "candidate_hash": "67db5f5c09f49b11",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex (G : SimpleGraph V) (s t : V) : SimpleGraph V :=\n  { E := fun v w ↦ (v ≠ t ∧ w ≠ t ∧ G.Adj v w) ∨ (v = t ∧ w ≠ t ∧ G.Adj s w) ∨ (w = t ∧ v ≠ t ∧ G.Adj s v),\n    -- Prove that the relation is irreflexive\n    irrefl := by\n      intro a h\n      simp only [SimpleGraph.Eq, Iff.comm] at h\n      aesop,\n    -- Prove that the relation is symmetric\n    symm := by\n      intro a b h\n      simp only [SimpleGraph.Eq, Iff.comm] at h ⊢\n      rcases h with (⟨h₁, h₂, h₃⟩ | ⟨h₁, h₂, h₃⟩ | ⟨h₁, h₂, h₃⟩) <;>\n        (try aesop) <;>\n        (try simp_all [SimpleGraph.Adj, SimpleGraph.Eq, Iff.comm]) <;>\n        (try aesop) <;>\n        (try simp_all [SimpleGraph.Adj, SimpleGraph.Eq, Iff.comm]) <;>\n        (try aesop) <;>\n        (try simp_all [SimpleGraph.Adj, SimpleGraph.Eq, Iff.comm]) <;>\n        (try aesop)\n  }",
+  "temperature": 1.0
+}

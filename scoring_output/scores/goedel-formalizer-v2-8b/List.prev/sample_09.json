@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `length`: The environment does not contain `Function.length`, so it is not possible to project the field `length` from an expression\n  l'\nof type `List ?m.6 → List ?m.7`; failed to synthesize instance of type class\n  HAdd α ℕ (?m.6 → ?m.7)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Invalid field `find?`: The environment does not contain `Function.find?`, so it is not possible to project the field `find?` from an expression\n  l'\nof type `List ?m.6 → List ?m.7`; Invalid field `get?`: The environment does not contain `Function.get?`, so it is not possible to project the field `get?` from an expression\n  l'\nof type `List ?m.6 → List ?m.7`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.16,
+  "model_slug": "goedel-formalizer-v2-8b",
+  "task_name": "List.prev",
+  "sample_index": 9,
+  "candidate_hash": "acab24a0e9c9608f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.prev {α : Type*} [DecidableEq α] (l : List α) (x : α) (h : x ∈ l) : α :=\n  -- Convert list to (index, element) pairs for easier indexing\n  let l' := List.zipWith (· + 1) l\n  -- Find the index of x in l', using the membership hypothesis\n  let x_idx := l'.find? h |>.getD 0\n  -- The cyclic predecessor is the element at position (x_idx - 1) mod list_length\n  let list_length := l'.length\n  let prev_idx := (x_idx + list_length - 1) % list_length\n  -- Get the element at the previous index\n  (l'.get? prev_idx).getD l.getLast!",
+  "temperature": 1.0
+}

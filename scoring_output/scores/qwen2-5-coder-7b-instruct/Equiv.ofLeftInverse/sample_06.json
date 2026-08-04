@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `Injective`; Unknown identifier `Classical.some`; Unknown identifier `Classical.some`; Application type mismatch: The argument\n  f_inv ha\nhas type\n  β → α\nbut is expected to have type\n  α\nin the application\n  f (f_inv ha); Type mismatch\n  ha\nhas type\n  Nonempty α\nof sort `Prop` but is expected to have type\n  β\nof sort `Type u_4`; Application type mismatch: The last\n  ha\nargument has type\n  Nonempty α\nbut is expected to have type\n  α\nin the application\n  hf ha ha; Application type mismatch: The argument\n  f_inv hb\nhas type\n  β → α\nbut is expected to have type\n  α\nin the application\n  f (f_inv hb); Type mismatch\n  hb\nhas type\n  Nonempty α\nof sort `Prop` but is expected to have type\n  β\nof sort `Type u_4`; Application type mismatch: The last\n  hb\nargument has type\n  Nonempty α\nbut is expected to have type\n  α\nin the application\n  hf hb hb; Unknown constant `Equiv.sigmaCong`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.062,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 6,
+  "candidate_hash": "19e694d1b55783fb",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse [Inhabited α] {β : Type u_4} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) : α ≃ ↑(Set.range f) :=\nlet f_range := Set.range f\nhave f_injective : Injective f := fun a b h => \n  match h with\n  | h =>\n    let ha := Classical.some (Exists.fst h)\n    let hb := Classical.some (Exists.snd h)\n    have hf_inv_a : f (f_inv ha) = ha := hf ha ha\n    have hf_inv_b : f (f_inv hb) = hb := hf hb hb\n    congr (hf_inv_a ▸ hf_inv_b)\nhave e : α ≃ f_range :=\n  Equiv.ofBijective (Equiv.sigmaCong f_range (fun x => f x)) (by sorry)\n  (by sorry)\ne",
+  "temperature": 1.0
+}

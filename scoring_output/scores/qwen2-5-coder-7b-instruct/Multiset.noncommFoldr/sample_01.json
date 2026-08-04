@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to elaborate eliminator, invalid motive\n  fun x => ((a : ?m.14) → (s : ?m.95 a) → (ih : ?m.96 a s) → ?m.97 a s ih → β → β) → β; Function expected at\n  comm'\nbut this term has type\n  ?m.97 a s ih\n\nNote: Expected a function because this term is being applied to the argument\n  x; Function expected at\n  eq_xy_yx\nbut this term has type\n  ?m.88 xs acc x xs' y hy b\n\nNote: Expected a function because this term is being applied to the argument\n  yx; Invalid field notation: Type of\n  s\nis not known; cannot resolve field `toList`\n\nHint: Consider replacing the field projection with a call to one of the following:\n  • `Array.toList`\n  • `ByteArray.toList`\n  • `DyckWord.toList`\n  • `FinEnum.toList`\n  • `Finset.toList`\n  • `FloatArray.toList`\n  • `ForIn.toList`\n  • `FreeAddMonoid.toList`\n  • `FreeMonoid.toList`\n  • `Lists.toList`\n  • `Lists'.toList`\n  • `Multiset.toList`\n  • `Nondet.toList`\n  • `Option.toList`\n  • `Ordnode.toList`\n  • `RelSeries.toList`\n  • `String.toList`\n  • `Traversable.toList`\n  • `Vector.toList`\n  • `WType.toList`\n  • `Aesop.PersistentHashSet.toList`\n  • `Array.Perm.toList`\n  • `Batteries.AssocList.toList`\n  • `Batteries.BinomialHeap.toList`\n  • `Batteries.DList.toList`\n  • `Batteries.HashMap.toList`\n  • `Batteries.PairingHeap.toList`\n  • `Equiv.Perm.toList`\n  • `Lean.AssocList.toList`\n  • `Lean.MessageLog.toList`\n  • `Lean.PHashSet.toList`\n  • `Lean.PersistentArray.toList`\n  • `Lean.PersistentHashMap.toList`\n  • `Lean.PersistentHashSet.toList`\n  • `Lean.SMap.toList`\n  • `Lean.SSet.toList`\n  • `List.Vector.toList`\n  • `Quiver.Path.toList`\n  • `RBTree.RBMap.toList`\n  • `RBTree.RBNode.toList`\n  • `RBTree.RBSet.toList`\n  • `Std.DHashMap.toList`\n  • `Std.DTreeMap.toList`\n  • `Std.ExtDTreeMap.toList`\n  • `Std.ExtTreeMap.toList`\n  • `Std.ExtTreeSet.toList`\n  • `Std.HashMap.toList`\n  • `Std.HashSet.toList`\n  • `Std.Iter.toList`\n  • `Std.IterM.toList`\n  • `Std.Rcc.toList`\n  • `Std.Rci.toList`\n  • `Std.Rco.toList`\n  • `Std.Ric.toList`\n  • `Std.Rii.toList`\n  • `",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.165,
+  "model_slug": "qwen2-5-coder-7b-instruct",
+  "task_name": "Multiset.noncommFoldr",
+  "sample_index": 1,
+  "candidate_hash": "5052a706a68bfe7c",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.noncommFoldr {α : Type u_3} {β : Type u_4} \n    (f : α → β → β) (s : Multiset α) \n    (comm : {x | x ∈ s}.Pairwise fun x y => ∀ (b : β), f x (f y b) = f y (f x b)) \n    (b : β) : β :=\ns.induction_on b (fun _ => id)\n    (fun a s ih => fun comm' b =>\n        let rec go (xs : List α) (acc : β) : β :=\n            match xs with\n            | [] => acc\n            | x :: xs' =>\n                let new_acc := f x acc;\n                let new_comm := fun y => fun hy => fun b =>\n                    let xy := f x (f y b);\n                    let yx := f y (f x b);\n                    let eq_xy_yx := comm' x y;\n                    eq_xy_yx yx xy;\n                go xs' new_acc\n        go (s.toList) b)",
+  "temperature": 0.7
+}
