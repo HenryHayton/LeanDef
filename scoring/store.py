@@ -59,13 +59,32 @@ def read_verdict(path: Path) -> dict | None:
         return None
 
 
-def is_complete(model_slug: str, task_name: str, sample_index: int, *, scores_dir: Path | None = None) -> bool:
-    """Exists AND parses AND has the required keys -- see the module docstring on why all
-    three."""
+def is_complete(
+    model_slug: str,
+    task_name: str,
+    sample_index: int,
+    *,
+    scores_dir: Path | None = None,
+    require_mechanisms: tuple[str, ...] = ("decide", "proof"),
+) -> bool:
+    """Exists AND parses AND has the required keys AND covers `require_mechanisms`.
+
+    The mechanism clause exists because the run is deliberately split: Stage D scores decide
+    facts over every candidate, Stage E fills in the proof facts later. Without it a Stage D
+    record would satisfy every other test of doneness and Stage E would skip the very
+    candidates it exists to finish -- silently, and looking exactly like a successful resume.
+
+    A record whose candidate never reached the fact walk at all (inadmissible, or certified
+    wholesale by the tier-4 equivalence path) is complete for EVERY mechanism: in the first case
+    there is nothing further to attempt, in the second every fact already has a verdict.
+    """
     record = read_verdict(verdict_path(model_slug, task_name, sample_index, scores_dir=scores_dir))
     if record is None:
         return False
-    return all(key in record for key in REQUIRED_KEYS)
+    if not all(key in record for key in REQUIRED_KEYS):
+        return False
+    attempted = set(record.get("mechanisms_attempted") or [])
+    return set(require_mechanisms) <= attempted
 
 
 def iter_verdicts(*, scores_dir: Path | None = None):

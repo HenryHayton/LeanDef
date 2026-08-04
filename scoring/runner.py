@@ -39,6 +39,7 @@ class TaskOutcome:
     skipped: int = 0         # already complete on disk
     unextractable: int = 0   # no definition to score
     equivalence_hits: int = 0
+    noncomputable: int = 0   # candidates carrying `noncomputable` -- the coverage-differential rate
     admissibility: dict = field(default_factory=dict)  # failure kind -> count (None = admitted)
     wall_s: float = 0.0
     per_candidate_s: float = 0.0
@@ -147,6 +148,7 @@ def score_task(
     samples_root=None,
     try_equivalence: bool = True,
     limit: int | None = None,
+    mechanisms: tuple[str, ...] = ("decide", "proof"),
 ) -> TaskOutcome:
     """Score every distinct candidate for one (model, task), fanning verdicts out to duplicates."""
     started = time.perf_counter()
@@ -164,7 +166,10 @@ def score_task(
         body = representative["extracted_code"]
 
         if all(
-            store.is_complete(model_slug, task_name, m["sample_index"], scores_dir=scores_dir)
+            store.is_complete(
+                model_slug, task_name, m["sample_index"],
+                scores_dir=scores_dir, require_mechanisms=mechanisms,
+            )
             for m in members
         ):
             outcome.skipped += len(members)
@@ -177,7 +182,7 @@ def score_task(
                 server, base_env, task["signature"], body, task["facts"],
                 truth_real_name=task["truth_real_name"] if try_equivalence else None,
                 budgets=budgets, cache=cache, imports=task["imports"],
-                try_equivalence=try_equivalence,
+                try_equivalence=try_equivalence, mechanisms=mechanisms,
             )
         except Exception as e:  # noqa: BLE001 -- one candidate must never sink the run
             outcome.errors.append(f"{task_name}/sample_{representative['sample_index']}: {e}")
@@ -188,6 +193,8 @@ def score_task(
         outcome.admissibility[kind] = outcome.admissibility.get(kind, 0) + 1
         if payload.get("equivalence_certified"):
             outcome.equivalence_hits += 1
+        if payload.get("noncomputable"):
+            outcome.noncomputable += 1
 
         for member in members:
             record = dict(payload)
@@ -223,6 +230,7 @@ def score_model_tasks(
     samples_root=None,
     try_equivalence: bool = True,
     limit_per_task: int | None = None,
+    mechanisms: tuple[str, ...] = ("decide", "proof"),
 ) -> list[TaskOutcome]:
     """Sequential pass over tasks, sharing one server handle across all of them."""
     handle = ServerHandle()
@@ -232,7 +240,7 @@ def score_model_tasks(
             outcome = score_task(
                 model_slug, task_name, handle, budgets=budgets, cache=cache,
                 scores_dir=scores_dir, tasks_root=tasks_root, samples_root=samples_root,
-                try_equivalence=try_equivalence, limit=limit_per_task,
+                try_equivalence=try_equivalence, limit=limit_per_task, mechanisms=mechanisms,
             )
             outcomes.append(outcome)
             print(

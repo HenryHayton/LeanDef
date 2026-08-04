@@ -135,10 +135,11 @@ def test_samples_without_extracted_code_are_dropped():
 # --- store ------------------------------------------------------------------------------------------
 
 
-def _record(idx=0):
+def _record(idx=0, mechanisms=("decide", "proof")):
     return {
         "schema_version": 1, "model_slug": "m", "task_name": "T", "sample_index": idx,
         "fact_verdicts": [{"fact_id": "f", "verdict": "pass"}],
+        "mechanisms_attempted": list(mechanisms),
     }
 
 
@@ -152,6 +153,33 @@ def test_is_complete_requires_parseable_json_with_the_required_keys(tmp_path):
     assert not store.is_complete("m", "T", 0, scores_dir=tmp_path)
     store.write_verdict(_record(), scores_dir=tmp_path)
     assert store.is_complete("m", "T", 0, scores_dir=tmp_path)
+
+
+# --- pass-aware completeness (Stage D writes decide, Stage E fills in proof) ---------------------
+
+
+def test_a_decide_only_record_is_not_complete_for_the_proof_pass(tmp_path):
+    """THE Stage D/E handover test. Without the mechanism clause a Stage D record satisfies every
+    other test of doneness, so Stage E would skip exactly the candidates it exists to finish --
+    silently, and looking indistinguishable from a successful resume."""
+    store.write_verdict(_record(mechanisms=("decide",)), scores_dir=tmp_path)
+
+    assert store.is_complete("m", "T", 0, scores_dir=tmp_path, require_mechanisms=("decide",))
+    assert not store.is_complete("m", "T", 0, scores_dir=tmp_path, require_mechanisms=("decide", "proof"))
+
+
+def test_a_decide_only_record_is_not_rescored_by_a_second_decide_pass(tmp_path):
+    """The other half: re-running Stage D must recompute nothing."""
+    store.write_verdict(_record(mechanisms=("decide",)), scores_dir=tmp_path)
+    assert store.is_complete("m", "T", 0, scores_dir=tmp_path, require_mechanisms=("decide",))
+
+
+def test_a_record_with_no_mechanism_field_is_never_complete(tmp_path):
+    """Fails closed. A record predating the field is more safely rescored than wrongly skipped."""
+    legacy = _record()
+    del legacy["mechanisms_attempted"]
+    store.write_verdict(legacy, scores_dir=tmp_path)
+    assert not store.is_complete("m", "T", 0, scores_dir=tmp_path)
 
 
 def test_a_truncated_file_is_not_complete(tmp_path):
@@ -184,3 +212,26 @@ def test_iter_verdicts_skips_unparseable_files_rather_than_raising(tmp_path):
 
 def test_iter_verdicts_on_a_missing_tree_is_empty(tmp_path):
     assert list(store.iter_verdicts(scores_dir=tmp_path / "nope")) == []
+
+
+# --- NOT_ATTEMPTED is not UNKNOWN ------------------------------------------------------------------
+
+
+def test_not_attempted_is_distinct_from_unknown():
+    """UNKNOWN means we tried and could not tell; NOT_ATTEMPTED means we deliberately have not
+    tried yet. Collapsing them would let a Stage D coverage figure read as a Stage E one."""
+    assert Verdict.NOT_ATTEMPTED is not Verdict.UNKNOWN
+    assert not Verdict.NOT_ATTEMPTED.is_resolved
+    assert Verdict.UNKNOWN.is_resolved
+
+
+def test_not_attempted_is_excluded_from_fidelity():
+    assert fidelity([Verdict.PASS, Verdict.FAIL, Verdict.NOT_ATTEMPTED]) == pytest.approx(0.5)
+    assert fidelity([Verdict.NOT_ATTEMPTED, Verdict.NOT_ATTEMPTED]) is None
+
+
+@pytest.mark.parametrize("mechanism", [DECIDE, PROOF])
+def test_not_attempted_is_legal_for_either_mechanism(mechanism):
+    """It is a statement about the PASS, not about the fact, so the mechanism invariant must
+    not reject it -- including for proof facts, which may otherwise never be FAIL."""
+    check_mechanism_invariant(mechanism, Verdict.NOT_ATTEMPTED)

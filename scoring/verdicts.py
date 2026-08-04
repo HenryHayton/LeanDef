@@ -37,14 +37,24 @@ class Verdict(Enum):
     FAIL = "fail"        # kernel-certified negative: the fact is false of this candidate
     UNKNOWN = "unknown"  # not adjudicable within budget, or untestable through this splice
     ERROR = "error"      # infrastructure failed; says nothing about the candidate
+    NOT_ATTEMPTED = "not_attempted_this_pass"  # deliberately deferred to a later pass
 
     @property
-    def counts_in_denominator(self) -> bool:
+    def counts_in_denominator(self) -> bool:  # noqa: D401
         """Fidelity is `PASS / (PASS + FAIL)`. UNKNOWN and ERROR are excluded, per
         `docs/design/task_schema_v1_1.md`'s scoring semantics -- a fact we could not resolve is
         not a fact the candidate got wrong, and folding it in either way would be a claim we
         cannot support."""
         return self in (Verdict.PASS, Verdict.FAIL)
+
+    @property
+    def is_resolved(self) -> bool:
+        """Did we learn anything about the candidate from this fact? `NOT_ATTEMPTED` is
+        distinguished from `UNKNOWN` on purpose: UNKNOWN means we tried and could not tell,
+        NOT_ATTEMPTED means we deliberately did not try yet. Collapsing them would let a
+        deferred pass masquerade as an exhausted one, and would make a Stage D coverage figure
+        look like a Stage E one."""
+        return self is not Verdict.NOT_ATTEMPTED
 
 
 # Ladder outcome -> what it tells us about the candidate.
@@ -79,6 +89,8 @@ def check_mechanism_invariant(mechanism: str, verdict: Verdict) -> None:
     """Raise if `verdict` is impossible for `mechanism`. Called on every fact before it is
     written, so a mapping bug surfaces at the fact that caused it rather than as an inexplicable
     aggregate weeks later."""
+    if verdict is Verdict.NOT_ATTEMPTED:
+        return  # legal for either mechanism -- it is a statement about the PASS, not the fact
     if mechanism == DECIDE:
         if verdict is Verdict.UNKNOWN:
             return  # untestable-through-this-splice; see the module docstring

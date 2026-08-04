@@ -36,7 +36,7 @@ from lean_interact import AutoLeanServer
 
 from harness.admissibility import check_admissibility
 from harness.facts import Fact
-from harness.results import CheckStatus, SpliceOutcome
+from harness.results import CheckStatus, SpliceOutcome, SplicePath
 from harness.scoring import splice_candidate_declaration, splice_real_name
 from harness.signature import PinnedSignature
 from ladder.adjudicate import adjudicate_fact
@@ -161,6 +161,7 @@ def score_candidate_body(
     cache=None,
     imports: list[str] | None = None,
     try_equivalence: bool = True,
+    mechanisms: tuple[str, ...] = ("decide", "proof"),
 ) -> dict:
     """Score one candidate. `declaration` is the model's full Lean declaration, as extracted.
 
@@ -181,6 +182,14 @@ def score_candidate_body(
         "equivalence_certified": False,
         "fact_verdicts": [],
         "fidelity": None,
+        "mechanisms_attempted": list(mechanisms),
+        # Whether this candidate is noncomputable -- either because the model wrote the modifier
+        # or because the splice ladder had to add it. Recorded per candidate so the per-model
+        # emission rate can be reported beside coverage: a noncomputable definition cannot
+        # evaluate its decide facts (correctly UNKNOWN), so a model that emits them more often
+        # is judged on a different, smaller fact population than one that does not. That is a
+        # differential-coverage mechanism, and it must be visible rather than silent.
+        "noncomputable": False,
     }
     started = time.perf_counter()
 
@@ -205,12 +214,17 @@ def score_candidate_body(
     result["splice_retries"] = outcome.retries_consumed
     if not outcome.succeeded:
         result["admissibility_failure"] = "compile_error"
+        result["mechanisms_attempted"] = ["decide", "proof"]  # terminal: nothing left to attempt
         result["admissibility_detail"] = (outcome.result.detail or "")[:2000]
         result["splice_secondary_errors"] = outcome.secondary_details[1:]
         result["wall_time_s"] = round(time.perf_counter() - started, 3)
         return result
 
     candidate_env = outcome.result.env
+    result["noncomputable"] = (
+        "noncomputable" in (outcome.cmd_text or "")
+        or outcome.path in (SplicePath.NONCOMPUTABLE, SplicePath.ROOT_QUALIFIED_NONCOMPUTABLE)
+    )
 
     # 3. Admissibility.
     verdict = check_admissibility(
@@ -218,6 +232,7 @@ def score_candidate_body(
     )
     if not verdict.passed:
         result["admissibility_failure"] = verdict.failure.value
+        result["mechanisms_attempted"] = ["decide", "proof"]  # terminal
         result["admissibility_detail"] = verdict.detail[:2000]
         result["wall_time_s"] = round(time.perf_counter() - started, 3)
         return result
@@ -243,6 +258,9 @@ def score_candidate_body(
                 for f in facts
             ]
             result["fidelity"] = 1.0
+            # Equivalence certifies the WHOLE suite, both mechanisms, so Stage E has nothing to
+            # add for this candidate and must skip it.
+            result["mechanisms_attempted"] = ["decide", "proof"]
             result["wall_time_s"] = round(time.perf_counter() - started, 3)
             return result
 
@@ -250,6 +268,17 @@ def score_candidate_body(
     current_env = candidate_env
     verdicts: list[FactVerdict] = []
     for fact in facts:
+        if fact.mechanism not in mechanisms:
+            # Deliberately deferred to a later pass -- NOT the same as UNKNOWN, and recorded
+            # distinctly so a partial pass can never be mistaken for an exhausted one.
+            verdicts.append(
+                FactVerdict(
+                    fact_id=fact.id, mechanism=fact.mechanism, verdict=Verdict.NOT_ATTEMPTED,
+                    tier=None, certified_via=CERTIFIED_VIA_FACT, elapsed_s=0.0,
+                    detail=f"mechanism {fact.mechanism!r} not attempted in this pass",
+                )
+            )
+            continue
         fact_verdict, current_env = _adjudicate_one_fact(
             server, current_env, fact, budgets, cache, imports
         )
