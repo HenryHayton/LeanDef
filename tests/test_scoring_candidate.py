@@ -29,8 +29,13 @@ from scoring.verdicts import DECIDE, PROOF, Verdict, check_mechanism_invariant
 CLOG = PinnedSignature(name="VTask.clog", type_sig="(b n : ℕ) -> ℕ")
 TRUTH = "Nat.clog"
 
-# The real definition, as a candidate would express it -- the verbatim/RECALLED_TARGET case.
-VERBATIM = "_root_.Nat.clog"
+# The real definition as a candidate would express it. Eta-expanded, NOT the bare alias
+# `_root_.Nat.clog`: a bare alias deliberately trips the admissibility shadowing check, which is
+# how this repo currently declines to score a verbatim copy as a definition (docs/deferred.md,
+# "bare-alias candidate bodies ... rather than being scored as memorization", trigger: mini-trial
+# design). Eta-expanded is still definitionally equal to the truth, so the equivalence fast path
+# closes it by `rfl` exactly as a genuine near-verbatim candidate would.
+VERBATIM = "fun b n => Nat.clog b n"
 # Off by one: agrees nowhere interesting. `clog 2 8 = 3` becomes 4.
 WRONG = "fun b n => Nat.log b n + 1"
 

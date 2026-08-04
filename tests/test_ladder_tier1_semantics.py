@@ -30,7 +30,6 @@ phrase things unusually: the same differential-by-output-style problem Stage A f
 
 import pytest
 
-from harness.results import CheckStatus
 from ladder.budgets import DEFAULT_LADDER_BUDGETS
 from ladder.statuses import AdjudicationStatus
 from ladder.tier1 import adjudicate_tier1, classify_decide_failure
@@ -162,9 +161,11 @@ def test_recursion_blowup_is_errored_against_real_lean(mathlib_env):
     assert attempt.status is AdjudicationStatus.ERRORED, attempt.detail
 
 
-def test_infrastructure_errors_from_run_checked_stay_errored(mathlib_env):
-    """A `CheckStatus.ERRORED` (timeout, dead REPL) never reaches the content classifier."""
+def test_a_healthy_true_statement_is_unaffected_by_the_classifier(mathlib_env):
+    """The classifier only ever sees `CheckStatus.FAILED`. A PASSED check must still certify,
+    and an infrastructure `CheckStatus.ERRORED` (timeout, dead REPL) has no Lean message to
+    read and short-circuits to ERRORED without consulting it."""
     server, env = mathlib_env
-    attempt = adjudicate_tier1(server, env, "example : (2:ℕ) + 2 = 4 := by decide", DEFAULT_LADDER_BUDGETS)
-    assert attempt.status is not AdjudicationStatus.ERRORED  # sanity: the healthy path still works
-    assert CheckStatus.PASSED is CheckStatus.PASSED
+    attempt = adjudicate_tier1(server, env, "example : (3:ℕ) * 3 = 9 := by decide", DEFAULT_LADDER_BUDGETS)
+    assert attempt.status is AdjudicationStatus.CERTIFIED
+    assert attempt.detail == ""

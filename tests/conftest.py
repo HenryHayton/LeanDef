@@ -22,10 +22,10 @@ import sys
 
 import psutil
 import pytest
-from lean_interact import AutoLeanServer, LeanREPLConfig, LocalProject
+from lean_interact import AutoLeanServer, Command, LeanREPLConfig, LocalProject
 
 from harness import config as cfg
-from harness.repl import get_warm_environment
+from harness.repl import get_warm_environment, is_unknown_environment_error, run_checked
 from harness.results import CheckStatus
 
 # Recycling thresholds for the shared server. A session-scoped server lives far longer than any
@@ -92,6 +92,22 @@ class _MathlibEnvManager:
                 return "server died"
         except Exception:  # noqa: BLE001 -- a server too broken to answer is a dead server
             return "server unresponsive"
+
+        # Liveness is NOT enough, and assuming it was cost 70 test failures on 2026-08-05.
+        # `AutoLeanServer` self-heals: when the REPL dies it silently restarts on the next call,
+        # so `is_alive()` reports True again -- but every environment id from before the restart
+        # is gone, and requests against them fail with "Unknown environment". A stale env handed
+        # to the next test poisons it, and with ONE session-scoped server that poisons every
+        # remaining test rather than (as module scope used to bound it) one file's worth.
+        #
+        # So probe the env itself, not just the process. A trivial command against a warm server
+        # is sub-millisecond, which is nothing next to the ~40 s cold import it protects against
+        # paying unnecessarily -- or the whole-session cascade it prevents.
+        probe = run_checked(
+            self._server, Command(cmd="example : True := trivial", env=self._env), timeout=30.0
+        )
+        if is_unknown_environment_error(probe.detail or ""):
+            return "environment was invalidated by a server restart"
         rss = self._rss_gb()
         if rss > MATHLIB_SERVER_ABSOLUTE_CAP_GB:
             return f"RSS {rss:.1f}GB over the {MATHLIB_SERVER_ABSOLUTE_CAP_GB}GB backstop"
