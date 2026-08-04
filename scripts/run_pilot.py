@@ -98,8 +98,9 @@ def main() -> int:
             if t2.winning_script:
                 entry = CacheEntry(
                     statement_hash=statement_hash(item["statement"]), toolchain_pin=pin,
-                    tier=2, script=t2.winning_script, statement=item["statement"],
-                    axiom_closure=None, theorem_name=t2.winning_theorem_name,
+                    tier=2, script=t2.winning_script, axiom_closure=[],
+                    wall_clock_s=round(time.perf_counter() - started, 3),
+                    canonical_statement=item["statement"],
                 )
                 try:
                     cache.put(entry)
