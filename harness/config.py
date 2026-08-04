@@ -5,10 +5,25 @@ Single source of truth for values previously copy-pasted across `scripts/smoke_t
 observations 6-7).
 """
 
+import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-LEAN_PROJECT_DIR = REPO_ROOT / "lean"
+
+# Which Lean project the REPL runs against. Overridable via `$VERIFIER_LEAN_PROJECT_DIR`
+# (2026-08-05) because the EC2 scoring box has TWO projects and the choice is not cosmetic:
+#
+#   ~/definition-verifier/lean   -- the plain project, what the Mac uses
+#   ~/verifier-lean              -- Hammer-enabled, required for tier 3 (`docs/ec2_runbook.md`)
+#
+# Scoring on the box runs against the Hammer-enabled one from the start, so a C->C2 trigger does
+# not force an environment switch mid-phase. Named explicitly rather than resolved from the
+# working directory: a scoring run that silently picked its Lean project from wherever it was
+# launched could produce verdicts against a different Mathlib than the corpus was validated
+# against, which is precisely the failure the pin gate exists to prevent.
+ENV_LEAN_PROJECT_DIR = "VERIFIER_LEAN_PROJECT_DIR"
+_override = os.environ.get(ENV_LEAN_PROJECT_DIR, "").strip()
+LEAN_PROJECT_DIR = Path(_override).expanduser() if _override else REPO_ROOT / "lean"
 
 # AutoLeanServer refuses to start once system-wide memory usage is above this fraction.
 #

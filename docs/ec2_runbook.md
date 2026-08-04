@@ -115,6 +115,86 @@ ssh -i ~/.ssh/verifier-hammer.pem -o StrictHostKeyChecking=accept-new ubuntu@<fr
 
 ---
 
+## Phase B.1 — scoring pre-flight (added 2026-08-05, executed and passing)
+
+Run this before any scoring phase. Every item below was verified on 2026-08-05; the three
+surprises are recorded because the runbook's earlier text implied otherwise.
+
+```
+# 0. credentials (interactive MFA -- cannot be automated)
+aws sts get-caller-identity --profile verifier
+eval "$(aws configure export-credentials --profile verifier --format env)"
+
+# 1. the SG's allowed IP is almost always stale -- check and add, then REVOKE when done
+curl -s https://checkip.amazonaws.com
+aws ec2 authorize-security-group-ingress --group-id sg-07dee4fbf43bade67 --region eu-west-1 \
+  --ip-permissions 'IpProtocol=tcp,FromPort=22,ToPort=22,IpRanges=[{CidrIp=<YOUR_IP>/32}]'
+
+# 2. start, wait, connect (Phase B)
+
+# 3. PIN GATE -- compare the RESOLVED COMMIT, not the tag
+ssh ... 'cat ~/verifier-lean/lean-toolchain; grep -A2 mathlib ~/verifier-lean/lakefile.toml'
+# and the rev in ~/verifier-lean/lake-manifest.json vs the Mac's lean/lake-manifest.json
+```
+
+**Pin gate result 2026-08-05: PASS.** Lean `v4.32.0`; Mathlib `inputRev v4.32.0` resolving to
+`81a5d257c8e410db227a6665ed08f64fea08e997` on BOTH the box's `~/verifier-lean` and the Mac's
+`lean/`. Comparing the tag alone would not have been sufficient — the tag is a moving target in
+principle; the commit is the thing the corpus was validated against.
+
+### Three things that did not match this runbook's earlier assumptions
+
+1. **`~/definition-verifier` on the box is NOT a git clone.** It is an rsync'd partial copy
+   (`harness`, `ladder`, `lean`, `miner`, `scripts`, `tests`, `docs` — no `scoring/`, `prelim/`
+   or `authoring/`). "Repo pulls and builds" is therefore not the workflow: **push code up with
+   rsync**. There is no git remote configured on the box and no credentials for the private repo
+   there, which is a feature, not a gap — nothing to leak.
+2. **`uv` is not installed on the box.** There is a working `~/definition-verifier/.venv`
+   (Python 3.12.3, `lean_interact` + `psutil` present). Run things as
+   `.venv/bin/python`, never `uv run`.
+3. **Non-interactive SSH is not a login shell**, so `~/.profile` never runs and `lake` is not on
+   `PATH`. Every remote command that touches Lean must begin
+   `export PATH="$HOME/.elan/bin:$PATH";`. Without it, `LeanREPLConfig` fails after a **600 s**
+   watchdog timeout with a misleading "Lean 4 build system executable not found at `lake`".
+   (The runbook already noted this at Phase C.2; it bites the scoring path too.)
+
+### Scoring must name its Lean project explicitly
+
+The box has two Lean projects and the choice is not cosmetic. Scoring uses the Hammer-enabled
+one from the start so a C→C2 trigger does not force an environment switch mid-phase:
+
+```
+cd ~/definition-verifier
+export PATH="$HOME/.elan/bin:$PATH"
+VERIFIER_LEAN_PROJECT_DIR=$HOME/verifier-lean .venv/bin/python -m <entry point>
+```
+
+`harness.config.LEAN_PROJECT_DIR` reads `$VERIFIER_LEAN_PROJECT_DIR` (added 2026-08-05) and
+otherwise defaults to `<repo>/lean`. It is never resolved from the working directory: a run that
+picked its Lean project from wherever it was launched could produce verdicts against a different
+Mathlib than the corpus was validated against.
+
+### Measured on the box, 2026-08-05
+
+| | |
+|---|---|
+| Instance | r6i.2xlarge, x86_64, 8 vCPU, 61 GB RAM, 127 GB free |
+| On-demand price (eu-west-1, Linux) | **$0.564/hr** (AWS pricing API, not the ~$0.50 estimate) |
+| Cold Mathlib import (`~/verifier-lean`) | **13.8 s** — vs ~40 s on the Mac |
+| Warm scoring, `Nat.clog` | **0.39 s/candidate** (29 facts: 21 decide + 8 proof), ~13 ms/fact |
+| Premise-selection / Hammer | package present (5.2 MB), `zipperposition.exe` and `libcvc5` present |
+| rsync round-trip | verified both directions; scores tree parses and `is_complete` on the Mac |
+
+**The first timed run reported 22 s/candidate and was wrong** — it included a one-off
+version-specific REPL cache download plus the cold import, because `TaskOutcome.wall_s` starts
+before `ServerHandle.get()`. Time the import separately before quoting a per-candidate figure.
+
+**Both per-candidate numbers are floors, not estimates for the pilot**: they were taken with a
+truncated tier-2 tactic set (`rfl`/`simp`/`omega` only) and no tier 3, and most proof facts
+short-circuit at the elaboration probe. The pilot is what produces a real number.
+
+---
+
 ## Phase C — Lean/Hammer environment (only needed on a genuinely fresh box)
 
 ### C.1 — base packages
