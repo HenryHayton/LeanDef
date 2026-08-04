@@ -18,6 +18,7 @@ warm server in the overwhelmingly common case and can transparently replace it w
 """
 
 import os
+import sys
 
 import psutil
 import pytest
@@ -27,12 +28,22 @@ from harness import config as cfg
 from harness.repl import get_warm_environment
 from harness.results import CheckStatus
 
-# Recycle the shared server once its RSS crosses this. A session-scoped server lives far longer
-# than any module-scoped one did, and 2026-08-04 showed a single server ballooning on its own,
-# so long life needs a ceiling that per-module churn used to supply for free. 5 GB is roughly
-# 2x the ~2.5 GB a healthy warm Mathlib import measures at -- high enough not to thrash on
-# normal growth, low enough to act well before a 16 GB machine is in trouble.
-MATHLIB_SERVER_RSS_CAP_GB = 5.0
+# Recycling thresholds for the shared server. A session-scoped server lives far longer than any
+# module-scoped one did, and 2026-08-04 showed a single server ballooning, so long life needs a
+# ceiling that per-module churn used to supply for free.
+#
+# **Keyed on GROWTH FROM BASELINE, not an absolute number** -- measured the hard way. A first
+# attempt used a flat 5 GB cap on the reasoning that a warm Mathlib import "measures ~2.5 GB"
+# (CLAUDE.md). It does not: a healthy warm server on this machine reads **5.7 GB RSS**, because
+# Mathlib mmaps gigabytes of `.olean` files and RSS counts those mapped pages. The flat cap
+# therefore sat BELOW the normal working set and fired on literally every test, so every test
+# paid a fresh ~60 s cold import -- the exact opposite of what sharing a server is for.
+#
+# Growth-relative is also the more honest test of the thing we actually fear: "ballooning" means
+# growing well past where a healthy server sits, and that is machine-independent in a way a flat
+# GB number never is (the EC2 box has the same oleans and far more RAM).
+MATHLIB_SERVER_GROWTH_FACTOR = 1.5   # recycle at 1.5x the post-warm baseline
+MATHLIB_SERVER_ABSOLUTE_CAP_GB = 10.0  # backstop, in case the baseline measurement is itself bad
 
 
 @pytest.fixture(scope="session")
@@ -60,6 +71,7 @@ class _MathlibEnvManager:
     def __init__(self):
         self._server = None
         self._env = None
+        self._baseline_gb = None  # RSS measured just after the warm import, per server
 
     @staticmethod
     def _rss_gb() -> float:
@@ -81,20 +93,27 @@ class _MathlibEnvManager:
         except Exception:  # noqa: BLE001 -- a server too broken to answer is a dead server
             return "server unresponsive"
         rss = self._rss_gb()
-        if rss > MATHLIB_SERVER_RSS_CAP_GB:
-            return f"RSS {rss:.1f}GB over {MATHLIB_SERVER_RSS_CAP_GB}GB cap"
+        if rss > MATHLIB_SERVER_ABSOLUTE_CAP_GB:
+            return f"RSS {rss:.1f}GB over the {MATHLIB_SERVER_ABSOLUTE_CAP_GB}GB backstop"
+        if self._baseline_gb and rss > self._baseline_gb * MATHLIB_SERVER_GROWTH_FACTOR:
+            return f"RSS {rss:.1f}GB is {rss / self._baseline_gb:.1f}x the {self._baseline_gb:.1f}GB baseline"
         return None
 
     def get(self):
         reason = self._needs_recycle()
         if reason is not None:
+            # Announced on stderr, not silent: a recycle costs ~60 s of cold import, so a run
+            # that is unexpectedly slow should say why rather than leave it to be guessed at.
+            print(f"[mathlib_env] starting fresh server ({reason})", file=sys.stderr, flush=True)
             self.close()
             server, import_result = get_warm_environment()
             assert import_result.status is CheckStatus.PASSED, import_result.detail
             self._server, self._env = server, import_result.env
+            self._baseline_gb = self._rss_gb()
         return self._server, self._env
 
     def close(self):
+        self._baseline_gb = None
         if self._server is not None:
             try:
                 self._server.kill()

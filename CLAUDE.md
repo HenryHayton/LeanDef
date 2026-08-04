@@ -99,11 +99,26 @@ which should stay in sync with this file._
 - `AutoLeanServer` refuses to run once system-wide memory usage is above `max_total_memory`
   (default 0.8 = 80%). Dev laptops sit above that from unrelated apps often enough that this
   needs raising (we use 0.95 in `scripts/smoke_test.py` and `tests/conftest.py`) — otherwise it
-  restart-loops and raises `MemoryError` before even trying. Real Mathlib-import memory use was
-  ~2.5 GB RSS in our one measurement.
+  restart-loops and raises `MemoryError` before even trying. **Reverted to the 0.8 default on
+  2026-08-05** (see `harness/config.py`) after orphaned servers OOM'd the dev Mac; the guard
+  refusing to start is the desired behaviour, and `scripts/reap_repls.py` clears the strays
+  that make it fire. Real Mathlib-import memory use measured **5.7 GB RSS** warm (2026-08-05,
+  many samples), peaking ~6.9 GB under load — NOT the ~2.5 GB a single earlier measurement
+  suggested. Mathlib mmaps gigabytes of `.olean` files and RSS counts those mapped pages.
+  Size worker pools off 5.7 GB, not 2.5 GB: it is the difference between 4 and 10 workers
+  fitting on a 64 GB box.
 - `lean_interact.LocalProject` creates an empty concurrency-control lock file as a sibling of
   the project directory (`lean.lock` next to `lean/`, not to be confused with `uv.lock`).
   Gitignored via `/lean.lock`.
+- **Test suite selection (2026-08-05).** `uv run pytest` runs the FAST suite only:
+  `-m 'not box_only and not mathlib'` (see `pyproject.toml`). ~770 tests, ~2 min, no Mathlib.
+  The Mathlib-backed tests carry a `mathlib` marker applied automatically by fixture use
+  (`tests/conftest.py`'s `pytest_collection_modifyitems`) — run them with `-m mathlib`
+  (~136 tests, ~3.5 min) or everything with `-m 'not box_only'`. They share ONE session-scoped
+  Mathlib server instead of the 12 module-scoped ones this repo used to start; if a run is
+  interrupted, `uv run python scripts/reap_repls.py` lists orphaned servers (`--kill` to
+  reap them). Never `pkill` a run holding a REPL — orphans reparent to launchd, hold ~5.7 GB
+  each, and are not reaped by `harness.repl._kill_stray_children`.
 - The pytest-facing tests (`tests/test_lean_repl.py`) deliberately skip `import Mathlib` — the
   two required known-answer checks (`decide` on arithmetic, `sorry`-as-warning) don't need it,
   and skipping keeps `uv run pytest` fast (~18s) rather than 2+ minutes per run. Full
