@@ -85,3 +85,32 @@ No separation/anti-gaming property; no candidate-level certification; no claim o
 beyond provisional validation (except the pilot-certified side-ledger facts, kernel-proved
 truth-side); no comparison involving excluded models; no transfer of truth-side discharge rates to
 any other population.
+
+## Amendment (2026-08-07)
+
+*Made after Stage D's decide-component results were visible, before any proof-component verdict
+exists. Recorded as such: the numbers below were known when this was written.*
+
+1. **The decide-only coverage fallback is void.** Stage D established that the decide component is
+   structurally a **16-of-41-task instrument**, saturated (96.7–98.2%) conditional on
+   admissibility, with per-model macros computed over **non-comparable task sets** (8/7/3 tasks).
+   This is a fact about the corpus's fact-type distribution, not about the models.
+2. **No metric is promoted to sole primary.** Base selection is an **operator decision** made on
+   the full evidence pack after the proof component completes, recorded in a dated decision memo
+   stating the reasoning. This pre-registration continues to bind **how every metric is computed**
+   (denominators, UNKNOWN exclusion, verdict semantics, dedup, slices); it no longer binds a
+   single selection formula. The 15–55% band is retained as an **interpretive lens for headroom,
+   not a trigger**.
+3. **Tier 3 (LeanHammer) is enabled for the entire proof-component pass by operator decision** —
+   unconditional, not contingent on the verbatim/non-verbatim UNKNOWN trigger. Rationale recorded:
+   cheap-tier discharge on this corpus is substantially **anchor lookup** (`exact?` resolving mined
+   anchors), which is expected to fail on correct-but-rephrased candidates. Running the hammer
+   uniformly from the start removes the risk that proof-fact UNKNOWNs correlate with **phrasing**
+   and thereby flatter memorization, rather than detecting that bias after the fact. The
+   verbatim/non-verbatim UNKNOWN split **remains a required report view** — now as a measurement of
+   how much the hammer mattered, not as a trigger.
+4. **Recorded defects and execution facts.** The universe-variable type-probe bug (false
+   `WRONG_TYPE` on the 32/41 universe-carrying tasks; fixed by binding the universes; pre-fix
+   records discarded and the pass re-run). Stage D executed **on the Mac** (single worker, no
+   tier 3, Mathlib commit verified identical to the box at pre-flight); **Stage E executes on the
+   box**.
