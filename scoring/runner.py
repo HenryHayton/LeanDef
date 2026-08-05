@@ -27,6 +27,7 @@ from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
 from scoring import config as cfg
 from scoring import dedup, store
 from scoring.candidate import score_candidate_body
+from scoring.verdicts import Verdict, fidelity
 from scoring.samples import load_samples, load_task
 
 
@@ -115,7 +116,7 @@ class ServerHandle:
         if reason is not None:
             self.close()
             print(f"[scoring] fresh Mathlib server ({reason})", file=sys.stderr, flush=True)
-            server, imported = get_warm_environment()
+            server, imported = get_warm_environment(imports=cfg.imports_for(None))
             if imported.status is not CheckStatus.PASSED:
                 raise RuntimeError(f"could not warm Mathlib: {imported.detail}")
             self._server, self._env = server, imported.env
@@ -134,6 +135,47 @@ class ServerHandle:
             except Exception:  # noqa: BLE001
                 pass
         self._server, self._env, self._baseline_gb = None, None, None
+
+
+
+def _merge_with_existing(
+    payload: dict, model_slug: str, task_name: str, sample_index: int, scores_dir
+) -> dict:
+    """Fold this pass's verdicts into whatever a previous pass already wrote.
+
+    Stage D scores decide facts over every candidate; Stage E fills in the proof facts later.
+    Without this the second pass would OVERWRITE the first -- the decide verdicts would silently
+    revert to `NOT_ATTEMPTED_THIS_PASS`, which is worse than losing them outright because the
+    file would still look complete and internally consistent.
+
+    A fact carries forward from the old record unless this pass produced a real verdict for it.
+    `NOT_ATTEMPTED_THIS_PASS` never overwrites anything: it is the absence of a measurement, so
+    a pass that skips a mechanism must not erase an earlier pass that did not.
+    """
+    existing = store.read_verdict(
+        store.verdict_path(model_slug, task_name, sample_index, scores_dir=scores_dir)
+    )
+    if not existing or not existing.get("fact_verdicts"):
+        return payload
+
+    merged = {fv["fact_id"]: fv for fv in existing["fact_verdicts"]}
+    for fv in payload.get("fact_verdicts", []):
+        if fv["verdict"] == Verdict.NOT_ATTEMPTED.value and fv["fact_id"] in merged:
+            continue
+        merged[fv["fact_id"]] = fv
+    payload["fact_verdicts"] = list(merged.values())
+
+    payload["mechanisms_attempted"] = sorted(
+        set(existing.get("mechanisms_attempted") or []) | set(payload.get("mechanisms_attempted") or [])
+    )
+    payload["fidelity"] = fidelity([Verdict(fv["verdict"]) for fv in payload["fact_verdicts"]])
+    # Admissibility/splice facts come from whichever pass actually spliced the candidate; a pass
+    # that skipped the splice (resumed) must not claim the candidate was inadmissible.
+    for key in ("splice_path", "splice_retries", "admissible", "admissibility_failure",
+                "admissibility_detail", "noncomputable", "equivalence_certified"):
+        if key in existing and key not in payload:
+            payload[key] = existing[key]
+    return payload
 
 
 def score_task(
@@ -181,7 +223,7 @@ def score_task(
             payload = score_candidate_body(
                 server, base_env, task["signature"], body, task["facts"],
                 truth_real_name=task["truth_real_name"] if try_equivalence else None,
-                budgets=budgets, cache=cache, imports=task["imports"],
+                budgets=budgets, cache=cache, imports=cfg.imports_for(task["imports"]),
                 try_equivalence=try_equivalence, mechanisms=mechanisms,
             )
         except Exception as e:  # noqa: BLE001 -- one candidate must never sink the run
@@ -197,7 +239,9 @@ def score_task(
             outcome.noncomputable += 1
 
         for member in members:
-            record = dict(payload)
+            record = _merge_with_existing(
+                dict(payload), model_slug, task_name, member["sample_index"], scores_dir
+            )
             record.update(
                 model_slug=model_slug,
                 task_name=task_name,

@@ -25,6 +25,20 @@ ENV_LEAN_PROJECT_DIR = "VERIFIER_LEAN_PROJECT_DIR"
 _override = os.environ.get(ENV_LEAN_PROJECT_DIR, "").strip()
 LEAN_PROJECT_DIR = Path(_override).expanduser() if _override else REPO_ROOT / "lean"
 
+# The REPL binary LeanInteract drives. Normally None -- LeanInteract fetches and builds its own.
+#
+# On the EC2 box, tier 3 (hammer) needs `libcvc5_cvc5.so`'s symbols loaded into the interpreter or
+# the process SIGABRTs, and there is no CLI-flag path through LeanInteract to `--load-dynlib`
+# (`LeanServer.start()` hardcodes its argv, and the stock REPL's `main` discards its args --
+# both verified by reading the sources, see `ladder/tier3.py`). The resolution is a patched REPL
+# checkout whose `main` calls `Lean.loadDynlib` directly, reading `LEAN_INTERACT_LOAD_DYNLIB`.
+#
+# That patched REPL is a no-op when the env var is unset, so it is safe for every tier, not just
+# tier 3 -- which is why this is one setting rather than a tier-3-only code path.
+ENV_REPL_PATH = "VERIFIER_REPL_PATH"
+_repl_override = os.environ.get(ENV_REPL_PATH, "").strip()
+LOCAL_REPL_PATH = Path(_repl_override).expanduser() if _repl_override else None
+
 # AutoLeanServer refuses to start once system-wide memory usage is above this fraction.
 #
 # Back to lean_interact's own 0.8 default (2026-08-05), from the 0.95 this repo had been

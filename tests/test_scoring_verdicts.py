@@ -235,3 +235,45 @@ def test_not_attempted_is_legal_for_either_mechanism(mechanism):
     """It is a statement about the PASS, not about the fact, so the mechanism invariant must
     not reject it -- including for proof facts, which may otherwise never be FAIL."""
     check_mechanism_invariant(mechanism, Verdict.NOT_ATTEMPTED)
+
+
+# --- Stage D -> Stage E merge (2026-08-07) ---------------------------------------------------------
+
+
+def test_a_later_pass_does_not_erase_an_earlier_pass(tmp_path):
+    """THE Stage D/E handover hazard. Without merging, Stage E overwrites the file and the decide
+    verdicts revert to NOT_ATTEMPTED -- worse than losing them, because the record still looks
+    complete and internally consistent."""
+    from scoring.runner import _merge_with_existing
+
+    store.write_verdict({
+        "schema_version": 1, "model_slug": "m", "task_name": "T", "sample_index": 0,
+        "mechanisms_attempted": ["decide"], "admissible": True, "splice_path": "plain",
+        "fact_verdicts": [
+            {"fact_id": "d1", "mechanism": "decide", "verdict": "pass"},
+            {"fact_id": "p1", "mechanism": "proof", "verdict": "not_attempted_this_pass"},
+        ],
+    }, scores_dir=tmp_path)
+
+    stage_e = {
+        "mechanisms_attempted": ["proof"],
+        "fact_verdicts": [
+            {"fact_id": "d1", "mechanism": "decide", "verdict": "not_attempted_this_pass"},
+            {"fact_id": "p1", "mechanism": "proof", "verdict": "pass"},
+        ],
+    }
+    merged = _merge_with_existing(stage_e, "m", "T", 0, tmp_path)
+    by_id = {fv["fact_id"]: fv["verdict"] for fv in merged["fact_verdicts"]}
+
+    assert by_id["d1"] == "pass", "Stage D's decide verdict must survive Stage E"
+    assert by_id["p1"] == "pass", "Stage E's proof verdict must land"
+    assert merged["mechanisms_attempted"] == ["decide", "proof"]
+    assert merged["fidelity"] == 1.0
+    assert merged["admissible"] is True  # carried from the pass that actually spliced
+
+
+def test_merging_into_nothing_is_a_no_op(tmp_path):
+    from scoring.runner import _merge_with_existing
+
+    payload = {"fact_verdicts": [{"fact_id": "x", "mechanism": "decide", "verdict": "pass"}]}
+    assert _merge_with_existing(dict(payload), "m", "T", 0, tmp_path) == payload

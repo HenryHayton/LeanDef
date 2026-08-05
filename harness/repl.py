@@ -70,8 +70,13 @@ def _kill_stray_children(wait_timeout: float = 5.0) -> list[int]:
 
 
 def _build_server(lean_project_dir: Path, max_total_memory: float, verbose: bool) -> AutoLeanServer:
-    lean_config = LeanREPLConfig(project=LocalProject(directory=str(lean_project_dir)), verbose=verbose)
-    return AutoLeanServer(lean_config, max_total_memory=max_total_memory)
+    kwargs = {"project": LocalProject(directory=str(lean_project_dir)), "verbose": verbose}
+    if cfg.LOCAL_REPL_PATH is not None:
+        # `build_repl=False`: the patched checkout is built once by the runbook's Phase G, and
+        # letting LeanInteract rebuild it would overwrite the patch. See `harness.config`.
+        kwargs["local_repl_path"] = str(cfg.LOCAL_REPL_PATH)
+        kwargs["build_repl"] = False
+    return AutoLeanServer(LeanREPLConfig(**kwargs), max_total_memory=max_total_memory)
 
 
 def start_server_with_watchdog(

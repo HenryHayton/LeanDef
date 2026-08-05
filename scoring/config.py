@@ -14,6 +14,7 @@ ENV_SCORES_DIR = "SCORING_SCORES_DIR"
 ENV_TASKS_DIR = "SCORING_TASKS_DIR"
 ENV_SAMPLES_DIR = "SCORING_SAMPLES_DIR"
 ENV_WORKERS = "SCORING_WORKERS"
+ENV_EXTRA_IMPORTS = "SCORING_EXTRA_IMPORTS"
 
 SCHEMA_VERSION = 1
 
@@ -60,3 +61,29 @@ INFRA_RETRY_ATTEMPTS = 1
 # symbol (`VTask.`) so fact statements -- which name `VTask.*` -- can never resolve against the
 # truth definition. See `scoring.equivalence` for the inertness argument and its adversarial test.
 TRUTH_SYMBOL_PREFIX = "VTruth."
+
+
+def extra_imports() -> list[str]:
+    """Lean modules to import beyond the task's own list, comma-separated in
+    `$SCORING_EXTRA_IMPORTS`.
+
+    Exists for `Hammer`. Tier 3's `by hammer` is an **unknown tactic** under `import Mathlib`
+    alone -- it fails instantly (~0.04 s) with "unknown tactic", which reads as a hammer that
+    tried and lost rather than one that never ran. That is exactly how the first shakedown
+    failed: 0/4 reproved, every attempt "UNKNOWN" in 0.0 s.
+
+    Kept OUT of `task.json`: the import set is a property of the machine and the tier
+    configuration (Hammer only exists on the box), not of the task. Writing it into the corpus
+    would make the tasks unloadable anywhere Hammer is absent.
+    """
+    raw = os.environ.get(ENV_EXTRA_IMPORTS, "").strip()
+    return [m.strip() for m in raw.split(",") if m.strip()]
+
+
+def imports_for(task_imports: list[str] | None) -> list[str]:
+    """A task's imports plus the configured extras, order preserved, deduplicated."""
+    out = list(task_imports or ["Mathlib"])
+    for m in extra_imports():
+        if m not in out:
+            out.append(m)
+    return out

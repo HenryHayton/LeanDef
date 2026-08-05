@@ -27,7 +27,7 @@ from scoring import store
 from scoring.runner import ServerHandle, score_task
 from scoring.samples import available_models, available_tasks
 
-MECHANISMS = ("decide",)
+
 
 
 def main() -> int:
@@ -36,10 +36,13 @@ def main() -> int:
                     help="stop after roughly this many candidates have been SCORED (priority rule)")
     ap.add_argument("--models", nargs="*", default=None)
     ap.add_argument("--out", default="scoring_output/stage_d_summary.json")
+    ap.add_argument("--mechanisms", default="decide",
+                    help="comma-separated: 'decide' for Stage D, 'proof' for Stage E")
     args = ap.parse_args()
 
+    mechanisms = tuple(m.strip() for m in args.mechanisms.split(',') if m.strip())
     models = args.models or [m for m in available_models() if not m.startswith("kimina")]
-    print(f"Stage D: models={models}\n", flush=True)
+    print(f"pass mechanisms={mechanisms}  models={models}\n", flush=True)
 
     handle = ServerHandle()
     started = time.perf_counter()
@@ -58,7 +61,7 @@ def main() -> int:
                     stopped_early = True
                     break
                 out = score_task(model, task_name, handle, budgets=DEFAULT_LADDER_BUDGETS,
-                                 mechanisms=MECHANISMS)
+                                 mechanisms=mechanisms)
                 agg["tasks"] += 1
                 for k in ("scored", "fanned_out", "skipped", "unextractable",
                           "equivalence_hits", "noncomputable"):
@@ -79,7 +82,7 @@ def main() -> int:
     wall = time.perf_counter() - started
     summary = {
         "generated_at_unix": int(time.time()),
-        "mechanisms": list(MECHANISMS),
+        "mechanisms": list(mechanisms),
         "models": per_model,
         "scored_total": scored_total,
         "stopped_early": stopped_early,
