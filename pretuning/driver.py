@@ -19,7 +19,9 @@ instruction text, the prompt hash). Recovering which prompt produced a sample mu
 re-deriving it from code that has since changed.
 """
 
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -33,6 +35,7 @@ from pretuning.prompts import build_prompt, check_prompt_leak
 TEMPERATURE = 0.7          # fixed: this compares prompts, not sampling
 SAMPLES_PER_TASK = 10
 MAX_TOKENS = 8192
+DEFAULT_CONCURRENCY = 32   # measured: ~25 s/generation single-stream; sequential would be ~23 h
 
 
 @dataclass
@@ -70,6 +73,8 @@ def run_cell(
     samples_per_task: int = SAMPLES_PER_TASK,
     max_tokens: int = MAX_TOKENS,
     timeout_s: float = 600.0,
+    concurrency: int = DEFAULT_CONCURRENCY,
+    progress_interval_s: float = 60.0,
     forbidden: dict[str, str] | None = None,
 ) -> CellOutcome:
     """Generate every (task, sample) for one cell, resuming over whatever is already on disk."""
@@ -139,11 +144,38 @@ def run_cell(
             log(f"[{cell.cell_id}] GATE FAILED -- skipping this cell, continuing with the others")
             return out
 
-    for task in tasks:
-        for idx in range(samples_per_task):
-            one(task, idx)
-        log(f"[{cell.cell_id}] {task}: generated={out.generated} skipped={out.skipped} "
-            f"errors={out.errors}")
+    # --- the rest, concurrently -------------------------------------------------------------
+    # Single-stream latency is ~25 s, so the whole 3,280-generation run would be ~23 h serially.
+    # The endpoint batches happily; the client is thread-safe (each call owns its own request),
+    # and the store is atomic per file, so the only shared state is the counter under `lock`.
+    units = [(t, i) for t in prompts for i in range(samples_per_task)]
+    lock = threading.Lock()
+    started_gen = time.perf_counter()
+    last = started_gen
+    done = 0
+
+    def _work(unit):
+        t, i = unit
+        try:
+            one(t, i)
+        except Exception as e:  # noqa: BLE001 -- a unit must never sink the cell
+            with lock:
+                out.errors += 1
+            log(f"[{cell.cell_id}] {t}/{i} UNCAUGHT {type(e).__name__}: {str(e)[:120]}")
+
+    with ThreadPoolExecutor(max_workers=max(1, concurrency)) as pool:
+        futures = [pool.submit(_work, u) for u in units]
+        for _ in as_completed(futures):
+            with lock:
+                done += 1
+                now = time.perf_counter()
+                if now - last >= progress_interval_s:
+                    last = now
+                    rate = done / max(now - started_gen, 1e-6)
+                    eta = (len(units) - done) / rate if rate > 0 else float("inf")
+                    log(f"[{cell.cell_id}] {done}/{len(units)} "
+                        f"(gen={out.generated} skip={out.skipped} err={out.errors}) "
+                        f"eta {eta/60:.0f} min")
 
     out.status = "completed"
     out.wall_s = time.perf_counter() - started
