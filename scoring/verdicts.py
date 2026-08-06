@@ -118,3 +118,26 @@ def fidelity(verdicts: list[Verdict]) -> float | None:
     if denominator == 0:
         return None
     return sum(1 for v in verdicts if v is Verdict.PASS) / denominator
+
+
+def resolution_rate(verdicts: list[Verdict]) -> float | None:
+    """Fraction of facts that produced a verdict at all -- the mandatory companion to `fidelity`.
+
+    Fidelity divides by what resolved, so it is silent about how much resolved: 1.0 from 9 of 29
+    facts and 1.0 from 29 of 29 print identically while meaning very different things. Reporting
+    fidelity without this number next to it overstates the first case by a factor of three, which
+    is why every funnel that carries a fidelity column has to carry this one too.
+
+    **This is `counts_in_denominator`, NOT `Verdict.is_resolved`** -- the two are different
+    coverage notions and using the wrong one silently reports 1.0 for a candidate whose every
+    fact came back UNKNOWN. `is_resolved` asks "did THIS PASS attempt the fact", separating a
+    deferred Stage D from an exhausted Stage E; it counts UNKNOWN and ERROR as resolved, because
+    both mean the pass did try. This function asks the sharper question "did we actually learn
+    the fact's truth value", and only PASS and FAIL do.
+
+    `None` when there are no facts at all, matching `fidelity`'s convention that an unscored
+    candidate is not a candidate that scored zero.
+    """
+    if not verdicts:
+        return None
+    return sum(1 for v in verdicts if v.counts_in_denominator) / len(verdicts)

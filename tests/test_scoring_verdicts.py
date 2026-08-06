@@ -277,3 +277,27 @@ def test_merging_into_nothing_is_a_no_op(tmp_path):
 
     payload = {"fact_verdicts": [{"fact_id": "x", "mechanism": "decide", "verdict": "pass"}]}
     assert _merge_with_existing(dict(payload), "m", "T", 0, tmp_path) == payload
+
+
+def test_resolution_rate_is_the_companion_fidelity_cannot_supply():
+    """1.0 from 9-of-29 and 1.0 from 29-of-29 print identically under `fidelity` alone."""
+    from scoring.verdicts import Verdict, fidelity, resolution_rate
+
+    thin = [Verdict.PASS] * 9 + [Verdict.UNKNOWN] * 20
+    full = [Verdict.PASS] * 29
+    assert fidelity(thin) == fidelity(full) == 1.0
+    assert resolution_rate(thin) == 9 / 29
+    assert resolution_rate(full) == 1.0
+
+
+def test_resolution_rate_is_not_the_same_coverage_notion_as_is_resolved():
+    """Two different questions, and answering the wrong one reports 1.0 for a candidate that
+    learned nothing. `is_resolved` asks "did this pass attempt the fact" (UNKNOWN counts);
+    `resolution_rate` asks "did we learn its truth value" (only PASS/FAIL count)."""
+    from scoring.verdicts import Verdict, resolution_rate
+
+    assert resolution_rate([Verdict.NOT_ATTEMPTED] * 4) == 0.0
+    assert resolution_rate([Verdict.UNKNOWN] * 4) == 0.0
+    assert all(v.is_resolved for v in [Verdict.UNKNOWN, Verdict.ERROR])
+    assert resolution_rate([Verdict.PASS, Verdict.FAIL, Verdict.UNKNOWN, Verdict.ERROR]) == 0.5
+    assert resolution_rate([]) is None
