@@ -203,3 +203,50 @@ def test_extractor_does_not_mistake_the_prose_for_the_definition():
     only_prose = ("The object is the least k such that n ≤ b^k, and it is 0 when b ≤ 1.\n"
                   "No Lean code follows.")
     assert not isinstance(extract_definition("goedel-formalizer-v2-8b", only_prose), Extraction)
+
+
+# --- driver: store contract and resume ------------------------------------------------------
+
+
+def test_driver_keys_the_tree_by_cell_and_resumes(tmp_path, tasks):
+    """The store's `model_name` slot carries the CELL ID, so eight prompts over one model land in
+    eight separate trees. Resume must then recompute nothing -- the property that survived a real
+    mid-run kill in the prelim."""
+    from prelim.stubserver import ScriptedResponse, StubEndpointServer, sse_stream
+    from pretuning.driver import run_all
+
+    good = ("```lean4\ndef VTask.clog (b n : ℕ) : ℕ :=\n  if b ≤ 1 then 0 else Nat.log b n + 1\n```")
+    srv = StubEndpointServer([ScriptedResponse(200, sse_stream(good))])
+    try:
+        kw = dict(endpoint_url=srv.url, samples_dir=tmp_path, model_name="m",
+                  cells=CELLS[:2], samples_per_task=2, log=lambda *a, **k: None)
+        first = run_all(tasks[:2], **kw)
+        assert all(o.status == "completed" for o in first)
+        assert {p.name for p in tmp_path.iterdir()} == {CELLS[0].cell_id, CELLS[1].cell_id}
+
+        again = run_all(tasks[:2], **kw)
+        assert sum(o.generated for o in again) == 0, "resume must recompute nothing"
+    finally:
+        srv.stop()
+
+
+def test_every_sample_records_its_full_cell_configuration(tmp_path, tasks):
+    """Recovering which prompt produced a sample must never require re-deriving it from code
+    that has since changed."""
+    import json as _json
+
+    from prelim.stubserver import ScriptedResponse, StubEndpointServer, sse_stream
+    from pretuning.driver import run_all
+
+    srv = StubEndpointServer([ScriptedResponse(200, sse_stream("```lean\ndef VTask.clog : ℕ := 0\n```"))])
+    try:
+        run_all(tasks[:1], endpoint_url=srv.url, samples_dir=tmp_path, model_name="m",
+                cells=[CELLS[4]], samples_per_task=1, log=lambda *a, **k: None)
+        rec = _json.loads(next(tmp_path.rglob("sample_*.json")).read_text())
+        for key in ("cell_id", "anti_sorry_level", "scaffold", "anti_sorry_text", "scaffold_text"):
+            assert key in rec["extra"], key
+        assert rec["extra"]["anti_sorry_level"] == S_C
+        assert rec["finish_reason"] is not None
+        assert rec["prompt_sha256"]
+    finally:
+        srv.stop()
