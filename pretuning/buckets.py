@@ -98,10 +98,18 @@ def classify(
 
 
 def contains_banned_token(text: str) -> bool:
-    """Did a banned word reach the output despite the ban? Reported separately from the buckets.
+    """Did a banned word reach the text despite the ban? Reported separately from the buckets.
 
     A leak is not a bucket: it is a statement about whether the intervention was actually applied,
     and it needs to be visible even when the sample it appears in is otherwise a fine construction
-    attempt (a stray `sorry` in a think-block, say).
+    attempt.
+
+    **Report this over the extracted DEFINITION, not over the whole completion.** The ban is
+    token-level, not string-level, and prose spellings tokenize differently: measured live against
+    the served tokenizer, bare `sorry` is token 67597 and ` sorry` is 14589 (both banned outright),
+    but the same letters inside quotes or after a dot are different ids entirely (`.sorry` ->
+    [514, 8468]). So the model can still discuss `sorry` in a think-block while being unable to
+    emit it as a body -- which is the intervention working, not leaking. Counting prose mentions
+    as failures would understate a ban that did exactly its job.
     """
     return re.search(r"\b(sorry|sorryAx|admit)\b", text or "") is not None

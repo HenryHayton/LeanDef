@@ -73,7 +73,7 @@ def main() -> int:
             weight: collections.Counter = collections.Counter()
             bucket_w: collections.Counter = collections.Counter()
             bucket_adm: collections.Counter = collections.Counter()
-            n = unext = leaks = think = prefilled = 0
+            n = unext = leak_defn = leak_prose = think = prefilled = 0
             subst_identical = subst_rederived = 0
             comp_tokens: list[int] = []
 
@@ -90,11 +90,16 @@ def main() -> int:
                     think += 1
                 if extra.get("prefill_applied"):
                     prefilled += 1
-                if extra.get("ban_applied") and B.contains_banned_token(completion):
-                    leaks += 1
-
                 r = extract_definition(MODEL_SLUG, completion, finish_reason=d.get("finish_reason"))
                 got = isinstance(r, Extraction)
+                if extra.get("ban_applied"):
+                    # Two separate numbers. Only the first is a failure of the intervention: the
+                    # ban is token-level, so a prose mention in a think-block can survive it while
+                    # the body cannot carry `sorry` at all. See `buckets.contains_banned_token`.
+                    if got and B.contains_banned_token(r.code):
+                        leak_defn += 1
+                    elif B.contains_banned_token(completion):
+                        leak_prose += 1
                 bucket = B.classify(
                     extracted=got,
                     declaration=r.code if got else None,
@@ -178,7 +183,8 @@ def main() -> int:
                 "bucket_by_outcome": {f"{b}|{k}": v for (b, k), v in bucket_adm.items()},
                 "substitution": {"identical": subst_identical, "rederived": subst_rederived,
                                  "total": subst_identical + subst_rederived},
-                "banned_token_leaks": leaks,
+                "banned_in_definition": leak_defn,
+                "banned_in_prose_only": leak_prose,
                 "think_block_present": think,
                 "prefilled_samples": prefilled,
                 "completion_tokens": {
@@ -195,7 +201,7 @@ def main() -> int:
             print(f"{cell:<6} adm/100={out[cell]['adm_per_100']:>5.1f}  "
                   f"adm|nonsorry={out[cell]['adm_given_nonsorry']:>5.1f}%  "
                   f"nonverbatim={adm_nonverbatim:>4}  subst={out[cell]['substitution']['total']:>4}  "
-                  f"leaks={leaks:>3}  tasks={len(tasks_ok):>2}", flush=True)
+                  f"leak_defn={leak_defn:>3}  tasks={len(tasks_ok):>2}", flush=True)
     finally:
         handle.close()
 
