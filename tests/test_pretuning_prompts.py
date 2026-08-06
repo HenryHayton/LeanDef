@@ -158,3 +158,48 @@ def test_determinism(tasks):
     d, sig = load_task(tasks[0])
     for c in CELLS:
         assert build_prompt(c, d, sig) == build_prompt(c, d, sig)
+
+
+# --- extractor smoke on both cell output shapes ---------------------------------------------
+#
+# R0 carries NO format instruction, so the extractor must survive whatever the model chooses.
+# Measured on 410 real Goedel-Formalizer completions, its native shape is uniformly
+# `<think>` + prose + fenced ```lean4 block carrying miniF2F boilerplate (import lines INSIDE
+# the fence) -- 371/410 extracted. R1 adds a prose characterization before the code, which is a
+# shape the corpus does not yet contain, so it is smoked here against constructed cases.
+
+from prelim.extract import Extraction, extract_definition  # noqa: E402
+
+_BODY = "def VTask.clog (b n : ℕ) : ℕ :=\n  if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b n + 1"
+
+R1_SHAPES = {
+    "prose then fence": f"**Characterization.** The object is the ceiling logarithm; at `b ≤ 1` "
+                        f"it is 0 by convention.\n\n```lean4\nimport Mathlib\n\n{_BODY}\n```",
+    "think, prose, fence": f"<think>Let me work out the boundary.</think>\nThe object is the "
+                           f"least k with n ≤ b^k.\n\n```lean4\n{_BODY}\n```",
+    "prose mentioning def, then fence": f"We define VTask.clog by cases; the definition below "
+                                        f"uses `Nat.log`.\n\n```lean\n{_BODY}\n```",
+    "numbered prose then fence": f"1. The object is a ceiling log.\n2. Boundary: 0 when b ≤ 1."
+                                 f"\n\n```lean4\n{_BODY}\n```",
+    "prose, fence, trailing prose": f"Characterization first.\n\n```lean4\n{_BODY}\n```\n\n"
+                                    f"This handles all boundary cases.",
+    "bare code, no fence (R0 risk)": f"The object is a ceiling logarithm.\n\n{_BODY}\n",
+}
+
+
+@pytest.mark.parametrize("label", sorted(R1_SHAPES))
+def test_extractor_survives_every_r1_output_shape(label):
+    result = extract_definition("goedel-formalizer-v2-8b", R1_SHAPES[label])
+    assert isinstance(result, Extraction), f"{label}: {result}"
+    assert result.declared_name == "VTask.clog"
+    assert "Nat.log b n + 1" in result.code
+    for prose in ("Characterization", "least k", "handles all", "We define"):
+        assert prose not in result.code, f"{label}: prose leaked into the extracted code"
+
+
+def test_extractor_does_not_mistake_the_prose_for_the_definition():
+    """R1's prose is explicitly not graded. If a prose sentence were extracted as the answer, the
+    cell would score its own instruction rather than the model's definition."""
+    only_prose = ("The object is the least k such that n ≤ b^k, and it is 0 when b ≤ 1.\n"
+                  "No Lean code follows.")
+    assert not isinstance(extract_definition("goedel-formalizer-v2-8b", only_prose), Extraction)
