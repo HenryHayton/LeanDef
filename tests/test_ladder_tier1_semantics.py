@@ -231,3 +231,55 @@ def test_membership_extension_works_without_a_real_name():
     tactics = [t.tactic for t in with_membership_tactics(
         DEFAULT_LADDER_BUDGETS, "VTask.Map").tier2_tactics]
     assert any("simp [VTask.Map]" == t for t in tactics)
+
+
+# --- decide-fallback (2026-08-07) -----------------------------------------------------------------
+
+def test_decide_prop_extraction():
+    from ladder.adjudicate import decide_statement_to_prop
+    assert decide_statement_to_prop("example : VTask.clog 2 8 = 3 := by decide") == "VTask.clog 2 8 = 3"
+    assert decide_statement_to_prop("example : P ∧ Q := by decide") == "P ∧ Q"
+    assert decide_statement_to_prop("theorem foo : X := rfl") is None   # not a decide command
+    assert decide_statement_to_prop("") is None
+
+
+def test_decide_fallback_rescues_a_noncomputable_candidate(mathlib_env):
+    """THE case this exists for. A noncomputable definition (`sInf`) has no evaluable `Decidable`
+    instance, so every one of its decide facts returns UNKNOWN and the candidate loses all decide
+    coverage -- while a candidate that reduces the same object to a computable primitive scores
+    cleanly. That is a bias about ANSWER SHAPE, not correctness.
+
+    Measured on the prelim run: 32% noncomputable emission for one model, and its coverage fell
+    to 71.8% as a direct result.
+    """
+    from harness.facts import Fact
+    from harness.results import CheckStatus
+    from harness.scoring import splice_candidate
+    from harness.signature import PinnedSignature
+    from ladder.adjudicate import adjudicate_fact
+    from ladder.budgets import LadderBudgets, TacticBudget
+    from ladder.statuses import AdjudicationStatus
+
+    server, env = mathlib_env
+    sig = PinnedSignature(name="VTask.nc", type_sig="(n : ℕ) -> ℕ")
+    # Noncomputable by construction: `sInf` of a set of naturals.
+    decl = "@[reducible] noncomputable def VTask.nc (n : ℕ) : ℕ := sInf {k : ℕ | n ≤ k}"
+    sp = splice_candidate(server, env, decl, timeout=60.0)
+    assert sp.status is CheckStatus.PASSED, sp.detail
+
+    fact = Fact(id="nc_zero", type="casework", mechanism="decide",
+                statement="example : VTask.nc 0 = 0 := by decide",
+                domain_inputs={"n": ["0"]}, anchors=[])
+    fast = LadderBudgets(tier2_tactics=(TacticBudget("simp", 15.0),), decide_fallback=True)
+
+    off, _ = adjudicate_fact(fact, sp.env, server, LadderBudgets(
+        tier2_tactics=(TacticBudget("simp", 15.0),), decide_fallback=False))
+    on, _ = adjudicate_fact(fact, sp.env, server, fast)
+
+    assert off.status is AdjudicationStatus.UNKNOWN, "without the fallback this must be UNKNOWN"
+    # With the fallback it is either CERTIFIED (tier 2 proved it) or still UNKNOWN -- but never
+    # FAILED: tier 2 only finds proofs, so no candidate can be refuted by this path.
+    assert on.status is not AdjudicationStatus.FAILED
+    assert len(on.attempts) >= len(off.attempts), "the fallback must record its extra attempt"
+    print(f"\n  decide-fallback: off={off.status.value} on={on.status.value} "
+          f"tier={on.tier} attempts={len(on.attempts)}")

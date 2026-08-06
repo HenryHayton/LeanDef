@@ -41,6 +41,7 @@ ladder, or a real tier 3/4 call) is not interrupted partway through; the ceiling
 prevents the *next* tier from starting.
 """
 
+import re
 import time
 
 from lean_interact import AutoLeanServer, Command
@@ -49,7 +50,7 @@ from harness.facts import Fact
 from harness.repl import run_checked
 from harness.results import CheckStatus
 from ladder.axiom_audit import audit_proof_axioms
-from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets
+from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets, with_membership_tactics
 from ladder.cache import CacheEntry, ProofScriptCache, replay, statement_hash, toolchain_pin
 from ladder.statuses import Adjudication, AdjudicationStatus, ElaborationStatus, TierAttempt
 from ladder.tier1 import adjudicate_tier1
@@ -59,6 +60,48 @@ from ladder.tier4 import adjudicate_tier4_equivalence
 from ladder.tier_stubs import adjudicate_tier5_flagship
 
 BUDGET_EXHAUSTED_MARKER = "BUDGET_EXHAUSTED"
+
+
+
+# `example : <PROP> := by decide` -> `<PROP>`. Decide facts are stored as full runnable commands
+# (schema v1.1 §3.1), but tier 2 declares its own theorem around a BARE Prop, so the fallback has
+# to recover the proposition from the command.
+_DECIDE_PROP_RE = re.compile(r"^\s*example\s*:\s*(?P<prop>.+?)\s*:=\s*by\s+decide\s*$", re.DOTALL)
+_TASK_SYMBOL_RE = re.compile(r"(?<![A-Za-z0-9_.])(VTask\.[A-Za-z_][A-Za-z0-9_.']*)")
+
+
+def decide_statement_to_prop(statement: str) -> str | None:
+    m = _DECIDE_PROP_RE.match(statement or "")
+    return m.group("prop").strip() if m else None
+
+
+def _decide_fallback(server, env, fact, budgets, imports):
+    """Escalate an UNDECIDABLE decide fact to tier 2. Returns `(TierAttempt|None, env)`.
+
+    **Why this exists.** A decide fact returns UNKNOWN when the `Decidable` instance is missing or
+    stuck -- which is exactly what a NONCOMPUTABLE candidate does to every one of its decide
+    facts. Measured on the prelim run: one model emitted noncomputable definitions in 32% of
+    candidates and lost its entire decide coverage as a result, while a model that reduced the
+    same object to an existing computable primitive scored cleanly. The instrument was therefore
+    rewarding algorithm-by-reduction over definition-by-characterization -- a bias about
+    *answer shape*, not correctness.
+
+    The proposition is still perfectly true or false; it just cannot be settled by kernel
+    computation through this splice. Tier 2 can often settle it by proof instead, with the
+    membership extension supplying the definition-unfolding tactics that recovered 4/5 of the
+    pilot's residue.
+
+    Soundness is unchanged: tier 2 only ever finds PROOFS, so this can turn UNKNOWN into
+    CERTIFIED and nothing else. It can never manufacture a FAILED, so no candidate can be
+    refuted by this path.
+    """
+    prop = decide_statement_to_prop(fact.statement)
+    if prop is None:
+        return None, env
+    sym = _TASK_SYMBOL_RE.search(prop)
+    b = with_membership_tactics(budgets, sym.group(1)) if sym else budgets
+    result = adjudicate_tier2(server, env, f"{fact.id}_decidefallback", prop, b, imports=imports)
+    return result.winning, result.env
 
 
 def _probe_elaboration(server: AutoLeanServer, env: int, canonical_statement: str, budgets: LadderBudgets) -> ElaborationStatus:
@@ -155,6 +198,15 @@ def adjudicate_fact(
 
     if fact.mechanism == "decide":
         attempt = adjudicate_tier1(server, env, fact.statement, budgets)
+        attempts_d = [attempt]
+        # Decide-fallback: UNKNOWN means "not settleable by computation through this splice",
+        # not "not settleable". ERRORED is broken machinery and is NOT escalated -- retrying a
+        # broken splice as a proof goal just spends budget on the same breakage.
+        if budgets.decide_fallback and attempt.status is AdjudicationStatus.UNKNOWN:
+            won, env = _decide_fallback(server, env, fact, budgets, imports)
+            if won is not None:
+                attempts_d.append(won)
+                attempt = won
         elapsed = time.perf_counter() - start
         decided = attempt.status in (AdjudicationStatus.CERTIFIED, AdjudicationStatus.FAILED)
         return (
@@ -162,11 +214,11 @@ def adjudicate_fact(
                 fact_id=fact.id,
                 elaboration=ElaborationStatus.ELABORATES if decided else ElaborationStatus.UNKNOWN,
                 status=attempt.status,
-                tier=1 if decided else None,
+                tier=(attempt.tier if decided else None),
                 script=fact.statement if attempt.status is AdjudicationStatus.CERTIFIED else None,
                 axiom_closure=None,  # tier 1 is kernel computation, not an assembled proof term -- no axiom audit applies
                 wall_clock_s=elapsed,
-                attempts=[attempt],
+                attempts=attempts_d,
             ),
             env,
         )

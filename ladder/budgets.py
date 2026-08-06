@@ -81,6 +81,13 @@ class LadderBudgets:
     # See `ladder.tier2`'s module docstring for the chosen design and its justification.
     env_death_max_recovery_attempts: int = 3
 
+    # Decide-fallback (2026-08-07): escalate an UNKNOWN decide fact to tier 2 rather than
+    # writing it off. UNKNOWN there means the `Decidable` instance is missing or stuck -- the
+    # signature of a NONCOMPUTABLE candidate -- so without this the instrument silently rewards
+    # algorithm-by-reduction over definition-by-characterization. Tier 2 only finds proofs, so
+    # this can only ever turn UNKNOWN into CERTIFIED; it cannot refute anything.
+    decide_fallback: bool = True
+
 
 DEFAULT_LADDER_BUDGETS = LadderBudgets()
 
