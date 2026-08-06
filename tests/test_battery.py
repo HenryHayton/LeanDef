@@ -195,6 +195,12 @@ def test_every_bucket_is_reachable_and_precedence_is_total():
     assert _classify("def VTask.clog : ℕ := Nat.log 2 5 + 1") == B.REAL_CONSTRUCTION_ATTEMPT
     assert _classify("def VTask.clog : ℕ := by exact?") == B.TACTIC_JUNK_BODY
     assert _classify("def VTask.clog : ℕ := by aesop") == B.TACTIC_JUNK_BODY
+    # The shape the ban ACTUALLY produces: a whole proof script as the definition body.
+    assert _classify("def VTask.f : T := by use f use hf_nonempty use hf_inverse") == B.TACTIC_JUNK_BODY
+    # Commentary explaining that the answer is absent is not a construction attempt.
+    assert _classify("def VTask.f : T := by -- this would be a complex recursive definition\n"
+                     "  -- the actual implementation is intricate") == B.DEGENERATE_BODY
+    assert _classify("def VTask.f : T := by -- goes here\n  placeholder") == B.DEGENERATE_BODY
     assert _classify("def VTask.clog : ℕ :=") == B.DEGENERATE_BODY
     assert _classify("def VTask.clog : ℕ := _") == B.DEGENERATE_BODY
     assert _classify("def VTask.ceilRoot : ℕ := 3", name="VTask.ceilRoot") == B.EXEMPLAR_SUBSTITUTION

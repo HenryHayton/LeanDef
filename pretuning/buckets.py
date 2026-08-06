@@ -38,17 +38,33 @@ BUCKETS: tuple[str, ...] = (
 # token reaching the output anyway -- is classified honestly rather than counted as construction.
 _PLACEHOLDER_BODIES = frozenset({
     "", "_", "?_", "sorry", "by sorry", "admit", "by admit", "sorryAx", "by exact sorry",
-    "by trivial", "trivial",
+    "by trivial", "trivial", "by",
 })
 
-# A body that is nothing but a tactic invocation: the model has handed the definition itself to
-# proof automation. `exact?`/`apply?` are search tactics that do not even claim to know the
-# answer; `aesop`/`simp`/`decide`/`omega` are the automation a punting formalizer reaches for.
-_TACTIC_ONLY_RE = re.compile(
-    r"^by\s+(exact\?|apply\?|aesop|simp\b.*|decide|omega|tauto|norm_num\b.*|trivial|"
-    r"first\b.*|repeat\b.*|assumption)\s*$",
-    re.DOTALL,
-)
+_COMMENT_RE = re.compile(r"--[^\n]*|/-.*?-/", re.DOTALL)
+
+# DETECTOR WIDENED 2026-08-07, AFTER SEEING T1 OUTPUT -- bucket definitions unchanged.
+#
+# The six bucket NAMES and their precedence were fixed before any T1/T3 sample existed and are
+# untouched. What changed is which strings each detector recognises, and it changed because the
+# original two were too narrow to catch their own bucket's central case:
+#
+#   - The junk-body detector listed specific tactics (`exact?`, `aesop`, `simp`, ...). Under the
+#     ban the model does not reach for those; it writes a whole PROOF SCRIPT as the definition
+#     body -- `by use f use hf_nonempty use f_inv_nonempty use hf_inverse`, `by apply And.intro
+#     · intro f g h · simp`. That is the same escape route (hand the definition to tactic mode),
+#     and the narrow list scored it as `real_construction_attempt`.
+#   - The degenerate detector had no notion of a body made entirely of COMMENTS. Under the ban
+#     that appears directly: `by -- The strong induction definition would go here, but the
+#     actual proof is not provided -- This is a placeholder`. Prose explaining that the answer
+#     is absent is not a construction attempt.
+#
+# Widening a detector after seeing data is a real risk to the pre-registration, so it is recorded
+# rather than quietly applied: the change makes each detector match the bucket the operator NAMED
+# ("by exact?-by aesop-style junk body", "degenerate-empty-or-unfinished body"), and it moves
+# samples OUT of `real_construction_attempt` -- i.e. it makes the ban look worse, not better. The
+# pre-widening figures are in git history if the difference is ever in question.
+_TACTIC_ONLY_RE = re.compile(r"^by\b", re.DOTALL)
 
 _UNFINISHED_TAIL_RE = re.compile(r"(?::=|[+\-*/,∧∨→←↔=<>]|\bthen\b|\belse\b|\bwith\b|=>)$")
 
@@ -88,7 +104,12 @@ def classify(
 
     body = body_of(declaration)
     normalised = " ".join(body.split())
-    if normalised in _PLACEHOLDER_BODIES or _UNFINISHED_TAIL_RE.search(body.rstrip()):
+    # A body whose only content is commentary is degenerate however long the commentary is.
+    decommented = " ".join(_COMMENT_RE.sub("", body).split())
+    if (normalised in _PLACEHOLDER_BODIES
+            or decommented in _PLACEHOLDER_BODIES
+            or "placeholder" in normalised.lower()
+            or _UNFINISHED_TAIL_RE.search(body.rstrip())):
         return DEGENERATE_BODY
 
     if _TACTIC_ONLY_RE.match(normalised):
