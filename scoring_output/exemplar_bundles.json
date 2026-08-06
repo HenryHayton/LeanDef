@@ -1,0 +1,254 @@
+[
+ {
+  "name": "Fin.contractNth",
+  "slot": 1,
+  "tag": "A",
+  "status": "ok",
+  "pinned_signature": "VTask.contractNth : {n : ℕ} -> {α : Sort u_1} -> (j : Fin (n + 1)) -> (op : α → α → α) -> (g : Fin (n + 1) → α) -> (k : Fin n) -> α",
+  "pinned_type": "{n : ℕ} -> {α : Sort u_1} -> (j : Fin (n + 1)) -> (op : α → α → α) -> (g : Fin (n + 1) → α) -> (k : Fin n) -> α",
+  "real_body": "def contractNth (j : Fin (n + 1)) (op : α → α → α) (g : Fin (n + 1) → α) (k : Fin n) : α :=\n  if (k : ℕ) < j then g (Fin.castSucc k)\n  else if (k : ℕ) = j then op (g (Fin.castSucc k)) (g k.succ) else g k.succ",
+  "docstring": "Sends `(g₀, ..., gₙ)` to `(g₀, ..., op gⱼ gⱼ₊₁, ..., gₙ)`.",
+  "dossier_md": "## Object\n\n`VTask.contractNth j op g` is the function that \"contracts\" a tuple `(g₀, g₁, …, gₙ)` of length `n+1` into a tuple of length `n` by merging the adjacent pair at position `j` using the binary operation `op`. Concretely, positions strictly before `j` are copied unchanged, position `j` is replaced by `op(gⱼ, gⱼ₊₁)`, and positions after `j` are shifted left by one (i.e., they read `gₖ₊₁` from the original tuple). The result is a function `Fin n → α` encoding the contracted tuple.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.contractNth : {n : ℕ} -> {α : Sort u_1} -> (j : Fin (n + 1)) -> (op : α → α → α) -> (g : Fin (n + 1) → α) -> (k : Fin n) -> α\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.contractNth : {n : ℕ} -> {α : Sort u_1} -> (j : Fin (n + 1)) -> (op : α → α → α) -> (g : Fin (n + 1) → α) -> (k : Fin n) -> α`\n\nThe implicit argument `n` is one less than the length of the input tuple; `α` is the type of the tuple's entries. The argument `j` is the index (into the original length-`(n+1)` tuple) at which the contraction occurs — the entry at `j` and its right neighbour `j+1` are merged. The argument `op` is the binary operation used to merge those two entries. The argument `g` is the original tuple of length `n+1`, represented as a function `Fin (n+1) → α`. The argument `k` is the index into the resulting contracted tuple of length `n`.\n\n## Conventions\n\nWhen `(k : ℕ) < j`, the output is the original entry `g(castSucc k)`, i.e., position `k` is copied verbatim from the original. When `(k : ℕ) = j`, the output is `op(g(castSucc k), g(k.succ))`, merging the two original entries at positions `j` and `j+1`. When `(k : ℕ) > j`, the output is `g(k.succ)`, shifting the original entry one position to the right to fill the gap.\n\n## Worked examples\n\n- Claim: For `g : Fin 3 → ℕ` defined by `g i = i`, contracting at `j = 1` with `(· + ·)` gives a tuple of length 2 where position 0 is 0, position 1 is `1 + 2 = 3`.\n\n- Claim: For `g : Fin 3 → ℕ` defined by `g i = i`, contracting at `j = 0` with `(· * ·)` gives a tuple of length 2 where position 0 is `0 * 1 = 0` and position 1 is `2`.\n\n- Claim: For `g : Fin 2 → ℕ` with `g 0 = 5, g 1 = 7`, contracting at `j = 0` with `(· + ·)`, the unique output at `k = 0 : Fin 1` is `5 + 7 = 12`.\n\n- Claim: `VTask.contractNth (0 : Fin 2) (· + ·) ![10, 20, 30] (0 : Fin 2) = 30` — contracting a length-3 tuple `[10, 20, 30]` at index 0 gives `[30, 30]` at position 1, since position 1 > j=0 so it reads original entry at index 2 which is 30.\n\n## Boundaries\n\n- When `n = 0`, the type `Fin n = Fin 0` is empty, so `VTask.contractNth j op g` is vacuously a function on an empty domain (contracting a length-1 tuple yields a length-0 tuple).\n- When `j = 0` (the leftmost position), all positions in the output satisfy `k ≥ j`, so either the merge branch or the right-shift branch is taken; the copy branch is never exercised.\n- When `j = n` (the rightmost position in `Fin (n+1)`), all positions `k < n` in the output satisfy `k ≤ n-1 < n = j`, so either the copy branch or the merge branch is taken; the right-shift branch is only taken if `k = n`, but `k : Fin n` so `k ≤ n-1`, meaning only copy and merge occur.\n- The operation `op` is used exactly once, at the unique index `k` with `(k : ℕ) = j`. If `j`'s value equals `n`, the merge entry is always at `k = j` (last valid index of `Fin n`).\n\n## Not to be confused with\n\n- `Fin.insertNth`: inserts a new element into a tuple, expanding its length by one (the reverse direction).\n- `Matrix.updateRow` / `Matrix.updateColumn`: replaces an entire row or column of a matrix, rather than merging two adjacent entries.\n- `Finset.sup` or fold operations: these aggregate all entries of a tuple, not just an adjacent pair at a specified position.",
+  "dossier_chars": 3756,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 0,
+    "disjunctions": 0,
+    "conditionals": 2,
+    "quantifiers": 0,
+    "comparisons": 2,
+    "hypothesis_binders": 2,
+    "total": 6
+   },
+   "return_shape": "value",
+   "exec_mechanism": "none",
+   "docstring_substance": {
+    "length_beyond_floor": 38,
+    "condition_markers": 0,
+    "score": 3.6635616461296463
+   },
+   "module_path": "Data/Fin/Tuple/Basic.lean",
+   "rank": 59
+  }
+ },
+ {
+  "name": "Nat.ceilRoot",
+  "slot": 1,
+  "tag": "B",
+  "status": "ok",
+  "pinned_signature": "VTask.ceilRoot : (n a : ℕ) -> ℕ",
+  "pinned_type": "(n a : ℕ) -> ℕ",
+  "real_body": "def ceilRoot (n a : ℕ) : ℕ :=\n  if n = 0 ∨ a = 0 then 0 else a.factorization.prod fun p k ↦ p ^ ((k + n - 1) / n)",
+  "docstring": "Ceiling root of a natural number. This divides the valuation of every prime number rounding up.\n\nEg if `n = 3`, `a = 2^4 * 3^2 * 5`, then `ceilRoot n a = 2^2 * 3 * 5`.\n\nIn order theory terms, this is the lower or left adjoint of the map `a ↦ a ^ n : ℕ → ℕ` where `ℕ`\nis ordered by divisibility.\n\nTo ensure that the adjunction (`Nat.dvd_pow_iff_ceilRoot_dvd`) holds in as many cases as possible,\nwe special-case the following values:\n* `ceilRoot 0 a = 0` (this one is not strictly necessary)\n* `ceilRoot n 0 = 0`",
+  "dossier_md": "## Object\n\n`VTask.ceilRoot n a` computes the **ceiling root** of a natural number `a` with respect to the degree `n`. Concretely, if `a` has prime factorization `a = p₁^k₁ · p₂^k₂ · … · pₘ^kₘ`, then `VTask.ceilRoot n a = p₁^⌈k₁/n⌉ · p₂^⌈k₂/n⌉ · … · pₘ^⌈kₘ/n⌉`. In other words, each prime's exponent in the factorization of `a` is divided by `n`, rounding **up**. This makes `VTask.ceilRoot n` the left (lower) adjoint to the map `a ↦ aⁿ` on `ℕ` ordered by divisibility: `VTask.ceilRoot n a ∣ b` if and only if `a ∣ bⁿ` (in appropriate non-degenerate cases).\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.ceilRoot : (n a : ℕ) -> ℕ\n<!-- PINNED-SIGNATURE:END -->\n\n\nThe first argument `n` is the **degree** of the root — it plays the role of the denominator in the ceiling division applied to each prime exponent. The second argument `a` is the natural number whose ceiling root is being computed.\n\n## Conventions\n\nWhen `n = 0`, the result is defined to be `0` regardless of `a`, as a special-case choice to extend the adjunction formula as broadly as possible. When `a = 0`, the result is defined to be `0` regardless of `n`, again as a special-case convention supporting the divisibility adjunction.\n\n## Worked examples\n\n- Claim: `VTask.ceilRoot 3 (2^4 * 3^2 * 5) = 2^2 * 3 * 5` — each exponent 4, 2, 1 is divided by 3 rounding up to give 2, 1, 1 respectively.\n  ```lean\n  example : VTask.ceilRoot 3 (2^4 * 3^2 * 5) = 2^2 * 3 * 5 := by native_decide\n  ```\n\n- Claim: `VTask.ceilRoot 2 (2^5 * 7^3) = 2^3 * 7^2` — exponents 5 and 3 each divided by 2 rounding up give 3 and 2.\n  ```lean\n  example : VTask.ceilRoot 2 (2^5 * 7^3) = 2^3 * 7^2 := by native_decide\n  ```\n\n- Claim: `VTask.ceilRoot 1 a = a` for any `a > 0` — dividing each exponent by 1 and rounding up leaves it unchanged, so the 1st ceiling root of any positive number is itself.\n\n- Claim: `VTask.ceilRoot n 1 = 1` for any `n > 0` — the number 1 has an empty factorization, so its ceiling root of any degree is 1.\n  ```lean\n  example : VTask.ceilRoot 5 1 = 1 := by native_decide\n  ```\n\n- Claim: `VTask.ceilRoot 0 7 = 0` — special case: degree zero always yields 0.\n  ```lean\n  example : VTask.ceilRoot 0 7 = 0 := by native_decide\n  ```\n\n- Claim: `VTask.ceilRoot 4 0 = 0` — special case: ceiling root of 0 is always 0.\n  ```lean\n  example : VTask.ceilRoot 4 0 = 0 := by native_decide\n  ```\n\n## Boundaries\n\n- **`n = 0`**: Returns `0` for all `a`, by special-case convention. This is not forced by the adjunction but is chosen for consistency.\n- **`a = 0`**: Returns `0` for all `n`, by special-case convention. Zero has no prime factorization, so this is an extension by choice.\n- **`a = 1`**: For any `n ≥ 1`, the factorization of 1 is empty, so the product over prime factors is empty and equals 1. Thus `VTask.ceilRoot n 1 = 1`.\n- **`n = 1`**: Ceiling division of each exponent by 1 is exact (no rounding needed), so `VTask.ceilRoot 1 a = a` for all `a > 0`.\n- **`a` is a perfect `n`-th power**: In this case every prime exponent is divisible by `n`, the ceiling division coincides with ordinary division, and `VTask.ceilRoot n a` equals the exact `n`-th root of `a`.\n- **`a` is a prime `p`**: Then `VTask.ceilRoot n p = p` for all `n ≥ 1`, since the single exponent is 1 and ⌈1/n⌉ = 1.\n\n## Not to be confused with\n\n- **`Nat.sqrt` / integer square root**: Computes `⌊√a⌋`, the *floor* of the square root; this is the right adjoint of squaring, not the left adjoint, and deals only with degree 2.\n- **`Nat.floorRoot n a`** (if it exists): Would compute the floor-of-root version (the right adjoint), dividing each prime exponent by `n` rounding *down* rather than up.\n- **`Nat.pow n a` (i.e., `aⁿ`)**: The map that `VTask.ceilRoot n` is adjoint to; applying `ceilRoot n` then raising to the `n`-th power gives a number divisible by the original, not necessarily equal to it.",
+  "dossier_chars": 3837,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 0,
+    "disjunctions": 1,
+    "conditionals": 1,
+    "quantifiers": 0,
+    "comparisons": 2,
+    "hypothesis_binders": 0,
+    "total": 4
+   },
+   "return_shape": "value",
+   "exec_mechanism": "eval",
+   "docstring_substance": {
+    "length_beyond_floor": 488,
+    "condition_markers": 1,
+    "score": 7.192362489474872
+   },
+   "module_path": "Data/Nat/Factorization/Root.lean",
+   "rank": 106
+  }
+ },
+ {
+  "name": "SimpleGraph.LocallyLinear",
+  "slot": 2,
+  "tag": "A",
+  "status": "ok",
+  "pinned_signature": "VTask.LocallyLinear : {α : Type u_1} -> (G : SimpleGraph α) -> Prop",
+  "pinned_type": "{α : Type u_1} -> (G : SimpleGraph α) -> Prop",
+  "real_body": "def LocallyLinear (G : SimpleGraph α) : Prop :=\n  G.EdgeDisjointTriangles ∧ ∀ ⦃x y⦄, G.Adj x y → ∃ s, G.IsNClique 3 s ∧ x ∈ s ∧ y ∈ s",
+  "docstring": "A graph is locally linear if each edge belongs to exactly one triangle.",
+  "dossier_md": "## Object\n\nA simple graph is *locally linear* if its edge set can be partitioned into triangles in the strongest possible sense: every edge belongs to **exactly one** triangle. Equivalently, the triangles of the graph are pairwise edge-disjoint (no two triangles share an edge), **and** every edge is covered by at least one triangle (so no edge lies outside all triangles). Together these two requirements force each edge to live in precisely one triangle.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.LocallyLinear : {α : Type u_1} -> (G : SimpleGraph α) -> Prop\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.LocallyLinear : {α : Type u_1} -> (G : SimpleGraph α) -> Prop`\n\nThe implicit type parameter `α` is the vertex type of the graph. The single explicit argument `G` is the simple graph being tested; the proposition asserts that `G` is locally linear.\n\n## Conventions\n\nThe definition is a `Prop`-valued predicate, so it carries no junk-value convention. The two conjuncts are treated symmetrically: neither edge-disjointness of triangles alone nor triangle-coverage of every edge alone suffices; both must hold simultaneously.\n\n## Worked examples\n\n- Claim: The complete graph on 3 vertices (`K₃`) is locally linear, because its unique triangle covers all three edges and those edges are trivially edge-disjoint.\n\n- Claim: A single edge with no triangle (e.g., a path on two vertices viewed as a subgraph of a larger graph) is **not** locally linear, because that edge is not covered by any triangle, violating the second conjunct.\n\n- Claim: The complete graph on 4 vertices (`K₄`) is **not** locally linear: the edge `{0,1}` belongs to the triangle `{0,1,2}` and also to `{0,1,3}`, violating the edge-disjointness condition.\n\n- Claim: A disjoint union of copies of `K₃` (e.g., two vertex-disjoint triangles on six vertices) is locally linear, since every edge is in exactly one triangle and no edge is shared between the two triangles.\n\n## Boundaries\n\n- The **empty graph** (no edges) satisfies `VTask.LocallyLinear` vacuously: there are no edges to violate either conjunct, so both hold trivially.\n- A **triangle-free graph** with at least one edge is **not** locally linear: every edge violates the coverage condition.\n- A graph in which some edge belongs to **two or more** triangles fails the edge-disjointness condition, even if every edge is covered.\n- The definition makes no restriction on the vertex type `α`; it applies to finite and infinite graphs alike.\n\n## Not to be confused with\n\n- `SimpleGraph.EdgeDisjointTriangles`: only the first conjunct — triangles are pairwise edge-disjoint — with no requirement that every edge is covered by a triangle.\n- `SimpleGraph.IsNClique 3`: asserts that a specific 3-element set is a triangle in the graph; `VTask.LocallyLinear` is a global property of the whole graph, not of a single clique.\n- *Locally linear* in the sense of neighborhood graphs being linear (paths/matchings): a different usage of the term found in some graph-theory literature, unrelated to triangle coverage.",
+  "dossier_chars": 3039,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 3,
+    "disjunctions": 0,
+    "conditionals": 0,
+    "quantifiers": 2,
+    "comparisons": 0,
+    "hypothesis_binders": 0,
+    "total": 5
+   },
+   "return_shape": "prop",
+   "exec_mechanism": "none",
+   "docstring_substance": {
+    "length_beyond_floor": 51,
+    "condition_markers": 1,
+    "score": 4.951243718581427
+   },
+   "module_path": "Combinatorics/SimpleGraph/Triangle/Basic.lean",
+   "rank": 77
+  }
+ },
+ {
+  "name": "Set.InjOn",
+  "slot": 2,
+  "tag": "B",
+  "status": "ok",
+  "pinned_signature": "VTask.InjOn : {α : Type u} -> {β : Type v} -> (f : α → β) -> (s : Set α) -> Prop",
+  "pinned_type": "{α : Type u} -> {β : Type v} -> (f : α → β) -> (s : Set α) -> Prop",
+  "real_body": "def InjOn (f : α → β) (s : Set α) : Prop :=\n  ∀ ⦃x₁ : α⦄, x₁ ∈ s → ∀ ⦃x₂ : α⦄, x₂ ∈ s → f x₁ = f x₂ → x₁ = x₂",
+  "docstring": "`f` is injective on `s` if the restriction of `f` to `s` is injective.",
+  "dossier_md": "## VTask.InjOn\n\n### Object\n\nA predicate asserting that a function `f` is *injective when restricted to a set `s`*: distinct elements of `s` are mapped to distinct elements of the codomain. Formally, whenever two elements of `s` have the same image under `f`, they must be equal. This is a weaker condition than global injectivity — `f` may collapse points outside `s` without violating `InjOn f s`.\n\n### Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.InjOn : {α : Type u} -> {β : Type v} -> (f : α → β) -> (s : Set α) -> Prop\n<!-- PINNED-SIGNATURE:END -->\n\n\nThe first argument `f` is the function whose injectivity is being examined. The second argument `s` is the subset of the domain on which injectivity is required; elements outside `s` are unconstrained.\n\n### Conventions\n\nThere are no junk-value conventions to declare: `VTask.InjOn` is a `Prop`-valued predicate that is simply true or false for any given `f` and `s`; no special conventions govern edge inputs.\n\n### Worked examples\n\n- Claim: `VTask.InjOn (fun n : ℕ => n * 2) Set.univ` holds, because multiplication by 2 on ℕ is globally injective and hence injective on any set.\n\n- Claim: `VTask.InjOn (fun _ : ℕ => (0 : ℕ)) {1, 2}` does **not** hold, because the constant function sends 1 and 2 to the same value even though 1 ≠ 2, and both lie in the set.\n\n- Claim: `VTask.InjOn (fun n : ℤ => n ^ 2) (Set.Ici 0)` holds, because on the non-negative integers squaring is injective (two non-negative integers with equal squares must be equal).\n\n- Claim: `VTask.InjOn (fun n : ℤ => n ^ 2) Set.univ` does **not** hold, because `(-1)^2 = 1^2` yet `-1 ≠ 1`, and both lie in the universal set.\n\n### Boundaries\n\n- **Empty set**: `VTask.InjOn f ∅` is vacuously true for every `f`, since there are no elements in `∅` to test the condition on.\n- **Singleton set**: `VTask.InjOn f {a}` is trivially true for every `f`, since the only pair of elements in `{a}` is `(a, a)`, and the conclusion `a = a` is immediate.\n- **Universal set**: `VTask.InjOn f Set.univ` is equivalent to global injectivity `Function.Injective f`.\n- **Monotonicity (anti-tone in `s`)**: if `VTask.InjOn f t` and `s ⊆ t`, then `VTask.InjOn f s`; enlarging the set can only make the property harder to satisfy.\n\n### Not to be confused with\n\n- **`Function.Injective f`** — global injectivity, requiring distinctness of all inputs regardless of membership in any set; `InjOn f Set.univ` is equivalent to this.\n- **`Set.BijOn f s t`** — bijectivity of `f` *from* `s` *to* `t`, which requires injectivity on `s` (i.e., `InjOn f s`) together with mapping `s` into `t` and surjectivity onto `t`.\n- **`Set.SurjOn f s t`** — surjectivity of `f` from `s` onto `t`, the dual notion concerned with the range rather than with distinctness of inputs.",
+  "dossier_chars": 2756,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 0,
+    "disjunctions": 0,
+    "conditionals": 0,
+    "quantifiers": 2,
+    "comparisons": 2,
+    "hypothesis_binders": 1,
+    "total": 5
+   },
+   "return_shape": "prop",
+   "exec_mechanism": "none",
+   "docstring_substance": {
+    "length_beyond_floor": 50,
+    "condition_markers": 1,
+    "score": 4.931825632724326
+   },
+   "module_path": "Data/Set/Operations.lean",
+   "rank": 78
+  }
+ },
+ {
+  "name": "Filter.limsSup",
+  "slot": 3,
+  "tag": "A",
+  "status": "ok",
+  "pinned_signature": "VTask.limsSup : {α : Type u_1} -> [ConditionallyCompleteLattice α] -> (f : Filter α) -> α",
+  "pinned_type": "{α : Type u_1} -> [ConditionallyCompleteLattice α] -> (f : Filter α) -> α",
+  "real_body": "def limsSup (f : Filter α) : α :=\n  sInf { a | ∀ᶠ n in f, n ≤ a }",
+  "docstring": "The `limsSup` of a filter `f` is the infimum of the `a` such that the inequality\n`x ≤ a` eventually holds for `f`.",
+  "dossier_md": "## Object\n\nThe `limsSup` of a filter `f` on a conditionally complete lattice `α` is the greatest eventual upper bound of `f`. Concretely, it is the infimum of the set of all elements `a ∈ α` such that, eventually along `f`, every element of the filter is at most `a`. Informally, it is the smallest value that the filter's \"tail\" is ultimately bounded above by.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.limsSup : {α : Type u_1} -> [ConditionallyCompleteLattice α] -> (f : Filter α) -> α\n<!-- PINNED-SIGNATURE:END -->\n\n\nThe unique implicit type argument `α` is the underlying conditionally complete lattice. The instance argument supplies the lattice structure. The single explicit argument `f` is the filter on `α` whose lim-sup is being computed.\n\n## Conventions\n\nWhen the set of eventual upper bounds is empty (e.g., `f` is not bounded above in any eventual sense), the infimum is taken over an empty set; in a conditionally complete lattice this yields the top element by the junk-value convention of `sInf ∅`. When the set of eventual upper bounds is unbounded below (e.g., the filter is trivial or the lattice has no bottom), the infimum is the greatest lower bound of that set in the lattice sense.\n\n## Worked examples\n\n- Claim: For the `atTop` filter on `ℝ`, `VTask.limsSup atTop` equals `+∞` when considered in the extended reals; in ordinary `ℝ` it is not bounded, so `VTask.limsSup (atTop : Filter ℝ)` is the infimum of an empty set (no finite eventual upper bound exists), which equals the junk value `sSup ∅`.\n\n- Claim: For the filter `pure (3 : ℝ)` (the principal filter at a single point), `VTask.limsSup (pure 3) = 3`, since the only eventual upper bound constraints come from `x ≤ a` holding for `x = 3`, so the infimum of `{a | 3 ≤ a}` is `3`.\n\n- Claim: For the `atBot` filter on `ℝ`, every real number is an eventual upper bound (since elements eventually satisfy `x ≤ a` for any `a`), so `VTask.limsSup atBot = sInf Set.univ`, which in `ℝ` is the infimum of all reals (a junk value, since `ℝ` is unbounded below).\n\n## Boundaries\n\n- If `f = ⊥` (the bottom filter, which contains every set), then every set is in `f`, so \"eventually\" is vacuously always true; every `a` is an eventual upper bound; `VTask.limsSup ⊥ = sInf Set.univ`.\n- If `f = ⊤` (the top filter, i.e., the filter of all subsets, which forces convergence everywhere), the set of eventual upper bounds may shrink to the empty set or may equal a specific interval depending on the lattice and the filter.\n- When `α` is a complete lattice, junk values disappear: `sInf ∅ = ⊤` and `sInf Set.univ = ⊥` are well-defined.\n- The value `VTask.limsSup f` is always a genuine lattice element; the definition is total for any filter and any conditionally complete lattice.\n\n## Not to be confused with\n\n- `limsInf f`: the dual quantity — the supremum of eventual lower bounds; `limsInf f ≤ limsSup f` always holds.\n- `limsup f u` (the lim-sup of a function `u : β → α` along a filter `f` on `β`): this is the `limsSup` of the pushforward filter `map u f`, not `limsSup f` itself.\n- `sSup f` (the supremum of `f` viewed as a set of sets or elements): `sSup` operates on the elements of `f` directly, whereas `limsSup` operates on eventual upper bounds, a strictly different construction.",
+  "dossier_chars": 3268,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 0,
+    "disjunctions": 0,
+    "conditionals": 0,
+    "quantifiers": 1,
+    "comparisons": 1,
+    "hypothesis_binders": 0,
+    "total": 2
+   },
+   "return_shape": "value",
+   "exec_mechanism": "none",
+   "docstring_substance": {
+    "length_beyond_floor": 94,
+    "condition_markers": 0,
+    "score": 4.553876891600541
+   },
+   "module_path": "Order/LiminfLimsup.lean",
+   "rank": 409
+  }
+ },
+ {
+  "name": "SuccChain",
+  "slot": 3,
+  "tag": "B",
+  "status": "ok",
+  "pinned_signature": "VTask.SuccChain : {α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Set α",
+  "pinned_type": "{α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Set α",
+  "real_body": "def SuccChain (r : α → α → Prop) (s : Set α) : Set α :=\n  if h : ∃ t, IsChain r s ∧ SuperChain r s t then h.choose else s",
+  "docstring": "Given a set `s`, if there exists a chain `t` strictly including `s`, then `SuccChain s`\nis one of these chains. Otherwise it is `s`.",
+  "dossier_md": "## Object\n\n`VTask.SuccChain r s` is a \"successor chain\" operator used in Zorn's-lemma-style arguments. Given a relation `r` on a type `α` and a set `s ⊆ α`, it returns a chain (a set totally ordered by `r`) that strictly extends `s` whenever such a strict extension exists, and returns `s` itself otherwise. In other words, it is a choice function that, when possible, picks one specific chain that properly contains `s` as a sub-chain.\n\n## Signature\n\n<!-- PINNED-SIGNATURE:BEGIN -->\nVTask.SuccChain : {α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Set α\n<!-- PINNED-SIGNATURE:END -->\n\n\n`VTask.SuccChain : {α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Set α`\n\nThe implicit type argument `α` is the carrier type on which the relation lives. The first explicit argument `r` is the binary relation that defines what it means for two elements to be \"comparable\" (i.e., `r` is the order used to measure chainhood). The second explicit argument `s` is the base set — the chain whose successor we are computing.\n\n## Conventions\n\nWhen there is no chain that strictly extends `s` (either because `s` is not itself a chain, or because no larger chain exists), `VTask.SuccChain r s` is defined to equal `s` exactly — it is a junk value that leaves `s` unchanged rather than signalling failure or producing an arbitrary unrelated set.\n\n## Worked examples\n\n- Claim: If `s` is a chain with respect to `r` and a strict superchain exists, then `VTask.SuccChain r s` is a chain that strictly contains `s`.\n\n- Claim: If no strict superchain of `s` exists (for example, `s` is already a maximal chain), then `VTask.SuccChain r s = s`.\n\n- Claim: For the empty set `∅`, if the whole type is a chain under `r` and the type has at least two elements, then `VTask.SuccChain r ∅` strictly contains `∅`.\n\n- Claim: When `s` is a singleton `{a}` and `r` is a total order with more than one element, `VTask.SuccChain r {a}` is a chain that includes `{a}` and is not equal to `{a}` (assuming the order is not trivially one-element).\n\n## Boundaries\n\n- **No strict superchain exists**: The function returns `s` exactly. This covers both the case where `s` is already a maximal chain and the degenerate case where `s` is not even a chain (since the hypothesis requires `s` itself to be a chain as a precondition for there being a superchain).\n- **The witness is non-constructive**: The specific chain returned when a superchain exists is chosen by the axiom of choice; only its existence properties (it is a chain, it strictly contains `s`) are guaranteed, not any canonical or minimal/maximal choice.\n- **Type is empty or a singleton**: No strict superchain can exist (every set is already maximal), so the function returns `s` for all inputs.\n\n## Not to be confused with\n\n- `IsChain r s` — a predicate asserting that `s` is a chain under `r`; `VTask.SuccChain` is a *function* that produces a set, not a proposition.\n- `SuperChain r s t` — the predicate asserting that `t` is a strict superchain of `s`; `VTask.SuccChain r s` *uses* this predicate to decide what to return but is not itself this predicate.\n- `Set.chainClosure` / chain-closure operators — these build the closure of a family of chains upward, whereas `VTask.SuccChain` only takes one step, producing a single immediate successor chain.",
+  "dossier_chars": 3288,
+  "sections": [
+   "boundaries",
+   "conventions",
+   "not_to_be_confused_with",
+   "object",
+   "signature",
+   "worked_examples"
+  ],
+  "leak_ok": true,
+  "leak_detail": "",
+  "manifest": {
+   "richness": {
+    "conjunctions": 1,
+    "disjunctions": 0,
+    "conditionals": 1,
+    "quantifiers": 1,
+    "comparisons": 0,
+    "hypothesis_binders": 1,
+    "total": 4
+   },
+   "return_shape": "value",
+   "exec_mechanism": "none",
+   "docstring_substance": {
+    "length_beyond_floor": 112,
+    "condition_markers": 2,
+    "score": 6.727387818712341
+   },
+   "module_path": "Order/Preorder/Chain.lean",
+   "rank": 109
+  }
+ }
+]
