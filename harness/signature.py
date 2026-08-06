@@ -74,7 +74,16 @@ def reducible_declaration(decl_text: str, *, noncomputable: bool = False) -> str
 
     if attrs:
         inner = attrs.strip()[2:-1].strip() if attrs.startswith("@[") and attrs.endswith("]") else None
-        merged = f"@[reducible, {inner}]" if inner else f"@[reducible] {attrs}"
+        if inner:
+            # Idempotent: a declaration that ALREADY says `@[reducible]` must not become
+            # `@[reducible, reducible]`. This is not hypothetical -- the prefill intervention
+            # (`pretuning.decode.prefill_text`) hands the model the spliced header verbatim,
+            # `@[reducible]` included, so under T2/T3 every single candidate arrives carrying it.
+            # A model can also write it unprompted in any cell.
+            kept = [p.strip() for p in inner.split(",") if p.strip() and p.strip() != "reducible"]
+            merged = f"@[reducible, {', '.join(kept)}]" if kept else "@[reducible]"
+        else:
+            merged = f"@[reducible] {attrs}"
     else:
         merged = "@[reducible]"
 

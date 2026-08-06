@@ -265,6 +265,13 @@ def generate(
     # on because it knows it is going through RunPod's proxy, which 524s long non-streaming
     # requests. Keeping the default off also keeps every non-streaming test meaningful.
     stream: bool = False,
+    # Extra top-level request fields, merged last. This is how server-specific sampling controls
+    # reach the wire without this module learning what they mean: vLLM's `bad_words`, and the
+    # `continue_final_message`/`add_generation_prompt` pair that turns a trailing assistant
+    # message into a prefill. A dict of unknown keys keeps the no-provider-specific-code rule
+    # intact -- the client still just posts JSON -- while making a 400 from an unsupported field
+    # a loud, immediate, non-retryable error rather than a silently ignored intervention.
+    extra_body: dict | None = None,
     timeout_s: float | None = None,
     endpoint_url: str | None = None,
     api_key: str | None = None,
@@ -313,6 +320,12 @@ def generate(
             raise PrelimClientError("completion endpoint_style requires a prompt string")
         request_body["prompt"] = prompt
         extract_fn = _extract_completion
+
+    if extra_body:
+        # Merged before `stream`, so the streaming flags this module owns can never be clobbered
+        # by a caller's extra field -- streaming is a transport requirement here (RunPod's proxy
+        # 524s on long silent requests), not a knob.
+        request_body.update(extra_body)
 
     if stream:
         # Server-Sent Events. REQUIRED for long generations through RunPod's Cloudflare-backed

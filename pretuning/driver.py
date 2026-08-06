@@ -25,12 +25,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from harness.signature import PinnedSignature
 from prelim import store
-from prelim.client import GenerationResult, generate
+from prelim.client import generate
 from prelim.prompts import load_task
 from prelim.validity import check_early_samples
 from pretuning.cells import CELLS, Cell
-from pretuning.prompts import build_prompt, check_prompt_leak
+from pretuning.decode import assemble_prefilled, bad_words_body, prefill_body, prefill_text
+from pretuning.prompts import THREE_PLAIN, build_prompt, check_prompt_leak
 
 TEMPERATURE = 0.7          # fixed: this compares prompts, not sampling
 SAMPLES_PER_TASK = 10
@@ -58,8 +60,20 @@ def _extra_for(cell: Cell, task: str) -> dict:
         "anti_sorry_text": cell.anti_sorry_text,
         "scaffold_text": cell.scaffold_text,
         "exemplar_prose_shown": cell.uses_prose_exemplars,
+        # Present for every cell so a battery sample and an eight-cell sample are read the same
+        # way. Absent attributes fall back to the eight-cell run's configuration, which is what a
+        # `Cell` (as opposed to a `BatteryCell`) actually was.
+        "exemplar_mode": getattr(cell, "exemplar_mode", THREE_PLAIN),
+        "ban_applied": bool(getattr(cell, "ban", False)),
+        "prefill_applied": bool(getattr(cell, "prefill", False)),
         "task": task,
     }
+
+
+def _pinned(pinned_signature: str) -> PinnedSignature:
+    """`"VTask.clog : (b n : ℕ) -> ℕ"` -> the object the splice machinery takes."""
+    name, _, type_sig = pinned_signature.partition(" : ")
+    return PinnedSignature(name=name.strip(), type_sig=type_sig.strip())
 
 
 def run_cell(
@@ -76,15 +90,32 @@ def run_cell(
     concurrency: int = DEFAULT_CONCURRENCY,
     progress_interval_s: float = 60.0,
     forbidden: dict[str, str] | None = None,
+    ban_variants: list[str] | None = None,
 ) -> CellOutcome:
-    """Generate every (task, sample) for one cell, resuming over whatever is already on disk."""
+    """Generate every (task, sample) for one cell, resuming over whatever is already on disk.
+
+    `ban_variants` are the already-tokenizer-resolved `sorry`/`admit` spellings; they are applied
+    only when the cell asks for a ban. Resolution happens once per run, in the launcher, against
+    the served tokenizer -- never guessed here (`pretuning.decode`).
+    """
     out = CellOutcome(cell_id=cell.cell_id)
     started = time.perf_counter()
     prompts: dict[str, str] = {}
+    prefills: dict[str, str] = {}
+    exemplar_mode = getattr(cell, "exemplar_mode", THREE_PLAIN)
+    wants_ban = bool(getattr(cell, "ban", False))
+    wants_prefill = bool(getattr(cell, "prefill", False))
+
+    if wants_ban and not ban_variants:
+        out.status = "aborted"
+        out.notes.append("cell asks for a token ban but no resolved variants were supplied")
+        log(f"[{cell.cell_id}] ABORT -- ban requested with no resolved variants; refusing to run "
+            f"a cell whose central intervention would silently be absent")
+        return out
 
     for task in tasks:
         dossier, pinned = load_task(task)
-        text = build_prompt(cell, dossier, pinned)
+        text = build_prompt(cell, dossier, pinned, exemplar_mode=exemplar_mode)
         if forbidden and forbidden.get(task):
             ok, detail = check_prompt_leak(text, forbidden[task])
             if not ok:
@@ -92,37 +123,65 @@ def run_cell(
                 log(f"[{cell.cell_id}] LEAK GUARD FIRED on {task}: {detail}")
                 continue
         prompts[task] = text
+        if wants_prefill:
+            prefills[task] = prefill_text(_pinned(pinned))
 
-    def one(task: str, idx: int) -> GenerationResult | None:
+    def one(task: str, idx: int) -> tuple[str, str | None] | None:
         if store.is_complete(cell.cell_id, task, idx, samples_dir=samples_dir):
             out.skipped += 1
             return None
         messages = [{"role": "user", "content": prompts[task]}]
+        extra_body: dict = {}
+        prefill = prefills.get(task)
+        if wants_ban:
+            extra_body.update(bad_words_body(ban_variants or []))
+        if prefill:
+            # The prefix is a trailing ASSISTANT message; the two template flags stop the server
+            # closing that turn and opening a fresh one, so generation resumes mid-declaration.
+            messages.append({"role": "assistant", "content": prefill})
+            extra_body.update(prefill_body(prefill))
         t0 = time.perf_counter()
         try:
             res = generate(
                 messages, temperature=TEMPERATURE, max_tokens=max_tokens,
                 model_name=model_name, endpoint_style="chat", stream=True,
                 timeout_s=timeout_s, endpoint_url=endpoint_url,
+                extra_body=extra_body or None,
             )
         except Exception as e:  # noqa: BLE001 -- one sample must never sink a cell
             out.errors += 1
             log(f"[{cell.cell_id}] {task}/{idx} ERROR {type(e).__name__}: {str(e)[:120]}")
             return None
+        # The server returns only the CONTINUATION under a prefill -- it does not echo the prefix
+        # back. Re-attaching it here, at the one boundary that knows the prefix, keeps every
+        # downstream consumer (extractor, scorer, bucket classifier) reading one shape. The raw
+        # continuation is kept alongside so nothing is lost, and `completion_tokens` is left as
+        # the server reported it: it counts the continuation, which is the honest figure.
+        completion = assemble_prefilled(prefill, res.text) if prefill else res.text
+        extra = _extra_for(cell, task)
+        if prefill:
+            extra["prefill"] = prefill
+            extra["raw_continuation"] = res.text
+        if wants_ban:
+            extra["ban_variants"] = list(ban_variants or [])
         sample = store.build_sample(
             model_name=model_name, task_name=task, sample_index=idx, temperature=TEMPERATURE,
-            max_tokens=max_tokens, prompt_messages=messages, completion=res.text,
+            max_tokens=max_tokens, prompt_messages=messages, completion=completion,
             finish_reason=res.finish_reason, prompt_tokens=res.prompt_tokens,
             completion_tokens=res.completion_tokens,
             wall_time_s=time.perf_counter() - t0, endpoint_url=endpoint_url,
-            extra=_extra_for(cell, task),
+            extra=extra,
         )
         # `model_slug` is derived from `model_name` inside `build_sample`; override it with the
         # cell id so the tree is keyed by CELL -- the thing that actually varies in this run.
         sample.model_slug = cell.cell_id
         store.write_sample(sample, samples_dir=samples_dir)
         out.generated += 1
-        return res
+        # The ASSEMBLED text, not `res.text`: the gate asks whether a declaration is present, and
+        # under a prefill the `def ... :=` it looks for is in the prefix the server did not echo.
+        # Gating on the continuation alone would fail every prefill cell for the one reason that
+        # is not a defect.
+        return completion, res.finish_reason
 
     # --- first-3 gate: structural plausibility, one task's first three samples ---------------
     gate_task = tasks[0]
@@ -130,7 +189,7 @@ def run_cell(
     for idx in range(3):
         res = one(gate_task, idx)
         if res is not None:
-            gate_texts.append((res.text, res.finish_reason))
+            gate_texts.append(res)
     if gate_texts:
         verdict = check_early_samples(cell.cell_id, gate_texts)
         out.gate_detail = verdict.summary

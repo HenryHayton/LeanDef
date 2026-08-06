@@ -51,11 +51,32 @@ __all__ = [
 ]
 
 # Lean's own compiler error text for the noncomputability case `PinnedSignature.splice_real_name`'s
-# own docstring describes -- confirmed verbatim (2026-07-31) against a real failing case
-# (`Function.extend`): "failed to compile definition, consider marking it as 'noncomputable'
-# because it depends on '<name>', which is 'noncomputable'". Matched as a substring, not an
-# exact string, since `<name>` varies per declaration.
-_NONCOMPUTABLE_ERROR_MARKER = "consider marking it as 'noncomputable'"
+# own docstring describes. Matched as substrings, not exact strings, since the depended-on name
+# varies per declaration.
+#
+# There are TWO phrasings, not one, and they are not variants of the same sentence -- they come
+# from different points in the compiler. Both confirmed verbatim against live Lean v4.32.2
+# (2026-08-07, an eight-case probe):
+#
+#   1. "failed to compile definition, consider marking it as 'noncomputable' because it depends
+#      on 'Real.sqrt', which is 'noncomputable'"        <- the common one; fires for anything
+#      reached INDIRECTLY (`Real.sqrt`, `Real.instDivInvMonoid`, `Real.instInfSet`, and notably
+#      `Classical.choose`). Confirmed 2026-07-31 against `Function.extend`.
+#   2. "`Classical.choice` not supported by code generator; consider marking definition as
+#      `noncomputable`"                                  <- fires only for a body naming
+#      `Classical.choice` DIRECTLY. Different verb, different quoting, no "it".
+#
+# Only (1) was matched until 2026-08-07, so a candidate reaching for `Classical.choice` by name
+# never got the retry and was recorded as COMPILE_ERROR despite being correct. Narrow -- most
+# classical constructions route through `Classical.choose` and hit (1) -- but a false
+# COMPILE_ERROR is exactly the differential-by-output-style failure this ladder exists to remove.
+# Found while checking whether the prefill intervention breaks the retry: a prefilled candidate
+# CANNOT write `noncomputable` itself, because the prefix already spent the modifier slot, so for
+# T2/T3 this retry is the only thing standing between a classical definition and a compile error.
+_NONCOMPUTABLE_ERROR_MARKERS = (
+    "consider marking it as 'noncomputable'",
+    "consider marking definition as `noncomputable`",
+)
 
 # Error shapes that mean "a bare reference in the body resolved to the declaration currently
 # being elaborated" -- the self-reference collision `PinnedSignature.splice_real_name`'s
@@ -75,7 +96,8 @@ _SELF_REFERENCE_ERROR_MARKERS = ("well-founded recursion", "failed to show termi
 
 
 def _needs_noncomputable(detail: str) -> bool:
-    return _NONCOMPUTABLE_ERROR_MARKER in (detail or "")
+    text = detail or ""
+    return any(marker in text for marker in _NONCOMPUTABLE_ERROR_MARKERS)
 
 
 def _looks_like_self_reference(detail: str) -> bool:
@@ -122,7 +144,7 @@ def splice_real_name(
     result = splice_candidate(server, base_env, cmd, timeout=timeout)
     if result.status is CheckStatus.PASSED:
         return result
-    if _NONCOMPUTABLE_ERROR_MARKER in (result.detail or ""):
+    if _needs_noncomputable(result.detail):
         retry_cmd = signature.splice_real_name(real_name, noncomputable=True)
         return splice_candidate(server, base_env, retry_cmd, timeout=timeout)
     return result

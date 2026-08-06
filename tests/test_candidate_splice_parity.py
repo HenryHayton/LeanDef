@@ -22,7 +22,11 @@ from lean_interact.interface import CommandResponse, Message, Pos
 
 from harness.repl import run_checked
 from harness.results import CheckStatus, SplicePath
-from harness.scoring import splice_candidate_body, splice_real_name
+from harness.scoring import (
+    splice_candidate_body,
+    splice_candidate_declaration,
+    splice_real_name,
+)
 from harness.signature import PinnedSignature
 from lean_interact import Command
 
@@ -36,6 +40,16 @@ WELL_FOUNDED = (
 NONCOMPUTABLE = (
     "failed to compile definition, consider marking it as 'noncomputable' because it depends on "
     "'Real.decidableLT', which is 'noncomputable'"
+)
+# Lean's SECOND noncomputable phrasing, from a different point in the compiler and matching none
+# of the first's wording -- different verb ("marking definition" vs "marking it"), backticks
+# rather than single quotes, no "failed to compile definition" preamble. Confirmed verbatim
+# against live Lean v4.32.2 (2026-08-07). It fires only when the body names `Classical.choice`
+# DIRECTLY; routing through `Classical.choose` produces the first phrasing instead, which is why
+# this went unnoticed until the prefill work made the retry load-bearing.
+NONCOMPUTABLE_DIRECT_CHOICE = (
+    "`Classical.choice` not supported by code generator; consider marking definition as "
+    "`noncomputable`"
 )
 
 MONOTONE = PinnedSignature(
@@ -107,6 +121,24 @@ def test_noncomputable_candidate_is_rescued_by_the_modifier_retry():
     assert outcome.path is SplicePath.NONCOMPUTABLE
     assert outcome.retries_consumed == 1
     assert server.cmds[1].startswith("@[reducible] noncomputable def VTask.clog")
+
+
+def test_both_of_leans_noncomputable_phrasings_trigger_the_retry():
+    """Matching only the first phrasing recorded a correct classical candidate as COMPILE_ERROR.
+
+    The declaration path is checked alongside the body path because the prefill intervention
+    (`pretuning.decode`) sends declarations, and a prefilled candidate cannot write
+    `noncomputable` for itself -- the prefix already consumed the modifier slot, so this retry is
+    the only thing between a classical definition and a false compile error in T2/T3.
+    """
+    for splice, arg in ((splice_candidate_body, "fun _ _ => Classical.choice inferInstance"),
+                        (splice_candidate_declaration,
+                         "def VTask.clog : (b n : ℕ) -> ℕ := Classical.choice inferInstance")):
+        server = _FakeServer([_fail(NONCOMPUTABLE_DIRECT_CHOICE), _ok()])
+        outcome = splice(server, 0, CLOG, arg)
+        assert outcome.succeeded, splice.__name__
+        assert outcome.path is SplicePath.NONCOMPUTABLE, splice.__name__
+        assert "noncomputable def VTask.clog" in server.cmds[1]
 
 
 def test_candidate_needing_both_converges_on_the_combined_path():
