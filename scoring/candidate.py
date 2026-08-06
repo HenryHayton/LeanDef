@@ -227,8 +227,12 @@ def score_candidate_body(
     )
 
     # 3. Admissibility.
+    # `truth_real_name` is the mined provenance: it drives the equivalence fast path AND the
+    # self-delegation gate. The two are independent -- `try_equivalence=False` must still reject a
+    # candidate that defines the target by calling the target -- so it is passed here regardless.
     verdict = check_admissibility(
-        server, candidate_env, signature, splice_response=outcome.result.raw_response
+        server, candidate_env, signature, splice_response=outcome.result.raw_response,
+        target_real_name=truth_real_name,
     )
     if not verdict.passed:
         result["admissibility_failure"] = verdict.failure.value

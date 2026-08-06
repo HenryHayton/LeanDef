@@ -97,16 +97,33 @@ class LLMResponse:
     raw_response: dict = field(repr=False)  # the full parsed response body, for provenance
 
 
-def _build_request_body(system: str, user_message: str, max_tokens: int, temperature: float) -> dict:
+def _build_request_body(
+    system: str,
+    user_message: str,
+    max_tokens: int,
+    temperature: float,
+    thinking: dict | None = None,
+) -> dict:
     """The Bedrock-Anthropic wire format for Claude models' `invoke_model` body -- stable,
-    documented, unrelated to whether this call is going to the real service or the stub."""
-    return {
+    documented, unrelated to whether this call is going to the real service or the stub.
+
+    `thinking` enables extended thinking (`{"type": "adaptive"}` on Sonnet 4.6). When it is set,
+    `temperature` is OMITTED rather than passed: the API rejects a non-default temperature
+    alongside extended thinking, and silently sending both would fail the whole call for a reason
+    that reads as a credentials or model-id problem. Callers that need a specific temperature
+    should leave thinking off.
+    """
+    body = {
         "anthropic_version": "bedrock-2023-05-31",
         "max_tokens": max_tokens,
-        "temperature": temperature,
         "system": system,
         "messages": [{"role": "user", "content": user_message}],
     }
+    if thinking is not None:
+        body["thinking"] = thinking
+    else:
+        body["temperature"] = temperature
+    return body
 
 
 def _extract_text(parsed: dict) -> str:
@@ -166,6 +183,7 @@ class BedrockClient:
         model_id: str,
         max_tokens: int = 1024,
         temperature: float = 1.0,
+        thinking: dict | None = None,
     ) -> LLMResponse:
         """Send one prompt (system + user message) and return the response text plus
         metadata. `model_id` is required and not defaulted here -- callers pass
@@ -173,7 +191,7 @@ class BedrockClient:
         model actually used is visible at the call site as well as in the provenance log (the
         reproducibility rule this client exists to support -- see this module's own
         docstring)."""
-        request_body = _build_request_body(system, user_message, max_tokens, temperature)
+        request_body = _build_request_body(system, user_message, max_tokens, temperature, thinking)
         last_error_summary = ""
 
         for attempt in range(1, self.max_attempts + 1):

@@ -93,6 +93,7 @@ class AdmissibilityFailure(Enum):
     NEW_AXIOM = "new_axiom"
     NAME_SHADOWED = "name_shadowed"
     WRONG_TYPE = "wrong_type"  # compiled fine, but does not have the pinned type
+    SELF_DELEGATION = "self_delegation"  # defines the target by invoking the target
     ERRORED = "errored"
 
 
@@ -102,6 +103,96 @@ class AdmissibilityVerdict:
     failure: AdmissibilityFailure | None
     detail: str
     axioms: frozenset[str] = frozenset()
+
+
+_USED_CONSTS_MARKER = "USEDCONSTS"
+
+# Walks the spliced declaration's ELABORATED constant closure, not its source text. Source-text
+# matching is defeated by notation, `open`, and abbreviations; the elaborator has already
+# resolved all of those by the time a constant lands in the expression.
+#
+# The walk expands transitively ONLY into constants whose name is prefixed by the task symbol --
+# i.e. auxiliaries the candidate itself introduced (`VTask.clog.go` from a `where` clause,
+# equation lemmas). That bound matters in both directions:
+#
+#   - Without it, a full transitive walk into Mathlib would explode and would eventually reach
+#     almost anything, manufacturing false positives.
+#   - With it, the one real smuggling route stays closed. Verified live (2026-08-07): a candidate
+#     whose body is `fun b n => go b n where go b n := Nat.clog b n` reports declarations
+#     `[VTask.clog]` ONLY -- the `where` helper is invisible to the NAME_SHADOWED gate -- while
+#     the closure walk sees both `VTask.clog.go` and `Nat.clog`.
+_USED_CONSTS_PROBE = r"""
+open Lean in
+#eval show CoreM Unit from do
+  let env ← getEnv
+  let root : Name := `{root}
+  let mut seen : NameSet := {{}}
+  let mut out : NameSet := {{}}
+  let mut todo : List Name := [root]
+  for _ in [0:{fuel}] do
+    match todo with
+    | [] => pure ()
+    | n :: rest =>
+      todo := rest
+      if !seen.contains n then
+        seen := seen.insert n
+        match env.find? n with
+        | none => pure ()
+        | some ci =>
+          let e := ci.value?.getD ci.type
+          for c in e.getUsedConstants do
+            out := out.insert c
+            if root.isPrefixOf c && !seen.contains c then
+              todo := c :: todo
+  IO.println ("{marker} " ++ String.intercalate " " (out.toList.map toString))
+"""
+
+
+def used_constants_command(signature: PinnedSignature, *, fuel: int = 64) -> str:
+    """The REPL command that prints the spliced declaration's used-constant closure."""
+    return _USED_CONSTS_PROBE.format(
+        root=signature.name, fuel=fuel, marker=_USED_CONSTS_MARKER
+    )
+
+
+def parse_used_constants(raw: object) -> frozenset[str] | None:
+    """Constants from the probe's info message, or `None` if the marker never appeared.
+
+    `None` is a distinct outcome from "no constants": a probe that did not run tells us nothing
+    about the candidate, and the caller reports ERRORED rather than admitting on silence.
+    """
+    messages = getattr(raw, "messages", None) or []
+    for message in messages:
+        data = getattr(message, "data", "") or ""
+        if _USED_CONSTS_MARKER in data:
+            return frozenset(data.split(_USED_CONSTS_MARKER, 1)[1].split())
+    return None
+
+
+def self_delegating_constants(constants: frozenset[str], target_real_name: str) -> list[str]:
+    """Which of `constants` are the mined target itself, or one of its tight companions.
+
+    Matching is delegated to `authoring.namematch` -- the single matcher this repo keeps for
+    "does this text name this declaration", written after three private copies had independently
+    drifted and each carried the same bug. Reusing it here rather than writing a fourth copy is
+    a deliberate constraint of this check's brief.
+
+    It gives exactly the semantics needed, for free:
+
+    - `Nat.clog.eq_1`, `Nat.clog.induct` and other auto-generated companions TRIP (the `.` after
+      the name is not an identifier character, so the boundary allows it).
+    - `Nat.clog2` does NOT trip -- a genuinely different declaration (`2` is an identifier
+      character). That is the exact false-positive class the module was built to kill.
+    - `Nat.log` inside a `clog` candidate does NOT trip. Using the library is legal; only using
+      the object under definition is not.
+    - The task symbol itself does NOT trip when the real name is unnamespaced: `VTask.Monotone`
+      is excluded by `exclude_task_symbol`, so legitimate recursion through the task symbol stays
+      admissible.
+    """
+    from authoring.namematch import name_occurs  # imported here to keep `harness` importable
+    # standalone -- `authoring` depends on `harness`, and a module-level import would invert that.
+
+    return sorted(c for c in constants if name_occurs(c, target_real_name))
 
 
 def _parse_axioms(message_data: str) -> frozenset[str] | None:
@@ -122,6 +213,7 @@ def check_admissibility(
     *,
     baseline_axioms: frozenset[str] | None = None,
     splice_response: object | None = None,
+    target_real_name: str | None = None,
     timeout: float | None = None,
 ) -> AdmissibilityVerdict:
     """Verdict a spliced candidate before any scoring.
@@ -209,6 +301,43 @@ def check_admissibility(
                 detail=(
                     f"does not have the pinned type '{signature.type_sig}': "
                     f"{(type_probe.detail or '').strip()[:600]}"
+                ),
+            )
+
+    # Self-delegation. A candidate that defines the target by invoking the target is a tautology:
+    # it type-checks, it passes every fact the real object passes, and it says nothing whatever
+    # about whether the model can construct the object. Placed here deliberately -- after
+    # compile/`sorry`/shadowing/WRONG_TYPE, before `admitted` -- because it is a SEMANTIC gate:
+    # the candidate is well-formed Lean, and what disqualifies it is what it means.
+    #
+    # Skipped when no target name is supplied, rather than failing closed. The mined real name is
+    # provenance the harness cannot derive on its own, and callers that legitimately have none
+    # (authoring round-trips, synthetic tests) must not all become inadmissible.
+    if target_real_name:
+        closure = run_checked(
+            server, Command(cmd=used_constants_command(signature), env=candidate_env),
+            timeout=timeout,
+        )
+        if closure.status is not CheckStatus.PASSED:
+            return AdmissibilityVerdict(
+                passed=False,
+                failure=AdmissibilityFailure.ERRORED,
+                detail=f"could not read the constant closure: {closure.detail}",
+            )
+        constants = parse_used_constants(closure.raw_response)
+        if constants is None:
+            return AdmissibilityVerdict(
+                passed=False,
+                failure=AdmissibilityFailure.ERRORED,
+                detail="constant-closure probe produced no result marker",
+            )
+        offenders = self_delegating_constants(constants, target_real_name)
+        if offenders:
+            return AdmissibilityVerdict(
+                passed=False,
+                failure=AdmissibilityFailure.SELF_DELEGATION,
+                detail=(
+                    f"body reaches the definition target '{target_real_name}' via {offenders}"
                 ),
             )
 
