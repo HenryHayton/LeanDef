@@ -22,6 +22,7 @@ Precedence is fixed and total, so every sample lands in exactly one bucket:
 import re
 
 TRUNCATION_AT_CAP = "truncation_at_cap"
+STATEMENT_SHAPE = "statement_shape"
 EXEMPLAR_SUBSTITUTION = "exemplar_substitution"
 DEGENERATE_BODY = "degenerate_body"
 TACTIC_JUNK_BODY = "tactic_junk_body"
@@ -30,8 +31,27 @@ OTHER = "other"
 
 BUCKETS: tuple[str, ...] = (
     REAL_CONSTRUCTION_ATTEMPT, TACTIC_JUNK_BODY, DEGENERATE_BODY,
-    EXEMPLAR_SUBSTITUTION, TRUNCATION_AT_CAP, OTHER,
+    STATEMENT_SHAPE, EXEMPLAR_SUBSTITUTION, TRUNCATION_AT_CAP, OTHER,
 )
+
+# Statement emission, not definition. Pre-registered for StepFun-Formalizer-32B, whose card
+# documents its trained task as autoformalizing a PROBLEM into a `theorem` ("Use the following
+# theorem names: my_favorite_theorem") -- so a wrong-shaped output there is the model doing its
+# own job correctly, and pooling it with `sorry` or with `other` would misattribute the failure.
+#
+# It has to be detected from the RAW COMPLETION, not from the extraction. `prelim.extract`
+# deliberately refuses `theorem`/`lemma` (a returned theorem is a wrong answer we want to see as
+# such), so a perfectly well-formed theorem never reaches the extractor at all and would
+# otherwise land in `other` with no indication of why.
+_STATEMENT_DECL_RE = re.compile(r"^\s*(theorem|lemma|example)\b", re.MULTILINE)
+_DEF_DECL_RE = re.compile(r"^\s*(?:@\[[^\]]*\]\s*)*(?:noncomputable\s+|private\s+|protected\s+)*"
+                          r"(?:def|abbrev|instance)\b", re.MULTILINE)
+
+
+def looks_statement_shaped(completion: str | None) -> bool:
+    """True when the output declares a theorem/lemma/example and no definition at all."""
+    text = completion or ""
+    return bool(_STATEMENT_DECL_RE.search(text)) and not _DEF_DECL_RE.search(text)
 
 # Bodies that are placeholders however they are spelled. `?_` and `_` are Lean's own holes;
 # `sorry`/`admit` are what the ban exists to remove and are listed so that a LEAK -- a banned
@@ -88,6 +108,7 @@ def classify(
     expected_name: str,
     exemplar_symbols: frozenset[str] | set[str],
     finish_reason: str | None,
+    completion: str | None = None,
 ) -> str:
     """The one bucket this sample belongs to. See the module docstring for precedence."""
     if finish_reason == "length":
@@ -97,7 +118,12 @@ def classify(
         return TRUNCATION_AT_CAP
 
     if not extracted or not declaration:
-        return OTHER
+        return STATEMENT_SHAPE if looks_statement_shaped(completion) else OTHER
+
+    # A declaration with no `:=` at all is a signature with no body -- the same "emitted a
+    # statement, not a definition" failure, reached through a shape the extractor does accept.
+    if ":=" not in declaration:
+        return STATEMENT_SHAPE
 
     if declared_name and declared_name in exemplar_symbols and declared_name != expected_name:
         return EXEMPLAR_SUBSTITUTION

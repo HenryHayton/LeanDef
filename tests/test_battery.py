@@ -208,8 +208,30 @@ def test_every_bucket_is_reachable_and_precedence_is_total():
     assert _classify(None, extracted=False) == B.OTHER
     assert set(B.BUCKETS) == {
         B.REAL_CONSTRUCTION_ATTEMPT, B.TACTIC_JUNK_BODY, B.DEGENERATE_BODY,
-        B.EXEMPLAR_SUBSTITUTION, B.TRUNCATION_AT_CAP, B.OTHER,
+        B.STATEMENT_SHAPE, B.EXEMPLAR_SUBSTITUTION, B.TRUNCATION_AT_CAP, B.OTHER,
     }
+
+
+def test_statement_shape_is_detected_from_the_raw_completion():
+    """StepFun's trained task is statement emission, so a `theorem` is it doing its own job --
+    a distinct failure from `sorry`, and one the extractor never surfaces because it refuses
+    `theorem`/`lemma` outright."""
+    thm = "```lean4\ntheorem my_favorite_theorem (n : \u2115) : n = n := rfl\n```"
+    assert B.looks_statement_shaped(thm)
+    assert B.classify(extracted=False, declaration=None, declared_name=None,
+                      expected_name="VTask.clog", exemplar_symbols=frozenset(),
+                      finish_reason="stop", completion=thm) == B.STATEMENT_SHAPE
+    # A definition alongside a theorem is still a definition.
+    assert not B.looks_statement_shaped(thm + "\n```lean4\ndef VTask.clog : \u2115 := 0\n```")
+    # Unextractable output that is NOT statement-shaped stays `other`.
+    assert B.classify(extracted=False, declaration=None, declared_name=None,
+                      expected_name="VTask.clog", exemplar_symbols=frozenset(),
+                      finish_reason="stop", completion="I cannot do this.") == B.OTHER
+
+
+def test_a_bodyless_signature_is_statement_shaped_not_degenerate():
+    """Reaches the same failure through a shape the extractor does accept."""
+    assert _classify("def VTask.clog : (b n : \u2115) -> \u2115") == B.STATEMENT_SHAPE
 
 
 def test_truncation_outranks_every_other_reading():
