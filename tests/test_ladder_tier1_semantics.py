@@ -255,13 +255,11 @@ def test_decide_fallback_rescues_a_noncomputable_candidate(mathlib_env):
     from harness.facts import Fact
     from harness.results import CheckStatus
     from harness.scoring import splice_candidate
-    from harness.signature import PinnedSignature
     from ladder.adjudicate import adjudicate_fact
     from ladder.budgets import LadderBudgets, TacticBudget
     from ladder.statuses import AdjudicationStatus
 
     server, env = mathlib_env
-    sig = PinnedSignature(name="VTask.nc", type_sig="(n : ℕ) -> ℕ")
     # Noncomputable by construction: `sInf` of a set of naturals.
     decl = "@[reducible] noncomputable def VTask.nc (n : ℕ) : ℕ := sInf {k : ℕ | n ≤ k}"
     sp = splice_candidate(server, env, decl, timeout=60.0)
