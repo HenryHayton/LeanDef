@@ -98,10 +98,32 @@ def truth_signature_for(signature: PinnedSignature) -> PinnedSignature:
 
 
 def is_prop_valued(signature: PinnedSignature) -> bool:
-    """Whether the pinned type's result is `Prop`, which decides `↔` vs `=` in the equivalence
-    probe. Textual on the pinned type -- the signature is ours and canonical, not model output,
-    so its final token is trustworthy in a way a candidate body never is."""
+    """Whether the pinned type's result is `Prop`. Textual on the pinned type -- the signature is
+    ours and canonical, not model output, so its final token is trustworthy in a way a candidate
+    body never is."""
     return signature.type_sig.rstrip().rstrip("()").strip().endswith("Prop")
+
+
+def equivalence_uses_iff(signature: PinnedSignature) -> bool:
+    """Whether the equivalence probe may use `↔` rather than `=`.
+
+    NOT the same question as `is_prop_valued`, and conflating them broke the probe outright.
+    `↔` relates two PROPOSITIONS; a predicate that takes arguments is a FUNCTION returning Prop,
+    so `VTask.ModEq ↔ VTruth.ModEq` is ill-typed and Lean rejects it before any tactic runs:
+
+        Application type mismatch: VTask.ModEq has type ℕ → ℕ → ℕ → Prop
+        but is expected to have type Prop
+
+    `=` at function type is well-formed and closes by `rfl` on a definitionally equal candidate,
+    so it is the right relation for every predicate with arguments -- which is most of the
+    predicate corpus (`Monotone`, `DependsOn`, `ModEq`, `Fibration`, ...). Confirmed against live
+    Lean v4.32.2 (2026-08-07): the `↔` form FAILED and the `=` form PASSED on the same pair.
+
+    Consequence of the old behaviour: tier-4 equivalence never fired for an argument-taking
+    predicate, so "verbatim" was systematically under-counted and "non-verbatim" over-counted
+    wherever that column has been reported.
+    """
+    return is_prop_valued(signature) and signature.type_sig.strip() in ("Prop", "(Prop)")
 
 
 def _adjudicate_one_fact(
@@ -248,7 +270,7 @@ def score_candidate_body(
         result["equivalence_attempted"] = True
         tier4 = adjudicate_tier4_equivalence(
             server, candidate_env, truth_env, signature.name, truth_name, budgets,
-            prop_valued=is_prop_valued(signature), fact_id="equivalence", imports=imports,
+            prop_valued=equivalence_uses_iff(signature), fact_id="equivalence", imports=imports,
         )
         result["equivalence_attempts"] = _attempt_dicts(tier4.attempts)
         if tier4.winning is not None:

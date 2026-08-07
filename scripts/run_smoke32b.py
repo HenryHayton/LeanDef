@@ -40,21 +40,15 @@ from pretuning.decode import ban_variants, dump_resolution, resolve_bad_words
 from pretuning.driver import run_all
 from pretuning.prompts import ZERO
 
-# NO decode intervention on any cell (operator decision, 2026-08-07). The brief put the
-# sorry/statement-shape ban on StepFun because its trained task is statement emission. Two reasons
-# it is off instead:
+# `ban` is on only for StepFun, per the brief: its trained task is statement emission, so it is
+# the cell where a punt is most likely to arrive as a bodyless `theorem`. Ban variants are
+# resolved against ITS tokenizer at pre-flight rather than assumed -- an unresolved list would
+# leave the intervention silently absent, which is indistinguishable in the output from an
+# intervention that did nothing.
 #
-# - The goal of this run is to see whether these models produce genuinely interesting CORRECT
-#   definitions, not to maximise a score. The 8B battery measured what the ban actually does: it
-#   drives `sorry` to zero without changing the non-answer rate at all (56.6% -> 55.9%), because
-#   the punts reappear as truncation (1% -> 24%) and tactic-script bodies (0% -> 13%). It makes
-#   the output WORSE to read while leaving capability untouched -- the opposite of what is wanted
-#   here.
-# - With it off, all three cells differ only in the model, which is what a base-selection
-#   comparison needs.
-#
-# StepFun's characteristic failure is still captured: `pretuning.buckets.STATEMENT_SHAPE` counts
-# theorem-shaped and bodyless output directly, which was the real point of singling that model out.
+# This is the ONLY decode intervention in the run. No prefill on any cell: the 8B battery measured
+# prefill as actively harmful (sorry bodies 38.8% -> 56.3%, admissibility halved), and stacking
+# further interventions would obscure what the models can actually construct.
 MODELS = {
     "goedel-prover-v2-32b": {
         "hf": "Goedel-LM/Goedel-Prover-V2-32B",
@@ -63,7 +57,7 @@ MODELS = {
     },
     "stepfun-formalizer-32b": {
         "hf": "stepfun-ai/StepFun-Formalizer-32B",
-        "ban": False,
+        "ban": True,
         "note": "Qwen2ForCausalLM, 131072 ctx (NOT 16384), statement-emission trained",
     },
     "qwen3-32b": {
@@ -86,6 +80,9 @@ def main() -> int:
     ap.add_argument("--samples-per-task", type=int, default=10)
     ap.add_argument("--concurrency", type=int, default=16)
     ap.add_argument("--max-tokens", type=int, default=MAX_TOKENS)
+    ap.add_argument("--allow-degenerate", action="store_true",
+                    help="run even if the first-3 gate fails -- only when the failure mode is "
+                         "itself the thing being measured")
     ap.add_argument("--exemplar-mode", default=ZERO,
                     help="ZERO by default -- the A-battery winner. Changing this makes the cell "
                          "non-comparable to the others unless every cell changes with it.")
@@ -126,7 +123,7 @@ def main() -> int:
                    model_name=spec["hf"], cells=[cell], log=log,
                    concurrency=args.concurrency, forbidden=reals, ban_variants=variants,
                    samples_per_task=args.samples_per_task, max_tokens=args.max_tokens,
-                   timeout_s=1800.0)
+                   timeout_s=1800.0, allow_degenerate=args.allow_degenerate)
 
     o = outs[0]
     log(f"\n{o.cell_id}: {o.status} generated={o.generated} skipped={o.skipped} "

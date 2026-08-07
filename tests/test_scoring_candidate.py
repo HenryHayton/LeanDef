@@ -427,3 +427,19 @@ def test_a_genuinely_wrong_type_is_still_rejected_under_universe_binding(mathlib
     )
     assert not record["admissible"]
     assert record["admissibility_failure"] == "wrong_type"
+
+
+def test_iff_is_only_for_a_bare_prop_not_a_predicate_with_arguments():
+    """`↔` relates propositions. A predicate taking arguments is a FUNCTION returning Prop, so the
+    `↔` form is ill-typed and Lean rejects it before any tactic runs -- which silently disabled
+    tier-4 equivalence for most of the predicate corpus."""
+    from harness.signature import PinnedSignature
+    from scoring.candidate import equivalence_uses_iff, is_prop_valued
+
+    predicate = PinnedSignature(name="VTask.ModEq", type_sig="(n a b : ℕ) -> Prop")
+    bare = PinnedSignature(name="VTask.P", type_sig="Prop")
+    data = PinnedSignature(name="VTask.clog", type_sig="(b n : ℕ) -> ℕ")
+
+    assert is_prop_valued(predicate) and not equivalence_uses_iff(predicate)
+    assert is_prop_valued(bare) and equivalence_uses_iff(bare)
+    assert not is_prop_valued(data) and not equivalence_uses_iff(data)

@@ -91,6 +91,7 @@ def run_cell(
     progress_interval_s: float = 60.0,
     forbidden: dict[str, str] | None = None,
     ban_variants: list[str] | None = None,
+    allow_degenerate: bool = False,
 ) -> CellOutcome:
     """Generate every (task, sample) for one cell, resuming over whatever is already on disk.
 
@@ -197,11 +198,20 @@ def run_cell(
             f"({verdict.n_plausible}/{verdict.n_checked} plausible) -- {verdict.summary}")
         for line in verdict.report_lines():
             log(f"        {line}")
-        if not verdict.passed:
+        if not verdict.passed and not allow_degenerate:
             out.status = "gate_failed"
             out.wall_s = time.perf_counter() - started
             log(f"[{cell.cell_id}] GATE FAILED -- skipping this cell, continuing with the others")
             return out
+        if not verdict.passed:
+            # The gate exists to stop a broken cell burning 410 samples. It is overridden only
+            # when the degeneracy IS the measurement -- StepFun-Formalizer emits `theorem`s
+            # because statement emission is its trained task, which the pre-registered
+            # `STATEMENT_SHAPE` bucket exists to quantify. Asserting that from 3 samples and
+            # asserting it from 410 are different claims.
+            out.notes.append(f"GATE FAILED, overridden: {verdict.summary}")
+            log(f"[{cell.cell_id}] GATE FAILED but --allow-degenerate set -- proceeding; "
+                f"this cell's failure mode is the measurement")
 
     # --- the rest, concurrently -------------------------------------------------------------
     # Single-stream latency is ~25 s, so the whole 3,280-generation run would be ~23 h serially.
