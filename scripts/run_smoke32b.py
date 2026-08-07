@@ -40,10 +40,21 @@ from pretuning.decode import ban_variants, dump_resolution, resolve_bad_words
 from pretuning.driver import run_all
 from pretuning.prompts import ZERO
 
-# `ban` is on only for StepFun: its trained task is statement emission, so it is the cell where a
-# punt is most likely to arrive as a bodyless `theorem`. Ban variants are resolved against ITS
-# tokenizer at pre-flight -- token ids differ per model family and guessing them would leave the
-# intervention silently absent (Goedel-Formalizer-8B's were sorry=67597, ' sorry'=14589).
+# NO decode intervention on any cell (operator decision, 2026-08-07). The brief put the
+# sorry/statement-shape ban on StepFun because its trained task is statement emission. Two reasons
+# it is off instead:
+#
+# - The goal of this run is to see whether these models produce genuinely interesting CORRECT
+#   definitions, not to maximise a score. The 8B battery measured what the ban actually does: it
+#   drives `sorry` to zero without changing the non-answer rate at all (56.6% -> 55.9%), because
+#   the punts reappear as truncation (1% -> 24%) and tactic-script bodies (0% -> 13%). It makes
+#   the output WORSE to read while leaving capability untouched -- the opposite of what is wanted
+#   here.
+# - With it off, all three cells differ only in the model, which is what a base-selection
+#   comparison needs.
+#
+# StepFun's characteristic failure is still captured: `pretuning.buckets.STATEMENT_SHAPE` counts
+# theorem-shaped and bodyless output directly, which was the real point of singling that model out.
 MODELS = {
     "goedel-prover-v2-32b": {
         "hf": "Goedel-LM/Goedel-Prover-V2-32B",
@@ -52,7 +63,7 @@ MODELS = {
     },
     "stepfun-formalizer-32b": {
         "hf": "stepfun-ai/StepFun-Formalizer-32B",
-        "ban": True,
+        "ban": False,
         "note": "Qwen2ForCausalLM, 131072 ctx (NOT 16384), statement-emission trained",
     },
     "qwen3-32b": {
