@@ -21,6 +21,8 @@ import json
 import time
 from pathlib import Path
 
+import dataclasses
+
 from ladder.budgets import DEFAULT_LADDER_BUDGETS
 from scoring import config as cfg
 from scoring import store
@@ -38,7 +40,12 @@ def main() -> int:
     ap.add_argument("--out", default="scoring_output/stage_d_summary.json")
     ap.add_argument("--mechanisms", default="decide",
                     help="comma-separated: 'decide' for Stage D, 'proof' for Stage E")
+    ap.add_argument("--no-tier3", action="store_true",
+                    help="skip the hammer. Use where no Hammer build exists (e.g. the laptop): "
+                         "without it the tactic is unknown and every attempt fails in ~0ms, which "
+                         "is indistinguishable in the log from the hammer trying and losing.")
     args = ap.parse_args()
+    budgets = dataclasses.replace(DEFAULT_LADDER_BUDGETS, tier3_enabled=not args.no_tier3)
 
     mechanisms = tuple(m.strip() for m in args.mechanisms.split(',') if m.strip())
     models = args.models or [m for m in available_models() if not m.startswith("kimina")]
@@ -60,7 +67,7 @@ def main() -> int:
                 if args.limit_candidates is not None and scored_total >= args.limit_candidates:
                     stopped_early = True
                     break
-                out = score_task(model, task_name, handle, budgets=DEFAULT_LADDER_BUDGETS,
+                out = score_task(model, task_name, handle, budgets=budgets,
                                  mechanisms=mechanisms)
                 agg["tasks"] += 1
                 for k in ("scored", "fanned_out", "skipped", "unextractable",
