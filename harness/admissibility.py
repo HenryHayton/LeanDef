@@ -106,6 +106,22 @@ class AdmissibilityVerdict:
 
 
 _USED_CONSTS_MARKER = "USEDCONSTS"
+_WRAPPER_MARKER = "WRAPPER"
+
+# A "thin wrapper" is a library constant whose whole job is to re-present another one. Mathlib is
+# full of them, and they are the natural way to delegate to the target WITHOUT naming it:
+#
+#   def Finset.strongInductionOn := fun {α} {p} s H => Finset.strongInduction H s
+#
+# A candidate for `Finset.strongInduction` that calls `strongInductionOn` is defining the target
+# by calling the target, one hop away. Found in live data (Goedel-Prover-V2-32B, 2026-08-07) --
+# it was scored ADMITTED and counted as one of the model's newly-cracked tasks.
+#
+# The bound is what keeps this from becoming the unbounded Mathlib walk the original design
+# rejected: only constants whose own value uses at most `_WRAPPER_MAX_KIDS` other constants are
+# expanded. That is the definition of thin -- a constant reaching for fifty others is doing real
+# work, not aliasing -- and it caps the emitted text as well as the false-positive surface.
+_WRAPPER_MAX_KIDS = 12
 
 # Walks the spliced declaration's ELABORATED constant closure, not its source text. Source-text
 # matching is defeated by notation, `open`, and abbreviations; the elaborator has already
@@ -145,14 +161,42 @@ open Lean in
             if root.isPrefixOf c && !seen.contains c then
               todo := c :: todo
   IO.println ("{marker} " ++ String.intercalate " " (out.toList.map toString))
+  for c in out.toList do
+    if !root.isPrefixOf c then
+      match env.find? c with
+      | none => pure ()
+      | some ci =>
+        let kids := (ci.value?.getD ci.type).getUsedConstants
+        if kids.size <= {kidcap} then
+          IO.println ("{wrapper} " ++ toString c ++ " "
+            ++ String.intercalate " " (kids.toList.map toString))
 """
 
 
 def used_constants_command(signature: PinnedSignature, *, fuel: int = 64) -> str:
     """The REPL command that prints the spliced declaration's used-constant closure."""
     return _USED_CONSTS_PROBE.format(
-        root=signature.name, fuel=fuel, marker=_USED_CONSTS_MARKER
+        root=signature.name, fuel=fuel, marker=_USED_CONSTS_MARKER,
+        wrapper=_WRAPPER_MARKER, kidcap=_WRAPPER_MAX_KIDS,
     )
+
+
+def parse_wrapper_expansions(raw: object) -> dict[str, frozenset[str]]:
+    """`{library constant -> the constants ITS value uses}`, for thin constants only.
+
+    One bounded level past the direct closure. Empty dict when the probe emitted none, which is
+    the normal case for a candidate built out of substantial library definitions.
+    """
+    out: dict[str, frozenset[str]] = {}
+    for message in (getattr(raw, "messages", None) or []):
+        data = getattr(message, "data", "") or ""
+        for line in data.splitlines():
+            if not line.startswith(_WRAPPER_MARKER + " "):
+                continue
+            parts = line[len(_WRAPPER_MARKER) + 1:].split()
+            if parts:
+                out[parts[0]] = frozenset(parts[1:])
+    return out
 
 
 def parse_used_constants(raw: object) -> frozenset[str] | None:
@@ -340,6 +384,18 @@ def check_admissibility(
                     f"body reaches the definition target '{target_real_name}' via {offenders}"
                 ),
             )
+        # One bounded level further: a thin library wrapper around the target is still delegation.
+        for wrapper, kids in parse_wrapper_expansions(closure.raw_response).items():
+            through = self_delegating_constants(kids, target_real_name)
+            if through:
+                return AdmissibilityVerdict(
+                    passed=False,
+                    failure=AdmissibilityFailure.SELF_DELEGATION,
+                    detail=(
+                        f"body reaches the definition target '{target_real_name}' through the "
+                        f"thin wrapper '{wrapper}' (which uses {through})"
+                    ),
+                )
 
     axiom_result = run_checked(
         server, Command(cmd=f"#print axioms {signature.name}", env=candidate_env), timeout=timeout

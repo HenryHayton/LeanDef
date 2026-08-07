@@ -27,6 +27,7 @@ from harness.admissibility import (
     AdmissibilityFailure,
     check_admissibility,
     parse_used_constants,
+    parse_wrapper_expansions,
     self_delegating_constants,
     used_constants_command,
 )
@@ -215,3 +216,57 @@ def test_no_target_name_supplied_means_the_gate_is_skipped(mathlib_env):
     candidate_env = _splice(server, env, sig, decl)
     verdict = check_admissibility(server, candidate_env, sig, splice_response=None, timeout=60.0)
     assert verdict.failure is not AdmissibilityFailure.SELF_DELEGATION
+
+
+def test_a_thin_library_wrapper_around_the_target_is_still_delegation(mathlib_env):
+    """The route the first version of this gate missed, found in live 32B output.
+
+    `Finset.strongInductionOn` is literally `fun {α} {p} s H => Finset.strongInduction H s` -- an
+    argument-swap wrapper. A candidate for `Finset.strongInduction` that calls it is defining the
+    target by calling the target, one hop away, while naming a different constant. The original
+    closure walk stopped at Mathlib constants and scored this ADMITTED.
+    """
+    server, env = mathlib_env
+    sig = PinnedSignature(
+        name="VTask.strongInduction",
+        type_sig="{α : Type u_1} -> {p : Finset α → Sort u_4} -> "
+                 "(H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) → (s : Finset α) → p s",
+    )
+    decl = ("def VTask.strongInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> "
+            "(H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) → (s : Finset α) → p s := "
+            "fun {α} {p} H s => Finset.strongInductionOn s (fun s ih => H s (fun t ht => ih t ht))")
+    candidate_env = _splice(server, env, sig, decl)
+
+    # NOTE: for this particular splice Lean unfolds `strongInductionOn`, so the target already
+    # appears in the DIRECT closure and the gate would catch it even without wrapper expansion.
+    # Whether it unfolds is an elaboration detail that varies with how the candidate is written,
+    # which is exactly why the wrapper level exists -- it removes the dependence on that luck.
+    verdict = check_admissibility(server, candidate_env, sig, splice_response=None,
+                                  target_real_name="Finset.strongInduction", timeout=60.0)
+    assert verdict.failure is AdmissibilityFailure.SELF_DELEGATION, verdict.detail
+
+
+def test_a_substantial_library_definition_is_not_expanded_as_a_wrapper(mathlib_env):
+    """The bound that keeps this from becoming the unbounded Mathlib walk. An honest `clog`
+    candidate built from `Nat.log` must stay admissible -- `Nat.log` does real work and is not a
+    thin re-presentation of anything."""
+    server, env = mathlib_env
+    decl = ("def VTask.clog : (b n : ℕ) -> ℕ := fun b n => "
+            "if b ≤ 1 ∨ n ≤ 1 then 0 else Nat.log b (n - 1) + 1")
+    candidate_env = _splice(server, env, CLOG, decl)
+    verdict = check_admissibility(server, candidate_env, CLOG, splice_response=None,
+                                  target_real_name="Nat.clog", timeout=60.0)
+    assert verdict.failure is not AdmissibilityFailure.SELF_DELEGATION, verdict.detail
+
+
+def test_wrapper_expansions_parse_into_parent_child_sets():
+    class _M:
+        data = "WRAPPER Finset.strongInductionOn Finset.strongInduction Finset\nWRAPPER A B"
+
+    class _Raw:
+        messages = [_M()]
+
+    got = parse_wrapper_expansions(_Raw())
+    assert got["Finset.strongInductionOn"] == frozenset({"Finset.strongInduction", "Finset"})
+    assert got["A"] == frozenset({"B"})
+    assert parse_wrapper_expansions(type("R", (), {"messages": []})()) == {}

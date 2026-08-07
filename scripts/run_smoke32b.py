@@ -9,18 +9,23 @@ concurrency, and the ban wiring with its refuse-to-run-without-resolved-variants
 its `cell_id` to the MODEL slug puts the tree at `smoke32b/<model>/<task>/sample_NN.json`, which
 is the shape `scripts/score_cells.py` already reads.
 
-**One prompt for all three models.** The brief specified a one-exemplar variant for StepFun on the
-grounds that its context limit is 16,384 and the 3-exemplar prompt would not fit. Its
-`config.json` reports `max_position_embeddings: 131072`, so that premise does not hold and the
-substitution's only justification is gone. Varying the prompt for one model would confound exactly
-the between-model comparison the decision rule rests on, so all three get the identical
-3-exemplar S-A_R0 stack and prompt-token counts are recorded either way.
+**One prompt for all three models, and it carries no exemplars** (operator decision, 2026-08-07).
 
-Standing caveat, recorded rather than silently acted on: the A-battery verdict landed AFTER this
-brief was written and found ZERO exemplars beat both three-exemplar and reframed variants (A1 won
-on every criterion; A3's single exemplar produced more contamination than A2's three). These
-cells therefore run a prompt already measured as worse than the available alternative. Holding
-the brief's dose is the conservative choice for a pre-registered comparison, not an endorsement.
+Two brief premises about the prompt did not survive contact:
+
+- StepFun was to get a one-exemplar variant because its context limit is 16,384 and the
+  3-exemplar prompt "(~16k)" would not fit. Its `config.json` reports
+  `max_position_embeddings: 131072`, and the assembled prompt measures **4,496 tokens** -- the
+  ~16k figure was CHARACTERS. Neither half of the premise holds.
+- The exemplar dose itself. The A-battery verdict landed after the brief was written and found
+  zero exemplars beat both three-exemplar and reframed: A1 won on every criterion, and A3's
+  single exemplar produced MORE contamination than A2's three (32 vs 10 substitutions). Running
+  the brief's dose would have measured three base models through a prompt already known to be
+  the worse of the two available.
+
+So every cell runs A1's stack -- prohibition instruction, conformance instruction, notation
+glossary, no exemplars -- identically. A base-selection comparison needs the prompt held fixed
+across models; the only thing that varies between cells is the model.
 """
 
 import argparse
@@ -33,7 +38,7 @@ from prelim.prompts import available_tasks
 from pretuning.battery import BatteryCell
 from pretuning.decode import ban_variants, dump_resolution, resolve_bad_words
 from pretuning.driver import run_all
-from pretuning.prompts import THREE_PLAIN
+from pretuning.prompts import ZERO
 
 # `ban` is on only for StepFun: its trained task is statement emission, so it is the cell where a
 # punt is most likely to arrive as a bodyless `theorem`. Ban variants are resolved against ITS
@@ -70,6 +75,9 @@ def main() -> int:
     ap.add_argument("--samples-per-task", type=int, default=10)
     ap.add_argument("--concurrency", type=int, default=16)
     ap.add_argument("--max-tokens", type=int, default=MAX_TOKENS)
+    ap.add_argument("--exemplar-mode", default=ZERO,
+                    help="ZERO by default -- the A-battery winner. Changing this makes the cell "
+                         "non-comparable to the others unless every cell changes with it.")
     args = ap.parse_args()
 
     spec = MODELS[args.model]
@@ -98,8 +106,9 @@ def main() -> int:
             dump_resolution(resolved), encoding="utf-8")
         variants = [t.variant for t in resolved]
 
-    cell = BatteryCell(cell_id=args.model, battery="S", exemplar_mode=THREE_PLAIN,
+    cell = BatteryCell(cell_id=args.model, battery="S", exemplar_mode=args.exemplar_mode,
                        ban=spec["ban"], prefill=False, rationale=spec["note"])
+    log(f"exemplar_mode={args.exemplar_mode}  ban={spec['ban']}")
 
     t0 = time.perf_counter()
     outs = run_all(tasks, endpoint_url=args.endpoint, samples_dir=Path(args.samples_dir),

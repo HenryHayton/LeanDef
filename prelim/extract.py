@@ -155,6 +155,19 @@ def extract_definition(
     if not text.strip():
         return ExtractionFailure(NO_DEF_FOUND, "completion was empty", n_candidates=0)
 
+    # Reasoning-model output puts deliberation in `<think>...</think>`, and models that quote
+    # candidate fragments while reasoning ("the body would be ```lean fun x => ...```") leave
+    # several fenced blocks in there that are NOT the answer. Counting them produced
+    # MULTIPLE_AMBIGUOUS on StepFun-Formalizer-32B for output whose real answer sat, complete,
+    # immediately after the closing tag. Only text after the LAST `</think>` is the answer.
+    #
+    # An UNTERMINATED `<think>` is left alone: that is a truncated generation, and discarding
+    # everything would turn a truncation into a spurious `no_def_found`.
+    if "</think>" in text:
+        after = text.rsplit("</think>", 1)[1]
+        if after.strip():
+            text = after
+
     regions = _candidate_regions(text)
     candidates: list[Extraction] = []
     for region, from_fence in regions:

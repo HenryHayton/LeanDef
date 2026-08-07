@@ -36,6 +36,7 @@ from pretuning import buckets as B
 from pretuning.prompts import load_exemplars
 from scoring.candidate import score_candidate_body
 from scoring.runner import ServerHandle
+from harness.signature import retarget_declaration
 from scoring.samples import load_task
 
 MODEL_SLUG = "goedel-formalizer-v2-8b"   # extraction is model-independent; this names the caller
@@ -73,7 +74,7 @@ def main() -> int:
             weight: collections.Counter = collections.Counter()
             bucket_w: collections.Counter = collections.Counter()
             bucket_adm: collections.Counter = collections.Counter()
-            n = unext = leak_defn = leak_prose = think = prefilled = 0
+            n = unext = leak_defn = leak_prose = think = prefilled = retargeted = 0
             subst_identical = subst_rederived = 0
             comp_tokens: list[int] = []
 
@@ -114,6 +115,15 @@ def main() -> int:
                     unext += 1
                     continue
 
+                # A declaration naming something other than the pinned symbol is a naming
+                # failure, not a semantic one; splice it under our name (see
+                # `harness.signature.retarget_declaration`) and count how often we had to.
+                code_for_scoring, did_retarget = retarget_declaration(
+                    r.code, "VTask." + task.rsplit(".", 1)[-1])
+                retargeted += did_retarget
+                r = Extraction(code=code_for_scoring, declared_name=r.declared_name,
+                               renamed_symbol=r.renamed_symbol, from_fence=r.from_fence,
+                               truncated_trailing=r.truncated_trailing, n_candidates=r.n_candidates)
                 h = norm(r.code)
                 if bucket == B.EXEMPLAR_SUBSTITUTION:
                     # Byte-identical vs re-derived is the diagnostic split: a re-derived variant
@@ -151,7 +161,13 @@ def main() -> int:
                         bucket_adm[(bucket, "exemplar_copy")] += w
                         continue
                     server, env = handle.get()
+                    # `truth_real_name` here activates the SELF_DELEGATION gate. It is NOT the
+                    # same switch as `try_equivalence`: the truth splice only happens when BOTH
+                    # are set, so passing the name with equivalence off costs nothing and is
+                    # required -- without it the gate silently skips and a candidate that defines
+                    # the target by invoking the target counts as ADMITTED.
                     rec = score_candidate_body(server, env, t["signature"], code, [],
+                                               truth_real_name=t.get("truth_real_name"),
                                                try_equivalence=False)
                     kind = "admitted" if rec["admissible"] else (rec["admissibility_failure"] or "other")
                     res[kind] += w
@@ -183,6 +199,7 @@ def main() -> int:
                 "bucket_by_outcome": {f"{b}|{k}": v for (b, k), v in bucket_adm.items()},
                 "substitution": {"identical": subst_identical, "rederived": subst_rederived,
                                  "total": subst_identical + subst_rederived},
+                "retargeted_names": retargeted,
                 "banned_in_definition": leak_defn,
                 "banned_in_prose_only": leak_prose,
                 "think_block_present": think,

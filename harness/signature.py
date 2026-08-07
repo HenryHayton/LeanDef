@@ -92,6 +92,30 @@ def reducible_declaration(decl_text: str, *, noncomputable: bool = False) -> str
     return f"{merged} {modifiers.strip()} {rest.strip()}".replace("  ", " ").strip()
 
 
+def retarget_declaration(decl_text: str, pinned_name: str) -> tuple[str, bool]:
+    """`(decl_text with its declared name replaced by `pinned_name`, whether anything changed)`.
+
+    `prelim.extract` accepts a declaration that names something other than the pinned symbol and
+    flags it `renamed_symbol`, on the stated grounds that "scoring splices under our own name
+    anyway" -- a model that wrote `clog` instead of `VTask.clog` has still answered the question.
+    Declaration-verbatim splicing (2026-08-05) quietly broke that promise: the model's own name
+    goes to the kernel, so a renamed declaration now fails NAME_SHADOWED and scores zero.
+
+    That is a formatting failure being scored as a semantic one, and it is not hypothetical.
+    StepFun-Formalizer-32B names every definition `VTask_DependsOn` with an underscore -- its
+    training convention is underscore identifiers (`my_favorite_theorem`) -- so without this the
+    entire cell would read as total failure while the definitions underneath were sound.
+
+    Only the declared NAME is rewritten. The body is untouched, so a body that refers to itself
+    by the model's chosen name still fails, as it should -- this restores the documented contract,
+    it does not paper over a broken candidate.
+    """
+    m = _DECL_HEAD_RE.match(decl_text)
+    if m is None or m.group(4) == pinned_name:
+        return decl_text, False
+    return decl_text[: m.start(4)] + pinned_name + decl_text[m.end(4):], True
+
+
 def declaration_body_offset(decl_text: str) -> int:
     """Index just past the declared name -- everything after it is body/binders.
 
