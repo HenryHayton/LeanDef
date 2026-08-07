@@ -52,7 +52,14 @@ class LadderBudgets:
     # Tier 2 (pinned tactic set).
     tier2_tactics: tuple[TacticBudget, ...] = DEFAULT_TIER2_TACTICS
 
-    # Tier 3 (hammer) -- config only, unused until Session B (EC2).
+    # Tier 3 (hammer).
+    #
+    # `tier3_enabled` is a real switch, not a reliance on the import being missing. Without
+    # `$SCORING_EXTRA_IMPORTS` the `hammer` tactic is simply unknown, so the attempt fails in
+    # ~0ms -- which looks like "the hammer tried and lost" in the attempt log when in fact it was
+    # never available. Turning it off explicitly keeps that distinction honest, and saves a REPL
+    # round-trip per fact on every run that has no Hammer build (e.g. the laptop).
+    tier3_enabled: bool = True
     tier3_wall_clock_s: float = 60.0
     tier3_premise_count: int = 32
 

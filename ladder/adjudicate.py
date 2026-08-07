@@ -284,32 +284,34 @@ def adjudicate_fact(
             env,
         )
 
-    # Tier 3 (real): hammer.
-    if _budget_exhausted(start, budgets):
-        return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
+    # Tier 3 (real): hammer. Wrapped rather than early-returned -- tier 4 comes AFTER this in the
+    # cascade, so returning here would silently disable the equivalence fast path too.
+    if budgets.tier3_enabled:
+        if _budget_exhausted(start, budgets):
+            return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
 
-    tier3_result = adjudicate_tier3_hammer(server, env, fact.id, canonical_statement, fact.anchors, budgets, imports=imports)
-    attempts.extend(tier3_result.attempts)
-    env = tier3_result.env
+        tier3_result = adjudicate_tier3_hammer(server, env, fact.id, canonical_statement, fact.anchors, budgets, imports=imports)
+        attempts.extend(tier3_result.attempts)
+        env = tier3_result.env
 
-    if tier3_result.winning is not None:
-        return (
-            _audit_and_finalize(
-                fact, canonical_statement, 3, tier3_result.winning_theorem_name, tier3_result.winning_script,
-                env, server, budgets, cache, pin, attempts, elaboration, start,
-            ),
-            env,
-        )
-    if any(a.status is AdjudicationStatus.ENV_DEATH for a in tier3_result.attempts):
-        elapsed = time.perf_counter() - start
-        return (
-            Adjudication(
-                fact_id=fact.id, elaboration=elaboration, status=AdjudicationStatus.ENV_DEATH, tier=None,
-                script=None, axiom_closure=None, wall_clock_s=elapsed, attempts=attempts,
-                detail="environment-death recovery exhausted its budget",
-            ),
-            env,
-        )
+        if tier3_result.winning is not None:
+            return (
+                _audit_and_finalize(
+                    fact, canonical_statement, 3, tier3_result.winning_theorem_name, tier3_result.winning_script,
+                    env, server, budgets, cache, pin, attempts, elaboration, start,
+                ),
+                env,
+            )
+        if any(a.status is AdjudicationStatus.ENV_DEATH for a in tier3_result.attempts):
+            elapsed = time.perf_counter() - start
+            return (
+                Adjudication(
+                    fact_id=fact.id, elaboration=elaboration, status=AdjudicationStatus.ENV_DEATH, tier=None,
+                    script=None, axiom_closure=None, wall_clock_s=elapsed, attempts=attempts,
+                    detail="environment-death recovery exhausted its budget",
+                ),
+                env,
+            )
 
     # Tier 4 (real, narrow scope -- see module docstring): only attempted if the caller
     # supplied enough context; otherwise falls through exactly as if it were still a stub.

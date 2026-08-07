@@ -74,6 +74,9 @@ def adjudicate_tier4_equivalence(
     if any(a.status is AdjudicationStatus.ENV_DEATH for a in tier2_result.attempts):
         return Tier4Result(attempts, None, None, None, env)
 
+    if not budgets.tier3_enabled:
+        return Tier4Result(attempts, None, None, None, env)
+
     tier3_result = adjudicate_tier3_hammer(server, env, fact_id, goal_statement, [], budgets, imports=imports)
     attempts.extend(tier3_result.attempts)
     env = tier3_result.env
