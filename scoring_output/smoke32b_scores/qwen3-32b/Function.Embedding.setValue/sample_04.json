@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.01,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 4,
+  "candidate_hash": "6ca168bdd2c5404d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue {α : Sort u} {β : Sort v} (f : α ↪ β) (a : α) (b : β)\n  [decA : ∀ a', Decidable (a' = a)] [decB : ∀ a', Decidable (f a' = b)] :\n  α ↪ β :=\n{ toFun := fun x => \n    if h : x = a then b \n    else if h' : f x = b then f a \n    else f x,\n  inj := fun x y h => \n    match decA x, decA y with\n    | isTrue hxa, isTrue hya => rfl\n    | isTrue hxa, isFalse hyna => \n      let hgx := by simp [hxa]; rfl\n      let hgy := if h : y = a then b else if f y = b then f a else f y\n      have h_eq : b = hgy := by rw [hgx, h]; rfl\n      match decB y with\n      | isTrue hfy => \n        have h_b_eq_fa : b = f a := by rw [if_pos hfy]; exact h_eq\n        have hya' : f y = b := hfy\n        have hya'' : y = a := f.inj (hya'.trans h_b_eq_fa.symm)\n        contradiction\n      | isFalse hfy => \n        have h_b_eq_fy : b = f y := by rw [if_neg hfy]; exact h_eq\n        have hya''' : f a = b := by rw [h_b_eq_fy.symm, ← f.inj.eq_iff hxa]; congr_arg f hxa\n        have hya'''' : f y = f a := h_b_eq_fy.symm ▸ hya'''\n        exact hyna (hya'''' ▸ rfl)\n    | isFalse hxa, isTrue hya => \n      let hgy := by simp [hya]; rfl\n      let hgx := if h : x = a then b else if f x = b then f a else f x\n      have h_eq : hgx = b := by rw [hgy, h]; rfl\n      match decB x with\n      | isTrue hfx => \n        have hfa_eq_b : f a = b := by rw [if_pos hfx]; exact h_eq\n        have hxa' : x = a := f.inj (hfx ▸ hfa_eq_b.symm)\n        contradiction\n      | isFalse hfx => \n        have hfx_eq_b : f x = b := by rw [if_neg hfx]; exact h_eq\n        have hxa' : x = a := f.inj (hfx_eq_b.symm ▸ congr_arg f hxa)\n        contradiction\n    | isFalse hxa, isFalse hyna => \n      let gx := if h : x = a then b else if f x = b then f a else f x\n      let gy := if h : y = a then b else if f y = b then f a else f y\n      have hgx : gx = (if f x = b then f a else f x) := by simp [hxa]\n      have hgy : gy = (if f y = b then f a else f y) := by simp [hyna]\n      have h_eq : (if f x = b then f a else f x) = (if f y = b then f a else f y) := by rw [hgx, hgy, h]; rfl\n      match decB x with\n      | isTrue hfx => \n        match decB y with\n        | isTrue hfy => \n          have hfa_eq_fx : f a = b := by rw [hfx]; rfl\n          have hfa_eq_fy : f a = b := by rw [hfy]; rfl\n          have hfx_eq_fy : f x = f y := by rw [hfx, hfy]; rfl\n          exact f.inj hfx_eq_fy\n        | isFalse hfy => \n          have hgy_val : gy = f y := by rw [if_neg hfy]; rfl\n          have hgx_val : gx = f a := by rw [if_pos hfx]; rfl\n          have h_eq' : f a = f y := by rw [hgx_val, hgy_val, h_eq]; rfl\n          have hxy : x = a := f.inj (congr_arg f hxa ▸ h_eq'.symm)\n          contradiction\n      | isFalse hfx => \n        match decB y with\n        | isTrue hfy => \n          have hgy_val : gy = f a := by rw [if_pos hfy]; rfl\n          have hgx_val : gx = f x := by rw [if_neg hfx]; rfl\n          have h_eq' : f x = f a := by rw [hgx_val, hgy_val, h_eq]; rfl\n          have hxy : x = a := f.inj h_eq'\n          contradiction\n        | isFalse hfy => \n          have hgx_val : gx = f x := by rw [if_neg hfx]; rfl\n          have hgy_val : gy = f y := by rw [if_neg hfy]; rfl\n          have h_eq' : f x = f y := by rw [hgx_val, hgy_val, h_eq]; rfl\n          exact f.inj h_eq' }",
+  "temperature": 0.7
+}

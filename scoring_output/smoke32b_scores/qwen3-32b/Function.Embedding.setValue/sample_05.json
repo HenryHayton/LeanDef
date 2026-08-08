@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token '='; expected ')', '_', '↑', '↥', '⇑', identifier or term",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 5,
+  "candidate_hash": "34c13e6d90bf90b7",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue {α : Sort u_1} {β : Sort u_2} (f : α ↪ β) (a : α) (b : β)\n  [Decidable ((=) a)] [Decidable (f ∙ (=) b)] : α ↪ β :=\nlet g : α → β :=\n  fun x => if x = a then b else if (f x = b ∧ x ≠ a) then f a else f x\nFunction.Embedding.ofInjective g\n  (by\n    intro x y h\n    dsimp [g] at h\n    by_cases Hx : x = a\n    by_cases Hy : y = a\n    · -- x = a and y = a\n      simp [Hx, Hy]\n    · -- x = a and y ≠ a\n      simp [Hx] at h\n      by_cases hf : f y = b\n      · -- f y = b and y ≠ a\n        have : f a = b := by simp [h, hf, Hy]\n        rw [← this] at hf\n        exact Hy (f.Injective hf)\n      · -- f y ≠ b\n        simp [hf, h] at *\n        exact hf (Eq.symm this)\n    · -- y = a and x ≠ a\n      simp [Hy] at h\n      by_cases hf : f x = b\n      · -- f x = b and x ≠ a\n        have : f a = b := by simp [h, hf, Hx]\n        rw [← this] at hf\n        exact Hx (f.Injective hf)\n      · -- f x ≠ b\n        simp [hf, h] at *\n        exact hf (Eq.symm this)\n    · -- x ≠ a and y ≠ a\n      by_cases hfx : f x = b\n      by_cases hfy : f y = b\n      · -- f x = b and f y = b\n        have : f x = f y := by rw [hfx, hfy]\n        exact f.Injective this\n      · -- f x = b and f y ≠ b\n        have gx : g x = f a := by simp [Hx, hfx]\n        have gy : g y = f y := by simp [Hy, hfy]\n        rw [← gx, ← gy] at h\n        have : f a = f y := h\n        rw [← this] at hfy\n        exact hfy (f.Injective this)\n      · -- f x ≠ b and f y = b\n        have gx : g x = f x := by simp [Hx, hfx]\n        have gy : g y = f a := by simp [Hy, hfy]\n        rw [← gx, ← gy] at h\n        have : f x = f a := h\n        rw [← this] at hfx\n        exact hfx (f.Injective this)\n      · -- f x ≠ b and f y ≠ b\n        have gx : g x = f x := by simp [Hx, hfx]\n        have gy : g y = f y := by simp [Hy, hfy]\n        rw [← gx, ← gy] at h\n        exact f.Injective h\n  )",
+  "temperature": 0.7
+}

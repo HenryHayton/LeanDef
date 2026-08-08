@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "fail to show termination for\n  VTask.nthRoot.loop\nwith errors\nfailed to infer structural recursion:\nNot considering parameter n of VTask.nthRoot.loop:\n  it is unchanged in the recursive calls\nNot considering parameter a of VTask.nthRoot.loop:\n  it is unchanged in the recursive calls\nCannot use parameter low:\n  failed to eliminate recursive application\n    nthRoot.loop n a (mid + 1) high\nCannot use parameter high:\n  failed to eliminate recursive application\n    nthRoot.loop n a (mid + 1) high\n\n\nCould not find a decreasing measure.\nThe basic measures relate at each recursive call as follows:\n(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)\n           low high #1\n1) 14:5-24   ?    =  ≤\n2) 16:5-23   _    ≤  ≤\n\n#1: high - low\n\nPlease use `termination_by` to specify a decreasing measure.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.982,
+  "model_slug": "qwen3-32b",
+  "task_name": "Nat.nthRoot",
+  "sample_index": 4,
+  "candidate_hash": "db422ee2f6e1cca3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.nthRoot : ℕ → ℕ → ℕ\n  | 0, _ => 1\n  | _, 0 => 0\n  | 1, a => a\n  | n, a =>\n    let rec loop (low high : ℕ) : ℕ :=\n      if low > high then high\n      else\n        let mid := (low + high) / 2\n        let midPow := Nat.pow mid n\n        if midPow == a then\n          mid\n        else if midPow < a then\n          loop (mid + 1) high\n        else\n          loop low (mid - 1)\n    loop 1 a\ntermination_by loop low high => high - low\ndecreasing_by\n  simp [mid]\n  apply Nat.lt_of_le_sub_one\n  -- The measure `high - low` strictly decreases in each recursive call\n  -- because the binary search interval is halved at each step",
+  "temperature": 0.7
+}

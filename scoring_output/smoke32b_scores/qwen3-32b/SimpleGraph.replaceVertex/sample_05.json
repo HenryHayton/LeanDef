@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unknown tactic; Unknown constant `Decidable.decEq`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "qwen3-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 5,
+  "candidate_hash": "86efe77e4c544509",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u_1} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V :=\n  let adj (v w : V) : Prop :=\n    if v = t then\n      if w = t then\n        False\n      else\n        G.Adj s w\n    else if w = t then\n      G.Adj s v\n    else\n      G.Adj v w\n  let symm_iff (v w : V) : adj v w ↔ adj w v :=\n    by\n      cases (Decidable.decEq v t) with (hv_eq : v = t) (hv_ne : v ≠ t)\n      · cases (Decidable.decEq w t) with (hw_eq : w = t) (hw_ne : w ≠ t)\n        · simp [adj, hv_eq, hw_eq]\n          rfl\n        · simp [adj, hv_eq, hw_ne]\n          rfl\n      · cases (Decidable.decEq w t) with (hw_eq : w = t) (hw_ne : w ≠ t)\n        · simp [adj, hv_ne, hw_eq]\n          rfl\n        · simp [adj, hv_ne, hw_ne]\n          exact G.symm v w\n  let loopless (v : V) : ¬ adj v v :=\n    by\n      cases (Decidable.decEq v t) with (hv_eq : v = t) (hv_ne : v ≠ t)\n      · simp [adj, hv_eq]\n        intro h\n        exact False.elim h\n      · simp [adj, hv_ne]\n        exact G.loopless v\n  let symm_proof : ∀ {v w}, adj v w → adj w v :=\n    λ h => (symm_iff v w).mpr h\n  { Adj := adj,\n    symm := symm_proof,\n    loopless := loopless }",
+  "temperature": 0.7
+}

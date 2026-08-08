@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.021,
+  "model_slug": "qwen3-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 0,
+  "candidate_hash": "db1e6d55842bd4cc",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk {α : Type u_1} (p : Set α → Prop) (he : p ∅) (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α := \n  let F : Set (Set α) := { s | p sᶜ }\n  let isF : IsFilter F := \n    { univ_mem := he\n      upward   := fun s t hs hsub => hmono sᶜ hs tᶜ (Set.compl_subset_compl_iff.mp hsub)\n      inter    := fun s t hs ht => hunion sᶜ tᶜ hs ht }\n  Filter.of F",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  fun α β₁ β₂ F => ?m.6\nhas type\n  (α : (a : α✝) → β₁✝ a ≃ β₂✝ a) → (β₁ : ?m.7 α) → (β₂ : ?m.8 α β₁) → (F : ?m.9 α β₁ β₂) → ?m.10 α β₁ β₂ F\nbut is expected to have type\n  ((a : α✝) → β₁✝ a ≃ β₂✝ a) → ((a : α✝) → β₁✝ a) ≃ ((a : α✝) → β₂✝ a)\nthe following variables have been introduced by the implicit lambda feature\n  α✝ : Sort u_1\n  β₁✝ : α✝ → Sort u_9\n  β₂✝ : α✝ → Sort u_10\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.021,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.piCongrRight",
+  "sample_index": 4,
+  "candidate_hash": "faa8beec278b0f76",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piCongrRight : {α : Sort u_1} -> {β₁ : α → Sort u_9} -> {β₂ : α → Sort u_10} -> (F : (a : α) → β₁ a ≃ β₂ a) -> ((a : α) → β₁ a) ≃ ((a : α) → β₂ a) :=\n  fun α β₁ β₂ F => {\n    toFun := fun f a => (F a).toFun (f a),\n    invFun := fun f a => (F a).invFun (f a),\n    left_inv := by\n      intro f\n      funext a\n      have h₁ : (F a).invFun ((F a).toFun (f a)) = f a := by\n        apply (F a).invFun_toFun\n      exact h₁,\n    right_inv := by\n      intro f\n      funext a\n      have h₁ : (F a).toFun ((F a).invFun (f a)) = f a := by\n        apply (F a).toFun_invFun\n      exact h₁\n  }",
+  "temperature": 0.7
+}

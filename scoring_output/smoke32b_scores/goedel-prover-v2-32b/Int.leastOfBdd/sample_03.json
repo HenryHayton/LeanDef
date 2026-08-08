@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `classical`; unexpected token 'let'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 3,
+  "candidate_hash": "e7bc3c718b420ef3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } :=\n  fun {P} _ b Hb Hinh =>\n    let f : ℤ → Bool := fun z => if h : P z then true else false\n    -- Use the classical approach to find the least element, but we need to make it computable.\n    -- Instead, we will search upwards from `b` until we find the least element.\n    have h₁ : ∃ z, P z := Hinh\n    -- We will use the fact that the set is bounded below and non-empty to find the least element.\n    -- We start searching from `b` and go upwards until we find the least element.\n    classical\n      -- Use the classical `exists` to find the least element.\n      -- In practice, we would use a computable search, but since we are using `[DecidablePred P]`, we can do this.\n      let s : Set ℤ := {z | P z}\n      have h₂ : BddBelow s := ⟨b, by\n        intro z hz\n        have h₃ : P z := by simpa using hz\n        have h₄ : b ≤ z := Hb z h₃\n        exact h₄⟩\n      have h₃ : ∃ z, z ∈ s := by\n        obtain ⟨z, hz⟩ := Hinh\n        exact ⟨z, by simpa using hz⟩\n      -- Use the classical `sInf` to find the least element.\n      -- We know that `sInf s` is the least element because `s` is bounded below and non-empty.\n      have h₄ : ∃ z, z ∈ s ∧ ∀ z' ∈ s, z ≤ z' := by\n        use sInf s\n        constructor\n        · -- Prove that `sInf s ∈ s`\n          have h₅ : sInf s ∈ s := by\n            -- Use the fact that `s` is bounded below and non-empty to show that `sInf s ∈ s`\n            have h₆ : IsLeast s (sInf s) := by\n              apply isLeast_csInf\n              <;> simp_all [Set.Nonempty]\n              <;> exact ⟨b, by\n                intro z hz\n                have h₇ : P z := by simpa using hz\n                have h₈ : b ≤ z := Hb z h₇\n                exact h₈⟩\n            exact h₆.1\n          exact h₅\n        · -- Prove that `sInf s` is the least element in `s`\n          intro z' hz'\n          have h₅ : sInf s ≤ z' := by\n            apply csInf_le\n            <;> simp_all [Set.Nonempty]\n            <;> exact ⟨b, by\n              intro z hz\n              have h₆ : P z := by simpa using hz\n              have h₇ : b ≤ z := Hb z h₆\n              exact h₇⟩\n          exact h₅\n      -- Obtain the least element from the classical proof.\n      obtain ⟨z, hz₁, hz₂⟩ := h₄\n      -- Use the least element to construct the subtype.\n      refine' ⟨z, _⟩\n      constructor\n      · -- Prove that `P z`\n        simpa using hz₁\n      · -- Prove that `z` is the least element\n        intro z' hz'\n        have h₅ : z ≤ z' := hz₂ z' (by simpa using hz')\n        exact h₅",
+  "temperature": 0.7
+}

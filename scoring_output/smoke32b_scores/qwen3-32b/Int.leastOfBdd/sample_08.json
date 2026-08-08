@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  Q\nhas type\n  ℕ → Prop\nof sort `Type` but is expected to have type\n  ∃ n, ?m.21 n\nof sort `Prop` in the application\n  Nat.find Q; Invalid field `nat`: The environment does not contain `Int.nat`, so it is not possible to project the field `nat` from an expression\n  z - b\nof type `ℤ`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nz : ℤ\nhPz : P z\nh_le : b ≤ z\n⊢ ∃ k, Q k; Application type mismatch: The argument\n  k_min\nhas type\n  ℤ\nbut is expected to have type\n  ℕ\nin the application\n  Q k_min; Application type mismatch: The argument\n  Q\nhas type\n  ℕ → Prop\nof sort `Type` but is expected to have type\n  ∃ n, ?m.66 n\nof sort `Prop` in the application\n  Nat.find_spec Q; Invalid field `nat`: The environment does not contain `Int.nat`, so it is not possible to project the field `nat` from an expression\n  z - b\nof type `ℤ`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nhQ_inh : ∃ k, Q k\nk_min : ℤ := sorry\nlb : ℤ := b + k_min\nhP_lb : P lb\nz : ℤ\nhPz : P z\nh_le_z : b ≤ z\n⊢ lb ≤ z",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.037,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 8,
+  "candidate_hash": "e6631f848fdadad9",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → b ≤ z) (Hinh : ∃ z, P z) : { lb // P lb ∧ ∀ z, P z → lb ≤ z } :=\n  let Q (k : ℕ) := P (b + (k : ℤ))\n  have hQ_inh : ∃ k, Q k :=\n    by\n      obtain ⟨z, hPz⟩ := Hinh\n      have h_le : b ≤ z := Hb z hPz\n      let k := (z - b).nat\n      have h_eq : b + (k : ℤ) = z := by\n        rw [← Int.coe_nat_sub h_le]\n        rfl\n      rw [h_eq] at hPz\n      exact ⟨k, hPz⟩\n  let k_min := Nat.find Q hQ_inh\n  let lb : ℤ := b + (k_min : ℤ)\n  have hP_lb : P lb :=\n    by\n      have hQ_min : Q k_min := Nat.find_spec Q hQ_inh\n      exact hQ_min\n  have h_least : ∀ z, P z → lb ≤ z :=\n    by\n      intro z hPz\n      have h_le_z : b ≤ z := Hb z hPz\n      let k_z := (z - b).nat\n      have h_eq_z : b + (k_z : ℤ) = z := by\n        rw [← Int.coe_nat_sub h_le_z]\n        rfl\n      rw [h_eq_z] at hPz\n      have hQ_z : Q k_z := hPz\n      have h_k_min_le : k_min ≤ k_z := Nat.find_min Q hQ_inh hQ_z\n      calc lb = b + (k_min : ℤ) := rfl\n          _ ≤ b + (k_z : ℤ) := by\n            have h_ineq : (k_min : ℤ) ≤ k_z := by rw [Nat.cast_le]; exact h_k_min_le\n            exact Int.add_le_add_left h_ineq b\n          _ = z := h_eq_z\n  ⟨lb, hP_lb, h_least⟩",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token 'using'; expected 'else'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.01,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.binaryRec",
+  "sample_index": 6,
+  "candidate_hash": "81891767d78ae651",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.binaryRec : {motive : ℕ → Sort u} → (zero : motive 0) → (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) → (n : ℕ) → motive n :=\n  fun {motive} zero bit n =>\n    let rec aux : ∀ (n : ℕ), motive n := fun n =>\n      if h : n = 0 then\n        -- Base case: if n = 0, return the given zero value\n        have h₁ : motive 0 := zero\n        -- Since n = 0, we can directly use the zero value\n        simpa [h] using h₁\n      else\n        -- Recursive case: if n ≠ 0, we need to find the least significant bit and the rest of the number\n        have h₁ : n ≠ 0 := h\n        have h₂ : ∃ (b : Bool) (m : ℕ), n = Nat.bit b m := by sorry\n        -- Obtain the bit and the rest of the number\n        obtain ⟨b, m, hm⟩ := h₂\n        -- Use the bit function to compute the value for n\n        have h₃ : motive (Nat.bit b m) := sorry\n        -- Since n = Nat.bit b m, we can use the computed value\n        simpa [hm] using h₃\n    -- Apply the auxiliary function to n\n    aux n",
+  "temperature": 0.7
+}

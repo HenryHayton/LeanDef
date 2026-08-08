@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ':='; expected ']'; Unknown constant `Decidable.decEq`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.023,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 6,
+  "candidate_hash": "35a2e0a24ffef969",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def setValue \n  {α : Sort _} \n  {β : Sort _} \n  (f : α ↪ β) \n  (a : α) \n  (b : β) \n  [(a' : α) → Decidable (a' = a)] \n  [(a' : α) → Decidable (f a' = b)] \n  : α ↪ β :=\n{ \n  toFun := λ x => \n    if h : x = a then b \n    else if (f x = b ∧ x ≠ a) then f a \n    else f x,\n  inj' := by\n    intro x y hxy\n    dsimp at hxy ⊢\n    cases (Decidable.decEq x a) with\n    | isTrue hxa => \n      have hx : toFun _ x = b := by simp [hxa]\n      have hy : toFun _ y = b := by rw [hxy, hx]\n      cases (Decidable.decEq y a) with\n      | isTrue hya => rfl\n      | isFalse hya => \n        have hfyb : f y = b := by\n          simp [hy, hya] at hy\n          exact hy\n        have hgy : toFun _ y = f a := by simp [hy, hya, hfyb]\n        rw [hy] at hgy\n        have hba : b = f a := by rw [hx, hxa]\n        have h : y = a := f.Inj hfyb hba.symm\n        contradiction\n    | isFalse hxa => \n      cases (Decidable.decEq y a) with\n      | isTrue hya => \n        have hy : toFun _ y = b := by simp [hya]\n        have hx : toFun _ x = b := by rw [hxy, hy]\n        have hfx : f x = b := by\n          simp [hx, hxa] at hx\n          exact hx\n        have hgx : toFun _ x = f a := by simp [hx, hxa, hfx]\n        rw [hx] at hgx\n        have hba : b = f a := by rw [hy, hya]\n        have h : x = a := f.Inj hfx hba.symm\n        contradiction\n      | isFalse hya => \n        cases (Decidable.decEq (f x) b) with\n        | isTrue hfbx => \n          cases (Decidable.decEq (f y) b) with\n          | isTrue hfb_y => \n            exact f.Inj hfbx hfb_y\n          | isFalse hfb_y => \n            have hgx : toFun _ x = f a := by simp [hfbx, hxa]\n            have hgy : toFun _ y = f y := by simp [hfb_y, hgy := hxy, rw [hxy], simp [hgx, hgy]\n            have hfa_eq_fy : f a = f y := by rw [hxy]; exact hgx.symm ▸ hgy\n            have h_a_y : a = y := f.Inj (by rw [hfa_eq_fy]; exact hfbx) hfb_y\n            contradiction\n        | isFalse hfbx => \n          cases (Decidable.decEq (f y) b) with\n          | isTrue hfb_y => \n            have hgx : toFun _ x = f x := by simp [hfbx, hxa]\n            have hgy : toFun _ y = f a := by simp [hfb_y, hya]\n            have hfx_eq_fa : f x = f a := by rw [hxy]; exact hgx.symm ▸ hgy\n            have h_x_a : x = a := f.Inj hfbx.symm hfb_y\n            contradiction\n          | isFalse hfb_y => \n            have hgx : toFun _ x = f x := by simp [hfbx, hxa]\n            have hgy : toFun _ y = f y := by simp [hfb_y, hya]\n            have hfx_eq_fy : f x = f y := by rw [hxy]; exact hgx.symm ▸ hgy\n            exact f.Inj hfbx hfb_y\n}",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token 'have'; expected ')', ',' or ':'; unsolved goals\ncase neg\nα : Sort u_1\nβ : Sort u_2\nf : α ↪ β\na : α\nb : β\nhα_eq_a : (a' : α) → Decidable (a' = a)\nhβ_eq_b : (a' : α) → Decidable (f a' = b)\nx : α\nh : ¬x = a\nh₁ : ¬∃ a', f a' = b ∧ a' ≠ a\n⊢ False",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.012,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 8,
+  "candidate_hash": "0fefa0099a7faf55",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue : {α : Sort u_1} -> {β : Sort u_2} -> (f : α ↪ β) -> (a : α) -> (b : β) -> [(a' : α) → Decidable (a' = a)] -> [(a' : α) → Decidable (f a' = b)] -> α ↪ β :=\n  fun {α} {β} f a b hα_eq_a hβ_eq_b =>\n    let g : α → β :=\n      fun x =>\n        if h : x = a then b\n        else\n          let a' : α := (Classical.choose (by\n            by_cases h₁ : ∃ (a' : α), f a' = b ∧ a' ≠ a\n            · exact h₁\n            · exfalso\n              have h₂ : ∀ (a' : α), f a' = b → a' = a := by\n                intro a' h₃\n                by_cases h₄ : a' = a\n                · exact h₄\n                · have h₅ : ¬ (∃ (a' : α), f a' = b ∧ a' ≠ a) := h₁\n                  have h₆ : ∃ (a' : α), f a' = b ∧ a' ≠ a := ⟨a', h₃, h₄⟩\n                  exact absurd h₆ h₅\n              by_cases h₃ : f x = b\n              · have h₄ : x = a := h₂ x h₃\n                simp_all [h₄]\n              · simp_all\n          ))\n          if h' : f a' = b ∧ a' ≠ a then f x\n          else b\n        <;>\n        (try simp_all) <;>\n        (try contradiction) <;>\n        (try {\n          exfalso\n          have h₂ : ∀ (a' : α), f a' = b → a' = a := by\n            intro a' h₃\n            by_cases h₄ : a' = a\n            · exact h₄\n            · have h₅ : ¬ (∃ (a' : α), f a' = b ∧ a' ≠ a) := by\n                by_cases h₅ : ∃ (a' : α), f a' = b ∧ a' ≠ a\n                · exfalso\n                  have h₆ := Classical.choose_spec h₅\n                  simp_all\n                  <;>\n                  (try contradiction) <;>\n                  (try simp_all) <;>\n                  (try {\n                    exfalso\n                    simp_all [h₆]\n                    <;>\n                    (try contradiction) <;>\n                    (try simp_all)\n                  })\n                · exact h₅\n              have h₆ : ∃ (a' : α), f a' = b ∧ a' ≠ a := ⟨a', h₃, h₄⟩\n              exact absurd h₆ h₅\n          by_cases h₃ : f x = b\n          · have h₄ : x = a := h₂ x h₃\n            simp_all [h₄]\n          · simp_all\n        })\n    {\n      toFun := g\n      map_eq' := by\n        intro x y hxy\n        by_cases h₁ : x = a <;> by_cases h₂ : y = a <;> simp_all [h₁, h₂]\n        <;>\n        (try {\n          have h₃ := f.injective hxy\n          simp_all\n        })\n        <;>\n        (try {\n          exfalso\n          have h₃ := f.injective\n          simp_all [Function.Embedding.injective]\n          <;>\n          (try contradiction)\n        })\n        <;>\n        (try {\n          simp_all [Function.Embedding.injective]\n          <;>\n          (try contradiction)\n        })\n      }",
+  "temperature": 0.7
+}

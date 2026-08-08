@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `simp_all`; unsolved goals\ncase succ\nn✝ a✝ a r n : ℕ\nh₈ : ¬a = 0\nh₉ : 1 ≤ a\nhn : 1 ≤ n\nhr : a < (r + 1) ^ (n + 1)\n⊢ False; unsolved goals\ncase pos\nn a : ℕ\nh : ∀ (a n : ℕ), n ≥ 2 → ∃ r, r ^ n ≤ a ∧ a < (r + 1) ^ n\nhn : n = 0\n⊢ False; unsolved goals\ncase neg\nn a : ℕ\nh : ∀ (a n : ℕ), n ≥ 2 → ∃ r, r ^ n ≤ a ∧ a < (r + 1) ^ n\nhn : ¬n = 0\n⊢ n ≥ 2; unsolved goals\nn a : ℕ\nh : ∀ (a n : ℕ), n ≥ 2 → ∃ r, r ^ n ≤ a ∧ a < (r + 1) ^ n\nh₂ : n ≥ 2\n⊢ ∃ r, r ^ n ≤ a ∧ a < (r + 1) ^ n; unexpected token ':'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.204,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.nthRoot",
+  "sample_index": 6,
+  "candidate_hash": "c374f26df7ad75e7",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.nthRoot (n : ℕ) (a : ℕ) : ℕ :=\n  if n = 0 then 1\n  else if n = 1 then a\n  else\n    have h : ∀ (a n : ℕ), n ≥ 2 → ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := by\n      intro a n hn\n      have h₁ : ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := by\n        -- We use the fact that the function r ↦ r^n is increasing to find the appropriate r.\n        -- We start by finding an upper bound for r.\n        have h₂ : ∃ (r : ℕ), a < (r + 1) ^ n := by\n          -- Since (a + 1)^n > a for any a and n ≥ 1, we can use a + 1 as an upper bound.\n          use a\n          have h₃ : a < (a + 1) ^ n := by\n            have h₄ : a < (a + 1) ^ n := by\n              calc\n                a < a + 1 := by simp\n                _ ≤ (a + 1) ^ n := by\n                  exact Nat.le_self_pow (by omega) (a + 1)\n            exact h₄\n          exact h₃\n        -- Now we use the fact that there exists an upper bound to find the appropriate r.\n        obtain ⟨r, hr⟩ := h₂\n        -- We use the fact that the function r ↦ r^n is increasing to find the appropriate r.\n        -- We start by checking if 0 is a valid r.\n        have h₃ : ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := by\n          -- We use the fact that the function r ↦ r^n is increasing to find the appropriate r.\n          -- We start by checking if 0 is a valid r.\n          classical\n          -- We use the fact that the function r ↦ r^n is increasing to find the appropriate r.\n          -- We start by checking if 0 is a valid r.\n          have h₄ : ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := by\n            -- We use the fact that the function r ↦ r^n is increasing to find the appropriate r.\n            -- We start by checking if 0 is a valid r.\n            use 0\n            have h₅ : 0 ^ n ≤ a := by\n              cases n with\n              | zero => contradiction -- n ≥ 2, so this case is impossible\n              | succ n =>\n                simp [Nat.zero_pow]\n                <;>\n                (try omega) <;>\n                (try simp_all) <;>\n                (try nlinarith)\n            have h₆ : a < (0 + 1) ^ n := by\n              have h₇ : (0 + 1 : ℕ) ^ n = 1 := by simp\n              rw [h₇]\n              have h₈ : a < 1 := by\n                by_contra h₈\n                have h₉ : a ≥ 1 := by omega\n                have h₁₀ : 0 ^ n ≤ a := h₅\n                cases n with\n                | zero => contradiction -- n ≥ 2, so this case is impossible\n                | succ n =>\n                  simp [Nat.zero_pow] at h₁₀\n                  <;>\n                  (try omega) <;>\n                  (try simp_all) <;>\n                  (try nlinarith)\n              omega\n            exact ⟨h₅, h₆⟩\n          exact h₄\n        exact h₃\n      exact h₁\n    have h₁ : ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := by\n      have h₂ : n ≥ 2 := by\n        by_cases hn : n = 0\n        · exfalso\n          simp_all\n        · by_cases hn' : n = 1\n          · exfalso\n            simp_all\n          · have h₃ : n ≥ 2 := by\n              omega\n            exact h₃\n      have h₃ : ∃ (r : ℕ), r ^ n ≤ a ∧ a < (r + 1) ^ n := h a n h₂\n      exact h₃\n    obtain ⟨r, h₂, h₃⟩ := h₁\n    r",
+  "temperature": 0.7
+}

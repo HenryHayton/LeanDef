@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  p\nhas type\n  Finset α → Sort u_4\nof sort `Type (max u_1 u_4)` but is expected to have type\n  ℕ\nof sort `Type` in the application\n  @Finset.strongDownwardInductionOn α p; Type mismatch\n  fun t₂ ht₂ hts => ?m.25\nhas type\n  (t₂ : t₂✝.card ≤ n) → (ht₂ : t ⊂ t₂✝) → (hts : ?m.26 t₂ ht₂) → ?m.27 t₂ ht₂ hts\nbut is expected to have type\n  t₂✝.card ≤ n → t ⊂ t₂✝ → p t₂✝\nthe following variables have been introduced by the implicit lambda feature\n  t₂✝ : Finset α\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.; Function expected at\n  ht\nbut this term has type\n  ?m.31 t\n\nNote: Expected a function because this term is being applied to the argument\n  t₂",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.057,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 6,
+  "candidate_hash": "37bd6a3c4a5f944f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> {n : ℕ} -> (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁) -> (s : Finset α) -> s.card ≤ n → p s\n  := fun {α} {p} {n} H s hs => @Finset.strongDownwardInductionOn α p s (fun t ht => H t (fun t₂ ht₂ hts => ht t₂ ht₂ hts) ht)",
+  "temperature": 0.7
+}

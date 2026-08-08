@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`simp` made no progress\n\nNote: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    fun s => p sᶜ\n  has type\n    Set α → Prop\n  but is expected to have type\n    Set (Set α)\n  in the application\n    Membership.mem fun s => p sᶜ; Function expected at\n  Set.compl_subset_compl\nbut this term has type\n  ?m.27ᶜ ⊆ ?m.28ᶜ ↔ ?m.28 ⊆ ?m.27\n\nNote: Expected a function because this term is being applied to the argument\n  h_sub; Tactic `apply` failed: could not unify the type of `hunion sᶜ h_s tᶜ h_t`\n  p (sᶜ ∪ tᶜ)\nwith the goal\n  s ∩ t ∈ fun s => p sᶜ\n\nα : Type u_1\np : Set α → Prop\nhe : p ∅\nhmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s\nhunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)\ns t : Set α\nh_s : s ∈ fun s => p sᶜ\nh_t : t ∈ fun s => p sᶜ\n⊢ s ∩ t ∈ fun s => p sᶜ",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.014,
+  "model_slug": "qwen3-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 2,
+  "candidate_hash": "784fea2fd52a965e",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk {α : Type u_1} (p : Set α → Prop) (he : p ∅) \n    (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) \n    (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α :=\n  Filter.mk (fun s => p sᶜ) \n    (by simp [Set.compl_univ]; exact he)\n    (by\n      intro s t h h_sub\n      apply hmono _ h\n      exact Set.compl_subset_compl h_sub)\n    (by\n      intro s t h_s h_t\n      apply hunion _ h_s _ h_t\n      exact sᶜ ∪ tᶜ)",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  fun α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁ g₂ a b => ?m.14\nhas type\n  (α₁ : α₁✝ → β₁✝ → Finset γ₁✝) →\n    (α₂ : α₂✝ → β₂✝ → Finset γ₂✝) →\n      (β₁ : α₁✝ → β₂✝ → Finset γ₁✝) →\n        (β₂ : α₁✝ → β₂✝ → Finset γ₂✝) →\n          (γ₁ : α₁✝ ⊕ α₂✝) →\n            (γ₂ : β₁✝ ⊕ β₂✝) →\n              (f₁ : ?m.18 α₁ α₂ β₁ β₂ γ₁ γ₂) →\n                (f₂ : ?m.19 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁) →\n                  (g₁ : ?m.20 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂) →\n                    (g₂ : ?m.21 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁) →\n                      (a : ?m.22 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁ g₂) →\n                        (b : ?m.23 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁ g₂ a) → ?m.24 α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁ g₂ a b\nbut is expected to have type\n  (α₁✝ → β₁✝ → Finset γ₁✝) →\n    (α₂✝ → β₂✝ → Finset γ₂✝) →\n      (α₁✝ → β₂✝ → Finset γ₁✝) → (α₁✝ → β₂✝ → Finset γ₂✝) → α₁✝ ⊕ α₂✝ → β₁✝ ⊕ β₂✝ → Finset (γ₁✝ ⊕ γ₂✝)\nthe following variables have been introduced by the implicit lambda feature\n  α₁✝ : Type u_1\n  α₂✝ : Type u_2\n  β₁✝ : Type u_3\n  β₂✝ : Type u_4\n  γ₁✝ : Type u_5\n  γ₂✝ : Type u_6\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.074,
+  "model_slug": "stepfun-formalizer-32b",
+  "task_name": "Finset.sumLexLift",
+  "sample_index": 1,
+  "candidate_hash": "81ec7f062aec7dae",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask_sumLexLift : {α₁ : Type u_1} -> {α₂ : Type u_2} -> {β₁ : Type u_3} -> {β₂ : Type u_4} -> {γ₁ : Type u_5} -> {γ₂ : Type u_6} -> (f₁ : α₁ → β₁ → Finset γ₁) -> (f₂ : α₂ → β₂ → Finset γ₂) -> (g₁ : α₁ → β₂ → Finset γ₁) -> (g₂ : α₁ → β₂ → Finset γ₂) -> α₁ ⊕ α₂ → β₁ ⊕ β₂ → Finset (γ₁ ⊕ γ₂) :=\n  fun α₁ α₂ β₁ β₂ γ₁ γ₂ f₁ f₂ g₁ g₂ => fun a b => match a with\n  | inl x => match b with\n    | inl y => (f₁ x y).image (inl ·)\n    | inr y => ((g₁ x y).image (inl ·) : Finset (γ₁ ⊕ γ₂)).disjUnion (g₂ x y).image (inr ·)\n  | inr x => match b with\n    | inl y => ∅\n    | inr y => (f₂ x y).image (inr ·)",
+  "temperature": 0.7
+}

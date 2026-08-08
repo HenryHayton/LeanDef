@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.013,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 0,
+  "candidate_hash": "0dcfe089981852fc",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α β} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β :=\n  let E' := f '' M.E\n  let indep' (s : Set β) := s ⊆ E' ∧ M.Indep (f ⁻¹' s)\n\n  { E := E'\n    indep := indep'\n    indep_empty := by\n      constructor\n      · simp [E', image_subset]\n      · simp [preimage_empty, M.indep_empty]\n    indep_subset := by\n      intro s t hst hti\n      constructor\n      · apply subset.trans hst; exact hti.1\n      · apply M.indep_subset (preimage_mono hst)\n        exact hti.2\n    indep_exchange := by\n      intro s t hEs hEt hsi hti hcard\n      let S := f ⁻¹' s\n      let T := f ⁻¹' t\n      have hS := hsi.2\n      have hT := hti.2\n      have hcardST := by\n        rw [← card_image_of_inj_on hf S (subset.image_subset _ hEs)]\n        rw [← card_image_of_inj_on hf T (subset.image_subset _ hEt)]\n        exact hcard\n      obtain ⟨x, hxT, hxS, hSx⟩ := M.indep_exchange hS hT hcardST\n      use [f x]\n      constructor\n      · apply subset.trans (subset_union_left _ _)\n        · simp [hEs, hEt, hf.InjectiveOn, S, T]\n        · exact subset.trans (subset_union_right _ _) hEt\n      · constructor\n        · simp [E', hEs, hEt, hf.InjectiveOn]\n        · apply M.Indep.union_singleton hSx\n  }",
+  "temperature": 0.7
+}

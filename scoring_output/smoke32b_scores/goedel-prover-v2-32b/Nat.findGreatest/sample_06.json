@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to synthesize instance of type class\n  Decidable (∃ i ∈ Finset.Icc 1 n, P i)\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.203,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.findGreatest",
+  "sample_index": 6,
+  "candidate_hash": "bbba683327e594ae",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.findGreatest {P : ℕ → Prop} [DecidablePred P] (n : ℕ) : ℕ :=\n  if h : ∃ i ∈ Finset.Icc 1 n, P i then\n    let m := (Finset.filter P (Finset.Icc 1 n)).max' (Finset.nonempty_of_ne_empty (by\n      intro h₁\n      have h₂ : Finset.filter P (Finset.Icc 1 n) = ∅ := by simpa using h₁\n      simp_all [Finset.ext_iff, Finset.mem_filter, Finset.mem_Icc]\n      <;> aesop))\n    m\n  else\n    0",
+  "temperature": 0.7
+}

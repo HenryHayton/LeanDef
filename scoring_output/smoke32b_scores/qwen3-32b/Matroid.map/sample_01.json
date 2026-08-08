@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  emb\nhas type\n  { x // x ∈ s } ↪ β\nof sort `Type (max (max 0 u_1) u_2)` but is expected to have type\n  Matroid ?m.25\nof sort `Type u_2` in the application\n  Matroid.mapEmbedding emb; Invalid field `subtype`: The environment does not contain `Matroid.subtype`, so it is not possible to project the field `subtype` from an expression\n  M\nof type `Matroid α`; `simp` made no progress",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.086,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 1,
+  "candidate_hash": "bfeaa492ad4eb4d0",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map : {α : Type u_1} → {β : Type u_2} → (M : Matroid α) → (f : α → β) → (hf : Set.InjOn f M.E) → Matroid β :=\n  fun {α} {β} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) => \n    let s := M.E\n    let f_sub : {x : α // x ∈ s} → β := fun x => f x\n    have h_inj : Function.Injective f_sub := \n      by \n        intro x y h\n        simp at *\n        exact hf x.1 y.1 h\n    let emb : {x : α // x ∈ s} ↪ β := ⟨f_sub, h_inj⟩\n    Matroid.mapEmbedding emb (M.subtype s)",
+  "temperature": 0.7
+}

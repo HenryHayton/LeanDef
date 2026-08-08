@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.017,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 0,
+  "candidate_hash": "a4f5d0a2d243efcc",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue {α : Sort u} {β : Sort v} (f : α ↪ β) (a : α) (b : β)\n  [D1 : (a' : α) → Decidable (a' = a)] [D2 : (a' : α) → Decidable (f a' = b)] : α ↪ β :=\n{ toFun := λ x => if x = a then b else if f x = b then f a else f x,\n  inj' := \n    let newFun (x : α) : β := if x = a then b else if f x = b then f a else f x\n    show Function.Injective newFun from\n      assume x y (h : newFun x = newFun y)\n      by_cases hxa : x = a\n      by_cases hya : y = a\n      -- Case 1: x = a and y = a\n      { exact hxa ▸ hya }\n      -- Case 2: x = a and y ≠ a\n      { by_cases hfy : f y = b\n        { have h1 : f y = f a := by rw [← h, hfy]\n          exact hya (f.Injective h1) }\n        { have h1 : b = f y := h\n          exact hfy h1 } }\n      -- Case 3: x ≠ a and y = a\n      { by_cases hfx : f x = b\n        { have h1 : f x = f a := by rw [← h, hfx]\n          exact hxa (f.Injective h1) }\n        { have h1 : b = f x := h\n          exact hfx h1 } }\n      -- Case 4: x ≠ a and y ≠ a\n      { by_cases hfx : f x = b\n        by_cases hfy : f y = b\n        -- Subcase 4a: both are true\n        { have h1 : f x = f y := by rw [hfx, hfy]\n          exact (f.Injective h1) }\n        -- Subcase 4b: hfx and not hfy\n        { have h1 : f a = f y := by rw [← h, hfx]\n          exact hya (f.Injective h1) }\n        -- Subcase 4c: not hfx and hfy\n        { have h1 : f a = f x := by rw [← h, hfy]\n          exact hxa (f.Injective h1) }\n        -- Subcase 4d: neither is true\n        { exact (f.Injective h) } } } }",
+  "temperature": 0.7
+}

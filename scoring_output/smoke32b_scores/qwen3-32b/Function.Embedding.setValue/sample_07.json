@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `α`; Unknown identifier `β`; unsolved goals\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ndec_a : (a' : α✝) → Decidable (a' = a)\ndec_fb : (a' : α✝) → Decidable (f a' = b)\ng : sorry → sorry := fun x => sorry\nx y : sorry\nhxy : g x = g y\nhx : sorry\nhy : ¬sorry\n⊢ sorry (); unsolved goals\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ndec_a : (a' : α✝) → Decidable (a' = a)\ndec_fb : (a' : α✝) → Decidable (f a' = b)\ng : sorry → sorry := fun x => sorry\nx y : sorry\nhxy : g x = g y\nhx : sorry\nhy : ¬sorry\ngx_eq_b : sorry\n⊢ sorry (); Unknown identifier `hy`; unsolved goals\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ndec_a : (a' : α✝) → Decidable (a' = a)\ndec_fb : (a' : α✝) → Decidable (f a' = b)\ng : sorry → sorry := fun x => sorry\nx y : sorry\nhxy : g x = g y\nhx : ¬sorry\n⊢ sorry (); unsolved goals\nα✝ : Sort u_1\nβ✝ : Sort u_2\nf : α✝ ↪ β✝\na : α✝\nb : β✝\ndec_a : (a' : α✝) → Decidable (a' = a)\ndec_fb : (a' : α✝) → Decidable (f a' = b)\ng : sorry → sorry := fun x => sorry\nx y : sorry\nhxy : g x = g y\nhx : ¬sorry\ngy_eq_b : sorry\n⊢ sorry (); No goals to be solved",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.138,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 7,
+  "candidate_hash": "7c03d24549e26ae5",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue : {α : Sort u_1} → {β : Sort u_2} → (f : α ↪ β) → (a : α) → (b : β) → [(a' : α) → Decidable (a' = a)] → [(a' : α) → Decidable (f a' = b)] → α ↪ β :=\n  λ f a b dec_a dec_fb =>\n  let g : α → β := λ x => if x = a then b else if f x = b then f a else f x\n  have inj_g : Function.Injective g :=\n    by\n      intro x y hxy\n      by_cases hx : x = a\n      by_cases hy : y = a\n      · -- x = a, y = a\n        rw [hx, hy]\n        rfl\n      · -- x = a, y ≠ a\n        have gx_eq_b : g x = b := by simp [hx]\n        have gy : g y = (if f y = b then f a else f y) := by simp [hy]\n        rw [gx_eq_b, gy] at hxy\n        by_cases hfy : f y = b\n        · -- f y = b\n          have b_eq_fa : b = f a := by rw [hxy]; exact hfy ▸ rfl\n          have y_eq_a : y = a := f.Injective.eq (by rw [← b_eq_fa, hfy])\n          contradiction\n        · -- f y ≠ b\n          have f_y_eq_b : f y = b := by rw [hxy]; exact hfy\n          exact hfy f_y_eq_b\n      · -- x ≠ a, y = a\n        have gy_eq_b : g y = b := by simp [hy]\n        have gx : g x = (if f x = b then f a else f x) := by simp [hx]\n        rw [gy_eq_b, gx] at hxy\n        by_cases hfx : f x = b\n        · -- f x = b\n          have b_eq_fa : b = f a := by rw [hxy]; exact hfx ▸ rfl\n          have x_eq_a : x = a := f.Injective.eq (by rw [← b_eq_fa, hfx])\n          contradiction\n        · -- f x ≠ b\n          have f_x_eq_b : f x = b := by rw [hxy]; exact hfx\n          exact hfx f_x_eq_b\n      · -- x ≠ a, y ≠ a\n        have gx : g x = (if f x = b then f a else f x) := by simp [hx]\n        have gy : g y = (if f y = b then f a else f y) := by simp [hy]\n        rw [gx, gy] at hxy\n        by_cases hfx : f x = b\n        by_cases hfy : f y = b\n        · -- f x = b, f y = b\n          exact f.Injective.eq (by rw [hfx, hfy])\n        · -- f x = b, f y ≠ b\n          have h : f a = f y := by rw [hxy]; exact hfx ▸ rfl\n          have y_eq_a : y = a := f.Injective.eq (by rw [← h])\n          contradiction\n        · -- f x ≠ b, f y = b\n          have h : f x = f a := by rw [hxy]; exact hfy ▸ rfl\n          have x_eq_a : x = a := f.Injective.eq (by rw [← h])\n          contradiction\n        · -- f x ≠ b, f y ≠ b\n          exact f.Injective.eq hxy\n  { toFun := g, inj' := inj_g }",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  he\nhas type\n  p ∅\nbut is expected to have type\n  Set.univ ∈ fun s => p sᶜ\nin the application\n  Filter.mk (fun s => p sᶜ) he; Application type mismatch: The argument\n  s\nhas type\n  x✝ ∈ fun s => p sᶜ\nof sort `Prop` but is expected to have type\n  Set α\nof sort `Type u` in the application\n  sᶜ; Application type mismatch: The argument\n  t\nhas type\n  x✝ ⊆ y✝\nof sort `Prop` but is expected to have type\n  Set α\nof sort `Type u` in the application\n  tᶜ; Invalid field notation: Type of\n  hst\nis not known; cannot resolve field `compl_subset`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.174,
+  "model_slug": "qwen3-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 6,
+  "candidate_hash": "def08bb31bd44531",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk {α : Type u} (p : Set α → Prop) (he : p ∅) \n    (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) \n    (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α := \n  Filter.mk \n    (fun s => p sᶜ)\n    he\n    (fun s t hst hs => hmono sᶜ hs tᶜ (hst.compl_subset))\n    (fun s t hs ht => hunion sᶜ hs tᶜ ht)",
+  "temperature": 0.7
+}

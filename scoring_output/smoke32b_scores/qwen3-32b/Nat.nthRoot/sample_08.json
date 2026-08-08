@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "3 parameters bound in `termination_by`, but the body of VTask.nthRoot.loop only binds 0 parameters. (Since Lean v4.6.0, the `termination_by` clause no longer expects the function name here.)",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.013,
+  "model_slug": "qwen3-32b",
+  "task_name": "Nat.nthRoot",
+  "sample_index": 8,
+  "candidate_hash": "81e2537d12fbbeb7",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.nthRoot : ℕ → ℕ → ℕ\n  | 0, _ => 1\n  | _, 0 => 0\n  | 1, a => a\n  | n, a =>\n    let rec loop (low high : ℕ) : ℕ :=\n      if low > high then high\n      else let mid := (low + high) / 2\n           let mid_pow := mid ^ n\n           if mid_pow == a then mid\n           else if mid_pow < a then loop (mid + 1) high\n           else loop low (mid - 1)\n    termination_by loop low high => high - low\n    loop 1 a",
+  "temperature": 0.7
+}

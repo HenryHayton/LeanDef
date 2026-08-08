@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `f`; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\n⊢ ?m.5",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.03,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 1,
+  "candidate_hash": "408c603b723608ba",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f)\n  := @Equiv.ofInjective _ _ _ f (by\n    -- Prove that f is injective\n    intro a₁ a₂ h\n    by_cases hα : Nonempty α\n    · -- Case: α is nonempty\n      have h_inv : Function.LeftInverse (f_inv hα) f := hf hα\n      have h₁ : f_inv hα (f a₁) = a₁ := h_inv a₁\n      have h₂ : f_inv hα (f a₂) = a₂ := h_inv a₂\n      have h₃ : f_inv hα (f a₁) = f_inv hα (f a₂) := by rw [h]\n      rw [h₁, h₂] at h₃\n      exact h₃\n    · -- Case: α is empty\n      -- This case is impossible because hα : ¬Nonempty α and we have a₁ : α, which implies Nonempty α\n      exfalso\n      exact hα ⟨a₁⟩\n  )",
+  "temperature": 0.7
+}

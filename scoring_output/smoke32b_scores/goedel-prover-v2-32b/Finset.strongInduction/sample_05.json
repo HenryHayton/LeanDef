@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Finset.wf_subset`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.034,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Finset.strongInduction",
+  "sample_index": 5,
+  "candidate_hash": "ec169cd392bb7e8a",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> (H : (s : Finset α) → ((t : Finset α) → t ⊂ s → p t) → p s) -> (s : Finset α) -> p s := by\n  intro α p H s\n  have h : ∀ (s : Finset α), p s := by\n    intro s\n    classical\n    -- Use the well-foundedness of the subset relation to perform strong induction\n    have h₁ : p s := by\n      -- Use the well-founded recursion to generate the proof for each finset\n      refine' WellFounded.fix (Finset.wf_subset) s _\n      intro s ih\n      -- Apply the given step function H to s and the recursive oracle\n      exact H s (fun t ht => ih t (Finset.subset_iff.1 ht))\n    exact h₁\n  exact h s",
+  "temperature": 0.7
+}

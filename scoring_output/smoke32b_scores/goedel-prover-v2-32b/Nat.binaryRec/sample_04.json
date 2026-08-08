@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `exact`; Type mismatch when assigning motive\n  fun n => motive n\nhas type\n  ℕ → Sort u\nof sort `Type u` but is expected to have type\n  ℕ → Prop\nof sort `Type`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.019,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.binaryRec",
+  "sample_index": 4,
+  "candidate_hash": "211eb7cb607a8998",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.binaryRec : {motive : ℕ → Sort u} → (zero : motive 0) → (bit : (b : Bool) → (n : ℕ) → motive n → motive (Nat.bit b n)) → (n : ℕ) → motive n :=\n  fun {motive} zero bit n =>\n    have h : ∀ (n : ℕ), motive n := by\n      intro n\n      induction n using Nat.strong_induction_on with\n      | h n ih =>\n        cases n with\n        | zero => exact zero\n        | succ n =>\n          have h₁ : n.succ = Nat.bit (n.succ.testBit 0) (n.succ >>> 1) := by\n            have h₂ : n.succ.testBit 0 = if n.succ % 2 = 1 then true else false := by\n              simp [Nat.testBit, Nat.mod_two_eq_zero_or_one]\n              <;> split_ifs <;> simp_all [Nat.mod_eq_of_lt]\n              <;> omega\n            rw [h₂]\n            have h₃ : n.succ % 2 = 1 ∨ n.succ % 2 = 0 := by omega\n            cases h₃ with\n            | inl h₃ =>\n              have h₄ : n.succ.testBit 0 = true := by simp [h₂, h₃]\n              simp [h₄, Nat.bit, Nat.succ_eq_add_one, Nat.add_assoc]\n              <;>\n              (try omega) <;>\n              (try {\n                have h₅ : n.succ % 2 = 1 := by omega\n                have h₆ : (n.succ >>> 1) = (n.succ / 2) := by\n                  simp [Nat.shiftr_eq_div_pow]\n                  <;>\n                  (try omega)\n                rw [h₆]\n                have h₇ : n.succ = 2 * (n.succ / 2) + 1 := by\n                  have h₈ := Nat.div_add_mod (n.succ) 2\n                  have h₉ : n.succ % 2 = 1 := by omega\n                  omega\n                omega\n              })\n            | inr h₃ =>\n              have h₄ : n.succ.testBit 0 = false := by simp [h₂, h₃]\n              simp [h₄, Nat.bit, Nat.succ_eq_add_one, Nat.add_assoc]\n              <;>\n              (try omega) <;>\n              (try {\n                have h₅ : n.succ % 2 = 0 := by omega\n                have h₆ : (n.succ >>> 1) = (n.succ / 2) := by\n                  simp [Nat.shiftr_eq_div_pow]\n                  <;>\n                  (try omega)\n                rw [h₆]\n                have h₇ : n.succ = 2 * (n.succ / 2) := by\n                  have h₈ := Nat.div_add_mod (n.succ) 2\n                  have h₉ : n.succ % 2 = 0 := by omega\n                  omega\n                omega\n              })\n          rw [h₁]\n          have h₂ : (n.succ >>> 1) < n.succ := by\n            have h₃ : n.succ >>> 1 < n.succ := by\n              apply Nat.div_lt_self\n              <;> omega\n            exact h₃\n          have h₃ : motive (n.succ >>> 1) := ih (n.succ >>> 1) h₂\n          have h₄ : n.succ.testBit 0 = if n.succ % 2 = 1 then true else false := by\n            simp [Nat.testBit, Nat.mod_two_eq_zero_or_one]\n            <;> split_ifs <;> simp_all [Nat.mod_eq_of_lt]\n            <;> omega\n          simp_all [h₄, bit]\n          <;>\n          (try {\n            split_ifs at * <;>\n            simp_all [Nat.mod_eq_of_lt]\n            <;>\n            (try omega)\n          })\n          <;>\n          (try {\n            simp_all [Nat.mod_eq_of_lt]\n            <;>\n            (try omega)\n          })\n    exact h n",
+  "temperature": 0.7
+}

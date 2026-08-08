@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  rfl\nhas type\n  ?m.50 = ?m.50\nbut is expected to have type\n  y = a\nin the application\n  isTrue ⋯",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.038,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.Embedding.setValue",
+  "sample_index": 1,
+  "candidate_hash": "c8484e96b2a1c814",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.setValue : {α : Sort u_1} → {β : Sort u_2} → (f : α ↪ β) → (a : α) → (b : β) → [(a' : α) → Decidable (a' = a)] → [(a' : α) → Decidable (f a' = b)] → α ↪ β\n  | α, β, f, a, b, decEq, decImg =>\n    let g : α → β := λ x => if h : x = a then b else if h2 : f x = b then f a else f x\n    have inj_g : Function.Injective g :=\n      λ x y h_eq =>\n        match (decEq x, decEq y) with\n        | (isTrue rfl, isTrue rfl) => rfl\n        | (isTrue rfl, isFalse hna) =>\n          match decImg y with\n          | isTrue hfy =>\n            let h1 : f y = b := hfy\n            let h2 : b = f a := Eq.substr h_eq (if_pos rfl) (if_pos hfy)\n            let eq_f := Eq.trans h1 h2\n            let eq_y_a := f.injective eq_f\n            Eq.substr hna eq_y_a\n          | isFalse hfy =>\n            let eq_b_fy : b = f y := Eq.substr h_eq (if_pos rfl) (if_neg hfy)\n            let h1 : f y = b := Eq.symm eq_b_fy\n            let eq_x_a := f.injective (Eq.trans h1 (Eq.symm rfl))\n            Eq.substr hna eq_x_a\n        | (isFalse hna, isTrue rfl) =>\n          match decImg x with\n          | isTrue hfx =>\n            let h1 : f x = b := hfx\n            let h2 : b = f a := Eq.substr h_eq.symm (if_neg hna) (if_pos hfx)\n            let eq_f := Eq.trans h1 h2\n            let eq_x_a := f.injective eq_f\n            Eq.substr hna eq_x_a\n          | isFalse hfx =>\n            let eq_b_fx : b = f x := Eq.substr h_eq.symm (if_neg hna) (if_neg hfx)\n            let h1 : f x = b := Eq.symm eq_b_fx\n            let eq_x_a := f.injective (Eq.trans h1 (Eq.symm rfl))\n            Eq.substr hna eq_x_a\n        | (isFalse hna, isFalse hna') =>\n          match (decImg x, decImg y) with\n          | (isTrue hfx, isTrue hfy) =>\n            let eq_f := Eq.trans hfx hfy.symm\n            eq_f\n          | (isTrue hfx, isFalse hfy) =>\n            let eq_fa_fy : f a = f y := Eq.substr h_eq (if_neg hna) (if_pos hfx) (if_neg hfy)\n            let eq_a_y := f.injective eq_fa_fy\n            Eq.substr hna' eq_a_y\n          | (isFalse hfx, isTrue hfy) =>\n            let eq_fx_fa : f x = f a := Eq.substr h_eq.symm (if_neg hna') (if_neg hfx) (if_pos hfy)\n            let eq_x_a := f.injective eq_fx_fa\n            Eq.substr hna eq_x_a\n          | (isFalse hfx, isFalse hfy) =>\n            let eq_fx_fy : f x = f y := Eq.substr h_eq (if_neg hna) (if_neg hfx) (if_neg hfy)\n            f.injective eq_fx_fy\n    { toFun := g, inj' := inj_g }",
+  "temperature": 0.7
+}

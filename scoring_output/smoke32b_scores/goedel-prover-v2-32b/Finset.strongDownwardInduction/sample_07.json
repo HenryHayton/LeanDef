@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch when assigning motive\n  fun k => (t : Finset α) → t.card = k → k ≤ n → p t\nhas type\n  ℕ → Sort (imax (u_1 + 1) u_4)\nof sort `Type (imax (u_1 + 1) u_4)` but is expected to have type\n  ℕ → Prop\nof sort `Type`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.021,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 7,
+  "candidate_hash": "5868c2db10eeb9f1",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Finset α → Sort u_4} {n : ℕ} (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁) (s : Finset α) (hs : s.card ≤ n) : p s :=\n  let h : ∀ (t : Finset α), t.card ≤ n → p t := by\n    intro t ht\n    -- Use strong induction on the cardinality of the finset.\n    have h₁ : ∀ (k : ℕ), ∀ (t : Finset α), t.card = k → k ≤ n → p t := by\n      intro k\n      induction' k using Nat.strong_induction_on with k ih\n      intro t ht_card ht_le\n      -- Use the step function H to construct p t.\n      have h₂ := H t (fun {t₂} ht₂_card ht₂_subset => by\n        -- For any strict superset t₂ of t with t₂.card ≤ n,\n        -- we can use the inductive hypothesis to get p t₂.\n        have h₃ : t₂.card < k + 1 := by\n          have h₄ : t₂.card > k := by\n            have h₅ : t ⊂ t₂ := ht₂_subset\n            have h₆ : t.card < t₂.card := Finset.card_lt_card h₅\n            linarith\n          omega\n        have h₇ : t₂.card ≤ n := ht₂_card\n        have h₈ : t₂.card ≤ n := ht₂_card\n        have h₉ : t₂.card < k + 1 := h₃\n        have h₁₀ : t₂.card ≤ k := by\n          omega\n        have h₁₁ : p t₂ := ih t₂.card (by\n          have h₁₂ : t₂.card < k + 1 := h₃\n          omega) ht₂_card (by omega)\n        exact h₁₁\n      ) ht_le\n      exact h₂\n    -- Apply the induction to t with t.card ≤ n.\n    have h₂ : p t := h₁ t.card t (by rfl) ht\n    exact h₂\n  -- Finally, apply the general result to s.\n  h s hs",
+  "temperature": 0.7
+}

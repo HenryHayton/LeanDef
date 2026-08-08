@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unknown tactic",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.155,
+  "model_slug": "qwen3-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 4,
+  "candidate_hash": "53b796c1be32efcd",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u_1} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V where\n  Adj u v := \n    if u = t then\n      v ≠ t ∧ G.Adj s v\n    else if v = t then\n      u ≠ t ∧ G.Adj s u\n    else\n      G.Adj u v\n  sym := by\n    intros u v\n    split\n    intro h\n    cases (decidable.eq_dec u t) with {mp := hut}\n    case pos hut =>\n      cases (decidable.eq_dec v t) with {mp := hvt}\n      case pos hvt =>\n        cases h\n      case neg hvt =>\n        have h1 : v ≠ t := h.left\n        have h2 : G.Adj s v := h.right\n        exact ⟨h1, h2⟩\n    case neg hut =>\n      cases (decidable.eq_dec v t) with {mp := hvt}\n      case pos hvt =>\n        have h1 : u ≠ t := h.left\n        have h2 : G.Adj s u := h.right\n        exact ⟨h1, h2⟩\n      case neg hvt =>\n        exact G.sym u v h\n    split\n    intro h\n    cases (decidable.eq_dec v t) with {mp := hvt}\n    case pos hvt =>\n      cases (decidable.eq_dec u t) with {mp := hut}\n      case pos hut =>\n        cases h\n      case neg hut =>\n        have h1 : u ≠ t := h.left\n        have h2 : G.Adj s u := h.right\n        exact ⟨h1, h2⟩\n    case neg hvt =>\n      cases (decidable.eq_dec u t) with {mp := hut}\n      case pos hut =>\n        have h1 : v ≠ t := h.left\n        have h2 : G.Adj s v := h.right\n        exact ⟨h1, h2⟩\n      case neg hut =>\n        exact G.sym u v h\n  loopless := by\n    intro u\n    cases (decidable.eq_dec u t) with {mp := hut}\n    case pos hut =>\n      simp [Adj]\n      decide\n    case neg hut =>\n      exact G.loopless u",
+  "temperature": 0.7
+}

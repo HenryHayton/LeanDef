@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break; Tactic `apply` failed: could not unify the type of `Hb z hz`\n  z ≤ b\nwith the goal\n  0 ≤ b - z\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b - ↑k)\nH_Q_dec : (k : ℕ) → Decidable (Q k)\nz : ℤ\nhz : P z\nk : ℕ := (b - z).toNat\n⊢ 0 ≤ b - z; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b - ↑k)\nH_Q_dec : (k : ℕ) → Decidable (Q k)\nz : ℤ\nhz : P z\nk : ℕ := (b - z).toNat\nh_k_nonneg : 0 ≤ b - z\n⊢ b - max (b - z) 0 = z; Tactic `apply` failed: could not unify the type of `Hb z hz`\n  z ≤ b\nwith the goal\n  0 ≤ b - z\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b - ↑k)\nH_Q_dec : (k : ℕ) → Decidable (Q k)\nH_Q_exists : ∃ k, Q k\nk₀ : ℕ := sorry\nh_Q_k₀ : Q k₀\nh_Q_min : ∀ k < k₀, ¬Q k\nub : ℤ := b - ↑k₀\nh_P_ub : P ub\nz : ℤ\nhz : P z\nk' : ℕ := (b - z).toNat\n⊢ 0 ≤ b - z; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b - ↑k)\nH_Q_dec : (k : ℕ) → Decidable (Q k)\nH_Q_exists : ∃ k, Q k\nk₀ : ℕ := sorry\nh_Q_k₀ : Q k₀\nh_Q_min : ∀ k < k₀, ¬Q k\nub : ℤ := b - ↑k₀\nh_P_ub : P ub\nz : ℤ\nhz : P z\nk' : ℕ := (b - z).toNat\nh_k'_nonneg : 0 ≤ b - z\n⊢ b - max (b - z) 0 = z; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  b - ↑k'\nin the target expression\n  P z\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b - ↑k)\nH_Q_dec : (k : ℕ) → Decidable (Q k)\nH_Q_exists : ∃ k, Q k\nk₀ : ℕ := sorry\nh_Q_k₀ : Q k₀\nh_Q_min : ∀ k < k₀, ¬Q k\nub : ℤ := b - ↑k₀\nh_P_ub : P ub\nz : ℤ\nhz : P z\nk' : ℕ := (b - z).toNat\nh_k'_nonneg : 0 ≤ b - z\nh_z_eq : b - ↑k' = z\n⊢ Q k'; Tactic `contrapose` failed: the goal `k₀ ≤ k'` is not of the form `_ → _` or `_ ↔ _`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z →",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.1,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 2,
+  "candidate_hash": "795f921ad7651819",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → z ≤ b) (Hinh : ∃ z, P z) : { ub | P ub ∧ ∀ z, P z → z ≤ ub } :=\nlet Q : ℕ → Prop := fun k => P (b - ↑k)\nhave H_Q_dec : ∀ k, Decidable (Q k) := by\n  intro k\n  apply DecidablePred\nhave H_Q_exists : ∃ k, Q k := by\n  let ⟨z, hz⟩ := Hinh\n  let k : ℕ := (b - z).toNat\n  have h_k_nonneg : 0 ≤ b - z := by\n    apply Hb z hz\n  have h_z_eq : b - ↑k = z := by\n    simp [k, h_k_nonneg]\n  rw [h_z_eq] at hz\n  exact ⟨k, hz⟩\nlet k₀ : ℕ := Nat.find H_Q_exists H_Q_dec\nhave h_Q_k₀ : Q k₀ := Nat.find_spec H_Q_exists H_Q_dec\nhave h_Q_min : ∀ k < k₀, ¬ Q k := Nat.find_min H_Q_exists H_Q_dec\nlet ub : ℤ := b - ↑k₀\nhave h_P_ub : P ub := h_Q_k₀\nhave h_forall : ∀ z, P z → z ≤ ub := by\n  intro z hz\n  let k' : ℕ := (b - z).toNat\n  have h_k'_nonneg : 0 ≤ b - z := by\n    apply Hb z hz\n  have h_z_eq : b - ↑k' = z := by\n    simp [k', h_k'_nonneg]\n  have h_Q_k' : Q k' := by\n    rwa [h_z_eq] at hz\n  have h_le : k₀ ≤ k' := by\n    contrapose!\n    intro h_lt : k' < k₀\n    exact h_Q_min k' h_lt\n  have h_ineq : b - ↑k' ≤ b - ↑k₀ := by\n    have h_sub : (↑k₀ : ℤ) ≤ ↑k' := by\n      exact Nat.cast_le.2 h_le\n    have h_neg : -↑k' ≤ -↑k₀ := by\n      exact (Int.le_neg.2 h_sub).le\n    add_le_add (le_rfl) h_neg\n  rw [h_z_eq] at h_ineq\n  exact h_ineq\n⟨ub, h_P_ub, h_forall⟩",
+  "temperature": 0.7
+}

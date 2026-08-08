@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `obtain`; failed to synthesize\n  WellFoundedLT ℤ\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.; unexpected token ':='; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.038,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 2,
+  "candidate_hash": "a7802ba20a788bea",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } := fun\n  {P} _ b Hb Hinh =>\n  let S : Set ℤ := {z | P z}\n  have h₁ : ∃ z, P z := Hinh\n  have h₂ : BddBelow S := ⟨b, by\n    intro z hz\n    -- Prove that `b` is a lower bound for `S`.\n    have h₃ : P z := hz\n    have h₄ : b ≤ z := Hb z h₃\n    exact h₄⟩\n  -- Use the fact that the set is bounded below and inhabited to find the least element.\n  have h₃ : ∃ lb, P lb ∧ ∀ z, P z → lb ≤ z := by\n    classical\n    -- Use the classical `csInf` to find the least element.\n    have h₄ : ∃ lb, lb ∈ S ∧ ∀ z ∈ S, lb ≤ z := by\n      -- Use the properties of `csInf` to find the least element.\n      have h₅ : ∃ lb, lb ∈ S ∧ ∀ z ∈ S, lb ≤ z := by\n        -- Use the fact that the set is bounded below and inhabited.\n        have h₆ : IsLeast S (sInf S) := by\n          apply isLeast_csInf\n          <;> simp_all [Set.Nonempty]\n          <;> aesop\n        refine' ⟨sInf S, _⟩\n        exact ⟨h₆.1, h₆.2⟩\n      exact h₅\n    obtain ⟨lb, hlb₁, hlb₂⟩ := h₄\n    refine' ⟨lb, _⟩\n    constructor\n    · -- Prove that `P lb` holds.\n      simpa [S] using hlb₁\n    · -- Prove that `lb` is the least element.\n      intro z hz\n      have h₅ : z ∈ S := by simpa [S] using hz\n      have h₆ : lb ≤ z := hlb₂ z h₅\n      exact h₆\n  -- Obtain the least element and its properties.\n  obtain ⟨lb, hlb₁, hlb₂⟩ := h₃\n  -- Construct the subtype.\n  ⟨lb, ⟨hlb₁, hlb₂⟩⟩",
+  "temperature": 0.7
+}

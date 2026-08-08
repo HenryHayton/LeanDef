@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 1,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  x\nhas type\n  ↑(Set.range f)\nof sort `Type u_4` but is expected to have type\n  ↑x ∈ Set.range f\nof sort `Prop` in the application\n  h₄ (↑x) x; Unknown constant `Equiv.empty`; failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Classical.propDecidable', which is 'noncomputable'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [
+    "noncomputable: Application type mismatch: The argument\n  x\nhas type\n  ↑(Set.range f)\nof sort `Type u_4` but is expected to have type\n  ↑x ∈ Set.range f\nof sort `Prop` in the application\n  h₄ (↑x) x; Unknown constant `Equiv.empty`"
+  ],
+  "wall_time_s": 0.144,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 0,
+  "candidate_hash": "fdc4db1227d8a21e",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse : {α : Sort u_3} -> {β : Type u_4} -> (f : α → β) -> (f_inv : Nonempty α → β → α) -> (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) -> α ≃ ↑(Set.range f) := by\n  intro α β f f_inv hf\n  classical\n  haveI : Nonempty α → Nonempty α := fun h => h\n  -- Construct the equivalence using the given left inverse and the properties of the function f.\n  have h₁ : α ≃ ↑(Set.range f) := by\n    -- Use the fact that f is injective when α is nonempty to construct the equivalence.\n    by_cases h : Nonempty α\n    · -- Case: α is nonempty\n      -- Use the injectivity of f to construct the equivalence.\n      have h₂ : Function.Injective f := by\n        intro a₁ a₂ h₃\n        have h₄ : f_inv h (f a₁) = a₁ := hf h a₁\n        have h₅ : f_inv h (f a₂) = a₂ := hf h a₂\n        have h₆ : f_inv h (f a₁) = f_inv h (f a₂) := by rw [h₃]\n        rw [h₄] at h₆\n        rw [h₅] at h₆\n        exact h₆\n      -- Use the injective function to construct the equivalence.\n      exact Equiv.ofInjective f (by\n        -- Prove that f is injective.\n        exact h₂)\n    · -- Case: α is empty\n      -- If α is empty, then the range of f is also empty.\n      have h₂ : IsEmpty α := by\n        exact not_nonempty_iff.mp h\n      -- Construct the equivalence between the empty types.\n      have h₃ : IsEmpty (Set.range f) := by\n        -- Prove that the range of f is empty.\n        have h₄ : ∀ (x : β), x ∉ Set.range f := by\n          intro x hx\n          obtain ⟨a, ha⟩ := hx\n          have h₅ : Nonempty α := ⟨a⟩\n          contradiction\n        -- Use the fact that the range is empty to construct the equivalence.\n        exact ⟨fun x => h₄ x x⟩\n      -- Use the fact that both types are empty to construct the equivalence.\n      exact Equiv.empty\n  -- Return the constructed equivalence.\n  exact h₁",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  ht₂\nhas type\n  t₂.card ≤ n\nbut is expected to have type\n  t₂ < s\nin the application\n  ih t₂ ht₂",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.026,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 7,
+  "candidate_hash": "587ac25030541446",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction : {α : Type u_1} -> {p : Multiset α → Sort u_3} -> {n : ℕ} -> (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) -> (s : Multiset α) -> s.card ≤ n → p s :=\n  @fun α p n H s h => by\n    classical\n    -- Use the well-founded recursion principle to define the induction\n    have h₁ : ∀ (s : Multiset α), s.card ≤ n → p s := by\n      intro s hs\n      -- Use the fact that the multiset order is well-founded to perform strong induction\n      have h₂ : ∀ (s : Multiset α), s.card ≤ n → p s := by\n        intro s hs\n        -- Use the well-founded recursion principle to define the induction\n        apply WellFounded.fix (IsWellFounded.wf : WellFounded (· < · : Multiset α → Multiset α → Prop))\n          (fun s ih => H s (fun {t₂} ht₂ ht => ih t₂ ht₂ ht) hs)\n          s\n      exact h₂ s hs\n    exact h₁ s h",
+  "temperature": 0.7
+}

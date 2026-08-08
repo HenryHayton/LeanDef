@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `le`: The environment does not contain `Int.NonNeg.le`, so it is not possible to project the field `le` from an expression\n  Hb z hz\nof type `(z - b).NonNeg`; Unknown constant `Int.coe_nat_toNat`; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  b + ↑k\nin the target expression\n  Q k\n\ncase h\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nQ : ℕ → Prop := ⋯\nz : ℤ\nhz : P z\nk : ℕ := ⋯\nh_nonneg : 0 ≤ z - b\nh_eq : b + ↑k = z\n⊢ Q k; Invalid rewrite argument: Expected an equality or iff proof or definition name, but `Q k_min` is a value of type\n  Prop; Invalid field `le`: The environment does not contain `Int.NonNeg.le`, so it is not possible to project the field `le` from an expression\n  Hb z hz\nof type `(z - b).NonNeg`; Unknown constant `Int.coe_nat_toNat`; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  b + ↑k_z\nin the target expression\n  Q k_z\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nhQex : ∃ k, Q k\nk_min : ℕ := Nat.find hQex\nlb : ℤ := b + ↑k_min\nhP : P lb\nz : ℤ\nhz : P z\nk_z : ℕ := (z - b).toNat\nh_nonneg_z : 0 ≤ z - b\nh_eq_z : b + ↑k_z = z\n⊢ Q k_z; Unknown constant `Int.coe_nat_le`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nhQex : ∃ k, Q k\nk_min : ℕ := Nat.find hQex\nlb : ℤ := b + ↑k_min\nhP : P lb\nz : ℤ\nhz : P z\nk_z : ℕ := (z - b).toNat\nh_nonneg_z : 0 ≤ z - b\nh_eq_z : b + ↑k_z = z\nhQ_z : Q k_z\nh_le_kz : k_min ≤ k_z\n⊢ b + ↑k_min ≤ b + ↑k_z; No goals to be solved",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.045,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 4,
+  "candidate_hash": "ad38fd3696f483e8",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → b ≤ z) (Hinh : ∃ z, P z) : { lb // P lb ∧ ∀ z, P z → lb ≤ z } := \n  let Q (k : Nat) := P (b + (k : ℤ))\n  have hQex : ∃ k, Q k := by \n    obtain ⟨z, hz⟩ := Hinh \n    let k := (z - b).toNat \n    have h_nonneg : 0 ≤ z - b := (Hb z hz).le\n    have h_eq : b + (k : ℤ) = z := by \n      rw [Int.coe_nat_toNat h_nonneg]\n      ring\n    use k \n    rw [h_eq]\n    exact hz \n  let k_min := Nat.find hQex \n  let lb := b + (k_min : ℤ)\n  have hP : P lb := by \n    rw [← Q k_min]\n    exact Nat.find_spec hQex\n  have hmin : ∀ z, P z → lb ≤ z := by \n    intro z hz \n    let k_z : Nat := (z - b).toNat \n    have h_nonneg_z : 0 ≤ z - b := (Hb z hz).le\n    have h_eq_z : b + (k_z : ℤ) = z := by \n      rw [Int.coe_nat_toNat h_nonneg_z]\n      ring\n    have hQ_z : Q k_z := by \n      rw [h_eq_z]\n      exact hz \n    have h_le_kz : k_min ≤ k_z := Nat.find_min' hQex hQ_z \n    calc lb = b + k_min := rfl\n      _ ≤ b + k_z := by rwa [← Int.coe_nat_le, h_le_kz]\n      _ = z := h_eq_z \n    exact this \n  ⟨lb, hP, hmin⟩",
+  "temperature": 0.7
+}

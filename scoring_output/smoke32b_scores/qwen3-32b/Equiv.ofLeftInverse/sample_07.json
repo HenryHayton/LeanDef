@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Nonempty.ofExists`; Unknown constant `Nonempty.ofExists`; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\na : α\n⊢ (fun x =>\n        match x with\n        | ⟨b, hb⟩ =>\n          let hα := ⋯;\n          f_inv hα b)\n      ((fun a => ⟨f a, ⋯⟩) a) =\n    a; Case tag `exists.intro` not found.\n\nHint: The only available case tag is `intro`.\n  e̵x̵i̵s̵t̵s̵.̵i̵n̵t̵r̵o̵i̲n̲t̲r̲o̲",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.019,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 7,
+  "candidate_hash": "f31e9208303af816",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse {α : Sort u_3} {β : Type u_4} (f : α → β) (f_inv : Nonempty α → β → α) (hf : ∀ h : Nonempty α, Function.LeftInverse (f_inv h) f) : α ≃ ↑(Set.range f) where\n  toFun := λ a => ⟨f a, ⟨a, rfl⟩⟩\n  invFun := λ ⟨b, hb⟩ => let hα := Nonempty.ofExists hb; f_inv hα b\n  left_inv := by\n    intro a\n    let hα := Nonempty.ofExists (SetLike.mem_range.2 ⟨a, rfl⟩)\n    rw [hf hα (f a)]\n  right_inv := by\n    intro ⟨b, hb⟩\n    cases hb\n    case exists.intro x hx =>\n      let hα := Nonempty.ofExists ⟨x, hx⟩\n      let a := f_inv hα b\n      have a_eq_x : a = x := by\n        rw [← hx]\n        apply hf hα (f x)\n      have f_a_eq_b : f a = b := by\n        rw [a_eq_x, hx]\n      show ⟨f a, ⟨a, rfl⟩⟩ = ⟨b, ⟨x, hx⟩⟩\n      congr\n      · exact f_a_eq_b\n      · rfl",
+  "temperature": 0.7
+}

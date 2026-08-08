@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.015,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 8,
+  "candidate_hash": "41f7fb0326a80cfd",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.subtypePreimage {α : Sort u} {β : Sort v} (p : α → Prop) [DecidablePred p] (x₀ : {a // p a} → β) : \n  {x // x ∘ Subtype.val = x₀} ≃ ({a // ¬ p a} → β) where\n  toFun := λ x => λ a => x a.val\n  invFun := λ y => ⟨λ a, if h : p a then x₀ ⟨a, h⟩ else y ⟨a, h⟩, λ s => by { simp [if_pos s.2] }⟩\n  left_inv := by\n    intro x\n    ext\n    apply Subtype.ext\n    funext a\n    by_cases h : p a\n    · simp [h]\n    · simp [h]\n  right_inv := by\n    intro y\n    ext a\n    simp",
+  "temperature": 0.7
+}

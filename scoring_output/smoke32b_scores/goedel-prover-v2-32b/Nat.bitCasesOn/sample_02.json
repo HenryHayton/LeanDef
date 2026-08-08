@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `exact`; Tactic `simp` failed with a nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information; Tactic `simp` failed with a nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information; Type mismatch\n  h₃\nhas type\n  motive (Nat.bit ((Nat.bit (n.testBit 0) (n / 2)).testBit 0) (Nat.bit (n.testBit 0) (n / 2) / 2))\nbut is expected to have type\n  motive (Nat.bit (n.testBit 0) (n / 2))",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.067,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.bitCasesOn",
+  "sample_index": 2,
+  "candidate_hash": "739ec7436758dc27",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.bitCasesOn : {motive : ℕ → Sort u} → (n : ℕ) → (bit : (b : Bool) → (n : ℕ) → motive (Nat.bit b n)) → motive n :=\n  fun {motive} n bit =>\n    have h₁ : n = Nat.bit (n.testBit 0) (n / 2) := by\n      have h₂ : n % 2 = 0 ∨ n % 2 = 1 := by omega\n      cases h₂ with\n      | inl h₂ =>\n        -- Case: n % 2 = 0\n        have h₃ : n.testBit 0 = false := by\n          simp [Nat.testBit_zero, h₂]\n          <;> omega\n        have h₄ : n = 2 * (n / 2) := by\n          have h₅ := Nat.mod_add_div n 2\n          omega\n        rw [h₃]\n        simp [Nat.bit, h₄]\n        <;> ring_nf at *\n        <;> omega\n      | inr h₂ =>\n        -- Case: n % 2 = 1\n        have h₃ : n.testBit 0 = true := by\n          simp [Nat.testBit_zero, h₂]\n          <;> omega\n        have h₄ : n = 2 * (n / 2) + 1 := by\n          have h₅ := Nat.mod_add_div n 2\n          omega\n        rw [h₃]\n        simp [Nat.bit, h₄]\n        <;> ring_nf at *\n        <;> omega\n    -- Now we have n = Nat.bit (n.testBit 0) (n / 2), so we can use the given `bit` function.\n    have h₂ : motive n := by\n      have h₃ : motive (Nat.bit (n.testBit 0) (n / 2)) := bit (n.testBit 0) (n / 2)\n      rw [h₁] at *\n      exact h₃\n    exact h₂",
+  "temperature": 0.7
+}

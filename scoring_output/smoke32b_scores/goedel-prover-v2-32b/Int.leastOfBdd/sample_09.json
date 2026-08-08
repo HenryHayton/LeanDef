@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to synthesize\n  WellFoundedLT ℤ\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh h₁ : ∃ z, P z\nh₂ : ∀ (z : ℤ), P z → b ≤ z\nh₃ : ∃ z, P z ∧ ∀ (w : ℤ), P w → z ≤ w\n⊢ { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }; unexpected identifier; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.182,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 9,
+  "candidate_hash": "e3e9235fe5e62e81",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} → [DecidablePred P] → (b : ℤ) → (Hb : ∀ (z : ℤ), P z → b ≤ z) → (Hinh : ∃ z, P z) → { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } := by\n  intro P _ b Hb Hinh\n  have h₁ : ∃ z, P z := Hinh\n  -- We need to find the smallest integer z such that P(z) holds.\n  -- We will use the fact that P is decidable and b is a lower bound to find this z.\n  have h₂ : ∀ (z : ℤ), P z → b ≤ z := Hb\n  -- We will search for the smallest z starting from b upwards until we find the first z that satisfies P(z).\n  -- Since P is decidable, we can use the `exists` statement to find the smallest z.\n  have h₃ : ∃ (z : ℤ), P z ∧ ∀ (w : ℤ), P w → z ≤ w := by\n    classical\n    -- Use the well-ordering principle to find the smallest z.\n    -- We will use the fact that P is decidable and b is a lower bound to find this z.\n    -- We will search for the smallest z starting from b upwards until we find the first z that satisfies P(z).\n    -- Since P is decidable, we can use the `exists` statement to find the smallest z.\n    use sInf {z : ℤ | P z}\n    have h₄ : ∃ z : ℤ, P z := h₁\n    have h₅ : BddBelow {z : ℤ | P z} := by\n      use b\n      intro z hz\n      have h₆ : P z := by simpa using hz\n      have h₇ : b ≤ z := h₂ z h₆\n      exact h₇\n    have h₆ : sInf {z : ℤ | P z} ∈ {z : ℤ | P z} := by\n      apply csInf_mem\n      <;> simp_all [h₄, h₅]\n      <;> aesop\n    have h₇ : P (sInf {z : ℤ | P z}) := by simpa using h₆\n    have h₈ : ∀ (w : ℤ), P w → sInf {z : ℤ | P z} ≤ w := by\n      intro w hw\n      have h₉ : w ∈ {z : ℤ | P z} := by simpa using hw\n      have h₁₀ : sInf {z : ℤ | P z} ≤ w := by\n        apply csInf_le\n        <;> simp_all [h₄, h₅]\n        <;> aesop\n      exact h₁₀\n    exact ⟨h₇, h₈⟩\n  -- We have found the smallest z such that P(z) holds.\n  -- Now we need to package it as a subtype.\n  obtain ⟨z, hz₁, hz₂⟩ := h₃\n  refine' ⟨z, _⟩\n  constructor\n  · exact hz₁\n  · intro w hw\n    exact hz₂ w hw",
+  "temperature": 0.7
+}

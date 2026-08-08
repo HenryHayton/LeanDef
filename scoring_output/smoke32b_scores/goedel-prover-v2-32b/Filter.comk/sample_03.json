@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected identifier; expected '}'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.011,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 3,
+  "candidate_hash": "829cb0df6617caa5",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "noncomputable def VTask.comk {α : Type*} (p : Set α → Prop) (he : p ∅) (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α :=\n  { sets := {s : Set α | p sᶜ},\n    mem_def := by simp [Set.ext_iff],\n    nonempty := by\n      -- Show that the filter is nonempty by proving that `univ` is in it.\n      have h : p (∅ : Set α) := he\n      have h₁ : p (univᶜ : Set α) := by\n        have h₂ : (univ : Set α)ᶜ = (∅ : Set α) := by simp\n        rw [h₂]\n        exact he\n      exact ⟨univ, by\n        have h₃ : (univ : Set α)ᶜ = (∅ : Set α) := by simp\n        have h₄ : p (∅ : Set α) := he\n        have h₅ : p (univᶜ : Set α) := by\n          rw [h₃]\n          exact he\n        simpa [h₃] using h₅⟩,\n    -- Prove that the filter is upward closed.\n    upward_closed := by\n      intro s hs t ht\n      have h₁ : p sᶜ := hs\n      have h₂ : s ⊆ t := ht\n      have h₃ : tᶜ ⊆ sᶜ := by\n        intro x hx\n        have h₄ : x ∉ t := hx\n        have h₅ : x ∉ s := by\n          intro h₆\n          have h₇ : x ∈ t := h₂ h₆\n          contradiction\n        exact h₅\n      have h₄ : p tᶜ := hmono sᶜ h₁ tᶜ h₃\n      exact h₄,\n    -- Prove that the filter is closed under binary intersections.\n    binary_inter : ∀ {s t : Set α}, s ∈ this → t ∈ this → s ∩ t ∈ this := by\n      intro s t hs ht\n      have h₁ : p sᶜ := hs\n      have h₂ : p tᶜ := ht\n      have h₃ : p (sᶜ ∪ tᶜ) := hunion sᶜ h₁ tᶜ h₂\n      have h₄ : (s ∩ t)ᶜ = sᶜ ∪ tᶜ := by\n        ext x\n        simp [Set.mem_compl_iff, Set.mem_inter_iff]\n        <;> tauto\n      have h₅ : p (s ∩ t)ᶜ := by\n        rw [h₄]\n        exact h₃\n      exact h₅ }",
+  "temperature": 0.7
+}

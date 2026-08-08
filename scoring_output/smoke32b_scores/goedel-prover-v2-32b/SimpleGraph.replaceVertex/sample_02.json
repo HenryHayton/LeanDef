@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`adj` is not a field of structure `SimpleGraph`; Fields missing: `Adj`\n\nHint: Add missing fields:\n  \n  ̲ ̲ ̲A̲d̲j̲ ̲:̲=̲ ̲_̲; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nV : Type u_1\nG : SimpleGraph V\ns t : V\ninst✝ : DecidableEq V\n⊢ Std.Symm sorry; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nV : Type u_1\nG : SimpleGraph V\ns t : V\ninst✝ : DecidableEq V\n⊢ Std.Irrefl sorry",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.008,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 2,
+  "candidate_hash": "108238a52a8ea96a",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex : {V : Type u_1} → (G : SimpleGraph V) → (s t : V) → [DecidableEq V] → SimpleGraph V :=\n  fun {V} G s t => {\n    adj := fun v w =>\n      if v = t then\n        if w = t then\n          False\n        else\n          G.Adj s w\n      else if w = t then\n        if v = t then\n          False\n        else\n          G.Adj s v\n      else\n        G.Adj v w\n    loopless := by\n      intro v\n      simp [SimpleGraph.loopless]\n      <;>\n      (try decide) <;>\n      (try {\n        by_cases h : v = t <;> simp_all [h]\n        <;>\n        (try {\n          have h₁ := G.loopless s\n          simp_all\n        })\n      })\n    symm := by\n      intro v w h\n      dsimp at h ⊢\n      split_ifs at h ⊢ <;>\n      (try simp_all [SimpleGraph.symm, eq_comm]) <;>\n      (try {\n        have h₁ := G.symm v w\n        simp_all\n      }) <;>\n      (try {\n        have h₁ := G.symm s w\n        simp_all\n      }) <;>\n      (try {\n        have h₁ := G.symm v s\n        simp_all\n      }) <;>\n      (try {\n        have h₁ := G.symm s v\n        simp_all\n      })\n  }",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Matroid.ofInd`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.008,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 2,
+  "candidate_hash": "3dd6b45268c2f79d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α β} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β :=\n  let ground := f '' M.E\n  let indep (s : Set β) : Prop := s ⊆ ground ∧ ∃ t, M.Indep t ∧ s = f '' t\n  Matroid.ofInd ground indep\n    (by\n      -- I1: Empty set is independent\n      simp [indep]\n      use ∅\n      exact ⟨M.indep_empty, by simp⟩)\n    (by\n      -- I2: Subset of an independent set is independent\n      rintro s t ⟨hst, ⟨t, hti, hse⟩⟩\n      use t\n      exact ⟨hti, hse⟩)\n    (by\n      -- I3: Augmentation axiom\n      rintro s t ⟨_, ⟨s', hs', hse⟩⟩ ⟨_, ⟨t', ht', hte⟩⟩ hcard\n      let s'' := s'.toFinset\n      let t'' := t'.toFinset\n      have hcard' : s''.card > t''.card := by\n        rw [← hse, ← hte]\n        exact hcard\n      obtain ⟨x, hx, hxnot⟩ := Finset.exists_mem_of_card_gt hcard'\n      let x' := f x\n      have hxnot' : x' ∉ f '' t' := by\n        intro h\n        rcases h with ⟨y, hy, rfl⟩\n        apply hf.injective\n        exact ⟨hy, hx⟩\n      have hnew := M.indep_add_card_gt hs' hx hxnot\n      refine ⟨⟨f x, hxnot'⟩, ⟨t', ht', hte⟩⟩)",
+  "temperature": 0.7
+}

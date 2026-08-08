@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '}'; unsolved goals\nα : Type ?u.4\nβ : Type ?u.9\nM : Matroid α\nf : α → β\nhf : Set.InjOn f M.E\nx : ↑M.E\n⊢ ∃ x_1 ∈ M.E, f x_1 = f ↑x",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.009,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 5,
+  "candidate_hash": "4008e3247949c90c",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α β} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β :=\n  let e : M.E → f '' M.E := fun x => ⟨f x, by { rw [Set.mem_image], existsi x, simp }⟩\n  let he_inj : Function.Injective e := by\n    intro x y h\n    apply hf\n    · simp [Set.mem_setOf_eq] at x\n    · simp [Set.mem_setOf_eq] at y\n    · apply_fun f at h\n      simp at h\n  let he_surj : Function.Surjective e := by\n    intro y\n    rcases y with ⟨a, ha⟩\n    existsi ⟨a, ha⟩\n    simp\n  let he_bio : Function.Bijective e := ⟨he_inj, he_surj⟩\n  Matroid.copy M e he_bio",
+  "temperature": 0.7
+}

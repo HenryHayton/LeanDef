@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `Embedding`; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\ncase mk.mk\nα : Type u_1\nβ : Type u_2\nM : Matroid α\nf : α → β\nhf : Set.InjOn f M.E\ne : { x // x ∈ M.E } → β := fun x => f ↑x\nval✝¹ : α\nproperty✝¹ : val✝¹ ∈ M.E\nval✝ : α\nproperty✝ : val✝ ∈ M.E\nh : e ⟨val✝¹, property✝¹⟩ = e ⟨val✝, property✝⟩\n⊢ ⟨val✝¹, property✝¹⟩ = ⟨val✝, property✝⟩",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.029,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 4,
+  "candidate_hash": "0e0c624d67c67d98",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map : {α : Type u_1} → {β : Type u_2} → (M : Matroid α) → (f : α → β) → (hf : Set.InjOn f M.E) → Matroid β\n  | α, β, M, f, hf => \n    let e : {x : α // x ∈ M.E} → β := λ x => f x\n    have inj_e : Function.Injective e := by\n      intro x y h\n      cases x; cases y\n      intro a ha b hb\n      exact hf ha hb h\n    let emb : Embedding e := ⟨e, inj_e⟩\n    Matroid.mapEmbedding emb",
+  "temperature": 0.7
+}

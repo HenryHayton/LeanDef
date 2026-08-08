@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected structInstFieldDecl; Application type mismatch: The argument\n  M.E\nhas type\n  Set α\nbut is expected to have type\n  Finset α\nin the application\n  Mathlib.Meta.SetNotationForOrder.SubsetElabAux s M.E; Application type mismatch: The argument\n  f\nhas type\n  α → β\nof sort `Type (max u_1 u_2)` but is expected to have type\n  Set.InjOn ?m.15 M.E\nof sort `Prop` in the application\n  M.map ?m.15 f",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.089,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 2,
+  "candidate_hash": "a3ce0927a0d619b9",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α : Type u_1} {β : Type u_2} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β := by\n  classical\n  have h₁ : ∀ (s : Finset α), s ⊆ M.E → ∀ (t : Finset α), t ⊆ s → M.Indep t ↔ (M.map s f).Indep (Finset.image f t) := by\n    intro s hs t ht\n    have h₂ : t ⊆ s := ht\n    have h₃ : s ⊆ M.E := hs\n    have h₄ : t ⊆ M.E := Finset.Subset.trans h₂ h₃\n    have h₅ : (M.map s f).Indep (Finset.image f t) ↔ M.Indep t := by\n      rw [Finset.indep_image_iff_inj_on_of_subset (Finset.image_subset_iff.mpr h₂)]\n      <;> simp_all [hf]\n      <;> aesop\n    simp_all\n  have h₂ : ∀ (s : Finset α), s ⊆ M.E → ∀ (t : Finset α), t ⊆ s → (M.map s f).Indep (Finset.image f t) ↔ M.Indep t := by\n    intro s hs t ht\n    have h₃ : t ⊆ s := ht\n    have h₄ : s ⊆ M.E := hs\n    have h₅ : t ⊆ M.E := Finset.Subset.trans h₃ h₄\n    have h₆ : (M.map s f).Indep (Finset.image f t) ↔ M.Indep t := by\n      rw [Finset.indep_image_iff_inj_on_of_subset (Finset.image_subset_iff.mpr h₃)]\n      <;> simp_all [hf]\n      <;> aesop\n    simp_all\n  -- Define the new matroid using the image of the independent sets under f\n  let E : Finset β := (M.E).image f\n  let I : Set (Finset β) := {s : Finset β | ∃ t : Finset α, t ⊆ M.E ∧ s = t.image f ∧ M.Indep t}\n  refine' {\n    E := E,\n    I := I,\n    indep_mem : _,\n    -- Check that the independent sets are subsets of the ground set\n    indep_subset : _,\n    -- Check that subsets of independent sets are independent\n    -- This is a placeholder for the actual proof\n    }\n  <;>\n  (try simp_all [Set.InjOn]) <;>\n  (try aesop) <;>\n  (try\n    {\n      intro s hs\n      aesop\n    }) <;>\n  (try\n    {\n      intro s t hs ht hst\n      aesop\n    })\n  <;>\n  (try\n    {\n      aesop\n    })",
+  "temperature": 0.7
+}

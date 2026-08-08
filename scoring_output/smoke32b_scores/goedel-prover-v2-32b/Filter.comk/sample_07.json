@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`univ_mem'` is not a field of structure `Filter`; `superset_mem'` is not a field of structure `Filter`; `mem_inter'` is not a field of structure `Filter`; Fields missing: `univ_sets`, `sets_of_superset`, `inter_sets`\n\nHint: Add missing fields:\n  \n  ̲ ̲ ̲ ̲u̲n̲i̲v̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲ ̲s̲e̲t̲s̲_̲o̲f̲_̲s̲u̲p̲e̲r̲s̲e̲t̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲ ̲i̲n̲t̲e̲r̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.01,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 7,
+  "candidate_hash": "4dee4a7f493dbe6d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk : {α : Type u_1} -> (p : Set α → Prop) -> (he : p ∅) -> (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) -> (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) -> Filter α :=\n  fun {α} p he hmono hunion =>\n    {\n      sets := {s : Set α | p sᶜ}\n      -- Prove that univ is in the filter\n      univ_mem' := by\n        have h : p (∅ : Set α) := he\n        have h₁ : (⊤ : Set α)ᶜ = (∅ : Set α) := by\n          simp [Set.ext_iff]\n        rw [h₁]\n        exact h\n      -- Prove that the filter is closed under superset\n      superset_mem' := by\n        intro s t hs ht\n        have h₁ : p sᶜ := hs\n        have h₂ : sᶜ ⊆ tᶜ := by\n          intro x hx\n          have h₃ : x ∉ s := hx\n          have h₄ : x ∉ t := by\n            intro h₅\n            have h₆ : x ∈ t := h₅\n            have h₇ : x ∈ s := ht h₆\n            contradiction\n          exact h₄\n        have h₃ : p tᶜ := hmono sᶜ h₁ tᶜ h₂\n        exact h₃\n      -- Prove that the filter is closed under pairwise intersection\n      mem_inter' := by\n        intro s t hs ht\n        have h₁ : p sᶜ := hs\n        have h₂ : p tᶜ := ht\n        have h₃ : p (sᶜ ∪ tᶜ) := hunion sᶜ h₁ tᶜ h₂\n        have h₄ : (s ∩ t)ᶜ = sᶜ ∪ tᶜ := by\n          ext x\n          simp [Set.mem_union, Set.mem_compl_iff, Set.mem_inter_iff]\n          <;> tauto\n        rw [h₄] at *\n        exact h₃\n    }",
+  "temperature": 0.7
+}

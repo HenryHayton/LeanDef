@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  P\nhas type\n  P✝ 0\nof sort `Sort u_1` but is expected to have type\n  ℕ → Sort u_1\nof sort `Type u_1`; Type mismatch\n  h0\nhas type\n  (n : ℕ) → P✝ n → P✝ (2 * n)\nbut is expected to have type\n  f 0; Type mismatch\n  h_even\nhas type\n  (n : ℕ) → P✝ n → P✝ (2 * n + 1)\nbut is expected to have type\n  (n : ℕ) → f n → f (2 * n); Type mismatch\n  h_odd\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  (n : ℕ) → f n → f (2 * n + 1)\nof sort `Sort u_1`; Unknown identifier `exact`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.044,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.evenOddRec",
+  "sample_index": 6,
+  "candidate_hash": "8a1d9e1d93e4ad98",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.evenOddRec : {P : ℕ → Sort u_1} → (h0 : P 0) → (h_even : (n : ℕ) → P n → P (2 * n)) → (h_odd : (n : ℕ) → P n → P (2 * n + 1)) → (n : ℕ) → P n :=\n  fun P h0 h_even h_odd n =>\n    let f : ℕ → Sort u_1 := P\n    let h₁ : f 0 := h0\n    let h₂ : ∀ (n : ℕ), f n → f (2 * n) := h_even\n    let h₃ : ∀ (n : ℕ), f n → f (2 * n + 1) := h_odd\n    -- Use strong induction to define the function\n    have h₄ : ∀ n : ℕ, f n := by\n      intro n\n      induction n using Nat.strong_induction_on with\n      | h n ih =>\n        match n with\n        | 0 => exact h₁\n        | n + 1 =>\n          have h₅ : (n + 1) % 2 = 0 ∨ (n + 1) % 2 = 1 := by omega\n          cases h₅ with\n          | inl h₅ =>\n            -- Case: n + 1 is even\n            have h₆ : ∃ k, n + 1 = 2 * k := by\n              use (n + 1) / 2\n              have h₇ : (n + 1) % 2 = 0 := h₅\n              have h₈ : 2 * ((n + 1) / 2) = n + 1 := by\n                have h₉ := Nat.div_add_mod (n + 1) 2\n                omega\n              linarith\n            obtain ⟨k, hk⟩ := h₆\n            have h₇ : k < n + 1 := by\n              have h₈ : 2 * k = n + 1 := by linarith\n              have h₉ : k < n + 1 := by\n                by_contra h₁₀\n                have h₁₁ : k ≥ n + 1 := by omega\n                have h₁₂ : 2 * k ≥ 2 * (n + 1) := by\n                  nlinarith\n                have h₁₃ : 2 * k > n + 1 := by nlinarith\n                linarith\n              exact h₉\n            have h₈ : f k := ih k h₇\n            have h₉ : f (2 * k) := h₂ k h₈\n            have h₁₀ : f (n + 1) := by\n              rw [hk] at *\n              exact h₉\n            exact h₁₀\n          | inr h₅ =>\n            -- Case: n + 1 is odd\n            have h₆ : ∃ k, n + 1 = 2 * k + 1 := by\n              use (n + 1) / 2\n              have h₇ : (n + 1) % 2 = 1 := h₅\n              have h₈ : 2 * ((n + 1) / 2) + 1 = n + 1 := by\n                have h₉ := Nat.div_add_mod (n + 1) 2\n                omega\n              linarith\n            obtain ⟨k, hk⟩ := h₆\n            have h₇ : k < n + 1 := by\n              have h₈ : 2 * k + 1 = n + 1 := by linarith\n              have h₉ : k < n + 1 := by\n                by_contra h₁₀\n                have h₁₁ : k ≥ n + 1 := by omega\n                have h₁₂ : 2 * k ≥ 2 * (n + 1) := by\n                  nlinarith\n                have h₁₃ : 2 * k + 1 > n + 1 := by nlinarith\n                linarith\n              exact h₉\n            have h₈ : f k := ih k h₇\n            have h₉ : f (2 * k + 1) := h₃ k h₈\n            have h₁₀ : f (n + 1) := by\n              rw [hk] at *\n              exact h₉\n            exact h₁₀\n    exact h₄ n",
+  "temperature": 0.7
+}

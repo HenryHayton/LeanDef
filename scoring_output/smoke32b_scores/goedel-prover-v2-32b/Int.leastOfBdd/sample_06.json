@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "failed to synthesize\n  WellFoundedLT ℤ\n\nHint: Additional diagnostic information may be available using the `set_option diagnostics true` command.; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh h₁ : ∃ z, P z\nh₂ : ∃ lb, P lb ∧ ∀ (z : ℤ), P z → lb ≤ z\n⊢ { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.138,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 6,
+  "candidate_hash": "c25c372864632574",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd {P : ℤ → Prop} [DecidablePred P]\n  (b : ℤ) (Hb : ∀ (z : ℤ), P z → b ≤ z)\n  (Hinh : ∃ z, P z) : { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } := by\n  -- Extract the witness from the existence proof\n  have h₁ : ∃ z, P z := Hinh\n  -- Use the fact that P is decidable to find the least element\n  classical\n    -- Use the minimum element from the set of integers satisfying P\n    have h₂ : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n      -- Use the well-ordering principle to find the least element\n      use sInf {z : ℤ | P z}\n      constructor\n      · -- Prove that the infimum satisfies P\n        have h₃ : BddBelow {z : ℤ | P z} := by\n          use b\n          intro z hz\n          have h₄ : P z := by simpa using hz\n          have h₅ : b ≤ z := Hb z h₄\n          exact h₅\n        have h₄ : ∃ z, P z := Hinh\n        have h₅ : sInf {z : ℤ | P z} ∈ {z : ℤ | P z} := by\n          apply csInf_mem\n          <;> simp_all [h₃]\n          <;> exact Set.Nonempty.intro (Classical.choose h₄) (Classical.choose_spec h₄)\n        simpa using h₅\n      · -- Prove that the infimum is the least element\n        intro z hz\n        have h₃ : z ∈ {z : ℤ | P z} := by simpa using hz\n        have h₄ : sInf {z : ℤ | P z} ≤ z := by\n          apply csInf_le\n          <;> simp_all [h₃]\n          <;>\n            (try\n              {\n                use b\n                intro z' hz'\n                have h₅ : P z' := by simpa using hz'\n                have h₆ : b ≤ z' := Hb z' h₅\n                exact h₆\n              })\n          <;>\n            (try\n              {\n                exact Set.Nonempty.intro (Classical.choose Hinh) (by simpa using Classical.choose_spec Hinh)\n              })\n        exact h₄\n    -- Obtain the least element and its properties\n    obtain ⟨lb, hlb₁, hlb₂⟩ := h₂\n    -- Construct the subtype\n    exact ⟨lb, hlb₁, hlb₂⟩",
+  "temperature": 0.7
+}

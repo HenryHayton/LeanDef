@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Nat.ofInt`; Unknown constant `Int.sub_non_neg_of_le`; No goals to be solved; Unknown constant `Int.add_sub_cancel_right`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nz : ℤ\npz : P z\nk_int : ℤ := z - b\nhk_nonneg : 0 ≤ k_int\nk_nat : ℕ := sorry\n⊢ z = b + ↑k_nat; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  z\nin the target expression\n  Q k_nat\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nz : ℤ\npz : P z\nk_int : ℤ := z - b\nhk_nonneg : 0 ≤ k_int\nk_nat : ℕ := sorry\nhz : z = b + ↑k_nat\n⊢ Q k_nat; Invalid rewrite argument: Expected an equality or iff proof or definition name, but `lb` is a value of type\n  ℤ; Unknown constant `Int.sub_non_neg_of_le`; No goals to be solved; Unknown constant `Nat.ofInt`; Unknown constant `Int.add_sub_cancel_right`; Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  z\nin the target expression\n  Q k_z_nat\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nhQ : ∃ k, Q k\nk₀ : ℕ := Nat.find hQ\nlb : ℤ := b + ↑k₀\nplb : P lb\nz : ℤ\npz : P z\nk_z : ℤ := z - b\nhkz_nonneg : 0 ≤ k_z\nk_z_nat : ℕ := sorry\nhz' : z = b + ↑k_z_nat\n⊢ Q k_z_nat; Tactic `apply` failed: could not unify the conclusion of `Nat.find_min hQ ?m.147`\n  False\nwith the goal\n  k₀ ≤ k_z_nat\n\nNote: The full type of `Nat.find_min hQ ?m.147` is\n  ¬Q ?m.146\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun k => P (b + ↑k)\nhQ : ∃ k, Q k\nk₀ : ℕ := Nat.find hQ\nlb : ℤ := b + ↑k₀\nplb : P lb\nz : ℤ\npz : P z\nk_z : ℤ := z - b\nhkz_nonneg : 0 ≤ k_z\nk_z_nat : ℕ := sorry\nhz' : z = b + ↑k_z_nat\nqk_z : Q k_z_nat\n⊢ k₀ ≤ k_z_nat; Invalid rewrite argument: Expected an equality or iff proof or definition name, but `lb` is a value of type\n  ℤ",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.035,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 6,
+  "candidate_hash": "76d2133dc6d30997",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd {P : ℤ → Prop} [DecidablePred P] \n  (b : ℤ) (Hb : ∀ z, P z → b ≤ z) (Hinh : ∃ z, P z) : \n    { lb // P lb ∧ ∀ z, P z → lb ≤ z } :=\n  let Q (k : Nat) : Prop := P (b + ↑k)\n  have hQ : ∃ k, Q k :=\n    let ⟨z, pz⟩ := Hinh\n    let k_int : ℤ := z - b\n    have hk_nonneg : 0 ≤ k_int := by\n      apply Int.sub_non_neg_of_le\n      exact Hb z pz\n    let k_nat : Nat := Nat.ofInt k_int\n    have hz : z = b + ↑k_nat := by\n      rw [← Int.add_sub_cancel_right b (z - b)]\n      simp [Nat.ofInt_eq_cast]\n    ⟨k_nat, by rw [hz]; exact pz⟩\n  let k₀ : Nat := Nat.find hQ\n  let lb : ℤ := b + ↑k₀\n  have plb : P lb := by\n    rw [lb]\n    exact Nat.find_spec hQ\n  have min : ∀ z, P z → lb ≤ z := by\n    intro z pz\n    let k_z : ℤ := z - b\n    have hkz_nonneg : 0 ≤ k_z := by\n      apply Int.sub_non_neg_of_le\n      exact Hb z pz\n    let k_z_nat : Nat := Nat.ofInt k_z\n    have hz' : z = b + ↑k_z_nat := by\n      rw [← Int.add_sub_cancel_right b (z - b)]\n      simp [Nat.ofInt_eq_cast]\n    have qk_z : Q k_z_nat := by\n      rw [hz']\n      exact pz\n    have k_le : k₀ ≤ k_z_nat := by\n      apply Nat.find_min hQ qk_z\n    rw [← lb, hz']\n    apply Int.add_le_add_right\n    exact k_le\n  ⟨lb, ⟨plb, min⟩⟩",
+  "temperature": 0.7
+}

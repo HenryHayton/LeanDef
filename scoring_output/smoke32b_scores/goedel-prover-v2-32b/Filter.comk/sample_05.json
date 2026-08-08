@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`empty` is not a field of structure `Filter`; `superset` is not a field of structure `Filter`; `inter` is not a field of structure `Filter`; Fields missing: `univ_sets`, `sets_of_superset`, `inter_sets`\n\nHint: Add missing fields:\n  \n  ̲ ̲ ̲ ̲u̲n̲i̲v̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲ ̲s̲e̲t̲s̲_̲o̲f̲_̲s̲u̲p̲e̲r̲s̲e̲t̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲ ̲i̲n̲t̲e̲r̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.011,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 5,
+  "candidate_hash": "9d92f5e7eba6610f",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk : {α : Type u_1} → (p : Set α → Prop) → (he : p ∅) → (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) → (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) → Filter α :=\n  fun {α} p he hmono hunion =>\n    {\n      sets := {s : Set α | p sᶜ},\n      -- Prove that the collection of sets {s : Set α | p sᶜ} forms a filter.\n      -- 1. The empty set is not in the filter, but the universe is.\n      -- 2. The filter is closed under supersets.\n      -- 3. The filter is closed under finite intersections.\n      -- These properties follow from the assumptions on p.\n      empty := by\n        -- We need to show that p ∅ᶜ holds, which is p univ.\n        -- This is not directly given, but we can use the fact that p ∅ holds and the assumptions on p.\n        -- However, we can't directly deduce p univ from the given assumptions.\n        -- But in Lean, the `empty` condition for a filter is that the empty set is *not* in the filter.\n        -- Wait no! Actually, the `empty` condition in Lean's `Filter` structure is that the universe set is in the filter.\n        -- So we need to show that p (univ : Set α)ᶜ holds, i.e., p ∅ holds, which is given by `he`.\n        have h : p (∅ : Set α) := he\n        -- (∅ : Set α)ᶜ = univ\n        -- So we need p univᶜ = p ∅, which is true by `he`.\n        -- But in Lean, the `empty` field expects a proof that univ is in the filter.\n        -- The filter is {s | p sᶜ}, so we need p (univ : Set α)ᶜ = p ∅, which is `he`.\n        simp only [Set.compl_empty]\n        exact he\n      -- 2. The filter is closed under supersets.\n      superset := by\n        intro s hs t ht\n        -- hs : p sᶜ\n        -- ht : s ⊆ t\n        -- We need to show p tᶜ.\n        -- Since s ⊆ t, tᶜ ⊆ sᶜ.\n        -- By hmono, if p sᶜ, then p tᶜ.\n        have h : tᶜ ⊆ sᶜ := by\n          intro x hx\n          -- hx : x ∉ t\n          -- Since s ⊆ t, if x ∈ s, then x ∈ t, contradicting hx.\n          have h' : x ∉ s := by\n            intro h''\n            have h''' : x ∈ t := ht h''\n            contradiction\n          exact h'\n        -- Now we have tᶜ ⊆ sᶜ and p sᶜ, so by hmono, p tᶜ.\n        have h₂ : p (sᶜ : Set α) := hs\n        have h₃ : p (tᶜ : Set α) := hmono (sᶜ : Set α) h₂ (tᶜ : Set α) h\n        exact h₃\n      -- 3. The filter is closed under finite intersections.\n      -- In Lean, this is expressed as: if s and t are in the filter, then s ∩ t is in the filter.\n      -- Here, s ∈ filter means p sᶜ, t ∈ filter means p tᶜ.\n      -- We need to show p (s ∩ t)ᶜ.\n      -- (s ∩ t)ᶜ = sᶜ ∪ tᶜ.\n      -- By hunion, if p sᶜ and p tᶜ, then p (sᶜ ∪ tᶜ).\n      -- So we can directly use hunion.\n      inter := by\n        intro s hs t ht\n        -- hs : p sᶜ\n        -- ht : p tᶜ\n        -- We need to show p (s ∩ t)ᶜ = p (sᶜ ∪ tᶜ).\n        have h : p (sᶜ ∪ tᶜ : Set α) := hunion (sᶜ : Set α) hs (tᶜ : Set α) ht\n        -- (s ∩ t)ᶜ = sᶜ ∪ tᶜ\n        have h₂ : (s ∩ t : Set α)ᶜ = (sᶜ ∪ tᶜ : Set α) := by\n          ext x\n          simp [Set.mem_compl_iff, Set.mem_union, Set.mem_inter_iff]\n          <;> tauto\n        rw [h₂] at *\n        exact h\n    }",
+  "temperature": 0.7
+}

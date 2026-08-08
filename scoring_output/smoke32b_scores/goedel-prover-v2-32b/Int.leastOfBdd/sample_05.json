@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Int.sInf_mem`; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nh₁ : ∃ lb, P lb ∧ ∀ (z : ℤ), P z → lb ≤ z\n⊢ { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z }",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.216,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 5,
+  "candidate_hash": "018180b8ece51bbe",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } := by\n  intro P _ b Hb Hinh\n  have h₁ : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n    classical\n    -- Use the well-ordering principle to find the least integer satisfying P\n    -- by considering the set {z | P z} and its infimum.\n    -- However, since we are working with integers, we can use a more constructive approach.\n    -- We start from the given lower bound b and search upwards until we find the least element.\n    -- This is done using the `exists_least_of_bdd` lemma.\n    have h₂ : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n      -- Use the fact that the set {z | P z} is bounded below by b and non-empty.\n      -- We can then use the `exists_least_of_bdd` lemma to find the least element.\n      -- However, since we need a constructive approach, we will instead use the `exists_least_of_bdd` lemma.\n      -- which is a version of the well-ordering principle for integers.\n      have h₃ : ∃ (lb : ℤ), P lb := Hinh\n      have h₄ : ∃ (lb : ℤ), P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n        -- Use the `exists_least_of_bdd` lemma to find the least element.\n        -- This lemma requires that the set is bounded below and non-empty.\n        -- Here, the set is bounded below by b and non-empty by Hinh.\n        -- We can use the `exists_least_of_bdd` lemma to find the least element.\n        classical\n        -- Use the `exists_least_of_bdd` lemma to find the least element.\n        -- This lemma requires that the set is bounded below and non-empty.\n        -- Here, the set is bounded below by b and non-empty by Hinh.\n        -- We can use the `exists_least_of_bdd` lemma to find the least element.\n        use sInf {z : ℤ | P z}\n        have h₅ : ∃ (z : ℤ), P z := Hinh\n        have h₆ : BddBelow {z : ℤ | P z} := by\n          use b\n          intro z hz\n          have h₇ : P z := by simpa using hz\n          have h₈ : b ≤ z := Hb z h₇\n          exact h₈\n        have h₇ : sInf {z : ℤ | P z} ∈ {z : ℤ | P z} := by\n          -- Use the fact that the set is bounded below and non-empty to conclude that the infimum is in the set.\n          apply Int.sInf_mem\n          <;> aesop\n        have h₈ : P (sInf {z : ℤ | P z}) := by simpa using h₇\n        have h₉ : ∀ (z : ℤ), P z → sInf {z : ℤ | P z} ≤ z := by\n          intro z hz\n          have h₁₀ : z ∈ {z : ℤ | P z} := by simpa using hz\n          have h₁₁ : sInf {z : ℤ | P z} ≤ z := by\n            apply csInf_le\n            <;> aesop\n          exact h₁₁\n        exact ⟨h₈, h₉⟩\n      exact h₄\n    exact h₂\n  -- Now we have the existence of the least element, we can construct the subtype.\n  obtain ⟨lb, hlb, hlb'⟩ := h₁\n  refine' ⟨lb, _⟩\n  -- We need to prove that P lb holds and that lb is a lower bound for the set {z | P z}.\n  exact ⟨hlb, hlb'⟩",
+  "temperature": 0.7
+}

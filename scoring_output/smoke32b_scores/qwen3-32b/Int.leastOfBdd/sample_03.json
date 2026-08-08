@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `P`; Application type mismatch: The argument\n  pred\nhas type\n  ℕ → Prop\nof sort `Type` but is expected to have type\n  ∃ n, ?m.19 n\nof sort `Prop` in the application\n  Nat.find pred; Unknown identifier `b`; Unknown identifier `P`; failed to synthesize instance of type class\n  DecidablePred pred\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Unknown identifier `P`; Invalid `⟨...⟩` notation: The expected type\n  (b : ℤ) → (∀ (z : ℤ), P✝ z → b ≤ z) → (∃ z, P✝ z) → ↑{lb | P✝ lb ∧ ∀ (z : ℤ), P✝ z → lb ≤ z}\nis not an inductive type\n\nNote: This notation can only be used when the expected type is an inductive type with a single constructor; Unknown identifier `Hinh`; Unknown identifier `Hinh`; Invalid `⟨...⟩` notation: The expected type of this term could not be determined; Unknown identifier `b`; Unknown identifier `b`; Unknown identifier `Hb`; Unknown identifier `b`; unsolved goals\nP✝ : ℤ → Prop\ninst✝ : DecidablePred P✝\npred : ℕ → Prop := fun n => sorry\nexists_n : ∃ n, pred n\nn_min : ?m.60 exists_n := sorry\nlb : ℕ := sorry + n_min\nhP_lb : sorry\nz : ℕ\nhPz : sorry\nn_z : ℕ := sorry\nh_le_z : sorry ≤ z\n⊢ sorry () * 2 = z; failed to synthesize instance of type class\n  DecidablePred pred\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.; Application type mismatch: The argument\n  h_pred_nz\nhas type\n  pred n_z\nbut is expected to have type\n  ?m.105 < Nat.find exists_n\nin the application\n  Nat.find_min exists_n h_pred_nz",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.151,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 3,
+  "candidate_hash": "70687a36764fee64",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} → [DecidablePred P] → (b : ℤ) → (Hb : ∀ z, P z → b ≤ z) → (Hinh : ∃ z, P z) → { lb | P lb ∧ ∀ z, P z → lb ≤ z } :=\n  let pred (n : ℕ) := P (b + n)\n  have exists_n : ∃ n, pred n :=\n    let ⟨z, hPz⟩ := Hinh\n    let h_le := Hb z hPz\n    let n := (z - b).natAbs\n    have h_eq : b + n = z := by\n      simp [n, h_le, Int.natAbs_of_nonneg h_le]\n      ring\n    ⟨n, h_eq.symm ▸ hPz⟩\n  let n_min := Nat.find pred exists_n\n  let lb := b + n_min\n  have hP_lb : P lb := Nat.find_spec exists_n\n  have h_lb_le : ∀ z, P z → lb ≤ z := by\n    intro z hPz\n    let n_z : ℕ := (z - b).natAbs\n    have h_le_z : b ≤ z := Hb z hPz\n    have h_nz_eq : b + n_z = z := by\n      simp [n_z, h_le_z, Int.natAbs_of_nonneg h_le_z]\n      ring\n    have h_pred_nz : pred n_z := by\n      rw [← h_nz_eq] at hPz\n      exact hPz\n    have h_le_nz : n_min ≤ n_z := Nat.find_min exists_n h_pred_nz\n    calc\n      lb = b + n_min := rfl\n      _ ≤ b + n_z := by linarith [h_le_nz]\n      _ = z := h_nz_eq\n  ⟨lb, ⟨hP_lb, h_lb_le⟩⟩",
+  "temperature": 0.7
+}

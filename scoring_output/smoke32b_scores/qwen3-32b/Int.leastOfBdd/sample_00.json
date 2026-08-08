@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token; expected '_' or identifier; Function expected at\n  (z - b).toNat\nbut this term has type\n  ℕ\n\nNote: Expected a function because this term is being applied to the argument\n  hgeb; Type mismatch\n  Int.toNat_of_nonneg ?m.78\nhas type\n  ↑(Int.toNat ?m.77) = ?m.77\nbut is expected to have type\n  ↑m = z - b; Application type mismatch: The argument\n  hgeb\nhas type\n  b ≤ z\nbut is expected to have type\n  0 ≤ ?m.77\nin the application\n  Int.toNat_of_nonneg hgeb; Missing alternative name: Expected `zero` or `succ`; Alternative `zero` has not been provided; Alternative `succ` has not been provided; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nn : ℤ := search 0\nlb : ℤ := n\nhP_lb : P lb\nz : ℤ\nhPz : P z\nhgeb : b ≤ z\nm : ℕ := sorry\nhz_eq : b + ↑m = z\nhQ_m : P (b + ↑m)\n⊢ search 0 ≤ b + ↑m; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nn : ℤ := search 0\nlb : ℤ := n\nhP_lb : P lb\nz : ℤ\nhPz : P z\nhgeb : b ≤ z\nm : ℕ := sorry\nhz_eq : b + ↑m = z\nhQ_m : P (b + ↑m)\nhle : n ≤ b + ↑m\n⊢ lb ≤ z",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.136,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 0,
+  "candidate_hash": "f3fd613ad4c863b3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd \n  {P : ℤ → Prop} [DecidablePred P] \n  (b : ℤ) \n  (Hb : ∀ z, P z → b ≤ z) \n  (Hinh : ∃ z, P z) : \n  { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } := \n{\n  let rec search (n : Nat) : ℤ := \n    if h : P (b + n) then b + n else search (n + 1)\n\n  let n := search 0\n  let lb := n\n\n  have hP_lb : P lb := \n    match n with\n    | ⟨k, _⟩ => \n      let z := b + k\n      if h : P z then h else absurd rfl h\n\n  have hmin : ∀ z, P z → lb ≤ z :=\n    by\n      intro z hPz\n      have hgeb : b ≤ z := Hb z hPz\n      let m : Nat := (z - b).toNat hgeb\n      have hz_eq : b + m = z := \n        by\n          have h_cast : (m : ℤ) = z - b := Int.toNat_of_nonneg hgeb\n          rw [h_cast]\n          rfl\n      have hQ_m : P (b + m) := by rw [hz_eq]; exact hPz\n      have hle : n ≤ b + m := by\n        simp only [← hz_eq, n]\n        let rec aux (k : Nat) : b + k ≤ z := by\n          cases k with\n          | 0 => \n            have h_eq : b + 0 = b := rfl\n            have h : P b := hQ_m\n            exact le_of_eq h_eq\n          | k + 1 => \n            have h_prev : b + k ≤ z := aux k\n            have h_k1 : b + (k + 1) = b + k + 1 := rfl\n            have h_le : b + k ≤ z := h_prev\n            have h_add_le : b + k + 1 ≤ z + 1 := add_le_add_right h_le 1\n            have h_eq : z + 1 = b + (k + 1) + 1 := by \n              rw [← h_k1, ← hz_eq]\n              rfl\n            exact le_of_eq h_eq\n        exact aux m\n      exact hle\n\n  ⟨lb, hP_lb, hmin⟩\n}",
+  "temperature": 0.7
+}

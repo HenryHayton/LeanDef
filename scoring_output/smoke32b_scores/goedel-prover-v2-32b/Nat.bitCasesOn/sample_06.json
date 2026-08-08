@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Function expected at\n  n.testBit 0\nbut this term has type\n  Bool\n\nNote: Expected a function because this term is being applied to the argument\n  ?_; Invalid field `testBit_one`: The environment does not contain `Nat.testBit_one`, so it is not possible to project the field `testBit_one` from an expression\n  n\nof type `ℕ`; Unknown constant `Nat.bit_eq`; Tactic `simp` failed with a nested error:\nmaximum recursion depth has been reached\nuse `set_option maxRecDepth <num>` to increase limit\nuse `set_option diagnostics true` to get diagnostic information; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nmotive : ℕ → Sort u\nn✝ : ℕ\nbit : (b : Bool) → (n : ℕ) → motive (Nat.bit b n)\nn : ℕ\nh : ∃ b m, n = Nat.bit b m\n⊢ motive n",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.058,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.bitCasesOn",
+  "sample_index": 6,
+  "candidate_hash": "29ffc03710ec1260",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.bitCasesOn {motive : ℕ → Sort u} (n : ℕ) (bit : (b : Bool) → (n : ℕ) → motive (Nat.bit b n)) : motive n :=\n  let aux : ∀ (n : ℕ), motive n := by\n    intro n\n    -- Use the fact that every natural number can be decomposed into its binary representation\n    have h : ∃ (b : Bool) (m : ℕ), n = Nat.bit b m := by\n      -- For any natural number n, we can find b and m such that n = Nat.bit b m\n      -- Specifically, b is the least significant bit and m is the remaining bits\n      use n.testBit 0\n      use n >>> 1\n      have h₁ : n = Nat.bit (n.testBit 0) (n >>> 1) := by\n        -- Prove that n = Nat.bit (n.testBit 0) (n >>> 1)\n        have h₂ : n = 2 * (n >>> 1) + (n.testBit 0 ?_ : ℕ) := by\n          -- Use the property of binary representation to express n in terms of its bits\n          have h₃ := n.div2_val\n          have h₄ := n.testBit_zero\n          have h₅ := n.testBit_one\n          simp [Nat.div2_val, Nat.testBit_zero, Nat.testBit_one, Nat.mod_two_eq_zero_or_one] at h₃ h₄ h₅ ⊢\n          <;>\n          (try omega) <;>\n          (try\n            {\n              cases' Nat.mod_two_eq_zero_or_one n with h₆ h₆ <;>\n              simp [h₆, Nat.div2_val, Nat.testBit_zero, Nat.testBit_one, Nat.mod_two_eq_zero_or_one] at h₃ h₄ h₅ ⊢ <;>\n              omega\n            }) <;>\n          (try\n            {\n              simp_all [Nat.div2_val, Nat.testBit_zero, Nat.testBit_one, Nat.mod_two_eq_zero_or_one]\n              <;> omega\n            })\n          <;>\n          (try omega)\n        -- Convert the expression into the form of Nat.bit\n        simp [Nat.bit_eq, h₂]\n        <;>\n        (try omega) <;>\n        (try\n          {\n            cases' Nat.mod_two_eq_zero_or_one n with h₆ h₆ <;>\n            simp [h₆, Nat.div2_val, Nat.testBit_zero, Nat.testBit_one, Nat.mod_two_eq_zero_or_one] at h₃ h₄ h₅ ⊢ <;>\n            omega\n          }) <;>\n        (try\n          {\n            simp_all [Nat.div2_val, Nat.testBit_zero, Nat.testBit_one, Nat.mod_two_eq_zero_or_one]\n            <;> omega\n          })\n        <;>\n        (try omega)\n      -- Use the derived equality to conclude the proof\n      exact h₁\n    -- Obtain the b and m such that n = Nat.bit b m\n    obtain ⟨b, m, rfl⟩ := h\n    -- Apply the given function bit to b and m\n    exact bit b m\n  -- Use the auxiliary function to get the result\n  aux n",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected end of input",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.015,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 6,
+  "candidate_hash": "1aa52fd1f73bbda0",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P]\n  (b : ℤ)\n  (Hb : ∀ z, P z → z ≤ b)\n  (Hinh : ∃ z, P z)\n  : { ub // P ub ∧ ∀ z, P z → z ≤ ub } :=\n  let h_exists := exists_le_of_exists_and_bound Hinh Hb\n\n  let rec helper (z : ℤ) (h_exists_z : ∃ w ≤ z, P w) : { ub // P ub ∧ ∀ z, P z → z ≤ ub } :=\n    if hPz : P z then\n      have h_max : ∀ w, P w → w ≤ z := by intro w hw; exact",
+  "temperature": 0.7
+}

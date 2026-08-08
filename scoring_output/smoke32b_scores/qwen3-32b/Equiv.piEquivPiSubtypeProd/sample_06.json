@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nα : Type u_9\np : α → Prop\nβ : α → Type u_10\ninst✝ : DecidablePred p\nf : (i : α) → β i\n⊢ (fun ph a => if h : p a then ph.1 ⟨a, h⟩ else ph.2 ⟨a, h⟩) ((fun f => (fun i => f ↑i, fun i => f ↑i)) f) = f; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\ncase mk\nα : Type u_9\np : α → Prop\nβ : α → Type u_10\ninst✝ : DecidablePred p\nfst✝ : (i : { x // p x }) → β ↑i\nsnd✝ : (i : { x // ¬p x }) → β ↑i\n⊢ (fun f => (fun i => f ↑i, fun i => f ↑i)) ((fun ph a => if h : p a then ph.1 ⟨a, h⟩ else ph.2 ⟨a, h⟩) (fst✝, snd✝)) =\n    (fst✝, snd✝)",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.016,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 6,
+  "candidate_hash": "3ca7c40e83ac2c34",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n  ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) where\n  toFun f := (λ i => f i.val, λ i => f i.val)\n  invFun ph := λ a => if h : p a then ph.1 ⟨a, h⟩ else ph.2 ⟨a, h⟩\n  left_inv f := by\n    intro a\n    by_cases h : p a\n    · simp [h]\n    · simp [h]\n  right_inv ph := by\n    cases ph\n    intro g h\n    funext i; simp\n    funext i; simp",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Function expected at\n  trivial\nbut this term has type\n  True\n\nNote: Expected a function because this term is being applied to the argument\n  ·; unsolved goals\ncase neg\nV : Type u_1\nG : SimpleGraph V\ns t : V\ninst✝ : DecidableEq V\nadj' : V → V → Prop := fun v w => if v = t then w ≠ t ∧ G.Adj w s else if w = t then v ≠ t ∧ G.Adj v s else G.Adj v w\nv : V\nhvt : ¬v = t\n⊢ ¬adj' v v",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.014,
+  "model_slug": "qwen3-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 3,
+  "candidate_hash": "7306b86a902fe53d",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u_1} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V :=\n  let adj' (v w : V) : Prop :=\n    if v = t then\n      w ≠ t ∧ G.Adj w s\n    else if w = t then\n      v ≠ t ∧ G.Adj v s\n    else\n      G.Adj v w\n  have h_irr : ∀ v, ¬ adj' v v :=\n    by\n      intro v\n      by_cases hvt : v = t\n      · simp [adj', hvt]\n        trivial\n      · simp [adj', hvt]\n        exact G.irr v\n  SimpleGraph.mk adj' h_irr",
+  "temperature": 0.7
+}

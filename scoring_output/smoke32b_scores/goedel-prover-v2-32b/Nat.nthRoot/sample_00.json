@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `classical`; unsolved goals\ncase h\nn a : ℕ\nB : ℕ := a + 1\nh₁ : ∀ (k : ℕ), k ^ n ≤ a ↔ k ^ n ≤ a\n⊢ 0 ^ n ≤ a ∧ a = 0; unexpected token 'let'; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.084,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Nat.nthRoot",
+  "sample_index": 0,
+  "candidate_hash": "21d9a9deb67b5175",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.nthRoot : ℕ → ℕ → ℕ\n  | 0, a => 1\n  | n, 0 => 0\n  | 1, a => a\n  | n, a =>\n    let B := (a : ℕ) + 1\n    -- Use the fact that the nth root of a is the largest k such that k^n ≤ a\n    -- We find this k by checking each possible value from 0 up to B-1\n    have h₁ : ∀ (k : ℕ), k ^ n ≤ a ↔ k ^ n ≤ a := by intro k; rfl\n    have h₂ : ∃ (k : ℕ), k ^ n ≤ a ∧ (k + 1) ^ n > a := by\n      -- We know that 0^n ≤ a and (a+1)^n > a\n      use 0\n      <;> simp [pow_succ]\n      <;>\n      (try omega) <;>\n      (try {\n        have h₃ : a ≥ 0 := by omega\n        have h₄ : (a + 1 : ℕ) ^ n > a := by\n          have h₅ : (a + 1 : ℕ) ^ n ≥ (a + 1 : ℕ) := by\n            calc\n              (a + 1 : ℕ) ^ n ≥ (a + 1 : ℕ) ^ 1 := by\n                apply Nat.pow_le_pow_of_le_right\n                <;> omega\n              _ = (a + 1 : ℕ) := by simp\n          have h₆ : (a + 1 : ℕ) > a := by omega\n          omega\n        omega\n      }) <;>\n      (try {\n        have h₃ : a ≥ 0 := by omega\n        have h₄ : (0 : ℕ) ^ n ≤ a := by\n          cases n with\n          | zero => simp_all\n          | succ n => simp_all [Nat.zero_pow]\n          <;> omega\n        omega\n      })\n    -- We can now find the largest k such that k^n ≤ a\n    -- We use the fact that the set of k satisfying k^n ≤ a is finite and non-empty\n    classical\n    let k := (Finset.Icc 0 B).max' (by\n      -- Show that the set is non-empty\n      have h₃ : 0 ∈ Finset.Icc 0 B := by\n        simp [Finset.mem_Icc]\n        <;> omega\n      exact ⟨0, h₃⟩) (by\n      -- Show that the set is finite\n      apply Finset.finite_toSet)\n    -- Now we check that this k is the correct one\n    have h₃ : k ∈ Finset.Icc 0 B := Finset.max'_mem _ _\n    have h₄ : k ≤ B := (Finset.mem_Icc.mp h₃).2\n    have h₅ : 0 ≤ k := (Finset.mem_Icc.mp h₃).1\n    have h₆ : k ^ n ≤ a := by\n      by_contra h\n      -- If k^n > a, then we can find a smaller k that satisfies the condition\n      have h₇ : k > 0 := by\n        by_contra h₈\n        simp_all [Nat.zero_pow]\n        <;> omega\n      have h₈ : (k - 1) ^ n ≤ a := by\n        -- Use the fact that (k-1) is in the set\n        have h₉ : k - 1 ∈ Finset.Icc 0 B := by\n          have h₁₀ : k - 1 ≤ B := by\n            have h₁₁ : k ≤ B := h₄\n            have h₁₂ : k - 1 ≤ k := by omega\n            omega\n          have h₁₁ : 0 ≤ k - 1 := by\n            have h₁₂ : k > 0 := h₇\n            omega\n          simp [Finset.mem_Icc]\n          <;> omega\n        have h₁₀ : (k - 1) ^ n ≤ a := by\n          -- Use the fact that (k-1) is in the set\n          have h₁₁ : (k - 1) ∈ Finset.Icc 0 B := h₉\n          have h₁₂ : (k - 1) ^ n ≤ a := by\n            by_contra h₁₃\n            -- If (k-1)^n > a, then we can find a smaller k that satisfies the condition\n            have h₁₄ : (k - 1) < k := by\n              have h₁₅ : k > 0 := h₇\n              omega\n            have h₁₅ : (k - 1) ∈ Finset.Icc 0 B := h₉\n            simp_all [Finset.mem_Icc]\n            <;>\n            (try omega) <;>\n            (try {\n              have h₁₆ : (k - 1 : ℕ) ^ n > a := by omega\n              have h₁₇ : (k - 1 : ℕ) < k := by omega\n              simp_all [Finset.mem_Icc]\n              <;> omega\n            })\n          exact h₁₂\n        exact h₁₀\n      -- Use the fact that (k-1) is in the set\n      have h₉ : k - 1 ∈ Finset.Icc 0 B := by\n        have h₁₀ : k - 1 ≤ B := by\n          have h₁₁ : k ≤ B := h₄\n          have h₁₂ : k - 1 ≤ k := by omega\n          omega\n        have h₁₁ : 0 ≤ k - 1 := by\n          have h₁₂ : k > 0 := h₇\n          omega\n        simp [Finset.mem_Icc]\n        <;> omega\n      have h₁₀ : (k - 1) ^ n ≤ a := h₈\n      have h₁₁ : k - 1 < k := by\n        have h₁₂ : k > 0 := h₇\n        omega\n      have h₁₂ : k ≤ B := h₄\n      simp_all [Finset.mem_Icc]\n      <;>\n      (try omega) <;>\n      (try {\n        have h₁₃ : (k : ℕ) ^ n > a := by omega\n        have h₁₄ : (k - 1 : ℕ) ^ n ≤ a := by omega\n        have h₁₅ : (k - 1 : ℕ) < k := by omega\n        simp_all [Finset.mem_Icc]\n        <;> omega\n      })\n    -- Now we have the correct k, so we can return it\n    k",
+  "temperature": 0.7
+}

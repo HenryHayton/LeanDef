@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field notation: Type of\n  gfp_down\nis not known; cannot resolve field `val`\n\nHint: Consider replacing the field projection with a call to one of the following:\n  • `AddUnits.val`\n  • `ArchimedeanOrder.val`\n  • `Char.val`\n  • `Fin.val`\n  • `Finset.val`\n  • `Float.val`\n  • `Float32.val`\n  • `FloatSpec.val`\n  • `GroupLike.val`\n  • `HomogeneousLocalization.val`\n  • `IntermediateField.val`\n  • `IterateAddAct.val`\n  • `IterateMulAct.val`\n  • `MulArchimedeanOrder.val`\n  • `NonScalar.val`\n  • `PNat.val`\n  • `PreQuasiregular.val`\n  • `PreTilt.val`\n  • `Semiquot.val`\n  • `SheafOfModules.val`\n  • `Subalgebra.val`\n  • `SubalgebraClass.val`\n  • `Subtype.val`\n  • `Units.val`\n  • `ZMod.val`\n  • `Algebra.Generators.val`\n  • `Array.Mem.val`\n  • `CategoryTheory.Sheaf.val`\n  • `Heyting.Regular.val`\n  • `Lean.ElabBlock.val`\n  • `Lean.ElabInline.val`\n  • `Lean.ExprStructEq.val`\n  • `Metric.Snowflaking.val`\n  • `NumberField.RingOfIntegers.val`\n  • `OrderHom.Subtype.val`\n  • `ST.Out.val`\n  • `SheafOfModules.Hom.val`\n  • `Valuation.IsUniformizer.val`\n  • `Valuation.Uniformizer.val`\n  • `Vector.Mem.val`\n  • `Algebra.Extension.Cotangent.val`\n  • `Algebra.Generators.Hom.val`\n  • `CategoryTheory.ActionCategory.homOfPair.val`\n  • `CategoryTheory.OverPresheafAux.OverArrows.val`\n  • `Lean.Doc.Parser.val`\n  • `Lean.Doc.WithSyntax.val`\n  • `Lean.Elab.FieldInfo.val`\n  • `Lean.Language.DynamicSnapshot.val`\n  • `Lean.Language.SyntaxGuarded.val`\n  • `Lean.Meta.InstanceEntry.val`\n  • `Lean.Server.WithRpcRef.val`\n  • `Module.End.Eigenvalues.val`\n  • `Module.End.UnifEigenvalues.val`\n  • `Std.Time.Timestamp.val`\n  • `Std.Time.WallTime.val`\n  • `Batteries.BinomialHeap.Imp.FindMin.val`\n  • `CategoryTheory.Functor.WellOrderInductionData.Extension.val`\n  • `CategoryTheory.Limits.MulticospanIndex.sections.val`\n  • `CategoryTheory.PreGaloisCategory.PointedGaloisObject.Hom.val`\n  • `Lean.Elab.ComputedFields.Context.val`\n  • `Lean.Elab.Term.LetRecToLift.val`\n  • `Lean.Elab.Term.NamedArg.val`\n  • `Lean.Meta",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 1.225,
+  "model_slug": "qwen3-32b",
+  "task_name": "OrderHom.prevFixed",
+  "sample_index": 7,
+  "candidate_hash": "a0e60e1b8f6a91b9",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def prevFixed {α : Type u} [CompleteLattice α] (f : α →o α) (x : α) (hx : f x ≤ x) : ↑(Function.fixedPoints ⇑f) :=\n  let down_x := { y : α // y ≤ x }\n  let f_down : down_x → down_x := fun y => ⟨f y.val, le_trans (f.mono y.2) hx⟩\n  let f_down_order_hom : down_x →o down_x := ⟨f_down, fun y z h => f.mono h⟩\n  let gfp_down := OrderHom.gfp f_down_order_hom\n  ⟨gfp_down.val, by rw [OrderHom.gfp_eq f_down_order_hom]⟩",
+  "temperature": 0.7
+}

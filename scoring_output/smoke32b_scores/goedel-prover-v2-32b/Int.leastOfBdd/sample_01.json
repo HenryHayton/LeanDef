@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `obtain`; Type mismatch: After simplification, term\n  hz\n has type\n  z ∈ S\nbut is expected to have type\n  P z; Unknown constant `Int.sInf_mem`; Type mismatch: After simplification, term\n  hlb\n has type\n  lb ∈ S\nbut is expected to have type\n  P lb; Type mismatch: After simplification, term\n  hz\n has type\n  P z\nbut is expected to have type\n  z ∈ S; unexpected token ':='; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.111,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 1,
+  "candidate_hash": "c8b16852053cb5ee",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd : {P : ℤ → Prop} -> [DecidablePred P] -> (b : ℤ) -> (Hb : ∀ (z : ℤ), P z → b ≤ z) -> (Hinh : ∃ z, P z) -> { lb // P lb ∧ ∀ (z : ℤ), P z → lb ≤ z } :=\n  fun {P} _ b Hb Hinh =>\n    let S : Set ℤ := { z : ℤ | P z }\n    have hS : S.Nonempty := by\n      obtain ⟨z, hz⟩ := Hinh\n      exact ⟨z, hz⟩\n    have hB : BddBelow S := by\n      use b\n      intro z hz\n      have : P z := by simpa using hz\n      have : b ≤ z := Hb z this\n      linarith\n    -- Use the constructive version of the least element to find the minimum\n    have h : ∃ lb, P lb ∧ ∀ (z : ℤ), P z → lb ≤ z := by\n      classical\n      -- Use the fact that the set is bounded below and nonempty to find the infimum\n      have h₁ : ∃ lb, lb ∈ S ∧ ∀ (z : ℤ), z ∈ S → lb ≤ z := by\n        use sInf S\n        have h₂ : sInf S ∈ S := by\n          -- Use the fact that the set is bounded below and nonempty to find the infimum\n          have h₃ : sInf S ∈ S := by\n            -- Use the fact that the set is bounded below and nonempty to find the infimum\n            apply Int.sInf_mem\n            <;> simp_all [Set.Nonempty]\n            <;> exact hS\n          exact h₃\n        have h₃ : ∀ (z : ℤ), z ∈ S → sInf S ≤ z := by\n          intro z hz\n          apply csInf_le\n          <;> simp_all [Set.Nonempty]\n          <;> exact hS\n          <;> simp_all [Set.Nonempty]\n          <;> exact hB\n        exact ⟨h₂, h₃⟩\n      obtain ⟨lb, hlb, hlb'⟩ := h₁\n      refine' ⟨lb, _⟩\n      have h₂ : P lb := by simpa using hlb\n      have h₃ : ∀ (z : ℤ), P z → lb ≤ z := by\n        intro z hz\n        have h₄ : z ∈ S := by simpa using hz\n        have h₅ : lb ≤ z := hlb' z h₄\n        exact h₅\n      exact ⟨h₂, h₃⟩\n    -- Extract the least element from the existential\n    obtain ⟨lb, hlb, hlb'⟩ := h\n    refine' ⟨lb, _⟩\n    exact ⟨hlb, hlb'⟩",
+  "temperature": 0.7
+}

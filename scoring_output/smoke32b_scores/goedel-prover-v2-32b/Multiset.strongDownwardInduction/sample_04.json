@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `exact`; Unknown identifier `h₃`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.036,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 4,
+  "candidate_hash": "fe11a9973fadcd91",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Multiset α → Sort u_3} {n : ℕ} (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) (s : Multiset α) (h : s.card ≤ n) : p s :=\n  let R : Multiset α → Multiset α → Prop := fun s₁ s₂ => s₂ < s₁\n  have h₁ : ∀ s : Multiset α, s.card ≤ n → p s := by\n    intro s hs\n    -- Use the induction principle for the multiset order restricted to cardinality ≤ n\n    have h₂ : p s := by\n      -- Use the fact that the multiset order is well-founded to perform induction\n      have h₃ : ∀ (t : Multiset α), t.card ≤ n → p t := by\n        intro t ht\n        -- Use the induction principle for the multiset order restricted to cardinality ≤ n\n        have h₄ : p t := by\n          -- Use the given inductive step H to construct p t\n          have h₅ : ({t₂ : Multiset α} → t₂.card ≤ n → t < t₂ → p t₂) → t.card ≤ n → p t := by\n            intro ih ht'\n            exact H t ih ht'\n          -- Use the fact that the multiset order is well-founded to perform induction\n          have h₆ : ({t₂ : Multiset α} → t₂.card ≤ n → t < t₂ → p t₂) := by\n            intro t₂ ht₂ ht₃\n            -- Use the induction hypothesis to get p t₂\n            have h₇ : t₂.card ≤ n := ht₂\n            have h₈ : p t₂ := h₃ t₂ h₇\n            exact h₈\n          -- Use the given inductive step H to construct p t\n          have h₉ : t.card ≤ n := ht\n          exact h₅ h₆ h₉\n        exact h₄\n      -- Use the induction hypothesis to get p s\n      have h₁₀ : s.card ≤ n := hs\n      have h₁₁ : p s := h₃ s h₁₀\n      exact h₁₁\n    exact h₂\n  -- Use the induction hypothesis to get p s\n  have h₂ : s.card ≤ n := h\n  have h₃ : p s := h₁ s h₂\n  exact h₃",
+  "temperature": 0.7
+}

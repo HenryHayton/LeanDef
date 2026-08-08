@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Tactic `split_ifs` failed: no if-then-else conditions to split\n\nα : Type u_9\np : α → Prop\ninst✝ : DecidablePred p\nβ : α → Type u_10\nf : (i : α) → β i\ni : α\n⊢ (fun ph i => if h : p i then ph.1 ⟨i, h⟩ else ph.2 ⟨i, h⟩) ((fun f => (fun i => f ↑i, fun j => f ↑j)) f) i = f i; could not synthesize default value for field 'right_inv' of 'Equiv' using tactics; Tactic `rfl` failed: The left-hand side\n  ((fun f => (fun i => f ↑i, fun j => f ↑j)) ((fun ph i => if h : p i then ph.1 ⟨i, h⟩ else ph.2 ⟨i, h⟩) x✝¹)).1 x✝\nis not definitionally equal to the right-hand side\n  x✝¹.1 x✝\n\ncase fst\nα : Type u_9\np : α → Prop\ninst✝ : DecidablePred p\nβ : α → Type u_10\nx✝¹ : ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i)\nx✝ : { x // p x }\n⊢ ((fun f => (fun i => f ↑i, fun j => f ↑j)) ((fun ph i => if h : p i then ph.1 ⟨i, h⟩ else ph.2 ⟨i, h⟩) x✝¹)).1 x✝ =\n    x✝¹.1 x✝; unexpected identifier; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.022,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 7,
+  "candidate_hash": "a97db568f06f2652",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) [DecidablePred p] (β : α → Type u_10) :\n    ((i : α) → β i) ≃ ((i : {x // p x}) → β ↑i) × ((i : {x // ¬p x}) → β ↑i) where\n  toFun (f) := (λ i => f i, λ j => f j)\n  invFun (ph) := λ (i : α) => if h : p i then ph.1 ⟨i, h⟩ else ph.2 ⟨i, h⟩\n  left_inv (f) := by\n    funext i\n    split_ifs\n    · simp [toFun, invFun]\n      rfl\n    · simp [toFun, invFun]\n      rfl\n  right_inv (ph) := by\n    cases ph\n    apply Prod.ext\n    · intro i\n      split_ifs\n      simp [toFun, invFun]\n      rfl\n    · intro i\n      split_ifs\n      simp [toFun, invFun]\n      rfl",
+  "temperature": 0.7
+}

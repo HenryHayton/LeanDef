@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  f a\nhas type\n  β₁ a\nof sort `Sort u_9` but is expected to have type\n  β₂ a\nof sort `Sort u_10` in the application\n  (F a).invFun (f a); Type mismatch\n  f a\nhas type\n  β₁ a\nof sort `Sort u_9` but is expected to have type\n  β₂ a\nof sort `Sort u_10`; Application type mismatch: The argument\n  f a\nhas type\n  β₂ a\nof sort `Sort u_10` but is expected to have type\n  β₁ a\nof sort `Sort u_9` in the application\n  (F a).toFun (f a); Type mismatch\n  f a\nhas type\n  β₂ a\nof sort `Sort u_10` but is expected to have type\n  β₁ a\nof sort `Sort u_9`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.022,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.piCongrRight",
+  "sample_index": 1,
+  "candidate_hash": "f97b51ab44422a08",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piCongrRight {α : Sort u_1} {β₁ : α → Sort u_9} {β₂ : α → Sort u_10} (F : ∀ a, β₁ a ≃ β₂ a) : ((a : α) → β₁ a) ≃ ((a : α) → β₂ a) where\n  toFun := fun f a => (F a).toFun (f a)\n  invFun := fun f a => (F a).invFun (f a)\n  left_inv := by\n    intro f\n    funext a\n    have h : (F a).toFun ((F a).invFun (f a)) = f a := by\n      apply Equiv.apply_symm_apply\n    exact h\n  right_inv := by\n    intro f\n    funext a\n    have h : (F a).invFun ((F a).toFun (f a)) = f a := by\n      apply Equiv.symm_apply_apply\n    exact h",
+  "temperature": 0.7
+}

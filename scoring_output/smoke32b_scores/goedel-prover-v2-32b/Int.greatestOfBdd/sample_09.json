@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Tactic `apply` failed: could not unify the conclusion of `@le_antisymm`\n  ?a = ?b\nwith the goal\n  sSup {z | P z} ∈ {z | P z}\n\nNote: The full type of `@le_antisymm` is\n  ∀ {α : Type ?u.55} [inst : PartialOrder α] {a b : α}, a ≤ b → b ≤ a → a = b\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh h₂ : ∃ z, P z\nh₃ : BddAbove {z | P z}\n⊢ sSup {z | P z} ∈ {z | P z}; Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`\n\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → z ≤ b\nHinh : ∃ z, P z\nh₁ : ∃ ub, P ub ∧ ∀ (z : ℤ), P z → z ≤ ub\n⊢ { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub }",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.061,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 9,
+  "candidate_hash": "726f0c1a1ce8ac07",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ (z : ℤ), P z → z ≤ b) (Hinh : ∃ z, P z) : { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub } := by\n  have h₁ : ∃ ub, P ub ∧ ∀ (z : ℤ), P z → z ≤ ub := by\n    classical\n    -- Use the fact that the set of integers satisfying P is bounded above and non-empty to find the greatest element\n    use sSup {z : ℤ | P z}\n    constructor\n    · -- Prove that the supremum is in the set\n      have h₂ : ∃ z, P z := Hinh\n      have h₃ : BddAbove {z : ℤ | P z} := by\n        use b\n        intro z hz\n        have h₄ : P z := hz\n        have h₅ : z ≤ b := Hb z h₄\n        exact h₅\n      have h₄ : sSup {z : ℤ | P z} ∈ {z : ℤ | P z} := by\n        apply le_antisymm\n        · -- Show that the supremum is less than or equal to itself\n          apply csSup_le\n          · -- The set is non-empty\n            obtain ⟨z, hz⟩ := Hinh\n            exact ⟨z, hz⟩\n          · -- The set is bounded above\n            intro z hz\n            have h₅ : P z := hz\n            have h₆ : z ≤ b := Hb z h₅\n            exact h₆\n        · -- Show that the supremum is greater than or equal to itself\n          apply le_csSup\n          · -- The set is bounded above\n            exact h₃\n          · -- The set is non-empty\n            obtain ⟨z, hz⟩ := Hinh\n            exact ⟨z, hz⟩\n      exact h₄\n    · -- Prove that the supremum is an upper bound for the set\n      intro z hz\n      have h₂ : z ∈ {z : ℤ | P z} := by simpa using hz\n      have h₃ : BddAbove {z : ℤ | P z} := by\n        use b\n        intro z hz\n        have h₄ : P z := hz\n        have h₅ : z ≤ b := Hb z h₄\n        exact h₅\n      have h₄ : z ≤ sSup {z : ℤ | P z} := by\n        apply le_csSup\n        · -- The set is bounded above\n          exact h₃\n        · -- The element is in the set\n          exact h₂\n      exact h₄\n  \n  -- Obtain the greatest element from the existence statement\n  obtain ⟨ub, hubP, hubUB⟩ := h₁\n  refine' ⟨ub, _⟩\n  -- Construct the subtype element with the required properties\n  exact ⟨hubP, hubUB⟩",
+  "temperature": 0.7
+}

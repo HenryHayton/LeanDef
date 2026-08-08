@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`indep` is not a field of structure `Matroid`; `indep_empty` is not a field of structure `Matroid`; `indep_subset` is not a field of structure `Matroid`; `indep_exchange` is not a field of structure `Matroid`; Fields missing: `IsBase`, `Indep`, `indep_iff'`, `exists_isBase`, `isBase_exchange`, `maximality`, `subset_ground`; unexpected identifier; expected command",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.006,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 9,
+  "candidate_hash": "72cf761f3c1ec044",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α : Type u_1} {β : Type u_2} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β where\n  E := f '' M.E\n  indep := λ s => ∃ I, M.Indep I ∧ s = f '' I\n  indep_empty := by\n    use ∅\n    simp only [M.indep_empty, image_empty]\n  indep_subset := by\n    intro s t hs hts\n    rcases hs with ⟨I, hI, rfl⟩\n    use I\n    exact And.intro hI (by simp only [image_subset_iff, hts])\n  indep_exchange := by\n    intro s t hs ht hcard\n    rcases hs with ⟨I, hI, rfl⟩\n    rcases ht with ⟨J, hJ, rfl⟩\n    have hI_card : (f '' I).card = I.card := by\n      apply Set.image_inj_on_card_eq hf\n      exact Set.subset.refl _\n    have hJ_card : (f '' J).card = J.card := by\n      apply Set.image_inj_on_card_eq hf\n      exact Set.subset.refl _\n    rw [hI_card, hJ_card] at hcard\n    obtain ⟨y, hyI, hyJ, hJy⟩ := M.indep_exchange hI hJ hcard\n    use f y\n    constructor\n    · simp only [Set.mem_diff, mem_image, mem_sep]\n      refine ⟨⟨y, hyI⟩, λ h => _, rfl⟩\n      obtain ⟨z, hzJ, hz⟩ := h\n      exact hf (hyI ▸ hzJ ▸ hz)\n    · use J ∪ {y}\n      constructor\n      · apply M.indep_subset hJy\n        simp only [subset_union_right, subset.rfl]\n      · simp only [image_union, image_singleton, union_comm]\n        rw [image_union, image_singleton]\n        congr 1\n        exact hJy",
+  "temperature": 0.7
+}

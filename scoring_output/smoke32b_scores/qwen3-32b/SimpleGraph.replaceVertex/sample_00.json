@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`adj` is not a field of structure `SimpleGraph`; `sym` is not a field of structure `SimpleGraph`; Fields missing: `Adj`; could not synthesize default value for field 'symm' of 'SimpleGraph' using tactics; Tactic `aesop` failed, failed to prove the goal after exhaustive search.\nInitial goal:\n  V : Type u_1\n  G : SimpleGraph V\n  s t : V\n  inst✝ : DecidableEq V\n  ⊢ Std.Symm sorry\nRemaining goals after safe rules:\n  V : Type u_1\n  G : SimpleGraph V\n  s t : V\n  inst : DecidableEq V\n  a b : V\n  a_1 : sorry a b\n  ⊢ sorry b a; Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce\n\nV : Type u_1\nG : SimpleGraph V\ns t : V\ninst✝ : DecidableEq V\n⊢ Std.Irrefl sorry",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.084,
+  "model_slug": "qwen3-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 0,
+  "candidate_hash": "c5719234c6d4bdd8",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u_1} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V where\n  adj v w := \n    if v = t then\n      if w = t then\n        False\n      else\n        G.Adj s w\n    else if w = t then\n      G.Adj s v\n    else\n      G.Adj v w\n  sym := by\n    intro v w h\n    cases (Decidable.decEq v t) with\n    | isTrue hvt => \n      cases (Decidable.decEq w t) with\n      | isTrue hwt => \n        contradiction\n      | isFalse hwt => \n        exact h\n    | isFalse hvt => \n      cases (Decidable.decEq w t) with\n      | isTrue hwt => \n        exact h\n      | isFalse hwt => \n        exact G.sym v w h\n  loopless := by\n    intro v\n    cases (Decidable.decEq v t) with\n    | isTrue h => \n      exact False.elim\n    | isFalse h => \n      exact G.loopless v",
+  "temperature": 0.7
+}

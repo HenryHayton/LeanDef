@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Tactic `cases` failed with a nested error:\nTactic `induction` failed: recursor `Or.casesOn` can only eliminate into `Prop`\n\nα : Sort u\nβ : Sort v\nγ : Sort w\nf : α → β\nb : β\nmotive : ((∃ a, f a = b) ∨ ¬∃ a, f a = b) → Sort ?u.21\nh_1 : (h_ex : ∃ a, f a = b) → motive ⋯\nh_2 : (h_not_ex : ¬∃ a, f a = b) → motive ⋯\nx✝ : (∃ a, f a = b) ∨ ¬∃ a, f a = b\n⊢ motive x✝ after processing\n  _\nthe dependent pattern matcher can solve the following kinds of equations\n- <var> = <term> and <term> = <var>\n- <term> = <term> where the terms are definitionally equal\n- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.007,
+  "model_slug": "qwen3-32b",
+  "task_name": "Function.extend",
+  "sample_index": 1,
+  "candidate_hash": "fb3093b1a8509d74",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def extend {α : Sort u} {β : Sort v} {γ : Sort w}\n  (f : α → β) (g : α → γ) (j : β → γ) (b : β) : γ :=\n  match Classical.em (∃ a : α, f a = b) with\n  | Or.inl h_ex => g (Classical.choose h_ex)\n  | Or.inr h_not_ex => j b",
+  "temperature": 0.7
+}

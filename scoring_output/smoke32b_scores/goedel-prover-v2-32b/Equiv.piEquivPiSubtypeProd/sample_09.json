@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unsolved goals\ncase snd\nα : Type u_9\np : α → Prop\nβ : α → Type u_10\ninst✝ : DecidablePred p\nf₁ : (i : { x // p x }) → β ↑i\nf₂ : (i : { x // ¬p x }) → β ↑i\nx : α\nhx : ¬p x\n⊢ ((fun f =>\n            (fun x =>\n              match x with\n              | ⟨x, hx⟩ => f x,\n              fun x =>\n              match x with\n              | ⟨x, hx⟩ => f x))\n          ((fun x x_1 =>\n              match x with\n              | (f₁, f₂) => if hx : p x_1 then f₁ ⟨x_1, hx⟩ else f₂ ⟨x_1, hx⟩)\n            (f₁, f₂))).2\n      ⟨x, hx⟩ =\n    (f₁, f₂).2 ⟨x, hx⟩",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.035,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 9,
+  "candidate_hash": "296b7bd42ec685c5",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n    ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n  {\n    toFun := fun f =>\n      (fun ⟨x, hx⟩ => f x, fun ⟨x, hx⟩ => f x)\n    invFun := fun ⟨f₁, f₂⟩ x =>\n      if hx : p x then f₁ ⟨x, hx⟩ else f₂ ⟨x, hx⟩\n    left_inv := by\n      intro f\n      ext x\n      by_cases hx : p x <;> simp [hx]\n      <;> congr 1 <;> ext ⟨y, hy⟩ <;> simp_all [Subtype.ext_iff]\n      <;> aesop\n    right_inv := by\n      intro ⟨f₁, f₂⟩\n      ext ⟨x, hx⟩\n      simp [hx]\n      <;> aesop\n  }",
+  "temperature": 0.7
+}

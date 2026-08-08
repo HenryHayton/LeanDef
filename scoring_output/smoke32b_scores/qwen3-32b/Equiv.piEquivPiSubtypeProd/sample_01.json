@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.052,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.piEquivPiSubtypeProd",
+  "sample_index": 1,
+  "candidate_hash": "4b4676901ab7d0f3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.piEquivPiSubtypeProd {α : Type u_9} (p : α → Prop) (β : α → Type u_10) [DecidablePred p] :\n  ((i : α) → β i) ≃ ((i : { x // p x }) → β ↑i) × ((i : { x // ¬p x }) → β ↑i) :=\n{\n  toFun := λ f => (λ s, f s.1, λ s, f s.1),\n  invFun := λ ph => let g := ph.1 in let h := ph.2 in λ i, \n    dite (p i) (λ h_p, g ⟨i, h_p⟩) (λ h_n, h ⟨i, h_n⟩),\n  left_inv := λ f => funext (λ i => by\n    match decide (p i) with\n    | isTrue h_p => rfl\n    | isFalse h_n => rfl),\n  right_inv := λ ph => funext (λ i => by\n    match decide (p i) with\n    | isTrue h_p => rfl\n    | isFalse h_n => rfl)\n}",
+  "temperature": 0.7
+}

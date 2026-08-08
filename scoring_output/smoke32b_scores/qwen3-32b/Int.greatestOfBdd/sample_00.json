@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break; Invalid field `le`: The environment does not contain `Int.NonNeg.le`, so it is not possible to project the field `le` from an expression\n  Hb z hPz\nof type `(b - z).NonNeg`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.058,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 0,
+  "candidate_hash": "b4618de04e8aabfa",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → z ≤ b) (Hinh : ∃ z, P z) : { ub // P ub ∧ ∀ (z : ℤ), P z → z ≤ ub } :=\n  let h_start : ∃ w ≤ b, P w := by\n    obtain ⟨z, hPz⟩ := Hinh\n    exact ⟨z, (Hb z hPz).le⟩\n  let h_no_larger_initial : ∀ z'', b < z'' ≤ b → ¬P z'' := by\n    intro z'' h1 h2\n    cases lt_irrefl b (lt_of_lt_of_le h1 h2)\n  let rec find_max (z : ℤ) (h_exists : ∃ w ≤ z, P w) (h_no_larger : ∀ z'', z < z'' ≤ b → ¬P z'') : { ub // P ub ∧ ∀ z', P z' → z' ≤ ub } :=\n    have h_z_le_b : z ≤ b := by\n      obtain ⟨w, h_w_le_z, hPw⟩ := h_exists\n      exact le_trans h_w_le_z (Hb w hPw)\n    if hP : P z then\n      have hP_z : P z := hP\n      have h_max : ∀ z', P z' → z' ≤ z := by\n        intro z' hP'\n        contrapose!\n        intro h_gt\n        have h_z'_le_b : z' ≤ b := Hb z' hP'\n        have h_range : z < z' ∧ z' ≤ b := by\n          split\n          exact h_gt\n          exact h_z'_le_b\n        exact (h_no_larger z' h_range.1 h_range.2) hP'\n      ⟨z, hP_z, h_max⟩\n    else\n      obtain ⟨w, h_w_le_z_minus_1, hPw⟩ := by\n        obtain ⟨w, h_w_le_z, hPw⟩ := h_exists\n        have h_w_ne_z : w ≠ z := by\n          intro h_eq\n          rw [h_eq] at hPw\n          exact hP hPw\n        have h_w_lt_z : w < z := by\n          linarith [h_w_le_z, h_w_ne_z]\n        have h_w_le_z_minus_1 : w ≤ z - 1 := by\n          exact le_sub_one_of_lt h_w_lt_z\n        exact ⟨w, h_w_le_z_minus_1, hPw⟩\n      let h_no_larger' : ∀ z'', (z - 1 < z'') → z'' ≤ b → ¬P z'' := by\n        intro z'' h_gt h_le\n        cases le_or_gt z'' z with\n        | inl h_le_z => \n          have h_eq : z'' = z := by\n            have h_z''_ge : z'' ≥ z := by linarith [h_gt, h_le_z]\n            linarith\n          rw [h_eq]\n          exact mt (λ h => h) hP\n        | inr h_gt_z => \n          exact h_no_larger z'' h_gt_z h_le\n      find_max (z - 1) ⟨w, h_w_le_z_minus_1, hPw⟩ h_no_larger'\n    using_well_founded { rel_tac := λ _ _ => `[exact measure (λ _ => b - z)] }",
+  "temperature": 0.7
+}

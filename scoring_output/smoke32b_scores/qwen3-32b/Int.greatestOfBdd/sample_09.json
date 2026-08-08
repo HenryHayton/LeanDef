@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token ','; expected '↦', '=>'",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.016,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 9,
+  "candidate_hash": "bdfd345ccb2bfd0a",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → z ≤ b) (Hinh : ∃ z, P z) : { ub // P ub ∧ ∀ z, P z → z ≤ ub } :=\nlet find_k (k : Nat) (H : ∀ k' < k, ¬ P (b - k')) : { k' // P (b - k') ∧ ∀ l < k', ¬ P (b - l) } :=\n  if h : P (b - k) then\n    ⟨k, h, H⟩\n  else\n    find_k (k + 1) (λ k'' hk'', \n      match Nat.lt_trichotomy k'' k with\n      | Or.inl hlt => H k'' hlt\n      | Or.inr (Or.inl h_eq) => absurd h_eq (Nat.not_lt_self k)\n      | Or.inr (Or.inr hgt) => \n        let h_eq : k'' = k := Nat.lt_succ_of_le hgt\n        let h_neg : ¬ P (b - k) := by { intro h_p, exact h h_p }\n        h_eq ▸ h_neg)\nin let ⟨k', h_p, h_smallest⟩ := find_k 0 (by simp [Nat.not_lt_zero]) in\nlet ub := b - k' in\n⟨ub, h_p, λ z hz =>\n  let k_z : Nat := (b - z).toNat\n  have h_eq : b - k_z = z := by simp [k_z]\n  have h_pz : P (b - k_z) := hz\n  have h_ge : k' ≤ k_z := h_smallest k_z (Nat.lt_of_lt_of_le (Nat.lt_of_succ_le (Nat.lt_of_lt_of_le (Nat.lt_succ_iff.mp hgt) rfl)) (Nat.le_of_lt hgt))\n  show z ≤ ub from by simp [ub, h_eq, h_ge]⟩",
+  "temperature": 0.7
+}

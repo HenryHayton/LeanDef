@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unexpected token 'exists'; expected '_' or identifier; Unknown constant `Nonempty.ofExists`; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\na : α\n⊢ (fun x =>\n        match x with\n        | ⟨b, hb⟩ => f_inv ⋯ b)\n      ((fun a => ⟨f a, ⋯⟩) a) =\n    a; Unknown constant `Nonempty.ofExists`; unsolved goals\nα : Sort u_3\nβ : Type u_4\nf : α → β\nf_inv : Nonempty α → β → α\nhf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f\nb : β\nhb : b ∈ Set.range f\n⊢ (fun a => ⟨f a, ⋯⟩)\n      ((fun x =>\n          match x with\n          | ⟨b, hb⟩ => f_inv ⋯ b)\n        ⟨b, hb⟩) =\n    ⟨b, hb⟩",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.018,
+  "model_slug": "qwen3-32b",
+  "task_name": "Equiv.ofLeftInverse",
+  "sample_index": 3,
+  "candidate_hash": "f0a436a64f1f4122",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.ofLeftInverse {α : Sort u_3} {β : Type u_4} (f : α → β) \n    (f_inv : Nonempty α → β → α) \n    (hf : ∀ (h : Nonempty α), Function.LeftInverse (f_inv h) f) : α ≃ ↑(Set.range f) where\n  toFun := λ a => ⟨f a, Set.mem_range_self a⟩\n  invFun := λ ⟨b, hb⟩ => f_inv (Nonempty.ofExists hb) b\n  left_inv := by\n    intro a\n    let h := Nonempty.ofExists (Set.mem_range_self a)\n    exact hf h a\n  right_inv := by\n    intro ⟨b, hb⟩\n    let h := Nonempty.ofExists hb\n    cases hb with\n    | exists a he => \n      have eq : f (f_inv h b) = b := by\n        rw [he]\n        exact congr_arg f (hf h a)\n      exact Subtype.eq eq",
+  "temperature": 0.7
+}

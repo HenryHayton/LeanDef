@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Application type mismatch: The argument\n  measure fun s => n - ?m.18\nhas type\n  WellFoundedRelation ?m.15\nof sort `Sort (max 1 ?u.35)` but is expected to have type\n  WellFounded ?m.14\nof sort `Prop` in the application\n  WellFounded.fix (measure fun s => n - ?m.18); Application type mismatch: The argument\n  n\nhas type\n  ℕ\nof sort `Type` but is expected to have type\n  ?m.31 ≤ ?m.29\nof sort `Prop` in the application\n  Nat.sub_lt_sub_right n; Invalid field notation: Type of\n  s\nis not known; cannot resolve field `card`\n\nHint: Consider replacing the field projection with a call to one of the following:\n  • `AlgHom.card`\n  • `ConjAct.card`\n  • `DihedralGroup.card`\n  • `ENat.card`\n  • `FinEnum.card`\n  • `FiniteField.card`\n  • `Finset.card`\n  • `Fintype.card`\n  • `GaloisField.card`\n  • `IteratedWreathProduct.card`\n  • `Multiset.card`\n  • `Nat.card`\n  • `OrderType.card`\n  • `Ordinal.card`\n  • `Projectivization.card`\n  • `QuaternionGroup.card`\n  • `RegularWreathProduct.card`\n  • `SemidirectProduct.card`\n  • `Sym2.card`\n  • `TruncatedWittVector.card`\n  • `YoungDiagram.card`\n  • `ZFSet.card`\n  • `ZMod.card`\n  • `AbsoluteValue.IsAdmissible.card`\n  • `Finset.AddETransform.card`\n  • `Finset.MulETransform.card`\n  • `Finset.addDysonETransform.card`\n  • `Finset.addETransformLeft.card`\n  • `Finset.addETransformRight.card`\n  • `Finset.mulDysonETransform.card`\n  • `Finset.mulETransformLeft.card`\n  • `Finset.mulETransformRight.card`\n  • `Fintype.IsSimpleOrder.card`\n  • `FirstOrder.Language.card`\n  • `NumberField.Embeddings.card`\n  • `Set.powersetCard.card`\n  • `SimpleGraph.IsSRGWith.card`\n  • `Tuple.graph.card`\n  • `Equiv.Perm.VectorsProdEqOne.card`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.178,
+  "model_slug": "qwen3-32b",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 2,
+  "candidate_hash": "64bf03687b99efb3",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction {α : Type u_1} {p : Finset α → Sort u_4} {n : ℕ}\n  (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁)\n  (s : Finset α) (h : s.card ≤ n) : p s :=\n  WellFounded.fix (measure (λ s => n - s.card)) (fun s self =>\n    H s\n      (λ {t₂} h_t₂_le_n h_subset =>\n        self t₂\n          (Nat.sub_lt_sub_right n t₂.card s.card h_subset.card_lt h_t₂_le_n))\n      h)\n  s",
+  "temperature": 0.7
+}

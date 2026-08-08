@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch\n  h0\nhas type\n  P 0\nof sort `Sort u_1` but is expected to have type\n  Sort u_1\nof sort `Type u_1`; Application type mismatch: The argument\n  VTask P h0 h_even h_odd (n / 2)\nhas type\n  Sort u_1\nof sort `Type u_1` but is expected to have type\n  P n\nof sort `Sort u_1` in the application\n  h_even n (VTask P h0 h_even h_odd (n / 2)); Application type mismatch: The argument\n  VTask P h0 h_even h_odd (n / 2)\nhas type\n  Sort u_1\nof sort `Type u_1` but is expected to have type\n  P (n / 2)\nof sort `Sort u_1` in the application\n  h_odd (n / 2) (VTask P h0 h_even h_odd (n / 2))",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.034,
+  "model_slug": "stepfun-formalizer-32b",
+  "task_name": "Nat.evenOddRec",
+  "sample_index": 2,
+  "candidate_hash": "09f61021c855cdf1",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask (P : ℕ → Sort u_1) (h0 : P 0) (h_even : (n : ℕ) → P n → P (2 * n)) (h_odd : (n : ℕ) → P n → P (2 * n + 1)) : ℕ → Sort u_1 := fun n => match n with\n| 0 => h0\n| n + 1 => if Even n then h_even n (VTask P h0 h_even h_odd (n / 2)) else h_odd (n / 2) (VTask P h0 h_even h_odd (n / 2))",
+  "temperature": 0.7
+}

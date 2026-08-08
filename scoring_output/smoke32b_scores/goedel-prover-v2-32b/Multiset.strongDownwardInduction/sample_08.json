@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Function expected at\n  WellFounded.fix ?m.68 (fun t ih => ?m.71) t\nbut this term has type\n  ?m.66 t\n\nNote: Expected a function because this term is being applied to the argument\n  ht; Unknown constant `Multiset.wf`; Application type mismatch: The argument\n  t₂\nhas type\n  t₂✝.card ≤ n\nof sort `Prop` but is expected to have type\n  Multiset α\nof sort `Type u_1` in the application\n  ih t₂; unsolved goals\ncase a\nα : Type u_1\np : Multiset α → Sort u_3\nn : ℕ\nH : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁\ns✝ : Multiset α\nhsn : s✝.card ≤ n\nR : Multiset α → Multiset α → Prop := ⋯\ns : Multiset α\nhs : s.card ≤ n\n⊢ s.card ≤ n",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.047,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 8,
+  "candidate_hash": "7d436b8f72535eba",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction : {α : Type u_1} -> {p : Multiset α → Sort u_3} -> {n : ℕ} -> (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) -> (s : Multiset α) -> s.card ≤ n → p s :=\n  fun {α} {p} {n} H s hsn =>\n    let R : Multiset α → Multiset α → Prop := fun s t => t < s\n    -- Use well-founded recursion to perform the induction\n    have h : ∀ (s : Multiset α), s.card ≤ n → p s := by\n      intro s hs\n      -- Use the well-founded recursion principle for the relation `R`\n      have h₁ : p s := by\n        apply H s\n        intro t₂ ht₂ hn\n        -- For each t₂ > s with t₂.card ≤ n, we need to show p t₂\n        -- This is done by recursively applying the induction hypothesis\n        have h₂ : t₂.card ≤ n := ht₂\n        have h₃ : s < t₂ := hn\n        -- Use the fact that t₂ is larger than s to apply the induction hypothesis\n        have h₄ : p t₂ := by\n          -- Use the well-founded recursion again for t₂\n          have h₅ : ∀ (t : Multiset α), t.card ≤ n → p t := by\n            intro t ht\n            -- Use the well-founded recursion principle for the relation `R`\n            apply WellFounded.fix (by\n              -- Prove that the relation `R` is well-founded\n              have : WellFounded (R : Multiset α → Multiset α → Prop) := by\n                -- Use the fact that the multiset order is well-founded\n                exact Multiset.wf\n              exact this\n            ) (fun t ih => by\n              -- Use the given hypothesis H to construct p t\n              have h₆ : p t := H t (fun t₂ ht₂ ht₂' => ih t₂ ht₂) (by assumption)\n              exact h₆\n            ) t ht\n          -- Apply the induction hypothesis to t₂\n          exact h₅ t₂ h₂\n        -- Return p t₂\n        exact h₄\n      -- Return p s\n      exact h₁\n    -- Apply the general result to s\n    h s hsn",
+  "temperature": 0.7
+}

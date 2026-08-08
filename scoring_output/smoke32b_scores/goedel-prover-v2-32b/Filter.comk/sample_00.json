@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`univ_mem` is not a field of structure `Filter`; `up_mem` is not a field of structure `Filter`; `inter_mem` is not a field of structure `Filter`; Fields missing: `univ_sets`, `sets_of_superset`, `inter_sets`\n\nHint: Add missing fields:\n  \n  ̲ ̲ ̲u̲n̲i̲v̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲s̲e̲t̲s̲_̲o̲f̲_̲s̲u̲p̲e̲r̲s̲e̲t̲ ̲:̲=̲ ̲_̲\n  ̲ ̲ ̲i̲n̲t̲e̲r̲_̲s̲e̲t̲s̲ ̲:̲=̲ ̲_̲",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.027,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Filter.comk",
+  "sample_index": 0,
+  "candidate_hash": "92b9f181c2c50bae",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.comk {α : Type u_1} (p : Set α → Prop) (he : p ∅) (hmono : ∀ (t : Set α), p t → ∀ s ⊆ t, p s) (hunion : ∀ (s : Set α), p s → ∀ (t : Set α), p t → p (s ∪ t)) : Filter α :=\n  {\n    sets := {s : Set α | p sᶜ},\n    -- The filter is defined by the sets whose complements satisfy p.\n    univ_mem := by\n      -- The universal set is in the filter because its complement is empty, and p(∅) is true.\n      have h : p (∅ : Set α) := he\n      have h₁ : ((∅ : Set α) : Set α) = (∅ : Set α) := rfl\n      have h₂ : p (univᶜ : Set α) := by\n        have h₃ : (univ : Set α)ᶜ = (∅ : Set α) := by\n          ext x\n          simp\n        rw [h₃]\n        exact he\n      simpa using h₂\n    -- The empty set is not necessarily in the filter, so we don't need to prove it here.\n    -- Instead, we need to prove that if a set is in the filter, then any superset of it is also in the filter.\n    up_mem := by\n      intro s hs t ht\n      have h₁ : p sᶜ := hs\n      have h₂ : sᶜ ⊆ tᶜ := by\n        intro x hx\n        -- If x is in the complement of s, then x is not in s.\n        -- Since t is a superset of s, x is also not in t.\n        have h₃ : x ∉ s := hx\n        have h₄ : x ∉ t := by\n          intro h₅\n          have h₆ : x ∈ s := ht h₅\n          contradiction\n        exact h₄\n      -- Since p is downward closed, p(tᶜ) is true.\n      have h₃ : p tᶜ := hmono sᶜ h₁ tᶜ h₂\n      exact h₃\n    -- We need to prove that if two sets are in the filter, then their intersection is also in the filter.\n    -- This is equivalent to proving that the union of their complements satisfies p.\n    inter_mem := by\n      intro s hs t ht\n      have h₁ : p sᶜ := hs\n      have h₂ : p tᶜ := ht\n      -- The complement of the intersection is the union of the complements.\n      have h₃ : (s ∩ t)ᶜ = sᶜ ∪ tᶜ := by\n        ext x\n        simp [Set.mem_union, Set.mem_compl_iff]\n        <;> tauto\n      -- Since p is closed under unions, p(sᶜ ∪ tᶜ) is true.\n      have h₄ : p (sᶜ ∪ tᶜ) := hunion sᶜ h₁ tᶜ h₂\n      -- Therefore, p((s ∩ t)ᶜ) is true.\n      rw [h₃] at *\n      exact h₄\n  }",
+  "temperature": 0.7
+}

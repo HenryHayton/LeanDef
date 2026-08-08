@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown constant `Nat.ofSub`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nQ : ℕ → Prop := fun n => P (b + ↑n)\nz : ℤ\nhz : P z\nhz_ge_b : b ≤ z\n⊢ ∃ n, Q n; Unknown constant `Nat.ofSub`; unsolved goals\nP : ℤ → Prop\ninst✝ : DecidablePred P\nb : ℤ\nHb : ∀ (z : ℤ), P z → b ≤ z\nHinh : ∃ z, P z\nQ : ℕ → Prop := fun n => P (b + ↑n)\nhexists : ∃ n, Q n\nn_min : ℕ := Nat.find hexists\nlb : ℤ := b + ↑n_min\nh_p_lb : P lb\nz : ℤ\nhz_p : P z\nhz_ge_b' : b ≤ z\n⊢ lb ≤ z",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.021,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.leastOfBdd",
+  "sample_index": 1,
+  "candidate_hash": "c8ede1b67e0ccfeb",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.leastOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) (Hb : ∀ z, P z → b ≤ z) (Hinh : ∃ z, P z) : { lb // P lb ∧ ∀ z, P z → lb ≤ z } := \n  let Q (n : Nat) := P (b + n)\n  have hexists : ∃ n, Q n := by \n    obtain ⟨z, hz⟩ := Hinh\n    have hz_ge_b : b ≤ z := Hb z hz\n    let m := Nat.ofSub hz_ge_b\n    have h_eq : b + m = z := Nat.ofSub_eq_of_le hz_ge_b\n    rw [h_eq] at hz \n    exact ⟨m, hz⟩\n  let n_min : Nat := Nat.find hexists\n  let lb : ℤ := b + n_min\n  have h_p_lb : P lb := by \n    have h_q : Q n_min := Nat.find_spec hexists\n    exact h_q\n  have h_min : ∀ z, P z → lb ≤ z := by \n    intro z hz_p\n    have hz_ge_b' : b ≤ z := Hb z hz_p\n    let m' := Nat.ofSub hz_ge_b'\n    have h_eq' : b + m' = z := Nat.ofSub_eq_of_le hz_ge_b'\n    have h_q' : Q m' := by \n      rw [h_eq']\n      exact hz_p\n    have h_le : n_min ≤ m' := Nat.find_min hexists h_q'\n    have h_lb_le_z : lb ≤ z := by \n      rw [lb, h_eq']\n      apply Int.add_le_add_right\n      exact h_le\n    exact h_lb_le_z\n  ⟨lb, ⟨h_p_lb, h_min⟩⟩",
+  "temperature": 0.7
+}

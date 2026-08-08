@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "unsolved goals\nα : Sort u\nβ : Sort v\np : α → Prop\ninst : DecidablePred p\nx₀ : { a // p a } → β\nh_forward : { x // x ∘ Subtype.val = x₀ } → { a // ¬p a } → β\ny : { a // ¬p a } → β\nh₁ : α → β\nval : α\nproperty : p val\n⊢ h₁ val = x₀ ⟨val, property⟩; Invalid argument: Variable `h_forward` is not a proposition or let-declaration; Invalid argument: Variable `h_inverse` is not a proposition or let-declaration; `dsimp` made no progress; Invalid argument: Variable `h_forward` is not a proposition or let-declaration; Invalid argument: Variable `h_inverse` is not a proposition or let-declaration; `dsimp` made no progress; Type mismatch\n  h_forward_inverse\nhas type\n  Function.LeftInverse.{imax (max 1 u) v, max 1 (imax u v)} h_forward h_inverse\nbut is expected to have type\n  Function.LeftInverse.{max 1 (imax u v), imax (max 1 u) v} h_inverse h_forward; Type mismatch\n  h_inverse_forward\nhas type\n  Function.RightInverse.{imax (max 1 u) v, max 1 (imax u v)} h_forward h_inverse\nbut is expected to have type\n  Function.RightInverse.{max 1 (imax u v), imax (max 1 u) v} h_inverse h_forward",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.089,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Equiv.subtypePreimage",
+  "sample_index": 2,
+  "candidate_hash": "a44b076dd713e262",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.subtypePreimage {α : Sort u} {β : Sort v} (p : α → Prop) [DecidablePred p] (x₀ : {a : α // p a} → β) : {x : α → β // x ∘ Subtype.val = x₀} ≃ ({a : α // ¬p a} → β) := by\n  have h_forward : {x : α → β // x ∘ Subtype.val = x₀} → ({a : α // ¬p a} → β) := by\n    intro f\n    have h₁ : f.val ∘ Subtype.val = x₀ := f.property\n    -- Define the forward direction by restricting f.val to {a : α // ¬p a}\n    have h₂ : ({a : α // ¬p a} → β) := fun ⟨a, ha⟩ => f.val a\n    exact h₂\n  \n  have h_inverse : ({a : α // ¬p a} → β) → {x : α → β // x ∘ Subtype.val = x₀} := by\n    intro y\n    -- Define the inverse direction by extending y to all of α using x₀ on p a\n    have h₁ : α → β := fun a => if h : p a then x₀ ⟨a, h⟩ else y ⟨a, by simpa [h] using Classical.by_contradiction (fun h' => by simp_all)⟩\n    -- Verify that h₁ ∘ Subtype.val = x₀\n    have h₂ : h₁ ∘ Subtype.val = x₀ := by\n      funext s\n      have h₃ : p s.val := s.property\n      have h₄ : (if h : p s.val then x₀ ⟨s.val, h⟩ else y ⟨s.val, by simpa [h] using Classical.by_contradiction (fun h' => by simp_all)⟩) = x₀ ⟨s.val, h₃⟩ := by\n        simp [h₃]\n      simp_all [Function.comp_apply]\n      <;> aesop\n    -- Construct the subtype element\n    exact ⟨h₁, h₂⟩\n  \n  have h_forward_inverse : Function.LeftInverse h_forward h_inverse := by\n    intro y\n    -- Simplify the expression to show that applying h_forward to h_inverse(y) gives back y\n    dsimp only [h_forward, h_inverse] at *\n    -- Use function extensionality to compare the functions\n    funext ⟨a, ha⟩\n    -- Simplify the if-then-else expression using the fact that ¬p a\n    by_cases h : p a <;> simp_all [h]\n    <;> try { contradiction }\n    <;> try { aesop }\n  \n  have h_inverse_forward : Function.RightInverse h_forward h_inverse := by\n    intro f\n    -- Simplify the expression to show that applying h_inverse to h_forward(f) gives back f\n    dsimp only [h_forward, h_inverse] at *\n    -- Use the property of f to simplify the if-then-else expression\n    have h₁ : f.val ∘ Subtype.val = x₀ := f.property\n    -- Use function extensionality to compare the functions\n    have h₂ : (fun a => if h : p a then x₀ ⟨a, h⟩ else (fun ⟨a, ha⟩ => f.val a) ⟨a, by simpa [h] using Classical.by_contradiction (fun h' => by simp_all)⟩) = f.val := by\n      funext a\n      by_cases h₃ : p a <;> simp_all [h₃]\n      <;>\n      (try {\n        have h₄ := congr_fun h₁ ⟨a, h₃⟩\n        simp [Function.comp_apply] at h₄ ⊢\n        <;> aesop\n      }) <;>\n      (try {\n        aesop\n      })\n    -- Use the simplified expression to conclude the proof\n    simp_all [Subtype.ext_iff]\n    <;> aesop\n  \n  have h_main : {x : α → β // x ∘ Subtype.val = x₀} ≃ ({a : α // ¬p a} → β) := by\n    refine' ⟨h_forward, h_inverse, _, _⟩\n    · -- Prove that h_forward is the left inverse of h_inverse\n      exact h_forward_inverse\n    · -- Prove that h_inverse is the right inverse of h_forward\n      exact h_inverse_forward\n  \n  exact h_main",
+  "temperature": 0.7
+}

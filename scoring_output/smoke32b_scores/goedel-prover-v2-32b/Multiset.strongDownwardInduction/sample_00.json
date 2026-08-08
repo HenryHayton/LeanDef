@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Unknown identifier `h₂`; unsolved goals\ncase a\nα : Type u_1\np : Multiset α → Sort u_3\nn : ℕ\nH : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁\ns : Multiset α\nh : s.card ≤ n\nt✝ : Multiset α\nht✝ : t✝.card ≤ n\nt : Multiset α\nht : t.card ≤ n\n⊢ t.card ≤ n",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.03,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Multiset.strongDownwardInduction",
+  "sample_index": 0,
+  "candidate_hash": "b0a21955e7e52c03",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction : {α : Type u_1} → {p : Multiset α → Sort u_3} → {n : ℕ} → (H : (t₁ : Multiset α) → ({t₂ : Multiset α} → t₂.card ≤ n → t₁ < t₂ → p t₂) → t₁.card ≤ n → p t₁) → (s : Multiset α) → s.card ≤ n → p s := by\n  intro α p n H s h\n  have h₁ : ∀ (t : Multiset α), t.card ≤ n → p t := by\n    intro t ht\n    have h₂ : ∀ (t : Multiset α), t.card ≤ n → p t := by\n      intro t ht\n      -- Use the fact that the strict multiset order is well-founded to perform induction\n      have h₃ : p t := by\n        apply H t\n        intro t₂ ht₂ hlt\n        -- For each t₂ > t with t₂.card ≤ n, we need to show p t₂\n        -- Since the order is well-founded, we can assume the statement holds for all t₂ > t\n        have h₄ : t₂.card ≤ n := ht₂\n        have h₅ : t < t₂ := hlt\n        -- Use the fact that the order is well-founded to perform induction\n        exact h₂ t₂ h₄\n      exact h₃\n    exact h₂ t ht\n  exact h₁ s h",
+  "temperature": 0.7
+}

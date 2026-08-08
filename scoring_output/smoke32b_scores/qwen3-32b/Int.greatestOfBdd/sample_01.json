@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "expected ';' or line break",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.182,
+  "model_slug": "qwen3-32b",
+  "task_name": "Int.greatestOfBdd",
+  "sample_index": 1,
+  "candidate_hash": "62a5f1c7c13db057",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.greatestOfBdd {P : ℤ → Prop} [DecidablePred P] (b : ℤ) \n    (Hb : ∀ z, P z → z ≤ b) (Hinh : ∃ z, P z) : \n    { ub | P ub ∧ ∀ z, P z → z ≤ ub } :=\n  let ⟨z, hz⟩ := Hinh\n  let h_exists_b : ∃ z ≤ b, P z := ⟨z, Hb z hz, hz⟩\n  let ⟨ub, h_p_ub⟩ :=\n    let rec findMax (c : ℤ) (h_exists : ∃ z ≤ c, P z) : { ub | P ub } :=\n      if h_p_c : P c then\n        ⟨c, h_p_c⟩\n      else\n        have h_exists' : ∃ z ≤ c - 1, P z :=\n          let ⟨z, hz_le_c, hz⟩ := h_exists\n          if hz_eq_c : z = c then\n            absurd hz (by rw [hz_eq_c]; exact h_p_c)\n          else\n            let hz_lt_c : z < c := lt_of_le_of_ne hz_le_c (ne_of_eq_not hz_eq_c)\n            ⟨z, le_of_lt hz_lt_c, hz⟩\n        let ⟨ub', h_p_ub'⟩ := findMax (c - 1) h_exists'\n        ⟨ub', h_p_ub'⟩\n    findMax b h_exists_b\n  have h_max : ∀ z, P z → z ≤ ub :=\n    assume z hz_p,\n    let hz_le_b := Hb z hz_p in\n    by_contradiction\n      assume hz_gt_ub : z > ub,\n      let hz_in_range : ub < z ∧ z ≤ b := by linarith [hz_gt_ub, hz_le_b] in\n      absurd (lt_irrefl ub (lt_of_lt_of_eq (lt_of_gt hz_gt_ub) rfl)) trivial\n  ⟨ub, h_p_ub, h_max⟩",
+  "temperature": 0.7
+}

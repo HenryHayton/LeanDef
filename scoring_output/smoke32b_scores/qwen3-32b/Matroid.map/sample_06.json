@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `indep_empty`: The environment does not contain `Matroid.indep_empty`, so it is not possible to project the field `indep_empty` from an expression\n  M\nof type `Matroid α`; Type mismatch\n  fun s t hst hIndep => ?m.35\nhas type\n  (s : s✝ ⊆ t✝) → (t : Indep t✝) → (hst : ?m.36 s t) → (hIndep : ?m.37 s t hst) → ?m.38 s t hst hIndep\nbut is expected to have type\n  s✝ ⊆ t✝ → Indep t✝ → Indep s✝\nthe following variables have been introduced by the implicit lambda feature\n  s✝ : Set β\n  t✝ : Set β\nyou can disable implicit lambdas using `@` or writing a lambda expression with `{}` or `[]` binder annotations.; Invalid `⟨...⟩` notation: The expected type of this term could not be determined",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.02,
+  "model_slug": "qwen3-32b",
+  "task_name": "Matroid.map",
+  "sample_index": 6,
+  "candidate_hash": "66f1a8e2ba952850",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.map {α β : Type} (M : Matroid α) (f : α → β) (hf : Set.InjOn f M.E) : Matroid β :=\n  let E' := f '' M.E\n  let Indep (s : Set β) := ∃ t, M.Indep t ∧ s = f '' t\n  let hI0 : Indep ∅ :=\n    ⟨∅, M.indep_empty, by simp⟩\n  let hI1 : ∀ {s t}, s ⊆ t → Indep t → Indep s :=\n    fun s t hst hIndep =>\n      let ⟨t', hIndep_t', rfl⟩ := hIndep\n      let s' := {x | x ∈ t' ∧ f x ∈ s}\n      have h_s'_subset_t' : s' ⊆ t' := by\n        intro x hx\n        exact hx.1\n      have h_s_image : f '' s' = s :=\n        let h_subset := Set.image_subset _ hst\n        Set.image_preimage_eq_of_inj_on hf h_subset\n      ⟨s', M.indep_subset hIndep_t' h_s'_subset_t', h_s_image⟩\n  let hI2 : ∀ {s t}, Indep s → Indep t → s.card > t.card → ∃ e, e ∈ s ∧ e ∉ t ∧ Indep (t ∪ {e}) :=\n    fun hIndep_s hIndep_t h_card_gt =>\n      let ⟨s', hIndep_s', rfl⟩ := hIndep_s\n      let ⟨t', hIndep_t', rfl⟩ := hIndep_t\n      let ⟨e, he_s', h_add⟩ := M.indep_augment hIndep_s' hIndep_t' h_card_gt\n      have e_not_in_t' : e ∉ t' :=\n        by\n        intro h\n        have hfe_in_t := by simp [h]\n        have hfe_in_s := by simp [he_s']\n        have hfe_in_t' := hf.injective hfe_in_t\n        have hfe_in_s' := hf.injective hfe_in_s\n        exact absurd hfe_in_t' hfe_in_s'\n      let f_e := f e\n      ⟨f_e, by\n        simp [he_s'],\n        fun h =>\n          match h with\n          | Or.inl _ => absurd h e_not_in_t'\n          | Or.inr h => by\n            have hfe_in_t := by simp [h]\n            exact hf.injective hfe_in_t e_not_in_t',\n        by\n        simp [Indep, hIndep_t, e_not_in_t', h_add]⟩\n  let axioms := ⟨hI0, hI1, hI2⟩\n  Matroid.mk E' Indep axioms",
+  "temperature": 0.7
+}

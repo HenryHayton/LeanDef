@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "`adj` is not a field of structure `SimpleGraph`; Fields missing: `Adj`\n\nHint: Add missing fields:\n  \n  ̲ ̲ ̲ ̲A̲d̲j̲ ̲:̲=̲ ̲_̲; could not synthesize default value for field 'symm' of 'SimpleGraph' using tactics; Tactic `aesop` failed, failed to prove the goal after exhaustive search.\nInitial goal:\n  V : Type u\n  G : SimpleGraph V\n  s t : V\n  inst✝ : DecidableEq V\n  ⊢ Std.Symm sorry\nRemaining goals after safe rules:\n  V : Type u\n  G : SimpleGraph V\n  s t : V\n  inst : DecidableEq V\n  a b : V\n  a_1 : sorry a b\n  ⊢ sorry b a; could not synthesize default value for field 'loopless' of 'SimpleGraph' using tactics; aesop: error while running norm rule norm|constructors|global|ULift: rule produced more than one subgoal.\nThe rule was run on this goal:\n  case a\n  V : Type u\n  G : SimpleGraph V\n  s t : V\n  inst : DecidableEq V\n  a : V\n  a_1 : sorry a a\n  ⊢ ULift.{?u.14, ?u.13} ?a.α",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.118,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 1,
+  "candidate_hash": "1ef5dbb9a0b4f8b1",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V :=\n  { adj := fun v w => \n      if h : v = t then \n        (w ≠ t ∧ G.adj s w)\n      else if h' : w = t then \n        (v ≠ t ∧ G.adj w s)\n      else \n        G.adj v w\n    }",
+  "temperature": 0.7
+}

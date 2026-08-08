@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Type mismatch when assigning motive\n  fun s => s.card ≤ n → p s\nhas type\n  Finset α → Sort u_4\nof sort `Type (max u_1 u_4)` but is expected to have type\n  Finset α → Prop\nof sort `Type u_1`",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 0.015,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "Finset.strongDownwardInduction",
+  "sample_index": 8,
+  "candidate_hash": "d6c32391f6a56221",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.strongDownwardInduction : {α : Type u_1} -> {p : Finset α → Sort u_4} -> {n : ℕ} -> (H : (t₁ : Finset α) → ({t₂ : Finset α} → t₂.card ≤ n → t₁ ⊂ t₂ → p t₂) → t₁.card ≤ n → p t₁) -> (s : Finset α) -> s.card ≤ n → p s :=\n  fun {α} {p} {n} H s hs =>\n    let h : ∀ (s : Finset α), s.card ≤ n → p s := by\n      intro s\n      induction' s using Finset.induction_on with a s has ih\n      intro hsc\n      have h₁ : s.card ≤ n := by\n        have h₂ : s.card ≤ (insert a s).card := by\n          apply Finset.card_mono\n          apply Finset.subset_insert\n        have h₃ : (insert a s).card ≤ n := by simpa [has] using hsc\n        linarith\n      -- We use the given step function H to construct the value for s.card ≤ n\n      have h₂ : p s := H s (fun {t₂} ht₂ hss => ih t₂ ht₂ (by\n        -- Prove that s is a subset of t₂\n        have h₃ : s ⊆ t₂ := by\n          have h₄ : s ⊆ insert a s := Finset.subset_insert a s\n          have h₅ : insert a s ⊆ t₂ := by\n            have h₆ : insert a s ⊂ t₂ := by\n              simpa [has] using hss\n            exact Finset.ssubset_iff_subset_ne.mp h₆ |>.1\n          exact Finset.Subset.trans h₄ h₅\n        -- Since s is a subset of t₂, we can use the induction hypothesis\n        have h₇ : t₂.card ≤ n := ht₂\n        have h₈ : s.card ≤ t₂.card := Finset.card_le_of_subset h₃\n        linarith\n      )) h₁\n      exact h₂\n    h s hs",
+  "temperature": 0.7
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "splice_path": "plain",
+  "splice_retries": 0,
+  "admissible": false,
+  "admissibility_failure": "compile_error",
+  "admissibility_detail": "Invalid field `adj`: The environment does not contain `SimpleGraph.adj`, so it is not possible to project the field `adj` from an expression\n  G\nof type `SimpleGraph V`; Invalid field `adj`: The environment does not contain `SimpleGraph.adj`, so it is not possible to project the field `adj` from an expression\n  G\nof type `SimpleGraph V`; Invalid field `adj`: The environment does not contain `SimpleGraph.adj`, so it is not possible to project the field `adj` from an expression\n  G\nof type `SimpleGraph V`; Application type mismatch: The argument\n  h_symm\nhas type\n  H_adj ?m.18 ?m.19 ↔ H_adj ?m.19 ?m.18\nbut is expected to have type\n  autoParam (Std.Symm H_adj) SimpleGraph.symm._autoParam\nin the application\n  @SimpleGraph.mk V H_adj ⋯; unsolved goals\ncase neg\nV : Type u_1\nG : SimpleGraph V\ns t : V\ninst✝ : DecidableEq V\nH_adj : V → V → Prop := fun u v => if u = t then if v = t then False else sorry else if v = t then sorry else sorry\nh_symm : ∀ {u v : V}, H_adj u v ↔ H_adj v u\nv : V\nh✝ : ¬v = t\n⊢ ¬sorry",
+  "equivalence_attempted": false,
+  "equivalence_certified": false,
+  "fact_verdicts": [],
+  "fidelity": null,
+  "mechanisms_attempted": [
+    "decide",
+    "proof"
+  ],
+  "noncomputable": false,
+  "splice_secondary_errors": [],
+  "wall_time_s": 4.391,
+  "model_slug": "goedel-prover-v2-32b",
+  "task_name": "SimpleGraph.replaceVertex",
+  "sample_index": 7,
+  "candidate_hash": "805f0c1f40b323ce",
+  "scored_as": null,
+  "extraction_disagreed": false,
+  "extracted_code": "def VTask.replaceVertex {V : Type u_1} (G : SimpleGraph V) (s t : V) [DecidableEq V] : SimpleGraph V :=\n  let H_adj : V → V → Prop :=\n    fun u v => if u = t then (if v = t then False else G.adj s v) else if v = t then G.adj u s else G.adj u v\n  have h_symm : ∀ {u v : V}, H_adj u v ↔ H_adj v u := by\n    intro u v\n    dsimp only [H_adj]\n    split_ifs <;>\n    (try { contradiction }) <;>\n    (try { simp_all [SimpleGraph.adj_symm] }) <;>\n    (try {\n      have h₁ : u = t := by simp_all\n      have h₂ : v ≠ t := by simp_all\n      simp_all [SimpleGraph.adj_symm]\n      <;>\n      (try { aesop }) <;>\n      (try { tauto })\n    }) <;>\n    (try {\n      have h₁ : u ≠ t := by simp_all\n      have h₂ : v = t := by simp_all\n      simp_all [SimpleGraph.adj_symm]\n      <;>\n      (try { aesop }) <;>\n      (try { tauto })\n    }) <;>\n    (try {\n      have h₁ : u ≠ t := by simp_all\n      have h₂ : v ≠ t := by simp_all\n      simp_all [SimpleGraph.adj_symm]\n      <;>\n      (try { aesop }) <;>\n      (try { tauto })\n    }) <;>\n    (try {\n      simp_all [SimpleGraph.adj_symm]\n      <;>\n      (try { aesop }) <;>\n      (try { tauto })\n    })\n    <;>\n    (try {\n      simp_all [SimpleGraph.adj_symm]\n      <;>\n      aesop\n    })\n  \n  have h_irrefl : ∀ {v : V}, ¬H_adj v v := by\n    intro v\n    dsimp only [H_adj]\n    split_ifs <;>\n    (try { contradiction }) <;>\n    (try {\n      simp_all [SimpleGraph.loopless]\n      <;>\n      aesop\n    }) <;>\n    (try {\n      simp_all [SimpleGraph.loopless]\n      <;>\n      aesop\n    })\n  \n  SimpleGraph.mk H_adj h_symm h_irrefl",
+  "temperature": 0.7
+}
