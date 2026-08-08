@@ -89,6 +89,12 @@ def main() -> int:
             )
             fresh.update(model_slug=model, task_name=task, sample_index=idx)
             merged = _merge_with_existing(fresh, model, task, idx, scores_dir)
+            # `fresh` only carries what score_candidate_body computes; the RUNNER-added fields
+            # (extracted_code, candidate_hash, scored_as, ...) exist only on the stored record.
+            # Without this, the top-up strips them -- which broke the negation pass downstream:
+            # its `extracted_code` guard skipped every topped-up record and it found 0 candidates.
+            for k, v in (record or {}).items():
+                merged.setdefault(k, v)
             merged["tier3_topup"] = True
             verdicts = [Verdict(fv["verdict"]) for fv in merged["fact_verdicts"]]
             merged["fidelity"] = fidelity(verdicts)
