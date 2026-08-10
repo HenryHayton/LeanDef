@@ -24,6 +24,7 @@ and operators aren't resolved to the constants they desugar to).
 
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from lean_interact import AutoLeanServer, Command
 
@@ -377,6 +378,11 @@ def verify_all_with_recovery(
     timeout: float | None = None,
     imports: list[str] | None = None,
     warmup_timeout: float | None = None,
+    cache: dict[str, VerifiedDef] | None = None,
+    cache_path: Path | None = None,
+    checkpoint_every: int = 50,
+    progress=None,
+    progress_every: int = 50,
 ) -> list[VerifiedDef]:
     """Like `verify_all`, but detects when the shared base environment has died mid-batch
     and re-establishes a fresh one instead of letting every remaining candidate cascade-fail.
@@ -389,10 +395,28 @@ def verify_all_with_recovery(
     elaborate." This function catches that specific signature and recovers by re-importing
     and continuing with the new environment, rather than losing the rest of the batch to one
     slow definition.
+
+    `cache` / `cache_path` (batch 5) add the two properties a ~11-hour run needs and this
+    function did not have: REUSE (a hit already in `cache` is returned without touching the
+    REPL) and RESUME (fresh records are appended to `cache_path` every `checkpoint_every`
+    candidates, so losing the process costs a chunk, not the run). Both default to None, so
+    existing callers -- and every existing test -- keep the previous behaviour exactly.
+    See `miner.verified_cache` for the key's shape and why it hashes the source text.
     """
+    # Deferred: `miner.verified_cache` imports VerifiedDef/BinderGroup from this module, so a
+    # top-level import here would be circular. Only paid when caching is actually requested.
+    from miner.verified_cache import append_records, cache_key
+
     base_env = initial_base_env
     results: list[VerifiedDef] = []
-    for hit in hits:
+    fresh: list[VerifiedDef] = []
+    for i, hit in enumerate(hits):
+        if cache is not None:
+            hit_key = cache_key(hit.name, hit.module_path, hit.source_text)
+            cached = cache.get(hit_key)
+            if cached is not None:
+                results.append(cached)
+                continue
         result = verify_definition(server, base_env, hit, timeout=timeout)
         if not result.included and _looks_like_env_death(result.exclusion_reason):
             reimport = warm_import(server, imports=imports, timeout=warmup_timeout)
@@ -400,4 +424,14 @@ def verify_all_with_recovery(
                 base_env = reimport.env
                 result = verify_definition(server, base_env, hit, timeout=timeout)
         results.append(result)
+        fresh.append(result)
+        # Checkpoint in batches: a kill -9 costs at most `checkpoint_every` candidates of REPL
+        # time, not the whole run. Appending per-candidate would fsync 12k times for no gain.
+        if cache_path is not None and len(fresh) >= checkpoint_every:
+            append_records(fresh, cache_path)
+            fresh = []
+        if progress is not None and (i + 1) % progress_every == 0:
+            progress(i + 1, len(hits))
+    if cache_path is not None and fresh:
+        append_records(fresh, cache_path)
     return results

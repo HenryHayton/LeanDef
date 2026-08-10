@@ -78,6 +78,17 @@ class RichnessComponents:
     comparisons: int
     hypothesis_binders: int
     total: int
+    # --- Blind-spot counters (batch 5, 10 Aug 2026). METADATA ONLY. ---
+    # The three gaps this module's docstring records as open, now measured because the recorded
+    # trigger ("revisit if recurring at scale in a wider harvest") fires with the batch-5 mine.
+    # They are DELIBERATELY excluded from `total`: `total` is a hard gate (RICHNESS_FLOOR) and
+    # the dominant preference-score term, so folding these in would silently reshuffle the whole
+    # ranking and change which definitions are eligible -- a threshold change, which the design's
+    # one-dial-on-evidence rule says is a separate, operator-approved step. This batch measures
+    # their incidence; promoting them is the decision that incidence informs.
+    blind_cond: int = 0
+    blind_heyting: int = 0
+    blind_disjoint_binders: int = 0
 
 
 def _count_conditionals(normalized: str) -> int:
@@ -96,6 +107,42 @@ def _count_hypothesis_binders(v: VerifiedDef) -> int:
     return sum(1 for g in v.binder_groups if g.kind == "explicit" and looks_like_prop_type(g.type_text))
 
 
+# --- Blind-spot detectors (batch 5). Metadata only; see RichnessComponents for why. ---
+
+# (1) `cond`-based branching: Lean's Bool eliminator, `cond b x y`. Real branching structure that
+# the `Prop`-level `_IF_RE`/`_BIF_RE` counters cannot see -- `Nat.bit`'s
+# `cond b (2 * n + 1) (2 * n)` is the module docstring's own worked example of the gap.
+# Word-bounded so `second`/`condition`/`Cond.foo` do not match.
+_BLIND_COND_RE = re.compile(r"(?<![\w.])cond(?![\w.])")
+
+# (2) Heyting-algebra operators: `⇨` (Heyting implication) and `\` (set/lattice difference).
+# Both are genuine binary structure. `\` must not match inside Lean's escapes or comments; the
+# body is already comment-stripped by `normalize_body`, and a lone backslash in Lean source at
+# this level is the difference operator (string escapes live inside string literals, which these
+# definition bodies essentially never contain).
+_BLIND_HEYTING_RE = re.compile(r"⇨|(?<!\w)\\(?!\w)")
+
+# (3) `Disjoint s t`-style hypothesis binders: a relational side condition written as an applied
+# predicate rather than an operator, so `looks_like_prop_type`'s textual heuristic misses it and
+# `_count_hypothesis_binders` does not score it. Counted over binder TYPE TEXT only (not the
+# body), matching where the real hypothesis-binder counter looks. The name list is deliberately
+# short and literal -- these are the recorded cases, not a guess at a general rule.
+_BLIND_RELATIONAL_PREDICATES = ("Disjoint", "Codisjoint", "IsCompl", "Pairwise", "Commute",
+                                "Nodup", "Injective", "Surjective", "Bijective", "Monotone")
+_BLIND_RELATIONAL_RE = re.compile(
+    r"(?<![\w.])(" + "|".join(_BLIND_RELATIONAL_PREDICATES) + r")(?![\w.])")
+
+
+def _count_blind_spots(v: VerifiedDef, normalized: str) -> tuple[int, int, int]:
+    cond = len(_BLIND_COND_RE.findall(normalized))
+    heyting = len(_BLIND_HEYTING_RE.findall(normalized))
+    disjoint = sum(
+        1 for g in v.binder_groups
+        if g.kind == "explicit" and _BLIND_RELATIONAL_RE.search(g.type_text or "")
+    )
+    return cond, heyting, disjoint
+
+
 def compute_richness(v: VerifiedDef) -> RichnessComponents:
     normalized = normalize_body(v.source_text)
     conjunctions = len(_CONJUNCTION_RE.findall(normalized))
@@ -104,7 +151,9 @@ def compute_richness(v: VerifiedDef) -> RichnessComponents:
     quantifiers = len(_QUANTIFIER_RE.findall(normalized))
     comparisons = len(_COMPARISON_RE.findall(normalized))
     hypothesis_binders = _count_hypothesis_binders(v)
+    # `total` deliberately does NOT include the blind-spot counters -- see RichnessComponents.
     total = conjunctions + disjunctions + conditionals + quantifiers + comparisons + hypothesis_binders
+    blind_cond, blind_heyting, blind_disjoint = _count_blind_spots(v, normalized)
     return RichnessComponents(
         conjunctions=conjunctions,
         disjunctions=disjunctions,
@@ -113,4 +162,7 @@ def compute_richness(v: VerifiedDef) -> RichnessComponents:
         comparisons=comparisons,
         hypothesis_binders=hypothesis_binders,
         total=total,
+        blind_cond=blind_cond,
+        blind_heyting=blind_heyting,
+        blind_disjoint_binders=blind_disjoint,
     )

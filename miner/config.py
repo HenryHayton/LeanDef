@@ -13,324 +13,60 @@ from harness import config as harness_cfg
 
 MATHLIB_ROOT = harness_cfg.LEAN_PROJECT_DIR / ".lake" / "packages" / "mathlib" / "Mathlib"
 
+# --- Batch 5 "full-math widening" (9 Aug 2026) ---------------------------------------------
+#
+# Tranche A: the large majority of mathematical Mathlib, as whole top-level subtrees. This
+# REPLACES the batch-1..4 entry list wholesale -- every prior entry was a corner of one of
+# these subtrees (Data/Nat under Data, Algebra/Ring/* under Algebra, Topology/Order/* under
+# Topology, ...), and keeping both granularities would double-scan those files exactly as the
+# batch-4 note that used to sit above the old Order/Combinatorics entries warned. The batch-4
+# manifest is the archived record of the old scope; git history holds the old list.
+#
+# Geometry is entered per-subdirectory because Geometry/Manifold is tranche-B deferred; the
+# pin has no loose Geometry/*.lean files (checked 9 Aug 2026), so the subdirectory list IS the
+# subtree minus Manifold.
 TARGET_MODULES: list[str] = [
-    # Original five corners (miner stage 1 / harvest batch 1).
-    "Data/Nat",
-    "Data/List",
-    "Data/Finset",
-    "Data/Int",
+    "Algebra",
+    "Analysis",
+    "Combinatorics",
+    "Computability",
+    "Control",
+    "Data",
+    "Dynamics",
+    "FieldTheory",
+    "Geometry/Convex",
+    "Geometry/Diffeology",
+    "Geometry/Euclidean",
+    "Geometry/Group",
+    "Geometry/Polygon",
+    "Geometry/RingedSpace",
+    "GroupTheory",
+    "InformationTheory",
+    "LinearAlgebra",
     "Logic",
-    # Widened for batch 2 (design doc §6): condition-richer territory beyond the
-    # foundational corners, deliberately kept to "basics"/"shallows" scope -- individual
-    # Defs/Basic files and small subdirectories, not whole (100+-file) subtrees -- to bound
-    # harvest cost. 69 files, 182 scanned `def` hits confirmed by a dry scan before the full
-    # harvest ran; see the batch-2 review doc's corpus-scope section for the count and the
-    # per-area file list this comment summarizes.
-    #
-    # NOTE (batch 4 "wide mine"): the batch-2 Order/* and Combinatorics/* entries that used
-    # to live here are gone -- not dropped, *subsumed* -- now that "Order" and "Combinatorics"
-    # below scan those same subtrees in full. Keeping both would double-scan every file in
-    # them (two ScanHit lists for the same declarations), so the narrower entries were removed
-    # rather than left redundant. `Algebra/GroupWithZero/*` and `Algebra/Order/*` are
-    # untouched -- outside batch 4's requested Algebra scope, unrelated to the change below.
-    "Algebra/GroupWithZero/Defs.lean",
-    "Algebra/GroupWithZero/Basic.lean",
-    "Algebra/Order/Monoid/Defs.lean",
-    "Algebra/Order/Ring/Defs.lean",
-    "Algebra/Order/Group/Defs.lean",
-    "NumberTheory/Basic.lean",
-    "NumberTheory/Divisors.lean",
-    "NumberTheory/Fermat.lean",
-    "NumberTheory/FermatPsp.lean",
-    "NumberTheory/LucasLehmer.lean",
-    "NumberTheory/LucasPrimality.lean",
-    "NumberTheory/Bertrand.lean",
-    "NumberTheory/AlmostPrime.lean",
-    "NumberTheory/Multiplicity.lean",
-    "NumberTheory/Wilson.lean",
-    "NumberTheory/ArithmeticFunction",
-    # --- Batch 4 "wide mine" (22 July 2026): corpus expansion for composition statistics.
-    # Measurement-purpose mine -- selection machinery is unchanged, only corpus scope grows.
-    # See docs/harvest_review_batch4.md for the dry-scan breakdown and the report's own note
-    # on `Algebra/GroupPower` (requested but does not exist in this Mathlib version -- skipped,
-    # not substituted) and the `Logic/Relation`+`Logic/Function` request (already fully covered
-    # by the bare "Logic" entry above -- a no-op, not re-added).
-    "Order",  # full subtree (was 13 individual batch-2 entries above)
-    "Combinatorics",  # full subtree (was 11 individual batch-2 entries above)
-    "Algebra/Group/AddChar.lean",
-    "Algebra/Group/Basic.lean",
-    "Algebra/Group/Center.lean",
-    "Algebra/Group/Commutator.lean",
-    "Algebra/Group/Conj.lean",
-    "Algebra/Group/ConjFinite.lean",
-    "Algebra/Group/Defs.lean",
-    "Algebra/Group/Embedding.lean",
-    "Algebra/Group/End.lean",
-    "Algebra/Group/Even.lean",
-    "Algebra/Group/EvenFunction.lean",
-    "Algebra/Group/Ext.lean",
-    "Algebra/Group/Finsupp.lean",
-    "Algebra/Group/ForwardDiff.lean",
-    "Algebra/Group/Graph.lean",
-    "Algebra/Group/Ideal.lean",
-    "Algebra/Group/Idempotent.lean",
-    "Algebra/Group/Indicator.lean",
-    "Algebra/Group/InjSurj.lean",
-    "Algebra/Group/MinimalAxioms.lean",
-    "Algebra/Group/ModEq.lean",
-    "Algebra/Group/NatPowAssoc.lean",
-    "Algebra/Group/Opposite.lean",
-    "Algebra/Group/PNatPowAssoc.lean",
-    "Algebra/Group/PUnit.lean",
-    "Algebra/Group/Prod.lean",
-    "Algebra/Group/Shrink.lean",
-    "Algebra/Group/Support.lean",
-    "Algebra/Group/Torsion.lean",
-    "Algebra/Group/TransferInstance.lean",
-    "Algebra/Group/Translate.lean",
-    "Algebra/Group/ULift.lean",
-    "Algebra/Ring/AddAut.lean",
-    "Algebra/Ring/Associated.lean",
-    "Algebra/Ring/Associator.lean",
-    "Algebra/Ring/Aut.lean",
-    "Algebra/Ring/Basic.lean",
-    "Algebra/Ring/BooleanRing.lean",
-    "Algebra/Ring/Center.lean",
-    "Algebra/Ring/Centralizer.lean",
-    "Algebra/Ring/CentroidHom.lean",
-    "Algebra/Ring/CharZero.lean",
-    "Algebra/Ring/Commute.lean",
-    "Algebra/Ring/CompTypeclasses.lean",
-    "Algebra/Ring/Defs.lean",
-    "Algebra/Ring/Equiv.lean",
-    "Algebra/Ring/Ext.lean",
-    "Algebra/Ring/Fin.lean",
-    "Algebra/Ring/GeomSum.lean",
-    "Algebra/Ring/GrindInstances.lean",
-    "Algebra/Ring/Idempotent.lean",
-    "Algebra/Ring/Identities.lean",
-    "Algebra/Ring/InjSurj.lean",
-    "Algebra/Ring/Invertible.lean",
-    "Algebra/Ring/IsFormallyReal.lean",
-    "Algebra/Ring/MinimalAxioms.lean",
-    "Algebra/Ring/Nat.lean",
-    "Algebra/Ring/NegOnePow.lean",
-    "Algebra/Ring/NonZeroDivisors.lean",
-    "Algebra/Ring/Opposite.lean",
-    "Algebra/Ring/PUnit.lean",
-    "Algebra/Ring/Parity.lean",
-    "Algebra/Ring/Periodic.lean",
-    "Algebra/Ring/Pi.lean",
-    "Algebra/Ring/Prod.lean",
-    "Algebra/Ring/Rat.lean",
-    "Algebra/Ring/Regular.lean",
-    "Algebra/Ring/Semiconj.lean",
-    "Algebra/Ring/Shrink.lean",
-    "Algebra/Ring/Subgroup.lean",
-    "Algebra/Ring/SumsOfSquares.lean",
-    "Algebra/Ring/Torsion.lean",
-    "Algebra/Ring/TransferInstance.lean",
-    "Algebra/Ring/ULift.lean",
-    "Algebra/Ring/Units.lean",
-    "Algebra/Ring/WithZero.lean",
-    "Algebra/Field/Basic.lean",
-    "Algebra/Field/Defs.lean",
-    "Algebra/Field/Equiv.lean",
-    "Algebra/Field/GeomSum.lean",
-    "Algebra/Field/IsField.lean",
-    "Algebra/Field/MinimalAxioms.lean",
-    "Algebra/Field/ModEq.lean",
-    "Algebra/Field/NegOnePow.lean",
-    "Algebra/Field/Opposite.lean",
-    "Algebra/Field/Periodic.lean",
-    "Algebra/Field/Power.lean",
-    "Algebra/Field/Rat.lean",
-    "Algebra/Field/Shrink.lean",
-    "Algebra/Field/TransferInstance.lean",
-    "Algebra/Field/ULift.lean",
-    "Algebra/Field/ZMod.lean",
-    "Algebra/BigOperators/Associated.lean",
-    "Algebra/BigOperators/Balance.lean",
-    "Algebra/BigOperators/Expect.lean",
-    "Algebra/BigOperators/Field.lean",
-    "Algebra/BigOperators/Fin.lean",
-    "Algebra/BigOperators/Finprod.lean",
-    "Algebra/BigOperators/Intervals.lean",
-    "Algebra/BigOperators/ModEq.lean",
-    "Algebra/BigOperators/Module.lean",
-    "Algebra/BigOperators/NatAntidiagonal.lean",
-    "Algebra/BigOperators/Option.lean",
-    "Algebra/BigOperators/Pi.lean",
-    "Algebra/BigOperators/RingEquiv.lean",
-    "Algebra/BigOperators/Sym.lean",
-    "Algebra/BigOperators/WithTop.lean",
-    "Algebra/Module/Basic.lean",
-    "Algebra/Module/BigOperators.lean",
-    "Algebra/Module/Bimodule.lean",
-    "Algebra/Module/Card.lean",
-    "Algebra/Module/CharacterModule.lean",
-    "Algebra/Module/DedekindDomain.lean",
-    "Algebra/Module/Defs.lean",
-    "Algebra/Module/End.lean",
-    "Algebra/Module/FinitePresentation.lean",
-    "Algebra/Module/GradedModule.lean",
-    "Algebra/Module/Hom.lean",
-    "Algebra/Module/Injective.lean",
-    "Algebra/Module/Lattice.lean",
-    "Algebra/Module/MinimalAxioms.lean",
-    "Algebra/Module/NatInt.lean",
-    "Algebra/Module/Opposite.lean",
-    "Algebra/Module/PID.lean",
-    "Algebra/Module/PUnit.lean",
-    "Algebra/Module/Pi.lean",
-    "Algebra/Module/PointwisePi.lean",
-    "Algebra/Module/Prod.lean",
-    "Algebra/Module/Projective.lean",
-    "Algebra/Module/Rat.lean",
-    "Algebra/Module/RingHom.lean",
-    "Algebra/Module/Shrink.lean",
-    "Algebra/Module/SnakeLemma.lean",
-    "Algebra/Module/SpanRank.lean",
-    "Algebra/Module/SpanRankOperations.lean",
-    "Algebra/Module/TransferInstance.lean",
-    "Algebra/Module/ULift.lean",
-    "Algebra/Module/ZMod.lean",
-    "NumberTheory/Primorial.lean",
-    "NumberTheory/Padics/AddChar.lean",
-    "NumberTheory/Padics/Complex.lean",
-    "NumberTheory/Padics/HeightOneSpectrum.lean",
-    "NumberTheory/Padics/Hensel.lean",
-    "NumberTheory/Padics/MahlerBasis.lean",
-    "NumberTheory/Padics/PadicIntegers.lean",
-    "NumberTheory/Padics/PadicNorm.lean",
-    "NumberTheory/Padics/PadicNumbers.lean",
-    "NumberTheory/Padics/ProperSpace.lean",
-    "NumberTheory/Padics/RingHoms.lean",
-    "NumberTheory/Padics/ValuativeRel.lean",
-    "NumberTheory/Padics/WithVal.lean",
-    "Topology/Basic.lean",
-    "Topology/Order/AtTopBotIxx.lean",
-    "Topology/Order/Basic.lean",
-    "Topology/Order/Bornology.lean",
-    "Topology/Order/Compact.lean",
-    "Topology/Order/Completion.lean",
-    "Topology/Order/CountableSeparating.lean",
-    "Topology/Order/DenselyOrdered.lean",
-    "Topology/Order/ExtendFrom.lean",
-    "Topology/Order/ExtrClosure.lean",
-    "Topology/Order/Filter.lean",
-    "Topology/Order/HullKernel.lean",
-    "Topology/Order/IntermediateValue.lean",
-    "Topology/Order/IsLUB.lean",
-    "Topology/Order/IsLocallyClosed.lean",
-    "Topology/Order/IsNormal.lean",
-    "Topology/Order/Lattice.lean",
-    "Topology/Order/LawsonTopology.lean",
-    "Topology/Order/LeftRight.lean",
-    "Topology/Order/LeftRightLim.lean",
-    "Topology/Order/LeftRightNhds.lean",
-    "Topology/Order/LiminfLimsup.lean",
-    "Topology/Order/LocalExtr.lean",
-    "Topology/Order/LowerUpperTopology.lean",
-    "Topology/Order/Monotone.lean",
-    "Topology/Order/MonotoneContinuity.lean",
-    "Topology/Order/MonotoneConvergence.lean",
-    "Topology/Order/NhdsSet.lean",
-    "Topology/Order/OrderClosed.lean",
-    "Topology/Order/OrderClosedExtr.lean",
-    "Topology/Order/PartialSups.lean",
-    "Topology/Order/Priestley.lean",
-    "Topology/Order/ProjIcc.lean",
-    "Topology/Order/Real.lean",
-    "Topology/Order/Rolle.lean",
-    "Topology/Order/ScottTopology.lean",
-    "Topology/Order/SuccPred.lean",
-    "Topology/Order/T5.lean",
-    "Topology/Order/UpperLowerSetTopology.lean",
-    "Topology/Order/WithTop.lean",
-    "Topology/Separation",  # full (flat) dir -- Hausdorff/regular/normal-type separation axioms
-    "Topology/Connected",  # full (flat) dir
-    "Topology/Compactness",  # full (flat) dir -- "compactness-related files" read as this directory
-    "Analysis/SpecialFunctions/Arcosh.lean",
-    "Analysis/SpecialFunctions/ArithmeticGeometricMean.lean",
-    "Analysis/SpecialFunctions/Arsinh.lean",
-    "Analysis/SpecialFunctions/Artanh.lean",
-    "Analysis/SpecialFunctions/Bernstein.lean",
-    "Analysis/SpecialFunctions/BinaryEntropy.lean",
-    "Analysis/SpecialFunctions/Choose.lean",
-    "Analysis/SpecialFunctions/CompareExp.lean",
-    "Analysis/SpecialFunctions/Exp.lean",
-    "Analysis/SpecialFunctions/ExpDeriv.lean",
-    "Analysis/SpecialFunctions/Exponential.lean",
-    "Analysis/SpecialFunctions/ImproperIntegrals.lean",
-    "Analysis/SpecialFunctions/JapaneseBracket.lean",
-    "Analysis/SpecialFunctions/MulExpNegMulSq.lean",
-    "Analysis/SpecialFunctions/MulExpNegMulSqIntegral.lean",
-    "Analysis/SpecialFunctions/NonIntegrable.lean",
-    "Analysis/SpecialFunctions/OrdinaryHypergeometric.lean",
-    "Analysis/SpecialFunctions/Pochhammer.lean",
-    "Analysis/SpecialFunctions/PolarCoord.lean",
-    "Analysis/SpecialFunctions/PolynomialExp.lean",
-    "Analysis/SpecialFunctions/Sigmoid.lean",
-    "Analysis/SpecialFunctions/SmoothTransition.lean",
-    "Analysis/SpecialFunctions/Sqrt.lean",
-    "Analysis/SpecialFunctions/Stirling.lean",
-    "Dynamics",  # full subtree
-    # "Data/Set/ core": read as top-level files only (excludes the Card/, Finite/, Lattice/,
-    # Pairwise/, Pointwise/ subdirectories -- deeper, more specialized machinery than "core"
-    # suggests; a judgment call, flagged in the batch-4 report).
-    "Data/Set/Accumulate.lean",
-    "Data/Set/Basic.lean",
-    "Data/Set/BoolIndicator.lean",
-    "Data/Set/BooleanAlgebra.lean",
-    "Data/Set/Card.lean",
-    "Data/Set/CoeSort.lean",
-    "Data/Set/Constructions.lean",
-    "Data/Set/Countable.lean",
-    "Data/Set/Defs.lean",
-    "Data/Set/Disjoint.lean",
-    "Data/Set/Dissipate.lean",
-    "Data/Set/Enumerate.lean",
-    "Data/Set/Equitable.lean",
-    "Data/Set/FiniteExhaustion.lean",
-    "Data/Set/Function.lean",
-    "Data/Set/Functor.lean",
-    "Data/Set/Image.lean",
-    "Data/Set/Inclusion.lean",
-    "Data/Set/Insert.lean",
-    "Data/Set/Lattice.lean",
-    "Data/Set/List.lean",
-    "Data/Set/MemPartition.lean",
-    "Data/Set/Monotone.lean",
-    "Data/Set/MulAntidiagonal.lean",
-    "Data/Set/NAry.lean",
-    "Data/Set/Notation.lean",
-    "Data/Set/Operations.lean",
-    "Data/Set/Opposite.lean",
-    "Data/Set/Order.lean",
-    "Data/Set/Piecewise.lean",
-    "Data/Set/PowersetCard.lean",
-    "Data/Set/Prod.lean",
-    "Data/Set/Restrict.lean",
-    "Data/Set/SMulAntidiagonal.lean",
-    "Data/Set/Semiring.lean",
-    "Data/Set/Sigma.lean",
-    "Data/Set/Subset.lean",
-    "Data/Set/Subsingleton.lean",
-    "Data/Set/Sups.lean",
-    "Data/Set/SymmDiff.lean",
-    "Data/Set/UnionLift.lean",
-    "Data/Rat",  # full subtree
-    "Data/Real",  # full subtree (happens to be flat -- no subdirectories exist)
-    "Data/Multiset",  # full subtree
-    "Data/Sym",  # full subtree
-    "Data/Fin",  # full subtree
-    "Data/Bool",  # full subtree
-    "Data/Prod",  # full subtree
-    "Data/Sum",  # full subtree
-    "Data/Option",  # full subtree
+    "ModelTheory",
+    "NumberTheory",
+    "Order",
+    "RingTheory",
+    "SetTheory",
+    "Topology",
 ]
 
+# Excluded PERMANENTLY (infrastructure/meta, not mathematics -- one-line reason each):
+#   Tactic      -- tactic implementations; no mathematical objects to mine
+#   Util        -- build/CI/doc tooling
+#   Lean        -- compiler/meta-level bindings
+#   Testing     -- test scaffolding (slim profile checks etc.)
+#   Deprecated  -- retired declarations kept for migration; mining them would select dead names
+# (No `Init` directory exists at this pin -- checked 9 Aug 2026.)
+#
+# DEFERRED, tranche B (do not scan this batch; trigger recorded in docs/deferred.md):
+#   CategoryTheory, AlgebraicGeometry, AlgebraicTopology, Condensed, RepresentationTheory,
+#   MeasureTheory, Probability, Geometry/Manifold
+# Reason: expected near-total attrition at the dependency-vocabulary / self-containment gates
+# (heavy abstract infrastructure; dossiers not self-containable at current depth standards).
+# Trigger to revisit: eligible pool still short of target after vocabulary round 2, or a strata
+# need only this territory supplies (e.g. the MeasurableSet predicate layer).
 
 def target_dirs(mathlib_root: Path | None = None) -> list[Path]:
     mathlib_root = mathlib_root if mathlib_root is not None else MATHLIB_ROOT
@@ -407,8 +143,25 @@ COMMON_VOCABULARY_MODULES: list[str] = [
     "Algebra/Ring",
     "Algebra/Field",
     "Algebra/BigOperators",
-    "Algebra/Polynomial",
+    "Algebra/Polynomial",    # --- Batch 5 round 1 (9 Aug 2026): conservative seeds for the widened territory, per
+    # area; every directory existence-checked at the pin. Round 2 grows from the review's
+    # grouped exclusion evidence, not guesswork. Deliberately NOT added in round 1:
+    # Real/NNReal/ENNReAL, Filter beyond what Order carries, and all topology vocabulary --
+    # the exclusion tables must argue for those.
+    "Data/Rat",             # rationals as common vocabulary alongside Nat/Int
+    "Data/Fintype",         # finiteness typeclass -- ubiquitous hypothesis vocabulary
+    "Data/ZMod",            # modular arithmetic carrier
+    "Data/Vector",          # fixed-length vectors
+    "Data/Array",           # array primitives (Computability/Control territory)
+    "Data/PNat",            # positive naturals
+    "Data/Sum",             # sum types (Prod/Option/Sigma already present)
+    "Data/Matrix",          # matrix basics -- LinearAlgebra territory's natural carrier
+    "GroupTheory/Perm",     # Equiv.Perm basics
+    "GroupTheory/Subgroup", # subgroup lattice vocabulary
+    "RingTheory/Ideal",     # ideal basics
+    "Algebra/GCDMonoid",    # divisibility/gcd vocabulary
 ]
+
 
 # (e) Anti-plumbing name patterns (design §3e): a candidate whose bare name (last dotted
 # component) matches any of these is excluded as an engineering artifact with no independent

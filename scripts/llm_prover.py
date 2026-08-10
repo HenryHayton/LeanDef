@@ -107,17 +107,32 @@ def key_of(record, fact_id, direction):
 
 
 def arm_of(record, fact_id) -> str:
-    """Deterministic 50/50 assignment of a GOAL to a backend arm (operator design, 2026-08-09).
+    """Deterministic assignment of a GOAL to a backend arm.
 
     Hashed, not positional: generation walks goals in alphabetical task order, so "first half /
     second half" would hand the arms systematically different tasks and confound the comparison.
     sha1 rather than hash() -- Python salts hash() per process, and the assignment must be
     reproducible across machines and runs. The DIRECTION is deliberately excluded: a goal's
     forward and negation attempts belong to the same arm, so each arm owns its half end-to-end.
+
+    Two-stage split. Stage 1 (2026-08-09, operator design): 50/50 goedel-8b vs "the rest",
+    unchanged since -- the goedel-8b bucket is bit-for-bit stable across every later change here,
+    so its in-flight/completed attempts are never invalidated by a later split.
+
+    Stage 2 (2026-08-10, operator design: "split sonnet's current workload in half, attack the
+    second half with goedel-32b on another pod"): the REST bucket (previously "sonnet" outright)
+    sub-splits 50/50 into "sonnet" / "goedel32b" via an independently salted hash. Safe to
+    introduce after generation had already started, because at the moment this was added the
+    live sonnet backlog (399 unresolved fact-pairs) had zero overlap with either script file on
+    disk -- confirmed by direct check -- so no in-flight sonnet attempt gets relabeled out from
+    under itself.
     """
     import hashlib
     base = f"{record['model_slug']}|{record['task_name']}|{record['sample_index']}|{fact_id}"
-    return "goedel" if hashlib.sha1(base.encode()).digest()[0] % 2 else "sonnet"
+    if hashlib.sha1(base.encode()).digest()[0] % 2:
+        return "goedel"
+    sub = hashlib.sha1((base + "|32b-split").encode()).digest()[0] % 2
+    return "goedel32b" if sub else "sonnet"
 
 
 PROVER_SYSTEM = "You are an expert Lean 4 and Mathlib prover."
@@ -301,8 +316,9 @@ def cmd_check(args) -> int:
             continue
     print(f"{sum(len(v) for v in scripts.values())} scripts over {len(scripts)} goals", flush=True)
 
-    if args.arm == "goedel":
-        stage, stamp = f"prover_{args.direction}", f"prover_{args.direction}_topup"
+    if args.arm in ("goedel", "goedel32b"):
+        tag = "prover" if args.arm == "goedel" else "prover32b"
+        stage, stamp = f"{tag}_{args.direction}", f"{tag}_{args.direction}_topup"
     else:
         stage, stamp = STAGE[args.direction], STAMP[args.direction]
     handle = ServerHandle()
@@ -390,7 +406,7 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     g = sub.add_parser("generate")
     g.add_argument("--direction", choices=("forward", "negation"), required=True)
-    g.add_argument("--arm", choices=("sonnet", "goedel", "all"), default="all")
+    g.add_argument("--arm", choices=("sonnet", "goedel", "goedel32b", "all"), default="all")
     g.add_argument("--backend", choices=("bedrock", "vllm"), default="bedrock")
     g.add_argument("--endpoint", default=None, help="vllm backend: chat-completions URL")
     g.add_argument("--model-name", default="Goedel-LM/Goedel-Prover-V2-8B")
@@ -403,7 +419,7 @@ def main() -> int:
     g.add_argument("--no-thinking", action="store_true")
     c = sub.add_parser("check")
     c.add_argument("--direction", choices=("forward", "negation"), required=True)
-    c.add_argument("--arm", choices=("sonnet", "goedel", "all"), default="all")
+    c.add_argument("--arm", choices=("sonnet", "goedel", "goedel32b", "all"), default="all")
     c.add_argument("--scripts", default=None)
     args = ap.parse_args()
     if args.scripts is None:

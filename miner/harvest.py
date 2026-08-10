@@ -15,6 +15,7 @@ from miner.depindex import build_declaration_index
 from miner.gates import GateConfig
 from miner.rank import DEFAULT_CURATION_PATH, ManifestRecord, build_manifest, load_curation, write_manifest
 from miner.scan import ScanHit, scan_all, scan_theorem_declarations_with_namespace, scan_theorem_statements_with_namespace
+from miner.verified_cache import load_cache
 from miner.verify import verify_all_with_recovery
 
 DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "harvest_manifest.jsonl"
@@ -185,6 +186,8 @@ def harvest(
     verify_timeout: float | None = None,
     curation_path: Path | None = None,
     gate_config: GateConfig | None = None,
+    cache_path: Path | None = None,
+    progress=None,
 ) -> list[ManifestRecord]:
     """Run the full stage-1 pipeline and write the manifest. Returns the records too, so
     callers (including tests) don't have to re-read the file they just wrote.
@@ -223,6 +226,13 @@ def harvest(
         )
     )
 
+    # Batch 5: reuse already-verified records and checkpoint fresh ones. `cache_path=None`
+    # (the default) keeps the pre-batch-5 behaviour -- verify everything, checkpoint nothing --
+    # so existing callers and tests are unaffected.
+    verified_cache = load_cache(cache_path) if cache_path is not None else None
+    if verified_cache:
+        print(f"verification cache: {len(verified_cache)} records available for reuse", flush=True)
+
     hits = scan_all(target_dirs, mathlib_root)
     compute_mention_counts(hits, mathlib_root)
 
@@ -236,7 +246,11 @@ def harvest(
     if base_import.status is not CheckStatus.PASSED:
         raise RuntimeError(f"could not warm up the Mathlib environment: {base_import.detail}")
 
-    verified = verify_all_with_recovery(server, base_import.env, hits, timeout=verify_timeout)
+    verified = verify_all_with_recovery(
+        server, base_import.env, hits, timeout=verify_timeout,
+        cache=verified_cache, cache_path=cache_path,
+        progress=progress,
+    )
 
     curation = load_curation(curation_path)
     records = build_manifest(

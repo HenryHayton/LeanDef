@@ -201,3 +201,68 @@ def test_implicit_and_instance_binders_are_not_counted_as_hypothesis_binders():
     )
     r = compute_richness(v)
     assert r.hypothesis_binders == 0
+
+
+# --- Blind-spot counters (batch 5, 10 Aug 2026) -------------------------------------------
+#
+# Acceptance tests for the three recorded richness blind spots, per the house rule that every
+# observed measurement gap becomes a test. The FIRST test here is the load-bearing one: these
+# counters are metadata, and a later change that quietly folds them into `total` would silently
+# reshuffle the ranking and change eligibility. That must fail loudly.
+
+
+def test_blind_spot_counters_never_enter_richness_total():
+    """The invariant that makes these counters safe to record mid-campaign."""
+    v = _verified(
+        "def foo (b : Bool) (n : ℕ) (h : Disjoint s t) := cond b (2 * n + 1) (2 * n)",
+        [
+            BinderGroup(kind="explicit", names=["b"], type_text="Bool"),
+            BinderGroup(kind="explicit", names=["n"], type_text="ℕ"),
+            BinderGroup(kind="explicit", names=["h"], type_text="Disjoint s t"),
+        ],
+    )
+    r = compute_richness(v)
+    assert r.blind_cond >= 1 and r.blind_disjoint_binders >= 1
+    components = (r.conjunctions + r.disjunctions + r.conditionals
+                  + r.quantifiers + r.comparisons + r.hypothesis_binders)
+    assert r.total == components, "richness_total must exclude the blind-spot counters"
+
+
+def test_cond_branching_counted_but_not_as_a_conditional():
+    """`Nat.bit`'s `cond b (2 * n + 1) (2 * n)` -- the module docstring's own worked example of
+    Bool-level branching that `if`/`bif` counting cannot see."""
+    v = _verified("def bit (b : Bool) (n : ℕ) := cond b (2 * n + 1) (2 * n)",
+                  [BinderGroup(kind="explicit", names=["b"], type_text="Bool")])
+    r = compute_richness(v)
+    assert r.blind_cond == 1
+    assert r.conditionals == 0
+
+
+def test_cond_detector_does_not_fire_on_substrings():
+    """`condition`/`second`/`Foo.cond` are not the `cond` eliminator."""
+    v = _verified("def foo (l : List ℕ) := l.second + condition + Foo.cond", [])
+    assert compute_richness(v).blind_cond == 0
+
+
+def test_heyting_operators_counted():
+    v = _verified("def foo (a b : α) := (a ⇨ b) ⊓ (a \\ b)", [])
+    assert compute_richness(v).blind_heyting == 2
+
+
+def test_disjoint_style_binder_counted_where_prop_heuristic_misses_it():
+    """`Disjoint s t` is a genuine side condition, but `looks_like_prop_type` is a textual
+    heuristic over type text and does not recognise an applied relational predicate."""
+    v = _verified("def foo (s t : Finset α) (h : Disjoint s t) := s ∪ t",
+                  [
+                      BinderGroup(kind="explicit", names=["s", "t"], type_text="Finset α"),
+                      BinderGroup(kind="explicit", names=["h"], type_text="Disjoint s t"),
+                  ])
+    assert compute_richness(v).blind_disjoint_binders == 1
+
+
+def test_blind_spot_counters_default_to_zero_on_plain_definitions():
+    v = _verified("def foo (n : ℕ) := if n ≤ 3 then n else n + 1",
+                  [BinderGroup(kind="explicit", names=["n"], type_text="ℕ")])
+    r = compute_richness(v)
+    assert (r.blind_cond, r.blind_heyting, r.blind_disjoint_binders) == (0, 0, 0)
+    assert r.total > 0
