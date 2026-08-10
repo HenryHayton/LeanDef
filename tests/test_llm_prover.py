@@ -41,3 +41,12 @@ def test_prover_prompt_is_a_file_completion_not_a_conversation():
     assert "theorem goal_to_prove : VTask.f = 3 := by" in p
     n = build_prover_prompt({"extracted_code": "def VTask.f : ℕ := 3"}, "VTask.f = 3", "negation")
     assert "¬ (VTask.f = 3)" in n
+
+
+def test_arm_assignment_is_deterministic_direction_blind_and_balanced():
+    from scripts.llm_prover import arm_of
+    rec = lambda i: {"model_slug": "m", "task_name": "T", "sample_index": i}
+    arms = [arm_of(rec(i), f"fact_{j}") for i in range(10) for j in range(30)]
+    assert arms == [arm_of(rec(i), f"fact_{j}") for i in range(10) for j in range(30)]
+    share = arms.count("goedel") / len(arms)
+    assert 0.4 < share < 0.6, f"hash split badly unbalanced: {share}"

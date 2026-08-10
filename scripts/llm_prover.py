@@ -106,6 +106,20 @@ def key_of(record, fact_id, direction):
     return f"{record['model_slug']}|{record['task_name']}|{record['sample_index']}|{fact_id}|{direction}"
 
 
+def arm_of(record, fact_id) -> str:
+    """Deterministic 50/50 assignment of a GOAL to a backend arm (operator design, 2026-08-09).
+
+    Hashed, not positional: generation walks goals in alphabetical task order, so "first half /
+    second half" would hand the arms systematically different tasks and confound the comparison.
+    sha1 rather than hash() -- Python salts hash() per process, and the assignment must be
+    reproducible across machines and runs. The DIRECTION is deliberately excluded: a goal's
+    forward and negation attempts belong to the same arm, so each arm owns its half end-to-end.
+    """
+    import hashlib
+    base = f"{record['model_slug']}|{record['task_name']}|{record['sample_index']}|{fact_id}"
+    return "goedel" if hashlib.sha1(base.encode()).digest()[0] % 2 else "sonnet"
+
+
 PROVER_SYSTEM = "You are an expert Lean 4 and Mathlib prover."
 
 
@@ -145,6 +159,8 @@ def cmd_generate(args) -> int:
         for fid in unknown:
             key = key_of(record, fid, args.direction)
             if key in done_keys or fid not in statements:
+                continue
+            if args.arm != "all" and arm_of(record, fid) != args.arm:
                 continue
             units.append((key, record, fid, statements[fid]))
     if args.limit:
@@ -220,6 +236,8 @@ def _generate_vllm(args) -> int:
         for fid in unknown:
             if fid not in statements:
                 continue
+            if args.arm != "all" and arm_of(record, fid) != args.arm:
+                continue
             key = key_of(record, fid, args.direction)
             for attempt in range(args.samples):
                 if (key, attempt) not in done:
@@ -283,7 +301,10 @@ def cmd_check(args) -> int:
             continue
     print(f"{sum(len(v) for v in scripts.values())} scripts over {len(scripts)} goals", flush=True)
 
-    stage, stamp = STAGE[args.direction], STAMP[args.direction]
+    if args.arm == "goedel":
+        stage, stamp = f"prover_{args.direction}", f"prover_{args.direction}_topup"
+    else:
+        stage, stamp = STAGE[args.direction], STAMP[args.direction]
     handle = ServerHandle()
     checked = certified = audit_rejected = 0
     by_fact = collections.Counter()
@@ -293,8 +314,12 @@ def cmd_check(args) -> int:
         for record, unknown in todo:
             t = load_task(record["task_name"])
             statements = {f.id: f.statement for f in t["facts"]}
+            in_arm = [fid for fid in unknown
+                      if args.arm == "all" or arm_of(record, fid) == args.arm]
+            if not in_arm:
+                continue  # no goals of this record belong to this arm -- do not stamp it
             relevant = [(fid, scripts.get(key_of(record, fid, args.direction)) or [None])
-                        for fid in unknown]
+                        for fid in in_arm]
             server, env = handle.get()
             outcome = splice_candidate_declaration(server, env, t["signature"],
                                                    record["extracted_code"])
@@ -365,6 +390,7 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     g = sub.add_parser("generate")
     g.add_argument("--direction", choices=("forward", "negation"), required=True)
+    g.add_argument("--arm", choices=("sonnet", "goedel", "all"), default="all")
     g.add_argument("--backend", choices=("bedrock", "vllm"), default="bedrock")
     g.add_argument("--endpoint", default=None, help="vllm backend: chat-completions URL")
     g.add_argument("--model-name", default="Goedel-LM/Goedel-Prover-V2-8B")
@@ -377,6 +403,7 @@ def main() -> int:
     g.add_argument("--no-thinking", action="store_true")
     c = sub.add_parser("check")
     c.add_argument("--direction", choices=("forward", "negation"), required=True)
+    c.add_argument("--arm", choices=("sonnet", "goedel", "all"), default="all")
     c.add_argument("--scripts", default=None)
     args = ap.parse_args()
     if args.scripts is None:
