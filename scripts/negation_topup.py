@@ -46,6 +46,7 @@ from pathlib import Path
 from harness.admissibility import STANDARD_MATHLIB_AXIOMS
 from harness.results import CheckStatus
 from harness.scoring import splice_candidate_declaration
+from harness.signature import root_qualify
 from ladder.axiom_audit import audit_proof_axioms
 from ladder.budgets import DEFAULT_LADDER_BUDGETS, TacticBudget
 from ladder.tier2 import adjudicate_tier2
@@ -108,6 +109,19 @@ def refute_one(server, env, fact_id, statement, task_symbol, imports, *, hammer:
     return True, tier, script, f"refuted: negation proved at tier {tier}", out_env
 
 
+def refutes_truth_too(server, base_env, statement, real_name, task_symbol, imports) -> bool:
+    """Does the same negation prove against the TRUTH? Then the FACT is defective, not the
+    candidate. Found live on the pass's first-ever refutation (Nat.log/log_lt_of_lt_pow,
+    2026-08-09): the mined fact lacked Mathlib's n ≠ 0 hypothesis, was false of Nat.log itself,
+    and the sole 'candidate FAIL' was really a truth-side defect. A refutation only counts
+    against a candidate if the truth SURVIVES the same attack."""
+    truth_stmt = statement.replace(task_symbol, root_qualify(real_name))
+    goal = negation_goal(truth_stmt)
+    budgets = negation_budgets(root_qualify(real_name))
+    t2 = adjudicate_tier2(server, base_env, "neg_truth_probe", goal, budgets, imports=imports)
+    return t2.winning is not None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
@@ -135,6 +149,7 @@ def main() -> int:
     from scoring.runner import ServerHandle
     handle = ServerHandle()
     refuted_by_fact = collections.Counter()
+    suspect_facts = collections.Counter()
     done = refuted = audited_out = 0
     t0 = time.perf_counter()
     try:
@@ -163,6 +178,14 @@ def main() -> int:
                     if "neg_tier3" not in stages:
                         stages.append("neg_tier3")
                     changed = True
+                if ok and t.get("truth_real_name") and refutes_truth_too(
+                        server, env, stmt, t["truth_real_name"], t["signature"].name, imports):
+                    by_id[fid]["detail"] = ("refutation also proves against the truth -- "
+                                            "suspect FACT, not a candidate FAIL")
+                    by_id[fid].setdefault("unknown_after", []).append("neg_suspect_fact")
+                    suspect_facts[f"{task}/{fid}"] += 1
+                    changed = True
+                    ok = False
                 if ok:
                     refuted += 1
                     refuted_by_fact[f"{task}/{fid}"] += 1
@@ -193,6 +216,7 @@ def main() -> int:
     Path("scoring_output/negation_topup_summary.json").write_text(json.dumps({
         "candidates": done, "facts_attempted": n_facts, "facts_refuted": refuted,
         "audit_rejected": audited_out, "refuted_by_fact": dict(refuted_by_fact),
+        "suspect_facts": dict(suspect_facts),
     }, indent=1), encoding="utf-8")
     return 0
 
