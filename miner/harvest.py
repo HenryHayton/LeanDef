@@ -2,7 +2,9 @@
 manifest. `harvest()` is what both the integration test and `python -m miner.harvest` call.
 """
 
+import collections
 import json
+import re
 import subprocess
 import time
 from dataclasses import asdict, dataclass, field
@@ -22,38 +24,54 @@ DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "harvest_mani
 DEFAULT_MENTION_NAMES_OUTPUT_PATH = Path(__file__).resolve().parent / "output" / "mention_names.jsonl"
 
 
+# A Lean identifier, dotted components included: `Nat.log`, `Finset.sum`, `x'`, `foo?`.
+# Anchored by the character class rather than \b so that `Nat.log` inside `Nat.log_le` yields the
+# single token `Nat.log_le`, not a spurious `Nat.log` -- see compute_mention_counts.
+_IDENT_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_'?!]*(?:\.[A-Za-z_][A-Za-z0-9_'?!]*)*")
+
+
 def compute_mention_counts(hits: list[ScanHit], mathlib_root: Path) -> None:
-    """Fill in `mention_count` on each hit in place: occurrences of its name in the Mathlib
-    source tree, outside its defining module entirely (not even later uses within the same
-    file count). Uses `grep` rather than a Python-level scan over ~8800 files -- a
-    fixed-string occurrence count across the whole corpus is exactly what `grep -c` does.
+    """Fill in `mention_count` on each hit in place: lines mentioning its name anywhere in the
+    Mathlib source tree, outside its defining module entirely (not even later uses within the
+    same file count).
 
     Recorded as metadata only since the 22 July 2026 design-doc revision -- no gate reads this
     field anymore (see `miner.config.THEOREM_MENTION_FLOOR`'s comment for why raw mention-count
-    was retired as a gate input).
-    """
-    for hit in hits:
-        defining_file = mathlib_root / hit.module_path
-        try:
-            result = subprocess.run(
-                ["grep", "-r", "-F", "-c", hit.name, str(mathlib_root)],
-                capture_output=True,
-                text=True,
-                timeout=60,
-            )
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            hit.mention_count = 0
-            continue
+    was retired as a gate input). That is what makes the two changes below safe: neither can
+    move a candidate across a gate, so neither can perturb eligibility or the monotonicity
+    invariant.
 
-        total = 0
-        for line in result.stdout.splitlines():
-            path_str, sep, count_str = line.rpartition(":")
-            if not sep or not count_str.isdigit():
-                continue
-            if Path(path_str) == defining_file:
-                continue
-            total += int(count_str)
-        hit.mention_count = total
+    **One pass, not one per candidate (batch 5, 10 Aug 2026).** This used to shell out to
+    `grep -r -F -c <name>` once PER CANDIDATE -- a full recursive walk of all 8,264 files each
+    time, measured at ~0.85s. Batch 4's 3,185 candidates absorbed that (~29 min); batch 5's
+    15,387 would have spent ~3.6 HOURS re-walking the same tree, to populate a field no gate
+    reads. The corpus is now read once and every candidate counted against it in that single
+    pass.
+
+    **Token matching, not substring.** `grep -F` is a substring search, so `Nat.log` matched
+    every `Nat.log_le`, `Nat.log_lt_of_lt_pow`, ... and the recorded counts were inflated for
+    every name that prefixes a longer sibling -- which in Mathlib's naming convention is most
+    of them. Counting identifier TOKENS fixes that. Counts therefore drop relative to batch 4,
+    and the drop is a correction rather than a regression; the batch-5 review reports it.
+    """
+    by_name: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
+    wanted = {hit.name for hit in hits}
+    for path in mathlib_root.rglob("*.lean"):
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        for line in text.splitlines():
+            # Per-LINE set: a name used three times on one line is one mentioning line, which is
+            # what `grep -c` counted and what the field has always meant.
+            for token in set(_IDENT_RE.findall(line)) & wanted:
+                by_name[token][str(path)] += 1
+
+    for hit in hits:
+        defining_file = str(mathlib_root / hit.module_path)
+        counts = by_name.get(hit.name)
+        hit.mention_count = 0 if not counts else sum(
+            n for path_str, n in counts.items() if path_str != defining_file)
 
 
 def compute_theorem_mention_counts(hits: list[ScanHit], mathlib_root: Path) -> dict[str, int]:

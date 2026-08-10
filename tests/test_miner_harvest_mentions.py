@@ -141,3 +141,76 @@ def test_named_argument_syntax_no_longer_truncates_mention_out_of_statement(tmp_
     )
     counts = compute_theorem_mention_counts([_hit("Finset.pi")], tmp_path)
     assert counts["Finset.pi"] == 1
+
+
+class TestMentionCountsOnePass:
+    """Batch-5 acceptance tests: the one-pass rewrite of `compute_mention_counts`.
+
+    Both behaviours were observed live on 10 Aug 2026: the per-candidate `grep -r` cost ~0.85s
+    over 8,264 files (≈3.6h for batch 5's 15,387 candidates), and `grep -F`'s substring match
+    inflated every name that prefixes a longer sibling.
+    """
+
+    def _tree(self, tmp_path):
+        root = tmp_path / "Mathlib"
+        (root / "Data").mkdir(parents=True)
+        (root / "Data" / "Log.lean").write_text(
+            "def Nat.log (b n : ℕ) : ℕ := 0\n", encoding="utf-8")
+        (root / "Data" / "Uses.lean").write_text(
+            "theorem a : Nat.log 2 8 = 3 := by simp\n"        # 1 mentioning line
+            "theorem b : Nat.log_le x := by simp\n"           # sibling, must NOT count
+            "theorem c : Nat.log 2 4 = Nat.log 2 4 := rfl\n",  # twice on ONE line = 1
+            encoding="utf-8")
+        return root
+
+    def test_sibling_prefix_is_not_counted_as_a_mention(self, tmp_path):
+        """`grep -F Nat.log` matched `Nat.log_le`; token matching must not."""
+        from miner.harvest import compute_mention_counts
+        from miner.scan import ScanHit
+
+        root = self._tree(tmp_path)
+        hit = ScanHit(name="Nat.log", module_path="Data/Log.lean",
+                      source_text="def Nat.log (b n : ℕ) : ℕ := 0")
+        compute_mention_counts([hit], root)
+        assert hit.mention_count == 2, "expected the 2 genuine lines, not the Nat.log_le line"
+
+    def test_defining_file_is_excluded(self, tmp_path):
+        from miner.harvest import compute_mention_counts
+        from miner.scan import ScanHit
+
+        root = self._tree(tmp_path)
+        hit = ScanHit(name="Nat.log", module_path="Data/Log.lean", source_text="x")
+        compute_mention_counts([hit], root)
+        counted_own_definition = hit.mention_count > 2
+        assert not counted_own_definition
+
+    def test_absent_name_scores_zero_not_an_error(self, tmp_path):
+        from miner.harvest import compute_mention_counts
+        from miner.scan import ScanHit
+
+        root = self._tree(tmp_path)
+        hit = ScanHit(name="Nope.missing", module_path="Data/Log.lean", source_text="x")
+        compute_mention_counts([hit], root)
+        assert hit.mention_count == 0
+
+    def test_corpus_is_walked_once_regardless_of_candidate_count(self, tmp_path, monkeypatch):
+        """The regression that motivated the rewrite: cost must not scale with candidates."""
+        from pathlib import Path as _P
+
+        from miner.harvest import compute_mention_counts
+        from miner.scan import ScanHit
+
+        root = self._tree(tmp_path)
+        calls = {"n": 0}
+        real_rglob = _P.rglob
+
+        def counting_rglob(self, pattern):
+            if pattern == "*.lean":
+                calls["n"] += 1
+            return real_rglob(self, pattern)
+
+        monkeypatch.setattr(_P, "rglob", counting_rglob)
+        hits = [ScanHit(name=f"Nat.log", module_path="Data/Log.lean", source_text="x")
+                for _ in range(25)]
+        compute_mention_counts(hits, root)
+        assert calls["n"] == 1, f"walked the corpus {calls['n']}x for 25 candidates"
