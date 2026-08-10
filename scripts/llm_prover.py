@@ -71,12 +71,23 @@ def build_prompt(record: dict, statement: str, direction: str) -> str:
 
 
 def extract_script(text: str) -> str | None:
-    """The tactic script from the reply: last fenced block, must start with `by`."""
+    """The tactic script from the reply.
+
+    Two shapes: a bare `by ...` block (what the Sonnet prompt asks for), or a full
+    `theorem ... := by ...` (what prover-trained models emit natively -- their training task is
+    completing whole proof files, and asking them for anything else fights the training). For
+    the second shape the script is everything from the LAST top-level `:= by` onward.
+    """
     blocks = re.findall(r"```(?:lean4?|)\s*\n(.*?)```", text or "", re.DOTALL | re.IGNORECASE)
     for block in reversed(blocks or [text or ""]):
         script = block.strip()
         if script.startswith("by"):
             return script
+        m = None
+        for m in re.finditer(r":=\s*(by\b)", script):
+            pass
+        if m:
+            return script[m.start(1):].strip()
     return None
 
 
@@ -95,7 +106,24 @@ def key_of(record, fact_id, direction):
     return f"{record['model_slug']}|{record['task_name']}|{record['sample_index']}|{fact_id}|{direction}"
 
 
+PROVER_SYSTEM = "You are an expert Lean 4 and Mathlib prover."
+
+
+def build_prover_prompt(record: dict, statement: str, direction: str) -> str:
+    """Prover-native shape: a Lean file to complete, not a conversation. Goedel-Prover-V2's
+    trained task is emitting the finished proof for a stated theorem; the candidate definition
+    rides above the goal exactly as an auxiliary definition would in its training data."""
+    goal = statement if direction == "forward" else negation_goal(statement)
+    return (
+        "Complete the following Lean 4 code:\n\n"
+        f"```lean4\nimport Mathlib\n\n{record['extracted_code']}\n\n"
+        f"theorem goal_to_prove : {goal} := by\n```\n"
+    )
+
+
 def cmd_generate(args) -> int:
+    if args.backend == "vllm":
+        return _generate_vllm(args)
     from bedrock import config as bcfg
     from bedrock.client import BedrockClient
 
@@ -164,6 +192,76 @@ def cmd_generate(args) -> int:
     return 0 if errors == 0 else 1
 
 
+def _generate_vllm(args) -> int:
+    """Prover-backend generation: k sampled attempts per goal against a vLLM endpoint.
+
+    k separate calls rather than one n=k request: `prelim.client`'s SSE accumulator merges all
+    choices into one string, and k calls parallelise across the pool anyway. Rows carry the same
+    `key` with an `attempt` index; the check phase tries every attempt until one certifies.
+    """
+    from prelim.client import generate as vllm_generate
+
+    scores_dir = cfg.scores_dir()
+    out_path = Path(args.scripts)
+    done = set()
+    if out_path.exists():
+        for line in out_path.read_text(encoding="utf-8").splitlines():
+            try:
+                row = json.loads(line)
+                done.add((row["key"], row.get("attempt", 0)))
+            except (json.JSONDecodeError, KeyError):
+                continue
+
+    units = []
+    from scoring.samples import load_task
+    for record, unknown in unresolved_facts(scores_dir):
+        t = load_task(record["task_name"])
+        statements = {f.id: f.statement for f in t["facts"]}
+        for fid in unknown:
+            if fid not in statements:
+                continue
+            key = key_of(record, fid, args.direction)
+            for attempt in range(args.samples):
+                if (key, attempt) not in done:
+                    units.append((key, attempt, record, statements[fid]))
+    if args.limit:
+        units = units[: args.limit]
+    print(f"{len(units)} attempts to generate (pass@{args.samples}, "
+          f"{len(done)} already on disk)", flush=True)
+
+    t0 = time.perf_counter()
+    n_done = errors = 0
+
+    def one(unit):
+        key, attempt, record, stmt = unit
+        prompt = build_prover_prompt(record, stmt, args.direction)
+        res = vllm_generate(
+            [{"role": "user", "content": prompt}], temperature=args.temperature,
+            max_tokens=args.max_tokens, model_name=args.model_name, endpoint_style="chat",
+            stream=True, timeout_s=1800.0, endpoint_url=args.endpoint)
+        return key, attempt, res.text
+
+    with ThreadPoolExecutor(max_workers=args.concurrency) as pool,             out_path.open("a", encoding="utf-8") as fh:
+        futures = {pool.submit(one, u): u for u in units}
+        for fut in as_completed(futures):
+            key, attempt = futures[fut][0], futures[fut][1]
+            try:
+                key, attempt, text = fut.result()
+                fh.write(json.dumps({"key": key, "attempt": attempt,
+                                     "script": extract_script(text)}) + "\n")
+                fh.flush()
+                n_done += 1
+            except Exception as e:  # noqa: BLE001
+                errors += 1
+                print(f"ERROR {key}#{attempt}: {type(e).__name__}: {str(e)[:100]}", flush=True)
+            if (n_done + errors) % 50 == 0:
+                rate = (n_done + errors) / max(time.perf_counter() - t0, 1e-6)
+                print(f"{n_done+errors}/{len(units)} (err={errors}) "
+                      f"eta {(len(units)-n_done-errors)/rate/60:.0f} min", flush=True)
+    print(f"\nGENERATED {n_done}, errors {errors}")
+    return 0 if errors == 0 else 1
+
+
 def cmd_check(args) -> int:
     from harness.admissibility import STANDARD_MATHLIB_AXIOMS
     from harness.repl import run_checked
@@ -175,15 +273,15 @@ def cmd_check(args) -> int:
     from scoring.samples import load_task
 
     scores_dir = cfg.scores_dir()
-    scripts = {}
+    scripts = collections.defaultdict(list)
     for line in Path(args.scripts).read_text(encoding="utf-8").splitlines():
         try:
             row = json.loads(line)
-            if row.get("script"):
-                scripts[row["key"]] = row["script"]
+            if row.get("script") and row["script"] not in scripts[row["key"]]:
+                scripts[row["key"]].append(row["script"])
         except json.JSONDecodeError:
             continue
-    print(f"{len(scripts)} generated scripts loaded", flush=True)
+    print(f"{sum(len(v) for v in scripts.values())} scripts over {len(scripts)} goals", flush=True)
 
     stage, stamp = STAGE[args.direction], STAMP[args.direction]
     handle = ServerHandle()
@@ -195,7 +293,7 @@ def cmd_check(args) -> int:
         for record, unknown in todo:
             t = load_task(record["task_name"])
             statements = {f.id: f.statement for f in t["facts"]}
-            relevant = [(fid, scripts.get(key_of(record, fid, args.direction)))
+            relevant = [(fid, scripts.get(key_of(record, fid, args.direction)) or [None])
                         for fid in unknown]
             server, env = handle.get()
             outcome = splice_candidate_declaration(server, env, t["signature"],
@@ -204,26 +302,33 @@ def cmd_check(args) -> int:
                 continue
             cand_env = outcome.result.env
             by_id = {fv["fact_id"]: fv for fv in record["fact_verdicts"]}
-            for i, (fid, script) in enumerate(relevant):
+            for i, (fid, attempt_scripts) in enumerate(relevant):
                 stages = by_id[fid].setdefault("unknown_after", [])
-                if script is None:
+                goal = statements[fid] if args.direction == "forward" else negation_goal(statements[fid])
+                ok, script = False, None
+                for j, candidate_script in enumerate(attempt_scripts):
+                    if candidate_script is None:
+                        continue
+                    script = candidate_script
+                    name = f"llm_{args.direction}_{i}_{j}"
+                    decl = f"theorem {name} : {goal} := {script}"
+                    checked += 1
+                    result = run_checked(server, Command(cmd=decl, env=cand_env), timeout=120.0)
+                    ok = result.status is CheckStatus.PASSED
+                    if ok:
+                        cand_env = result.env
+                        audit = audit_proof_axioms(server, cand_env, name,
+                                                   permitted=STANDARD_MATHLIB_AXIOMS)
+                        if not audit.passed:
+                            audit_rejected += 1
+                            ok = False
+                            by_id[fid]["detail"] = f"LLM proof rejected by axiom audit: {audit.detail[:160]}"
+                    if ok:
+                        break
+                if not any(attempt_scripts):
                     if stage not in stages:
                         stages.append(stage)
                     continue
-                goal = statements[fid] if args.direction == "forward" else negation_goal(statements[fid])
-                name = f"llm_{args.direction}_{i}"
-                decl = f"theorem {name} : {goal} := {script}"
-                checked += 1
-                result = run_checked(server, Command(cmd=decl, env=cand_env), timeout=120.0)
-                ok = result.status is CheckStatus.PASSED
-                if ok:
-                    cand_env = result.env
-                    audit = audit_proof_axioms(server, cand_env, name,
-                                               permitted=STANDARD_MATHLIB_AXIOMS)
-                    if not audit.passed:
-                        audit_rejected += 1
-                        ok = False
-                        by_id[fid]["detail"] = f"LLM proof rejected by axiom audit: {audit.detail[:160]}"
                 if ok:
                     certified += 1
                     by_fact[f"{record['task_name']}/{fid}"] += 1
@@ -260,6 +365,11 @@ def main() -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     g = sub.add_parser("generate")
     g.add_argument("--direction", choices=("forward", "negation"), required=True)
+    g.add_argument("--backend", choices=("bedrock", "vllm"), default="bedrock")
+    g.add_argument("--endpoint", default=None, help="vllm backend: chat-completions URL")
+    g.add_argument("--model-name", default="Goedel-LM/Goedel-Prover-V2-8B")
+    g.add_argument("--samples", type=int, default=8, help="vllm backend: pass@k attempts/goal")
+    g.add_argument("--temperature", type=float, default=1.0)
     g.add_argument("--scripts", default=None)
     g.add_argument("--concurrency", type=int, default=12)
     g.add_argument("--max-tokens", type=int, default=4096)
@@ -270,7 +380,9 @@ def main() -> int:
     c.add_argument("--scripts", default=None)
     args = ap.parse_args()
     if args.scripts is None:
-        args.scripts = f"scoring_output/llm_scripts_{args.direction}.jsonl"
+        backend = getattr(args, "backend", None) or "check"
+        suffix = "" if backend in ("bedrock", "check") else f"_{args.model_name.rsplit('/', 1)[-1].lower()}"
+        args.scripts = f"scoring_output/llm_scripts_{args.direction}{suffix}.jsonl"
     return cmd_generate(args) if args.cmd == "generate" else cmd_check(args)
 
 

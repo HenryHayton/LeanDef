@@ -23,3 +23,21 @@ def test_prompts_carry_the_candidate_and_the_right_goal_direction():
     neg = build_prompt(record, "VTask.f = 3", "negation")
     assert "def VTask.f" in fwd and "VTask.f = 3" in fwd and "NEGATION" not in fwd
     assert "¬ (VTask.f = 3)" in neg and "counterexample" in neg
+
+
+def test_prover_native_theorem_shape_extracts_from_the_last_assignment():
+    text = ("```lean4\nimport Mathlib\ndef VTask.f : ℕ := 3\n"
+            "theorem goal_to_prove : VTask.f = 3 := by\n  rfl\n```")
+    from scripts.llm_prover import extract_script
+    s = extract_script(text)
+    assert s is not None and s.startswith("by")
+    assert "rfl" in s and "theorem" not in s
+
+
+def test_prover_prompt_is_a_file_completion_not_a_conversation():
+    from scripts.llm_prover import build_prover_prompt
+    p = build_prover_prompt({"extracted_code": "def VTask.f : ℕ := 3"}, "VTask.f = 3", "forward")
+    assert "Complete the following Lean 4 code" in p
+    assert "theorem goal_to_prove : VTask.f = 3 := by" in p
+    n = build_prover_prompt({"extracted_code": "def VTask.f : ℕ := 3"}, "VTask.f = 3", "negation")
+    assert "¬ (VTask.f = 3)" in n
