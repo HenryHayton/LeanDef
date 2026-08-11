@@ -96,7 +96,7 @@ from authoring.consistency import (
 )
 from authoring.composition import enforce as enforce_composition
 from authoring.emit import emit_task
-from authoring.fact_validation import validate_fact
+from authoring.fact_validation import _schema_status as schema_status, validate_fact
 from authoring.facts import DomainSpec, ProposedFact
 from authoring.mentions import DEFAULT_MENTION_CAP, render_mention_excerpt
 from authoring.orchestrate import (
@@ -655,10 +655,20 @@ def _author_from_dossier(
 
     fact_list: list[Fact] = [
         f.to_fact(
-            validation_status=v.status,
+            validation_status=schema_status(v.status),
             anchors_resolved=v.anchors_resolved,
             cached_script=v.winning_script,
             axiom_closure=v.axiom_closure,
+            # Schema: a CERTIFIED proof fact must carry a discharge record. The ladder has the
+            # evidence (which tier won, with what script); without projecting it here the task
+            # fails emit at the first proof fact -- decide facts are unaffected, which is why
+            # the failure surfaced only at facts[6].
+            # Schema shape (harness.task_schema._validate_discharge): tier, wall_clock_s and
+            # `at` are all REQUIRED once discharge is non-null.
+            discharge=({"tier": v.tier, "wall_clock_s": v.wall_clock_s, "at": "authoring",
+                        "script": v.winning_script,
+                        "self_cited": bool(getattr(f, "self_restatement", False))}
+                       if v.status == "CERTIFIED" and f.mechanism == "proof" else None),
             provenance=FactProvenance(
                 validation_run_id=run_id,
                 note=(f"authored by {config.authoring_model_id}; "

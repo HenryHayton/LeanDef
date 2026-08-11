@@ -122,3 +122,65 @@ class ConverseClient:
                 region=self.region,
             )
         raise ConverseError(f"converse exhausted {self.max_attempts} attempts: {last}")
+
+
+class ConverseAuthoringClient:
+    """`BedrockClient`-shaped adapter over Converse, so the authoring pipeline can run on
+    DeepSeek/Qwen without knowing anything about wire formats.
+
+    Written when Sonnet hit its daily token quota mid-batch for the fourth time in this project.
+    The pipeline only ever reads `.text`, `.stop_reason` and `.usage` off a response
+    (`authoring.orchestrate`), so matching `LLMResponse` on those three is sufficient.
+
+    **One real caveat, not a detail.** DeepSeek V3.2 caps output at 8,192 tokens, while the
+    fact-proposal call is configured for 16,384 -- `ConverseClient.send` clamps rather than
+    erroring, so a large fact suite can come back truncated. `stop_reason == "max_tokens"` is
+    exactly what `_parse_llm_json_response` treats as a truncation failure, so this degrades
+    into an honest per-task rotation rather than silent corruption; but on tasks with big suites
+    it will rotate more often than Sonnet would.
+    """
+
+    def __init__(self, region: str = DEFAULT_REGION, *, model_id: str = DEEPSEEK_V32,
+                 log_path=None, read_timeout_s: float = 900.0):
+        self._client = ConverseClient(region=region, read_timeout_s=read_timeout_s)
+        self._default_model = model_id
+        self.log_path = log_path
+        self.region = region
+
+    def send(self, system: str, user_message: str, *, model_id: str | None = None,
+             max_tokens: int = 1024, temperature: float = 1.0, thinking=None):
+        import json as _json
+        import time as _time
+        from dataclasses import dataclass as _dc
+
+        # `thinking` is Anthropic-only and is accepted-and-ignored rather than rejected, so the
+        # pipeline needs no per-provider branching.
+        t0 = _time.perf_counter()
+        res = self._client.send(system, user_message,
+                                model_id=self._default_model,
+                                max_tokens=max_tokens, temperature=temperature)
+        latency = _time.perf_counter() - t0
+
+        @_dc(frozen=True)
+        class _Resp:
+            text: str
+            model_id: str
+            region: str
+            attempt: int
+            latency_s: float
+            stop_reason: str | None
+            usage: dict | None
+            raw_response: dict
+
+        usage = {"input_tokens": res.input_tokens, "output_tokens": res.output_tokens}
+        if self.log_path is not None:
+            # Same shape the cost accounting in scripts/run_batch200.py reads.
+            rec = {"timestamp": _time.strftime("%Y-%m-%dT%H:%M:%S"), "model_id": res.model_id,
+                   "outcome": "success", "latency_s": round(latency, 2),
+                   "request": {"max_tokens": max_tokens},
+                   "response": {"usage": usage, "stop_reason": res.stop_reason}}
+            with open(self.log_path, "a", encoding="utf-8") as fh:
+                fh.write(_json.dumps(rec) + "\n")
+        return _Resp(text=res.text, model_id=res.model_id, region=res.region, attempt=1,
+                     latency_s=latency, stop_reason=res.stop_reason, usage=usage,
+                     raw_response={})

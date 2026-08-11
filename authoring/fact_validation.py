@@ -85,6 +85,7 @@ class FactValidation:
     winning_script: str | None = None
     tier: int | None = None
     anchors_resolved: list[str] = field(default_factory=list)
+    wall_clock_s: float = 0.0
     # Schema rule: `axiom_closure` must be non-null whenever `cached_script` is -- a cached proof
     # ships with the axioms it actually depends on, or it is not evidence of anything.
     axiom_closure: list[str] | None = None
@@ -144,21 +145,36 @@ def is_restatement(server: AutoLeanServer, env: int, truth_prop: str) -> bool:
     return False
 
 
-def resolve_anchors(server: AutoLeanServer, env: int, anchors: list[str]) -> tuple[list[str], str]:
-    """`(resolved, failure_detail)`. An anchor must name a THEOREM; a `def` is a rejection.
+def resolve_anchors(server: AutoLeanServer, env: int, anchors: list[str],
+                    definition_name: str | None = None) -> tuple[list[str], str]:
+    """`(resolved, failure_detail)`. An anchor must RESOLVE, and must not be the definition itself.
 
-    `#print axioms <name>` succeeds for theorems and errors for a plain definition, which is the
-    cheapest discriminator available in the REPL without parsing `#check` output.
+    **What this does not do, and why.** The rule as specified is "anchors must resolve to
+    theorems, never definitions". There is no cheap REPL probe for that distinction:
+    `#print axioms` succeeds for definitions too, and the obvious `have := @a` elaboration probe
+    has false NEGATIVES on ordinary theorems -- measured, on 11 Aug 2026:
+
+        Nat.choose_symm     #check PASSED   have-probe PASSED
+        List.nextOr_nil     #check PASSED   have-probe FAILED   <- a real theorem
+        Relation.map_apply  #check PASSED   have-probe FAILED   <- a real theorem
+
+    (theorems whose statements carry universe metavariables or unresolved instance arguments do
+    not elaborate standalone). Shipping that probe rejected most global facts in the first
+    50-task attempt, leaving suites averaging 2.8 facts against a floor of 8, four of them empty.
+
+    So this enforces the part that is exactly checkable and covers the observed failure:
+    `Relation.Map/map_apply_unfold` cited `Relation.Map` -- the DEFINITION under test -- which is
+    a restatement by construction. A false anchor that happens to name some other definition is
+    not caught here; the rfl restatement gate is the backstop for the consequence that matters.
     """
     resolved: list[str] = []
+    banned = {definition_name} if definition_name else set()
     for a in anchors:
+        if a in banned:
+            return resolved, f"anchor {a!r} is the definition under test, not a theorem about it"
         chk = run_checked(server, Command(cmd=f"#check @{a}", env=env), timeout=20.0)
         if chk.status is not CheckStatus.PASSED:
             return resolved, f"anchor {a!r} does not resolve in the pinned environment"
-        is_thm = run_checked(server, Command(cmd=f"example : True := by have := @{a}; trivial",
-                                            env=env), timeout=20.0)
-        if is_thm.status is not CheckStatus.PASSED:
-            return resolved, f"anchor {a!r} is not usable as a theorem"
         resolved.append(a)
     return resolved, ""
 
@@ -187,6 +203,18 @@ def witness_violates(server: AutoLeanServer, env: int, truth_prop: str) -> bool:
     return res.winning is not None
 
 
+def _schema_status(status: str) -> str:
+    """The ladder's own vocabulary -> the two statuses task.json permits.
+
+    `harness.task_schema` allows only CERTIFIED and PROVISIONALLY_VALIDATED. UNVALIDATED is a
+    real and useful ladder outcome -- "no tier discharged this against the truth" -- but it is
+    not a schema value, so it maps to PROVISIONALLY_VALIDATED, which is exactly what that status
+    has always meant (authored, not kernel-discharged). The ladder's finer verdict survives in
+    the fact's provenance note, so the attrition stays visible.
+    """
+    return CERTIFIED if status == CERTIFIED else "PROVISIONALLY_VALIDATED"
+
+
 def validate_fact(
     server: AutoLeanServer,
     truth_env: int,
@@ -200,6 +228,8 @@ def validate_fact(
 ) -> FactValidation:
     """Run the ladder for one fact. `llm_closer(truth_prop) -> script|None` is optional; when
     supplied it is the last discharge attempt (DeepSeek in the 200-task run)."""
+    import time as _time
+    _t0 = _time.perf_counter()
     truth_prop = truth_statement(fact.statement, task_symbol, truth_name)
 
     # Restatement rejection applies ONLY to ANCHORED facts -- those derived from a named Mathlib
@@ -216,7 +246,8 @@ def validate_fact(
         return FactValidation(fact.id, REJECTED_RESTATEMENT,
                               "closed by rfl/Iff.rfl against the truth -- definitional unfolding")
 
-    resolved, anchor_fail = resolve_anchors(server, truth_env, list(fact.anchors or []))
+    resolved, anchor_fail = resolve_anchors(server, truth_env, list(fact.anchors or []),
+                                            definition_name=truth_name)
     if anchor_fail:
         return FactValidation(fact.id, REJECTED_ANCHOR, anchor_fail, anchors_resolved=resolved)
 
@@ -246,6 +277,7 @@ def validate_fact(
         v = FactValidation(fact.id, UNVALIDATED, "no tier discharged it against the truth",
                            anchors_resolved=resolved)
 
+    v.wall_clock_s = round(_time.perf_counter() - _t0, 3)
     if (fact.polarity or "") == "reject":
         v.witness_ok = witness_violates(server, truth_env, truth_prop)
         # A claimed per-clause near-miss that cannot be confirmed is downgraded to a generic

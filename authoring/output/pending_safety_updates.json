@@ -1876,5 +1876,553 @@
     },
     "repair_log": [],
     "status": "pending"
+  },
+  {
+    "name": "ArithmeticFunction.dirichletInverseFun",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11342,
+        11349
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "11 accepted, 3 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "ok",
+          "detail": "11 kept, 0 decide trimmed to cap"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "3 ship (3 certified), 8 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "flagged",
+          "detail": "shipped after 4 compile attempt(s) failing (attempt 1: compile_error: Function expected at\n  ih\nbut this term has type\n  R✝\n\nNote: Expected a function because this term is being applied to the argument\n  d; attempt 2: compile_error: Tactic `assumption` failed\n\nR✝ : Type u_1\ninst✝ : Ring R✝\nf : ℕ → R✝\nhf : Invertible (f 1)\nn✝ n : ℕ\nih : (m : ℕ) → m < n → R✝\nd : ℕ\n⊢ d ∈ Finset.filter (?m.74 n ih d) n.properDivisors; attempt 3: compile_error: Unknown constant `Nat.properDivisors_lt_self`; failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Nat.strongRecOn', which is 'noncomputable'; attempt 4: compile_error: Tactic `assumption` failed\n\nR✝ : Type u_1\ninst✝ : Ring R✝\nf : ℕ → R✝\nhf : Invertible (f 1)\nn✝ n : ℕ\nih : (m : ℕ) → m < n → R✝\nd : ℕ\n⊢ d ∈ n.properDivisors; failed to compile definition, consider marking it as 'noncomputable' because it depends on 'Nat.strongRecOn', which is 'noncomputable') -- reconstruction unverified, see ROUND_TRIP_UNVERIFIED_COMPILE flag"
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.dirichletInverseFun\n\n### Object\n\nGiven an arithmetic function `f : ℕ → R` (a function from natural numbers to a ring `R`) whose value at 1 is invertible, `VTask.dirichletInverseFun f hf` is the **Dirichlet inverse** of `f`: the unique arithmetic function `g : ℕ → R` such that the Dirichlet convolution `f * g` equals the arithmetic identity function (which is 1 at `n = 1` and 0 elsewhere). The function is defined by a recursive formula on the natural number argument, using the proper divisors of `n` in the recursive step.\n\n### Signature\n\n`{R : Type u_1} -> [Ring R] -> (f : ℕ → R) -> (hf : Invertible (f 1)) -> (n : ℕ) -> R`\n\n`R` is the target ring. `f` is the arithmetic function whose Dirichlet inverse is being constructed. `hf` is a witness that `f 1` is invertible in `R` (i.e., it provides a two-sided inverse `⅟(f 1)`); this witness is required because the Dirichlet inverse exists precisely when `f 1` is a unit, and providing it as an `Invertible` instance makes the function computable when `f` is computable. `n` is the natural number at which the Dirichlet inverse is evaluated.\n\n### Conventions\n\nAt `n = 0`, the value is defined to be `0` (the zero element of `R`). This is a junk value: `0` is not a natural-number index that carries meaningful Dirichlet-theoretic content, and the value is set to `0` by convention. At `n = 1`, the value is `⅟(f 1)`, the chosen inverse of `f 1` from the `Invertible` instance, reflecting that the Dirichlet inverse of `f` at 1 must be the ring-inverse of `f 1`.\n\n### Worked examples\n\n- Claim: `VTask.dirichletInverseFun f hf 0 = 0` for any `f` and `hf` — the value at zero is always the zero element of `R`.\n\n- Claim: `VTask.dirichletInverseFun f hf 1 = ⅟(f 1)` for any `f` and `hf` — the value at one is the chosen inverse of `f 1`.\n\n- Claim: For `n ≥ 2`, `VTask.dirichletInverseFun f hf n = -⅟(f 1) * ∑ d ∈ n.properDivisors, f (n / d) * VTask.dirichletInverseFun f hf d` — the value at any `n ≠ 0, 1` is determined by the values at all proper divisors of `n`, ensuring that the Dirichlet convolution of `f` with its inverse equals the identity arithmetic function.\n\n- Claim: If `f : ℕ → ℤ` satisfies `f 1 = 1` (so that `1 : ℤ` is invertible with inverse `1`), then the Dirichlet inverse at `n = 2` equals `-f 2`, reflecting that the only proper divisor of `2` is `1`, giving `-⅟(f 1) * f(2/1) * ⅟(f 1)`, simplified via `f 1 = 1`.\n\n### Boundaries\n\n- At `n = 0`: returns `0` unconditionally; this is a junk value with no number-theoretic significance.\n- At `n = 1`: returns `⅟(f 1)`, the inverse of `f 1`. This is independent of the rest of `f`.\n- For `n ≥ 2`: the recursion terminates because all proper divisors of `n` are strictly less than `n`, so well-foundedness of the natural number ordering ensures the recursion is well-defined.\n- The function is well-defined regardless of whether `f` is multiplicative, completely multiplicative, or anything else; the only algebraic hypothesis needed is that `f 1` is invertible in `R`.\n- If `R` is not commutative, the formula still applies but the non-commutativity of multiplication in `R` is respected.\n\n### Not to be confused with\n\n- **`ArithmeticFunction.pmul` or Dirichlet convolution (`ArithmeticFunction.pdiv`)**: those are the product/quotient operations on arithmetic functions, not the inverse under Dirichlet convolution.\n- **Möbius function `ArithmeticFunction.moebius`**: the Möbius function is specifically the Dirichlet inverse of the constant-1 arithmetic function; `VTask.dirichletInverseFun` generalizes this to any `f` with invertible `f 1`.\n- **`Invertible.invOf` (`⅟`)**: that is the ring-level inverse of a single element, whereas `VTask.dirichletInverseFun` constructs an entire arithmetic function (inverse under Dirichlet convolution), which uses `⅟(f 1)` as a building block.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Nat.Partition.ofSums",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11381,
+        11388
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "flagged",
+          "detail": "1 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "6 accepted, 8 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "violations",
+          "detail": "6 kept, 0 decide trimmed to cap; suite_floor: 6 < 8"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "6 ship (6 certified), 0 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "flagged",
+          "detail": "shipped after 4 compile attempt(s) failing (attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}') -- reconstruction unverified, see ROUND_TRIP_UNVERIFIED_COMPILE flag"
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.ofSums` constructs a partition of the natural number `n` from a multiset `l` of natural numbers whose elements sum to `n`. The resulting partition has exactly the same nonzero elements as `l`; any zeros present in `l` are discarded, since partitions require every part to be strictly positive.\n\n## Signature\n\n`VTask.ofSums : (n : ℕ) -> (l : Multiset ℕ) -> (hl : l.sum = n) -> n.Partition`\n\nThe first argument `n` is the natural number being partitioned. The second argument `l` is a multiset of natural numbers whose elements are the candidate parts (possibly including zeros). The third argument `hl` is a proof that the sum of all elements of `l` equals `n`, certifying that `l` accounts for `n` in total.\n\n## Conventions\n\nZeros appearing in the input multiset `l` are silently dropped: the `parts` of the resulting partition contain only the nonzero elements of `l`, so the count of `0` in `parts` is always `0`. For every nonzero natural number `i`, the count of `i` in the resulting partition's parts equals the count of `i` in the original multiset `l`.\n\n## Worked examples\n\n- Claim: Applying `VTask.ofSums 6 {3, 2, 1, 0} (rfl)` yields a partition whose parts are `{3, 2, 1}` (the zero is stripped), which still sums to 6.\n\n- Claim: The count of `0` in `(VTask.ofSums 5 {2, 2, 1, 0, 0} rfl).parts` is `0`.\n\n- Claim: The count of `2` in `(VTask.ofSums 5 {2, 2, 1, 0, 0} rfl).parts` equals the count of `2` in the multiset `{2, 2, 1, 0, 0}`, which is `2`.\n\n- Claim: Applying `VTask.ofSums 0 {0, 0} rfl` yields a partition of `0` whose parts multiset is empty (all zeros are stripped).\n\n## Boundaries\n\n- If `l` is the empty multiset, then `l.sum = 0 = n` forces `n = 0`, and the result is the unique empty partition of `0`.\n- If `l` consists entirely of zeros (e.g., `{0, 0, 0}`), all elements are removed, yielding the empty partition of `0`.\n- If `l` already contains no zeros, then `parts` is equal to `l` itself (as a multiset), and the partition is presented without any modification.\n- The function is total: any `l` satisfying `l.sum = n` is accepted, regardless of how many zeros are present or how large `n` is.\n\n## Not to be confused with\n\n- `Nat.Partition` (the structure itself): that is the type of the result, not the constructor; `VTask.ofSums` is the map from a summing multiset to a partition.\n- `Nat.Partition.ofSorts`: a different constructor that builds a partition from a sorted list rather than an arbitrary multiset.\n- `Multiset.toFinsupp` or similar multiset-to-function conversions: those do not produce a `Nat.Partition` and do not enforce the parts-sum or parts-positivity invariants."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "InfPrime",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11401,
+        11407
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "14 accepted, 0 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "ok",
+          "detail": "14 kept, 0 decide trimmed to cap"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "4 ship (3 certified), 10 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nAn inf-prime element of a semilattice with binary infima (meets) is an element `a` satisfying two conditions simultaneously: (1) `a` is not a maximal element of the lattice, and (2) whenever the meet of two elements `b` and `c` lies below `a`, at least one of `b` or `c` already lies below `a`. In other words, `a` is not a \"top\" element and the downward shadow of `a` is prime with respect to meets — it cannot be pierced by a meet without one of the factors being individually below `a`.\n\n## Signature\n\n`VTask.InfPrime : {α : Type u_2} -> [SemilatticeInf α] -> (a : α) -> Prop`\n\nThe implicit type argument `α` is the carrier type of the semilattice. The instance argument supplies the semilattice structure, which provides binary meets `⊓` and the associated order. The explicit argument `a` is the element of `α` being tested for inf-primeness.\n\n## Conventions\n\nThere are no special junk-value or boundary conventions declared for this predicate beyond what follows from its definition: the predicate simply evaluates to `False` for maximal elements (including `⊤` when it exists), and is well-typed for every element of `α`.\n\n## Worked examples\n\n- Claim: In a linear order with no maximum, every element is `VTask.InfPrime`.\n\n- Claim: In a bounded lattice with a top element `⊤`, `VTask.InfPrime ⊤` is false, because `⊤` is a maximal element.\n\n- Claim: In a distributive lattice, `VTask.InfPrime a` holds if and only if `a` is inf-irreducible (not a maximum and cannot be expressed as the meet of two strictly larger elements), because the inf-prime condition coincides with inf-irreducibility in such settings.\n\n- Claim: For a semilattice `α` and element `a : α`, if `b ⊓ c ≤ a` and `VTask.InfPrime a`, then `b ≤ a ∨ c ≤ a`.\n\n## Boundaries\n\n- **Top element**: `VTask.InfPrime ⊤` is always false in a lattice with a top, since `⊤` is a maximal element.\n- **Maximal elements**: Any maximal element (whether or not the lattice has a formal top) fails `VTask.InfPrime`, because the first conjunct `¬IsMax a` is violated.\n- **Linear orders without maximum**: Every element of a linear order with no maximum satisfies `VTask.InfPrime`, because the meet of any two elements is their minimum, which equals the smaller one; so if `b ⊓ c ≤ a`, then `min b c ≤ a`, which immediately gives `b ≤ a` or `c ≤ a`.\n- **Dual**: `VTask.InfPrime a` in `α` corresponds exactly to `SupPrime (toDual a)` in the dual order `αᵒᵈ`.\n\n## Not to be confused with\n\n- **`VTask.InfIrred`** (inf-irreducible): A weaker condition — inf-irreducible elements need not satisfy the full prime-like meet-splitting property in general semilattices, though in many common settings (e.g., distributive lattices) the two notions coincide.\n- **`SupPrime`** (sup-prime): The order-dual notion, concerning joins/suprema instead of meets/infima; an element is sup-prime when the upset above it is prime with respect to joins.\n- **`IsMax`**: A predicate asserting that the element has no strict upper bound; every `VTask.InfPrime` element is explicitly *not* `IsMax`."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "SupIrred",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11407,
+        11414
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "15 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "15 accepted, 0 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "ok",
+          "detail": "15 kept, 0 decide trimmed to cap"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "4 ship (3 certified), 11 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[0]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nAn element `a` of a semilattice (a partially ordered set with binary joins) is called **sup-irreducible** if two conditions hold simultaneously:\n1. `a` is not a minimum element of the order (it has something strictly below it, or equivalently, it is not a bottom element when one exists).\n2. Whenever `a` is expressed as the join (supremum) of two elements `b ⊔ c = a`, at least one of those elements must already equal `a` itself — so `a` cannot be \"split\" into two strictly smaller pieces via the join operation.\n\nIntuitively, sup-irreducible elements are the \"join-atomic\" building blocks of a semilattice: every element of a finite semilattice can be expressed as a join of sup-irreducible elements.\n\n## Signature\n\n`VTask.SupIrred : {α : Type u_2} -> [SemilatticeSup α] -> (a : α) -> Prop`\n\nThe implicit type parameter `α` is the carrier type of the semilattice. The instance `[SemilatticeSup α]` supplies the join operation `⊔` and the underlying partial order on `α`. The explicit argument `a` is the element of `α` being tested for sup-irreducibility.\n\n## Conventions\n\nIn a type that happens to have a bottom element `⊥`, a sup-irreducible element is necessarily distinct from `⊥`, since `⊥` is a minimum element. This is a consequence of the definition rather than an extra convention: the non-minimality condition directly rules out the bottom.\n\n## Worked examples\n\n- Claim: In the two-element Boolean lattice `Bool` (with `false < true`), the element `true` satisfies `VTask.SupIrred true` because `true` is not the minimum and the only way to write `b ⊔ c = true` requires `b = true` or `c = true`.\n\n- Claim: In a linear order with more than one element, every element that is not the minimum is sup-irreducible, because in a linear order `b ⊔ c` equals the larger of `b` and `c`, so `b ⊔ c = a` forces `b = a` or `c = a`.\n\n- Claim: In the divisibility order on `{1, 2, 3, 6}` (where `⊔` is lcm), the element `6` is **not** sup-irreducible because `2 ⊔ 3 = 6` while both `2 < 6` and `3 < 6`.\n\n- Claim: Every element `a` of a semilattice can be written as a finite join of sup-irreducible elements (decomposition theorem: `exists_supIrred_decomposition`).\n\n## Boundaries\n\n- **Minimum elements**: Any minimum element (including `⊥` when it exists) is **never** sup-irreducible, by the first condition of the definition.\n- **Linear orders**: In a linear (total) order, an element is sup-irreducible if and only if it is not a minimum element, since joins in a linear order always equal one of the two arguments.\n- **Two-element lattice**: The unique non-bottom element is always sup-irreducible.\n- **Trivial / one-element type**: There are no sup-irreducible elements, as the sole element is the minimum.\n- **Atoms in a Boolean algebra**: Atoms (elements covering `⊥`) are always sup-irreducible; in a finite distributive lattice, the sup-irreducible elements are exactly the join-irreducible elements in the classical sense.\n\n## Not to be confused with\n\n- **`VTask.SupPrime`**: A sup-prime element additionally requires that `a ≤ b ⊔ c` implies `a ≤ b` or `a ≤ c`; in a distributive lattice sup-prime and sup-irreducible coincide, but they differ in general.\n- **`VTask.InfIrred`**: The order-dual notion, replacing joins by meets; an element is inf-irreducible iff its image under `toDual` is sup-irreducible in the dual order.\n- **`IsAtom`**: An atom is an element that covers the bottom, which is a strictly stronger condition than sup-irreducibility in general lattices."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Function.dcomp",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "dossier_consistency",
+    "rotation_reason": "worked example (EXECUTION_FAILED) '`VTask.dcomp (fun {α : Type} (l : List α) => l.length) (fun n => List.replicate n ()) 4 = 4`': Application type mismatch: The argument\n  n\nhas type\n  Type\nof sort `Type 1` but is expected to have type\n  ℕ\nof sort `Type` in the application\n  List.replicate n; failed to synthesize instance of type class\n  OfNat Type 4\nnumerals are polymorphic in Lean, but the numeral `4` cannot be used in a context where the expected type is\n  Type\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11414,
+        11417
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "rotated",
+          "detail": "worked example (EXECUTION_FAILED) '`VTask.dcomp (fun {α : Type} (l : List α) => l.length) (fun n => List.replicate n ()) 4 = 4`': Application type mismatch: The argument\n  n\nhas type\n  Type\nof sort `Type 1` but is expected to have type\n  ℕ\nof sort `Type` in the application\n  List.replicate n; failed to synthesize instance of type class\n  OfNat Type 4\nnumerals are polymorphic in Lean, but the numeral `4` cannot be used in a context where the expected type is\n  Type\ndue to the absence of the instance above\n\nHint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command."
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.dcomp` is dependent function composition. Given a function `f` that accepts an argument `y : β x` (where `β x` may vary with `x`) and returns a value in `φ y` (which may further depend on both `x` and `y`), and a function `g` that maps each `x : α` to a value in `β x`, `VTask.dcomp f g` is the composed function that sends each `x : α` to `f (g x) : φ (g x)`. It is the dependent analogue of ordinary function composition `f ∘ g`.\n\n## Signature\n\n`{α : Sort u₁} -> {β : α → Sort u₂} -> {φ : {x : α} → β x → Sort u₃} -> (f : {x : α} → (y : β x) → φ y) -> (g : (x : α) → β x) -> (x : α) -> φ (g x)`\n\nThe universe-polymorphic type `α` is the shared domain. The family `β` assigns to each element `x : α` the type of intermediate values. The family `φ` assigns to each intermediate value `y : β x` the return type. The argument `f` is the outer function, which receives an implicit `x` and an explicit element of `β x` and produces a value in `φ y`. The argument `g` is the inner function, mapping each `x : α` to a value in `β x`. The final argument `x` is the point at which the composed function is evaluated.\n\n## Conventions\n\nThere are no junk-value or edge-case conventions for this definition: the operation is total and well-typed for all inputs, with no special treatment of any particular value.\n\n## Worked examples\n\n- Claim: `VTask.dcomp (fun {n : Nat} (v : Fin n) => v.val) (fun n => ⟨0, Nat.succ_pos n⟩ |>.castSucc.castSucc |>.castSucc) 5 = 0` is an instance of applying `dcomp` to extract the underlying natural number from a `Fin` value constructed by `g`.\n\n- Claim: `VTask.dcomp (fun {α : Type} (l : List α) => l.length) (fun n => List.replicate n ()) 4 = 4`\n  ```lean\n  example : VTask.dcomp (fun {α : Type} (l : List α) => l.length) (fun n => List.replicate n ()) 4 = 4 := by decide\n  ```\n\n- Claim: For any `f : {x : α} → (y : β x) → φ y` and `g : (x : α) → β x`, `VTask.dcomp f g x` evaluates to `f (g x)` definitionally (i.e., the two are definitionally equal for all `x`).\n\n- Claim: `VTask.dcomp (fun {n : Nat} (k : Fin (n + 1)) => k.val) (fun n => ⟨0, Nat.succ_pos n⟩) 3 = 0`\n  ```lean\n  example : VTask.dcomp (fun {n : Nat} (k : Fin (n + 1)) => k.val) (fun n => ⟨0, Nat.succ_pos n⟩) 3 = 0 := by decide\n  ```\n\n## Boundaries\n\n- The definition is total: it is defined for every choice of `α`, `β`, `φ`, `f`, `g`, and `x` as long as the types are consistent.\n- When `β` and `φ` are non-dependent (i.e., constant families), `VTask.dcomp` specialises to ordinary function composition.\n- The result type `φ (g x)` depends on both `x` and the value `g x`; this is what distinguishes `VTask.dcomp` from ordinary composition.\n- There is no restriction on the universes `u₁`, `u₂`, `u₃`; the definition works uniformly across all `Sort`s.\n\n## Not to be confused with\n\n- `Function.comp` (`f ∘ g`): ordinary (non-dependent) function composition, where none of the types vary with the argument.\n- `Function.comp₂`: composition involving two-argument functions, unrelated to dependency on intermediate values.\n- `Function.dite` or `dif`: dependent conditional expressions, which branch on a proposition rather than composing functions."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "RingEquiv.ofRingHom",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[0]: 'validation_status' must be one of ['CERTIFIED', 'PROVISIONALLY_VALIDATED'], got 'UNVALIDATED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11417,
+        11424
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "11 accepted, 3 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "violations",
+          "detail": "11 kept, 0 decide trimmed to cap; reject_floor: 0 < 2"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "1 ship (0 certified), 10 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "flagged",
+          "detail": "shipped after 4 compile attempt(s) failing (attempt 1: compile_error: unexpected identifier; expected '}'; attempt 2: compile_error: unexpected identifier; expected '}'; attempt 3: compile_error: unexpected identifier; expected '}'; attempt 4: compile_error: unexpected identifier; expected '}') -- reconstruction unverified, see ROUND_TRIP_UNVERIFIED_COMPILE flag"
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[0]: 'validation_status' must be one of ['CERTIFIED', 'PROVISIONALLY_VALIDATED'], got 'UNVALIDATED'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.ofRingHom\n\n### Object\n\nA constructor that packages a ring homomorphism together with an explicit two-sided inverse (also a ring homomorphism) into a ring isomorphism. Given a homomorphism `f : R →+* S` and a homomorphism `g : S →+* R` that are inverses of each other in both directions, it produces the ring equivalence `R ≃+* S` whose underlying forward map is `f` and whose underlying inverse map is `g`.\n\n### Signature\n\n`{R : Type u_4} -> {S : Type u_5} -> [NonAssocSemiring R] -> [NonAssocSemiring S] -> (f : R →+* S) -> (g : S →+* R) -> (h₁ : f.comp g = RingHom.id S) -> (h₂ : g.comp f = RingHom.id R) -> R ≃+* S`\n\nThe implicit type arguments `R` and `S` are the source and target semiring types, inferred from context. The two semiring structure instances are filled in automatically. The argument `f` is the forward ring homomorphism from `R` to `S`. The argument `g` is the proposed inverse ring homomorphism from `S` back to `R`. The proof `h₁` witnesses that `g` is a right inverse to `f`, i.e., that composing `f` after `g` yields the identity on `S`. The proof `h₂` witnesses that `g` is a left inverse to `f`, i.e., that composing `g` after `f` yields the identity on `R`.\n\n### Conventions\n\nNo junk-value or out-of-domain conventions apply: the construction is total and well-defined whenever the two inverse proofs `h₁` and `h₂` are supplied; there are no edge cases with special default behavior.\n\n### Worked examples\n\n- Claim: When `f` and `g` are mutual inverses, coercing `VTask.ofRingHom f g h₁ h₂` back to a ring homomorphism recovers `f` exactly.\n\n- Claim: The symmetric ring equivalence `(VTask.ofRingHom f g h₁ h₂).symm` equals `VTask.ofRingHom g f h₂ h₁`, i.e., swapping the roles of `f` and `g` and swapping the two proofs gives the inverse isomorphism.\n\n- Claim: If `e : R ≃+* S` is already a ring equivalence and `g : S →+* R` satisfies the inverse conditions with `↑e`, then `VTask.ofRingHom (↑e) g h₁ h₂ = e`.\n\n### Boundaries\n\n- The construction requires both `h₁` and `h₂`; neither proof alone is sufficient, because one only guarantees injectivity or surjectivity and not both.\n- The resulting ring equivalence carries exactly `f` as its forward coercion: any theorem that casts `VTask.ofRingHom f g h₁ h₂` to a ring homomorphism will recover `f` definitionally.\n- The inverse of the resulting equivalence is exactly the ring equivalence built from `g` with the two proofs swapped, as witnessed by the symmetry theorem.\n- Both `R` and `S` need only be `NonAssocSemiring`s; full commutativity and associativity are not required.\n\n### Not to be confused with\n\n- `RingEquiv.ofBijective`: constructs a ring isomorphism from a single bijective ring homomorphism (using the axiom of choice to produce the inverse), without requiring an explicit inverse to be supplied.\n- `RingEquiv.symm`: takes an *existing* ring equivalence and swaps its forward and backward maps, rather than building one from scratch from two homomorphisms.\n- `Equiv.ofLeftInverse` / `Equiv.ofLeftInverse'`: analogous constructions at the level of bare functions or types without ring structure, not preserving ring homomorphism properties.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Composition.embedding",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "emit",
+    "rotation_reason": "facts[1]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11430,
+        11435
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "flagged",
+          "detail": "1 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "10 proposed, 4 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "10 accepted, 0 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "ok",
+          "detail": "10 kept, 0 decide trimmed to cap"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "8 ship (8 certified), 2 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "round_trip_scoring",
+          "status": "flagged",
+          "detail": "shipped despite 1 compile attempt(s) failing (attempt 1: compile_error: Unknown identifier `c`; Unknown identifier `i`) -- round-trip candidate recalled the real Mathlib name, see RECALLED_TARGET flag"
+        },
+        {
+          "stage": "emit",
+          "status": "rotated",
+          "detail": "facts[1]: 'discharge' must be non-null when a proof fact is 'CERTIFIED'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.embedding\n\n### Object\n\nGiven a composition `c` of the natural number `n` (that is, an ordered list of positive integers summing to `n`), and a block index `i`, `VTask.embedding c i` is the order-preserving injection that places the `i`-th block of the composition inside the full range `Fin n`. Concretely, the `i`-th block has size `c.blocksFun i`, and this embedding identifies its elements `0, 1, …, c.blocksFun i − 1` with the consecutive positions `c.sizeUpTo i, c.sizeUpTo i + 1, …, c.sizeUpTo (i+1) − 1` inside `{0, …, n−1}`. In other words, the `j`-th element of the `i`-th block maps to position `c.sizeUpTo i + j` in `Fin n`.\n\n### Signature\n\n`{n : ℕ} -> (c : Composition n) -> (i : Fin c.length) -> Fin (c.blocksFun i) ↪o Fin n`\n\nThe implicit argument `n` is the natural number being composed. The argument `c` is the composition of `n`, i.e., the ordered tuple of positive integer parts summing to `n`. The argument `i` is the index of the block within the composition, ranging from `0` to `c.length − 1`. The result is an order-embedding from `Fin (c.blocksFun i)` (the index type for elements within block `i`) into `Fin n` (the index type for the full range).\n\n### Conventions\n\nThe embedding is strictly order-preserving (an `↪o`), so it preserves the natural ordering of positions within a block and within the full range. The concrete value formula is: for `j : Fin (c.blocksFun i)`, the image of `j` as a natural number equals `c.sizeUpTo i + j`.\n\n### Worked examples\n\n- Claim: For the composition `[2, 3]` of `5`, the embedding of block `0` maps `⟨1, _⟩` to `⟨1, _⟩` (i.e., `sizeUpTo 0 + 1 = 0 + 1 = 1`).\n\n- Claim: For the composition `[2, 3]` of `5`, the embedding of block `1` maps `⟨0, _⟩` to `⟨2, _⟩` (i.e., `sizeUpTo 1 + 0 = 2 + 0 = 2`).\n\n- Claim: For the `single n h` composition (one block of size `n`), the unique block embedding acts as the identity: `(single n h).embedding ⟨0, _⟩` maps `i` to `i` for all `i : Fin n`.\n\n- Claim: The images of the block embeddings of distinct blocks are always disjoint: for `i₁ ≠ i₂`, `Set.range (c.embedding i₁)` and `Set.range (c.embedding i₂)` are disjoint.\n\n- Claim: Every element `j : Fin n` lies in the range of `c.embedding (c.index j)`, so the block embeddings collectively cover all of `Fin n`.\n\n### Boundaries\n\n- When `c` is the `single n h` composition (one block of size `n`), the only block index is `⟨0, _⟩`, and its embedding is the identity on `Fin n`.\n- When `c` is the `ones n` composition (`n` blocks of size `1` each), the embedding of block `i` maps the unique element `⟨0, _⟩` to `⟨i, _⟩`.\n- The embedding of the first block (`i = 0`) starts at position `0`, since `c.sizeUpTo 0 = 0`.\n- The embedding of the last block ends exactly at position `n − 1`, since `c.sizeUpTo c.length = n`.\n- The embeddings of all blocks partition `Fin n` completely: every element belongs to exactly one block's image.\n\n### Not to be confused with\n\n- `Composition.invEmbedding`: the inverse direction, mapping an element `j : Fin n` back to its position within its block (rather than placing a within-block index into `Fin n`).\n- `Composition.index`: the function that, given `j : Fin n`, returns the block index `i` such that `j` belongs to block `i`, without providing the within-block position.\n- `Fin.natAddOrderEmb`: a lower-level order-embedding that simply shifts all indices by a fixed offset, which is a building block used here but does not encode the composition structure itself.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
   }
 ]
