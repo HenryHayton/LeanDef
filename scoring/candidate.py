@@ -285,6 +285,7 @@ def score_candidate_body(
         tier4 = adjudicate_tier4_equivalence(
             server, candidate_env, truth_env, signature.name, truth_name, budgets,
             prop_valued=equivalence_uses_iff(signature), fact_id="equivalence", imports=imports,
+            mathlib_name=truth_real_name,
         )
         result["equivalence_attempts"] = _attempt_dicts(tier4.attempts)
         if tier4.winning is not None:

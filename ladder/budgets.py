@@ -117,7 +117,7 @@ DEFAULT_LADDER_BUDGETS = LadderBudgets()
 # the standard set so the cheap pinned tactics still run first and nothing already working
 # changes order.
 def equivalence_induction_tactics(
-    task_symbol: str, real_name: str, max_args: int = 3
+    task_symbol: str, real_name: str, mathlib_name: str | None = None, max_args: int = 3
 ) -> tuple[TacticBudget, ...]:
     """Templates for `VTask.X = Mathlib.X` between two RECURSIVE definitions.
 
@@ -141,7 +141,11 @@ def equivalence_induction_tactics(
     the recursion moves the later argument (Pascal's rule recurses on both), which plain
     `induction` cannot express.
     """
-    names = f"{task_symbol}, {real_name}"
+    # `real_name` here is the TRUTH ALIAS (`VTruth.X`), which is `@[reducible] def VTruth.X :=
+    # Mathlib.X`. Unfolding it reaches `Mathlib.X` but NOT `Mathlib.X`'s equation lemmas, which is
+    # what an induction proof actually needs -- measured: every template failed on the
+    # Mathlib-identical Nat.choose until the real Mathlib name was added to the simp set.
+    names = ", ".join(n for n in (task_symbol, real_name, mathlib_name) if n)
     out: list[TacticBudget] = []
     for n in range(1, max_args + 1):
         vs = " ".join(f"a{i}" for i in range(n))

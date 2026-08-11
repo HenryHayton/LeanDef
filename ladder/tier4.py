@@ -54,6 +54,7 @@ def adjudicate_tier4_equivalence(
     prop_valued: bool = False,
     fact_id: str = "tier4_equiv",
     imports: list[str] | None = None,
+    mathlib_name: str | None = None,
 ) -> Tier4Result:
     """Attempts `candidate_name = truth_name` (or `↔` if `prop_valued`) in `candidate_env`
     (see module docstring for why that environment specifically). Tries tier 2's pinned tactic
@@ -74,7 +75,7 @@ def adjudicate_tier4_equivalence(
     equiv_budgets = dataclasses.replace(
         budgets,
         tier2_tactics=budgets.tier2_tactics + equivalence_induction_tactics(
-            candidate_name, truth_name),
+            candidate_name, truth_name, mathlib_name),
     )
     tier2_result = adjudicate_tier2(server, candidate_env, fact_id, goal_statement, equiv_budgets, imports=imports)
     attempts = list(tier2_result.attempts)
