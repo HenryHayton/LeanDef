@@ -94,7 +94,9 @@ from authoring.consistency import (
     check_round_trip_recalls_target,
     inject_pinned_signature,
 )
+from authoring.composition import enforce as enforce_composition
 from authoring.emit import emit_task
+from authoring.fact_validation import validate_fact
 from authoring.facts import DomainSpec, ProposedFact
 from authoring.mentions import DEFAULT_MENTION_CAP, render_mention_excerpt
 from authoring.orchestrate import (
@@ -607,16 +609,58 @@ def _author_from_dossier(
 
     self_restatement_ids = [f.id for f in adjudication.accepted if f.self_restatement]
 
-    # mechanism alone determines validation_status -- see module docstring, decision 1.
+    # --- Suite composition, enforced (11 Aug 2026) --------------------------------------------
+    # The prompt calls the decide cap and reject floor "hard", but a prompt only asks. The
+    # 3-task calibration proved asking insufficient: 10 decide facts against a cap of 6 on one
+    # task, a 6-fact suite against a floor of 8 on another.
+    comp = enforce_composition(adjudication.accepted)
+    surviving = comp.kept
+    stage_records.append(
+        StageRecord(
+            "composition", "ok" if comp.ok else "violations",
+            detail=(f"{len(surviving)} kept, {comp.trimmed_decide} decide trimmed to cap"
+                    + (f"; {'; '.join(comp.violations)}" if comp.violations else "")),
+            calls_made=budget.calls_made,
+        )
+    )
+
+    # --- Fact validation ladder (schema v1.2) --------------------------------------------------
+    # Replaces "validated against ground truth" as a claim made without running the kernel. Five
+    # checks against the TRUTH splice: restatement rejection, anchor-must-be-a-theorem, negation
+    # (a fact false of the truth is quarantined, which is how the two known defective facts are
+    # caught), full-ladder discharge, and witness validation on reject facts. See
+    # `authoring.fact_validation`.
+    validations = {}
+    validated_facts = []
+    for f in surviving:
+        v = validate_fact(config.server, truth_env, f, task_symbol, definition_input.name,
+                          imports=(pinned_signature.imports if pinned_signature else None))
+        validations[f.id] = v
+        if v.ships:
+            validated_facts.append((f, v))
+    quarantined = [fid for fid, v in validations.items() if not v.ships]
+    stage_records.append(
+        StageRecord(
+            "fact_validation", "ok",
+            detail=(f"{len(validated_facts)} ship "
+                    f"({sum(1 for _, v in validated_facts if v.status == 'CERTIFIED')} certified), "
+                    f"{len(quarantined)} rejected/quarantined"),
+            calls_made=budget.calls_made,
+        )
+    )
+
     fact_list: list[Fact] = [
         f.to_fact(
-            validation_status="CERTIFIED" if f.mechanism == "decide" else "PROVISIONALLY_VALIDATED",
+            validation_status=v.status,
+            anchors_resolved=v.anchors_resolved,
+            cached_script=v.winning_script,
             provenance=FactProvenance(
                 validation_run_id=run_id,
-                note=f"authored by {config.authoring_model_id}, validated against ground truth",
+                note=(f"authored by {config.authoring_model_id}; "
+                      f"{v.status.lower()} by the v1.2 kernel validation ladder"),
             ),
         )
-        for f in adjudication.accepted
+        for f, v in validated_facts
     ]
 
     # --- Call 4: blind round-trip generation + scoring -----------------------------------------

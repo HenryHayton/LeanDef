@@ -1,0 +1,383 @@
+{
+  "task_id": "Equiv.sumCompl",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumCompl",
+  "signature": {
+    "name": "VTask.sumCompl",
+    "type": "{α : Type u_9} -> (p : α → Prop) -> [DecidablePred p] -> { a // p a } ⊕ { a // ¬p a } ≃ α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "forward_map",
+        "statement": "The forward map of the equivalence sends both Sum.inl ⟨a, h⟩ and Sum.inr ⟨a, h⟩ to the underlying element a, discarding the proof witness.",
+        "note": "This is the canonical copairing of the two subtype inclusion maps."
+      },
+      {
+        "point": "inverse_map",
+        "statement": "The inverse map sends a : α to Sum.inl ⟨a, h⟩ if p a holds (h : p a) and to Sum.inr ⟨a, h⟩ if ¬ p a holds (h : ¬ p a), using the DecidablePred instance to branch.",
+        "note": "Decidability is required to make the inverse computable."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumCompl_apply_inl_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (x : { a // p a }), (VTask.sumCompl p) (Sum.inl x) = x.val",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_apply_inl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_apply_inr_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (x : { a // ¬p a }), (VTask.sumCompl p) (Sum.inr x) = x.val",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_apply_inr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_apply_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (x : { a // p a }), (VTask.sumCompl p).symm x.val = Sum.inl x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_apply_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (x : { a // ¬p a }), (VTask.sumCompl p).symm x.val = Sum.inr x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_neg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_of_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] {a : α} (h : p a), (VTask.sumCompl p).symm a = Sum.inl ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_of_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_of_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] {a : α} (h : ¬p a), (VTask.sumCompl p).symm a = Sum.inr ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_of_neg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_fin4_inl_apply",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun n : Fin 4 => n.val < 2)) (Sum.inl ⟨⟨1, by decide⟩, by decide⟩) = ⟨1, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_fin4_inr_apply",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun n : Fin 4 => n.val < 2)) (Sum.inr ⟨⟨3, by decide⟩, by decide⟩) = ⟨3, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_fin4_symm_pos",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun n : Fin 4 => n.val < 2)).symm ⟨1, by decide⟩ = Sum.inl ⟨⟨1, by decide⟩, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_fin4_symm_neg",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun n : Fin 4 => n.val < 2)).symm ⟨3, by decide⟩ = Sum.inr ⟨⟨3, by decide⟩, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p], Function.Bijective (VTask.sumCompl p)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_accept_membership",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun n : Fin 4 => n.val < 2)) (Sum.inl ⟨⟨0, by decide⟩, by decide⟩) = ⟨0, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": "accept",
+      "instance": "Sum.inl ⟨⟨0, by decide⟩, by decide⟩"
+    },
+    {
+      "id": "sumCompl_reject_inr_not_inl",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬((VTask.sumCompl (fun n : Fin 4 => n.val < 2)) (Sum.inr ⟨⟨3, by decide⟩, by decide⟩) = ⟨1, by decide⟩) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n : Fin 4 => n.val < 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": "reject",
+      "instance": "Sum.inr ⟨⟨3, by decide⟩, by decide⟩",
+      "violated_property": "forward map of inr gives val 3, not 1"
+    },
+    {
+      "id": "sumCompl_symm_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (x : { a // p a } ⊕ { a // ¬p a }), (VTask.sumCompl p).symm ((VTask.sumCompl p) x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-6ebc506e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6, validated against ground truth"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.sumCompl",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.sumCompl-6ebc506e",
+    "review_status": "unreviewed"
+  }
+}
