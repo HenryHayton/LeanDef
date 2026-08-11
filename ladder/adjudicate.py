@@ -50,7 +50,8 @@ from harness.facts import Fact
 from harness.repl import run_checked
 from harness.results import CheckStatus
 from ladder.axiom_audit import audit_proof_axioms
-from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets, with_membership_tactics
+from ladder.budgets import (DEFAULT_LADDER_BUDGETS, LadderBudgets,
+                            with_global_unfolding_tactics, with_membership_tactics)
 from ladder.cache import CacheEntry, ProofScriptCache, replay, statement_hash, toolchain_pin
 from ladder.statuses import Adjudication, AdjudicationStatus, ElaborationStatus, TierAttempt
 from ladder.tier1 import adjudicate_tier1
@@ -260,7 +261,27 @@ def adjudicate_fact(
     if _budget_exhausted(start, budgets):
         return _budget_exhausted_adjudication(fact, elaboration, attempts, budgets, start), env
 
-    tier2_result = adjudicate_tier2(server, env, fact.id, canonical_statement, budgets, imports=imports)
+    # Definition-unfolding tactics for GLOBAL/proof facts (11 Aug 2026).
+    #
+    # Tier 2's pinned set is `rfl, omega, norm_num, positivity, simp, exact?, aesop` -- not one of
+    # which unfolds the candidate's own `def`, because a plain `simp` cannot see inside a
+    # non-reducible definition. So every ∀-quantified fact was being attacked by tactics forbidden
+    # to look at the symbol under test. Measured on the scored corpus: 579 of 731 UNKNOWNs are
+    # global facts, and two spot-checks went UNKNOWN -> PASS purely from adding the unfold --
+    # including `∀ n, VTask.choose n 0 = 1` against a candidate whose FIRST DEFINING CLAUSE says
+    # exactly that.
+    #
+    # `with_membership_tactics` already builds the right set and was already used by the
+    # decide-fallback path; this extends it to the proof path. Appended AFTER the pinned set, so
+    # cheap-first ordering holds and nothing that already discharges changes which tactic wins.
+    # BOTH names are unfolded when the real name is known -- naming only the task symbol can stop
+    # at a `@[reducible]` alias without reaching the real body (pilot-era finding, see
+    # `ladder.budgets.with_membership_tactics`).
+    sym = _TASK_SYMBOL_RE.search(canonical_statement)
+    tier2_budgets = (with_global_unfolding_tactics(budgets, sym.group(1), truth_name)
+                     if sym else budgets)
+    tier2_result = adjudicate_tier2(server, env, fact.id, canonical_statement, tier2_budgets,
+                                    imports=imports)
     attempts.extend(tier2_result.attempts)
     env = tier2_result.env
 

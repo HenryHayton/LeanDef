@@ -116,6 +116,88 @@ DEFAULT_LADDER_BUDGETS = LadderBudgets()
 # Built per fact rather than pinned globally, since the symbols differ per task. Appended AFTER
 # the standard set so the cheap pinned tactics still run first and nothing already working
 # changes order.
+def equivalence_induction_tactics(
+    task_symbol: str, real_name: str, max_args: int = 3
+) -> tuple[TacticBudget, ...]:
+    """Templates for `VTask.X = Mathlib.X` between two RECURSIVE definitions.
+
+    Tier 4 previously offered only tier 2's pinned set then hammer. None of those can prove an
+    equality of functions defined by recursion: it needs `funext` to get to a pointwise goal and
+    then induction aligned with the recursion. Measured (11 Aug 2026) on a `Nat.choose` candidate
+    that is character-for-character Mathlib's:
+
+        rfl                                   FAILED   <- tier 4's first attempt
+        simp [VTask.choose, Nat.choose]       FAILED
+        aesop                                 FAILED
+        funext n k; induction n generalizing k …   PASSED
+
+    That mattered enormously: equivalence certification transfers the WHOLE fact suite, and all
+    27 equivalence-certified candidates in the corpus had zero unknowns while all 731 unknowns
+    sat in the 189 non-certified ones. `Nat.choose` alone had 16 admissible candidates, none
+    certified, carrying 128 unknowns.
+
+    A small template family, not a bespoke prover: `funext` over 1..max_args arguments, with and
+    without `generalizing`, closed by `simp` over both definitions. `generalizing` matters when
+    the recursion moves the later argument (Pascal's rule recurses on both), which plain
+    `induction` cannot express.
+    """
+    names = f"{task_symbol}, {real_name}"
+    out: list[TacticBudget] = []
+    for n in range(1, max_args + 1):
+        vs = " ".join(f"a{i}" for i in range(n))
+        out.append(TacticBudget(f"funext {vs} <;> simp [{names}]", 15.0))
+    out.append(TacticBudget(
+        f"funext a0; induction a0 <;> simp_all [{names}]", 30.0, heavy=True))
+    for n in range(2, max_args + 1):
+        vs = [f"a{i}" for i in range(n)]
+        head, rest = vs[0], " ".join(vs[1:])
+        out.append(TacticBudget(
+            f"funext {' '.join(vs)}; induction {head} generalizing {rest} <;> "
+            f"simp_all [{names}]", 45.0, heavy=True))
+        # `induction` on the first argument is not enough when the definition also matches on a
+        # LATER one: after `induction a0`, `choose (n+1) a1` is still stuck until `a1` is split.
+        # Measured -- the four-clause `Nat.choose` needs exactly this and the plain form above
+        # fails on it.
+        out.append(TacticBudget(
+            f"funext {' '.join(vs)}; induction {head} generalizing {rest} <;> "
+            f"cases {vs[1]} <;> simp_all [{names}]", 45.0, heavy=True))
+    return tuple(out)
+
+
+def with_global_unfolding_tactics(
+    budgets: LadderBudgets, task_symbol: str, real_name: str | None = None
+) -> LadderBudgets:
+    """`budgets` with INTROS-LED definition-unfolding tactics appended, for global facts.
+
+    Separate from `with_membership_tactics` for one measured reason: a global fact is
+    ∀-quantified, and `simp [VTask.X]` on an unopened `∀` never reaches the body. The membership
+    set omits `intros` because membership facts are already closed propositions.
+
+    Measured on `∀ n, VTask.choose n 0 = 1` against a candidate that is character-for-character
+    Mathlib's `Nat.choose` (11 Aug 2026):
+
+        by simp                              FAILED   <- tier 2's pinned set
+        by aesop                             FAILED   <- tier 2's pinned set
+        by intros <;> rfl                    FAILED   <- unfolding alone is not enough
+        by intros <;> simp [VTask.choose]    PASSED
+
+    `rfl` fails because the three overlapping clauses compile to a nested matcher, so
+    `choose n 0` cannot reduce until `n` is in weak-head normal form -- `simp` does that case
+    split, bare unfolding does not. The `rename_i`/`cases` variant is kept as a deeper fallback
+    for goals where simp's own splitting is not enough.
+    """
+    names = task_symbol if not real_name else f"{task_symbol}, {real_name}"
+    extension = (
+        TacticBudget(f"intros <;> simp [{names}]", 15.0),
+        TacticBudget(f"intros <;> simp_all [{names}]", 15.0),
+        TacticBudget(f"intros <;> simp [{names}] <;> omega", 15.0),
+        TacticBudget(f"unfold {task_symbol} <;> intros <;> rfl", 10.0),
+        TacticBudget(f"intros <;> rename_i n <;> cases n <;> simp [{names}]", 20.0, heavy=True),
+        TacticBudget(f"intros <;> simp only [{names}] <;> aesop", 30.0, heavy=True),
+    )
+    return replace(budgets, tier2_tactics=budgets.tier2_tactics + extension)
+
+
 def with_membership_tactics(
     budgets: LadderBudgets, task_symbol: str, real_name: str | None = None
 ) -> LadderBudgets:

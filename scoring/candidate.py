@@ -61,6 +61,12 @@ class FactVerdict:
     detail: str = ""
     attempts: list[dict] = field(default_factory=list)
     retried: bool = False
+    # The exact winning tactic invocation (11 Aug 2026). Previously dropped: `script` was empty
+    # for all 553 tier-2 wins in the 32B corpus, so "closed by `exact?` citing its own anchor
+    # theorem" -- the self-citation failure mode measured at 100% in the tier-cascade study --
+    # was undetectable at scoring time and had to be reconstructed by hand. Forward-only; no
+    # backfill of historical wins.
+    script: str | None = None
 
     def to_dict(self) -> dict:
         return {
@@ -72,6 +78,7 @@ class FactVerdict:
             "elapsed_s": round(self.elapsed_s, 4),
             "detail": self.detail[:2000],
             "retried": self.retried,
+            "script": self.script,
             # TierAttempt records are persisted in full: the pilot's per-tactic timing data then
             # collects itself, and calibrating budgets later needs the losers, not just winners.
             "attempts": self.attempts,
@@ -133,6 +140,7 @@ def _adjudicate_one_fact(
     budgets: LadderBudgets,
     cache,
     imports: list[str] | None,
+    truth_real_name: str | None = None,
 ) -> tuple[FactVerdict, int]:
     """One fact, with a single retry for infrastructure failures. Returns `(verdict, env)` --
     the env may have been replaced by tier 2's recovery loop and MUST be carried forward."""
@@ -143,10 +151,15 @@ def _adjudicate_one_fact(
         if fact.mechanism == "decide":
             attempt = adjudicate_tier1(server, env, fact.statement, budgets)
             status, tier, attempts, detail = attempt.status, 1, [attempt], attempt.detail
+            script = "decide"
         else:
-            adjudication, env = adjudicate_fact(fact, env, server, budgets, cache, imports=imports)
+            # `truth_name` is what lets tier 2 unfold BOTH the task symbol and the real
+            # definition; without it only the alias is reachable. See ladder.adjudicate.
+            adjudication, env = adjudicate_fact(fact, env, server, budgets, cache,
+                                                imports=imports, truth_name=truth_real_name)
             status, tier = adjudication.status, adjudication.tier
             attempts, detail = adjudication.attempts, adjudication.detail
+            script = adjudication.script
 
         if status not in RETRYABLE or attempt_n == cfg.INFRA_RETRY_ATTEMPTS:
             break
@@ -166,6 +179,7 @@ def _adjudicate_one_fact(
             detail=detail or "",
             attempts=_attempt_dicts(attempts),
             retried=retried,
+            script=script if verdict is Verdict.PASS else None,
         ),
         env,
     )
@@ -280,6 +294,7 @@ def score_candidate_body(
                     fact_id=f.id, mechanism=f.mechanism, verdict=Verdict.PASS, tier=4,
                     certified_via=CERTIFIED_VIA_EQUIVALENCE, elapsed_s=0.0,
                     detail="certified by candidate=truth equivalence",
+                    script=tier4.winning_script,
                 ).to_dict()
                 for f in facts
             ]
@@ -306,7 +321,8 @@ def score_candidate_body(
             )
             continue
         fact_verdict, current_env = _adjudicate_one_fact(
-            server, current_env, fact, budgets, cache, imports
+            server, current_env, fact, budgets, cache, imports,
+            truth_real_name=truth_real_name,
         )
         verdicts.append(fact_verdict)
 

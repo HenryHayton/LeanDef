@@ -20,9 +20,11 @@ Prop-valued facts compare via `↔` (per the reward doc's own parenthetical); ev
 `=`, chosen with `prop_valued`.
 """
 
+import dataclasses
+
 from lean_interact import AutoLeanServer
 
-from ladder.budgets import LadderBudgets
+from ladder.budgets import LadderBudgets, equivalence_induction_tactics
 from ladder.statuses import AdjudicationStatus, TierAttempt
 from ladder.tier2 import adjudicate_tier2
 from ladder.tier3 import adjudicate_tier3_hammer
@@ -65,7 +67,16 @@ def adjudicate_tier4_equivalence(
     relation = "↔" if prop_valued else "="
     goal_statement = f"{candidate_name} {relation} {truth_name}"
 
-    tier2_result = adjudicate_tier2(server, candidate_env, fact_id, goal_statement, budgets, imports=imports)
+    # An eta-expanded alias is closed by `rfl` from the pinned set alone -- the cheap common case
+    # this tier exists for -- so the pinned set runs first, unchanged. The induction templates are
+    # appended after it (see `ladder.budgets.equivalence_induction_tactics` for why they are
+    # needed at all, and the measurement that motivated them).
+    equiv_budgets = dataclasses.replace(
+        budgets,
+        tier2_tactics=budgets.tier2_tactics + equivalence_induction_tactics(
+            candidate_name, truth_name),
+    )
+    tier2_result = adjudicate_tier2(server, candidate_env, fact_id, goal_statement, equiv_budgets, imports=imports)
     attempts = list(tier2_result.attempts)
     env = tier2_result.env
 
