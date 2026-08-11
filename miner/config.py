@@ -160,6 +160,28 @@ COMMON_VOCABULARY_MODULES: list[str] = [
     "GroupTheory/Subgroup", # subgroup lattice vocabulary
     "RingTheory/Ideal",     # ideal basics
     "Algebra/GCDMonoid",    # divisibility/gcd vocabulary
+    # --- Batch 5 round 2 (11 Aug 2026): EVIDENCE-DRIVEN, from the round-1 exclusion table.
+    # Every entry below was the sole gate failing for a named block of definitions; the count is
+    # blocked references observed, and the test for inclusion was the brief's: would a dossier
+    # using this vocabulary still be writable to the depth standard, self-contained?
+    "Analysis/Normed",          # 538 refs -- normed spaces (ZSpan.fundamentalDomain, ZLattice.covolume).
+                                # The boldest entry: it transitively admits Real. Kept because "V is a
+                                # normed space, ‖·‖ its norm" is one dossier sentence, not an edifice.
+    "Algebra/Module",           # 365 -- modules over a ring; the natural successor to Group/Ring/Field
+    "Algebra/Algebra",          # 243 -- R-algebras (AlgEquiv.piCongrLeft, AlgEquiv.prodCongr)
+    "Topology/Defs",            # 261 -- IsOpen/IsClosed/Continuous, the basic topological vocabulary
+    "Computability/Partrec",    # 124 -- partial recursive functions; Computability is a scanned area
+    "Topology/MetricSpace",     #  55 -- metric spaces; standard vocabulary, self-contained in a line
+    "Combinatorics/SimpleGraph",#  46 -- simple graphs (SimpleGraph.mulCayley, adjMatrix)
+    "Data/Seq",                 #  45 -- sequences/streams (GenContFract.squashSeq, Stream'.Seq1.map)
+    "LinearAlgebra/Matrix",     #  45 -- matrix basics (Matrix.gram, Matrix.compl)
+    #
+    # Deliberately REJECTED despite high reference counts -- these are the heavy abstract
+    # infrastructure the gate exists to catch, and are tranche-B in character:
+    #   Algebra/Homology (501), CategoryTheory/* (375), Algebra/Category (193),
+    #   AlgebraicTopology/* (156), AlgebraicGeometry/* (115), Algebra/Lie (81), Data/QPF (46).
+    # A dossier for an object over chain complexes or a subfunctor is not self-containable at the
+    # current depth standard, which is precisely what tranche B defers.
 ]
 
 

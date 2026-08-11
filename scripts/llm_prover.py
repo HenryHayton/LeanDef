@@ -135,6 +135,33 @@ def arm_of(record, fact_id) -> str:
     return "goedel32b" if sub else "sonnet"
 
 
+def _refutes_truth_too(server, base_env, statement: str, real_name: str, task_symbol: str,
+                       imports) -> bool:
+    """Does the refuting argument also refute the TRUTH? Then the FACT is defective.
+
+    Mirrors `scripts/negation_topup.py`'s `refutes_truth_too` deliberately rather than importing
+    it: that module is a standalone pass with its own budgets, and the shared piece is only this
+    three-line probe. The tactic ladder is the negation one -- push_neg-led, since a genuine
+    counterexample is a witness hunt.
+    """
+    import dataclasses
+
+    from harness.signature import root_qualify
+    from ladder.budgets import DEFAULT_LADDER_BUDGETS, TacticBudget
+    from ladder.tier2 import adjudicate_tier2
+
+    truth_stmt = statement.replace(task_symbol, root_qualify(real_name))
+    budgets = dataclasses.replace(DEFAULT_LADDER_BUDGETS, tier2_tactics=(
+        TacticBudget("push_neg <;> simp_all", 15.0),
+        TacticBudget("push_neg <;> omega", 10.0),
+        TacticBudget("decide", 10.0),
+        TacticBudget("push_neg <;> aesop", 30.0, heavy=True),
+    ))
+    probe = adjudicate_tier2(server, base_env, "neg_truth_probe",
+                             negation_goal(truth_stmt), budgets, imports=imports)
+    return probe.winning is not None
+
+
 PROVER_SYSTEM = "You are an expert Lean 4 and Mathlib prover."
 
 
@@ -324,6 +351,7 @@ def cmd_check(args) -> int:
     handle = ServerHandle()
     checked = certified = audit_rejected = 0
     by_fact = collections.Counter()
+    suspect_facts = collections.Counter()
     t0 = time.perf_counter()
     try:
         todo = [(r, u) for r, u in unresolved_facts(scores_dir) if not r.get(stamp)]
@@ -370,6 +398,21 @@ def cmd_check(args) -> int:
                     if stage not in stages:
                         stages.append(stage)
                     continue
+                if ok and args.direction == "negation" and t.get("truth_real_name"):
+                    # A refutation only indicts the CANDIDATE if the TRUTH survives the same
+                    # attack. `scripts/negation_topup.py` has carried this countercheck since the
+                    # pass's first-ever refutation turned out to be a defective fact
+                    # (Nat.log/log_lt_of_lt_pow, missing `n ≠ 0`); this path did not, and shipped
+                    # the identical failure again -- Nat.divisors/divisors_mem_iff, false of real
+                    # `Nat.divisors` at n=0 because both it and the candidate give ∅ there.
+                    # Without this, tier 5 manufactures FAILs against defective facts at scale.
+                    if _refutes_truth_too(server, env, statements[fid], t["truth_real_name"],
+                                          t["signature"].name, cfg.imports_for(t.get("imports"))):
+                        suspect_facts[f"{record['task_name']}/{fid}"] += 1
+                        by_id[fid]["detail"] = ("refutation also proves against the truth -- "
+                                                "suspect FACT, not a candidate FAIL")
+                        by_id[fid].setdefault("unknown_after", []).append("neg_suspect_fact")
+                        ok = False
                 if ok:
                     certified += 1
                     by_fact[f"{record['task_name']}/{fid}"] += 1
@@ -392,12 +435,16 @@ def cmd_check(args) -> int:
         handle.close()
 
     print(f"\nCHECKED {checked} scripts: {certified} kernel-certified, "
-          f"{audit_rejected} rejected by axiom audit, {(time.perf_counter()-t0)/60:.1f} min")
+          f"{audit_rejected} rejected by axiom audit, "
+          f"{sum(suspect_facts.values())} withheld as SUSPECT FACTS (the refutation also proves "
+          f"against the truth), {(time.perf_counter()-t0)/60:.1f} min")
     for k, v in by_fact.most_common(15):
         print(f"  {v:>3}x  {k}")
+    for k, v in suspect_facts.most_common(15):
+        print(f"  SUSPECT {v:>3}x  {k}")
     Path(f"scoring_output/llm_{args.direction}_summary.json").write_text(json.dumps({
         "checked": checked, "certified": certified, "audit_rejected": audit_rejected,
-        "by_fact": dict(by_fact)}, indent=1), encoding="utf-8")
+        "by_fact": dict(by_fact), "suspect_facts": dict(suspect_facts)}, indent=1), encoding="utf-8")
     return 0
 
 
