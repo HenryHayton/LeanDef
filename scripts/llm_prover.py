@@ -136,19 +136,37 @@ def arm_of(record, fact_id) -> str:
 
 
 def _refutes_truth_too(server, base_env, statement: str, real_name: str, task_symbol: str,
-                       imports) -> bool:
+                       imports, script: str | None = None) -> bool:
     """Does the refuting argument also refute the TRUTH? Then the FACT is defective.
 
-    Mirrors `scripts/negation_topup.py`'s `refutes_truth_too` deliberately rather than importing
-    it: that module is a standalone pass with its own budgets, and the shared piece is only this
-    three-line probe. The tactic ladder is the negation one -- push_neg-led, since a genuine
-    counterexample is a witness hunt.
+    **The model's own script is tried FIRST, with the task symbol rewritten to the real name.**
+    A refutation is a WITNESS -- `refine ⟨0, 1, ?_⟩` -- and a generic tactic ladder cannot
+    rediscover which witness. Measured on the case that motivated this: for
+    `Nat.divisors/divisors_mem_iff` the ladder below returns False (it never guesses n=0, d=1),
+    while the model's four-line script proves the truth's negation instantly. Relying on the
+    ladder alone therefore certified a FAIL against a fact already known to be defective --
+    twice, on two different runs, before this was traced.
+
+    The generic ladder is kept as a fallback for the case where the script is unusable against
+    the truth (it may `unfold` the candidate's own symbol, which has no counterpart there).
     """
     import dataclasses
 
+    from harness.repl import run_checked
+    from harness.results import CheckStatus
     from harness.signature import root_qualify
     from ladder.budgets import DEFAULT_LADDER_BUDGETS, TacticBudget
     from ladder.tier2 import adjudicate_tier2
+    from lean_interact import Command
+
+    if script:
+        truth_goal = negation_goal(statement.replace(task_symbol, root_qualify(real_name)))
+        ported = script.replace(task_symbol, root_qualify(real_name))
+        probe = run_checked(
+            server, Command(cmd=f"theorem _truth_probe_script : {truth_goal} := {ported}",
+                            env=base_env), timeout=120.0)
+        if probe.status is CheckStatus.PASSED:
+            return True
 
     truth_stmt = statement.replace(task_symbol, root_qualify(real_name))
     budgets = dataclasses.replace(DEFAULT_LADDER_BUDGETS, tier2_tactics=(
@@ -177,9 +195,89 @@ def build_prover_prompt(record: dict, statement: str, direction: str) -> str:
     )
 
 
+def _generate_converse(args) -> int:
+    """Cross-vendor generation via Bedrock Converse (DeepSeek, Qwen, ...).
+
+    Same resume/atomic-append contract as the Bedrock-Anthropic path: one row per goal keyed by
+    `key`, errors counted and left absent so a re-run retries exactly them.
+    """
+    from bedrock.converse import ConverseClient
+    from scoring.samples import load_task
+
+    scores_dir = cfg.scores_dir()
+    out_path = Path(args.scripts)
+    done_keys = set()
+    if out_path.exists():
+        for line in out_path.read_text(encoding="utf-8").splitlines():
+            try:
+                done_keys.add(json.loads(line)["key"])
+            except (json.JSONDecodeError, KeyError):
+                continue
+
+    units = []
+    for record, unknown in unresolved_facts(scores_dir):
+        t = load_task(record["task_name"])
+        statements = {f.id: f.statement for f in t["facts"]}
+        for fid in unknown:
+            key = key_of(record, fid, args.direction)
+            if key in done_keys or fid not in statements:
+                continue
+            if args.arm != "all" and arm_of(record, fid) != args.arm:
+                continue
+            units.append((key, record, fid, statements[fid]))
+    if args.limit:
+        units = units[: args.limit]
+    print(f"{len(units)} scripts to generate with {args.model_id} @ {args.region} "
+          f"({len(done_keys)} already on disk)", flush=True)
+    if not units:
+        return 0
+
+    client = ConverseClient(region=args.region, read_timeout_s=900.0)
+    lock_path = out_path.with_suffix(".lock")
+    assert not lock_path.exists(), f"another generator appears active ({lock_path})"
+    lock_path.write_text(str(time.time()))
+    done = errors = 0
+    t0 = time.perf_counter()
+
+    def one(unit):
+        key, record, fid, stmt = unit
+        prompt = build_prompt(record, stmt, args.direction)
+        res = client.send(SYSTEM, prompt, model_id=args.model_id,
+                          max_tokens=args.max_tokens, temperature=args.temperature)
+        return key, res
+
+    try:
+        with ThreadPoolExecutor(max_workers=args.concurrency) as pool, \
+                out_path.open("a", encoding="utf-8") as fh:
+            futures = {pool.submit(one, u): u for u in units}
+            for fut in as_completed(futures):
+                key = futures[fut][0]
+                try:
+                    key, res = fut.result()
+                    fh.write(json.dumps({
+                        "key": key, "script": extract_script(res.text),
+                        "output_tokens": res.output_tokens, "stop_reason": res.stop_reason,
+                        "model_id": res.model_id}) + "\n")
+                    fh.flush()
+                    done += 1
+                except Exception as e:  # noqa: BLE001 -- quota walls checkpoint, never crash
+                    errors += 1
+                    print(f"ERROR {key}: {type(e).__name__}: {str(e)[:140]}", flush=True)
+                if (done + errors) % 20 == 0:
+                    rate = (done + errors) / max(time.perf_counter() - t0, 1e-6)
+                    print(f"{done+errors}/{len(units)} (err={errors}) "
+                          f"eta {(len(units)-done-errors)/rate/60:.0f} min", flush=True)
+    finally:
+        lock_path.unlink(missing_ok=True)
+    print(f"\nGENERATED {done}, errors {errors}")
+    return 0 if errors == 0 else 1
+
+
 def cmd_generate(args) -> int:
     if args.backend == "vllm":
         return _generate_vllm(args)
+    if args.backend == "converse":
+        return _generate_converse(args)
     from bedrock import config as bcfg
     from bedrock.client import BedrockClient
 
@@ -343,7 +441,12 @@ def cmd_check(args) -> int:
             continue
     print(f"{sum(len(v) for v in scripts.values())} scripts over {len(scripts)} goals", flush=True)
 
-    if args.arm in ("goedel", "goedel32b"):
+    if getattr(args, "tag", None):
+        # An explicit tag names the (model, arm) pass, so a SECOND model attacking the SAME arm's
+        # goals gets its own stage and stamp. Without it the stamp from the first pass would make
+        # `todo` skip every record, and the run would silently do nothing.
+        stage, stamp = f"{args.tag}_{args.direction}", f"{args.tag}_{args.direction}_topup"
+    elif args.arm in ("goedel", "goedel32b"):
         tag = "prover" if args.arm == "goedel" else "prover32b"
         stage, stamp = f"{tag}_{args.direction}", f"{tag}_{args.direction}_topup"
     else:
@@ -407,7 +510,8 @@ def cmd_check(args) -> int:
                     # `Nat.divisors` at n=0 because both it and the candidate give ∅ there.
                     # Without this, tier 5 manufactures FAILs against defective facts at scale.
                     if _refutes_truth_too(server, env, statements[fid], t["truth_real_name"],
-                                          t["signature"].name, cfg.imports_for(t.get("imports"))):
+                                          t["signature"].name, cfg.imports_for(t.get("imports")),
+                                          script=script):
                         suspect_facts[f"{record['task_name']}/{fid}"] += 1
                         by_id[fid]["detail"] = ("refutation also proves against the truth -- "
                                                 "suspect FACT, not a candidate FAIL")
@@ -454,7 +558,12 @@ def main() -> int:
     g = sub.add_parser("generate")
     g.add_argument("--direction", choices=("forward", "negation"), required=True)
     g.add_argument("--arm", choices=("sonnet", "goedel", "goedel32b", "all"), default="all")
-    g.add_argument("--backend", choices=("bedrock", "vllm"), default="bedrock")
+    g.add_argument("--backend", choices=("bedrock", "vllm", "converse"), default="bedrock")
+    g.add_argument("--model-id", default=None, help="converse backend: Bedrock model id")
+    g.add_argument("--region", default=None, help="converse backend: AWS region hosting it")
+    g.add_argument("--tag", default=None,
+                   help="names this (model, arm) pass; required when a second model attacks an "
+                        "arm another model already stamped")
     g.add_argument("--endpoint", default=None, help="vllm backend: chat-completions URL")
     g.add_argument("--model-name", default="Goedel-LM/Goedel-Prover-V2-8B")
     g.add_argument("--samples", type=int, default=8, help="vllm backend: pass@k attempts/goal")
@@ -468,6 +577,7 @@ def main() -> int:
     c.add_argument("--direction", choices=("forward", "negation"), required=True)
     c.add_argument("--arm", choices=("sonnet", "goedel", "goedel32b", "all"), default="all")
     c.add_argument("--scripts", default=None)
+    c.add_argument("--tag", default=None, help="must match the tag used at generate time")
     args = ap.parse_args()
     if args.scripts is None:
         backend = getattr(args, "backend", None) or "check"

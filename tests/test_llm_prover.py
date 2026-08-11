@@ -50,3 +50,37 @@ def test_arm_assignment_is_deterministic_direction_blind_and_balanced():
     assert arms == [arm_of(rec(i), f"fact_{j}") for i in range(10) for j in range(30)]
     share = arms.count("goedel") / len(arms)
     assert 0.4 < share < 0.6, f"hash split badly unbalanced: {share}"
+
+
+class TestTruthCountercheckUsesTheWitness:
+    """Regression: the countercheck must reuse the model's OWN refutation script.
+
+    Observed twice on Nat.divisors/divisors_mem_iff (a fact missing `n ≠ 0`, false of the real
+    Nat.divisors at n=0). A refutation is a WITNESS -- `refine ⟨0, 1, ?_⟩` -- and the generic
+    push_neg/simp_all/aesop ladder never rediscovers which witness, so it returned False and a
+    FAIL was certified against a fact already known to be defective.
+    """
+
+    def test_script_is_ported_to_the_truth_and_tried_first(self, monkeypatch):
+        import scripts.llm_prover as lp
+
+        seen = {}
+
+        class _Passed:
+            status = __import__("harness.results", fromlist=["CheckStatus"]).CheckStatus.PASSED
+
+        def fake_run_checked(server, command, timeout=None):
+            seen["cmd"] = command.cmd
+            return _Passed()
+
+        monkeypatch.setattr("harness.repl.run_checked", fake_run_checked)
+        out = lp._refutes_truth_too(
+            server=object(), base_env=0,
+            statement="∀ (n d : ℕ), d ∈ VTask.divisors n ↔ d ∣ n ∧ 0 < d",
+            real_name="Nat.divisors", task_symbol="VTask.divisors", imports=None,
+            script="by\n  push_neg\n  refine ⟨0, 1, ?_⟩\n  simp",
+        )
+        assert out is True, "a script that proves the truth's negation must flag a suspect fact"
+        assert "VTask.divisors" not in seen["cmd"], "task symbol must be rewritten to the truth"
+        assert "Nat.divisors" in seen["cmd"]
+        assert "refine ⟨0, 1, ?_⟩" in seen["cmd"], "the witness must survive the port"
