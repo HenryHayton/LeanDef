@@ -1385,5 +1385,496 @@
     },
     "repair_log": [],
     "status": "pending"
+  },
+  {
+    "name": "ArithmeticFunction.dirichletInverseFun",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11244,
+        11247
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nGiven an arithmetic function `f : ℕ → R` over a ring `R` and an invertibility witness for `f(1)`, `VTask.dirichletInverseFun f hf` is the **Dirichlet inverse** of `f`: the unique arithmetic function `g : ℕ → R` such that the Dirichlet convolution `f * g` equals the arithmetic identity (the function that is 1 at 1 and 0 elsewhere). The function is constructed recursively: its value at 0 is set to 0 (a conventional junk value), its value at 1 is the ring-inverse of `f(1)`, and for `n ≥ 2` it is determined by the identity `∑_{d | n} f(n/d) · g(d) = 0`, solving for `g(n)` using the values of `g` at the proper divisors of `n`.\n\n## Signature\n\n`VTask.dirichletInverseFun : {R : Type u_1} -> [Ring R] -> (f : ℕ → R) -> (hf : Invertible (f 1)) -> (n : ℕ) -> R`\n\n- `R` is the coefficient ring, which must be a (not necessarily commutative) ring.\n- `f` is the arithmetic function (a function from the natural numbers to `R`) whose Dirichlet inverse is being constructed.\n- `hf` is a witness that `f(1)` is invertible in `R`; this provides the multiplicative inverse `⅟(f 1)` used at every recursive step and makes the construction computable when `f` is computable.\n- `n` is the natural number argument at which the Dirichlet inverse is being evaluated.\n\n## Conventions\n\nThe value at `n = 0` is defined to be `0`, which is a junk value: Dirichlet convolution is only meaningful for positive integers, and setting the inverse to 0 at 0 is a convenient but mathematically unmotivated convention.\n\n## Worked examples\n\n- Claim: `VTask.dirichletInverseFun f hf 0 = 0` for any `f` and invertibility witness `hf` — the function always returns 0 at input 0, regardless of `f`.\n\n- Claim: `VTask.dirichletInverseFun f hf 1 = ⅟(f 1)` — at input 1, the Dirichlet inverse returns the ring-inverse of `f(1)` provided by the `Invertible` instance.\n\n- Claim: For `n ≥ 2`, `VTask.dirichletInverseFun f hf n = -⅟(f 1) * ∑ d ∈ n.properDivisors, f (n / d) * VTask.dirichletInverseFun f hf d` — at composite or prime inputs `n`, the value is determined by a negated-inverse-weighted sum over values at proper divisors.\n\n- Claim: If `f` is the constant function `fun _ => (1 : ℤ)` (with the canonical `Invertible 1` instance), then the Dirichlet inverse satisfies `VTask.dirichletInverseFun f hf 1 = 1`, recovering the Möbius-like structure where `g(1) = 1`.\n\n## Boundaries\n\n- At `n = 0`: Returns `0` unconditionally. This is a junk value with no arithmetic significance.\n- At `n = 1`: Returns `⅟(f 1)`, the ring-inverse of `f(1)`. The `Invertible` instance `hf` is essential; without it the function cannot be defined at all.\n- At `n ≥ 2` (including primes): Uses a well-founded recursion over proper divisors, which are all strictly less than `n`, so termination is guaranteed. The recursive definition matches the standard formula for computing Dirichlet inverses digit-by-digit.\n- The ring `R` need not be commutative, but the specific order of multiplication `f(n/d) * g(d)` in the sum matters in the non-commutative case.\n- If `f(1)` is not invertible, the construction is unavailable; the `Invertible` hypothesis is not merely a convenience but a necessity.\n\n## Not to be confused with\n\n- **Dirichlet convolution** (`ArithmeticFunction.pmul` or `ArithmeticFunction.pdiv`): the binary operation `f * g` on arithmetic functions; `dirichletInverseFun` constructs the inverse under this operation, not the operation itself.\n- **Multiplicative inverse in `R`**: the Dirichlet inverse `g` is an inverse of `f` with respect to Dirichlet convolution, not pointwise multiplication; in general `g(n) ≠ (f(n))⁻¹`.\n- **The Möbius function**: the Dirichlet inverse of the constant-1 function is the classical Möbius function `μ`, but `dirichletInverseFun` is the general construction for arbitrary invertible arithmetic functions, not specifically `μ`."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "List.nextOr",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11247,
+        11250
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.nextOr xs x default` searches the list `xs` for the first occurrence of element `x` such that `x` is immediately followed by another element `z` in `xs`, and returns that successor `z`. If no such pair exists — because `x` does not appear in `xs`, or `x` appears only as the very last element of `xs` — the function returns `default`.\n\nInformally: \"find the element immediately after the first `x` in the list, or fall back to `default`.\"\n\n## Signature\n\n`VTask.nextOr : {α : Type u_1} -> [DecidableEq α] -> List α → α → α → α`\n\nThe implicit type parameter `α` is the element type of the list. The `DecidableEq α` instance is required so that equality of elements can be decided computationally. The first explicit argument is the list being searched. The second explicit argument is the element `x` whose immediate successor is sought. The third explicit argument is the default value returned when no successor of `x` exists in the list.\n\n## Conventions\n\nWhen `xs` is empty, the function returns `default` regardless of the other arguments. When `xs` is a singleton, the function also returns `default` regardless of the other arguments, because no element can have a successor in a one-element list. When `x` appears as the last element of `xs` (and not earlier with a successor), the function returns `default`. When `x` does not appear anywhere in `xs`, the function returns `default`.\n\n## Worked examples\n\n- Claim: `VTask.nextOr [] 'a' 'z' = 'z'` (empty list returns default)\n  ```lean\n  example : VTask.nextOr [] 'a' 'z' = 'z' := by decide\n  ```\n\n- Claim: `VTask.nextOr ['a'] 'a' 'z' = 'z'` (singleton list returns default even if `x` matches)\n  ```lean\n  example : VTask.nextOr ['a'] 'a' 'z' = 'z' := by decide\n  ```\n\n- Claim: `VTask.nextOr ['a', 'b', 'c'] 'a' 'z' = 'b'` (returns immediate successor of first match)\n  ```lean\n  example : VTask.nextOr ['a', 'b', 'c'] 'a' 'z' = 'b' := by decide\n  ```\n\n- Claim: `VTask.nextOr ['a', 'b', 'c'] 'b' 'z' = 'c'` (finds `'b'` and returns `'c'`)\n  ```lean\n  example : VTask.nextOr ['a', 'b', 'c'] 'b' 'z' = 'c' := by decide\n  ```\n\n- Claim: `VTask.nextOr ['a', 'b', 'c'] 'c' 'z' = 'z'` (last element has no successor, returns default)\n  ```lean\n  example : VTask.nextOr ['a', 'b', 'c'] 'c' 'z' = 'z' := by decide\n  ```\n\n- Claim: `VTask.nextOr ['a', 'b', 'a', 'c'] 'a' 'z' = 'b'` (returns successor of *first* occurrence)\n  ```lean\n  example : VTask.nextOr ['a', 'b', 'a', 'c'] 'a' 'z' = 'b' := by decide\n  ```\n\n## Boundaries\n\n- **Empty list**: `VTask.nextOr [] x default = default` for all `x` and `default`.\n- **Singleton list**: `VTask.nextOr [y] x default = default` for all `x`, `y`, and `default`; even when `x = y` there is no successor.\n- **Element not found**: If `x ∉ xs`, the result is `default`; conversely, if the result differs from `default`, then `x` must belong to `xs`.\n- **Element is the last**: If `x` equals the last element of `xs` and does not appear earlier with a successor, the result is `default`.\n- **Duplicate occurrences**: Only the first occurrence of `x` in `xs` is used; if the first `x` has a successor, that successor is returned regardless of later occurrences.\n- **Membership of result**: If `default ∈ xs`, then the result is guaranteed to belong to `xs` (since either the found successor is in `xs`, or we return `default` which is in `xs`).\n- **Default value ignored when `x` is in `dropLast`**: When `x` appears strictly before the last position of `xs`, the returned value is the element at index `idxOf(x) + 1`, independent of `default`.\n\n## Not to be confused with\n\n- **`List.getD` / `List.get?`**: These retrieve elements by numeric index, not by searching for a predecessor element.\n- **`List.Cycle.next`**: The cyclic next function wraps around at the end of a list, returning the head after the last element, whereas `VTask.nextOr` never wraps and returns `default` at the boundary.\n- **`List.indexOf` (or `List.idxOf`)**: This returns the numeric index of an element, not its successor element."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Equiv.sumCompl",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11250,
+        11253
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.sumCompl\n\n### Object\n\nFor a type `α` and a decidable predicate `p : α → Prop`, `VTask.sumCompl p` is the canonical equivalence (bijection) between the disjoint sum (coproduct) of the two complementary subtypes `{ a // p a }` and `{ a // ¬ p a }` on one side, and the original type `α` on the other. Intuitively, every element of `α` either satisfies `p` or it does not, so tagging elements with which side they fall on and then forgetting the tag is a perfect bijection.\n\n### Signature\n\n`VTask.sumCompl : {α : Type u_9} -> (p : α → Prop) -> [DecidablePred p] -> { a // p a } ⊕ { a // ¬p a } ≃ α`\n\nThe implicit type argument `α` is the ambient type whose elements are being classified. The explicit argument `p` is the decidable predicate that partitions `α` into two complementary subtypes. The instance argument `[DecidablePred p]` supplies the algorithm for deciding, for each `a : α`, whether `p a` holds or not; it is needed to define the inverse of the equivalence.\n\n### Conventions\n\nThe forward direction (from the sum to `α`) forgets the proof tag and returns the underlying element: both `Sum.inl ⟨a, h⟩` and `Sum.inr ⟨a, h⟩` map to `a`. The inverse direction sends `a : α` to `Sum.inl ⟨a, h⟩` when `p a` holds (with `h : p a`) and to `Sum.inr ⟨a, h⟩` when `¬ p a` holds (with `h : ¬ p a`); the choice of branch is determined by the `DecidablePred` instance.\n\n### Worked examples\n\n- Claim: Applying `VTask.sumCompl` to `Sum.inl ⟨0, (by decide : 0 % 2 = 0)⟩` (where `p n := n % 2 = 0` on `Fin 4`) yields `0`.\n\n- Claim: The inverse of `VTask.sumCompl (fun n : Fin 4 => n % 2 = 0)` applied to `⟨1, by decide⟩` produces `Sum.inr ⟨1, by decide⟩` (landing in the odd side).\n\n- Claim: For `p : ℕ → Prop := (· = 0)` with `DecidablePred` instance, applying `VTask.sumCompl p` to `Sum.inl ⟨0, rfl⟩` gives `0`.\n\n- Claim: For any `a : α` with `h : p a`, `(VTask.sumCompl p).symm ⟨a, h⟩ = Sum.inl ⟨a, h⟩` (the symmetric image of a member of `p` is on the left).\n\n### Boundaries\n\n- When `p` is the always-true predicate `fun _ => True`, the type `{ a // ¬ p a }` is empty, so the sum degenerates to an equivalence `{ a // True } ⊕ Empty ≃ α`, which still holds correctly.\n- When `p` is the always-false predicate `fun _ => False`, the type `{ a // p a }` is empty, so the sum degenerates to `Empty ⊕ { a // True } ≃ α`, which also holds correctly.\n- The equivalence is defined for any type `α`, including infinite types; there is no finiteness restriction.\n- The `DecidablePred` hypothesis is only used for the inverse direction; without it, the forward direction (forgetting proof tags) is still a well-typed function, but the full equivalence cannot be stated without a way to decide which branch to use in the inverse.\n\n### Not to be confused with\n\n- `subtypeOrEquiv`: handles the case of two predicates `p` and `q` whose union covers `α` but which are not necessarily complements; `VTask.sumCompl` is the special case where `q = ¬ p`.\n- `Equiv.Set.sumCompl`: the set-theoretic analogue, where `p` is replaced by a set `s` and `¬ p` by `sᶜ`; morally the same construction but stated in the language of sets.\n- `Equiv.sumCongr`: an equivalence that combines two independent equivalences on the two summands of a sum type, unrelated to the complement decomposition of a single type."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "RingEquiv.piCongrRight",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11253,
+        11256
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.piCongrRight` constructs a ring isomorphism between two dependent product types `(∀ i, R i)` and `(∀ i, S i)` from a family of ring isomorphisms `e i : R i ≃+* S i`, one for each index `i`. The resulting isomorphism acts pointwise: it sends a tuple `f` to the tuple whose `j`-th component is `e j (f j)`, and its inverse sends a tuple `g` to the tuple whose `j`-th component is `(e j).symm (g j)`. Both the multiplicative and additive ring structures on the product types are respected.\n\n## Signature\n\n`VTask.piCongrRight : {ι : Type u_7} -> {R : ι → Type u_8} -> {S : ι → Type u_9} -> [(i : ι) → NonUnitalNonAssocSemiring (R i)] -> [(i : ι) → NonUnitalNonAssocSemiring (S i)] -> (e : (i : ι) → R i ≃+* S i) -> ((i : ι) → R i) ≃+* ((i : ι) → S i)`\n\nThe implicit type `ι` is the index type parametrising the family. The implicit type families `R` and `S` assign a type to each index; each fibre `R i` and `S i` is required to carry a non-unital, non-associative semiring structure, supplied by the two instance arguments. The explicit argument `e` is a family of ring isomorphisms, one per index, whose pointwise assembly produces the output isomorphism.\n\n## Conventions\n\nNo special junk-value or edge-case conventions are declared for this definition: it is a total construction that is well-defined for any choice of `ι`, `R`, `S`, and `e`, including the case where `ι` is empty (in which case the product types are both the trivial one-element type and the resulting isomorphism is necessarily the unique isomorphism between them).\n\n## Worked examples\n\n- Claim: Applying `VTask.piCongrRight` with the family of identity isomorphisms yields the identity ring isomorphism on the product type.\n\n- Claim: The inverse of `VTask.piCongrRight e` equals `VTask.piCongrRight (fun i => (e i).symm)` for any family `e`.\n\n- Claim: Composing `VTask.piCongrRight e` with `VTask.piCongrRight f` via `.trans` equals `VTask.piCongrRight (fun i => (e i).trans (f i))`.\n\n- Claim: For `ι = Fin 2`, `R = fun _ => ℤ`, `S = fun _ => ℤ`, and `e = fun _ => RingEquiv.refl ℤ`, applying `VTask.piCongrRight e` to the tuple `(fun i => [1, 2].get i)` returns the same tuple pointwise.\n\n## Boundaries\n\n- **Empty index type**: When `ι` is the empty type, both `∀ i, R i` and `∀ i, S i` are singleton types. The construction still produces a valid ring isomorphism — the unique one between the two trivial products.\n- **Singleton index type**: When `ι` has exactly one element, `VTask.piCongrRight e` is essentially the same as `e ⟨⟩` (or `e default`), wrapped into the pi-type ring isomorphism.\n- **Identity family**: When `e i = RingEquiv.refl (R i)` for every `i`, the result equals `RingEquiv.refl (∀ i, R i)`, as confirmed by `piCongrRight_refl`.\n- **Symmetry**: `(VTask.piCongrRight e).symm = VTask.piCongrRight (fun i => (e i).symm)`, so inverting the whole isomorphism is the same as inverting each component.\n- **Transitivity**: Composing two pi congr-right isomorphisms via `.trans` is the same as forming the pi of the componentwise compositions.\n\n## Not to be confused with\n\n- `RingEquiv.arrowCongr`: the non-dependent version, which constructs a ring isomorphism `(α → β) ≃+* (γ → δ)` from a single pair of ring isomorphisms rather than a dependent family.\n- `Equiv.piCongrRight`: the purely set-theoretic (non-ring-structure-respecting) version that constructs an equivalence of dependent products from a family of equivalences, without any algebraic compatibility.\n- `MulEquiv.piCongrRight` / `AddEquiv.piCongrRight`: the multiplicative-only or additive-only analogues, which respect only one of the two semiring operations rather than both simultaneously."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "SimpleGraph.Walk.dropUntil",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11256,
+        11260
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.dropUntil\n\n### Object\n\n`VTask.dropUntil` extracts the **suffix** of a walk in a simple graph, starting at (and including) a specified vertex. Given a walk from `v` to `w` and a vertex `u` that is known to appear in the walk's support (the ordered list of vertices visited), it returns the sub-walk that begins at the first occurrence of `u` and continues all the way to the terminal vertex `w`. Intuitively, it \"drops\" all vertices from the front of the walk until it reaches `u`, then hands back everything from `u` onward.\n\n### Signature\n\n`{V : Type u} -> {G : SimpleGraph V} -> [DecidableEq V] -> {v w : V} -> (p : G.Walk v w) -> (u : V) -> u ∈ p.support → G.Walk u w`\n\n- `V` is the vertex type of the graph (implicit).\n- `G` is the simple graph in which the walk lives (implicit).\n- The `DecidableEq V` instance is needed to compare vertices when scanning the walk (implicit).\n- `v` and `w` are the start and end vertices of the original walk (implicit).\n- `p` is the walk from `v` to `w` whose suffix is being extracted.\n- `u` is the vertex at which the suffix should begin.\n- The final argument is a proof that `u` actually appears in the support of `p`, ensuring the operation is well-defined.\n\nThe result is a walk from `u` to `w`.\n\n### Conventions\n\nWhen `u` is the very first vertex of `p` (i.e., `u = v`), `VTask.dropUntil p u h` returns the entire walk `p` unchanged — no vertices are dropped. This is the \"drop nothing\" boundary case.\n\n### Worked examples\n\n- Claim: For the trivial (nil) walk at vertex `u`, `VTask.dropUntil (Walk.nil) u h` is the nil walk at `u` (the only supported vertex is `u` itself, and the suffix starting there is the empty walk).\n\n- Claim: If `p` is a walk `v → a → b → w` and `u = a`, then `VTask.dropUntil p a h` is the sub-walk `a → b → w` — the portion of `p` from `a` to the end.\n\n- Claim: Appending `VTask.takeUntil p u h` and `VTask.dropUntil p u h` reconstructs the original walk `p` exactly (the \"take_spec\" identity).\n\n- Claim: The support of `VTask.dropUntil p u h` is a suffix of the support of `p`.\n\n- Claim: The length of `VTask.dropUntil p u h` is at most the length of `p`.\n\n- Claim: If `p` is a path (no repeated vertices), then `VTask.dropUntil p u h` is also a path.\n\n### Boundaries\n\n- **`u` is the start vertex (`u = v`):** `VTask.dropUntil p u h` equals `p` in full — nothing is dropped.\n- **`u` is the end vertex (`u = w`):** The result is a nil walk at `w` (the empty walk ending at `w`).\n- **Trivial walk (`p = Walk.nil` at `v`):** The only vertex in the support is `v`, so `u` must equal `v`, and the result is `Walk.nil` again.\n- **`u` appears multiple times in the support:** Only the *first* occurrence of `u` is used as the cut point; the suffix starts at the first visit to `u`.\n- **Length:** The length of the dropped suffix is `p.length - (index of u in p.support)`, so it is always ≤ the length of `p`, and strictly less whenever `u ≠ v`.\n\n### Not to be confused with\n\n- **`VTask.takeUntil`** — the complementary operation that returns the *prefix* of a walk up to (and including) `u`, rather than the suffix starting at `u`.\n- **`Walk.dropUntil` on lists** — generic list suffix operations do not require a membership proof and work on unstructured lists, whereas this operation respects the graph adjacency structure throughout.\n- **`Walk.tail` / prefix-removal by one step** — that operation removes only a single edge from the front, whereas `VTask.dropUntil` skips any number of edges to reach an arbitrary specified vertex."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Equiv.sumPiEquivProdPi",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11260,
+        11263
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.sumPiEquivProdPi` is a canonical type equivalence (a bijection with explicitly given inverse) between two descriptions of \"dependent functions indexed by a sum type\". Given a type family `π` over `ι ⊕ ι'`, it witnesses that a dependent function `f : (i : ι ⊕ ι') → π i` is the same data as a pair consisting of a dependent function `fl : (i : ι) → π (Sum.inl i)` on the left summand and a dependent function `fr : (i' : ι') → π (Sum.inr i')` on the right summand. In other words, it records the familiar fact that to specify a function on a disjoint union it suffices — and is necessary — to specify it separately on each piece, lifted to the fully dependent (fibre-varying) setting.\n\n## Signature\n\n`VTask.sumPiEquivProdPi : {ι : Type u_10} -> {ι' : Type u_11} -> (π : ι ⊕ ι' → Type u_9) -> ((i : ι ⊕ ι') → π i) ≃ ((i : ι) → π (Sum.inl i)) × ((i' : ι') → π (Sum.inr i'))`\n\nThe two universe-polymorphic index types `ι` and `ι'` are implicit; they are the left and right components of the sum type used for indexing. The explicit argument `π` is the dependent type family over `ι ⊕ ι'` whose fibre over a sum-type index `i` specifies the type of values at that index. The result is a term of type `Equiv`, packaging the forward map (restriction/splitting) and its inverse (gluing) together with proofs that they are mutually inverse.\n\n## Conventions\n\nNo special junk-value or edge conventions are declared for this definition. It is a total, universe-polymorphic construction that produces a valid equivalence for every choice of `ι`, `ι'`, and `π`, including the degenerate cases where one or both index types are empty.\n\n## Worked examples\n\n- Claim: Applying `(VTask.sumPiEquivProdPi π).toFun f` to a specific dependent function `f` on `Bool ⊕ Unit` splits it into its left and right restrictions.\n\n- Claim: For the constant family `π _ = ℕ`, the forward direction of `VTask.sumPiEquivProdPi π` sends the function `Sum.elim (fun _ => 3) (fun _ => 7)` to the pair `(fun _ => 3, fun _ => 7)`.\n\n- Claim: The equivalence `VTask.sumPiEquivProdPi π` is its own double-inverse: applying the forward map and then the inverse recovers the original function (i.e., `(VTask.sumPiEquivProdPi π).symm ((VTask.sumPiEquivProdPi π) f) = f` for every `f`).\n\n- Claim: When `ι` is `Empty`, the forward map projects any dependent function `f : (i : Empty ⊕ ι') → π i` to the pair `(fun i => i.elim, fun i' => f (Sum.inr i'))`, so the left component is determined vacuously and the right component retains all the information.\n\n## Boundaries\n\n- **Empty index types:** When `ι` is `Empty`, the left component of the pair is the unique function from the empty type, and the equivalence reduces to an isomorphism between `(i : Empty ⊕ ι') → π i` and `(i' : ι') → π (Sum.inr i')` (up to the unit in the product). When `ι'` is `Empty`, the situation is symmetric. When both are `Empty`, both components are vacuous and the entire function space has exactly one element.\n- **Non-dependent (constant family):** When `π` is a constant family `fun _ => α`, the equivalence specialises to the non-dependent version: `(ι ⊕ ι' → α) ≃ (ι → α) × (ι' → α)`, recovering `Equiv.sumArrowEquivProdArrow`.\n- **The equivalence is definitionally bijective:** the forward and inverse maps are literally composition with `Sum.inl` / `Sum.inr` and case-analysis via `Sum.rec`, so the round-trip equalities hold by reflexivity on each constructor.\n\n## Not to be confused with\n\n- `Equiv.sumArrowEquivProdArrow`: the non-dependent special case where the codomain type does not vary with the index; `VTask.sumPiEquivProdPi` generalises this.\n- `Equiv.piEquivPiSubtypeProd`: a different splitting of a pi type, this one splitting the domain by a predicate (subtype + complement) rather than by a sum-type disjoint union.\n- `MeasurableEquiv.sumPiEquivProdPi`: the measurable-space version of the same equivalence; it carries the same underlying map but lives in the category of measurable spaces and measurable maps."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Nat.Partition.ofSums",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11263,
+        11266
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.ofSums n l hl` is a partition of the natural number `n` constructed from a multiset `l` of natural numbers whose sum equals `n`. The partition's parts are exactly the nonzero elements of `l` (with multiplicity); any zeros in `l` are dropped because a valid partition requires all parts to be positive. The resulting `Nat.Partition n` records these nonzero elements as its multiset of parts, and the sum of those parts is still `n` (since the dropped zeros contribute nothing to the sum).\n\n## Signature\n\n`(n : ℕ) -> (l : Multiset ℕ) -> (hl : l.sum = n) -> n.Partition`\n\nThe first argument `n` is the natural number being partitioned. The second argument `l` is a multiset of natural numbers that will supply the parts; it may contain zeros. The third argument `hl` is a proof that the sum of `l` equals `n`, which guarantees the filtered result will also sum to `n`.\n\n## Conventions\n\nZeros in the input multiset `l` are silently discarded: the parts of the resulting partition contain only the strictly positive elements of `l`, each with the same multiplicity it had in `l`.\n\n## Worked examples\n\n- Claim: For `l = {3, 1, 0, 2}` with sum `6`, `VTask.ofSums 6 {3,1,0,2} rfl` produces a partition whose parts are `{3,2,1}` (zeros removed), which form a valid partition of 6.\n\n- Claim: For `l = {0, 0, 0}` with sum `0`, `VTask.ofSums 0 {0,0,0} rfl` produces the empty partition of `0` (all zeros are removed, leaving no parts).\n\n- Claim: The count of `0` in the parts of `VTask.ofSums n l hl` is always `0`, regardless of how many zeros `l` contains.\n\n- Claim: For any nonzero `i`, the count of `i` in `(VTask.ofSums n l hl).parts` equals the count of `i` in `l`.\n\n## Boundaries\n\n- If `l` is the empty multiset and `n = 0` (with `hl : (∅ : Multiset ℕ).sum = 0`), the result is the unique partition of `0` with no parts.\n- If `l` consists entirely of zeros, all elements are filtered out and the result is the empty partition of `0`; this requires `n = 0` by the sum hypothesis.\n- If `l` already contains no zeros, the parts of the resulting partition are identical to `l` (as a multiset).\n- The function is total: it is well-defined for every `n`, every multiset `l`, and every proof `hl` that `l.sum = n`.\n\n## Not to be confused with\n\n- `Nat.Partition` (the structure itself): that is the *type* of partitions; `VTask.ofSums` is a *constructor* for inhabitants of that type from a possibly-zero-containing multiset.\n- `Nat.Partition.ofComposition` or similar constructors: those build partitions from ordered sequences (compositions) rather than unordered multisets.\n- The identity coercion of a multiset directly to a partition without filtering: unlike a raw coercion, `VTask.ofSums` actively removes zeros to satisfy the positivity requirement."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "InverseSystem.IsNatEquiv",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11266,
+        11270
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.IsNatEquiv` is a predicate on a family of equivalences that asserts they form a **natural transformation** (in the informal sense): the equivalences between `F j` and `piLT X j`, indexed over a set `s` of indices, must commute with the restriction maps of the system. Concretely, if you first apply the restriction map `f` to move from `F j` down to `F k` (for `k ≤ j`) and then apply the equivalence at `k`, you must get the same result as first applying the equivalence at `j` and then applying the canonical projection `piLTProj` that moves within the `piLT` side.\n\n## Signature\n\n`(f : ⦃i j : ι⦄ → i ≤ j → F j → F i) -> {s : Set ι} -> (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j) -> Prop`\n\nThe first argument `f` is the restriction map (or transition map) of the system: given indices `i ≤ j` it transports elements of `F j` back to `F i`. The second argument `s` is the subset of indices over which the family of equivalences is defined. The third argument `equiv` is the family of type equivalences to be tested for naturality — for each index `j` in `s`, it provides a bijection between `F j` and `InverseSystem.piLT X j`.\n\n## Conventions\n\nNo junk-value or out-of-domain conventions are declared: the predicate is a universally quantified statement over pairs of indices in `s`, and it is well-typed for any such family; no special meaning is assigned to degenerate inputs.\n\n## Worked examples\n\n- Claim: If the family `equiv` consists of a single equivalence at one index `j₀ ∈ s`, the naturality condition `VTask.IsNatEquiv f equiv` holds vacuously for any pair with `k = j` (reflexive case) whenever `f` and `piLTProj` both act as the identity on reflexive restrictions.\n\n- Claim: For the specific family `piEquivLim nat equivLim hi` constructed from an inverse system satisfying `(equivLim x).1 l = f l.2.le x` for all `x` and `l`, the predicate `VTask.IsNatEquiv f (piEquivLim nat equivLim hi)` holds — this is `InverseSystem.isNatEquiv_piEquivLim`.\n\n- Claim: If `equiv` already satisfies `VTask.IsNatEquiv f equiv` and an additional equivalence `e` at a successor index satisfies the compatibility `(e x).1 = f (le_succ i) x`, then the extended family `piEquivSucc equiv e hi` also satisfies `VTask.IsNatEquiv f (piEquivSucc equiv e hi)` — this is `InverseSystem.isNatEquiv_piEquivSucc`.\n\n## Boundaries\n\n- If the index set `s` is empty, the predicate holds trivially because the universal quantification over pairs in `s` is vacuous.\n- If `s` is a singleton `{j₀}`, the only pairs to check are `j = k = j₀` with `h : j₀ ≤ j₀`, so the condition reduces to checking that `equiv ⟨j₀, _⟩ (f (le_refl j₀) x) = piLTProj (le_refl j₀) (equiv ⟨j₀, _⟩ x)` for all `x : F j₀`.\n- The predicate does not require any `InverseSystem` typeclass instance on `f`; it is meaningful for any bare restriction map.\n\n## Not to be confused with\n\n- `InverseSystem` (a typeclass on `f` asserting transitivity of restrictions) — `VTask.IsNatEquiv` is a predicate on an *external* family of equivalences, not on `f` itself.\n- `piLTProj` — the projection map on the `piLT` side; it appears inside the naturality square but is not the same object as `VTask.IsNatEquiv`.\n- A general `NatTrans` in category theory — `VTask.IsNatEquiv` is an ad hoc pointwise naturality condition for equivalences in this specific inverse-system context, not a bundled natural transformation in a functor category."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "SupPrime",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11270,
+        11274
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.SupPrime\n\n### Object\n\nAn element `a` of a semilattice with suprema (join-semilattice) is called **sup-prime** if two conditions both hold: (1) `a` is not a minimal element of the lattice (informally, it is \"non-bottom\"), and (2) whenever `a` is below a binary supremum `b ⊔ c`, it is already below at least one of the two pieces, `b` or `c`. This is the order-theoretic analogue of a prime element in a commutative monoid or ring: just as a prime divides a product only if it divides one factor, a sup-prime lies below a join only if it lies below one of the joinands.\n\n### Signature\n\n`VTask.SupPrime : {α : Type u_2} -> [SemilatticeSup α] -> (a : α) -> Prop`\n\nThe implicit type argument `α` is the carrier type of the semilattice. The type-class instance `[SemilatticeSup α]` equips `α` with a binary supremum operation `⊔`. The explicit argument `a` is the element of `α` whose sup-primeness is being asserted.\n\n### Conventions\n\nWhen the semilattice has a bottom element `⊥`, the condition \"not a minimal element\" is equivalent to `a ≠ ⊥`; in that setting `not_supPrime_bot` records that `⊥` is never sup-prime. In a semilattice without a distinguished bottom, non-minimality still rules out every element that is a global minimum.\n\n### Worked examples\n\n- Claim: In the lattice of natural numbers ordered by divisibility, the element 2 is sup-prime because it is non-minimal and whenever 2 divides lcm(b, c) it divides b or c.\n\n- Claim: The bottom element `⊥` of any semilattice with bottom is never sup-prime (it is minimal), so `VTask.SupPrime ⊥` is always false.\n\n- Claim: In a two-element Boolean lattice `{⊥, ⊤}`, the top element `⊤` is not sup-prime because it is the supremum of itself with anything, but it is also the join of `⊥ ⊔ ⊤`, so the condition `a ≤ b ⊔ c → a ≤ b ∨ a ≤ c` vacuously forces `⊤ ≤ ⊥ ∨ ⊤ ≤ ⊤`, which holds — so `⊤` is actually sup-prime in a two-element lattice, being the unique non-minimal element and satisfying the join condition trivially.\n\n- Claim: Every sup-prime element is also sup-irreducible: if `VTask.SupPrime a` holds, then `a` cannot be written as a supremum of two strictly smaller elements.\n\n### Boundaries\n\n- A minimal element (one satisfying `IsMin a`) is **never** sup-prime; the first conjunct rules it out outright.\n- In a lattice where every semilattice is a chain (totally ordered), being sup-prime collapses to simply being non-minimal, because in a chain `a ≤ b ⊔ c` always implies `a ≤ b` or `a ≤ c`.\n- In a distributive lattice the notions of sup-prime and sup-irreducible coincide (the theorem `supPrime_iff_supIrred` holds). In non-distributive lattices the two notions can differ.\n- The predicate is defined for any `SemilatticeSup`, so there is no requirement that a bottom element `⊥` exists; however when `⊥` exists, sup-primeness implies `a ≠ ⊥`.\n\n### Not to be confused with\n\n- **`SupIrred`**: A sup-irreducible element is non-minimal and cannot be expressed as a supremum of two strictly smaller elements; sup-prime implies sup-irreducible, but the converse requires distributivity.\n- **`InfPrime`**: The order-dual notion; an element is inf-prime when it is non-maximal and lies above an infimum only if it lies above one of the infimands. `InfPrime` on the dual order is equivalent to `VTask.SupPrime` on the original.\n- **`Prime` in a monoid**: While conceptually analogous (prime divides a product iff it divides a factor), `Prime` lives in a multiplicative structure and is distinct from the order-theoretic `VTask.SupPrime`.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "InfPrime",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11274,
+        11279
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.InfPrime\n\n### Object\n\nAn element `a` of a semilattice with binary meets (infima) is called **inf-prime** if two conditions hold simultaneously:\n1. `a` is not a maximal element of the lattice (in particular, `a` is not a top element if one exists).\n2. Whenever the meet (infimum) of two elements `b` and `c` is below `a`, at least one of `b` or `c` is itself already below `a`.\n\nIntuitively, inf-prime elements are those for which \"being below `a`\" is closed under binary meets in the reverse direction: if `b ⊓ c ≤ a` then the \"blame\" can be placed on one of the two factors. This is the order-theoretic analogue of a prime element in a ring (where divisibility by a prime is preserved under products).\n\n### Signature\n\nThe implicit type argument `α` is the carrier type of the semilattice. The instance argument provides the binary meet operation `⊓` and its associated order. The explicit argument `a` is the element of `α` being tested for the inf-prime property.\n\n### Conventions\n\nNo junk-value or out-of-domain conventions are declared for this predicate: it is a well-formed `Prop` for every element of every `SemilatticeInf`, including top elements (where it simply evaluates to `False` since top is maximal).\n\n### Worked examples\n\n- Claim: In a `SemilatticeInf` where `a` is a maximal element, `VTask.InfPrime a` is false.\n\n- Claim: In a linear order (a totally ordered set with more than one element), every non-maximal element is inf-prime, because for a linear order `b ⊓ c` equals `min b c`, and `min b c ≤ a` implies `b ≤ a` or `c ≤ a` since one of `b, c` equals the minimum.\n\n- Claim: In a Boolean algebra, every co-atom (element covered only by `⊤`) is inf-prime, since `b ⊓ c ≤ a` and `a` a co-atom means `b ⊓ c` is either `≤ a` by one of the factors being `≤ a`, or the meet is `⊤` (impossible for a co-atom unless both `b` and `c` are `⊤`, but then trivially one is `≤ a` via `⊤ ≤ a` being false, giving the correct disjunction by one factor equaling `⊤` and hence forcing that factor ≤ a when a is top — this case is vacuous since a is not top).\n\n- Claim: The top element of any bounded `SemilatticeInf` is never inf-prime, i.e., `¬ VTask.InfPrime (⊤ : α)` holds.\n\n### Boundaries\n\n- **Top element**: The top element `⊤` (when it exists) is never inf-prime, because `⊤` is a maximal element. The first condition of inf-primeness (`¬IsMax a`) fails.\n- **Maximal elements**: Any maximal element fails to be inf-prime for the same reason, regardless of whether the meet condition would hold.\n- **Minimal elements / bottom**: A bottom element `⊥` (if it is not also the top, i.e., the lattice is non-trivial) may or may not be inf-prime depending on the lattice structure; the meet condition is trivially satisfied since `⊥ ≤ ⊥` and both `b ≤ ⊥` and `c ≤ ⊥`, but one must separately verify it is not maximal.\n- **Trivial one-element lattice**: The unique element is both `⊤` and maximal, so it is not inf-prime.\n- **Equivalence with `InfIrred`**: In a `SemilatticeInf`, the notions of inf-prime and inf-irreducible coincide (i.e., `VTask.InfPrime a ↔ InfIrred a`). This equivalence is non-trivial and specific to this setting.\n- **Dual correspondence**: `a` is inf-prime in `α` if and only if `a` (viewed in the opposite order) is sup-prime in `αᵒᵈ`.\n\n### Not to be confused with\n\n- **`InfIrred`**: An inf-irreducible element; in a `SemilatticeInf` these coincide with inf-prime elements, but in more general settings (e.g., without all infima) the notions may diverge.\n- **`SupPrime`**: The order-dual notion — a non-bottom element `a` such that `a ≤ b ⊔ c` implies `a ≤ b` or `a ≤ c`; related by the dual equivalence `VTask.InfPrime a ↔ SupPrime (toDual a)`.\n- **Prime elements in a commutative monoid/ring**: While the intuition is analogous (primeness under a binary operation), `VTask.InfPrime` is purely order-theoretic and involves the meet operation, not ring multiplication.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "SupIrred",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11279,
+        11283
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.SupIrred\n\n### Object\n\nAn element `a` of a semilattice with a join operation (`⊔`) is called **sup-irreducible** when it satisfies two conditions simultaneously:\n1. It is not a minimal element of the order (equivalently, it is strictly above at least one element, and in particular it is not the bottom element if one exists).\n2. Whenever `a` can be written as the join (supremum) of two elements `b ⊔ c = a`, at least one of `b` or `c` must already equal `a` itself — so `a` cannot be expressed as a genuine join of two strictly smaller elements.\n\nIntuitively, sup-irreducible elements are the \"atoms of joinability\": they cannot be built by combining two smaller pieces. In a finite distributive lattice these are precisely the join-irreducible elements in the classical sense.\n\n### Signature\n\nThe implicit type argument ranges over any type equipped with a semilattice-sup structure (a partial order with binary joins). The explicit argument `a` is the element of that type whose sup-irreducibility is being tested.\n\n### Conventions\n\nIn a type that has a bottom element `⊥`, any minimal element fails the first condition and hence is not sup-irreducible; in particular `⊥` itself is never sup-irreducible. There is no junk value to declare for out-of-range inputs because the predicate is defined for every element of every semilattice-sup type.\n\n### Worked examples\n\n- Claim: In the lattice of divisors of 12 (ordered by divisibility), the element 4 is sup-irreducible because it cannot be written as lcm(b, c) with b < 4 and c < 4 both dividing 12.\n\n- Claim: In a linear order, every non-minimum element is sup-irreducible, because the join of any two elements equals the larger one, so if `b ⊔ c = a` then `max b c = a`, meaning one of them already equals `a`.\n\n- Claim: For the two-element lattice `{⊥, ⊤}`, the element `⊤` satisfies `VTask.SupIrred ⊤`.\n\n- Claim: In a lattice where `a = b ⊔ c` with `b < a` and `c < a`, the element `a` does **not** satisfy `VTask.SupIrred a`.\n\n### Boundaries\n\n- **Bottom element**: If the type has a bottom `⊥`, then `VTask.SupIrred ⊥` is always false, because `⊥` is a minimal element.\n- **Minimal elements generally**: Any element that is minimal in the order fails sup-irreducibility regardless of whether it equals a named bottom.\n- **Linear orders**: Every non-minimal element of a linear order is sup-irreducible, because joins coincide with maxima, so one of the two operands must equal their join.\n- **Chains of length two**: In a two-element lattice `{⊥, ⊤}`, the top element `⊤` is sup-irreducible (there is nothing strictly below it except `⊥`, and `⊥ ⊔ ⊤ = ⊤` with `⊤ = ⊤`).\n- **Decomposition**: Every element of a finite semilattice-sup can be expressed as a finite join of sup-irreducible elements (by the `exists_supIrred_decomposition` theorem).\n- **Relation to sup-prime**: In a distributive lattice every sup-prime element is sup-irreducible; in the linear-order and two-chain cases the two notions coincide.\n\n### Not to be confused with\n\n- **`VTask.SupPrime`**: A strictly stronger condition; every sup-prime element is sup-irreducible, but the converse requires distributivity.\n- **`VTask.InfIrred`**: The order-dual notion, where the roles of `⊔` and `⊓` are exchanged; `a` is sup-irreducible iff its dual is inf-irreducible.\n- **Atom** (in a bounded lattice): An atom covers the bottom element but need not be sup-irreducible in general; sup-irreducibility is a weaker condition that does not require reference to a bottom element.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Function.dcomp",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11283,
+        11287
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.dcomp` is the **dependent function composition** operator. Given two functions `f` and `g`, it produces the composite function that first applies `g` to an argument `x`, then applies `f` to the result `g x`. The key feature distinguishing it from ordinary function composition is that the return type of `g x` may depend on `x`, and the return type of `f (g x)` may depend on both `x` and `g x` — so the overall composite lives in a fully dependent setting.\n\nUsing the notation `f ∘' g`, the pointwise equation is `(f ∘' g) x = f (g x)` for every `x`.\n\n## Signature\n\n`{α : Sort u₁} -> {β : α → Sort u₂} -> {φ : {x : α} → β x → Sort u₃} -> (f : {x : α} → (y : β x) → φ y) -> (g : (x : α) → β x) -> (x : α) -> φ (g x)`\n\nThe three universe-polymorphic sort arguments `α`, `β`, and `φ` are implicit and are inferred from context. `α` is the domain type. `β` is the family of types indexed by `α`, serving as the codomain of `g` and the domain-family of `f`. `φ` is a family of types indexed by elements of each fiber of `β`, serving as the result-type family of `f`. The first explicit argument `f` is the \"outer\" function, taking an element of `β x` (for implicit `x`) to an element of `φ y`. The second explicit argument `g` is the \"inner\" function, mapping each `x : α` to an element of `β x`. The third argument `x` is the point at which the composite is evaluated; supplying it yields an element of `φ (g x)`.\n\n## Conventions\n\nThere are no junk-value or boundary conventions to declare: the definition is total and well-defined for all inputs in every universe, with no edge cases or special handling for degenerate arguments.\n\n## Worked examples\n\n- Claim: Applying `VTask.dcomp` recovers pointwise application: for `f : {n : ℕ} → Fin n → ℕ` and `g : ℕ → Fin 3` with `g n = ⟨0, by omega⟩`, `VTask.dcomp f g 5 = f (g 5)`.\n\n- Claim: When `β` and `φ` are both constant (non-dependent) families, `VTask.dcomp` coincides with ordinary function composition: for `f : ℕ → ℕ` defined as `f n = n + 1` and `g : ℕ → ℕ` defined as `g n = n * 2`, `VTask.dcomp (fun y => y + 1) (fun x => x * 2) 3 = 7`.\n  ```lean\n  example : VTask.dcomp (fun (y : ℕ) => y + 1) (fun (x : ℕ) => x * 2) 3 = 7 := by decide\n  ```\n\n- Claim: The composite `VTask.dcomp f g` evaluated at any `x` is definitionally equal to `f (g x)`, so `VTask.dcomp (fun (b : Bool) => !b) id true = false`.\n  ```lean\n  example : VTask.dcomp (fun (b : Bool) => !b) id true = false := by decide\n  ```\n\n## Boundaries\n\n- When `α`, `β`, and `φ` are all non-dependent (constant families), `VTask.dcomp f g` is propositionally (and definitionally) equal to the ordinary composition `f ∘ g`.\n- If `g` is the identity function `id`, then `VTask.dcomp f id` reduces to `fun x => f x`, which is `f` itself (up to eta-expansion).\n- The definition is universe-polymorphic and works in `Prop`, `Type`, and any `Sort`, so it applies to proof-relevant and proof-irrelevant settings alike.\n- There is no restriction on `α` being a type as opposed to a proposition-sort; the operator is fully general across all `Sort` levels.\n\n## Not to be confused with\n\n- **`Function.comp` (`f ∘ g`)**: Ordinary (non-dependent) function composition, where all types involved are constant — the codomain of `g` and the domain and codomain of `f` do not vary with the argument.\n- **`Function.comp₂`**: A variant that composes with a binary function rather than a unary one; unrelated to the dependent-type generalization here.\n- **`Pi.comp`**: Composition of pi-type inhabitants in a different organizational context; should not be conflated with the dependent composition captured by `VTask.dcomp`.\n"
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "RingEquiv.ofRingHom",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11287,
+        11291
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nA ring isomorphism (a bijective ring homomorphism together with its inverse as a ring homomorphism) built from a pair of ring homomorphisms that are inverses of each other. Concretely, given `f : R →+* S` and `g : S →+* R` satisfying `f ∘ g = id_S` and `g ∘ f = id_R`, `VTask.ofRingHom` packages these into a single `R ≃+* S`, with `f` as the forward map and `g` as the inverse map.\n\n## Signature\n\n`VTask.ofRingHom : {R : Type u_4} -> {S : Type u_5} -> [NonAssocSemiring R] -> [NonAssocSemiring S] -> (f : R →+* S) -> (g : S →+* R) -> (h₁ : f.comp g = RingHom.id S) -> (h₂ : g.comp f = RingHom.id R) -> R ≃+* S`\n\nThe implicit type arguments `R` and `S` are the source and target semiring types. The instance arguments supply the `NonAssocSemiring` structure on `R` and `S`. The argument `f` is the forward ring homomorphism from `R` to `S`. The argument `g` is the proposed inverse ring homomorphism from `S` to `R`. The proof `h₁` witnesses that composing `f` after `g` is the identity on `S` (so `g` is a right inverse of `f`). The proof `h₂` witnesses that composing `g` after `f` is the identity on `R` (so `g` is a left inverse of `f`).\n\n## Conventions\n\nThe coercion of the resulting `R ≃+* S` back to a ring homomorphism recovers exactly `f`; the ring-homomorphism identity of the constructed isomorphism is `f`, not some other representative.\n\n## Worked examples\n\n- Claim: The coercion of `VTask.ofRingHom f g h₁ h₂` to a ring homomorphism equals `f`.\n\n- Claim: The symmetric isomorphism `(VTask.ofRingHom f g h₁ h₂).symm` equals `VTask.ofRingHom g f h₂ h₁`.\n\n- Claim: For any ring equivalence `e : R ≃+* S`, applying `VTask.ofRingHom` to its underlying ring homomorphism with a compatible inverse and proofs recovers `e` itself.\n\n## Boundaries\n\n- The function is total on its explicit arguments; there are no domain restrictions beyond typechecking.\n- Both `h₁` and `h₂` must be equalities of ring homomorphisms (not just pointwise equalities); if only one direction holds, the construction is not valid.\n- When `R = S` and `f = g = RingHom.id R`, one can take `h₁ = h₂ = rfl` and the resulting isomorphism is the identity equivalence.\n- The construction does not check or use any additional structure beyond `NonAssocSemiring`; it applies equally to semirings, rings, and commutative variants by instance inheritance.\n\n## Not to be confused with\n\n- `RingEquiv.ofBijective`: constructs a ring isomorphism from a single ring homomorphism and a bijectivity proof, without supplying an explicit inverse.\n- `RingEquiv.symm`: reverses an *already-constructed* ring isomorphism; does not take a raw ring homomorphism as input.\n- `Equiv.ofLeftInverse`: a purely set-theoretic construction of a bijection from a left inverse, with no ring-homomorphism structure."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "InfIrred",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11291,
+        11295
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## VTask.InfIrred\n\n### Object\n\nAn element `a` of a semilattice with meets is called **inf-irreducible** if two conditions both hold:\n1. `a` is not a maximal element (equivalently, in a bounded lattice, `a` is not the top element ⊤).\n2. Whenever `a` can be written as the infimum (meet) of two elements `b ⊓ c = a`, at least one of those elements must already equal `a` itself — that is, `a` cannot be expressed as a \"proper\" binary meet of strictly larger elements.\n\nIntuitively, inf-irreducible elements are the \"atoms of meet-decomposition\": they cannot be broken down further as meets. This is the order-theoretic dual of sup-irreducibility.\n\n### Signature\n\nThe implicit type argument is the carrier type of the semilattice. The typeclass argument equips the type with a meet (infimum) operation and the associated order. The explicit argument `a` is the element of the semilattice whose inf-irreducibility is being asserted.\n\n### Conventions\n\nIn a lattice that has a top element ⊤, every inf-irreducible element is strictly below ⊤; the top element itself is never inf-irreducible. In a linear order (total order), every non-maximal element is inf-irreducible, because meets are just minima and any meet `b ⊓ c = a` forces `b = a` or `c = a`.\n\n### Worked examples\n\n- Claim: In the lattice of divisors of 12 ordered by divisibility, the element 4 is inf-irreducible because it cannot be written as a proper meet of two strictly larger divisors of 12.\n\n- Claim: In any semilattice, the top element ⊤ (when it exists) is not inf-irreducible, i.e., `¬ VTask.InfIrred (⊤ : α)` holds for any `SemilatticeInf` with a top.\n\n- Claim: If `a` is inf-prime (i.e., `a ⊓ b ≤ a` implies `b ≤ a` or `c ≤ a` in appropriate sense), then `a` is inf-irreducible: `InfPrime a → VTask.InfIrred a`.\n\n- Claim: In the lattice `ℕ` ordered by `≤` (a linear order with no top), every element `n : ℕ` is inf-irreducible, because `ℕ` has no maximal element and any `min b c = n` forces `b = n` or `c = n`.\n\n- Claim: `VTask.InfIrred a` is equivalent to `¬ IsMax a` in a linear order (where every non-max element is automatically inf-irreducible).\n\n### Boundaries\n\n- **Top element**: The top element ⊤, when it exists, fails the first condition (it is a maximum, hence a maximal element), so it is never inf-irreducible.\n- **Maximal elements**: Any maximal element (not necessarily a global top) is excluded by the first conjunct, so maximal elements are never inf-irreducible.\n- **Linear orders**: In a linear (totally ordered) semilattice, inf-irreducibility collapses to non-maximality: `VTask.InfIrred a ↔ ¬ IsMax a`, because in a linear order every meet equals one of its arguments.\n- **Finset decomposition**: Every element of a suitable lattice admits a finite decomposition as a meet of inf-irreducible elements.\n- **Empty or trivial type**: In a one-element semilattice, the sole element is a maximum, so it is not inf-irreducible; `VTask.InfIrred` holds of no element.\n\n### Not to be confused with\n\n- **`SupIrred`**: The dual notion for joins/suprema; an element that is not a minimum and cannot be written as a proper binary join. Related by `infIrred_toDual`.\n- **`InfPrime`**: A strictly stronger property; inf-prime elements are always inf-irreducible, but the converse may fail in general (it holds in distributive lattices).\n- **`IsAtom`**: In a bounded lattice, atoms are minimal non-bottom elements; this is a different irreducibility notion and does not coincide with inf-irreducibility in general."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Composition.embedding",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11295,
+        11299
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nGiven a composition `c` of the natural number `n` (i.e., an ordered list of positive integers whose sum is `n`), and an index `i` selecting one of its blocks, `VTask.embedding c i` is the canonical order-embedding that places the `i`-th block contiguously inside `{0, 1, …, n−1}`. Concretely, it sends local position `j` within that block to the global position `(sizeUpTo c i) + j` in `Fin n`, where `sizeUpTo c i` is the sum of all block sizes that precede block `i`. The result is an order-preserving injection (an `OrderEmbedding`) from `Fin (c.blocksFun i)` into `Fin n`.\n\n## Signature\n\n`VTask.embedding : {n : ℕ} -> (c : Composition n) -> (i : Fin c.length) -> Fin (c.blocksFun i) ↪o Fin n`\n\nThe implicit argument `n` is the integer being composed. The first explicit argument `c` is the composition of `n`, specifying the ordered sequence of block sizes. The second explicit argument `i` is a valid index into the list of blocks (a term of `Fin c.length`), selecting which block is to be embedded. The result is an order-embedding — an injective, strictly-order-preserving map — from the finite set of local positions within that block into the full finite set `Fin n`.\n\n## Conventions\n\nThe natural number coercion of the embedded value satisfies `(c.embedding i j : ℕ) = c.sizeUpTo i + j`, making the offset by `sizeUpTo` the defining arithmetic content of the map.\n\n## Worked examples\n\n- Claim: For the composition `single n h` (the unique composition of `n` into one block of size `n`), the embedding at the only block index `(0 : Fin 1)` acts as the identity: `(single n h).embedding (0 : Fin 1) i = i` for all `i : Fin n`.\n\n- Claim: For the `ones n` composition (each block has size 1), the embedding at block `i` sends the unique local index `⟨0, h⟩` to the global position `⟨i, _⟩`.\n\n- Claim: For any composition `c` and block index `i`, the image of `VTask.embedding c i` is exactly the set of `j : Fin n` satisfying `c.sizeUpTo i ≤ (j : ℕ)` and `(j : ℕ) < c.sizeUpTo (i + 1)`, i.e., the half-open interval of indices belonging to block `i`.\n\n- Claim: The ranges of distinct blocks are disjoint: for `i₁ ≠ i₂`, `Disjoint (Set.range (c.embedding i₁)) (Set.range (c.embedding i₂))`.\n\n- Claim: Every `j : Fin n` lies in the range of `c.embedding (c.index j)`, so the embeddings of all blocks together cover all of `Fin n`.\n\n## Boundaries\n\n- When `c` is `single n h`, there is exactly one block of size `n`, and the single embedding is the identity on `Fin n`.\n- When `c` is `ones n`, each block has size 1, and each block's embedding sends the unique element `⟨0, _⟩` to the corresponding singleton position `⟨i, _⟩`.\n- At the first block (`i = 0`), `sizeUpTo c 0 = 0`, so the embedding is an order-embedding into the initial segment `{0, 1, …, c.blocksFun 0 − 1}` of `Fin n`.\n- At the last block (`i = c.length − 1`), the image ends exactly at `n − 1`, since all block sizes sum to `n`.\n- The map is always an order-embedding (injective and order-preserving), never merely a function.\n\n## Not to be confused with\n\n- `Composition.invEmbedding`: the inverse direction, sending a global index `j : Fin n` back to a local index within its block — the left inverse of `VTask.embedding`.\n- `Composition.index`: a function that, given a global index `j : Fin n`, returns which block it belongs to — not an embedding but a block-assignment map.\n- `Composition.blocksFun`: a function returning the *size* of the `i`-th block as a natural number, which is the domain size of the embedding but not the embedding itself."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "RelIso.copy",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11299,
+        11302
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.copy` produces a relation isomorphism (`r ≃r s`) that is definitionally equal to a given one, but whose underlying forward function and inverse function are replaced by explicitly supplied functions. The resulting isomorphism is propositionally — and in fact definitionally — equal to the original; the purpose is purely technical: to give Lean's kernel a concrete, unfolded description of the functions, which can resolve definitional-equality problems that arise when composing or rewriting with bundled structures.\n\n## Signature\n\n`VTask.copy : {α : Type u_1} -> {β : Type u_2} -> {r : α → α → Prop} -> {s : β → β → Prop} -> (e : r ≃r s) -> (f : α → β) -> (g : β → α) -> (hf : f = ⇑e) -> (hg : g = ⇑e.symm) -> r ≃r s`\n\nThe implicit type arguments `α` and `β` are the domain and codomain types; `r` and `s` are the binary relations on them. The argument `e` is the existing relation isomorphism being copied. The argument `f` is the desired forward function (from `α` to `β`); `g` is the desired inverse function (from `β` to `α`). The proof `hf` witnesses that `f` equals the coercion of `e` as a function, and `hg` witnesses that `g` equals the coercion of `e.symm` as a function. Together `hf` and `hg` ensure the copy is genuinely a copy of `e`.\n\n## Conventions\n\nThere are no junk-value or edge-case conventions declared for this construction: the inputs are fully constrained by the proof arguments `hf` and `hg`, so no degenerate or boundary regime arises.\n\n## Worked examples\n\n- Claim: For any `e : r ≃r s`, `VTask.copy e (⇑e) (⇑e.symm) rfl rfl` has the same underlying function as `e`, namely `⇑e`.\n\n- Claim: For any `e : r ≃r s`, `VTask.copy e (⇑e) (⇑e.symm) rfl rfl = e` as relation isomorphisms (the copy equals the original).\n\n- Claim: The coercion of `VTask.copy e f g hf hg` to a function equals `f` (not some further unfolding), so `⇑(VTask.copy e f g hf hg) = f`.\n\n## Boundaries\n\n- The proof arguments `hf` and `hg` are not merely equalities of values at individual points; they are full function equalities. In particular they cannot be supplied unless `f` and `g` are literally (propositionally) equal to the existing coercions.\n- When `f = ⇑e` and `g = ⇑e.symm` hold by `rfl` (i.e., definitional equality), the copy is entirely transparent to the kernel and the resulting isomorphism unfolds to the given `f` and `g` directly.\n- The copy does not change the isomorphism's propositional content: by `copy_eq`, the result is propositionally equal to `e`.\n\n## Not to be confused with\n\n- `RelIso.trans` — composes two relation isomorphisms into a new one; does not merely rename the underlying functions of an existing isomorphism.\n- `RelIso.symm` — reverses the direction of a relation isomorphism, swapping domain and codomain; not a copy operation.\n- `Equiv.copy` — the analogous copy operation for plain type equivalences without relation structure; does not carry `map_rel_iff`."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "finSumNatEquiv",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11302,
+        11305
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.finSumNatEquiv n` is the canonical bijection between the disjoint-union type `Fin n ⊕ ℕ` and `ℕ`. It identifies the \"small\" summand `Fin n` with the first `n` natural numbers `{0, 1, …, n−1}` and shifts the \"tail\" `ℕ` summand up by `n`, so that `inr a` lands at `n + a`. Together the two pieces tile `ℕ` without overlap.\n\n## Signature\n\n`(n : ℕ) -> Fin n ⊕ ℕ ≃ ℕ`\n\nThe single argument `n` is the size of the finite prefix: it fixes both the type `Fin n` appearing in the domain and the shift amount applied to the infinite tail. The result is a fully verified equivalence (a bijection equipped with explicit inverse and round-trip proofs).\n\n## Conventions\n\nWhen `n = 0` the type `Fin 0` is empty, so the domain reduces to `ℕ` on the `inr` side; the equivalence then acts as the identity on `inr a`, since `0 + a = a`. There are no junk-value conventions because the equivalence is total and both sides are well-defined for every `n`.\n\n## Worked examples\n\n- Claim: For `n = 3`, `VTask.finSumNatEquiv 3` maps `inl ⟨2, _⟩` to `2`.\n  ```lean\n  example : VTask.finSumNatEquiv 3 (Sum.inl ⟨2, by norm_num⟩) = 2 := by decide\n  ```\n\n- Claim: For `n = 3`, `VTask.finSumNatEquiv 3` maps `inr 0` to `3`.\n  ```lean\n  example : VTask.finSumNatEquiv 3 (Sum.inr 0) = 3 := by decide\n  ```\n\n- Claim: For `n = 3`, `VTask.finSumNatEquiv 3` maps `inr 7` to `10`.\n  ```lean\n  example : VTask.finSumNatEquiv 3 (Sum.inr 7) = 10 := by decide\n  ```\n\n- Claim: For `n = 0`, `VTask.finSumNatEquiv 0` maps `inr 5` to `5`.\n  ```lean\n  example : VTask.finSumNatEquiv 0 (Sum.inr 5) = 5 := by decide\n  ```\n\n- Claim: The inverse of `VTask.finSumNatEquiv 4` sends `2` (which is less than 4) to `inl ⟨2, _⟩`.\n  ```lean\n  example : (VTask.finSumNatEquiv 4).symm 2 = Sum.inl ⟨2, by norm_num⟩ := by decide\n  ```\n\n- Claim: The inverse of `VTask.finSumNatEquiv 4` sends `6` (which equals `4 + 2`) to `inr 2`.\n  ```lean\n  example : (VTask.finSumNatEquiv 4).symm 6 = Sum.inr 2 := by decide\n  ```\n\n## Boundaries\n\n- **`n = 0`**: `Fin 0` is the empty type, so the `inl` branch is vacuously unreachable. The equivalence restricts to the identity `ℕ ≃ ℕ` on the `inr` side, since `0 + a = a`.\n- **`inl` at the upper boundary**: `inl ⟨n−1, _⟩` maps to `n−1`, which is strictly less than `n`. The `inr` branch starts at `n`, so there is no overlap.\n- **`inr 0`**: maps to `n`, the first natural number not covered by the `inl` branch.\n- **Large `inr` values**: there is no upper bound; every natural number `≥ n` is hit by exactly one `inr a` with `a = i − n`.\n\n## Not to be confused with\n\n- **`Fin.orderIsoNat` or similar order embeddings**: those embed `Fin n` into `ℕ` alone, not a coproduct equivalence that also accounts for all remaining naturals.\n- **`Equiv.sumComm`**: swaps the two summands of a coproduct but does not produce a map to `ℕ`.\n- **`finSumFinEquiv`**: the analogous equivalence `Fin m ⊕ Fin n ≃ Fin (m + n)`, which is between two *finite* types rather than between a mixed finite/infinite coproduct and `ℕ`."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Filter.Germ.LiftRel",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "unexpected_error",
+    "rotation_reason": "AttributeError: 'str' object has no attribute 'imports'",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11305,
+        11308
+      ],
+      "stage_records": [
+        {
+          "stage": "unexpected_error",
+          "status": "rotated",
+          "detail": "AttributeError: 'str' object has no attribute 'imports'"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.LiftRel r f g` is a proposition asserting that two germs `f` and `g` stand in the lifted relation `r`. More precisely, two germs of functions from a filter base `l` are related by `VTask.LiftRel r` if and only if the set of points where the underlying functions satisfy `r` belongs to the filter `l` — that is, `r (f x) (g x)` holds for *almost all* `x` in the sense of `l`. This construction is well-defined: replacing either germ by a filter-equivalent function gives the same truth value.\n\n## Signature\n\n`VTask.LiftRel : {α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> {l : Filter α} -> (r : β → γ → Prop) -> (f : l.Germ β) -> (g : l.Germ γ) -> Prop`\n\nThe implicit type parameters `α`, `β`, `γ` are the index type, the source type of the left germ, and the source type of the right germ, respectively. The implicit `l` is the filter over `α` used to define the germ equivalence and the notion of \"almost everywhere\". The explicit argument `r` is the pointwise relation on `β × γ` that one wishes to lift. The argument `f` is a germ of `β`-valued functions and `g` is a germ of `γ`-valued functions, both defined modulo `l`-equivalence.\n\n## Conventions\n\nThere are no declared junk-value or boundary conventions for this definition: it is a well-defined total predicate on `Germ l β × Germ l γ`, and its value is fully determined by the filter `l` and the relation `r` without any special casing.\n\n## Worked examples\n\n- Claim: For constant germs, `VTask.LiftRel r ↑x ↑y` holds whenever `r x y` holds pointwise, and over a non-bot filter the converse is also true.\n\n- Claim: When `f g : α → β` are ordinary functions viewed as germs, `VTask.LiftRel r (f : Filter.Germ l β) (g : Filter.Germ l γ)` is equivalent to `∀ᶠ x in l, r (f x) (g x)`.\n\n- Claim: The `≤` order on `Germ l β` (for a preorder `β`) coincides with `VTask.LiftRel (· ≤ ·)`; that is, two germs are related by `≤` if and only if the pointwise inequality holds on a set in `l`.\n\n- Claim: If `r` is reflexive (∀ x, r x x) then `VTask.LiftRel r f f` holds for every germ `f`.\n\n## Boundaries\n\n- When the filter `l` is the `⊥` filter (the filter containing every set, including the empty set), `VTask.LiftRel r f g` holds for *every* pair `f`, `g` and every relation `r`, because every proposition holds eventually with respect to the bottom filter.\n- When `l` is `⊤` (the principal filter of the whole space, i.e., the cofinite or principal filter at a point), the lifted relation is strictly finer, and `VTask.LiftRel r` on constant germs `↑x` and `↑y` is equivalent to `r x y` (this requires `l` to be a `NeBot` filter).\n- Since the definition lives in `Prop` and is constructed via a quotient lift, it is automatically invariant under the choice of representative: replacing `f` or `g` by any `l`-almost-everywhere equal function does not change the truth value.\n\n## Not to be confused with\n\n- `Filter.Eventually` (`∀ᶠ x in l, P x`): this is the underlying eventually-quantified proposition that `VTask.LiftRel` uses internally, but `VTask.LiftRel` lives on germs (equivalence classes), not on raw functions.\n- `Filter.Germ.map₂`: this lifts a *function* `β → γ → δ` to germs, producing a new germ, whereas `VTask.LiftRel` lifts a *relation* and produces a `Prop`.\n- Pointwise equality of germs (`f = g` in `Germ l β`): equality of germs is the special case `VTask.LiftRel (· = ·)`, but the general lifted relation need not be an equivalence relation even if `r` is not."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "SimpleGraph.Walk.takeUntil",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "mechanical_validation",
+    "rotation_reason": "no facts survived mechanical validation",
+    "category": "agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11308,
+        11312
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "13 proposed, 1 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "rotated",
+          "detail": "no facts survived mechanical validation"
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\n`VTask.takeUntil` extracts a **prefix sub-walk** of a given walk in a simple graph. Given a walk `p` from vertex `v` to vertex `w`, and a vertex `u` that appears somewhere in `p`'s support (i.e., the ordered list of vertices visited by `p`), it returns the initial portion of `p` that starts at `v` and ends exactly at the **first occurrence** of `u` in `p`.\n\n## Signature\n\n`VTask.takeUntil : {V : Type u} -> {G : SimpleGraph V} -> [DecidableEq V] -> {v w : V} -> (p : G.Walk v w) -> (u : V) -> u ∈ p.support → G.Walk v u`\n\nThe implicit type `V` is the vertex type of the graph. The implicit `G` is the simple graph being walked. The `DecidableEq V` instance provides decidable vertex equality, required to compare vertices during the traversal. The implicit endpoints `v` and `w` are respectively the starting and ending vertices of the input walk. The argument `p` is the walk from `v` to `w` whose prefix is to be extracted. The argument `u` is the target vertex at which to stop. The final argument is a proof that `u` appears in the support of `p`, ensuring the prefix is well-defined. The result is a walk from `v` to `u`.\n\n## Conventions\n\nWhen `u` equals the starting vertex `v`, the result is the trivial (nil) walk of length zero at `v`, regardless of what the rest of `p` looks like. The function stops at the **first** occurrence of `u` in the support list; if `u` appears multiple times (which can happen in a non-simple walk), only the initial prefix up to the first occurrence is returned.\n\n## Worked examples\n\n- Claim: For the trivial (nil) walk at a vertex `v`, `takeUntil` applied with the only available support membership proof (for `v` itself) returns the nil walk.\n\n- Claim: If `p` is a walk from `v` to `w` and `u = v`, then `p.takeUntil v p.start_mem_support` is the nil walk (length 0).\n\n- Claim: If `p` is a path (no repeated vertices) and `u ∈ p.support`, then `p.takeUntil u h` is also a path.\n\n- Claim: The darts (directed edges) of `p.takeUntil u h` form a prefix of the dart list of `p`; in particular, every dart of the prefix walk also appears in the original walk.\n\n- Claim: The length of `p.takeUntil u h` equals the index of `u` in `p.support` (i.e., the 0-based position of the first occurrence of `u` in the support list).\n\n## Boundaries\n\n- **Target is the start vertex:** When `u = v`, the result is `Walk.nil`, a degenerate walk of length zero. This is the minimal possible output.\n- **Target is the end vertex `w`:** When `u = w` and `w ∉ support` of any internal node, the result is the entire walk `p` (up to proof irrelevance). More precisely, if `w` does not appear earlier in the support, the whole walk is returned.\n- **First occurrence semantics:** If `u` appears multiple times in the support of a non-simple walk, only the prefix up to the *first* occurrence is returned. The membership proof does not control which occurrence is chosen.\n- **Membership proof irrelevance:** The output walk is determined by `p` and `u` alone (up to definitional equality); the specific proof `h : u ∈ p.support` does not affect which walk is returned.\n- **Single-edge walk:** For a walk `cons r nil` from `v` to `w` using edge `r : G.Adj v w`, `takeUntil w (by simp)` returns the full one-edge walk, while `takeUntil v (by simp)` returns `nil`.\n\n## Not to be confused with\n\n- **`Walk.dropUntil`**: The complementary operation that returns the *suffix* of `p` starting at `u` (rather than the prefix ending at `u`); together `takeUntil` and `dropUntil` decompose `p`.\n- **`Walk.takeUntil` vs `List.takeWhile`**: `takeUntil` stops *at* (and includes) the target vertex, while `List.takeWhile` on the support list would exclude the stopping element if the predicate is strict.\n- **`Walk.support`**: The full ordered list of all vertices visited by `p`; `takeUntil` uses this list to locate `u` but returns a walk (graph object), not a list."
+    },
+    "repair_log": [],
+    "status": "pending"
   }
 ]

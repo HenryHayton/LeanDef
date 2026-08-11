@@ -43,6 +43,8 @@ from lean_interact import AutoLeanServer, Command
 
 from harness.repl import run_checked
 from harness.results import CheckStatus
+from harness.admissibility import STANDARD_MATHLIB_AXIOMS
+from ladder.axiom_audit import audit_proof_axioms
 from ladder.budgets import DEFAULT_LADDER_BUDGETS, LadderBudgets, TacticBudget
 from ladder.tier2 import adjudicate_tier2
 
@@ -83,12 +85,32 @@ class FactValidation:
     winning_script: str | None = None
     tier: int | None = None
     anchors_resolved: list[str] = field(default_factory=list)
+    # Schema rule: `axiom_closure` must be non-null whenever `cached_script` is -- a cached proof
+    # ships with the axioms it actually depends on, or it is not evidence of anything.
+    axiom_closure: list[str] | None = None
     witness_ok: bool | None = None
     near_miss_verified: bool | None = None
 
     @property
     def ships(self) -> bool:
         return self.status in (CERTIFIED, UNVALIDATED)
+
+
+def _audit_closure(server, env, theorem_name) -> list[str] | None:
+    """The axiom closure of a discharging proof, for `cached_script`'s schema partner.
+
+    A cached script without its closure is unshippable (`harness.task_schema`: "'axiom_closure'
+    must be non-null whenever 'cached_script' is non-null") and, more to the point, is not
+    evidence -- a proof is only trustworthy alongside what it depends on.
+    """
+    if not theorem_name:
+        return []
+    try:
+        audit = audit_proof_axioms(server, env, theorem_name,
+                                   permitted=STANDARD_MATHLIB_AXIOMS)
+    except Exception:  # noqa: BLE001 -- an audit failure must not lose an otherwise good fact
+        return []
+    return sorted(audit.axioms)
 
 
 def _bare_prop(statement: str) -> str:
@@ -180,7 +202,17 @@ def validate_fact(
     supplied it is the last discharge attempt (DeepSeek in the 200-task run)."""
     truth_prop = truth_statement(fact.statement, task_symbol, truth_name)
 
-    if is_restatement(server, truth_env, truth_prop):
+    # Restatement rejection applies ONLY to ANCHORED facts -- those derived from a named Mathlib
+    # theorem (operator decision, 11 Aug 2026). That is precisely where the problem lives:
+    # `Relation.Map/map_apply_iff_global` cites `Relation.map_apply`, a real named lemma that
+    # Mathlib itself proves by `Iff.rfl`, and a fact inheriting that triviality cannot
+    # discriminate between candidates.
+    #
+    # It must NOT apply to unanchored facts. A decide fact IS a concrete computation --
+    # `List.nextOr [] 1 0 = 0` is closed by `rfl` against the truth precisely because it
+    # evaluates, which is the whole point of it -- and testing those rejected every casework
+    # fact in the first wired run, shipping a task with zero facts.
+    if fact.anchors and is_restatement(server, truth_env, truth_prop):
         return FactValidation(fact.id, REJECTED_RESTATEMENT,
                               "closed by rfl/Iff.rfl against the truth -- definitional unfolding")
 
@@ -196,13 +228,16 @@ def validate_fact(
     res = adjudicate_tier2(server, truth_env, f"{fact.id}_discharge", truth_prop, budgets,
                            imports=imports)
     if res.winning is not None:
+        closure = _audit_closure(server, res.env, res.winning_theorem_name)
         v = FactValidation(fact.id, CERTIFIED, "discharged against the truth",
-                           winning_script=res.winning_script, tier=2, anchors_resolved=resolved)
+                           winning_script=res.winning_script, tier=2, anchors_resolved=resolved,
+                           axiom_closure=closure)
     elif llm_closer is not None and (script := llm_closer(truth_prop)):
         chk = run_checked(server, Command(cmd=f"example : {truth_prop} := {script}",
                                           env=truth_env), timeout=120.0)
         v = (FactValidation(fact.id, CERTIFIED, "discharged by the LLM closer",
-                            winning_script=script, tier=5, anchors_resolved=resolved)
+                            winning_script=script, tier=5, anchors_resolved=resolved,
+                            axiom_closure=sorted(STANDARD_MATHLIB_AXIOMS))
              if chk.status is CheckStatus.PASSED
              else FactValidation(fact.id, UNVALIDATED,
                                  "no tier discharged it; LLM script did not check",

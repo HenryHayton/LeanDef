@@ -633,8 +633,12 @@ def _author_from_dossier(
     validations = {}
     validated_facts = []
     for f in surviving:
+        # `pinned_signature` here is the RENDERED STRING, not an object -- reading `.imports`
+        # off it raised AttributeError inside the per-task try, which rotated every task at
+        # `unexpected_error` AFTER its three Bedrock calls had already been paid for. The
+        # imports live on the resolved definition input.
         v = validate_fact(config.server, truth_env, f, task_symbol, definition_input.name,
-                          imports=(pinned_signature.imports if pinned_signature else None))
+                          imports=definition_input.signature_dict.get("imports"))
         validations[f.id] = v
         if v.ships:
             validated_facts.append((f, v))
@@ -654,6 +658,7 @@ def _author_from_dossier(
             validation_status=v.status,
             anchors_resolved=v.anchors_resolved,
             cached_script=v.winning_script,
+            axiom_closure=v.axiom_closure,
             provenance=FactProvenance(
                 validation_run_id=run_id,
                 note=(f"authored by {config.authoring_model_id}; "
