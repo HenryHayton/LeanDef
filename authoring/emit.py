@@ -53,6 +53,12 @@ def _fact_to_dict(fact: Fact) -> dict:
         "domain_inputs": dict(fact.domain_inputs),
         "anchors": list(fact.anchors),
         "validation_status": fact.validation_status,
+        # schema v1.2 (11 Aug 2026). `self_restatement` in particular was computed by the
+        # author call and discarded here for months; it now ships so scoring can act on it.
+        "self_restatement": fact.self_restatement,
+        "boundary_vs_interior": fact.boundary_vs_interior,
+        "near_miss_clause": fact.near_miss_clause,
+        "anchors_resolved": list(fact.anchors_resolved),
         "discharge": fact.discharge,
         "cached_script": fact.cached_script,
         "axiom_closure": fact.axiom_closure,
@@ -62,11 +68,15 @@ def _fact_to_dict(fact: Fact) -> dict:
             else None
         ),
     }
+    # `polarity` now ships on EVERY fact, not just membership ones (schema v1.2). 42 of the 88
+    # reject-shaped facts in the authored corpus carried no polarity label and could only be
+    # found by regex-sniffing `¬`/`∉`/`≠`, so nothing downstream could select on "is this a
+    # near-miss fact" -- which is exactly what the reject-fact floor needs to count.
+    data["polarity"] = fact.polarity
     if fact.type == "membership":
         data["instance"] = fact.instance
-        data["polarity"] = fact.polarity
-        if fact.polarity == "reject":
-            data["violated_property"] = fact.violated_property
+    if fact.polarity == "reject":
+        data["violated_property"] = fact.violated_property
     return data
 
 

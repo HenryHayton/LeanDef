@@ -46,6 +46,29 @@ class Fact:
     anchors: list[str] = field(default_factory=list)  # global facts only: named Mathlib
     # theorem(s) this fact cites, resolved in the pinned environment; [] for non-global facts.
     validation_status: str | None = None  # "CERTIFIED" | "PROVISIONALLY_VALIDATED"
+
+    # --- schema v1.2 (11 Aug 2026): fields that must survive to scoring time -----------------
+    #
+    # `self_restatement` closes a standing debt. The fact-proposal prompt has always asked the
+    # model to declare when a fact merely restates its anchor theorem or the definition's own
+    # unfolding, and `authoring.facts.ProposedFact` has always collected it -- but it was
+    # documented as "authoring-time-only: never reaches a shipped task.json fact entry", so no
+    # scorer could ever act on it. Measured consequence: 13.1% of proof-mechanism facts in the
+    # authored corpus are `rfl`-provable restatements of the definition (a FLOOR -- an earlier
+    # n=5 study using "exact? cites its own anchor" found 100%), and they resolve at 87.7%
+    # against 58.0% for real facts, inflating every fidelity figure derived from them.
+    self_restatement: bool = False
+    # "boundary" | "interior" on decide-mechanism facts. An interior arithmetic spot-check
+    # (`choose 10 3 = 120`) survives every plausible misreading -- boundary and side-condition
+    # errors compute the interior correctly -- so it discriminates almost nothing.
+    boundary_vs_interior: str | None = None
+    # For a near-miss reject fact: the ONE defining clause this witness violates, satisfying all
+    # others. `None` on a generic non-example, which is still shippable but weaker.
+    near_miss_clause: str | None = None
+    # The anchor as actually RESOLVED in the pinned environment (a theorem's full name). An
+    # anchor that resolves to a definition rather than a theorem is a restatement by
+    # construction and is rejected at validation.
+    anchors_resolved: list[str] = field(default_factory=list)
     discharge: dict | None = None  # {"tier": 1-5, "wall_clock_s": float, "at": "authoring"|"reward"}
     cached_script: str | None = None  # the reconstructed proof script; null until a tier 2-5 proof exists
     axiom_closure: list[str] | None = None  # required non-null whenever cached_script is non-null
@@ -72,4 +95,9 @@ class Fact:
             cached_script=data.get("cached_script"),
             axiom_closure=data.get("axiom_closure"),
             provenance=FactProvenance.from_dict(provenance_data) if provenance_data else None,
+            # schema v1.2 -- absent on every pre-v1.2 task.json, hence the defaults.
+            self_restatement=bool(data.get("self_restatement", False)),
+            boundary_vs_interior=data.get("boundary_vs_interior"),
+            near_miss_clause=data.get("near_miss_clause"),
+            anchors_resolved=data.get("anchors_resolved", []),
         )

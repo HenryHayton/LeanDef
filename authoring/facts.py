@@ -118,15 +118,17 @@ class ProposedFact:
     # elaborate at.
 
     # Contract §4.2 (self-citation rule): the model's own declaration that a global fact
-    # restates its anchor theorem near-verbatim. Authoring-time-only for now, like
-    # `expected_type` above but for a different reason: the schema home for a self-citation
-    # signal is `discharge.self_cited` (schema v1.1.1), and `discharge` stays `null` for every
-    # fact this pipeline ships (no ladder exists yet to produce a real discharge record) -- so
-    # there is currently nowhere downstream for this declaration to land. Collected and carried
-    # through the batch review (contract §7's "self-citation rates") so it isn't silently
-    # dropped; projecting it into a real `discharge.self_cited` is future work once discharge
-    # records exist.
+    # restates its anchor theorem near-verbatim, or restates the definition's own unfolding.
+    #
+    # SHIPPED as of schema v1.2 (11 Aug 2026). It was previously authoring-time-only, on the
+    # reasoning that its schema home was `discharge.self_cited` and `discharge` was always null.
+    # That reasoning cost real signal: the flag was computed and thrown away, so scoring could
+    # not act on it, and 13.1% of proof-mechanism facts turned out to be rfl-provable
+    # restatements that nothing downstream could see. It now has its own field on the shipped
+    # fact, and validation independently rejects restatements rather than trusting the flag.
     self_restatement: bool = False
+    boundary_vs_interior: str | None = None  # decide facts: "boundary" | "interior"
+    near_miss_clause: str | None = None  # reject facts: the one clause this witness violates
 
     def to_fact(
         self,
@@ -136,6 +138,7 @@ class ProposedFact:
         discharge: dict | None = None,
         cached_script: str | None = None,
         axiom_closure: list[str] | None = None,
+        anchors_resolved: list[str] | None = None,
     ) -> Fact:
         """Project onto `harness.facts.Fact`, the frozen runtime/schema-aligned shape -- drops
         only `expected_type`. Callers should only do this once a fact has a verdict (`ACCEPTED`
@@ -153,6 +156,10 @@ class ProposedFact:
             violated_property=self.violated_property,
             domain_inputs=dict(self.domain_inputs),
             anchors=list(self.anchors),
+            self_restatement=self.self_restatement,
+            boundary_vs_interior=self.boundary_vs_interior,
+            near_miss_clause=self.near_miss_clause,
+            anchors_resolved=list(anchors_resolved or []),
             validation_status=validation_status,
             discharge=discharge,
             cached_script=cached_script,

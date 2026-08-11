@@ -19,7 +19,8 @@
 #
 # Output required: strict JSON array only, matching authoring.parse.parse_facts's shape:
 #   [{id, type, mechanism, statement, instance?, polarity?, violated_property?, anchors?,
-#     domain_inputs, expected_type?, self_restatement?}, ...]
+#     domain_inputs, expected_type?, self_restatement?, boundary_vs_interior?,
+#     near_miss_clause?}, ...]
 # No markdown fences. No prose outside the JSON array.
 
 ===SYSTEM===
@@ -51,6 +52,36 @@ standalone -- missing `variable`/`open` context is normal, not a defect). Use it
 mathematical content and to source anchor names; never reproduce a mention's statement text
 verbatim (even with the name substituted) as your own `statement`. Write a fresh statement,
 grounded in the dossier, for the task symbol's own domain.
+
+SUITE COMPOSITION (2026-08-11 revision; these are counted mechanically):
+
+- Propose about 14 facts. The shipped suite targets 10-12 after validation attrition, floor 8.
+- AT MOST 6 facts with mechanism "decide". This is a hard cap: a suite over it is trimmed.
+  Computational checks are cheap but weakly discriminating, and a suite dominated by them
+  measures arithmetic rather than meaning.
+- AT LEAST 2 REJECT facts -- facts asserting the definition does NOT hold of something:
+  `polarity: "reject"` membership facts, or global facts shaped `¬ ...`, `... ∉ ...`, `... ≠ ...`.
+  This is a hard floor. A suite of purely positive facts cannot distinguish the intended object
+  from a vacuous one that accepts everything: a definition whose body is just `True` satisfies
+  every positively-phrased fact, and two such definitions in the existing corpus score perfect
+  fidelity today for exactly this reason.
+- For a Prop-valued or bundled task, aim for ONE NEAR-MISS PER DEFINING CLAUSE (encouraged, not
+  required): if the object is defined by conditions P1 ∧ ... ∧ Pn, give, for each i, an object
+  that satisfies every Pj (j ≠ i) and violates exactly Pi. A group definition is pinned down by
+  a monoid that is not a group. Set `near_miss_clause` to the name of the clause it violates.
+  This is how a definition is characterised by its non-examples, and each such fact detects a
+  candidate that dropped exactly that clause.
+
+For computational checks, prefer boundary cases, degenerate inputs (zero, empty, singleton), and
+cases where a plausible misreading would go wrong. Avoid interior arithmetic spot-checks. Mark
+each "decide" fact `boundary_vs_interior`: "boundary" or "interior" accordingly -- an interior
+check like `choose 10 3 = 120` survives every plausible misreading and so tests almost nothing,
+whereas `choose 0 0 = 1` and `choose 4 5 = 0` are exactly where misreadings live.
+
+Where possible, favour facts that would be easy to disprove by a concrete counterexample if they
+were false.
+
+Include one or two facts per task that are not modelled on any single existing library theorem.
 
 Per-type rules -- every field listed below as REQUIRED must be present and non-empty on every
 fact of that type. A fact missing one is mechanically rejected before it is even checked against
@@ -99,7 +130,10 @@ to it in the statement is mechanically rejected.
   mechanically rejected, not merely discouraged.
 - global (mechanism "proof"): `statement` is REQUIRED and is a BARE Prop -- no `:=`, no tactic
   block, no `by`. `anchors` is REQUIRED and NON-EMPTY: fully-qualified Mathlib theorem names --
-  cite the specific theorems the fact derives from, not a namespace dump. `anchors` must be
+  cite the specific theorems the fact derives from, not a namespace dump. Each anchor must be a
+  THEOREM (or lemma), never a DEFINITION: an anchor naming the definition itself is mechanically
+  rejected, because a fact derived from a definition rather than from a theorem about it is a
+  restatement of that definition and cannot discriminate between candidates. `anchors` must be
   OMITTED or empty on casework/membership facts -- anchors are global-fact-only. If a global
   fact restates its anchor theorem near-verbatim (the anchor essentially proves it outright, not
   merely contributes to it), set `self_restatement: true` on that fact -- omit it (or set

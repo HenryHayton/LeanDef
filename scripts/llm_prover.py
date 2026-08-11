@@ -570,7 +570,7 @@ def main() -> int:
     g.add_argument("--temperature", type=float, default=1.0)
     g.add_argument("--scripts", default=None)
     g.add_argument("--concurrency", type=int, default=12)
-    g.add_argument("--max-tokens", type=int, default=4096)
+    g.add_argument("--max-tokens", type=int, default=8192)  # 4096 truncated 57% of Sonnet replies
     g.add_argument("--limit", type=int, default=None)
     g.add_argument("--no-thinking", action="store_true")
     c = sub.add_parser("check")

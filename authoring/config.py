@@ -22,7 +22,11 @@ AUTHORING_MAX_CALLS_PER_TASK = 12
 AUTHORING_MAX_TOKENS = {
     "classification": 1024,
     "dossier": 4096,
-    "fact_proposal": 8192,
+    # Raised 11 Aug 2026: the suite grew from ~11 facts to ~14 AND each now carries more
+    # metadata (polarity everywhere, boundary_vs_interior, near_miss_clause). A truncated fact
+    # call is total loss for the task -- and on the tier-5 side an undersized ceiling burned 89%
+    # of a day's Sonnet output tokens on replies cut off mid-proof.
+    "fact_proposal": 16384,
     "round_trip": 2048,
 }
 
