@@ -214,3 +214,30 @@ don't leave it checked off in place.
   So the six remain genuine corpus-hardness signal, and the roundtrip gap is a real but
   separate defect that has not yet been shown to have cost anything.
   **Trigger:** the next authoring/round-trip task.
+
+- **Tranche B mining territory: `CategoryTheory`, `AlgebraicGeometry`, `AlgebraicTopology`,
+  `Condensed`, `RepresentationTheory`, `MeasureTheory`, `Probability`, `Geometry/Manifold`.**
+  Excluded from the batch-5 widening (11 Aug 2026) on the expectation of near-total attrition at
+  the dependency-vocabulary and self-containment gates -- heavy abstract infrastructure whose
+  dossiers are not self-containable at the current depth standard. Batch 5's own round-2 exclusion
+  table supports this: `Algebra/Homology` (501 blocked refs), `CategoryTheory/Subfunctor` (375),
+  `Algebra/Category` (193) and `AlgebraicTopology/*` (156) were the highest-count vocabulary
+  rejections and were declined on exactly that ground.
+  **Trigger:** the eligible pool falling short of a stage-2 need after the current 2,609 are
+  consumed, or a strata need only this territory supplies (e.g. the `MeasurableSet` predicate
+  layer for measure-theoretic tasks).
+- **Richness blind-spot counters: MEASURED AND DECLINED, not open.** The recorded trigger
+  ("revisit if recurring at scale in a wider harvest") fired with batch 5 and was answered:
+  `blind_disjoint_binders` 14, `blind_heyting` 5, `blind_cond` 1 -- 20 of 2,609 eligible (0.8%)
+  across a 4.8x-larger corpus. They do NOT recur at scale. The counters remain recorded as
+  per-candidate metadata, excluded from `richness_total`, the preference score and every gate,
+  with a load-bearing test asserting that exclusion.
+  **Re-open only if:** a future harvest shows materially higher incidence, or a stage-2 failure
+  mode is traced to one of these notations being invisible to the richness metric.
+- **`mention_count` values are not comparable across batches 4 and 5.** The batch-5 rewrite of
+  `compute_mention_counts` changed matching from `grep -F` substring to identifier-token, which
+  corrects a systematic overcount for every name that prefixes a longer sibling. Cached batch-4
+  `VerifiedDef` records retain their old (inflated) values unless re-verified. Harmless today --
+  the field gates nothing -- but any future analysis that compares this metric across batches must
+  re-derive it rather than trust the stored values.
+  **Trigger:** the first analysis or gate proposal that reads `mention_count` quantitatively.
