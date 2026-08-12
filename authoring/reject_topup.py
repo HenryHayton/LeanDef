@@ -56,8 +56,15 @@ class RejectTopupOutcome:
 
 
 def topup_reject_facts(client, model_id, system: str, facts: list, parse_fn, *,
-                       budget=None, max_tokens: int | None = None) -> RejectTopupOutcome:
-    """One focused re-ask for reject facts. Returns the outcome; caller appends `gained`."""
+                       original_user: str = "", budget=None,
+                       max_tokens: int | None = None) -> RejectTopupOutcome:
+    """One focused re-ask for reject facts. Returns the outcome; caller appends `gained`.
+
+    `original_user` is REQUIRED in practice even though it defaults to empty: Bedrock calls carry
+    no conversation history, so without the original user message (dossier, pinned signature,
+    mention excerpt) the model is being asked to write facts about an object it has never been
+    shown. It answers with prose and the JSON parse fails -- observed on SimpleGraph.boxProd.
+    """
     from authoring.orchestrate import _call_llm_json
 
     before = sum(1 for f in facts if _is_reject(f))
@@ -66,8 +73,9 @@ def topup_reject_facts(client, model_id, system: str, facts: list, parse_fn, *,
         return out
 
     out.attempted = True
-    prompt = REJECT_TOPUP_PROMPT.format(n_reject=before, floor=REJECT_FLOOR,
-                                        n_needed=REJECT_FLOOR - before)
+    instruction = REJECT_TOPUP_PROMPT.format(n_reject=before, floor=REJECT_FLOOR,
+                                             n_needed=REJECT_FLOOR - before)
+    prompt = f"{original_user}\n\n---\n\n{instruction}" if original_user else instruction
     try:
         new_facts, _rejections = _call_llm_json(client, system, prompt, model_id=model_id,
                                                 parse_fn=parse_fn, budget=budget,

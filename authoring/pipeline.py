@@ -95,6 +95,8 @@ from authoring.consistency import (
     inject_pinned_signature,
 )
 from authoring.composition import enforce as enforce_composition
+from authoring.composition import _is_reject as _is_reject_fact
+from authoring.reject_topup import topup_reject_facts
 from authoring.emit import emit_task
 from authoring.fact_validation import _schema_status as schema_status, validate_fact
 from authoring.facts import DomainSpec, ProposedFact
@@ -568,7 +570,6 @@ def _author_from_dossier(
             domain_constraint=dossier_payload.domain.constraint,
             decidability=definition_input.decidability,
             domain_variables=dossier_payload.domain.variables,
-            reject_topup=True,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)
@@ -579,21 +580,6 @@ def _author_from_dossier(
             calls_made=budget.calls_made,
         )
     )
-
-    topup = proposal.reject_topup
-    if topup is not None and topup.needed:
-        # Measured on the 50-task run: the reject floor of 2 was stated as "hard" in the prompt
-        # and only 15 of 29 suites met it, 7 with ZERO reject facts, while the mechanically
-        # enforced decide cap held 29/29. So the floor gets ONE focused re-ask. It never discards
-        # the task -- a suite still short after the top-up ships anyway, because the floor of 2 is
-        # not yet known to be the right number and deleting the evidence would prevent finding out.
-        stage_records.append(
-            StageRecord(
-                "reject_topup", "ok" if topup.met_after else "still_short",
-                detail=f"{topup.before} -> {topup.after} reject facts; {topup.detail}",
-                calls_made=budget.calls_made,
-            )
-        )
 
     # --- Mechanical validation against ground truth (contract §6 rows 4-5) -------------------
     try:
@@ -623,14 +609,20 @@ def _author_from_dossier(
         )
     )
 
-    self_restatement_ids = [f.id for f in adjudication.accepted if f.self_restatement]
+    accepted = list(adjudication.accepted)
+    self_restatement_ids = [f.id for f in accepted if f.self_restatement]
+    # Reject census at each stage. The floor has been mis-measured at three different points, so
+    # the counts themselves are now recorded rather than inferred.
+    _rej_census = {"proposed": sum(1 for f in proposal.facts if _is_reject_fact(f)),
+                   "mech_validated": sum(1 for f in accepted if _is_reject_fact(f))}
 
     # --- Suite composition, enforced (11 Aug 2026) --------------------------------------------
     # The prompt calls the decide cap and reject floor "hard", but a prompt only asks. The
     # 3-task calibration proved asking insufficient: 10 decide facts against a cap of 6 on one
     # task, a 6-fact suite against a floor of 8 on another.
-    comp = enforce_composition(adjudication.accepted)
+    comp = enforce_composition(accepted)
     surviving = comp.kept
+    _rej_census["after_composition"] = sum(1 for f in surviving if _is_reject_fact(f))
     stage_records.append(
         StageRecord(
             "composition", "ok" if comp.ok else "violations",
@@ -668,6 +660,55 @@ def _author_from_dossier(
             calls_made=budget.calls_made,
         )
     )
+
+    # --- Reject-floor top-up: ONE focused re-ask, judged on what actually SHIPS ---------------
+    # Placement was got wrong twice. Checking the floor on PROPOSED facts never fires (mechanical
+    # validation removes facts after it); checking it on mechanically-validated facts also never
+    # fires, because the VALIDATION LADDER removes more -- Order.idealOfCofinals had >=2 rejects
+    # at that point and shipped with zero. The floor is a property of the shipped suite, so it is
+    # measured here, on what survived everything.
+    #
+    # Once, and never fatal: a suite still short after the top-up ships anyway. The floor of 2 is
+    # not yet known to be the right number, and deleting the evidence would prevent finding out.
+    _rej_census["after_ladder"] = sum(1 for f, _ in validated_facts if _is_reject_fact(f))
+    topup = topup_reject_facts(
+        config.client, config.authoring_model_id, proposal.system_prompt,
+        [f for f, _ in validated_facts], proposal.parse_fn,
+        original_user=proposal.user_prompt or "", budget=budget,
+        max_tokens=authoring_cfg.AUTHORING_MAX_TOKENS["fact_proposal"],
+    )
+    if topup.gained:
+        try:
+            extra = adjudicate_proposed_facts(
+                config.server, truth_env, topup.gained, dossier_payload.domain, task_symbol,
+                timeout=config.check_timeout,
+            )
+            gained_validated = 0
+            for f in extra.accepted:
+                v = validate_fact(config.server, truth_env, f, task_symbol, definition_input.name,
+                                  imports=definition_input.signature_dict.get("imports"))
+                if v.ships:
+                    validated_facts.append((f, v))
+                    gained_validated += 1
+            topup.after = sum(1 for f, _ in validated_facts if _is_reject_fact(f))
+            topup.detail += (f"; {len(extra.accepted)}/{len(topup.gained)} survived mechanical "
+                             f"validation, {gained_validated} survived the ladder")
+        except Exception as e:  # noqa: BLE001 -- a failed top-up must never lose the task
+            topup.detail += f"; top-up validation failed: {type(e).__name__}"
+    if topup.needed:
+        stage_records.append(
+            StageRecord(
+                "reject_topup", "ok" if topup.met_after else "still_short",
+                detail=f"{topup.before} -> {topup.after} reject facts; {topup.detail}",
+                calls_made=budget.calls_made,
+            )
+        )
+
+    _rej_census["shipped"] = sum(1 for f, _ in validated_facts if _is_reject_fact(f))
+    stage_records.append(
+        StageRecord("reject_census", "ok",
+                    detail=" -> ".join(f"{k}={v}" for k, v in _rej_census.items()),
+                    calls_made=budget.calls_made))
 
     fact_list: list[Fact] = [
         f.to_fact(
@@ -974,6 +1015,18 @@ def render_batch_review(results: list[TaskResult]) -> str:
                 lines.append(f"  - `{fact_id}`")
         else:
             lines.append("- self-restatement declarations: none")
+        if r.outcome == "SHIPPED" and r.stage_records:
+            # SHIPPED tasks used to print no stage records at all, only ROTATED ones. That gap
+            # cost real money on 12 Aug: the reject-floor top-up and the composition counts were
+            # invisible on every successful task, so three separate "the top-up never fires"
+            # diagnoses were made from absence-of-evidence and each was chased with a live run.
+            interesting = {"fact_proposal", "mechanical_validation", "reject_census",
+                           "reject_topup", "composition", "fact_validation"}
+            shown = [st for st in r.stage_records if st.stage in interesting]
+            if shown:
+                lines.append("- composition/validation record:")
+                for st in shown:
+                    lines.append(f"  - `{st.stage}`: {st.status} -- {st.detail}")
         if r.outcome == "ROTATED":
             lines.append("- stage-by-stage record (full where-it-died reconstruction):")
             for sr in r.stage_records:

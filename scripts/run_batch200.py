@@ -13,8 +13,9 @@ REPL-death recovery -- all already built) and adds the two things this batch spe
     floor are only real if something counts them. Reported per task, not just in aggregate,
     because a systematic miss at 3 tasks is a prompt fix and at 50 it is a rerun.
 
-Resume is by file existence: a task whose `task.json` already exists is skipped, so a
-credential expiry mid-run costs nothing already paid for.
+Resume is by file existence, implemented HERE: `authoring.batch.run_batch` has no existence
+check of its own. That was assumed rather than verified once, and the 12 Aug resume re-authored
+21 tasks that were already on disk -- paying twice and reaching none of the unattempted ones.
 """
 
 import argparse
@@ -71,6 +72,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=3)
     ap.add_argument("--out", default=str(OUT_DIR))
+    ap.add_argument("--redo", action="store_true",
+                    help="re-author tasks that already have a task.json (default: skip them)")
     args = ap.parse_args()
 
     from bedrock import config as bcfg
@@ -86,6 +89,14 @@ def main() -> int:
              if n.strip() and not n.startswith("#")][: args.limit]
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
+    if not args.redo:
+        already = [n for n in names if (out_dir / n / "task.json").exists()]
+        names = [n for n in names if n not in set(already)]
+        if already:
+            print(f"resume: skipping {len(already)} task(s) already on disk", flush=True)
+    if not names:
+        print("nothing to do -- every task in this slice is already authored")
+        return 0
     slice_file = out_dir / f"_slice_{len(names)}.txt"
     slice_file.write_text("\n".join(names) + "\n", encoding="utf-8")
     print(f"{len(names)} tasks -> {out_dir}", flush=True)

@@ -219,10 +219,18 @@ def run_dossier_call(
 class FactProposalResult:
     facts: list[ProposedFact]
     dropped: list[FactParseRejection] = field(default_factory=list)  # still-bad after the one retry
-    # The reject-floor top-up outcome (None when the call was not reached). Recorded whether or
-    # not it was needed, so the batch report can say how well the re-ask works rather than only
-    # whether the floor ended up met.
+    # The reject-floor top-up outcome, filled in by the driver AFTER attrition (None if never
+    # reached). Recorded whether or not it was needed, so the batch report can say how well the
+    # re-ask works rather than only whether the floor ended up met.
     reject_topup: object | None = None
+    # Handed to the driver so it can re-ask on the SAME prompt and parse rules post-attrition.
+    # `user_prompt` matters as much as `system_prompt`: Bedrock calls are INDEPENDENT, so a
+    # top-up that sends only a short instruction gives the model no dossier, no signature and no
+    # mention excerpt -- it has no object to write facts about, and answers with prose that fails
+    # the JSON parse. Measured exactly that way on SimpleGraph.boxProd, 12 Aug 2026.
+    system_prompt: str | None = None
+    user_prompt: str | None = None
+    parse_fn: object | None = None
 
 
 def _retry_rejected_facts(
@@ -316,18 +324,13 @@ def run_fact_proposal_call(
         )
         facts = facts + fixed_facts
 
-    # Reject-floor top-up: one focused re-ask, here rather than in the driver because this is
-    # where `system` and the parse closure already live. See `authoring.reject_topup`.
-    #
-    # OPT-IN (default False) because it spends an extra LLM call: every existing caller, and
-    # every test scripting an exact stub-response sequence, is unaffected unless it asks.
-    topup = None
-    if reject_topup:
-        from authoring.reject_topup import topup_reject_facts
-        topup = topup_reject_facts(client, model_id, system, facts, _parse,
-                                   budget=budget, max_tokens=max_tokens)
-    return FactProposalResult(facts=facts + list(topup.gained if topup else []),
-                              dropped=still_dropped, reject_topup=topup)
+    # The reject-floor top-up does NOT happen here. Measured on the 12 Aug run: checking the
+    # floor against PROPOSED facts almost never fires, because the shipped suite goes short
+    # through ATTRITION -- mechanical validation and the validation ladder remove facts after
+    # this point. The floor has to be judged on what survives, so the driver does it (see
+    # `authoring.pipeline`) and this call just hands over the pieces a later re-ask needs.
+    return FactProposalResult(facts=facts, dropped=still_dropped,
+                              system_prompt=system, user_prompt=user, parse_fn=_parse)
 
 
 # === Rows 4-5 -- mechanical adjudication (no LLM involvement) ==================================
