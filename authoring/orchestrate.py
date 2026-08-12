@@ -219,6 +219,10 @@ def run_dossier_call(
 class FactProposalResult:
     facts: list[ProposedFact]
     dropped: list[FactParseRejection] = field(default_factory=list)  # still-bad after the one retry
+    # The reject-floor top-up outcome (None when the call was not reached). Recorded whether or
+    # not it was needed, so the batch report can say how well the re-ask works rather than only
+    # whether the floor ended up met.
+    reject_topup: object | None = None
 
 
 def _retry_rejected_facts(
@@ -274,6 +278,7 @@ def run_fact_proposal_call(
     decidability: str | None = None,
     domain_variables: list[str] | None = None,
     max_tokens: int | None = None,
+    reject_topup: bool = False,
 ) -> FactProposalResult:
     """`task_symbol`/`forbidden_name` (contract §4.4) thread through to `authoring.parse.parse_facts`
     on both the initial parse and the row-3 per-fact retry, so a raw-Mathlib-name leak is caught
@@ -304,13 +309,25 @@ def run_fact_proposal_call(
         )
 
     facts, rejections = _call_llm_json(client, system, user, model_id=model_id, parse_fn=_parse, budget=budget, max_tokens=max_tokens)
-    if not rejections:
-        return FactProposalResult(facts=facts, dropped=[])
+    still_dropped: list = []
+    if rejections:
+        fixed_facts, still_dropped = _retry_rejected_facts(
+            client, model_id, system, rejections, budget=budget, parse_fn=_parse, max_tokens=max_tokens
+        )
+        facts = facts + fixed_facts
 
-    fixed_facts, still_dropped = _retry_rejected_facts(
-        client, model_id, system, rejections, budget=budget, parse_fn=_parse, max_tokens=max_tokens
-    )
-    return FactProposalResult(facts=facts + fixed_facts, dropped=still_dropped)
+    # Reject-floor top-up: one focused re-ask, here rather than in the driver because this is
+    # where `system` and the parse closure already live. See `authoring.reject_topup`.
+    #
+    # OPT-IN (default False) because it spends an extra LLM call: every existing caller, and
+    # every test scripting an exact stub-response sequence, is unaffected unless it asks.
+    topup = None
+    if reject_topup:
+        from authoring.reject_topup import topup_reject_facts
+        topup = topup_reject_facts(client, model_id, system, facts, _parse,
+                                   budget=budget, max_tokens=max_tokens)
+    return FactProposalResult(facts=facts + list(topup.gained if topup else []),
+                              dropped=still_dropped, reject_topup=topup)
 
 
 # === Rows 4-5 -- mechanical adjudication (no LLM involvement) ==================================

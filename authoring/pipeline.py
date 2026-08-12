@@ -568,6 +568,7 @@ def _author_from_dossier(
             domain_constraint=dossier_payload.domain.constraint,
             decidability=definition_input.decidability,
             domain_variables=dossier_payload.domain.variables,
+            reject_topup=True,
         )
     except (AuthoringCallFailed, CallBudgetExceeded, BedrockClientError) as e:
         return _rotate("fact_proposal", f"{type(e).__name__}: {e}", convention_flags=consistency_result.flags)
@@ -578,6 +579,21 @@ def _author_from_dossier(
             calls_made=budget.calls_made,
         )
     )
+
+    topup = proposal.reject_topup
+    if topup is not None and topup.needed:
+        # Measured on the 50-task run: the reject floor of 2 was stated as "hard" in the prompt
+        # and only 15 of 29 suites met it, 7 with ZERO reject facts, while the mechanically
+        # enforced decide cap held 29/29. So the floor gets ONE focused re-ask. It never discards
+        # the task -- a suite still short after the top-up ships anyway, because the floor of 2 is
+        # not yet known to be the right number and deleting the evidence would prevent finding out.
+        stage_records.append(
+            StageRecord(
+                "reject_topup", "ok" if topup.met_after else "still_short",
+                detail=f"{topup.before} -> {topup.after} reject facts; {topup.detail}",
+                calls_made=budget.calls_made,
+            )
+        )
 
     # --- Mechanical validation against ground truth (contract §6 rows 4-5) -------------------
     try:

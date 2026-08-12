@@ -9,12 +9,12 @@ happened to hold on all three (2, 3, 5), but "happened to" is not a guarantee ei
 So the caps are applied here, mechanically, after the model has proposed and before anything
 ships.
 
-TRIMMING PREFERS BOUNDARY CHECKS. When a suite is over the decide cap, the facts dropped are the
-INTERIOR ones first -- an interior arithmetic spot-check (`choose 10 3 = 120`) survives every
-plausible misreading, because boundary and side-condition errors compute the interior correctly,
-whereas `choose 0 0 = 1` is exactly where misreadings live. Unlabelled decide facts are treated
-as interior: the prompt asks for the label, and an unlabelled fact is the one we know least
-about.
+TRIMMING KEEPS PROPOSAL ORDER. An earlier revision asked the model to label each decide fact
+"boundary" or "interior" so the trim could drop the weakest first. That label was dropped
+(operator decision, 12 Aug 2026: it is an oversimplification, and the 50-task run showed Sonnet
+ignoring it entirely -- 0 of 44 decide facts carried one). The prompt now simply asks for
+casework at important points rather than randomly chosen ones, and the trim keeps the first
+`DECIDE_CAP` in proposal order, which is the model's own priority ordering.
 
 The floor is NOT enforced by invention -- nothing here makes up facts. A suite under the floor
 ships with `under_floor` recorded, so the batch report can show it rather than a silently short
@@ -57,13 +57,7 @@ def enforce(facts: list) -> CompositionOutcome:
     other = [f for f in facts if getattr(f, "mechanism", None) != "decide"]
 
     if len(decide) > DECIDE_CAP:
-        # Boundary-labelled first, then unlabelled/interior -- so the cap removes the least
-        # discriminating checks rather than an arbitrary suffix.
-        ranked = sorted(
-            decide,
-            key=lambda f: 0 if getattr(f, "boundary_vs_interior", None) == "boundary" else 1,
-        )
-        keep, drop = ranked[:DECIDE_CAP], ranked[DECIDE_CAP:]
+        keep, drop = decide[:DECIDE_CAP], decide[DECIDE_CAP:]
         out.trimmed_decide = len(drop)
         out.dropped.extend(drop)
         decide = keep

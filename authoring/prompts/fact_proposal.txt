@@ -19,8 +19,7 @@
 #
 # Output required: strict JSON array only, matching authoring.parse.parse_facts's shape:
 #   [{id, type, mechanism, statement, instance?, polarity?, violated_property?, anchors?,
-#     domain_inputs, expected_type?, self_restatement?, boundary_vs_interior?,
-#     near_miss_clause?}, ...]
+#     domain_inputs, expected_type?, self_restatement?, near_miss_clause?}, ...]
 # No markdown fences. No prose outside the JSON array.
 
 ===SYSTEM===
@@ -72,11 +71,11 @@ SUITE COMPOSITION (2026-08-11 revision; these are counted mechanically):
   This is how a definition is characterised by its non-examples, and each such fact detects a
   candidate that dropped exactly that clause.
 
-For computational checks, prefer boundary cases, degenerate inputs (zero, empty, singleton), and
-cases where a plausible misreading would go wrong. Avoid interior arithmetic spot-checks. Mark
-each "decide" fact `boundary_vs_interior`: "boundary" or "interior" accordingly -- an interior
-check like `choose 10 3 = 120` survives every plausible misreading and so tests almost nothing,
-whereas `choose 0 0 = 1` and `choose 4 5 = 0` are exactly where misreadings live.
+Try to make casework at IMPORTANT points rather than randomly chosen ones: boundaries,
+degenerate inputs (zero, empty, singleton), the places a plausible misreading would go wrong.
+A check in the middle of the ordinary range (`choose 10 3 = 120`) is computed correctly by almost
+any wrong definition, so it tests little; `choose 0 0 = 1` and `choose 4 5 = 0` are where
+misreadings actually live.
 
 Where possible, favour facts that would be easy to disprove by a concrete counterexample if they
 were false.
@@ -137,13 +136,15 @@ to it in the statement is mechanically rejected.
   OMITTED or empty on casework/membership facts -- anchors are global-fact-only. If a global
   fact restates its anchor theorem near-verbatim (the anchor essentially proves it outright, not
   merely contributes to it), set `self_restatement: true` on that fact -- omit it (or set
-  `false`) otherwise. Be honest here: this doesn't penalize the fact, it only marks that its
+  `false`) otherwise. This flag is ONLY ever about the relationship between a fact and the
+  ANCHOR THEOREM it cites; never set it on a fact that has no anchors. Be honest here: this doesn't penalize the fact, it only marks that its
   eventual discharge cost can't be read as a difficulty estimate. The same self-restatement
   discipline applies to a Prop-valued task's own definitional unfolding, not just anchor
   theorems: a fact stating nothing more than what the task symbol already says by definition
   (e.g., for `VTask.ModEq n a b`, a fact whose content is just "`VTask.ModEq n a b ↔ a % n = b %
   n`") is trivial by unfolding alone and must be marked `self_restatement: true` the same way --
-  it is not wrong to propose, but it must be marked, for the same honesty reason. Example global fact:
+  it is not wrong to propose, but it must be marked, for the same honesty reason. (That case is
+  still anchor-mediated: mark it only where the fact carries anchors.) Example global fact:
   `{{"id": "clog_monotone", "type": "global", "mechanism": "proof", "statement": "∀ b : ℕ, Monotone (VTask.clog b)", "anchors": ["Nat.clog_monotone"], "self_restatement": true}}`
 
 Suite-level rules: fact `id`s unique within the suite; no fact may quantify over anything

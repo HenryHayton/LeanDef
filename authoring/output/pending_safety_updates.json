@@ -2424,5 +2424,157 @@
     },
     "repair_log": [],
     "status": "pending"
+  },
+  {
+    "name": "SimpleGraph.boxProd",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "round_trip_generation",
+    "rotation_reason": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11720,
+        11726
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "dossier_consistency",
+          "status": "ok",
+          "detail": "0 convention-prose flag(s)"
+        },
+        {
+          "stage": "fact_proposal",
+          "status": "ok",
+          "detail": "14 proposed, 0 format/name-dropped"
+        },
+        {
+          "stage": "mechanical_validation",
+          "status": "ok",
+          "detail": "8 accepted, 6 dropped, 0 errored"
+        },
+        {
+          "stage": "composition",
+          "status": "violations",
+          "detail": "8 kept, 0 decide trimmed to cap; reject_floor: 0 < 2"
+        },
+        {
+          "stage": "fact_validation",
+          "status": "ok",
+          "detail": "7 ship (7 certified), 1 rejected/quarantined"
+        },
+        {
+          "stage": "round_trip_generation",
+          "status": "rotated",
+          "detail": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired."
+        }
+      ],
+      "rejected_dossier_md": "## Object\n\nThe **box product** (also called the Cartesian product) of two simple graphs `G` on vertex set `α` and `H` on vertex set `β` is the simple graph whose vertex set is the Cartesian product `α × β`, where two vertices `(a₁, b₁)` and `(a₂, b₂)` are adjacent if and only if exactly one coordinate changes and the change is an edge in the corresponding factor graph. More precisely, either the first coordinates `a₁` and `a₂` are adjacent in `G` while the second coordinates coincide (`b₁ = b₂`), or the second coordinates `b₁` and `b₂` are adjacent in `H` while the first coordinates coincide (`a₁ = a₂`).\n\nThis construction is the graph-theoretic analogue of the Cartesian product of spaces: each copy of `G` (one per vertex of `H`) is present as an induced subgraph, and each copy of `H` (one per vertex of `G`) is present as an induced subgraph, with no diagonal edges.\n\n## Signature\n\n`VTask.boxProd : {α : Type u_1} -> {β : Type u_2} -> (G : SimpleGraph α) -> (H : SimpleGraph β) -> SimpleGraph (α × β)`\n\nThe first implicit argument is the type of vertices of the first factor graph. The second implicit argument is the type of vertices of the second factor graph. `G` is the first factor simple graph, defined on vertices of type `α`. `H` is the second factor simple graph, defined on vertices of type `β`. The result is a simple graph on the Cartesian product of the two vertex sets.\n\n## Conventions\n\nThere are no special junk-value or edge conventions for this construction: it is a total operation defined for any two simple graphs, regardless of whether they are finite, connected, or non-empty.\n\n## Worked examples\n\n- Claim: In `VTask.boxProd G H`, two vertices `(a₁, b)` and `(a₂, b)` sharing the same second coordinate are adjacent if and only if `a₁` and `a₂` are adjacent in `G`.\n\n- Claim: In `VTask.boxProd G H`, two vertices `(a, b₁)` and `(a, b₂)` sharing the same first coordinate are adjacent if and only if `b₁` and `b₂` are adjacent in `H`.\n\n- Claim: If both `G` and `H` are connected, then `VTask.boxProd G H` is connected.\n\n- Claim: For any vertex `x : α × β`, the degree of `x` in `VTask.boxProd G H` equals the degree of `x.1` in `G` plus the degree of `x.2` in `H`.\n\n- Claim: The graph distance between `x` and `y` in `VTask.boxProd G H` equals the graph distance from `x.1` to `y.1` in `G` plus the graph distance from `x.2` to `y.2` in `H`.\n\n- Claim: Two vertices `x` and `y` are reachable in `VTask.boxProd G H` if and only if `x.1` is reachable from `y.1` in `G` and `x.2` is reachable from `y.2` in `H`.\n\n## Boundaries\n\n- If either `G` or `H` is the empty graph (no edges), then `VTask.boxProd G H` has no edges of the corresponding type; for example, if `G` has no edges, then `VTask.boxProd G H` contains only the copies of `H`, one per vertex of `α`.\n- If either factor graph has a single vertex (and hence no edges as a simple graph), the box product is isomorphic to the other factor.\n- When both factor graphs are complete graphs, the box product is NOT the complete graph on the product vertex set; it is sparser, since no diagonal adjacencies are present.\n- Connectivity is preserved: `VTask.boxProd G H` is connected if and only if both `G` and `H` are connected.\n- The neighbor set of a vertex `(a, b)` is exactly the set of vertices of the form `(a', b)` with `a'` adjacent to `a` in `G`, union the set of vertices of the form `(a, b')` with `b'` adjacent to `b` in `H`; these two parts are disjoint.\n\n## Not to be confused with\n\n- **Tensor product (categorical product)** of graphs: there, `(a₁, b₁)` and `(a₂, b₂)` are adjacent when *both* coordinates change and form edges in their respective graphs — diagonal edges are allowed, unlike in the box product.\n- **Strong product** of graphs: the strong product allows both the box-product edges and the tensor-product (diagonal) edges simultaneously.\n- **Lexicographic product** of graphs: a non-commutative construction where `(a₁, b₁)` is adjacent to `(a₂, b₂)` if `a₁` is adjacent to `a₂` in `G`, or `a₁ = a₂` and `b₁` is adjacent to `b₂` in `H`; this lacks the symmetry of the box product."
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "Order.idealOfCofinals",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "classification",
+    "rotation_reason": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11726,
+        11729
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "rotated",
+          "detail": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired."
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
+  },
+  {
+    "name": "GaloisConnection",
+    "batch": "prelim_testing/tasks_batch200/_slice_50.txt",
+    "rotation_stage": "classification",
+    "rotation_reason": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired.",
+    "category": "not_agent_fixable",
+    "artifacts": {
+      "task_dir": null,
+      "call_log_lines": [
+        11729,
+        11732
+      ],
+      "stage_records": [
+        {
+          "stage": "lookup",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "mention_retrieval",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "truth_splice",
+          "status": "ok",
+          "detail": ""
+        },
+        {
+          "stage": "classification",
+          "status": "rotated",
+          "detail": "BedrockRetriesExhaustedError: Bedrock call did not succeed after 3 attempt(s); last error: transport error: Credentials were refreshed, but the refreshed credentials are still expired."
+        }
+      ],
+      "rejected_dossier_md": null
+    },
+    "repair_log": [],
+    "status": "pending"
   }
 ]
