@@ -1,0 +1,190 @@
+{
+  "task_id": "SymbolicDynamics.FullShift.cylinder",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cylinder",
+  "signature": {
+    "name": "VTask.cylinder",
+    "type": "{A : Type u_1} -> {G : Type u_2} -> (U : Finset G) -> (x : G → A) -> Set (G → A)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "U",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "U = ∅",
+        "statement": "When the support is the empty finset, the cylinder equals Set.univ (all configurations), because the agreement condition is vacuously satisfied.",
+        "note": "Natural consequence of universal quantification over an empty set; no special junk value is assigned."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cylinder_empty_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {G : Type*} (x : G → A), VTask.cylinder ∅ x = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cylinder_isClosed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {G : Type*} [TopologicalSpace A] [T1Space A] (U : Finset G) (x : G → A), IsClosed (VTask.cylinder U x)",
+      "domain_inputs": {},
+      "anchors": [
+        "SymbolicDynamics.FullShift.isClosed_cylinder"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SymbolicDynamics.FullShift.isClosed_cylinder"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.147,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cylinder_isOpen_discrete",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {G : Type*} [TopologicalSpace A] [DiscreteTopology A] (U : Finset G) (x : G → A), IsOpen (VTask.cylinder U x)",
+      "domain_inputs": {},
+      "anchors": [
+        "SymbolicDynamics.FullShift.isOpen_cylinder"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SymbolicDynamics.FullShift.isOpen_cylinder"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.017,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cylinder_same_support_same_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {G : Type*} (U : Finset G) (x x' : G → A), (∀ i ∈ U, x i = x' i) → VTask.cylinder U x = VTask.cylinder U x'",
+      "domain_inputs": {},
+      "anchors": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cylinder_self_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {G : Type*} (U : Finset G) (x : G → A), x ∈ VTask.cylinder U x",
+      "domain_inputs": {},
+      "anchors": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SymbolicDynamics.FullShift.mem_cylinder"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SymbolicDynamics.FullShift.cylinder",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SymbolicDynamics.FullShift.cylinder-6bee3cf0",
+    "review_status": "unreviewed"
+  }
+}

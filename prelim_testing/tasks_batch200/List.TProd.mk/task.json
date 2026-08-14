@@ -1,0 +1,202 @@
+{
+  "task_id": "List.TProd.mk",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mk",
+  "signature": {
+    "name": "VTask.mk",
+    "type": "{ι : Type u} -> {α : ι → Type v} -> (l : List ι) -> (_f : (i : ι) → α i) -> List.TProd α l",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "_f"
+    ],
+    "conventions": [
+      {
+        "point": "l = []",
+        "statement": "When `l` is the empty list, `VTask.mk [] f` is `PUnit.unit`, the unique element of `PUnit`, regardless of `f`.",
+        "note": "This is the base case of the recursion; the function argument is ignored."
+      },
+      {
+        "point": "l = i :: is",
+        "statement": "When `l` is `i :: is`, `VTask.mk (i :: is) f` is the pair `(f i, VTask.mk is f)`, a right-nested product.",
+        "note": "The first component is `f i` and the second component is the `TProd` for the tail `is`."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mk_singleton_fst",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mk ([0] : List Nat) (fun i => i + 1)).1 = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_two_elem_fst",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mk ([0, 1] : List Nat) (fun i => i) : List.TProd (fun _ => Nat) [0, 1]).1 = 0 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_two_elem_snd_fst",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mk ([0, 1] : List Nat) (fun i => i) : List.TProd (fun _ => Nat) [0, 1]).2.1 = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_duplicate_index_fst",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mk ([3, 3] : List Nat) (fun i => i * 2) : List.TProd (fun _ => Nat) [3, 3]).1 = 6 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[3, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_fst_not_wrong_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mk ([2, 5] : List Nat) (fun i => i + 10) : List.TProd (fun _ => Nat) [2, 5]).1 = 12 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[2, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.mk ([2, 5] : List Nat) (fun i => i + 10) : List.TProd (fun _ => Nat) [2, 5]).1"
+    },
+    {
+      "id": "mk_fst_not_snd_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬((VTask.mk ([2, 5] : List Nat) (fun i => i + 10) : List.TProd (fun _ => Nat) [2, 5]).1 = 15) := by decide",
+      "domain_inputs": {
+        "l": [
+          "[2, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.mk-67fc992d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.mk ([2, 5] : List Nat) (fun i => i + 10) : List.TProd (fun _ => Nat) [2, 5]).1",
+      "violated_property": "fst equals f of the first index, not f of the second"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.TProd.mk",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.TProd.mk-67fc992d",
+    "review_status": "unreviewed"
+  }
+}

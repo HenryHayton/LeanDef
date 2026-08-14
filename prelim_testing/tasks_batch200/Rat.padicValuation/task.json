@@ -1,0 +1,251 @@
+{
+  "task_id": "Rat.padicValuation",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.padicValuation",
+  "signature": {
+    "name": "VTask.padicValuation",
+    "type": "(p : ℕ) -> [Fact (Nat.Prime p)] -> Valuation ℚ (WithZero (Multiplicative ℤ))",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "Nat.Prime p",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "zero input",
+        "statement": "VTask.padicValuation p 0 = 0, where 0 is the absorbing zero element of WithZero (Multiplicative ℤ), not any integer value.",
+        "note": "Standard Valuation axiom in Mathlib; the value monoid WithZero absorbs at 0."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "padic_val_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], VTask.padicValuation p (1 : ℚ) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.596,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_val_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], VTask.padicValuation p (p : ℚ) = Multiplicative.ofAdd (-1 : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.padicValuation_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.padicValuation_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.33,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_val_eq_zero_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (x : ℚ), VTask.padicValuation p x = 0 ↔ x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.padicValuation_eq_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.padicValuation_eq_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.351,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_val_le_one_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (x : ℚ), VTask.padicValuation p x ≤ 1 ↔ ¬ p ∣ x.den",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.padicValuation_le_one_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.padicValuation_le_one_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.495,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_val_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], Function.Surjective (VTask.padicValuation p)",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.surjective_padicValuation"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.surjective_padicValuation"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.009,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_val_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (x y : ℚ), VTask.padicValuation p (x * y) = VTask.padicValuation p x * VTask.padicValuation p y",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 38.286,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.padicValuation-71eafbdb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Rat.padicValuation",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Rat.padicValuation-71eafbdb",
+    "review_status": "unreviewed"
+  }
+}

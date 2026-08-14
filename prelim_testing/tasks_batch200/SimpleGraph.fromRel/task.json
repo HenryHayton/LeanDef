@@ -1,0 +1,461 @@
+{
+  "task_id": "SimpleGraph.fromRel",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fromRel",
+  "signature": {
+    "name": "VTask.fromRel",
+    "type": "{V : Type u} -> (r : V → V → Prop) -> SimpleGraph V",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total and uniformly defined for every binary relation r on every type V; there are no junk-value or special edge-case conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fromRel_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (r : V → V → Prop) (v w : V), (VTask.fromRel r).Adj v w → (VTask.fromRel r).Adj w v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.439,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_irrefl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (r : V → V → Prop) (v : V), ¬ (VTask.fromRel r).Adj v v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.219,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_false_no_edges",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (v w : V), ¬ (VTask.fromRel (fun _ _ => False)).Adj v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.117,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_true_complete",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (v w : V), v ≠ w → (VTask.fromRel (fun _ _ => True)).Adj v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.132,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_adj_lt_fin3_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (a b : Fin 3) => a < b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 0 1"
+    },
+    {
+      "id": "fromRel_adj_lt_fin3_symm",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 1 0 := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (a b : Fin 3) => a < b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 1 0"
+    },
+    {
+      "id": "fromRel_adj_self_loop_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.fromRel (fun (_ _ : Fin 3) => True)).Adj 0 0 := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (_ _ : Fin 3) => True"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.fromRel (fun (_ _ : Fin 3) => True)).Adj 0 0",
+      "violated_property": "adjacency requires v ≠ w"
+    },
+    {
+      "id": "fromRel_adj_false_rel_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.fromRel (fun (_ _ : Fin 3) => False)).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (_ _ : Fin 3) => False"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.fromRel (fun (_ _ : Fin 3) => False)).Adj 0 1",
+      "violated_property": "r v w ∨ r w v must hold"
+    },
+    {
+      "id": "fromRel_adj_raa_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 1 2 = False := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (a b : Fin 3) => a < b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 1 2"
+    },
+    {
+      "id": "fromRel_adj_self_raa_loop_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 0 0 := by decide",
+      "domain_inputs": {
+        "r": [
+          "fun (a b : Fin 3) => a < b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.fromRel (fun (a b : Fin 3) => a < b)).Adj 0 0",
+      "violated_property": "adjacency requires v ≠ w"
+    },
+    {
+      "id": "fromRel_adj_sym_reduces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (r : V → V → Prop), (∀ a b, r a b → r b a) → ∀ v w : V, (VTask.fromRel r).Adj v w ↔ v ≠ w ∧ r v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.543,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_adj_iff_or_direction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (r : V → V → Prop) (v w : V), r v w → v ≠ w → (VTask.fromRel r).Adj v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.179,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromRel_adj_reverse_direction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (r : V → V → Prop) (v w : V), r w v → v ≠ w → (VTask.fromRel r).Adj v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.fromRel_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.272,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.fromRel",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.fromRel-454b8ee9",
+    "review_status": "unreviewed"
+  }
+}

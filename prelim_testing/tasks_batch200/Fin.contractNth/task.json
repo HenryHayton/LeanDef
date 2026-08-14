@@ -1,0 +1,307 @@
+{
+  "task_id": "Fin.contractNth",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.contractNth",
+  "signature": {
+    "name": "VTask.contractNth",
+    "type": "{n : ℕ} -> {α : Sort u_1} -> (j : Fin (n + 1)) -> (op : α → α → α) -> (g : Fin (n + 1) → α) -> (k : Fin n) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "j",
+      "op",
+      "g",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": "k < j",
+        "statement": "When the output index k (as a natural number) is strictly less than j, the result is g applied to the coercion of k to Fin (n + 1) via castSucc, i.e., the original entry is passed through unchanged.",
+        "note": "Left-of-merge passthrough"
+      },
+      {
+        "point": "k = j",
+        "statement": "When the output index k equals j (as natural numbers), the result is op applied to the original entries at positions j and j + 1, i.e., op (g (castSucc k)) (g k.succ).",
+        "note": "Merge point"
+      },
+      {
+        "point": "k > j",
+        "statement": "When the output index k (as a natural number) is strictly greater than j, the result is g applied to k.succ, i.e., the entry one position higher in the original tuple is returned.",
+        "note": "Right-of-merge passthrough with index shift"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "contractNth_lt_case_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.contractNth (1 : Fin 3) (· + ·) ![10, 20, 30] (0 : Fin 2) = 10 := by decide",
+      "domain_inputs": {
+        "j": [
+          "1"
+        ],
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_eq_case_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.contractNth (1 : Fin 3) (· + ·) ![10, 20, 30] (1 : Fin 2) = 50 := by decide",
+      "domain_inputs": {
+        "j": [
+          "1"
+        ],
+        "k": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_last_merge_first_slot",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.contractNth (2 : Fin 3) (· + ·) ![(10 : ℕ), 20, 30] (0 : Fin 2) = 10 := by decide",
+      "domain_inputs": {
+        "j": [
+          "2"
+        ],
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_apply_of_lt_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Sort*} (j : Fin (n + 1)) (op : α → α → α) (g : Fin (n + 1) → α) (k : Fin n), (k : ℕ) < j → VTask.contractNth j op g k = g (Fin.castSucc k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.contractNth_apply_of_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.contractNth_apply_of_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.942,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_apply_of_eq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Sort*} (j : Fin (n + 1)) (op : α → α → α) (g : Fin (n + 1) → α) (k : Fin n), (k : ℕ) = j → VTask.contractNth j op g k = op (g (Fin.castSucc k)) (g k.succ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.contractNth_apply_of_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.contractNth_apply_of_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.933,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_apply_of_gt_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Sort*} (j : Fin (n + 1)) (op : α → α → α) (g : Fin (n + 1) → α) (k : Fin n), (j : ℕ) < k → VTask.contractNth j op g k = g k.succ",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.contractNth_apply_of_gt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.contractNth_apply_of_gt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.87,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_apply_of_ne_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Sort*} (j : Fin (n + 1)) (op : α → α → α) (g : Fin (n + 1) → α) (k : Fin n), (j : ℕ) ≠ k → VTask.contractNth j op g k = g (j.succAbove k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.contractNth_apply_of_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.contractNth_apply_of_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.113,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contractNth_comp_naturality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α β : Sort*} (opα : α → α → α) (opβ : β → β → β) (f : α → β), (∀ x y, f (opα x y) = opβ (f x) (f y)) → ∀ (j : Fin (n + 1)) (g : Fin (n + 1) → α), f ∘ VTask.contractNth j opα g = VTask.contractNth j opβ (f ∘ g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.comp_contractNth"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.comp_contractNth"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.605,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.contractNth-0c8999df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.contractNth",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.contractNth-0c8999df",
+    "review_status": "unreviewed"
+  }
+}

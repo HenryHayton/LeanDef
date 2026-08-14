@@ -1,0 +1,126 @@
+{
+  "task_id": "Matrix.vecAppend",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.vecAppend",
+  "signature": {
+    "name": "VTask.vecAppend",
+    "type": "{m n : ℕ} -> {α : Type u_1} -> {o : ℕ} -> (ho : o = m + n) -> (u : Fin m → α) -> (v : Fin n → α) -> Fin o → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ho",
+      "u",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "index in first segment",
+        "statement": "For i : Fin o with (i : ℕ) < m, VTask.vecAppend ho u v i = u ⟨i, h⟩ where h : (i : ℕ) < m.",
+        "note": "This is the casework rule for indices that fall within the range of the first vector u."
+      },
+      {
+        "point": "index in second segment",
+        "statement": "For i : Fin o with ¬ (i : ℕ) < m, VTask.vecAppend ho u v i = v ⟨(i : ℕ) - m, _⟩.",
+        "note": "This is the casework rule for indices that fall within the range of the second vector v, shifted by m."
+      },
+      {
+        "point": "proof irrelevance of ho",
+        "statement": "Any two proofs ho₁ ho₂ : o = m + n yield the same function VTask.vecAppend ho₁ u v = VTask.vecAppend ho₂ u v.",
+        "note": "The proof ho is used only for reindexing and does not affect values."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "vecAppend_empty_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (v : Fin n → α), VTask.vecAppend rfl v ![] = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.vecAppend_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.vecAppend_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.419,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.vecAppend-f96f87e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vecAppend_empty_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (v : Fin n → α), VTask.vecAppend n.zero_add.symm ![] v = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.empty_vecAppend"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.empty_vecAppend"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.341,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.vecAppend-f96f87e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.vecAppend",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.vecAppend-f96f87e2",
+    "review_status": "unreviewed"
+  }
+}

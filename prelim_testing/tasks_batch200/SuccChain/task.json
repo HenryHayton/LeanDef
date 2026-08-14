@@ -1,0 +1,323 @@
+{
+  "task_id": "SuccChain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SuccChain",
+  "signature": {
+    "name": "VTask.SuccChain",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Set α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "no_superchain",
+        "statement": "When no chain t satisfying (IsChain r s ∧ SuperChain r s t) exists, VTask.SuccChain r s = s.",
+        "note": "This covers both the case where s is a maximal chain and the case where s is not itself a chain."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "succChain_subset_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), s ⊆ VTask.SuccChain r s",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_succChain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_succChain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.48,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_isChain_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), IsChain r s → IsChain r (VTask.SuccChain r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.314,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_spec_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), (∃ t, IsChain r s ∧ SuperChain r s t) → SuperChain r s (VTask.SuccChain r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "succChain_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "succChain_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.463,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_superChain_of_not_maxChain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), IsChain r s → ¬IsMaxChain r s → SuperChain r s (VTask.SuccChain r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.superChain_succChain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.superChain_succChain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.28,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_fixpoint_maxChain_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), IsMaxChain r s → VTask.SuccChain r s = s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.superChain_succChain",
+        "succChain_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.superChain_succChain",
+        "succChain_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_not_proper_subset_of_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), ¬(VTask.SuccChain r s ⊂ s)",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_succChain"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_succChain"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_non_chain_input_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), ¬IsChain r s → VTask.SuccChain r s = s",
+      "domain_inputs": {},
+      "anchors": [
+        "succChain_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "succChain_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_superChain_ssubset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), (∃ t, IsChain r s ∧ SuperChain r s t) → s ⊂ VTask.SuccChain r s",
+      "domain_inputs": {},
+      "anchors": [
+        "succChain_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "succChain_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "succChain_isChain_output_from_chain_input",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), IsChain r s → IsChain r (VTask.SuccChain r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.292,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuccChain-0b5e9b0f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SuccChain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SuccChain-0b5e9b0f",
+    "review_status": "unreviewed"
+  }
+}

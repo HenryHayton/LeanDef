@@ -1,0 +1,292 @@
+{
+  "task_id": "Equiv.sumCompl",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumCompl",
+  "signature": {
+    "name": "VTask.sumCompl",
+    "type": "{α : Type u_9} -> (p : α → Prop) -> [DecidablePred p] -> { a // p a } ⊕ { a // ¬p a } ≃ α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "forward_inl",
+        "statement": "The forward map sends `Sum.inl ⟨a, h⟩` to `a`, ignoring the proof that `p a`.",
+        "note": "Forgetting the subtype tag on the left summand."
+      },
+      {
+        "point": "forward_inr",
+        "statement": "The forward map sends `Sum.inr ⟨a, h⟩` to `a`, ignoring the proof that `¬ p a`.",
+        "note": "Forgetting the subtype tag on the right summand."
+      },
+      {
+        "point": "inverse_pos",
+        "statement": "The inverse map sends `a : α` with `p a` to `Sum.inl ⟨a, h⟩` where `h : p a`.",
+        "note": "Uses decidability to branch; lands in the left summand when the predicate holds."
+      },
+      {
+        "point": "inverse_neg",
+        "statement": "The inverse map sends `a : α` with `¬ p a` to `Sum.inr ⟨a, h⟩` where `h : ¬ p a`.",
+        "note": "Uses decidability to branch; lands in the right summand when the predicate fails."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumCompl_apply_inl",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumCompl (· < 3) (Sum.inl ⟨(2 : Fin 5), by decide⟩) = (2 : Fin 5) := by decide",
+      "domain_inputs": {
+        "p": [
+          "(· < 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_apply_inr",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumCompl (· < 3) (Sum.inr ⟨(3 : Fin 5), by decide⟩) = (3 : Fin 5) := by decide",
+      "domain_inputs": {
+        "p": [
+          "(· < 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_apply_pos",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (· < 3)).symm (2 : Fin 5) = Sum.inl ⟨2, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "(· < 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_apply_neg",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (· < 3)).symm (3 : Fin 5) = Sum.inr ⟨3, by decide⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "(· < 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_always_true_symm",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumCompl (fun _ : Fin 3 => True)).symm (1 : Fin 3) = Sum.inl ⟨1, trivial⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "(fun _ : Fin 3 => True)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_accept_inl_element",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumCompl (· < 3) (Sum.inl ⟨(0 : Fin 5), by decide⟩) ∈ Finset.univ := by decide",
+      "domain_inputs": {
+        "p": [
+          "(· < 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.sumCompl (· < 3) (Sum.inl ⟨(0 : Fin 5), by decide⟩)"
+    },
+    {
+      "id": "sumCompl_symm_of_pos_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] {a : α} (h : p a), (VTask.sumCompl p).symm a = Sum.inl ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_of_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.sumCompl_symm_apply_of_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.53,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumCompl_symm_of_neg_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] {a : α} (h : ¬p a), (VTask.sumCompl p).symm a = Sum.inr ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.sumCompl_symm_apply_of_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.sumCompl_symm_apply_of_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.402,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.sumCompl",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.sumCompl-e3fdf6dd",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,360 @@
+{
+  "task_id": "SimpleGraph.cycleGraph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cycleGraph",
+  "signature": {
+    "name": "VTask.cycleGraph",
+    "type": "(n : ℕ) -> SimpleGraph (Fin n)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.cycleGraph 0 = ⊥, the empty graph on the empty vertex type Fin 0.",
+        "note": "No vertices exist, so no edges are possible."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.cycleGraph 1 = ⊥, the graph with one vertex and no edges.",
+        "note": "A simple graph forbids self-loops, so the single vertex has no neighbours."
+      },
+      {
+        "point": "n = 2",
+        "statement": "VTask.cycleGraph 2 = ⊤, the complete graph on Fin 2.",
+        "note": "The two vertices are mutually adjacent under the modular adjacency rule."
+      },
+      {
+        "point": "Modular arithmetic on Fin n",
+        "statement": "Adjacency is determined by modular subtraction on Fin n, making the graph genuinely cyclic with vertex 0 adjacent to vertex n-1.",
+        "note": "This is the standard convention for cycle graphs using Fin arithmetic."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cycleGraph_two_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.cycleGraph 2 = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.cycleGraph_two_eq_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.cycleGraph_two_eq_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.211,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleGraph_three_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.cycleGraph 3 = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.cycleGraph_three_eq_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.cycleGraph_three_eq_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.343,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleGraph_zero_no_adj",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ∀ u v : Fin 0, ¬(VTask.cycleGraph 0).Adj u v := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "∀ u v : Fin 0, ¬(VTask.cycleGraph 0).Adj u v"
+    },
+    {
+      "id": "cycleGraph_one_no_adj",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ∀ u v : Fin 1, ¬(VTask.cycleGraph 1).Adj u v := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "∀ u v : Fin 1, ¬(VTask.cycleGraph 1).Adj u v"
+    },
+    {
+      "id": "cycleGraph_two_adj",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleGraph 2).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.cycleGraph 2).Adj (0 : Fin 2) (1 : Fin 2)"
+    },
+    {
+      "id": "cycleGraph_five_degree",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleGraph 5).degree (0 : Fin 5) = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pathGraph_le_cycleGraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, SimpleGraph.pathGraph n ≤ VTask.cycleGraph n",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.pathGraph_le_cycleGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.pathGraph_le_cycleGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.181,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleGraph_not_acyclic_ge3",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, n ≥ 3 → ¬(VTask.cycleGraph n).IsAcyclic",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isAcyclic_iff_free_cycleGraph"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isAcyclic_iff_free_cycleGraph"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleGraph_degree_two_n5_v2",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleGraph 5).degree (2 : Fin 5) = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleGraph_three_adj_all_pairs",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleGraph 3).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.cycleGraph 3).Adj (0 : Fin 3) (2 : Fin 3)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.cycleGraph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.cycleGraph-26e8b938",
+    "review_status": "unreviewed"
+  }
+}

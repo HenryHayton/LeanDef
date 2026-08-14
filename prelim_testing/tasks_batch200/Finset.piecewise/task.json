@@ -1,0 +1,413 @@
+{
+  "task_id": "Finset.piecewise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piecewise",
+  "signature": {
+    "name": "VTask.piecewise",
+    "type": "{ι : Type u_1} -> {π : ι → Sort u_2} -> (s : Finset ι) -> (f g : (i : ι) → π i) -> [(j : ι) → Decidable (j ∈ s)] -> (i : ι) -> π i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "f",
+      "g",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "VTask.piecewise ∅ f g = g, because no index belongs to the empty set and g is used everywhere.",
+        "note": "Corresponds to Finset.piecewise_empty"
+      },
+      {
+        "point": "f = g",
+        "statement": "VTask.piecewise s f f = f, because both branches return the same function regardless of membership.",
+        "note": "Corresponds to Finset.piecewise_same"
+      },
+      {
+        "point": "s = {i} singleton",
+        "statement": "VTask.piecewise {i} f g = Function.update g i (f i), i.e., the result is g with the single index i changed to f i.",
+        "note": "Corresponds to Finset.piecewise_singleton"
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piecewise_mem_fact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise ({0, 1} : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 0 = 10 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_notmem_fact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise ({0, 1} : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 2 = 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "i": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_empty_fact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (∅ : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 1 = 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_univ_fact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Finset.univ : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 2 = 12 := by decide",
+      "domain_inputs": {
+        "s": [
+          "Finset.univ"
+        ],
+        "i": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_singleton_fact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise ({1} : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 1 = 11 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ],
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_singleton_offpoint",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise ({1} : Finset (Fin 3)) (fun i => i.val + 10) (fun i => i.val) 0 = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_eq_of_mem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {π : ι → Sort*} (s : Finset ι) (f g : (i : ι) → π i) [DecidablePred (· ∈ s)] (i : ι), i ∈ s → VTask.piecewise s f g i = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.piecewise_eq_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.piecewise_eq_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.023,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_eq_of_notmem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {π : ι → Sort*} (s : Finset ι) (f g : (i : ι) → π i) [DecidablePred (· ∈ s)] (i : ι), i ∉ s → VTask.piecewise s f g i = g i",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.piecewise_eq_of_notMem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.piecewise_eq_of_notMem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.687,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_same_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {π : ι → Sort*} (s : Finset ι) (f : (i : ι) → π i) [DecidablePred (· ∈ s)], VTask.piecewise s f f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.piecewise_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.piecewise_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.13,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_mem_Icc_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [inst : ∀ i, Preorder (α i)] (s : Finset ι) (f g : (i : ι) → α i) [DecidablePred (· ∈ s)], f ≤ g → VTask.piecewise s f g ∈ Set.Icc f g",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.piecewise_mem_Icc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.piecewise_mem_Icc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.402,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_reject_mem_clause",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise ({0} : Finset (Fin 2)) (fun _ => 1) (fun _ => 0) 1 ≠ 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ],
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.piecewise-e970b3ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.piecewise ({0} : Finset (Fin 2)) (fun _ => 1) (fun _ => 0) 1",
+      "violated_property": "i ∈ s implies piecewise s f g i = f i (index 1 is not in {0}, so the value is g 1 = 0, not f 1 = 1)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.piecewise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.piecewise-e970b3ae",
+    "review_status": "unreviewed"
+  }
+}

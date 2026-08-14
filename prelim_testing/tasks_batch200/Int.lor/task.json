@@ -1,0 +1,317 @@
+{
+  "task_id": "Int.lor",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lor",
+  "signature": {
+    "name": "VTask.lor",
+    "type": "ℤ → ℤ → ℤ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "Negative integers use two's-complement with infinite leading 1-bits",
+        "statement": "A negative integer -[k+1] is treated as having all bit positions above its magnitude set to 1, so VTask.lor (-1) n = -1 for all n : ℤ.",
+        "note": "This is the standard two's-complement extension of bitwise OR to ℤ."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lor_zero_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor 0 0 = 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "0"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_six_three",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor 6 3 = 7 := by decide",
+      "domain_inputs": {
+        "m": [
+          "6"
+        ],
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_five_five",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor 5 5 = 5 := by decide",
+      "domain_inputs": {
+        "m": [
+          "5"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_neg3_neg5",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor (-3) (-5) = -1 := by decide",
+      "domain_inputs": {
+        "m": [
+          "-3"
+        ],
+        "n": [
+          "-5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_testBit_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m n : ℤ, ∀ k : ℕ, Int.testBit (VTask.lor m n) k = (Int.testBit m k || Int.testBit n k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.testBit_lor"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.testBit_lor"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.077,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_neg_neg_is_neg",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor (-3) (-5) < 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "-3"
+        ],
+        "n": [
+          "-5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.lor (-3) (-5)"
+    },
+    {
+      "id": "lor_nonneg_nonneg_nonneg",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 0 ≤ VTask.lor 6 3 := by decide",
+      "domain_inputs": {
+        "m": [
+          "6"
+        ],
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.lor 6 3"
+    },
+    {
+      "id": "lor_neg1_not_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℤ, VTask.lor (-1) n ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.testBit_lor"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.testBit_lor"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lor_6_3_not_6",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lor 6 3 ≠ 6 := by decide",
+      "domain_inputs": {
+        "m": [
+          "6"
+        ],
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.lor-00037556",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Int.lor",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Int.lor-00037556",
+    "review_status": "unreviewed"
+  }
+}

@@ -712,7 +712,7 @@ def _author_from_dossier(
 
     fact_list: list[Fact] = [
         f.to_fact(
-            validation_status=schema_status(v.status),
+            validation_status=schema_status(v.status, f.mechanism),
             anchors_resolved=v.anchors_resolved,
             cached_script=v.winning_script,
             axiom_closure=v.axiom_closure,

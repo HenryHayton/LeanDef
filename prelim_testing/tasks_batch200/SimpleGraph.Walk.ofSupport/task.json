@@ -1,0 +1,152 @@
+{
+  "task_id": "SimpleGraph.Walk.ofSupport",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofSupport",
+  "signature": {
+    "name": "VTask.ofSupport",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> (l : List V) -> (hne : l ≠ []) -> (hchain : List.IsChain G.Adj l) -> G.Walk (l.head hne) (l.getLast hne)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "l ≠ []",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "singleton list",
+        "statement": "When l = [v] (a single-element list), VTask.ofSupport l hne hchain is the nil walk Walk.nil at v, with length 0.",
+        "note": "Base case of the recursive construction; no edge is traversed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofSupport_support_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (l : List V) (hne : l ≠ []) (hchain : List.IsChain G.Adj l), (VTask.ofSupport l hne hchain).support = l",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.support_ofSupport"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.support_ofSupport"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.379,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofSupport-7cbcc554",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSupport_length_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (l : List V) (hne : l ≠ []) (hchain : List.IsChain G.Adj l), (VTask.ofSupport l hne hchain).length = l.length - 1",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_ofSupport"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_ofSupport"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.27,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofSupport-7cbcc554",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSupport_support_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (l : List V) (hne : l ≠ []) (hchain : List.IsChain G.Adj l), (VTask.ofSupport l hne hchain).support ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.support_ofSupport",
+        "SimpleGraph.Walk.support_ne_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.support_ofSupport",
+        "SimpleGraph.Walk.support_ne_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.894,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofSupport-7cbcc554",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.ofSupport",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.ofSupport-7cbcc554",
+    "review_status": "unreviewed"
+  }
+}

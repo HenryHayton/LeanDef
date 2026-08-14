@@ -1,0 +1,219 @@
+{
+  "task_id": "Nat.Partition.ofSums",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofSums",
+  "signature": {
+    "name": "VTask.ofSums",
+    "type": "(n : ℕ) -> (l : Multiset ℕ) -> (hl : l.sum = n) -> n.Partition",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "l.sum = n",
+    "variables": [
+      "n",
+      "l",
+      "hl"
+    ],
+    "conventions": [
+      {
+        "point": "zero filtering",
+        "statement": "All zero entries in `l` are dropped from the parts of the resulting partition; `(VTask.ofSums n l hl).parts.count 0 = 0` always holds.",
+        "note": "Zeros are junk values in the sense of partitions (parts must be positive); they are silently discarded."
+      },
+      {
+        "point": "nonzero count preservation",
+        "statement": "For any `i ≠ 0`, `(VTask.ofSums n l hl).parts.count i = l.count i`; nonzero multiplicities are carried over unchanged.",
+        "note": "This is the complementary convention to zero-filtering: everything positive is kept exactly."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofSums_count_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : Multiset ℕ) (hl : l.sum = n), (VTask.ofSums n l hl).parts.count 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.154,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.ofSums-efd052de",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSums_count_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : Multiset ℕ) (hl : l.sum = n) (i : ℕ) (hi : i ≠ 0), (VTask.ofSums n l hl).parts.count i = l.count i",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.count_ofSums_of_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.count_ofSums_of_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.32,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.ofSums-efd052de",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSums_parts_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : Multiset ℕ) (hl : l.sum = n), (VTask.ofSums n l hl).parts.sum = n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.count_ofSums_of_ne_zero",
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.count_ofSums_of_ne_zero",
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.22,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.ofSums-efd052de",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSums_parts_no_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : Multiset ℕ) (hl : l.sum = n), 0 ∉ (VTask.ofSums n l hl).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.count_ofSums_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.136,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.ofSums-efd052de",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSums_no_zeros_means_parts_eq_l",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : Multiset ℕ) (hl : l.sum = n), (∀ i, (VTask.ofSums n l hl).parts.count i = l.count i) → (VTask.ofSums n l hl).parts = l",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.Partition.ofSums-efd052de",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.Partition.ofSums",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.Partition.ofSums-efd052de",
+    "review_status": "unreviewed"
+  }
+}

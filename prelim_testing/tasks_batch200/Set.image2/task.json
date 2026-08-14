@@ -1,0 +1,278 @@
+{
+  "task_id": "Set.image2",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.image2",
+  "signature": {
+    "name": "VTask.image2",
+    "type": "{α : Type u} -> {β : Type v} -> {γ : Type w} -> (f : α → β → γ) -> (s : Set α) -> (t : Set β) -> Set γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "VTask.image2 f ∅ t = ∅ for all f and t.",
+        "note": "No element of the empty set exists to serve as the first argument, so the binary image is empty."
+      },
+      {
+        "point": "t = ∅",
+        "statement": "VTask.image2 f s ∅ = ∅ for all f and s.",
+        "note": "No element of the empty set exists to serve as the second argument, so the binary image is empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "image2_empty_left_eq_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (t : Set β), VTask.image2 f ∅ t = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image2_empty_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image2_empty_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.871,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_empty_right_eq_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s : Set α), VTask.image2 f s ∅ = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image2_empty_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image2_empty_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.692,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_nonempty_implies_left_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s : Set α) (t : Set β), (VTask.image2 f s t).Nonempty → s.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Nonempty.of_image2_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Nonempty.of_image2_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.052,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_nonempty_implies_right_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s : Set α) (t : Set β), (VTask.image2 f s t).Nonempty → t.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Nonempty.of_image2_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Nonempty.of_image2_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.711,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_subset_monotone_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s s' : Set α) (t : Set β), s ⊆ s' → VTask.image2 f s t ⊆ VTask.image2 f s' t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image2_subset_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image2_subset_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.749,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_subset_monotone_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s : Set α) (t t' : Set β), t ⊆ t' → VTask.image2 f s t ⊆ VTask.image2 f s t'",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image2_subset_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image2_subset_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.087,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "image2_union_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β → γ) (s s' : Set α) (t : Set β), VTask.image2 f (s ∪ s') t = VTask.image2 f s t ∪ VTask.image2 f s' t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image2_union_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image2_union_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.341,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.image2-65d8c81a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.image2",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.image2-65d8c81a",
+    "review_status": "unreviewed"
+  }
+}

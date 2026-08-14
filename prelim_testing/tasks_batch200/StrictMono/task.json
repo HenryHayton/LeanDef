@@ -1,0 +1,351 @@
+{
+  "task_id": "StrictMono",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.StrictMono",
+  "signature": {
+    "name": "VTask.StrictMono",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: StrictMono is a universally-quantified Prop over all functions between preorders with no junk-value inputs or distinguished edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strictmono_id_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StrictMono (id : ℕ → ℕ)",
+      "domain_inputs": {
+        "f": [
+          "id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.058,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "id"
+    },
+    {
+      "id": "strictmono_double_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StrictMono (fun n : ℕ => 2 * n)",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => 2 * n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun n : ℕ => 2 * n"
+    },
+    {
+      "id": "strictmono_pred_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.StrictMono (fun n : ℕ => n / 2)",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n / 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun n : ℕ => n / 2",
+      "violated_property": "f a < f b whenever a < b"
+    },
+    {
+      "id": "strictmono_neg_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.StrictMono (fun n : ℤ => -n)",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℤ => -n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun n : ℤ => -n",
+      "violated_property": "f a < f b whenever a < b"
+    },
+    {
+      "id": "strictmono_implies_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.StrictMono f → Monotone f",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMono.monotone"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMono.monotone"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmono_not_iff_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ f : ℕ → ℕ, Monotone f ∧ ¬ VTask.StrictMono f",
+      "domain_inputs": {},
+      "anchors": [
+        "monotone_const"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "monotone_const"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmono_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [LinearOrder α] [Preorder β] (f : α → β), VTask.StrictMono f → Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMono.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMono.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.074,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmono_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ), VTask.StrictMono f → VTask.StrictMono g → VTask.StrictMono (g ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMono.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMono.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.266,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmono_id_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α], VTask.StrictMono (id : α → α)",
+      "domain_inputs": {},
+      "anchors": [
+        "strictMono_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "strictMono_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.191,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmono_succ_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StrictMono Nat.succ",
+      "domain_inputs": {
+        "f": [
+          "Nat.succ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Nat.succ"
+    },
+    {
+      "id": "strictmono_const_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.StrictMono (fun _ : ℕ => (0 : ℕ))",
+      "domain_inputs": {
+        "f": [
+          "fun _ : ℕ => (0 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMono-a0dbb0be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun _ : ℕ => (0 : ℕ)",
+      "violated_property": "f a < f b whenever a < b"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "StrictMono",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "StrictMono-a0dbb0be",
+    "review_status": "unreviewed"
+  }
+}

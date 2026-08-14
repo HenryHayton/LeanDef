@@ -1,0 +1,184 @@
+{
+  "task_id": "DirectedOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.DirectedOn",
+  "signature": {
+    "name": "VTask.DirectedOn",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "empty set",
+        "statement": "VTask.DirectedOn r ∅ is vacuously true for any relation r, since the universal quantifier over elements of ∅ has no witnesses to discharge.",
+        "note": "Standard vacuous truth; no junk value is introduced."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "directedOn_total_implies_all_sets",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (r : α → α → Prop) [Std.Total r] (s : Set α), VTask.DirectedOn r s",
+      "domain_inputs": {},
+      "anchors": [
+        "Std.Total.directedOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Std.Total.directedOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.359,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectedOn-c3490c64",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "directedOn_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) {s t : Set α}, VTask.DirectedOn r t → s ⊆ t → VTask.DirectedOn r s",
+      "domain_inputs": {},
+      "anchors": [
+        "DirectedOn.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DirectedOn.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DirectedOn-c3490c64",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "directedOn_univ_iff_directed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), VTask.DirectedOn r Set.univ ↔ Directed r id",
+      "domain_inputs": {},
+      "anchors": [
+        "directedOn_univ_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "directedOn_univ_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DirectedOn-c3490c64",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "directedOn_le_preimage_of_directed_Iic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] {s : Set α}, VTask.DirectedOn (· ≤ ·) s → ∀ x ∈ s, ∀ y ∈ s, (Set.Iic x ∩ s).Nonempty ∨ (Set.Ici x ∩ s).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.nonempty_Ici"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.nonempty_Ici"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DirectedOn-c3490c64",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "directedOn_range_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α ι : Type*} {r : α → α → Prop} {f : ι → α}, VTask.DirectedOn r (Set.range f) ↔ Directed r f",
+      "domain_inputs": {},
+      "anchors": [
+        "directedOn_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "directedOn_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.587,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectedOn-c3490c64",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DirectedOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DirectedOn-c3490c64",
+    "review_status": "unreviewed"
+  }
+}

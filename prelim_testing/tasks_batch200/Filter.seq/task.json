@@ -1,0 +1,312 @@
+{
+  "task_id": "Filter.seq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.seq",
+  "signature": {
+    "name": "VTask.seq",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (f : Filter (α → β)) -> (g : Filter α) -> Filter β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.seq is a total operation on all pairs of filters with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "seq_mem_iff_witnesses",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : Filter (α → β)) (g : Filter α) (s : Set β), s ∈ VTask.seq f g ↔ ∃ u ∈ f, ∃ t ∈ g, Set.seq u t ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.mem_seq_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.mem_seq_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.753,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {f₁ f₂ : Filter (α → β)} {g₁ g₂ : Filter α}, f₁ ≤ f₂ → g₁ ≤ g₂ → VTask.seq f₁ g₁ ≤ VTask.seq f₂ g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.seq_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.seq_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.86,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_prod_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : Filter α) (g : Filter β), f ×ˢ g = VTask.seq (Filter.map Prod.mk f) g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.prod_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.prod_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.37,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_comm_prod_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : Filter α) (g : Filter β), VTask.seq (Filter.map Prod.mk f) g = VTask.seq (Filter.map (fun b a => (a, b)) g) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.prod_map_seq_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.prod_map_seq_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.369,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_le_of_forall",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {f : Filter (α → β)} {g : Filter α} {h : Filter β}, (∀ t ∈ f, ∀ u ∈ g, Set.seq t u ∈ h) → h ≤ VTask.seq f g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.le_seq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.le_seq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.402,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_mono_first_arg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {f₁ f₂ : Filter (α → β)} (g : Filter α), f₁ ≤ f₂ → VTask.seq f₁ g ≤ VTask.seq f₂ g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.seq_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.seq_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.521,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_mono_second_arg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : Filter (α → β)) {g₁ g₂ : Filter α}, g₁ ≤ g₂ → VTask.seq f g₁ ≤ VTask.seq f g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.seq_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.seq_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.308,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seq_bot_left_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (g : Filter α), VTask.seq (⊥ : Filter (α → β)) g = ⊥",
+      "domain_inputs": {
+        "f": [
+          "⊥"
+        ],
+        "g": [
+          "⊥"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.seq-0830668d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.seq (⊥ : Filter (Nat → Nat)) ⊥"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.seq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.seq-0830668d",
+    "review_status": "unreviewed"
+  }
+}

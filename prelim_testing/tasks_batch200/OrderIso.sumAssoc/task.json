@@ -1,0 +1,282 @@
+{
+  "task_id": "OrderIso.sumAssoc",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumAssoc",
+  "signature": {
+    "name": "VTask.sumAssoc",
+    "type": "(α : Type u_10) -> (β : Type u_11) -> (γ : Type u_12) -> [LE α] -> [LE β] -> [LE γ] -> (α ⊕ β) ⊕ γ ≃o α ⊕ β ⊕ γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α",
+      "β",
+      "γ"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all triples of LE-equipped types; the ordering on disjoint sums has no junk values or special boundary conventions beyond the standard sum order (elements from different summands are incomparable)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumAssoc_is_order_iso",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β γ : Type*) [LE α] [LE β] [LE γ], Function.Bijective (VTask.sumAssoc α β γ).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderIso.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderIso.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumAssoc_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β γ : Type*) [LE α] [LE β] [LE γ] (x y : (α ⊕ β) ⊕ γ), x ≤ y ↔ VTask.sumAssoc α β γ x ≤ VTask.sumAssoc α β γ y",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderIso.le_iff_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderIso.le_iff_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.019,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumAssoc_nat_accept_inl_inl",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inl 3)) = Sum.inl 3 := by decide",
+      "domain_inputs": {
+        "α": [
+          "ℕ"
+        ],
+        "β": [
+          "ℕ"
+        ],
+        "γ": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inl 3)) = Sum.inl 3"
+    },
+    {
+      "id": "sumAssoc_nat_accept_inl_inr",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inr 5)) = Sum.inr (Sum.inl 5) := by decide",
+      "domain_inputs": {
+        "α": [
+          "ℕ"
+        ],
+        "β": [
+          "ℕ"
+        ],
+        "γ": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inr 5)) = Sum.inr (Sum.inl 5)"
+    },
+    {
+      "id": "sumAssoc_nat_accept_inr",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumAssoc ℕ ℕ ℕ (Sum.inr 7) = Sum.inr (Sum.inr 7) := by decide",
+      "domain_inputs": {
+        "α": [
+          "ℕ"
+        ],
+        "β": [
+          "ℕ"
+        ],
+        "γ": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.sumAssoc ℕ ℕ ℕ (Sum.inr 7) = Sum.inr (Sum.inr 7)"
+    },
+    {
+      "id": "sumAssoc_nat_reject_inl_inl_ne_inr",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inl 3)) = Sum.inr (Sum.inr 3)) := by decide",
+      "domain_inputs": {
+        "α": [
+          "ℕ"
+        ],
+        "β": [
+          "ℕ"
+        ],
+        "γ": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.sumAssoc ℕ ℕ ℕ (Sum.inl (Sum.inl 3)) = Sum.inr (Sum.inr 3)",
+      "violated_property": "inl (inl a) maps to inl a, not inr (inr a)"
+    },
+    {
+      "id": "sumAssoc_nat_reject_inr_ne_inl",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.sumAssoc ℕ ℕ ℕ (Sum.inr 2) = Sum.inl 2) := by decide",
+      "domain_inputs": {
+        "α": [
+          "ℕ"
+        ],
+        "β": [
+          "ℕ"
+        ],
+        "γ": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.sumAssoc ℕ ℕ ℕ (Sum.inr 2) = Sum.inl 2",
+      "violated_property": "inr c maps to inr (inr c), not inl c"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "OrderIso.sumAssoc",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "OrderIso.sumAssoc-69f5b600",
+    "review_status": "unreviewed"
+  }
+}

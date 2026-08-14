@@ -1,0 +1,299 @@
+{
+  "task_id": "Sublattice.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{κ : Type u_5} -> {π : κ → Type u_6} -> [(i : κ) → Lattice (π i)] -> (s : Set κ) -> (L : (i : κ) → Sublattice (π i)) -> Sublattice ((i : κ) → π i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "L"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "VTask.pi ∅ L equals the top sublattice ⊤ of (i : κ) → π i, because no index is controlled.",
+        "note": "Boundary: empty controlling set means no constraint on any coordinate."
+      },
+      {
+        "point": "s = Set.univ",
+        "statement": "VTask.pi Set.univ L is the full product of the sublattices L i, constraining every coordinate.",
+        "note": "Boundary: universal controlling set enforces membership in L i for all i."
+      },
+      {
+        "point": "L i = ⊥ for some i ∈ s with s = Set.univ",
+        "statement": "VTask.pi Set.univ L = ⊥ whenever L i = ⊥ for some index i.",
+        "note": "Follows from pi_univ_eq_bot; a single collapsed fiber forces the product to collapse."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_mem_empty_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (L : (i : κ) → Sublattice (π i)), VTask.pi ∅ L = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.le_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.le_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.665,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_eq_bot_from_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (L : (i : κ) → Sublattice (π i)) (i : κ), L i = ⊥ → VTask.pi Set.univ L = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.pi_univ_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.pi_univ_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.295,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_monotone_in_L",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (s : Set κ) (L L' : (i : κ) → Sublattice (π i)), (∀ i ∈ s, L i ≤ L' i) → VTask.pi s L ≤ VTask.pi s L'",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.le_pi"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.le_pi"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_antitone_in_s",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (s t : Set κ) (L : (i : κ) → Sublattice (π i)), s ⊆ t → VTask.pi t L ≤ VTask.pi s L",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.le_pi"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.le_pi"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_le_pi_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (s : Set κ) (L : (i : κ) → Sublattice (π i)) (M : Sublattice ((i : κ) → π i)), M ≤ VTask.pi s L ↔ ∀ i ∈ s, M ≤ Sublattice.comap (Pi.evalLatticeHom i) (L i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.le_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.le_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.456,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_sup_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (κ : Type) (π : κ → Type) [inst : (i : κ) → Lattice (π i)] (L : (i : κ) → Sublattice (π i)) (f g : (i : κ) → π i), f ∈ VTask.pi Set.univ L → g ∈ VTask.pi Set.univ L → f ⊔ g ∈ VTask.pi Set.univ L",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.le_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.le_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.595,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_reject_univ_coord_not_in_fiber",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (fun _ : Fin 1 => (⊤ : Bool)) ∈ VTask.pi Set.univ (fun _ : Fin 1 => (⊥ : Sublattice Bool))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.111,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun _ : Fin 1 => (⊤ : Bool)",
+      "violated_property": "f i ∈ L i for all i ∈ s"
+    },
+    {
+      "id": "pi_univ_neq_top_when_fiber_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : Fin 1 → Sublattice Bool), (∀ i, L i = ⊥) → VTask.pi Set.univ L ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Sublattice.pi_univ_eq_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sublattice.pi_univ_eq_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sublattice.pi-dbeadb3d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Sublattice.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Sublattice.pi-dbeadb3d",
+    "review_status": "unreviewed"
+  }
+}

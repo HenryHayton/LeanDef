@@ -1,0 +1,120 @@
+{
+  "task_id": "SimpleGraph.Walk.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v u' v' : V} -> (p : G.Walk u v) -> (hu : u = u') -> (hv : v = v') -> G.Walk u' v'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "hu",
+      "hv"
+    ],
+    "conventions": [
+      {
+        "point": "copy_rfl_rfl",
+        "statement": "When both equality proofs are `rfl`, `p.copy rfl rfl` is definitionally and propositionally equal to `p` itself.",
+        "note": "Established by the theorem `copy_rfl_rfl`."
+      },
+      {
+        "point": "simp_normal_form",
+        "statement": "The simp-normal form pushes `copy` outward through walk constructors such as `cons` and `append`, so that computations happen inside the copy context.",
+        "note": "This is the declared design convention for the function."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_rfl_rfl_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 0)).copy rfl rfl = SimpleGraph.Walk.nil := by decide",
+      "domain_inputs": {
+        "p": [
+          "SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 0)"
+        ],
+        "hu": [
+          "rfl"
+        ],
+        "hv": [
+          "rfl"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.copy-5ce9e05d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 0)).copy rfl rfl"
+    },
+    {
+      "id": "copy_length_zero_nil",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ((SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 1)).copy rfl rfl).length = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 1)"
+        ],
+        "hu": [
+          "rfl"
+        ],
+        "hv": [
+          "rfl"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.copy-5ce9e05d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "((SimpleGraph.Walk.nil (G := SimpleGraph.completeGraph (Fin 3)) (u := 1)).copy rfl rfl).length"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.copy-5ce9e05d",
+    "review_status": "unreviewed"
+  }
+}

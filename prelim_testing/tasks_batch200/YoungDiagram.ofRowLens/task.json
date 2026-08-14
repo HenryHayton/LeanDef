@@ -1,0 +1,362 @@
+{
+  "task_id": "YoungDiagram.ofRowLens",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofRowLens",
+  "signature": {
+    "name": "VTask.ofRowLens",
+    "type": "(w : List ℕ) -> (hw : w.SortedGE) -> YoungDiagram",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "w.SortedGE",
+    "variables": [
+      "w",
+      "hw"
+    ],
+    "conventions": [
+      {
+        "point": "trailing zeros in w",
+        "statement": "If w contains trailing zero entries, the construction succeeds and those rows contribute no cells; however, the canonical rowLens of the resulting Young diagram omits trailing zeros, so ofRowLens w hw and ofRowLens w' hw' can be equal even when w ≠ w' if they differ only in trailing zeros.",
+        "note": "This is the standard junk-value convention for row-lens representations of Young diagrams."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofRowLens_cell_accept_321",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0, 2) ∈ VTask.ofRowLens [3, 2, 1] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[3, 2, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0, 2)"
+    },
+    {
+      "id": "ofRowLens_cell_reject_321_row1",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (1, 2) ∉ VTask.ofRowLens [3, 2, 1] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[3, 2, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(1, 2)",
+      "violated_property": "j < w[i]: row 1 has width 2, so column 2 is out of bounds"
+    },
+    {
+      "id": "ofRowLens_cell_reject_321_row_oob",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (3, 0) ∉ VTask.ofRowLens [3, 2, 1] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[3, 2, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(3, 0)",
+      "violated_property": "i < w.length: row index 3 equals w.length = 3"
+    },
+    {
+      "id": "ofRowLens_cell_accept_21_row1",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (1, 0) ∈ VTask.ofRowLens [2, 1] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[2, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1, 0)"
+    },
+    {
+      "id": "ofRowLens_cell_reject_21_row2",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (2, 0) ∉ VTask.ofRowLens [2, 1] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[2, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(2, 0)",
+      "violated_property": "i < w.length: row index 2 equals w.length = 2"
+    },
+    {
+      "id": "ofRowLens_allzero_no_cell",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0, 0) ∉ VTask.ofRowLens [0, 0, 0] (by decide) := by decide",
+      "domain_inputs": {
+        "w": [
+          "[0, 0, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0, 0)",
+      "violated_property": "j < w[i]: all row widths are 0 so no column index is valid"
+    },
+    {
+      "id": "ofRowLens_rowLen_correct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (w : List ℕ) (hw : w.SortedGE) (i : Fin w.length), (VTask.ofRowLens w hw).rowLen i = w[i]",
+      "domain_inputs": {},
+      "anchors": [
+        "YoungDiagram.rowLen_ofRowLens"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "YoungDiagram.rowLen_ofRowLens"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.787,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofRowLens_rowLens_roundtrip_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (w : List ℕ) (hw : w.SortedGE), (∀ x ∈ w, 0 < x) → (VTask.ofRowLens w hw).rowLens = w",
+      "domain_inputs": {},
+      "anchors": [
+        "YoungDiagram.rowLens_ofRowLens_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "YoungDiagram.rowLens_ofRowLens_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.441,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofRowLens_rowLens_length_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (w : List ℕ) (hw : w.SortedGE), (∀ x ∈ w, 0 < x) → (VTask.ofRowLens w hw).rowLens.length = w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "YoungDiagram.rowLens_length_ofRowLens"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "YoungDiagram.rowLens_length_ofRowLens"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.438,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofRowLens_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (w : List ℕ) (hw : w.SortedGE) (c : ℕ × ℕ), c ∈ VTask.ofRowLens w hw ↔ ∃ h : c.fst < w.length, c.snd < w[c.fst]",
+      "domain_inputs": {},
+      "anchors": [
+        "YoungDiagram.mem_ofRowLens"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "YoungDiagram.mem_ofRowLens"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.371,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "YoungDiagram.ofRowLens",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "YoungDiagram.ofRowLens-7dc8d861",
+    "review_status": "unreviewed"
+  }
+}

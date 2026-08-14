@@ -1,0 +1,253 @@
+{
+  "task_id": "Set.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_2} -> (s : Set ι) -> (t : (i : ι) → Set (α i)) -> Set ((i : ι) → α i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "When the active index set is empty, VTask.pi ∅ t = Set.univ for any family t, because membership is vacuously satisfied.",
+        "note": "Edge convention: no constraint is imposed when s is empty."
+      },
+      {
+        "point": "t i = Set.univ for all i",
+        "statement": "When every slice is the universal set, VTask.pi s t = Set.univ regardless of s.",
+        "note": "Edge convention: unconstrained slices impose no restriction."
+      },
+      {
+        "point": "t i = ∅ for some i ∈ s",
+        "statement": "When any active coordinate has an empty slice, VTask.pi s t = ∅ because no function can satisfy f i ∈ ∅.",
+        "note": "Edge convention: an empty slice at an active index kills the entire pi set."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_empty_index_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (t : ∀ i, Set (α i)), VTask.pi (∅ : Set ι) t = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.empty_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.empty_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.35,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_empty_slice_active_eq_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)) (i : ι), i ∈ s → t i = ∅ → VTask.pi s t = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pi_eq_empty_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pi_eq_empty_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.608,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_slices_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι), VTask.pi s (fun i => (Set.univ : Set (α i))) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pi_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pi_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.153,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_mono_active_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s₁ s₂ : Set ι) (t : ∀ i, Set (α i)), s₁ ⊆ s₂ → VTask.pi s₂ t ⊆ VTask.pi s₁ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pi_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pi_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.839,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_inter_distrib",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t₁ t₂ : ∀ i, Set (α i)), VTask.pi s t₁ ∩ VTask.pi s t₂ = VTask.pi s (fun i => t₁ i ∩ t₂ i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pi_inter_distrib"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pi_inter_distrib"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.801,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_subset_of_fewer_constraints",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)), VTask.pi Set.univ t ⊆ VTask.pi s t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pi_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pi_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.717,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.pi-db505700",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.pi-db505700",
+    "review_status": "unreviewed"
+  }
+}

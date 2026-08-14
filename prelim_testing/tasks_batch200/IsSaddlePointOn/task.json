@@ -1,0 +1,352 @@
+{
+  "task_id": "IsSaddlePointOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSaddlePointOn",
+  "signature": {
+    "name": "VTask.IsSaddlePointOn",
+    "type": "{E : Type u_1} -> {F : Type u_2} -> {β : Type u_3} -> (X : Set E) -> (Y : Set F) -> (f : E → F → β) -> [Preorder β] -> (a : E) -> (b : F) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "X",
+      "Y",
+      "f",
+      "a",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "membership not required",
+        "statement": "The predicate VTask.IsSaddlePointOn X Y f a b does not require a ∈ X or b ∈ Y; it only asserts ∀ x ∈ X, ∀ y ∈ Y, f a y ≤ f x b.",
+        "note": "Explicitly stated in the docstring: 'we do not require that a ∈ X and b ∈ Y'."
+      },
+      {
+        "point": "vacuous truth on empty sets",
+        "statement": "If X = ∅ or Y = ∅ then VTask.IsSaddlePointOn X Y f a b holds for all a, b, f by vacuous universal quantification.",
+        "note": "Standard behaviour of ∀ over an empty set in Lean/Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "saddle_swap_left_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [Preorder β] (X : Set E) (Y : Set F) (f : E → F → β) {a a' : E} {b b' : F}, a' ∈ X → b ∈ Y → VTask.IsSaddlePointOn X Y f a b → VTask.IsSaddlePointOn X Y f a' b' → VTask.IsSaddlePointOn X Y f a b'",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSaddlePointOn.swap_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSaddlePointOn.swap_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_swap_right_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [Preorder β] (X : Set E) (Y : Set F) (f : E → F → β) {a a' : E} {b b' : F}, a ∈ X → b' ∈ Y → VTask.IsSaddlePointOn X Y f a b → VTask.IsSaddlePointOn X Y f a' b' → VTask.IsSaddlePointOn X Y f a' b",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSaddlePointOn.swap_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSaddlePointOn.swap_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_iff_complete_linear_order",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [CompleteLinearOrder β] (X : Set E) (Y : Set F) (f : E → F → β) {a : E} {b : F}, a ∈ X → b ∈ Y → (VTask.IsSaddlePointOn X Y f a b ↔ (⨆ y ∈ Y, f a y) ≤ (⨅ x ∈ X, f x b))",
+      "domain_inputs": {},
+      "anchors": [
+        "isSaddlePointOn_iff'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isSaddlePointOn_iff'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.616,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_implies_ge_row",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [Preorder β] (X : Set E) (Y : Set F) (f : E → F → β) (a : E) (b : F), VTask.IsSaddlePointOn X Y f a b → ∀ y ∈ Y, ∀ x ∈ X, f a y ≤ f x b",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSaddlePointOn.swap_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSaddlePointOn.swap_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.981,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_minimax_value_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [CompleteLinearOrder β] (X : Set E) (Y : Set F) (f : E → F → β) {a : E} {b : F}, a ∈ X → b ∈ Y → VTask.IsSaddlePointOn X Y f a b → (⨅ x ∈ X, ⨆ y ∈ Y, f x y) = f a b",
+      "domain_inputs": {},
+      "anchors": [
+        "isSaddlePointOn_value"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isSaddlePointOn_value"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_both_swap_produces_new_saddle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E F β : Type*} [Preorder β] (X : Set E) (Y : Set F) (f : E → F → β) {a a' : E} {b b' : F}, a' ∈ X → b ∈ Y → a ∈ X → b' ∈ Y → VTask.IsSaddlePointOn X Y f a b → VTask.IsSaddlePointOn X Y f a' b' → VTask.IsSaddlePointOn X Y f a' b",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSaddlePointOn.swap_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSaddlePointOn.swap_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.403,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "saddle_diff_function_positive_quadrant",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsSaddlePointOn {x : ℝ | x ≥ 0} {y : ℝ | y ≥ 0} (fun x y => x - y) 0 0",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsSaddlePointOn {x : ℝ | x ≥ 0} {y : ℝ | y ≥ 0} (fun x y => x - y) 0 0"
+    },
+    {
+      "id": "saddle_diff_function_reject_wrong_point",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsSaddlePointOn {x : ℝ | x ≥ 0} {y : ℝ | y ≥ 0} (fun x y => x - y) 1 0",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsSaddlePointOn {x : ℝ | x ≥ 0} {y : ℝ | y ≥ 0} (fun x y => x - y) 1 0",
+      "violated_property": "f a y ≤ f x b for all x ∈ X, y ∈ Y"
+    },
+    {
+      "id": "saddle_reject_not_min_row",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsSaddlePointOn (Set.univ : Set ℝ) (Set.univ : Set ℝ) (fun x y => x + y) 0 0",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsSaddlePointOn Set.univ Set.univ (fun x y => x + y) 0 0",
+      "violated_property": "f a y ≤ f x b for all x ∈ X, y ∈ Y"
+    },
+    {
+      "id": "saddle_outside_domain_allowed",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsSaddlePointOn {x : ℝ | x ≥ 1} {y : ℝ | y ≥ 1} (fun x y => x - y) 0 0",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsSaddlePointOn-f435dcd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsSaddlePointOn {x : ℝ | x ≥ 1} {y : ℝ | y ≥ 1} (fun x y => x - y) 0 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsSaddlePointOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsSaddlePointOn-f435dcd9",
+    "review_status": "unreviewed"
+  }
+}

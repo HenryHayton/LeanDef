@@ -1,0 +1,312 @@
+{
+  "task_id": "Combinatorics.Subspace.IsMono",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsMono",
+  "signature": {
+    "name": "VTask.IsMono",
+    "type": "{η : Type u_5} -> {α : Type u_6} -> {ι : Type u_7} -> {κ : Type u_8} -> (C : (ι → α) → κ) -> (l : Combinatorics.Subspace η α ι) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsMono is a Prop-valued existential with no junk-value conventions; edge cases (empty η, singleton κ, etc.) are handled by ordinary logic without any special definitional convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ismono_implies_exists_color",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η α ι κ : Type*} (C : (ι → α) → κ) (l : Combinatorics.Subspace η α ι), VTask.IsMono C l → ∃ c : κ, ∀ p : η → α, C (l p) = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.72,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_reindex",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η η' α α' ι ι' κ : Type*} {eη : η ≃ η'} {eα : α ≃ α'} {eι : ι ≃ ι'} {C : (ι → α) → κ} {l : Combinatorics.Subspace η α ι}, VTask.IsMono C l → VTask.IsMono (fun x => C (eα.symm ∘ x ∘ eι)) (l.reindex eη eα eι)",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.012,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_hales_jewett_fin",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α κ η : Type*) [Finite α] [Finite κ] [Finite η], ∃ n : ℕ, ∀ C : (Fin n → α) → κ, ∃ l : Combinatorics.Subspace η α (Fin n), VTask.IsMono C l",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension_fin"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension_fin"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.583,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_hales_jewett_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α κ η : Type*) [Finite α] [Finite κ] [Finite η], ∃ (ι : Type) (_ : Fintype ι), ∀ C : (ι → α) → κ, ∃ l : Combinatorics.Subspace η α ι, VTask.IsMono C l",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.824,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_single_point_trivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α ι κ : Type*} (C : (ι → α) → κ) (l : Combinatorics.Subspace Empty α ι), VTask.IsMono C l",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_monotone_witness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η α ι κ : Type*} {C : (ι → α) → κ} {l : Combinatorics.Subspace η α ι} (h : VTask.IsMono C l) (p : η → α), ∃ c : κ, C (l p) = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.945,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_same_color_all_pairs",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η α ι κ : Type*} {C : (ι → α) → κ} {l : Combinatorics.Subspace η α ι}, VTask.IsMono C l → ∀ (p q : η → α), C (l p) = C (l q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_unique_color_prop",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η α ι κ : Type*} {C : (ι → α) → κ} {l : Combinatorics.Subspace η α ι} (h : VTask.IsMono C l) (p q : η → α), C (l p) = C (l q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.IsMono.reindex"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismono_reject_two_color_coloring",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (C : (Fin 2 → Fin 2) → Fin 2) (l : Combinatorics.Subspace (Fin 2) (Fin 2) (Fin 2)), ¬ VTask.IsMono C l",
+      "domain_inputs": {},
+      "anchors": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension_fin"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Combinatorics.Subspace.exists_mono_in_high_dimension_fin"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Combinatorics.Subspace.IsMono",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Combinatorics.Subspace.IsMono-0d27a5c1",
+    "review_status": "unreviewed"
+  }
+}

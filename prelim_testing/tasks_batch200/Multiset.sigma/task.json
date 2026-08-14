@@ -1,0 +1,211 @@
+{
+  "task_id": "Multiset.sigma",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sigma",
+  "signature": {
+    "name": "VTask.sigma",
+    "type": "{α : Type u_1} -> {σ : α → Type u_4} -> (s : Multiset α) -> (t : (a : α) → Multiset (σ a)) -> Multiset ((a : α) × σ a)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.sigma is a total function on all multisets and fibre families; no junk-value or out-of-domain conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sigma_empty_left",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sigma (0 : Multiset ℕ) (fun a => ({a} : Multiset ℕ)) = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.sigma-21f195dc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_card_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {σ : α → Type*} (s : Multiset α) (t : ∀ a, Multiset (σ a)), Multiset.card (VTask.sigma s t) = Multiset.sum (Multiset.map (fun a => Multiset.card (t a)) s)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.card_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.card_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.458,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.sigma-21f195dc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_add_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {σ : α → Type*} (s₁ s₂ : Multiset α) (t : ∀ a, Multiset (σ a)), VTask.sigma (s₁ + s₂) t = VTask.sigma s₁ t + VTask.sigma s₂ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.add_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.add_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.355,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.sigma-21f195dc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_add_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {σ : α → Type*} (s : Multiset α) (t u : ∀ a, Multiset (σ a)), VTask.sigma s (fun a => t a + u a) = VTask.sigma s t + VTask.sigma s u",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.sigma_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.sigma_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.357,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.sigma-21f195dc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_nodup_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {σ : α → Type*} (s : Multiset α) (t : ∀ a, Multiset (σ a)), Multiset.Nodup s → (∀ a, Multiset.Nodup (t a)) → Multiset.Nodup (VTask.sigma s t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Nodup.sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.Nodup.sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.615,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.sigma-21f195dc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.sigma",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.sigma-21f195dc",
+    "review_status": "unreviewed"
+  }
+}

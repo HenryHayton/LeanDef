@@ -1,0 +1,542 @@
+{
+  "task_id": "Nat.IsAlmostPrime",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsAlmostPrime",
+  "signature": {
+    "name": "VTask.IsAlmostPrime",
+    "type": "(k n : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "k",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "0 is not IsAlmostPrime k 0 for any k; the predicate explicitly requires n ≠ 0.",
+        "note": "Junk-value exclusion: the prime-factor count Ω 0 is conventionally problematic, so 0 is ruled out by the nonzero side condition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "almost_prime_zero_iff_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.IsAlmostPrime 0 n ↔ n = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.isAlmostPrime_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.isAlmostPrime_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.207,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "almost_prime_one_iff_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.IsAlmostPrime 1 n ↔ n.Prime",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.isAlmostPrime_one_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.isAlmostPrime_one_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "almost_prime_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ k l m n : ℕ, VTask.IsAlmostPrime k m → VTask.IsAlmostPrime l n → VTask.IsAlmostPrime (k + l) (m * n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.IsAlmostPrime.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.IsAlmostPrime.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.69,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prime_sq_is_two_almost_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : ℕ, p.Prime → VTask.IsAlmostPrime 2 (p ^ 2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Prime.sq_isAlmostPrime_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Prime.sq_isAlmostPrime_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.374,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "almost_prime_product_two_primes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p q : ℕ, p.Prime → q.Prime → VTask.IsAlmostPrime 2 (p * q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Prime.mul_isAlmostPrime_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Prime.mul_isAlmostPrime_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.167,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "almost_prime_zero_one_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAlmostPrime 0 1",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.027,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAlmostPrime 0 1"
+    },
+    {
+      "id": "almost_prime_zero_two_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAlmostPrime 0 2",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.046,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAlmostPrime 0 2",
+      "violated_property": "n must have exactly 0 prime factors (i.e., n = 1)"
+    },
+    {
+      "id": "almost_prime_zero_zero_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAlmostPrime 0 0",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.042,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAlmostPrime 0 0",
+      "violated_property": "n must be nonzero"
+    },
+    {
+      "id": "almost_prime_one_two_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAlmostPrime 1 2",
+      "domain_inputs": {
+        "k": [
+          "1"
+        ],
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.026,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAlmostPrime 1 2"
+    },
+    {
+      "id": "almost_prime_one_seven_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAlmostPrime 1 7",
+      "domain_inputs": {
+        "k": [
+          "1"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.024,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAlmostPrime 1 7"
+    },
+    {
+      "id": "almost_prime_one_one_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAlmostPrime 1 1",
+      "domain_inputs": {
+        "k": [
+          "1"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.033,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAlmostPrime 1 1",
+      "violated_property": "n must have exactly 1 prime factor; 1 has none"
+    },
+    {
+      "id": "almost_prime_two_six_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAlmostPrime 2 6",
+      "domain_inputs": {
+        "k": [
+          "2"
+        ],
+        "n": [
+          "6"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAlmostPrime 2 6"
+    },
+    {
+      "id": "almost_prime_two_four_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAlmostPrime 2 4",
+      "domain_inputs": {
+        "k": [
+          "2"
+        ],
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAlmostPrime 2 4"
+    },
+    {
+      "id": "almost_prime_two_prime_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAlmostPrime 2 5",
+      "domain_inputs": {
+        "k": [
+          "2"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAlmostPrime 2 5",
+      "violated_property": "n must have exactly 2 prime factors; 5 is prime with 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.IsAlmostPrime",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.IsAlmostPrime-aa050790",
+    "review_status": "unreviewed"
+  }
+}

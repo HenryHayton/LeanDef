@@ -1,0 +1,167 @@
+{
+  "task_id": "CentroidHom.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{α : Type u_5} -> [NonUnitalNonAssocSemiring α] -> (g f : CentroidHom α) -> CentroidHom α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "application order",
+        "statement": "VTask.comp g f applies f first and then g, so (VTask.comp g f) a = g (f a).",
+        "note": "Right-to-left (standard mathematical) composition order."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cancel_left_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : NonUnitalNonAssocSemiring α] (g f₁ f₂ : CentroidHom α), Function.Injective g → (VTask.comp g f₁ = VTask.comp g f₂ ↔ f₁ = f₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "CentroidHom.cancel_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CentroidHom.cancel_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.743,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CentroidHom.comp-0ce3c2e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cancel_right_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : NonUnitalNonAssocSemiring α] (g₁ g₂ f : CentroidHom α), Function.Surjective f → (VTask.comp g₁ f = VTask.comp g₂ f ↔ g₁ = g₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "CentroidHom.cancel_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CentroidHom.cancel_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.633,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CentroidHom.comp-0ce3c2e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_assoc_ne_swap_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {α : Type*} [inst : NonUnitalNonAssocSemiring α] (h g f : CentroidHom α), VTask.comp h (VTask.comp g f) = VTask.comp (VTask.comp h f) g",
+      "domain_inputs": {},
+      "anchors": [
+        "CentroidHom.comp_assoc",
+        "CentroidHom.comp_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CentroidHom.comp_assoc",
+        "CentroidHom.comp_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CentroidHom.comp-0ce3c2e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_not_commutative_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {α : Type*} [inst : NonUnitalNonAssocSemiring α] (g f : CentroidHom α), VTask.comp g f = VTask.comp f g",
+      "domain_inputs": {},
+      "anchors": [
+        "CentroidHom.comp_apply",
+        "CentroidHom.coe_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CentroidHom.comp_apply",
+        "CentroidHom.coe_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CentroidHom.comp-0ce3c2e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CentroidHom.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CentroidHom.comp-0ce3c2e2",
+    "review_status": "unreviewed"
+  }
+}

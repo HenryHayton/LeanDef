@@ -1,0 +1,370 @@
+{
+  "task_id": "List.nextOr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.nextOr",
+  "signature": {
+    "name": "VTask.nextOr",
+    "type": "{α : Type u_1} -> [DecidableEq α] -> List α → α → α → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "xs",
+      "x",
+      "default"
+    ],
+    "conventions": [
+      {
+        "point": "empty list",
+        "statement": "VTask.nextOr [] x default = default for all x and default.",
+        "note": "Defined by the base case: searching an empty list always returns the default."
+      },
+      {
+        "point": "singleton list",
+        "statement": "VTask.nextOr [y] x default = default for all x, y, and default.",
+        "note": "A one-element list has no consecutive pair, so no successor can be found."
+      },
+      {
+        "point": "x is the last element",
+        "statement": "If x appears in xs only at the final position (or only at positions without a following element), VTask.nextOr xs x default = default.",
+        "note": "There is no wraparound; the last element is treated as having no successor."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nextOr_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr ([] : List ℕ) 5 0 = 0 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[]"
+        ],
+        "x": [
+          "5"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr [3] 3 0 = 0 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[3]"
+        ],
+        "x": [
+          "3"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_first_elem",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr [1, 2, 3] 1 0 = 2 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 3]"
+        ],
+        "x": [
+          "1"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_middle_elem",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr [1, 2, 3] 2 0 = 3 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 3]"
+        ],
+        "x": [
+          "2"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_last_elem",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr [1, 2, 3] 3 0 = 0 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 3]"
+        ],
+        "x": [
+          "3"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_first_occurrence",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextOr [1, 2, 1, 4] 1 0 = 2 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 1, 4]"
+        ],
+        "x": [
+          "1"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_ne_default_implies_x_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List ℕ) (x d : ℕ), VTask.nextOr xs x d ≠ d → x ∈ xs",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_of_nextOr_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_of_nextOr_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.446,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_mem_when_default_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List ℕ) (x d : ℕ), d ∈ xs → VTask.nextOr xs x d ∈ xs",
+      "domain_inputs": {},
+      "anchors": [
+        "List.nextOr_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.nextOr_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.247,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_self_cons_cons_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List ℕ) (x y d : ℕ), VTask.nextOr (x :: y :: xs) x d = y",
+      "domain_inputs": {},
+      "anchors": [
+        "List.nextOr_self_cons_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.nextOr_self_cons_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.119,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextOr_independent_of_default_when_in_dropLast",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List ℕ) (x d d' : ℕ), x ∈ xs.dropLast → VTask.nextOr xs x d = VTask.nextOr xs x d'",
+      "domain_inputs": {},
+      "anchors": [
+        "List.nextOr_eq_nextOr_of_mem_dropLast"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.nextOr_eq_nextOr_of_mem_dropLast"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.546,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.nextOr-b011aaef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.nextOr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.nextOr-b011aaef",
+    "review_status": "unreviewed"
+  }
+}

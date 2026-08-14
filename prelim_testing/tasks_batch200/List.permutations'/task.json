@@ -1,0 +1,380 @@
+{
+  "task_id": "List.permutations'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.permutations'",
+  "signature": {
+    "name": "VTask.permutations'",
+    "type": "{α : Type u_1} -> List α → List (List α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty list input",
+        "statement": "VTask.permutations' [] = [[]], i.e., the empty list has exactly one permutation (itself), so the result is a one-element list containing the empty list.",
+        "note": "Base case of the recursive definition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "permutations'_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permutations' ([] : List Nat) = [[]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permutations' [1] = [[1]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_two_elements",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permutations' [1, 2] = [[1, 2], [2, 1]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_three_elements_exact",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permutations' [1, 2, 3] = [[1,2,3],[2,1,3],[2,3,1],[1,3,2],[3,1,2],[3,2,1]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_three_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permutations' [1, 2, 3]).length = 6 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_repeated_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permutations' [1, 1, 2]).length = 6 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_mem_iff_perm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s t : List α), s ∈ VTask.permutations' t ↔ s.Perm t",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_permutations'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_permutations'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.252,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_perm_of_perm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s t : List α), s.Perm t → (VTask.permutations' s).Perm (VTask.permutations' t)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Perm.permutations'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Perm.permutations'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.207,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_map_comm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type) (f : α → β) (ts : List α), List.map (List.map f) (VTask.permutations' ts) = VTask.permutations' (List.map f ts)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.map_permutations'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.map_permutations'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.653,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_perm_permutations",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (ts : List α), ts.permutations.Perm (VTask.permutations' ts)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.permutations_perm_permutations'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.permutations_perm_permutations'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.264,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permutations'_reject_wrong_element",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : [1, 2, 4] ∉ VTask.permutations' [1, 2, 3] := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[1, 2, 4]",
+      "violated_property": "s must be a permutation of the input list (same elements with same multiplicities)"
+    },
+    {
+      "id": "permutations'_reject_wrong_length",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : [1, 2] ∉ VTask.permutations' [1, 2, 3] := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.permutations'-6f7e467d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[1, 2]",
+      "violated_property": "s must have the same length as the input list to be a permutation of it"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.permutations'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.permutations'-6f7e467d",
+    "review_status": "unreviewed"
+  }
+}

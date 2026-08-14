@@ -1,0 +1,362 @@
+{
+  "task_id": "Set.range",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.range",
+  "signature": {
+    "name": "VTask.range",
+    "type": "{α : Type u} -> {ι : Sort u_1} -> (f : ι → α) -> Set α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.range is a total construction with no junk-value conventions; it is well-defined for every function f : ι → α with no edge-case overrides."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "range_fin4_succ_3_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (3 : Fin 4).val ∈ VTask.range (fun n : Fin 4 => n.val) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 4 => n.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(3 : Fin 4).val"
+    },
+    {
+      "id": "range_fin4_succ_5_not_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (5 : ℕ) ∉ VTask.range (fun n : Fin 4 => n.val) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 4 => n.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "5",
+      "violated_property": "no element of Fin 4 maps to 5"
+    },
+    {
+      "id": "range_const_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (42 : ℕ) ∈ VTask.range (fun _ : Fin 3 => (42 : ℕ)) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 3 => (42 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "42"
+    },
+    {
+      "id": "range_const_nonempty_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (ι : Type) [Nonempty ι] (c : α), VTask.range (fun _ : ι => c) = {c}",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.808,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_surjective_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β), Function.Surjective f → VTask.range f = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_eq_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_eq_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.775,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_equiv_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (e : α ≃ β), VTask.range e.toFun = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.range_eq_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.range_eq_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.275,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_subset_codomain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {ι : Sort*} (f : ι → α), VTask.range f ⊆ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.286,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_id_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type), VTask.range (id : α → α) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 33.444,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_comp_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type} (f : α → β) (g : β → γ), VTask.range (g ∘ f) ⊆ VTask.range g",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_comp_subset_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_comp_subset_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.873,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_fin4_zero_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0 : ℕ) ∈ VTask.range (fun n : Fin 4 => n.val) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 4 => n.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.range-5e5c10aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.range",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.range-5e5c10aa",
+    "review_status": "unreviewed"
+  }
+}

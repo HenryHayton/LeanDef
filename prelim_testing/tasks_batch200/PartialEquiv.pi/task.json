@@ -1,0 +1,284 @@
+{
+  "task_id": "PartialEquiv.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{ι : Type u_5} -> {αi : ι → Type u_6} -> {βi : ι → Type u_7} -> (ei : (i : ι) → PartialEquiv (αi i) (βi i)) -> PartialEquiv ((i : ι) → αi i) ((i : ι) → βi i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ei"
+    ],
+    "conventions": [
+      {
+        "point": "source",
+        "statement": "The source of `VTask.pi ei` is `Set.pi Set.univ (fun i => (ei i).source)`: a dependent function lies in the source iff every component lies in the source of the corresponding component equivalence.",
+        "note": "Pointwise source condition over all indices."
+      },
+      {
+        "point": "target",
+        "statement": "The target of `VTask.pi ei` is `Set.pi Set.univ (fun i => (ei i).target)`: a dependent function lies in the target iff every component lies in the target of the corresponding component equivalence.",
+        "note": "Pointwise target condition over all indices."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*} {βi : ι → Type*} {γi : ι → Type*} (ei : (i : ι) → PartialEquiv (αi i) (βi i)) (ei' : (i : ι) → PartialEquiv (βi i) (γi i)), (VTask.pi ei).trans (VTask.pi ei') = VTask.pi (fun i => (ei i).trans (ei' i))",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.331,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*}, VTask.pi (fun i => PartialEquiv.refl (αi i)) = PartialEquiv.refl ((i : ι) → αi i)",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.14,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_source",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*} {βi : ι → Type*} (ei : (i : ι) → PartialEquiv (αi i) (βi i)), (VTask.pi ei).source = {f | ∀ i, f i ∈ (ei i).source}",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_symm",
+        "PartialEquiv.pi_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_symm",
+        "PartialEquiv.pi_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.623,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_target",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*} {βi : ι → Type*} (ei : (i : ι) → PartialEquiv (αi i) (βi i)), (VTask.pi ei).target = {f | ∀ i, f i ∈ (ei i).target}",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_symm",
+        "PartialEquiv.pi_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_symm",
+        "PartialEquiv.pi_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.312,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_trans_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*} (ei : (i : ι) → PartialEquiv (αi i) (αi i)), (VTask.pi (fun i => PartialEquiv.refl (αi i))).trans (VTask.pi (fun i => PartialEquiv.refl (αi i))) = VTask.pi (fun i => (PartialEquiv.refl (αi i)).trans (PartialEquiv.refl (αi i)))",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.646,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_refl_source_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {αi : ι → Type*}, (VTask.pi (fun i => PartialEquiv.refl (αi i))).source = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.093,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_ne_refl_when_component_not_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.pi (fun (i : Fin 1) => (PartialEquiv.ofSet (∅ : Set ℕ) : PartialEquiv ℕ ℕ)) ≠ PartialEquiv.refl ((i : Fin 1) → ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "PartialEquiv.pi_refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PartialEquiv.pi_refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PartialEquiv.pi-e8f95277",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PartialEquiv.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PartialEquiv.pi-e8f95277",
+    "review_status": "unreviewed"
+  }
+}

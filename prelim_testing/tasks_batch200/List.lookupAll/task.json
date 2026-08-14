@@ -1,0 +1,399 @@
+{
+  "task_id": "List.lookupAll",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lookupAll",
+  "signature": {
+    "name": "VTask.lookupAll",
+    "type": "{α : Type u} -> {β : α → Type v} -> [DecidableEq α] -> (a : α) -> List (Sigma β) → List (β a)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty list",
+        "statement": "VTask.lookupAll a [] = []  for any key a",
+        "note": "The empty list trivially has no entries to match."
+      },
+      {
+        "point": "non-matching head",
+        "statement": "When the head entry has a key different from a, it is skipped and lookupAll recurses on the tail unchanged.",
+        "note": "No junk value is produced; the entry simply does not contribute to the output."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lookupAll_empty_list",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lookupAll 1 ([] : List (Sigma (fun _ : Nat => Nat))) = [] := by decide",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_two_matches",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lookupAll 1 ([⟨1, 10⟩, ⟨2, 20⟩, ⟨1, 30⟩] : List (Sigma (fun _ : Nat => Nat))) = [10, 30] := by decide",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_no_match",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lookupAll 3 ([⟨1, 10⟩, ⟨2, 20⟩] : List (Sigma (fun _ : Nat => Nat))) = [] := by decide",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_single_match",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lookupAll 2 ([⟨1, 10⟩, ⟨2, 20⟩, ⟨1, 30⟩] : List (Sigma (fun _ : Nat => Nat))) = [20] := by decide",
+      "domain_inputs": {
+        "a": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_cons_eq_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.lookupAll 5 ([⟨5, 42⟩, ⟨5, 99⟩] : List (Sigma (fun _ : Nat => Nat))) = [42, 99] := by decide",
+      "domain_inputs": {
+        "a": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_mem_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (30 : Nat) ∈ VTask.lookupAll 1 ([⟨1, 10⟩, ⟨2, 20⟩, ⟨1, 30⟩] : List (Sigma (fun _ : Nat => Nat))) := by decide",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(30 : Nat)"
+    },
+    {
+      "id": "lookupAll_mem_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Nat) (b : Nat) (l : List (Sigma (fun _ : Nat => Nat))), b ∈ VTask.lookupAll a l ↔ Sigma.mk a b ∈ l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_lookupAll"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_lookupAll"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.041,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_eq_nil_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Nat) (l : List (Sigma (fun _ : Nat => Nat))), VTask.lookupAll a l = [] ↔ ∀ b : Nat, Sigma.mk a b ∉ l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.lookupAll_eq_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.lookupAll_eq_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.457,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_length_le_one_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Nat) (l : List (Sigma (fun _ : Nat => Nat))), l.NodupKeys → (VTask.lookupAll a l).length ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "List.lookupAll_length_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.lookupAll_length_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_eq_dlookup_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Nat) (l : List (Sigma (fun _ : Nat => Nat))), l.NodupKeys → VTask.lookupAll a l = (List.dlookup a l).toList",
+      "domain_inputs": {},
+      "anchors": [
+        "List.lookupAll_eq_dlookup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.lookupAll_eq_dlookup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.223,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_nodup_output",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Nat) (l : List (Sigma (fun _ : Nat => Nat))), l.NodupKeys → (VTask.lookupAll a l).Nodup",
+      "domain_inputs": {},
+      "anchors": [
+        "List.lookupAll_nodup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.lookupAll_nodup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.143,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lookupAll_reject_nonmatch",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (20 : Nat) ∉ VTask.lookupAll 1 ([⟨1, 10⟩, ⟨2, 20⟩, ⟨1, 30⟩] : List (Sigma (fun _ : Nat => Nat))) := by decide",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.lookupAll-d54e7990",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(20 : Nat)",
+      "violated_property": "Key equality: only values whose key equals the lookup key are included; value 20 has key 2, not key 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.lookupAll",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.lookupAll-d54e7990",
+    "review_status": "unreviewed"
+  }
+}

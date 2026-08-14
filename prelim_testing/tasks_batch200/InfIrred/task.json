@@ -1,0 +1,201 @@
+{
+  "task_id": "InfIrred",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.InfIrred",
+  "signature": {
+    "name": "VTask.InfIrred",
+    "type": "{α : Type u_2} -> [SemilatticeInf α] -> (a : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "top_excluded",
+        "statement": "If α has a top element ⊤, then VTask.InfIrred ⊤ is always false, since ⊤ is maximal.",
+        "note": "Follows from the non-maximality conjunct of the definition."
+      },
+      {
+        "point": "duality",
+        "statement": "VTask.InfIrred a in α corresponds exactly to SupIrred (toDual a) in αᵒᵈ, establishing order-duality.",
+        "note": "infIrred_toDual theorem."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "infirred_ne_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeInf α] [inst2 : OrderTop α] (a : α), VTask.InfIrred a → a ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "InfIrred.ne_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "InfIrred.ne_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.794,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "InfIrred-a027e4f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "infirred_ismax_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeInf α] (a : α), IsMax a → ¬ VTask.InfIrred a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMax.not_infIrred"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMax.not_infIrred"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.737,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "InfIrred-a027e4f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "infirred_iff_not_ismax",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeInf α] [inst2 : LinearOrder α] (a : α), VTask.InfIrred a ↔ ¬ IsMax a",
+      "domain_inputs": {},
+      "anchors": [
+        "infIrred_iff_not_isMax"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "infIrred_iff_not_isMax"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "InfIrred-a027e4f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "infprime_implies_infirred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeInf α] (a : α), InfPrime a → VTask.InfIrred a",
+      "domain_inputs": {},
+      "anchors": [
+        "InfPrime.infIrred"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "InfPrime.infIrred"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.131,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "InfIrred-a027e4f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "infirred_not_characterisation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeInf α] (a : α), ¬ VTask.InfIrred a ↔ IsMax a ∨ ∃ b c : α, b ⊓ c = a ∧ a < b ∧ a < c",
+      "domain_inputs": {},
+      "anchors": [
+        "not_infIrred"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_infIrred"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.337,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "InfIrred-a027e4f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "InfIrred",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "InfIrred-a027e4f2",
+    "review_status": "unreviewed"
+  }
+}

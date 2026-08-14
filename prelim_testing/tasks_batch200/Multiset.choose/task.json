@@ -1,0 +1,231 @@
+{
+  "task_id": "Multiset.choose",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.choose",
+  "signature": {
+    "name": "VTask.choose",
+    "type": "{α : Type u_1} -> (p : α → Prop) -> [DecidablePred p] -> (l : Multiset α) -> (hp : ∃! a, a ∈ l ∧ p a) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "∃! a, a ∈ l ∧ p a",
+    "variables": [
+      "p",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on its stated domain; the unique-existence hypothesis excludes all degenerate inputs, so no junk-value convention is needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "choose_eq_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a) (a : α), VTask.choose p l hp = a ↔ a ∈ l ∧ p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_eq_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_eq_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.828,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_spec_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a), VTask.choose p l hp ∈ l ∧ p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.513,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_unique_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a) (b : α), b ∈ l → p b → b = VTask.choose p l hp",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_eq_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_eq_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_mem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a), VTask.choose p l hp ∈ l",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.436,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_property_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a), p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_property"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_property"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.857,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_eq_iff_backward",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Multiset α) (hp : ∃! a, a ∈ l ∧ p a) (b : α), b ∈ l → p b → VTask.choose p l hp = b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.choose_eq_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.choose_eq_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.choose-7359a6d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.choose",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.choose-7359a6d0",
+    "review_status": "unreviewed"
+  }
+}

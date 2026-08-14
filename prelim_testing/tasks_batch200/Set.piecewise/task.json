@@ -1,0 +1,419 @@
+{
+  "task_id": "Set.piecewise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piecewise",
+  "signature": {
+    "name": "VTask.piecewise",
+    "type": "{α : Type u} -> {β : α → Sort v} -> (s : Set α) -> (f g : (i : α) → β i) -> [(j : α) → Decidable (j ∈ s)] -> (i : α) -> β i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "f",
+      "g",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "f = g",
+        "statement": "When the two branch functions are equal, VTask.piecewise s f f = f regardless of the set s.",
+        "note": "piecewise_same"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piecewise_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} (f g : ∀ i, β i) [∀ j : α, Decidable (j ∈ (Set.univ : Set α))], VTask.piecewise Set.univ f g = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.279,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} (f g : ∀ i, β i) [∀ j : α, Decidable (j ∈ (∅ : Set α))], VTask.piecewise ∅ f g = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.281,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_same",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} (s : Set α) (f : ∀ i, β i) [∀ j : α, Decidable (j ∈ s)], VTask.piecewise s f f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.298,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (x : α) (f g : α → β) [∀ y : α, Decidable (y ∈ ({x} : Set α))] [DecidableEq α], VTask.piecewise {x} f g = Function.update g x (f x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.933,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_eqOn_s",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (s : Set α) (f g : α → β) [∀ j : α, Decidable (j ∈ s)], Set.EqOn (VTask.piecewise s f g) f s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_eqOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_eqOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.847,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_eqOn_compl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (s : Set α) (f g : α → β) [∀ j : α, Decidable (j ∈ s)], Set.EqOn (VTask.piecewise s f g) g sᶜ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.piecewise_eqOn_compl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.piecewise_eqOn_compl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.781,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piecewise_inside_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) (-1) = 10 := by decide",
+      "domain_inputs": {
+        "i": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) (-1)"
+    },
+    {
+      "id": "piecewise_outside_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 1 ≠ 10 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 1",
+      "violated_property": "point 1 is not in Set.Iic 0, so f should not be applied"
+    },
+    {
+      "id": "piecewise_outside_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 1 = 20 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 1"
+    },
+    {
+      "id": "piecewise_boundary_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 0 = 10 := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piecewise (Set.Iic 0) (fun _ : ℤ => 10) (fun _ : ℤ => 20) 0"
+    },
+    {
+      "id": "piecewise_univ_nat",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (Set.univ : Set ℕ) (fun _ => 5) (fun _ => 7) 3 = 5 := by decide",
+      "domain_inputs": {
+        "i": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piecewise (Set.univ : Set ℕ) (fun _ => 5) (fun _ => 7) 3"
+    },
+    {
+      "id": "piecewise_empty_nat",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.piecewise (∅ : Set ℕ) (fun _ => 5) (fun _ => 7) 3 = 7 := by decide",
+      "domain_inputs": {
+        "i": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.piecewise-f49caf59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piecewise (∅ : Set ℕ) (fun _ => 5) (fun _ => 7) 3"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.piecewise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.piecewise-f49caf59",
+    "review_status": "unreviewed"
+  }
+}

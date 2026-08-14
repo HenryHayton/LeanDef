@@ -1,0 +1,225 @@
+{
+  "task_id": "Matroid.IsStrictMinor",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsStrictMinor",
+  "signature": {
+    "name": "VTask.IsStrictMinor",
+    "type": "{α : Type u_1} -> (N M : Matroid α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "N",
+      "M"
+    ],
+    "conventions": [
+      {
+        "point": "notation",
+        "statement": "The infix notation `N <m M` abbreviates `VTask.IsStrictMinor N M` throughout Mathlib.",
+        "note": "Standard Mathlib notation for the strict minor relation on matroids."
+      },
+      {
+        "point": "irreflexivity",
+        "statement": "For any matroid `M`, `VTask.IsStrictMinor M M` is false.",
+        "note": "Follows from the minor relation being a partial order (reflexive), making the conjunction self-contradictory."
+      },
+      {
+        "point": "strict_order_coincidence",
+        "statement": "`VTask.IsStrictMinor` coincides with the strict part `<` of the partial order on `Matroid α`, i.e., `N < M ↔ VTask.IsStrictMinor N M`.",
+        "note": "Recorded by the lemma `lt_eq_isStrictMinor`."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isStrictMinor_irrefl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Matroid α), ¬ VTask.IsStrictMinor M M",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsStrictMinor.not_isMinor",
+        "Matroid.IsStrictMinor.isMinor"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matroid.IsStrictMinor.not_isMinor",
+        "Matroid.IsStrictMinor.isMinor"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.564,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isStrictMinor_implies_isMinor",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (N M : Matroid α), VTask.IsStrictMinor N M → N ≤m M",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsStrictMinor.isMinor"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matroid.IsStrictMinor.isMinor"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isStrictMinor_implies_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (N M : Matroid α), VTask.IsStrictMinor N M → N ≠ M",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsStrictMinor.ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matroid.IsStrictMinor.ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 35.779,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isStrictMinor_implies_ssubset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (N M : Matroid α), VTask.IsStrictMinor N M → N.E ⊂ M.E",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsStrictMinor.ssubset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matroid.IsStrictMinor.ssubset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.682,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isStrictMinor_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (N M M' : Matroid α), VTask.IsStrictMinor N M → VTask.IsStrictMinor M M' → VTask.IsStrictMinor N M'",
+      "domain_inputs": {},
+      "anchors": [
+        "Matroid.IsStrictMinor.trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matroid.IsStrictMinor.trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 51.88,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matroid.IsStrictMinor",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matroid.IsStrictMinor-98321dd9",
+    "review_status": "unreviewed"
+  }
+}

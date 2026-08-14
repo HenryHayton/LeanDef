@@ -1,0 +1,256 @@
+{
+  "task_id": "Equiv.piFinsetUnion",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piFinsetUnion",
+  "signature": {
+    "name": "VTask.piFinsetUnion",
+    "type": "{ι : Type u_5} -> [DecidableEq ι] -> (α : ι → Type u_4) -> {s t : Finset ι} -> (h : Disjoint s t) -> ((i : ↥s) → α ↑i) × ((i : ↥t) → α ↑i) ≃ ((i : ↥(s ∪ t)) → α ↑i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "Disjoint s t",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The equivalence is only defined when the disjointness hypothesis is explicitly provided, so there are no junk-value conventions for out-of-domain inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piFinsetUnion_left_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (α : ι → Type*) {s t : Finset ι} (h : Disjoint s t) (f : (i : ↥s) → α ↑i) (g : (i : ↥t) → α ↑i) {i : ι} (hi : i ∈ s) (hi' : i ∈ s ∪ t), VTask.piFinsetUnion α h (f, g) ⟨i, hi'⟩ = f ⟨i, hi⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.piFinsetUnion_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.piFinsetUnion_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 29.088,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piFinsetUnion_right_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (α : ι → Type*) {s t : Finset ι} (h : Disjoint s t) (f : (i : ↥s) → α ↑i) (g : (i : ↥t) → α ↑i) {i : ι} (hi : i ∈ t) (hi' : i ∈ s ∪ t), VTask.piFinsetUnion α h (f, g) ⟨i, hi'⟩ = g ⟨i, hi⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.piFinsetUnion_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.piFinsetUnion_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 25.652,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piFinsetUnion_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (α : ι → Type*) {s t : Finset ι} (h : Disjoint s t), Function.Bijective (VTask.piFinsetUnion α h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.782,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piFinsetUnion_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (α : ι → Type*) {s t : Finset ι} (h : Disjoint s t) (p : ((i : ↥s) → α ↑i) × ((i : ↥t) → α ↑i)), (VTask.piFinsetUnion α h).symm (VTask.piFinsetUnion α h p) = p",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.347,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piFinsetUnion_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (α : ι → Type*) {s t : Finset ι} (h : Disjoint s t) (q : (i : ↥(s ∪ t)) → α ↑i), VTask.piFinsetUnion α h ((VTask.piFinsetUnion α h).symm q) = q",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.359,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piFinsetUnion_updateFinset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] (π : ι → Type*) {s t : Finset ι} (hst : Disjoint s t) (x : (i : ι) → π i) (y : (i : ↥s) → π ↑i) (z : (i : ↥t) → π ↑i), Function.updateFinset (Function.updateFinset x s y) t z = Function.updateFinset x (s ∪ t) (VTask.piFinsetUnion π hst ⟨y, z⟩)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.updateFinset_updateFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.updateFinset_updateFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.482,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piFinsetUnion-10380549",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.piFinsetUnion",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.piFinsetUnion-10380549",
+    "review_status": "unreviewed"
+  }
+}

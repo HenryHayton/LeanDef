@@ -1,0 +1,298 @@
+{
+  "task_id": "GaloisConnection",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.GaloisConnection",
+  "signature": {
+    "name": "VTask.GaloisConnection",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (l : α → β) -> (u : β → α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "u"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.GaloisConnection is a universally quantified Prop over all functions l and u between two preordered types; it is total with no junk values or special boundary conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "gc_nat_mul_div",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.GaloisConnection (· * 2) (· / 2 : ℕ → ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.div_le_iff_le_mul_add_pred"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.div_le_iff_le_mul_add_pred"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_monotone_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (l : α → β) (u : β → α), VTask.GaloisConnection l u → Monotone l",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.monotone_l"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.monotone_l"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.888,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_monotone_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (l : α → β) (u : β → α), VTask.GaloisConnection l u → Monotone u",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.monotone_u"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.monotone_u"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_dual",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (l : α → β) (u : β → α), VTask.GaloisConnection l u → VTask.GaloisConnection (OrderDual.toDual ∘ u ∘ OrderDual.ofDual) (OrderDual.toDual ∘ l ∘ OrderDual.ofDual)",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.dual"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.dual"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.492,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_compose",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (l1 : α → β) (u1 : β → α) (l2 : β → γ) (u2 : γ → β), VTask.GaloisConnection l1 u1 → VTask.GaloisConnection l2 u2 → VTask.GaloisConnection (l2 ∘ l1) (u1 ∘ u2)",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.compose"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.compose"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.526,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_l_u_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (l : α → β) (u : β → α), VTask.GaloisConnection l u → ∀ b : β, l (u b) ≤ b",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.l_u_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.l_u_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.617,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_le_u_l",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (l : α → β) (u : β → α), VTask.GaloisConnection l u → ∀ a : α, a ≤ u (l a)",
+      "domain_inputs": {},
+      "anchors": [
+        "GaloisConnection.le_u_l"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GaloisConnection.le_u_l"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.52,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gc_ideal_map_comap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S), VTask.GaloisConnection (Ideal.map f) (Ideal.comap f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.gc_map_comap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.gc_map_comap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.914,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GaloisConnection-e595d1d7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "GaloisConnection",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "GaloisConnection-e595d1d7",
+    "review_status": "unreviewed"
+  }
+}

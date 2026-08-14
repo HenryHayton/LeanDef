@@ -1,0 +1,80 @@
+{
+  "task_id": "Finpartition.extend",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.extend",
+  "signature": {
+    "name": "VTask.extend",
+    "type": "{α : Type u_1} -> [Lattice α] -> [OrderBot α] -> [IsModularLattice α] -> [DecidableEq α] -> {a b c : α} -> (P : Finpartition a) -> (hb : b ≠ ⊥) -> (hab : Disjoint a b) -> (hc : a ⊔ b = c) -> Finpartition c",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "hb",
+      "hab",
+      "hc"
+    ],
+    "conventions": [
+      {
+        "point": "parts of result",
+        "statement": "The parts of VTask.extend P hb hab hc are definitionally equal to insert b P.parts.",
+        "note": "b is prepended as a single new part to the existing parts of P"
+      },
+      {
+        "point": "cardinality",
+        "statement": "The cardinality of (VTask.extend P hb hab hc).parts equals P.parts.card + 1.",
+        "note": "Since b is disjoint from a, b cannot already be in P.parts (as P.parts covers a and b is disjoint from a and nonzero), so insertion strictly increases cardinality by one"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "extend_card_parts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a b c : α} (P : Finpartition a) (hb : b ≠ ⊥) (hab : Disjoint a b) (hc : a ⊔ b = c), (VTask.extend P hb hab hc).parts.card = P.parts.card + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.card_extend"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.card_extend"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.844,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Finpartition.extend-f0590a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finpartition.extend",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finpartition.extend-f0590a39",
+    "review_status": "unreviewed"
+  }
+}

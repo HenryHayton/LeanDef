@@ -1,0 +1,339 @@
+{
+  "task_id": "Filter.blimsup",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.blimsup",
+  "signature": {
+    "name": "VTask.blimsup",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [ConditionallyCompleteLattice α] -> (u : β → α) -> (f : Filter β) -> (p : β → Prop) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "u",
+      "f",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p = fun _ => False",
+        "statement": "VTask.blimsup u f (fun _ => False) = ⊥",
+        "note": "When the predicate is identically False, the implication 'p x → u x ≤ a' holds vacuously for every a, so the infimum over all a is the bottom element ⊥."
+      },
+      {
+        "point": "p = fun _ => True",
+        "statement": "VTask.blimsup u f (fun _ => True) = Filter.limsup u f",
+        "note": "When the predicate is identically True, the bounded limsup degenerates to the ordinary (unbounded) limsup along f."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "blimsup_true_eq_limsup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β), VTask.blimsup u f (fun _ => True) = Filter.limsup u f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_true"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_true"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.271,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_mono_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), (∀ x, p x → q x) → VTask.blimsup u f p ≤ VTask.blimsup u f q",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_sup_not_eq_limsup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p : β → Prop), VTask.blimsup u f p ⊔ VTask.blimsup u f (fun x => ¬p x) = Filter.limsup u f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_sup_not"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_sup_not"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_mono_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f g : Filter β) (p : β → Prop), f ≤ g → VTask.blimsup u f p ≤ VTask.blimsup u g p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_monotone_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_monotone_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_mono_func",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u v : β → α) (f : Filter β) (p : β → Prop), (∀ x, p x → u x ≤ v x) → VTask.blimsup u f p ≤ VTask.blimsup v f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.mono_blimsup"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.mono_blimsup"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_conj_le_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), VTask.blimsup u f (fun x => p x ∧ q x) ≤ VTask.blimsup u f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_sup_le_inf_aux_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_sup_le_inf_aux_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_sup_le_or",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), VTask.blimsup u f p ⊔ VTask.blimsup u f q ≤ VTask.blimsup u f (fun x => p x ∨ q x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_sup_le_or"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_sup_le_or"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_false_ne_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} (u : β → ℝ) (f : Filter β), VTask.blimsup u f (fun _ => False) ≤ Filter.limsup u f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_false",
+        "Filter.blimsup_true",
+        "Filter.blimsup_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_false",
+        "Filter.blimsup_true",
+        "Filter.blimsup_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_true_not_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β), VTask.blimsup u f (fun _ => False) ≤ VTask.blimsup u f (fun _ => True)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_conj_le_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), VTask.blimsup u f (fun x => p x ∧ q x) ≤ VTask.blimsup u f q",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blimsup_reject_not_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (u : ℕ → WithBot ℕ) (f : Filter ℕ) (p : ℕ → Prop), VTask.blimsup u f p = ⊥)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.blimsup_true",
+        "Filter.limsup_const"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.blimsup_true",
+        "Filter.limsup_const"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.blimsup-d1152732",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.blimsup",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.blimsup-d1152732",
+    "review_status": "unreviewed"
+  }
+}

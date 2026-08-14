@@ -1,0 +1,360 @@
+{
+  "task_id": "Function.FactorsThrough",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.FactorsThrough",
+  "signature": {
+    "name": "VTask.FactorsThrough",
+    "type": "{α : Sort u_1} -> {β : Sort u_2} -> {γ : Sort u_3} -> (g : α → γ) -> (f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.FactorsThrough is a universally quantified Prop that is meaningful and well-defined for all functions g and f between any types; there are no junk values or special edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "factorsthrough_inj_implies_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (g : α → γ), Function.Injective f → VTask.FactorsThrough g f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.factorsThrough"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.factorsThrough"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_const_through_any",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (c : γ), VTask.FactorsThrough (fun _ : α => c) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.factorsThrough"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.factorsThrough"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_iff_exists_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Nonempty γ] (f : α → β) (g : α → γ), VTask.FactorsThrough g f ↔ ∃ e : β → γ, g = e ∘ f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.factorsThrough_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.factorsThrough_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.783,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_extend_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (g : α → γ) (e' : β → γ), VTask.FactorsThrough g f → Function.extend f g e' ∘ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FactorsThrough.extend_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FactorsThrough.extend_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.859,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_extend_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (g : α → γ) (e' : β → γ) (a : α), VTask.FactorsThrough g f → Function.extend f g e' (f a) = g a",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FactorsThrough.extend_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FactorsThrough.extend_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.875,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_not_symmetric",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {α β : Type*} (f g : α → β), VTask.FactorsThrough g f → VTask.FactorsThrough f g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.factorsThrough"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.factorsThrough"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_empty_domain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β γ : Type*} (f : Empty → β) (g : Empty → γ), VTask.FactorsThrough g f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.factorsThrough"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.factorsThrough"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_comp_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ δ : Type*} (f : α → β) (g : α → γ) (h : γ → δ), VTask.FactorsThrough g f → VTask.FactorsThrough (h ∘ g) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.factorsThrough"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.factorsThrough"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.456,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factorsthrough_parity_same_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (a b : Fin 6), (fun n : Fin 6 => n % 2) a = (fun n : Fin 6 => n % 2) b → (fun n : Fin 6 => n % 2) a = (fun n : Fin 6 => n % 2) b",
+      "domain_inputs": {
+        "g": [
+          "fun n : Fin 6 => n % 2"
+        ],
+        "f": [
+          "fun n : Fin 6 => n % 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.137,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun n : Fin 6 => n % 2"
+    },
+    {
+      "id": "factorsthrough_coarser_coarser_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (a b : Fin 4), (fun n : Fin 4 => n) a = (fun n : Fin 4 => n) b → (fun n : Fin 4 => n % 2) a = (fun n : Fin 4 => n % 2) b",
+      "domain_inputs": {
+        "g": [
+          "fun n : Fin 4 => n % 2"
+        ],
+        "f": [
+          "fun n : Fin 4 => n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.136,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FactorsThrough-b0544c75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun n : Fin 4 => n % 2"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.FactorsThrough",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.FactorsThrough-b0544c75",
+    "review_status": "unreviewed"
+  }
+}

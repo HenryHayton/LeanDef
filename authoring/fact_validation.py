@@ -203,7 +203,7 @@ def witness_violates(server: AutoLeanServer, env: int, truth_prop: str) -> bool:
     return res.winning is not None
 
 
-def _schema_status(status: str) -> str:
+def _schema_status(status: str, mechanism: str | None = None) -> str:
     """The ladder's own vocabulary -> the two statuses task.json permits.
 
     `harness.task_schema` allows only CERTIFIED and PROVISIONALLY_VALIDATED. UNVALIDATED is a
@@ -211,7 +211,15 @@ def _schema_status(status: str) -> str:
     not a schema value, so it maps to PROVISIONALLY_VALIDATED, which is exactly what that status
     has always meant (authored, not kernel-discharged). The ladder's finer verdict survives in
     the fact's provenance note, so the attrition stays visible.
+
+    DECIDE facts are always CERTIFIED, and the schema requires it ("decide facts have no
+    provisional state"). A decide fact carries its own proof -- `example : P := by decide` -- so
+    it is discharged by construction; whether the truth-side ladder also happened to close it is
+    beside the point. Letting the ladder downgrade one to PROVISIONALLY_VALIDATED failed schema
+    validation at emit and rotated the whole task (SimpleGraph.cycleGraph, 12 Aug 2026).
     """
+    if mechanism == "decide":
+        return CERTIFIED
     return CERTIFIED if status == CERTIFIED else "PROVISIONALLY_VALIDATED"
 
 

@@ -1,0 +1,338 @@
+{
+  "task_id": "List.dlookup",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.dlookup",
+  "signature": {
+    "name": "VTask.dlookup",
+    "type": "{α : Type u} -> {β : α → Type v} -> [DecidableEq α] -> (a : α) -> List (Sigma β) → Option (β a)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: the function is total on all inputs; the empty-list and missing-key cases return none, which is the standard Option convention and requires no special junk-value declaration"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dlookup_empty_list",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.dlookup 'a' ([] : List (Sigma (fun _ : Char => Nat))) = none := by decide",
+      "domain_inputs": {
+        "a": [
+          "'a'"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_cons_eq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (b : β a) (l : List (Sigma β)), VTask.dlookup a (⟨a, b⟩ :: l) = some b",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_cons_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_cons_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.543,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_eq_none_iff_keys",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (l : List (Sigma β)), VTask.dlookup a l = none ↔ a ∉ l.keys",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_eq_none"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_eq_none"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.03,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_isSome_iff_mem_keys",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (l : List (Sigma β)), (VTask.dlookup a l).isSome ↔ a ∈ l.keys",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_isSome"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_isSome"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.491,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_kinsert_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (b : β a) (l : List (Sigma β)), VTask.dlookup a (List.kinsert a b l) = some b",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_kinsert"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_kinsert"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.428,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_kerase_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (l : List (Sigma β)), l.NodupKeys → VTask.dlookup a (List.kerase a l) = none",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_kerase"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_kerase"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.267,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_dedupKeys_invariance",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (l : List (Sigma β)), VTask.dlookup a (List.dedupKeys l) = VTask.dlookup a l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dlookup_dedupKeys"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dlookup_dedupKeys"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.175,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_of_mem_sigma",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [DecidableEq α] (β : α → Type) (a : α) (b : β a) (l : List (Sigma β)), b ∈ VTask.dlookup a l → Sigma.mk a b ∈ l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.of_mem_dlookup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.of_mem_dlookup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.604,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dlookup_reject_wrong_value",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.dlookup 'b' ([⟨'a', 1⟩, ⟨'b', 2⟩, ⟨'b', 3⟩] : List (Sigma (fun _ : Char => Nat)))) ≠ some 3 := by decide",
+      "domain_inputs": {
+        "a": [
+          "'b'"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dlookup-d97cf52d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.dlookup 'b' ([⟨'a', 1⟩, ⟨'b', 2⟩, ⟨'b', 3⟩] : List (Sigma (fun _ : Char => Nat)))) ≠ some 3",
+      "violated_property": "first match wins: later duplicate entries should be ignored, not returned"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.dlookup",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.dlookup-d97cf52d",
+    "review_status": "unreviewed"
+  }
+}

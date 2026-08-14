@@ -1,0 +1,152 @@
+{
+  "task_id": "InverseSystem.IsNatEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsNatEquiv",
+  "signature": {
+    "name": "VTask.IsNatEquiv",
+    "type": "{ι : Type u_1} -> [Preorder ι] -> {F : ι → Type u_4} -> {X : ι → Type u_5} -> (f : ⦃i j : ι⦄ → i ≤ j → F j → F i) -> {s : Set ι} -> (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "equiv"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsNatEquiv is a universally quantified Prop; it is satisfied when all naturality squares commute and unsatisfied otherwise. No junk-value or boundary conventions are needed because the definition is total and there are no out-of-domain inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isNatEquiv_not_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {ι : Type*} [Preorder ι] {F : ι → Type*} {X : ι → Type*} (f : ⦃i j : ι⦄ → i ≤ j → F j → F i) {s : Set ι} (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j), VTask.IsNatEquiv f equiv)",
+      "domain_inputs": {},
+      "anchors": [
+        "InverseSystem.isNatEquiv_piEquivLim"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "InverseSystem.isNatEquiv_piEquivLim"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "InverseSystem.IsNatEquiv-259b5b03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isNatEquiv_mono_implies_restrict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] {F : ι → Type*} {X : ι → Type*} (f : ⦃i j : ι⦄ → i ≤ j → F j → F i) {s t : Set ι} (hst : t ⊆ s) (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j), VTask.IsNatEquiv f equiv → VTask.IsNatEquiv f (fun j => equiv ⟨j.1, hst j.2⟩)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.inclusion_le_inclusion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.inclusion_le_inclusion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.212,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "InverseSystem.IsNatEquiv-259b5b03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isNatEquiv_iff_forall_diagram",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] {F : ι → Type*} {X : ι → Type*} (f : ⦃i j : ι⦄ → i ≤ j → F j → F i) {s : Set ι} (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j), VTask.IsNatEquiv f equiv ↔ ∀ (k j : ↑s) (h : k.1 ≤ j.1) (x : F j.1), (equiv k) (f h x) = InverseSystem.piLTProj h ((equiv j) x)",
+      "domain_inputs": {},
+      "anchors": [
+        "InverseSystem.isNatEquiv_piEquivLim"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "InverseSystem.isNatEquiv_piEquivLim"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "InverseSystem.IsNatEquiv-259b5b03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isNatEquiv_compose_inverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] {F : ι → Type*} {X : ι → Type*} (f : ⦃i j : ι⦄ → i ≤ j → F j → F i) {s : Set ι} (equiv : (j : ↑s) → F ↑j ≃ InverseSystem.piLT X ↑j), VTask.IsNatEquiv f equiv → ∀ (k j : ↑s) (h : k.1 ≤ j.1) (y : InverseSystem.piLT X j.1), f h ((equiv j).symm y) = (equiv k).symm (InverseSystem.piLTProj h y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "InverseSystem.IsNatEquiv-259b5b03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "InverseSystem.IsNatEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "InverseSystem.IsNatEquiv-259b5b03",
+    "review_status": "unreviewed"
+  }
+}

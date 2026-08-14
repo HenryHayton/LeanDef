@@ -1,0 +1,199 @@
+{
+  "task_id": "Equiv.subtypeEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypeEquiv",
+  "signature": {
+    "name": "VTask.subtypeEquiv",
+    "type": "{α : Sort u_1} -> {β : Sort u_4} -> {p : α → Prop} -> {q : β → Prop} -> (e : α ≃ β) -> (h : ∀ (a : α), p a ↔ q (e a)) -> { a // p a } ≃ { b // q b }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "e",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is a total constructor taking explicit mathematical data (an equivalence and a pointwise iff proof); there are no junk inputs or edge-value conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypeEquiv_accept_refl_identity",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl) = Equiv.refl {n : ℕ // n > 0}",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.096,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl)"
+    },
+    {
+      "id": "subtypeEquiv_accept_true_pred",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ (e : {n : ℕ // True} ≃ {n : ℕ // True}), e = VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.138,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl)"
+    },
+    {
+      "id": "subtypeEquiv_reject_wrong_type",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∃ (f : {n : ℕ // n > 0} ≃ {n : ℕ // n > 0} × Unit), f = Equiv.trans (VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl)) (Equiv.refl _).prodUnique.symm)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.subtypeEquiv (Equiv.refl ℕ) (fun _ => Iff.rfl)",
+      "violated_property": "The result type must be {b // q b}, not {b // q b} × Unit."
+    },
+    {
+      "id": "subtypeEquiv_symm_inverts_forward",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {p : α → Prop} {q : β → Prop} (e : α ≃ β) (h : ∀ a : α, p a ↔ q (e a)) (x : {a // p a}), (VTask.subtypeEquiv e h).symm (VTask.subtypeEquiv e h x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.subtypeEquiv_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.subtypeEquiv_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.562,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEquiv_injective_on_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {p : α → Prop} {q : β → Prop} (e : α ≃ β) (h : ∀ a : α, p a ↔ q (e a)), Function.Injective (VTask.subtypeEquiv e h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.681,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.subtypeEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.subtypeEquiv-9abd6fe0",
+    "review_status": "unreviewed"
+  }
+}

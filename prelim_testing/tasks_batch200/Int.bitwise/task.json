@@ -1,0 +1,285 @@
+{
+  "task_id": "Int.bitwise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.bitwise",
+  "signature": {
+    "name": "VTask.bitwise",
+    "type": "(f : Bool → Bool → Bool) -> ℤ → ℤ → ℤ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "Two's complement sign extension for negative integers",
+        "statement": "Negative integers have infinitely many `true` bits beyond their finite pattern (sign bit = 1), while non-negative integers have infinitely many `false` bits; this makes `VTask.bitwise f m n` well-defined at all bit positions for all integers.",
+        "note": "This convention means that if `f false false = true`, then `VTask.bitwise f` applied to two non-negative integers yields a negative integer."
+      },
+      {
+        "point": "Result is negative when f false false = true",
+        "statement": "When `f false false = true`, the result of `VTask.bitwise f m n` for non-negative `m` and `n` is a negative integer (specifically, the infinitely many upper bits all evaluate to `true`, giving a two's-complement negative number).",
+        "note": "No junk value is produced; the definition is total and this is the mathematically correct behaviour under two's-complement semantics."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bitwise_testBit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : Bool → Bool → Bool) (m n : ℤ) (k : ℕ), Int.testBit (VTask.bitwise f m n) k = f (Int.testBit m k) (Int.testBit n k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.testBit_bitwise"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.testBit_bitwise"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.157,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bitwise_and_eq_land",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.bitwise and = Int.land",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.bitwise_and"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.bitwise_and"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.185,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bitwise_or_eq_lor",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.bitwise or = Int.lor",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.bitwise_or"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.bitwise_or"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.282,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bitwise_xor_eq_xor",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.bitwise xor = Int.xor",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.bitwise_xor"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.bitwise_xor"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.069,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bitwise_nonneg_result_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.bitwise (fun _ _ => true) (2 : ℤ) (3 : ℤ) = 0) := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.bitwise (fun _ _ => true) (2 : ℤ) (3 : ℤ)",
+      "violated_property": "f false false = false (result would be non-negative, but f false false = true forces result = -1)"
+    },
+    {
+      "id": "bitwise_and_nonneg_nonneg_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ), 0 ≤ VTask.bitwise and (↑m : ℤ) (↑n : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.testBit_bitwise",
+        "Int.bitwise_and"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.testBit_bitwise",
+        "Int.bitwise_and"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.293,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bitwise_reject_ff_true_nonneg",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.bitwise (fun _ _ => true) 0 0 ≠ 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ _ => true"
+        ],
+        "m": [
+          "0"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.bitwise-c87f75c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.bitwise (fun _ _ => true) 0 0",
+      "violated_property": "When f false false = true, VTask.bitwise f 0 0 = -1 (not 0), because all bit positions yield true, encoding -1 in two's complement"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Int.bitwise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Int.bitwise-c87f75c7",
+    "review_status": "unreviewed"
+  }
+}

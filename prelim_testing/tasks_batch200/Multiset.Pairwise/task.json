@@ -1,0 +1,242 @@
+{
+  "task_id": "Multiset.Pairwise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Pairwise",
+  "signature": {
+    "name": "VTask.Pairwise",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (m : Multiset α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "empty multiset",
+        "statement": "VTask.Pairwise r 0 is always true for any relation r, witnessed by the empty list.",
+        "note": "Vacuous truth: List.Pairwise r [] holds by definition."
+      },
+      {
+        "point": "singleton multiset",
+        "statement": "VTask.Pairwise r {a} is always true for any element a and relation r.",
+        "note": "A single-element list has no two distinct positions, so List.Pairwise r [a] holds trivially."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pairwise_nodup_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Multiset ℕ), Multiset.Nodup s ↔ VTask.Pairwise (· ≠ ·) s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.nodup_iff_pairwise"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.nodup_iff_pairwise"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.124,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_zero_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), VTask.Pairwise r (0 : Multiset α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.pairwise_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.pairwise_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.213,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_forall_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {r : α → α → Prop} [Std.Symm r] {s : Multiset α}, VTask.Pairwise r s → ∀ ⦃a⦄, a ∈ s → ∀ ⦃b⦄, b ∈ s → a ≠ b → r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Pairwise.forall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.Pairwise.forall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.626,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_coe_iff_pairwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {r : α → α → Prop} [Std.Symm r] {l : List α}, VTask.Pairwise r (l : Multiset α) ↔ List.Pairwise r l",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.pairwise_coe_iff_pairwise"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.pairwise_coe_iff_pairwise"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.259,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_nodup_implies_pairwise_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Multiset α), Multiset.Nodup s → VTask.Pairwise (· ≠ ·) s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.nodup_iff_pairwise"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.nodup_iff_pairwise"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_empty_any_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), VTask.Pairwise r (∅ : Multiset α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.pairwise_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.pairwise_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.208,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.Pairwise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.Pairwise-ce4bd4fb",
+    "review_status": "unreviewed"
+  }
+}

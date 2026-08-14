@@ -1,0 +1,293 @@
+{
+  "task_id": "SimpleGraph.boxProd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.boxProd",
+  "signature": {
+    "name": "VTask.boxProd",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (G : SimpleGraph α) -> (H : SimpleGraph β) -> SimpleGraph (α × β)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "symmetry",
+        "statement": "The adjacency relation of VTask.boxProd G H is symmetric: if (a₁, b) is adjacent to (a₂, b) then (a₂, b) is adjacent to (a₁, b), and similarly for the second coordinate.",
+        "note": "Symmetry is required by the SimpleGraph structure and is guaranteed by the construction."
+      },
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total and has no junk-value or out-of-range inputs requiring a special convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "boxProd_degree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) (x : α × β) [Fintype (G.neighborSet x.1)] [Fintype (H.neighborSet x.2)] [Fintype ((VTask.boxProd G H).neighborSet x)], (VTask.boxProd G H).degree x = G.degree x.1 + H.degree x.2",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.degree_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.degree_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.907,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_connected_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β), (VTask.boxProd G H).Connected ↔ G.Connected ∧ H.Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.connected_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.connected_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.427,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_connected_from_both",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β), G.Connected → H.Connected → (VTask.boxProd G H).Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Connected.boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Connected.boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.419,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_edist",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) (x y : α × β), (VTask.boxProd G H).edist x y = G.edist x.1 y.1 + H.edist x.2 y.2",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.edist_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.edist_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.47,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_neighborSet",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) (x : α × β), (VTask.boxProd G H).neighborSet x = G.neighborSet x.1 ×ˢ {x.2} ∪ {x.1} ×ˢ H.neighborSet x.2",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.neighborSet_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.neighborSet_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.171,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_reachable_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) (x y : α × β), (VTask.boxProd G H).Reachable x y ↔ G.Reachable x.1 y.1 ∧ H.Reachable x.2 y.2",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.reachable_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.reachable_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.652,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "boxProd_no_edge_if_both_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*}, (VTask.boxProd (⊥ : SimpleGraph α) (⊥ : SimpleGraph β)) = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.boxProd_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.boxProd_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.418,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.boxProd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.boxProd-09c0decc",
+    "review_status": "unreviewed"
+  }
+}

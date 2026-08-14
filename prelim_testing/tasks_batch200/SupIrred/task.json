@@ -1,0 +1,336 @@
+{
+  "task_id": "SupIrred",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SupIrred",
+  "signature": {
+    "name": "VTask.SupIrred",
+    "type": "{α : Type u_2} -> [SemilatticeSup α] -> (a : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "minimum elements",
+        "statement": "Any minimum (globally least) element of α is not sup-irreducible; in particular, if α has a bottom element ⊥, then VTask.SupIrred ⊥ is false.",
+        "note": "Enforced by the first conjunct of the definition (¬IsMin a)."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "supirred_not_ismin",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] (a : α), VTask.SupIrred a → ¬IsMin a",
+      "domain_inputs": {},
+      "anchors": [
+        "SupIrred.not_isMin"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SupIrred.not_isMin"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.97,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supirred_ne_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] [inst2 : OrderBot α] (a : α), VTask.SupIrred a → a ≠ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "SupIrred.ne_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SupIrred.ne_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.001,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supirred_not_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] [inst2 : OrderBot α], ¬VTask.SupIrred (⊥ : α)",
+      "domain_inputs": {},
+      "anchors": [
+        "not_supIrred_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_supIrred_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.207,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supprime_implies_supirred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] [inst2 : Preorder α] (a : α), SupPrime a → VTask.SupIrred a",
+      "domain_inputs": {},
+      "anchors": [
+        "SupPrime.supIrred"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SupPrime.supIrred"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.744,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supirred_finset_sup_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] [inst2 : OrderBot α] {ι : Type*} (a : α) (s : Finset ι) (f : ι → α), VTask.SupIrred a → s.sup f = a → ∃ i ∈ s, f i = a",
+      "domain_inputs": {},
+      "anchors": [
+        "SupIrred.finset_sup_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SupIrred.finset_sup_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.187,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supirred_ismin_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : SemilatticeSup α] (a : α), VTask.SupIrred a ↔ ¬IsMin a",
+      "domain_inputs": {},
+      "anchors": [
+        "supIrred_iff_not_isMin"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supIrred_iff_not_isMin"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supirred_bot_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.SupIrred (⊥ : Bool)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.141,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(⊥ : Bool)",
+      "violated_property": "not a minimum element"
+    },
+    {
+      "id": "supirred_false_in_bool",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.SupIrred (false : Bool)",
+      "domain_inputs": {
+        "a": [
+          "false"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.13,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(false : Bool)",
+      "violated_property": "not a minimum element"
+    },
+    {
+      "id": "supirred_true_in_bool",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.SupIrred (true : Bool)",
+      "domain_inputs": {
+        "a": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.058,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SupIrred-0b7bb20a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(true : Bool)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SupIrred",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SupIrred-0b7bb20a",
+    "review_status": "unreviewed"
+  }
+}

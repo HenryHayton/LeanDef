@@ -1,0 +1,377 @@
+{
+  "task_id": "SimpleGraph.IsUniform",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsUniform",
+  "signature": {
+    "name": "VTask.IsUniform",
+    "type": "{α : Type u_1} -> {𝕜 : Type u_2} -> [Field 𝕜] -> [LinearOrder 𝕜] -> (G : SimpleGraph α) -> [DecidableRel G.Adj] -> (ε : 𝕜) -> (s t : Finset α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "ε",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "ε ≤ 0",
+        "statement": "When ε ≤ 0, IsUniform G ε s t is vacuously false (the required strict inequality |density difference| < ε cannot hold since absolute values are non-negative), except in degenerate cases; in practice the property is only meaningful for 0 < ε < 1.",
+        "note": "Follows from the fact that any proof of IsUniform G ε s t for a non-trivial pair implies 0 < ε, as recorded in IsUniform.pos."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isUniform_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] (G : SimpleGraph α) [DecidableRel G.Adj] (ε : 𝕜) (s t : Finset α), VTask.IsUniform G ε s t → 0 < ε",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsUniform.pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsUniform.pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniform_mono_eps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] (G : SimpleGraph α) [DecidableRel G.Adj] (ε₁ ε₂ : 𝕜) (s t : Finset α), ε₁ ≤ ε₂ → VTask.IsUniform G ε₁ s t → VTask.IsUniform G ε₂ s t",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsUniform.pos",
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsUniform.pos",
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "not_isUniform_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] (G : SimpleGraph α) [DecidableRel G.Adj] (ε : 𝕜) (s t : Finset α), ¬VTask.IsUniform G ε s t ↔ ∃ s' ⊆ s, ∃ t' ⊆ t, (s.card : 𝕜) * ε ≤ s'.card ∧ (t.card : 𝕜) * ε ≤ t'.card ∧ ε ≤ |G.edgeDensity s' t' - G.edgeDensity s t|",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniform_empty_left_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) ∅ {0, 1, 2}",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "t": [
+          "{0, 1, 2}"
+        ],
+        "ε": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.195,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) ∅ {0, 1, 2}"
+    },
+    {
+      "id": "isUniform_empty_right_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) {0, 1, 2} ∅",
+      "domain_inputs": {
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "∅"
+        ],
+        "ε": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.169,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) {0, 1, 2} ∅"
+    },
+    {
+      "id": "isUniform_nonpos_eps_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (0 : ℚ) {0, 1} {2, 3}",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "t": [
+          "{2, 3}"
+        ],
+        "ε": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.278,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (0 : ℚ) {0, 1} {2, 3}",
+      "violated_property": "ε must be positive for IsUniform to hold"
+    },
+    {
+      "id": "isUniform_neg_eps_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (-1 : ℚ) {0, 1} {2, 3}",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "t": [
+          "{2, 3}"
+        ],
+        "ε": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (-1 : ℚ) {0, 1} {2, 3}",
+      "violated_property": "ε must be positive for IsUniform to hold"
+    },
+    {
+      "id": "isUniform_nonuniform_witness_implies_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] (G : SimpleGraph α) [DecidableRel G.Adj] (ε : 𝕜) (s t : Finset α), ¬VTask.IsUniform G ε s t → ∃ s' ⊆ s, ∃ t' ⊆ t, (s.card : 𝕜) * ε ≤ s'.card ∧ (t.card : 𝕜) * ε ≤ t'.card ∧ ε ≤ |G.edgeDensity s' t' - G.edgeDensity s t|",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniform_density_diff_lt_eps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] (G : SimpleGraph α) [DecidableRel G.Adj] (ε : 𝕜) (s t s' t' : Finset α), VTask.IsUniform G ε s t → s' ⊆ s → t' ⊆ t → (s.card : 𝕜) * ε ≤ s'.card → (t.card : 𝕜) * ε ≤ t'.card → |G.edgeDensity s' t' - G.edgeDensity s t| < ε",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.not_isUniform_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniform_bot_graph_large_eps",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) {0, 1} {2, 3}",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "t": [
+          "{2, 3}"
+        ],
+        "ε": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.184,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsUniform (⊥ : SimpleGraph (Fin 4)) (1 : ℚ) {0, 1} {2, 3}"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.IsUniform",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.IsUniform-3c4a7746",
+    "review_status": "unreviewed"
+  }
+}

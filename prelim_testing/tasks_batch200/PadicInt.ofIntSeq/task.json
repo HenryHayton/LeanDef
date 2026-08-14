@@ -1,0 +1,284 @@
+{
+  "task_id": "PadicInt.ofIntSeq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofIntSeq",
+  "signature": {
+    "name": "VTask.ofIntSeq",
+    "type": "{p : ℕ} -> [hp : Fact (Nat.Prime p)] -> (seq : ℕ → ℤ) -> (h : IsCauSeq (padicNorm p) fun n => ↑(seq n)) -> ℤ_[p]",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "seq",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "norm_le_one",
+        "statement": "The resulting p-adic integer always has p-adic norm at most 1, because every integer has padicNorm p ≤ 1; no extra hypothesis is needed to guarantee membership in ℤ_[p].",
+        "note": "This is enforced by the construction itself."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofIntSeq_norm_le_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (seq : ℕ → ℤ) (h : IsCauSeq (padicNorm p) fun n => ↑(seq n)), ‖VTask.ofIntSeq seq h‖ ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.norm_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.norm_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.474,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_const_toZModPow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (k : ℤ) (h : IsCauSeq (padicNorm p) fun n => ↑k) (n : ℕ), (VTask.ofIntSeq (fun _ => k) h).toZModPow n = (k : ZMod (p ^ n))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.toZModPow_ofIntSeq_of_pow_dvd_sub"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.toZModPow_ofIntSeq_of_pow_dvd_sub"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_toZModPow_of_pow_dvd_sub",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (f : ℕ → ℤ) (hi : ∀ i, (p : ℤ) ^ i ∣ f (i + 1) - f i) (n : ℕ), (VTask.ofIntSeq f (PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub f p hi)).toZModPow n = (f n : ZMod (p ^ n))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.toZModPow_ofIntSeq_of_pow_dvd_sub"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.toZModPow_ofIntSeq_of_pow_dvd_sub"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.782,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_add_toZModPow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (f g : ℕ → ℤ) (hf : IsCauSeq (padicNorm p) fun n => ↑(f n)) (hg : IsCauSeq (padicNorm p) fun n => ↑(g n)) (n : ℕ), (VTask.ofIntSeq f hf + VTask.ofIntSeq g hg).toZModPow n = (VTask.ofIntSeq f hf).toZModPow n + (VTask.ofIntSeq g hg).toZModPow n",
+      "domain_inputs": {},
+      "anchors": [
+        "map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.123,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_val_in_unit_ball",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (seq : ℕ → ℤ) (h : IsCauSeq (padicNorm p) fun n => ↑(seq n)), (VTask.ofIntSeq seq h : ℚ_[p]) ∈ PadicInt.subring p",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.mem_subring_iff",
+        "PadicInt.norm_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.mem_subring_iff",
+        "PadicInt.norm_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.236,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_neg_toZModPow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (f : ℕ → ℤ) (hf : IsCauSeq (padicNorm p) fun n => ↑(f n)) (hn : IsCauSeq (padicNorm p) fun n => ↑(-f n)) (n : ℕ), (-VTask.ofIntSeq f hf).toZModPow n = -(VTask.ofIntSeq f hf).toZModPow n",
+      "domain_inputs": {},
+      "anchors": [
+        "map_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.826,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIntSeq_mul_toZModPow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (f g : ℕ → ℤ) (hf : IsCauSeq (padicNorm p) fun n => ↑(f n)) (hg : IsCauSeq (padicNorm p) fun n => ↑(g n)) (n : ℕ), (VTask.ofIntSeq f hf * VTask.ofIntSeq g hg).toZModPow n = (VTask.ofIntSeq f hf).toZModPow n * (VTask.ofIntSeq g hg).toZModPow n",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.537,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PadicInt.ofIntSeq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PadicInt.ofIntSeq-417681ce",
+    "review_status": "unreviewed"
+  }
+}

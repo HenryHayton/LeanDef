@@ -1,0 +1,150 @@
+{
+  "task_id": "AList.insertRec",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.insertRec",
+  "signature": {
+    "name": "VTask.insertRec",
+    "type": "{α : Type u} -> {β : α → Type v} -> [DecidableEq α] -> {C : AList β → Sort u_1} -> (H0 : C ∅) -> (IH : (a : α) → (b : β a) → (l : AList β) → a ∉ l → C l → C (AList.insert a b l)) -> (l : AList β) -> C l",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total over all AList β with no junk inputs; every AList satisfies the no-duplicate-keys invariant by construction, so there are no edge conventions beyond the standard base/step cases captured by H0 and IH."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "insertRec_empty_returns_H0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} [DecidableEq α] {C : AList β → Sort*} (H0 : C ∅) (IH : ∀ (a : α) (b : β a) (l : AList β), a ∉ l → C l → C (AList.insert a b l)), VTask.insertRec H0 IH ∅ = H0",
+      "domain_inputs": {},
+      "anchors": [
+        "AList.insertRec_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AList.insertRec_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.78,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AList.insertRec-cafdb14b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertRec_insert_step",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} [DecidableEq α] {C : AList β → Sort*} (H0 : C ∅) (IH : ∀ (a : α) (b : β a) (l : AList β), a ∉ l → C l → C (AList.insert a b l)) (a : α) (b : β a) (l : AList β) (h : a ∉ l), VTask.insertRec H0 IH (AList.insert a b l) = IH a b l h (VTask.insertRec H0 IH l)",
+      "domain_inputs": {},
+      "anchors": [
+        "AList.insertRec_insert_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AList.insertRec_insert_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.696,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AList.insertRec-cafdb14b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertRec_ih_receives_notin",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} [DecidableEq α] {C : AList β → Sort*} (H0 : C ∅) (IH : ∀ (a : α) (b : β a) (l : AList β), a ∉ l → C l → C (AList.insert a b l)) (a : α) (b : β a) (l : AList β) (h : a ∉ l), VTask.insertRec H0 IH (AList.insert a b l) = IH a b l h (VTask.insertRec H0 IH l)",
+      "domain_inputs": {},
+      "anchors": [
+        "AList.insertRec_insert_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AList.insertRec_insert_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.627,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AList.insertRec-cafdb14b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AList.insertRec",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AList.insertRec-cafdb14b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,476 @@
+{
+  "task_id": "Cycle.Nontrivial",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Nontrivial",
+  "signature": {
+    "name": "VTask.Nontrivial",
+    "type": "{α : Type u_1} -> (s : Cycle α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: Nontrivial is a straightforward existential Prop; there are no junk-value conventions or special edge-case output assignments needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nontrivial_length_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Cycle α), VTask.Nontrivial s → 2 ≤ s.length",
+      "domain_inputs": {},
+      "anchors": [
+        "Cycle.length_nontrivial"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cycle.length_nontrivial"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.413,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontrivial_nodup_iff_not_subsingleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Cycle α), s.Nodup → (VTask.Nontrivial s ↔ ¬s.Subsingleton)",
+      "domain_inputs": {},
+      "anchors": [
+        "Cycle.Nodup.nontrivial_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cycle.Nodup.nontrivial_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.769,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontrivial_nodup_coe_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (l : List α), l.Nodup → (VTask.Nontrivial (↑l : Cycle α) ↔ 2 ≤ l.length)",
+      "domain_inputs": {},
+      "anchors": [
+        "Cycle.nontrivial_coe_nodup_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cycle.nontrivial_coe_nodup_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.563,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontrivial_nodup_singleton_not_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a : α), ¬VTask.Nontrivial (↑[a] : Cycle α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Cycle.nontrivial_coe_nodup_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cycle.nontrivial_coe_nodup_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.152,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontrivial_formPerm_isCycle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (s : Cycle α) (h : s.Nodup), VTask.Nontrivial s → Equiv.Perm.IsCycle (s.formPerm h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Cycle.isCycle_formPerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cycle.isCycle_formPerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.303,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontrivial_accept_basic",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Nontrivial (↑[1, 2] : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑[1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.067,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(↑[1, 2] : Cycle ℕ)"
+    },
+    {
+      "id": "nontrivial_reject_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.Nontrivial (↑([] : List ℕ) : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑([] : List ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(↑([] : List ℕ) : Cycle ℕ)",
+      "violated_property": "no elements exist to witness the existential"
+    },
+    {
+      "id": "nontrivial_reject_singleton",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.Nontrivial (↑[42] : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑[42]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.089,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(↑[42] : Cycle ℕ)",
+      "violated_property": "only one element is present, so no pair of distinct elements can be found"
+    },
+    {
+      "id": "nontrivial_reject_repeated",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.Nontrivial (↑[1, 1] : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑[1, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(↑[1, 1] : Cycle ℕ)",
+      "violated_property": "no two distinct elements are present even though the length exceeds one"
+    },
+    {
+      "id": "nontrivial_accept_three_elements",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Nontrivial (↑[1, 2, 3] : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.083,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(↑[1, 2, 3] : Cycle ℕ)"
+    },
+    {
+      "id": "nontrivial_reject_all_same_three",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.Nontrivial (↑[5, 5, 5] : Cycle ℕ)",
+      "domain_inputs": {
+        "s": [
+          "↑[5, 5, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(↑[5, 5, 5] : Cycle ℕ)",
+      "violated_property": "no two distinct elements are present"
+    },
+    {
+      "id": "nontrivial_reverse_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Nontrivial (↑[1, 2] : Cycle ℕ).reverse",
+      "domain_inputs": {
+        "s": [
+          "↑[1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.072,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(↑[1, 2] : Cycle ℕ).reverse"
+    },
+    {
+      "id": "nontrivial_implies_length_ge_two_concrete",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Nontrivial (↑[0, 1] : Cycle ℕ) → 2 ≤ (↑[0, 1] : Cycle ℕ).length",
+      "domain_inputs": {
+        "s": [
+          "↑[0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.165,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(↑[0, 1] : Cycle ℕ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Cycle.Nontrivial",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Cycle.Nontrivial-b65cd04a",
+    "review_status": "unreviewed"
+  }
+}

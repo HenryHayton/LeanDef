@@ -1,0 +1,319 @@
+{
+  "task_id": "SimpleGraph.Walk.takeUntil",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.takeUntil",
+  "signature": {
+    "name": "VTask.takeUntil",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> [DecidableEq V] -> {v w : V} -> (p : G.Walk v w) -> (u : V) -> u ∈ p.support → G.Walk v u",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "u ∈ p.support",
+    "variables": [
+      "p",
+      "u"
+    ],
+    "conventions": [
+      {
+        "point": "u equals the starting vertex v",
+        "statement": "When u = v, VTask.takeUntil p u h = Walk.nil, the trivial walk at v with no edges.",
+        "note": "This is the base case: reaching the target immediately without traversing any edge."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "takeUntil_nil_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} (p : G.Walk v w) (h : u ∈ p.support), (VTask.takeUntil p u h).Nil ↔ v = u",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.nil_takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.nil_takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.378,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} (p : G.Walk v w) (h : u ∈ p.support), (VTask.takeUntil p u h).length = p.support.idxOf u",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.909,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_isSubwalk",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} (p : G.Walk v w) (h : u ∈ p.support), (VTask.takeUntil p u h).IsSubwalk p",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.isSubwalk_takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.isSubwalk_takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.615,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_darts_prefix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} (p : G.Walk v w) (h : u ∈ p.support), (VTask.takeUntil p u h).darts <+: p.darts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.darts_takeUntil_prefix_darts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.darts_takeUntil_prefix_darts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.627,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_edges_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} (p : G.Walk v w) (h : u ∈ p.support), (VTask.takeUntil p u h).edges ⊆ p.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_takeUntil_subset_edges"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_takeUntil_subset_edges"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.579,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_isPath_of_isPath",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} {p : G.Walk v w}, p.IsPath → ∀ (h : u ∈ p.support), (VTask.takeUntil p u h).IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.497,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_isTrail_of_isTrail",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} {p : G.Walk v w}, p.IsTrail → ∀ (h : u ∈ p.support), (VTask.takeUntil p u h).IsTrail",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsTrail.takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsTrail.takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.542,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "takeUntil_getVert_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {v w u : V} {p : G.Walk v w} (h : u ∈ p.support), p.getVert (VTask.takeUntil p u h).length = u",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.getVert_length_takeUntil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.getVert_length_takeUntil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.583,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.takeUntil",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.takeUntil-80ea91f8",
+    "review_status": "unreviewed"
+  }
+}

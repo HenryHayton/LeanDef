@@ -1,0 +1,422 @@
+{
+  "task_id": "Function.updateFinset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.updateFinset",
+  "signature": {
+    "name": "VTask.updateFinset",
+    "type": "{ι : Type u_1} -> {π : ι → Sort u_2} -> [DecidableEq ι] -> (x : (i : ι) → π i) -> (s : Finset ι) -> (y : (i : ↥s) → π ↑i) -> (i : ι) -> π i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "s",
+      "y",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "i ∈ s",
+        "statement": "When the query index `i` belongs to the finite set `s`, the result is the replacement value `y ⟨i, hi⟩` from the overriding function `y`.",
+        "note": "membership branch"
+      },
+      {
+        "point": "i ∉ s",
+        "statement": "When the query index `i` does not belong to `s`, the result is the background value `x i` from the original function.",
+        "note": "non-membership branch"
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "updateFinset_outside_s",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : let s : Finset (Fin 3) := {0, 2}; let x : Fin 3 → ℕ := fun _ => 0; let y : (i : ↥s) → ℕ := fun i => if (i : Fin 3) = 0 then 10 else 30; VTask.updateFinset x s y 1 = 0 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_inside_s_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : let s : Finset (Fin 3) := {0, 2}; let x : Fin 3 → ℕ := fun _ => 0; let y : (i : ↥s) → ℕ := fun i => if (i : Fin 3) = 0 then 10 else 30; VTask.updateFinset x s y 0 = 10 := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_inside_s_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : let s : Finset (Fin 3) := {0, 2}; let x : Fin 3 → ℕ := fun _ => 0; let y : (i : ↥s) → ℕ := fun i => if (i : Fin 3) = 0 then 10 else 30; VTask.updateFinset x s y 2 = 30 := by decide",
+      "domain_inputs": {
+        "i": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_singleton_matches_update",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : let x : Fin 3 → ℕ := fun _ => 0; let s : Finset (Fin 3) := {1}; let y : (i : ↥s) → ℕ := fun _ => 42; VTask.updateFinset x s y 1 = Function.update x 1 42 1 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_univ_eq_y",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) [DecidableEq ι] [Fintype ι] (π : ι → Type) (x : ∀ i, π i) (y : ∀ i : Finset.univ, π i) (i : ι), VTask.updateFinset x Finset.univ y i = y ⟨i, Finset.mem_univ i⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.updateFinset_univ_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.updateFinset_univ_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.853,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_restrict_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) [DecidableEq ι] (π : ι → Type) (s : Finset ι) (x : ∀ i, π i), VTask.updateFinset x s (s.restrict x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.updateFinset_restrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.updateFinset_restrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.517,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrict_updateFinset_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) [DecidableEq ι] (π : ι → Type) (s : Finset ι) (x : ∀ i, π i) (y : ∀ i : s, π i), s.restrict (VTask.updateFinset x s y) = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.restrict_updateFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.restrict_updateFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.188,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_singleton_eq_function_update",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) [DecidableEq ι] (π : ι → Type) (x : ∀ i, π i) (j : ι) (y : ∀ i : ({j} : Finset ι), π i), VTask.updateFinset x {j} y = Function.update x j (y ⟨j, Finset.mem_singleton_self j⟩)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.updateFinset_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.updateFinset_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.77,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_overwrite_subset_ignored",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) [DecidableEq ι] (π : ι → Type) (s t : Finset ι) (hst : s ⊆ t) (x : ∀ i, π i) (y : ∀ i : s, π i) (z : ∀ i : t, π i), VTask.updateFinset (VTask.updateFinset x s y) t z = VTask.updateFinset x t z",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.updateFinset_updateFinset_of_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.updateFinset_updateFinset_of_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 18.504,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "updateFinset_mem_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.updateFinset (fun _ : Fin 4 => (0 : ℕ)) {1, 3} (fun i => if (i : Fin 4) = 1 then 7 else 9) 1 = 7 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.updateFinset (fun _ : Fin 4 => (0 : ℕ)) {1, 3} (fun i => if (i : Fin 4) = 1 then 7 else 9) 1"
+    },
+    {
+      "id": "updateFinset_nonmem_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.updateFinset (fun _ : Fin 4 => (0 : ℕ)) {1, 3} (fun i => if (i : Fin 4) = 1 then 7 else 9) 2 ≠ 7 := by decide",
+      "domain_inputs": {
+        "i": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by positivity",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.updateFinset (fun _ : Fin 4 => (0 : ℕ)) {1, 3} (fun i => if (i : Fin 4) = 1 then 7 else 9) 2",
+      "violated_property": "index 2 is not in s = {1, 3}, so the result should be x 2 = 0, not the replacement value"
+    },
+    {
+      "id": "updateFinset_reject_inside_neq_background",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (let s : Finset (Fin 3) := {0, 2}; let x : Fin 3 → ℕ := fun _ => 0; let y : (i : ↥s) → ℕ := fun i => if (i : Fin 3) = 0 then 10 else 30; VTask.updateFinset x s y 0 = 0) = False := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.updateFinset-a82c43df",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.updateFinset (fun _ => 0) ({0, 2} : Finset (Fin 3)) (fun i => if (i : Fin 3) = 0 then 10 else 30) 0 = 0",
+      "violated_property": "For i ∈ s, the result must equal y ⟨i, _⟩, not x i"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.updateFinset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.updateFinset-a82c43df",
+    "review_status": "unreviewed"
+  }
+}

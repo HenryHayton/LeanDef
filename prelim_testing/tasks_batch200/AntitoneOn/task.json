@@ -1,0 +1,169 @@
+{
+  "task_id": "AntitoneOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.AntitoneOn",
+  "signature": {
+    "name": "VTask.AntitoneOn",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "empty set",
+        "statement": "VTask.AntitoneOn f ∅ is vacuously true for every f, because the universal quantification over elements of the empty set has no hypotheses to discharge.",
+        "note": "Standard vacuous truth of universal quantification over the empty set."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "antitone_on_univ_implies_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.AntitoneOn f Set.univ ↔ Antitone f",
+      "domain_inputs": {},
+      "anchors": [
+        "antitoneOn_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "antitoneOn_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.469,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AntitoneOn-d2185ec2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antitone_on_subset_restriction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s t : Set α), VTask.AntitoneOn f s → t ⊆ s → VTask.AntitoneOn f t",
+      "domain_inputs": {},
+      "anchors": [
+        "AntitoneOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntitoneOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.615,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "AntitoneOn-d2185ec2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antitone_on_comp_antitone_is_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ) (s : Set α) (t : Set β), VTask.AntitoneOn g t → VTask.AntitoneOn f s → Set.MapsTo f s t → MonotoneOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "AntitoneOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntitoneOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.57,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "AntitoneOn-d2185ec2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotone_comp_antitone_is_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ) (s : Set α) (t : Set β), MonotoneOn g t → VTask.AntitoneOn f s → Set.MapsTo f s t → VTask.AntitoneOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.comp_AntitoneOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.comp_AntitoneOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 46.481,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "AntitoneOn-d2185ec2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AntitoneOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AntitoneOn-d2185ec2",
+    "review_status": "unreviewed"
+  }
+}

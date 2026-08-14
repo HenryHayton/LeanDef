@@ -1,0 +1,302 @@
+{
+  "task_id": "Finpartition.extendOfLE",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.extendOfLE",
+  "signature": {
+    "name": "VTask.extendOfLE",
+    "type": "{α : Type u_1} -> [GeneralizedBooleanAlgebra α] -> [DecidableEq α] -> {a b : α} -> (P : Finpartition a) -> (hab : a ≤ b) -> Finpartition b",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "hab"
+    ],
+    "conventions": [
+      {
+        "point": "a = b (i.e., b \\ a = ⊥)",
+        "statement": "When a = b, VTask.extendOfLE P hab returns a finpartition whose parts are exactly P.parts; the element b \\ a = ⊥ is not added as a part.",
+        "note": "Degenerate case: the extension is the identity on parts."
+      },
+      {
+        "point": "a < b (i.e., b \\ a ≠ ⊥)",
+        "statement": "When a < b, VTask.extendOfLE P hab returns a finpartition whose parts are insert (b \\ a) P.parts; exactly one new part b \\ a is adjoined.",
+        "note": "Generic case: the leftover piece b \\ a becomes the unique new part."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "extendOfLE_parts_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a ≤ b), P.parts ⊆ (VTask.extendOfLE P hab).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_subset_extendOfLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_subset_extendOfLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.165,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_parts_eq_of_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a = b), (VTask.extendOfLE P hab.le).parts = P.parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.401,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_parts_insert_of_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a < b), (VTask.extendOfLE P (le_of_lt hab)).parts = insert (b \\ a) P.parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_extendOfLE_of_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_extendOfLE_of_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.512,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_mem_parts_or_sdiff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a ≤ b) {p : α}, p ∈ (VTask.extendOfLE P hab).parts → p ∈ P.parts ∨ p = b \\ a",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_parts_or_eq_sdiff_of_mem_extendOfLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_parts_or_eq_sdiff_of_mem_extendOfLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.117,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_card_eq_of_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a = b), (VTask.extendOfLE P hab.le).parts.card = P.parts.card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_sdiff_mem_parts_of_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a < b), b \\ a ∈ (VTask.extendOfLE P (le_of_lt hab)).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_extendOfLE_of_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_extendOfLE_of_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_parts_eq_parts_of_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a : α} (P : Finpartition a), (VTask.extendOfLE P (le_refl a)).parts = P.parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.parts_extendOfLE_of_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.961,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extendOfLE_reject_parts_not_superset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [GeneralizedBooleanAlgebra α] [DecidableEq α] {a b : α} (P : Finpartition a) (hab : a ≤ b) (p : α), p ∈ (VTask.extendOfLE P hab).parts → ¬(p ∉ P.parts ∧ p ≠ b \\ a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_parts_or_eq_sdiff_of_mem_extendOfLE"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_parts_or_eq_sdiff_of_mem_extendOfLE"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finpartition.extendOfLE",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finpartition.extendOfLE-10300f5c",
+    "review_status": "unreviewed"
+  }
+}

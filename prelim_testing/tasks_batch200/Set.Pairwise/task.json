@@ -1,0 +1,305 @@
+{
+  "task_id": "Set.Pairwise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Pairwise",
+  "signature": {
+    "name": "VTask.Pairwise",
+    "type": "{α : Type u_1} -> (s : Set α) -> (r : α → α → Prop) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": "distinctness_guard",
+        "statement": "The condition `x ≠ y` is built in: reflexive pairs are excluded, so no obligation is placed on `r x x` for any `x ∈ s`.",
+        "note": "This matches the definition: the hypothesis `x ≠ y` must be provided to conclude `r x y`."
+      },
+      {
+        "point": "vacuous_empty_or_singleton",
+        "statement": "For the empty set or any singleton set, `VTask.Pairwise s r` is vacuously true regardless of `r`.",
+        "note": "No two distinct elements exist, so the universal quantifier is empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pairwise_monotone_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), t ⊆ s → VTask.Pairwise s r → VTask.Pairwise t r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Pairwise.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Pairwise.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.966,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_empty_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), VTask.Pairwise (∅ : Set α) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pairwise_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pairwise_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.359,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_singleton_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a : α) (r : α → α → Prop), VTask.Pairwise ({a} : Set α) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pairwise_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pairwise_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.267,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_insert_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a : α) (s : Set α) (r : α → α → Prop), VTask.Pairwise (insert a s) r ↔ VTask.Pairwise s r ∧ ∀ b ∈ s, a ≠ b → r a b ∧ r b a",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pairwise_insert"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pairwise_insert"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.909,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_reflexive_no_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Set α) (r : α → α → Prop) [Std.Refl r], VTask.Pairwise s r ↔ ∀ ⦃a⦄, a ∈ s → ∀ ⦃b⦄, b ∈ s → r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Std.Refl.set_pairwise_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Std.Refl.set_pairwise_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.45,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_pair_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a b : α) (r : α → α → Prop) [Std.Symm r], VTask.Pairwise ({a, b} : Set α) r ↔ a ≠ b → r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.pairwise_pair_of_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.pairwise_pair_of_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.294,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_union_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s t : Set α) (r : α → α → Prop), VTask.Pairwise (s ∪ t) r → VTask.Pairwise s r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Pairwise.mono",
+        "Set.subset_union_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Pairwise.mono",
+        "Set.subset_union_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_pair_le_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Pairwise ({2, 5} : Set ℕ) (· ≥ ·)",
+      "domain_inputs": {
+        "s": [
+          "{2, 5} : Set ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.Pairwise-0b887a25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "{2, 5} : Set ℕ",
+      "violated_property": "r x y must hold for all distinct x y ∈ s; here 2 ≥ 5 fails"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.Pairwise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.Pairwise-0b887a25",
+    "review_status": "unreviewed"
+  }
+}

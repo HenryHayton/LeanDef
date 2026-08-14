@@ -1,0 +1,221 @@
+{
+  "task_id": "SimpleGraph.sum",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sum",
+  "signature": {
+    "name": "VTask.sum",
+    "type": "{V : Type u_3} -> {W : Type u_5} -> (G : SimpleGraph V) -> (H : SimpleGraph W) -> SimpleGraph (V ⊕ W)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The disjoint sum is a total construction defined for all simple graphs on any vertex types; there are no junk-value or boundary conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sum_not_adj_inl_inr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V W : Type*} (G : SimpleGraph V) (H : SimpleGraph W) (u : V) (v : W), ¬(VTask.sum G H).Adj (Sum.inl u) (Sum.inr v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Coloring.sumLeft_sum",
+        "SimpleGraph.Coloring.sumRight_sum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Coloring.sumLeft_sum",
+        "SimpleGraph.Coloring.sumRight_sum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.271,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.sum-71298a06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sum_colorable_max",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V W : Type*} (G : SimpleGraph V) (H : SimpleGraph W) (n m : ℕ), G.Colorable n → H.Colorable m → (VTask.sum G H).Colorable (max n m)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Colorable.sum_max"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Colorable.sum_max"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.534,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.sum-71298a06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sum_connected_sup_edge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V W : Type*} (G : SimpleGraph V) (H : SimpleGraph W) (v : V) (w : W), G.Connected → H.Connected → (VTask.sum G H ⊔ SimpleGraph.edge (Sum.inl v) (Sum.inr w)).Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Connected.sum_sup_edge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Connected.sum_sup_edge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.535,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.sum-71298a06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sum_not_connected_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬(VTask.sum (⊥ : SimpleGraph (Fin 1)) (⊥ : SimpleGraph (Fin 1))).Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Connected.sum_sup_edge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Connected.sum_sup_edge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.166,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.sum-71298a06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sum_reachable_sup_edge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V W : Type*} (G : SimpleGraph V) (H : SimpleGraph W) (v v' : V) (w w' : W), G.Reachable v v' → H.Reachable w w' → (VTask.sum G H ⊔ SimpleGraph.edge (Sum.inl v) (Sum.inr w)).Reachable (Sum.inl v') (Sum.inr w')",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Reachable.sum_sup_edge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Reachable.sum_sup_edge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.862,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.sum-71298a06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.sum",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.sum-71298a06",
+    "review_status": "unreviewed"
+  }
+}

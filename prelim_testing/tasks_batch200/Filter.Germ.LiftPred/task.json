@@ -1,0 +1,275 @@
+{
+  "task_id": "Filter.Germ.LiftPred",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.LiftPred",
+  "signature": {
+    "name": "VTask.LiftPred",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {l : Filter α} -> (p : β → Prop) -> (f : l.Germ β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.LiftPred is a total predicate with no junk values; it is defined for all filters, all types, all predicates, and all germs without restriction or special boundary convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftpred_bot_always_true",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) (f : Filter.Germ (⊥ : Filter ℕ) ℕ), VTask.LiftPred p f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.62,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_const_iff_nebot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} [Filter.NeBot l] (p : β → Prop) (x : β), VTask.LiftPred p (↑x : Filter.Germ l β) ↔ p x",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_const_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_const_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.974,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_const_of_holds",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} (p : β → Prop) (x : β), p x → VTask.LiftPred p (↑x : Filter.Germ l β)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.128,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_univ_always",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} (f : Filter.Germ l β), VTask.LiftPred (fun _ => True) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_true"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_true"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_false_rejects_nonempty_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} [Filter.NeBot l] (x : β), ¬ VTask.LiftPred (fun _ => False) (↑x : Filter.Germ l β)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_const_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_const_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.585,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_and_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} (p q : β → Prop) (f : α → β), VTask.LiftPred (fun x => p x ∧ q x) (↑f : Filter.Germ l β) ↔ (VTask.LiftPred p (↑f : Filter.Germ l β) ∧ VTask.LiftPred q (↑f : Filter.Germ l β))",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_and"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.eventually_and"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.412,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftpred_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} (p q : β → Prop) (f : Filter.Germ l β), (∀ x, p x → q x) → VTask.LiftPred p f → VTask.LiftPred q f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.Eventually.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftPred_coe",
+        "Filter.Eventually.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.Germ.LiftPred",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.Germ.LiftPred-491d8498",
+    "review_status": "unreviewed"
+  }
+}

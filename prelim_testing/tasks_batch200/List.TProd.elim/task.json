@@ -1,0 +1,271 @@
+{
+  "task_id": "List.TProd.elim",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.elim",
+  "signature": {
+    "name": "VTask.elim",
+    "type": "{ι : Type u} -> {α : ι → Type v} -> [DecidableEq ι] -> {l : List ι} -> List.TProd α l → {i : ι} → i ∈ l → α i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "v",
+      "i",
+      "hi"
+    ],
+    "conventions": [
+      {
+        "point": "duplicate indices",
+        "statement": "When i appears more than once in l, VTask.elim selects the component at the first occurrence of i.",
+        "note": "Explicitly documented in the docstring."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "elim_of_ne_tail",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (i j : ι) (l : List ι) (v : List.TProd α (i :: l)) (hj : j ∈ i :: l) (hji : j ≠ i), VTask.elim v hj = VTask.elim v.2 ((List.mem_cons.mp hj).resolve_left hji)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_of_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_of_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.127,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_mk_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (l : List ι) (f : ∀ i, α i) (i : ι) (hi : i ∈ l), VTask.elim (List.TProd.mk l f) hi = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.83,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_ext_nodup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] {l : List ι} (hl : l.Nodup) (v w : List.TProd α l), (∀ (i : ι) (hi : i ∈ l), VTask.elim v hi = VTask.elim w hi) → v = w",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.712,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_of_mem_nodup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (i j : ι) (l : List ι) (hl : (i :: l).Nodup) (hj : j ∈ l) (v : List.TProd α (i :: l)), VTask.elim v (List.mem_cons_of_mem i hj) = VTask.elim v.2 hj",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.742,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_mk_concat_first",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (i : ι) (l : List ι) (f : ∀ k, α k) (hi : i ∈ i :: l), VTask.elim (List.TProd.mk (i :: l) f) hi = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.511,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_ne_tail_when_head_matches",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (i : ι) (l : List ι) (v : List.TProd α (i :: l)) (hi : i ∈ i :: l), VTask.elim v hi = v.1",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.485,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "elim_mk_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [DecidableEq ι] (l : List ι) (f g : ∀ i, α i), (∃ (i : ι) (hi : i ∈ l), f i ≠ g i) → VTask.elim (List.TProd.mk l f) ≠ VTask.elim (List.TProd.mk l g)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.TProd.elim_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.TProd.elim_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.TProd.elim-043763b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.TProd.elim",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.TProd.elim-043763b2",
+    "review_status": "unreviewed"
+  }
+}

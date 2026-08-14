@@ -1,0 +1,132 @@
+{
+  "task_id": "Function.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{ι : Sort u_3} -> {α : ι → Type u_1} -> {β : ι → Type u_2} -> (f : (i : ι) → α i) -> (g : (i : ι) → β i) -> (i : ι) -> α i × β i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total function with no junk values or special edge conventions; it behaves uniformly for all inputs including empty or singleton index types."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_unit_const",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (fun _ : Unit => (42 : ℕ)) (fun _ : Unit => (7 : ℕ)) () = (42, 7) := by decide",
+      "domain_inputs": {
+        "i": [
+          "()"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.prod-df60c29b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_reject_fst_wrong",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (fun b : Bool => b) (fun b : Bool => !b) true ≠ (false, false) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun b : Bool => b"
+        ],
+        "g": [
+          "fun b : Bool => !b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.prod-df60c29b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prod (fun b : Bool => b) (fun b : Bool => !b) true",
+      "violated_property": "first component must equal f i (here f true = true, not false)"
+    },
+    {
+      "id": "prod_reject_snd_wrong",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (fun b : Bool => b) (fun b : Bool => !b) true ≠ (true, true) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun b : Bool => b"
+        ],
+        "g": [
+          "fun b : Bool => !b"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.prod-df60c29b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prod (fun b : Bool => b) (fun b : Bool => !b) true",
+      "violated_property": "second component must equal g i (here g true = false, not true)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.prod-df60c29b",
+    "review_status": "unreviewed"
+  }
+}

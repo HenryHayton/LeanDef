@@ -1,0 +1,365 @@
+{
+  "task_id": "Filter.IsBounded",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsBounded",
+  "signature": {
+    "name": "VTask.IsBounded",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (f : Filter α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.IsBounded is a straightforward existential Prop with no junk-value conventions; it is defined for all relations and all filters without any implicit domain restriction or special edge-case defaulting."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isBounded_bot_any_rel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop), VTask.IsBounded r ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.isBounded_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.isBounded_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isBounded_total_rel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (f : Filter α), VTask.IsBounded (fun _ _ => True) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.isBounded_top"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.isBounded_top"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isBounded_mono_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) {f g : Filter α}, f ≤ g → VTask.IsBounded r g → VTask.IsBounded r f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsBounded.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsBounded.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.291,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isBounded_le_atTop_nat_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBounded (· ≤ ·) (Filter.atTop : Filter ℕ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.atTop"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Filter.atTop : Filter ℕ",
+      "violated_property": "∃ b, ∀ᶠ x in Filter.atTop, x ≤ b"
+    },
+    {
+      "id": "isBounded_le_atBot_int_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsBounded (· ≤ ·) (Filter.atBot : Filter ℤ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.atBot"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.061,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Filter.atBot : Filter ℤ"
+    },
+    {
+      "id": "isBounded_ge_atTop_int_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsBounded (· ≥ ·) (Filter.atTop : Filter ℤ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.atTop"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.064,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Filter.atTop : Filter ℤ"
+    },
+    {
+      "id": "isBounded_ge_atBot_nat_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBounded (· ≥ ·) (Filter.atBot : Filter ℤ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.atBot"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Filter.atBot : Filter ℤ",
+      "violated_property": "∃ b, ∀ᶠ x in Filter.atBot, b ≤ x"
+    },
+    {
+      "id": "isBounded_principal_finite_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsBounded (· ≤ ·) (Filter.principal {1, 2, 3} : Filter ℕ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.principal {1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Filter.principal {1, 2, 3} : Filter ℕ"
+    },
+    {
+      "id": "isBounded_empty_rel_only_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (f : Filter α), VTask.IsBounded (fun _ _ => False) f → f = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.isBounded_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.isBounded_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isBounded_isCobounded_ge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : Preorder α] {f : Filter α} [hne : Filter.NeBot f], VTask.IsBounded (· ≤ ·) f → Filter.IsCobounded (· ≥ ·) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsBounded.isCobounded_ge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsBounded.isCobounded_ge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.56,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isBounded_le_sup_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsBounded (· ≤ ·) (Filter.atTop ⊔ Filter.atTop : Filter ℕ)",
+      "domain_inputs": {
+        "f": [
+          "Filter.atTop ⊔ Filter.atTop"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsBounded-e424980e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Filter.atTop ⊔ Filter.atTop : Filter ℕ",
+      "violated_property": "∃ b, ∀ᶠ x in Filter.atTop ⊔ Filter.atTop, x ≤ b"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.IsBounded",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.IsBounded-e424980e",
+    "review_status": "unreviewed"
+  }
+}

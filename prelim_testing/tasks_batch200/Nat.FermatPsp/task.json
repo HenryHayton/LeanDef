@@ -1,0 +1,416 @@
+{
+  "task_id": "Nat.FermatPsp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.FermatPsp",
+  "signature": {
+    "name": "VTask.FermatPsp",
+    "type": "(n b : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "base 0 or base 1",
+        "statement": "Every composite natural number greater than 1 is a Fermat pseudoprime to base 0 and to base 1, because the probable-prime condition holds trivially in those cases.",
+        "note": "Follows from the definition of ProbablePrime at these degenerate bases."
+      },
+      {
+        "point": "n = 0 or n = 1",
+        "statement": "Neither 0 nor 1 is ever a Fermat pseudoprime, regardless of the base, because the predicate requires 1 < n.",
+        "note": "Hard lower-bound convention built into the definition."
+      },
+      {
+        "point": "n < b permitted",
+        "statement": "There is no requirement that n be at least as large as b; for example, 4 is a Fermat pseudoprime to base 5.",
+        "note": "Explicitly noted in the docstring."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fermatpsp_4_1_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.FermatPsp 4 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.FermatPsp 4 1"
+    },
+    {
+      "id": "fermatpsp_9_1_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.FermatPsp 9 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "9"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.FermatPsp 9 1"
+    },
+    {
+      "id": "fermatpsp_7_2_reject_prime",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬VTask.FermatPsp 7 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "7"
+        ],
+        "b": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.FermatPsp 7 2",
+      "violated_property": "n must not be prime"
+    },
+    {
+      "id": "fermatpsp_4_2_reject_probable_prime",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬VTask.FermatPsp 4 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ],
+        "b": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.FermatPsp 4 2",
+      "violated_property": "n must be a probable prime to base b (b^(n-1) ≡ 1 mod n)"
+    },
+    {
+      "id": "fermatpsp_1_1_reject_lower_bound",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬VTask.FermatPsp 1 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.FermatPsp 1 1",
+      "violated_property": "n must satisfy 1 < n"
+    },
+    {
+      "id": "fermatpsp_0_0_reject_lower_bound",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬VTask.FermatPsp 0 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.FermatPsp 0 0",
+      "violated_property": "n must satisfy 1 < n"
+    },
+    {
+      "id": "fermatpsp_coprime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n b : ℕ, VTask.FermatPsp n b → 1 ≤ b → Nat.Coprime n b",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.coprime_of_fermatPsp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.coprime_of_fermatPsp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.573,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fermatpsp_base_one_all_composites",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 1 < n → ¬n.Prime → VTask.FermatPsp n 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.fermatPsp_base_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.fermatPsp_base_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.12,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fermatpsp_infinite_base_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Set.Infinite { n : ℕ | VTask.FermatPsp n 1 }",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.infinite_setOf_pseudoprimes"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.infinite_setOf_pseudoprimes"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fermatpsp_infinite_base_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Set.Infinite { n : ℕ | VTask.FermatPsp n 2 }",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.infinite_setOf_pseudoprimes"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.infinite_setOf_pseudoprimes"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fermatpsp_exists_large",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m : ℕ, ∃ n : ℕ, VTask.FermatPsp n 2 ∧ m ≤ n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.exists_infinite_pseudoprimes"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.exists_infinite_pseudoprimes"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fermatpsp_prime_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n b : ℕ, n.Prime → ¬VTask.FermatPsp n b",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.coprime_of_fermatPsp",
+        "Nat.fermatPsp_base_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.coprime_of_fermatPsp",
+        "Nat.fermatPsp_base_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.FermatPsp-4c756887",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.FermatPsp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.FermatPsp-4c756887",
+    "review_status": "unreviewed"
+  }
+}

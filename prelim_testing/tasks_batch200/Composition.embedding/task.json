@@ -1,0 +1,256 @@
+{
+  "task_id": "Composition.embedding",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.embedding",
+  "signature": {
+    "name": "VTask.embedding",
+    "type": "{n : ℕ} -> (c : Composition n) -> (i : Fin c.length) -> Fin (c.blocksFun i) ↪o Fin n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: All arguments are constrained by their types; the function is total on its stated domain with no junk values or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "embedding_disjoint_ranges",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (i₁ i₂ : Fin c.length), i₁ ≠ i₂ → Disjoint (Set.range (VTask.embedding c i₁)) (Set.range (VTask.embedding c i₂))",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.disjoint_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.disjoint_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.176,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embedding_mem_range_covering",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (j : Fin n), j ∈ Set.range (VTask.embedding c (c.index j))",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.mem_range_embedding"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.mem_range_embedding"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.31,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embedding_mem_range_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (j : Fin n) (i : Fin c.length), j ∈ Set.range (VTask.embedding c i) ↔ c.sizeUpTo i ≤ j ∧ (j : ℕ) < c.sizeUpTo (i : ℕ).succ",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.mem_range_embedding_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.mem_range_embedding_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.376,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embedding_index_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (i : Fin c.length) (j : Fin (c.blocksFun i)), c.index (VTask.embedding c i j) = i",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.index_embedding"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.index_embedding"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.409,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embedding_inv_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (j : Fin n), VTask.embedding c (c.index j) (c.invEmbedding j) = j",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.embedding_comp_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.embedding_comp_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.21,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embedding_order_embedding_strict_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} (c : Composition n) (i : Fin c.length), StrictMono (VTask.embedding c i)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderEmbedding.strictMono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderEmbedding.strictMono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.485,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.embedding-d0534b59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Composition.embedding",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Composition.embedding-d0534b59",
+    "review_status": "unreviewed"
+  }
+}

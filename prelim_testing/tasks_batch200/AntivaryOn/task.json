@@ -1,0 +1,389 @@
+{
+  "task_id": "AntivaryOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.AntivaryOn",
+  "signature": {
+    "name": "VTask.AntivaryOn",
+    "type": "{ι : Type u_1} -> {α : Type u_3} -> {β : Type u_4} -> [Preorder α] -> [Preorder β] -> (f : ι → α) -> (g : ι → β) -> (s : Set ι) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: AntivaryOn is a universally quantified Prop with no special junk-value conventions; vacuous truth handles all boundary cases (empty set, singleton, constant g) without any declared convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "antivary_subset_monotonicity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β) (s t : Set ι), s ⊆ t → VTask.AntivaryOn f g t → VTask.AntivaryOn f g s",
+      "domain_inputs": {},
+      "anchors": [
+        "AntivaryOn.subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntivaryOn.subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.161,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β) (s : Set ι), VTask.AntivaryOn f g s → VTask.AntivaryOn g f s",
+      "domain_inputs": {},
+      "anchors": [
+        "AntivaryOn.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntivaryOn.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_from_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β) (s : Set ι), Antivary f g → VTask.AntivaryOn f g s",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.antivaryOn"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.antivaryOn"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_empty_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.AntivaryOn f g ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "AntivaryOn.empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntivaryOn.empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.659,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_dual_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β) (s : Set ι), VTask.AntivaryOn f g s → MonovaryOn (OrderDual.toDual ∘ f) g s",
+      "domain_inputs": {},
+      "anchors": [
+        "AntivaryOn.dual_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntivaryOn.dual_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.721,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_comp_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {ι' : Type*} {α : Type*} {β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β) (s : Set ι) (k : ι' → ι), VTask.AntivaryOn f g s → VTask.AntivaryOn (f ∘ k) (g ∘ k) (k ⁻¹' s)",
+      "domain_inputs": {},
+      "anchors": [
+        "AntivaryOn.comp_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntivaryOn.comp_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.476,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) (∅ : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.043,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) ∅"
+    },
+    {
+      "id": "antivary_singleton",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) ({(1 : Fin 3)} : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "{(1 : Fin 3)}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) {(1 : Fin 3)}"
+    },
+    {
+      "id": "antivary_constant_g",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun _ : Fin 3 => (0 : ℕ)) (Set.univ : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun _ : Fin 3 => (0 : ℕ)) Set.univ"
+    },
+    {
+      "id": "antivary_decreasing_f_increasing_g",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.AntivaryOn (fun n : Fin 3 => 2 - n.val) (fun n : Fin 3 => n.val) (Set.univ : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => 2 - n.val) (fun n : Fin 3 => n.val) Set.univ"
+    },
+    {
+      "id": "antivary_reject_covarying",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) (Set.univ : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => n.val) Set.univ",
+      "violated_property": "whenever g i < g j, f j ≤ f i (covarying functions on full set violate this)"
+    },
+    {
+      "id": "antivary_reject_partial_violation",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => 2 - n.val) (Set.univ : Set (Fin 3))",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AntivaryOn-95525d82",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.AntivaryOn (fun n : Fin 3 => n.val) (fun n : Fin 3 => 2 - n.val) Set.univ",
+      "violated_property": "whenever g i < g j, f j ≤ f i (f is increasing while g is decreasing, so they covary, not antivary)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AntivaryOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AntivaryOn-95525d82",
+    "review_status": "unreviewed"
+  }
+}

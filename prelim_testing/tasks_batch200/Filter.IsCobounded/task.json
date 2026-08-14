@@ -1,0 +1,274 @@
+{
+  "task_id": "Filter.IsCobounded",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsCobounded",
+  "signature": {
+    "name": "VTask.IsCobounded",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (f : Filter α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "trivial_filter",
+        "statement": "When the empty set belongs to the filter (the trivial/bottom filter), VTask.IsCobounded r f holds vacuously because any element witnesses the existential with no obligations.",
+        "note": "This is intentional by design to ensure the definition behaves well on complete lattices without extra hypotheses."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "iscobounded_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (f g : Filter α), f ≤ g → VTask.IsCobounded r f → VTask.IsCobounded r g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsCobounded.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsCobounded.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.365,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_of_isBounded_ge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : Preorder α] (f : Filter α) [inst2 : Filter.NeBot f], Filter.IsBounded (· ≤ ·) f → VTask.IsCobounded (· ≥ ·) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsBounded.isCobounded_ge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsBounded.isCobounded_ge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.707,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_of_isBounded_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : Preorder α] (f : Filter α) [inst2 : Filter.NeBot f], Filter.IsBounded (· ≥ ·) f → VTask.IsCobounded (· ≤ ·) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsBounded.isCobounded_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsBounded.isCobounded_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.669,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_of_frequently_ge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : LinearOrder α] (f : Filter α) (l : α), (∃ᶠ x in f, l ≤ x) → VTask.IsCobounded (· ≤ ·) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsCobounded.of_frequently_ge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsCobounded.of_frequently_ge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.944,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_frequently_ge_of_nebot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : LinearOrder α] (f : Filter α) [inst2 : Filter.NeBot f], VTask.IsCobounded (· ≤ ·) f → ∃ l : α, ∃ᶠ x in f, l ≤ x",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsCobounded.frequently_ge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsCobounded.frequently_ge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.564,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_complete_lattice",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : CompleteLattice α] (f : Filter α), VTask.IsCobounded (· ≤ ·) f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsCobounded.mk",
+        "Filter.IsBounded.isCobounded_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsCobounded.mk",
+        "Filter.IsBounded.isCobounded_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.358,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscobounded_coarser_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (f : Filter α), VTask.IsCobounded r f → VTask.IsCobounded r ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.IsCobounded.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.IsCobounded.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.IsCobounded-21b93724",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.IsCobounded",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.IsCobounded-21b93724",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,393 @@
+{
+  "task_id": "SimpleGraph.Walk.getVert",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.getVert",
+  "signature": {
+    "name": "VTask.getVert",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v : V} -> G.Walk u v → ℕ → V",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "out_of_bounds",
+        "statement": "When n ≥ p.length, VTask.getVert p n returns the endpoint v of the walk rather than an error.",
+        "note": "Junk-value convention: out-of-range indices clamp to the terminal vertex."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "getVert_zero_eq_start",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.getVert p 0 = u",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.getVert_cons_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.getVert_cons_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.422,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_length_eq_end",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.getVert p p.length = v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.231,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_cons_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk v w) (h : G.Adj u v) (n : ℕ), n ≠ 0 → VTask.getVert (p.cons h) n = VTask.getVert p (n - 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.getVert_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.getVert_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.039,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_getVert_succ_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (i : ℕ), i < p.length → G.Adj (VTask.getVert p i) (VTask.getVert p (i + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.876,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_ge_length_clamps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n : ℕ), p.length ≤ n → VTask.getVert p n = v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.adj_getVert_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.026,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_injOn_path",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} {p : G.Walk u v}, p.IsPath → Set.InjOn (VTask.getVert p) {i | i ≤ p.length}",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.getVert_injOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.getVert_injOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.444,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_injOn_path_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), Set.InjOn (VTask.getVert p) {i | i ≤ p.length} ↔ p.IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.getVert_injOn_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.getVert_injOn_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.003,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "path_getVert_eq_start_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w} (hp : p.IsPath) {i : ℕ} (hi : i ≤ p.length), VTask.getVert p i = u ↔ i = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.getVert_eq_start_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.getVert_eq_start_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.181,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "path_getVert_eq_end_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w} (hp : p.IsPath) {i : ℕ} (hi : i ≤ p.length), VTask.getVert p i = w ↔ i = p.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.getVert_eq_end_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.getVert_eq_end_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 42.318,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getVert_ne_start_in_middle_path",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w}, p.IsPath → ¬p.Nil → 1 ≤ p.length → VTask.getVert p 1 = u)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w}, p.IsPath → ¬p.Nil → 1 ≤ p.length → VTask.getVert p 1 = u",
+      "violated_property": "getVert at a nonzero index on a non-nil path cannot equal the start vertex"
+    },
+    {
+      "id": "getVert_beyond_length_not_start_on_nontriv_path",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w}, p.IsPath → 0 < p.length → VTask.getVert p p.length = u)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ {V : Type*} {G : SimpleGraph V} {u w : V} {p : G.Walk u w}, p.IsPath → 0 < p.length → VTask.getVert p p.length = u",
+      "violated_property": "getVert at p.length on a nontrivial path cannot equal the start vertex (they differ on a path)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.getVert",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.getVert-57cc52ed",
+    "review_status": "unreviewed"
+  }
+}

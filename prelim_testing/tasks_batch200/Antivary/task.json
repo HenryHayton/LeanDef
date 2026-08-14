@@ -1,0 +1,474 @@
+{
+  "task_id": "Antivary",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Antivary",
+  "signature": {
+    "name": "VTask.Antivary",
+    "type": "{ι : Type u_1} -> {α : Type u_3} -> {β : Type u_4} -> [Preorder α] -> [Preorder β] -> (f : ι → α) -> (g : ι → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "empty index type",
+        "statement": "When ι is empty, VTask.Antivary f g holds vacuously for all f and g.",
+        "note": "No pairs i, j exist to check the condition."
+      },
+      {
+        "point": "constant g",
+        "statement": "When g is a constant function, VTask.Antivary f g holds vacuously for all f.",
+        "note": "g i < g j is never satisfied, so the universal quantification is over an empty domain."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "antivary_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι α β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.Antivary f g → VTask.Antivary g f",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_dual_both",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι α β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.Antivary f g → VTask.Antivary (OrderDual.toDual ∘ f) (OrderDual.toDual ∘ g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.dual"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.dual"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.793,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_dual_left_gives_monovary",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι α β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.Antivary f g → Monovary (OrderDual.toDual ∘ f) g",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.dual_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.dual_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.729,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_dual_right_gives_monovary",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι α β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.Antivary f g → Monovary f (OrderDual.toDual ∘ g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.dual_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.dual_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.703,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_chebyshev_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] (f g : ι → ℝ), VTask.Antivary f g → Fintype.card ι * ∑ i, f i * g i ≤ (∑ i, f i) * ∑ i, g i",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.card_mul_sum_le_sum_mul_sum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.card_mul_sum_le_sum_mul_sum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.001,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_symm_of_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι α β : Type*} [Preorder α] [Preorder β] (f : ι → α) (g : ι → β), VTask.Antivary f g ↔ VTask.Antivary g f",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_vacuous_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : Empty → α) (g : Empty → β), VTask.Antivary f g",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.682,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_not_monovary_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f g : Fin 3 → ℕ), VTask.Antivary f g → Monovary f g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Antivary.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Antivary.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "antivary_const_g",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Antivary (fun i : Fin 3 => i) (fun _ : Fin 3 => (0 : Fin 1))",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 3 => i"
+        ],
+        "g": [
+          "fun _ : Fin 3 => (0 : Fin 1)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Antivary (fun i : Fin 3 => i) (fun _ : Fin 3 => (0 : Fin 1))"
+    },
+    {
+      "id": "antivary_neg_id",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Antivary (fun i : Fin 4 => (4 : ℕ) - i.val) (fun i : Fin 4 => i.val)",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 4 => (4 : ℕ) - i.val"
+        ],
+        "g": [
+          "fun i : Fin 4 => i.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Antivary (fun i : Fin 4 => (4 : ℕ) - i.val) (fun i : Fin 4 => i.val)"
+    },
+    {
+      "id": "antivary_empty_index",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Antivary (fun i : Fin 0 => i) (fun i : Fin 0 => i)",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 0 => i"
+        ],
+        "g": [
+          "fun i : Fin 0 => i"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.06,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Antivary (fun i : Fin 0 => i) (fun i : Fin 0 => i)"
+    },
+    {
+      "id": "antivary_const_f",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Antivary (fun _ : Fin 3 => (0 : ℕ)) (fun i : Fin 3 => i.val)",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 3 => (0 : ℕ)"
+        ],
+        "g": [
+          "fun i : Fin 3 => i.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Antivary (fun _ : Fin 3 => (0 : ℕ)) (fun i : Fin 3 => i.val)"
+    },
+    {
+      "id": "antivary_reject_same_direction",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Antivary (fun i : Fin 3 => i.val) (fun i : Fin 3 => i.val)",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 3 => i.val"
+        ],
+        "g": [
+          "fun i : Fin 3 => i.val"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Antivary (fun i : Fin 3 => i.val) (fun i : Fin 3 => i.val)",
+      "violated_property": "whenever g i < g j, we need f j ≤ f i, but f moves in the same direction as g"
+    },
+    {
+      "id": "antivary_reject_strict_increase",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Antivary (fun i : Fin 2 => i.val) (fun i : Fin 2 => (1 - i.val : ℕ))",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 2 => i.val"
+        ],
+        "g": [
+          "fun i : Fin 2 => (1 - i.val : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Antivary-3aa23ac4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Antivary (fun i : Fin 2 => i.val) (fun i : Fin 2 => (1 - i.val : ℕ))",
+      "violated_property": "f increases when g decreases, violating f j ≤ f i whenever g i < g j"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Antivary",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Antivary-3aa23ac4",
+    "review_status": "unreviewed"
+  }
+}

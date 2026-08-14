@@ -1,0 +1,259 @@
+{
+  "task_id": "OrderHom.nextFixed",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.nextFixed",
+  "signature": {
+    "name": "VTask.nextFixed",
+    "type": "{α : Type u} -> [CompleteLattice α] -> (f : α →o α) -> (x : α) -> (hx : x ≤ f x) -> ↑(Function.fixedPoints ⇑f)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "x ≤ f x",
+    "variables": [
+      "f",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "hx precondition",
+        "statement": "The function is only defined when the caller supplies a proof hx : x ≤ f x; there is no junk-value convention for inputs where this fails, as the precondition is part of the function's signature.",
+        "note": "The design choice of requiring hx as an explicit argument avoids the need to specify any junk value."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nextFixed_is_fixed_point",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x), f (↑(VTask.nextFixed f x hx)) = ↑(VTask.nextFixed f x hx)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_above_x",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x), x ≤ ↑(VTask.nextFixed f x hx)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.le_nextFixed"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.le_nextFixed"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.216,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_minimality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x) (y : Function.fixedPoints ⇑f), x ≤ ↑y → ↑(VTask.nextFixed f x hx) ≤ ↑y",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.768,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x) (y : Function.fixedPoints ⇑f), ↑(VTask.nextFixed f x hx) ≤ ↑y ↔ x ≤ ↑y",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.821,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_le_any_fixed_point_above",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x) (y : Function.fixedPoints ⇑f), x ≤ ↑y → ↑(VTask.nextFixed f x hx) ≤ ↑y",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.776,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_mono_in_x",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [CompleteLattice α] (f : α →o α) (x y : α) (hx : x ≤ f x) (hy : y ≤ f y), x ≤ y → ↑(VTask.nextFixed f x hx) ≤ ↑(VTask.nextFixed f y hy)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le_iff",
+        "OrderHom.le_nextFixed"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le_iff",
+        "OrderHom.le_nextFixed"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextFixed_reject_not_above_fixed_point",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {α : Type} [inst : CompleteLattice α] (f : α →o α) (x : α) (hx : x ≤ f x) (y : Function.fixedPoints ⇑f), (VTask.nextFixed f x hx : α) ≤ y",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderHom.nextFixed_le_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderHom.nextFixed-58007ad1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "OrderHom.nextFixed",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "OrderHom.nextFixed-58007ad1",
+    "review_status": "unreviewed"
+  }
+}

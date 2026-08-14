@@ -1,0 +1,398 @@
+{
+  "task_id": "Set.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{α : Type u_1} -> {ι : Sort u_5} -> (f : ι → α) -> (s : Set α) -> (h : ∀ (x : ι), f x ∈ s) -> ι → ↑s",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total with no degenerate or junk-value inputs; it is well-defined for any function f, set s, and membership proof h."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Sort*} (f : ι → α) (s : Set α) (h : ∀ x, f x ∈ s) (x : ι), (VTask.codRestrict f s h x : α) ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.val_codRestrict_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.val_codRestrict_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.397,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_injective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Sort*} {f : ι → α} {s : Set α} (h : ∀ x, f x ∈ s), Function.Injective (VTask.codRestrict f s h) ↔ Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.injective_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.injective_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.288,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_surjective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} {f : ι → α} {s : Set α} (h : ∀ x, f x ∈ s), (VTask.codRestrict f s h).Surjective ↔ Set.range f = s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.surjective_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.surjective_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.273,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_range_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} (f : ι → α), (VTask.codRestrict f (Set.range f) Set.mem_range_self).Surjective",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.codRestrict_range_surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.codRestrict_range_surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.661,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_injective_of_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} {f : ι → α} {s : Set α} (h : ∀ x, f x ∈ s), Function.Injective f → Function.Injective (VTask.codRestrict f s h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.injective_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.injective_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.355,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_univ_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.codRestrict (fun n : Fin 3 => n.val) Set.univ (fun x => Set.mem_univ _) ⟨1, by omega⟩ : ℕ) = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 3 => n.val"
+        ],
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.codRestrict (fun n : Fin 3 => n.val) Set.univ (fun x => Set.mem_univ _) ⟨1, by omega⟩ : ℕ)"
+    },
+    {
+      "id": "codRestrict_val_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.codRestrict (fun n : Fin 3 => n.val) Set.univ (fun x => Set.mem_univ _) ⟨0, by omega⟩ : ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 3 => n.val"
+        ],
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_val_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.codRestrict (fun n : Fin 3 => n.val) Set.univ (fun x => Set.mem_univ _) ⟨2, by omega⟩ : ℕ) = 2 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Fin 3 => n.val"
+        ],
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_strictmono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s : Set β) (hs : ∀ x, f x ∈ s), StrictMono f → StrictMono (VTask.codRestrict f s hs)",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMono.codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMono.codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.39,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_val_neq_wrong",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f : ℕ → ℕ) (s : Set ℕ) (h : ∀ x, f x ∈ s) (x : ℕ), (VTask.codRestrict f s h x : ℕ) = f x + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.val_codRestrict_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.val_codRestrict_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_not_injective_when_f_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.codRestrict (fun _ : Fin 2 => (0 : ℕ)) (Set.univ : Set ℕ) (fun _ => Set.mem_univ _))",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.injective_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.injective_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.077,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.codRestrict-ebb9d264",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.codRestrict-ebb9d264",
+    "review_status": "unreviewed"
+  }
+}

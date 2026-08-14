@@ -1,0 +1,433 @@
+{
+  "task_id": "SimpleGraph.finsetWalkLength",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.finsetWalkLength",
+  "signature": {
+    "name": "VTask.finsetWalkLength",
+    "type": "{V : Type u} -> (G : SimpleGraph V) -> [DecidableEq V] -> [G.LocallyFinite] -> (n : ℕ) -> (u v : V) -> Finset (G.Walk u v)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "n",
+      "u",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0, u ≠ v",
+        "statement": "When the required length is 0 and the start and end vertices differ, the returned finset is empty, since no walk of length zero can connect distinct vertices.",
+        "note": "Edge case by structural recursion on n and decidable equality on V."
+      },
+      {
+        "point": "n = 0, u = v",
+        "statement": "When the required length is 0 and the start equals the end vertex, the returned finset contains exactly the single nil walk at that vertex.",
+        "note": "The nil walk is the unique walk of length zero from any vertex to itself."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "finsetWalkLength_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n : ℕ) (u v : V) (p : G.Walk u v), p ∈ VTask.finsetWalkLength G n u v ↔ p.length = n",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.667,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_coe_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n : ℕ) (u v : V), (VTask.finsetWalkLength G n u v : Set (G.Walk u v)) = {p : G.Walk u v | p.length = n}",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.coe_finsetWalkLength_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.coe_finsetWalkLength_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.273,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_card_eq_fintype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n : ℕ) (u v : V), Fintype.card {p : G.Walk u v | p.length = n} = (VTask.finsetWalkLength G n u v).card",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.card_set_walk_length_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.card_set_walk_length_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.241,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_toFinset_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n : ℕ) (u v : V), {p : G.Walk u v | p.length = n}.toFinset = VTask.finsetWalkLength G n u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.set_walk_length_toFinset_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.set_walk_length_toFinset_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.29,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_zero_self_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u : V), (VTask.finsetWalkLength G 0 u u).card = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_nil_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u : V), SimpleGraph.Walk.nil ∈ VTask.finsetWalkLength G 0 u u",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_zero_distinct_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u v : V), u ≠ v → VTask.finsetWalkLength G 0 u v = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.eq_of_length_eq_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.eq_of_length_eq_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_length_one_card_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u v : V), G.Adj u v → (VTask.finsetWalkLength G 1 u v).card = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.length_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_length_one_nonadj_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u v : V), ¬G.Adj u v → VTask.finsetWalkLength G 1 u v = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.adj_of_length_eq_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.adj_of_length_eq_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_accept_nil",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u : V), SimpleGraph.Walk.nil ∈ VTask.finsetWalkLength G 0 u u",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "SimpleGraph.Walk.nil"
+    },
+    {
+      "id": "finsetWalkLength_reject_nil_wrong_length",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (u : V), SimpleGraph.Walk.nil ∉ VTask.finsetWalkLength G 1 u u",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "SimpleGraph.Walk.nil",
+      "violated_property": "p.length = n"
+    },
+    {
+      "id": "finsetWalkLength_nonempty_implies_reachable",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n : ℕ) (u v : V), (VTask.finsetWalkLength G n u v).Nonempty → G.Reachable u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.reachable"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff",
+        "SimpleGraph.Walk.reachable"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finsetWalkLength_subset_longer_walks",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) [DecidableEq V] [G.LocallyFinite] (n m : ℕ) (u v : V), n ≠ m → ∀ p : G.Walk u v, p ∈ VTask.finsetWalkLength G n u v → p ∉ VTask.finsetWalkLength G m u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.mem_finsetWalkLength_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.mem_finsetWalkLength_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.finsetWalkLength",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.finsetWalkLength-dd83e1a3",
+    "review_status": "unreviewed"
+  }
+}

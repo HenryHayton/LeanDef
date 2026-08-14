@@ -1,0 +1,210 @@
+{
+  "task_id": "SimpleGraph.Walk.ofDarts",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofDarts",
+  "signature": {
+    "name": "VTask.ofDarts",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> (l : List G.Dart) -> (hne : l ≠ []) -> (hchain : List.IsChain G.DartAdj l) -> G.Walk (l.head hne).toProd.1 (l.getLast hne).toProd.2",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "l ≠ []",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: All inputs are fully constrained by explicit proof arguments (hne and hchain), leaving no room for junk values or degenerate conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofDarts_darts_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (l : List G.Dart) (hne : l ≠ []) (hchain : List.IsChain G.DartAdj l), (VTask.ofDarts l hne hchain).darts = l",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.darts_ofDarts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.darts_ofDarts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.564,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDarts_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (l : List G.Dart) (hne : l ≠ []) (hchain : List.IsChain G.DartAdj l), (VTask.ofDarts l hne hchain).length = l.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_ofDarts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_ofDarts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.269,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDarts_edges",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (l : List G.Dart) (hne : l ≠ []) (hchain : List.IsChain G.DartAdj l), (VTask.ofDarts l hne hchain).edges = l.map SimpleGraph.Dart.edge",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_ofDarts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_ofDarts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.259,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDarts_not_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (l : List G.Dart) (hne : l ≠ []) (hchain : List.IsChain G.DartAdj l), ¬(VTask.ofDarts l hne hchain).Nil",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_ofDarts",
+        "SimpleGraph.Walk.nil_iff_length_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_ofDarts",
+        "SimpleGraph.Walk.nil_iff_length_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDarts_edges_length_eq_darts_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (l : List G.Dart) (hne : l ≠ []) (hchain : List.IsChain G.DartAdj l), (VTask.ofDarts l hne hchain).edges.length = l.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_ofDarts",
+        "SimpleGraph.Walk.length_ofDarts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_ofDarts",
+        "SimpleGraph.Walk.length_ofDarts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.261,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.ofDarts",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.ofDarts-8239c309",
+    "review_status": "unreviewed"
+  }
+}

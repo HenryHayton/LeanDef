@@ -1,0 +1,137 @@
+{
+  "task_id": "Multiset.strongInductionOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.strongInductionOn",
+  "signature": {
+    "name": "VTask.strongInductionOn",
+    "type": "{α : Type u_1} -> {p : Multiset α → Sort u_3} -> (s : Multiset α) -> (ih : (s : Multiset α) → ((t : Multiset α) → t < s → p t) → p s) -> p s",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "base case",
+        "statement": "When s = ∅, the strong induction hypothesis ∀ t < ∅, p t is vacuously true, so ih must produce p ∅ without invoking any recursive call.",
+        "note": "This is the unique minimal case under the multiset strict order."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strong_induction_unfolding_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Multiset α → Sort*} (s : Multiset α) (ih : (s : Multiset α) → ((t : Multiset α) → t < s → p t) → p s), VTask.strongInductionOn s ih = ih s (fun t _ => VTask.strongInductionOn t ih)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.872,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.strongInductionOn-4353b943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_induction_card_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Multiset ℕ), VTask.strongInductionOn s (fun s _ => s.card) = s.card",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.786,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.strongInductionOn-4353b943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_induction_prop_rfl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Multiset ℕ), VTask.strongInductionOn s (fun s _ => (rfl : s.card = s.card)) = rfl",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.strongInductionOn_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Multiset.strongInductionOn-4353b943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.strongInductionOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.strongInductionOn-4353b943",
+    "review_status": "unreviewed"
+  }
+}

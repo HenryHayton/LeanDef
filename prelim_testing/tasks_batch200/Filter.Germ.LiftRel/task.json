@@ -1,0 +1,221 @@
+{
+  "task_id": "Filter.Germ.LiftRel",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.LiftRel",
+  "signature": {
+    "name": "VTask.LiftRel",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> {l : Filter α} -> (r : β → γ → Prop) -> (f : l.Germ β) -> (g : l.Germ γ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "l = ⊥ (bottom filter)",
+        "statement": "When l is the bottom filter, ∀ᶠ x in l, r (f x) (g x) is vacuously true, so VTask.LiftRel r f g holds for all f, g, and r.",
+        "note": "Degenerate case: the bottom filter contains every set, making the eventual condition trivially satisfied."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftrel_const_iff_nebot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} {l : Filter α} [Filter.NeBot l] (r : β → γ → Prop) (x : β) (y : γ), VTask.LiftRel r (↑x : l.Germ β) ↑y ↔ r x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftRel_const_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftRel_const_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.054,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_lt_eq_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder β] {l : Filter α} (f g : l.Germ β), f < g ↔ VTask.LiftRel (· < ·) f g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.lt_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.lt_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} [Preorder β] (f g h : l.Germ β), VTask.LiftRel (· ≤ ·) f g → VTask.LiftRel (· ≤ ·) g h → VTask.LiftRel (· ≤ ·) f h",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.le_def",
+        "le_trans"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.le_def",
+        "le_trans"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_const_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} {l : Filter α} (r : β → γ → Prop) (x : β) (y : γ), r x y → VTask.LiftRel r (↑x : l.Germ β) ↑y",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftRel_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftRel_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.051,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_eq_eventuallyeq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {l : Filter α} (f g : l.Germ β), VTask.LiftRel (· = ·) f g ↔ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.liftRel_coe",
+        "Filter.Germ.coe_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.liftRel_coe",
+        "Filter.Germ.coe_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_refl_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder β] {l : Filter α} (f : l.Germ β), VTask.LiftRel (· ≤ ·) f f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Germ.le_def",
+        "le_refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Germ.le_def",
+        "le_refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.Germ.LiftRel",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.Germ.LiftRel-66128de3",
+    "review_status": "unreviewed"
+  }
+}

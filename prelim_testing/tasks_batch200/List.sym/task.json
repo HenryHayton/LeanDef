@@ -1,0 +1,114 @@
+{
+  "task_id": "List.sym",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sym",
+  "signature": {
+    "name": "VTask.sym",
+    "type": "{α : Type u_1} -> (n : ℕ) -> List α → List (Sym α n)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "xs"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0, xs = []",
+        "statement": "VTask.sym 0 [] = [Sym.nil]: the empty source list still yields the unique 0-tuple.",
+        "note": "Base case: degree 0 always produces exactly one output regardless of the source list."
+      },
+      {
+        "point": "n >= 1, xs = []",
+        "statement": "VTask.sym n [] = [] for any n ≥ 1: no tuples can be formed from an empty list when a positive number of elements is required.",
+        "note": "Recursive base case on the list."
+      },
+      {
+        "point": "output order",
+        "statement": "The order of elements in the output list is determined by the recursive structure and the order of elements in xs; no sorted or canonical ordering is guaranteed.",
+        "note": "Only membership and cardinality properties are canonical, not position."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sym_length_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (xs : List ℕ), (VTask.sym n xs).length = Nat.choose (xs.length + n - 1) n",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_sym"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_sym"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.sym-62cc707f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym_nodup_preservation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) {α : Type} (xs : List α), xs.Nodup → (VTask.sym n xs).Nodup",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Nodup.sym"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Nodup.sym"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.38,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym-62cc707f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.sym",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.sym-62cc707f",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "task_id": "MonotoneOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.MonotoneOn",
+  "signature": {
+    "name": "VTask.MonotoneOn",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "empty set",
+        "statement": "VTask.MonotoneOn f ∅ is vacuously true for any f, since there are no elements in ∅ to serve as witnesses.",
+        "note": "Standard behavior of universal quantification over an empty domain."
+      },
+      {
+        "point": "singleton set",
+        "statement": "VTask.MonotoneOn f {a} is always true for any f and any a, since the only pair of witnesses coincides and reflexivity of ≤ applies.",
+        "note": "Degenerate case: no two distinct elements to compare."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "monotoneOn_univ_iff_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.MonotoneOn f Set.univ ↔ Monotone f",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.632,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotoneOn_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ) (s : Set α) (t : Set β), VTask.MonotoneOn g t → VTask.MonotoneOn f s → Set.MapsTo f s t → VTask.MonotoneOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.643,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotoneOn_antitone_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ) (s : Set α) (t : Set β), AntitoneOn g t → AntitoneOn f s → Set.MapsTo f s t → VTask.MonotoneOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "AntitoneOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AntitoneOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.277,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotoneOn_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s t : Set α), VTask.MonotoneOn f t → s ⊆ t → VTask.MonotoneOn f s",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.264,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotoneOn_monotone_subtype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s : Set α), VTask.MonotoneOn f s → Monotone (f ∘ Subtype.val : s → β)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.061,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "monotoneOn_vacuous_empty_any_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.MonotoneOn f ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "MonotoneOn.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonotoneOn.comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MonotoneOn-4f8e226f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonotoneOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonotoneOn-4f8e226f",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "task_id": "Filter.bliminf",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.bliminf",
+  "signature": {
+    "name": "VTask.bliminf",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [ConditionallyCompleteLattice α] -> (u : β → α) -> (f : Filter β) -> (p : β → Prop) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "u",
+      "f",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p = fun _ => False",
+        "statement": "When the bounding predicate is identically False, VTask.bliminf u f (fun _ => False) = ⊤, because the implication (False → a ≤ u x) is vacuously true for every a, making the supremum range over all of α.",
+        "note": "Matches Filter.bliminf_false in Mathlib."
+      },
+      {
+        "point": "Empty qualifying set in a ConditionallyCompleteLattice",
+        "statement": "If the set {a | ∀ᶠ x in f, p x → a ≤ u x} is empty (possible in a mere ConditionallyCompleteLattice), the value of VTask.bliminf is sSup ∅, which is conventionally a junk value and not guaranteed to equal ⊥.",
+        "note": "This is a lattice-completeness subtlety; in a CompleteLattice sSup ∅ = ⊥."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bliminf_antitone_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f g : Filter β) (p : β → Prop), f ≤ g → VTask.bliminf u g p ≤ VTask.bliminf u f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_antitone_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_antitone_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_antitone_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), (∀ x, p x → q x) → VTask.bliminf u f q ≤ VTask.bliminf u f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_antitone"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_antitone"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_inf_complement_eq_liminf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p : β → Prop), VTask.bliminf u f p ⊓ VTask.bliminf u f (fun x => ¬p x) = Filter.liminf u f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_inf_not"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_inf_not"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_mono_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u v : β → α) (f : Filter β) (p : β → Prop), (∀ x, p x → u x ≤ v x) → VTask.bliminf u f p ≤ VTask.bliminf v f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.mono_bliminf"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.mono_bliminf"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_and_le_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), VTask.bliminf u f p ≤ VTask.bliminf u f (fun x => p x ∧ q x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_sup_le_and_aux_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_sup_le_and_aux_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_or_le_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p q : β → Prop), VTask.bliminf u f (fun x => p x ∨ q x) ≤ VTask.bliminf u f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_or_le_inf_aux_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_or_le_inf_aux_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_orderiso",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [ConditionallyCompleteLattice α] [CompleteLattice γ] (u : β → α) (f : Filter β) (p : β → Prop) (e : α ≃o γ), e (VTask.bliminf u f p) = VTask.bliminf (e ∘ u) f p",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderIso.apply_bliminf"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderIso.apply_bliminf"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_strengthen_pred_decreases",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p : β → Prop), VTask.bliminf u f p ≤ VTask.bliminf u f (fun x => p x ∧ p x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_sup_le_and_aux_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_sup_le_and_aux_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.336,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bliminf_le_blimsup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [ConditionallyCompleteLattice α] (u : β → α) (f : Filter β) (p : β → Prop), VTask.bliminf u f p ≤ Filter.blimsup u f p",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.bliminf_inf_not",
+        "Filter.bliminf_antitone"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.bliminf_inf_not",
+        "Filter.bliminf_antitone"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.bliminf-9f490e5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.bliminf",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.bliminf-9f490e5c",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,343 @@
+{
+  "task_id": "Finset.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{α : Type u_1} -> {β : α → Type u} -> [DecidableEq α] -> (s : Finset α) -> (t : (a : α) → Finset (β a)) -> Finset ((a : α) → a ∈ s → β a)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "When s is the empty finset, VTask.pi s t is the singleton containing the unique empty function Pi.empty β, regardless of t.",
+        "note": "Standard convention: a dependent product over an empty index set has exactly one element."
+      },
+      {
+        "point": "t a = ∅ for some a ∈ s",
+        "statement": "When t a is empty for at least one index a that belongs to s, VTask.pi s t is the empty finset.",
+        "note": "No function can choose a value for an index whose fiber is empty."
+      },
+      {
+        "point": "a ∉ s",
+        "statement": "The value of t a for indices a not in s has no effect on VTask.pi s t.",
+        "note": "Functions in the result only need to be defined on s; t is consulted only at indices inside s."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : α → Type*) [DecidableEq α] (s : Finset α) (t : (a : α) → Finset (β a)) (f : (a : α) → a ∈ s → β a), f ∈ VTask.pi s t ↔ ∀ a (h : a ∈ s), f a h ∈ t a",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.95,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_card_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : α → Type*) [DecidableEq α] (s : Finset α) (t : (a : α) → Finset (β a)), (VTask.pi s t).card = ∏ a ∈ s, (t a).card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.card_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.card_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.471,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_empty_of_empty_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : α → Type*) [DecidableEq α] (s : Finset α) (t : (a : α) → Finset (β a)) (a₀ : α), a₀ ∈ s → t a₀ = ∅ → VTask.pi s t = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.pi_eq_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.pi_eq_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 60.216,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_nonempty_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β : α → Type*) [DecidableEq α] (s : Finset α) (t : (a : α) → Finset (β a)), (VTask.pi s t).Nonempty ↔ ∀ a ∈ s, (t a).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.pi_nonempty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.pi_nonempty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.605,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_empty_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.pi (∅ : Finset ℕ) (fun _ => ({0, 1} : Finset ℕ))).card = 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.pi (∅ : Finset ℕ) (fun _ => ({0, 1} : Finset ℕ))).card"
+    },
+    {
+      "id": "pi_singleton_two_values",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.pi ({0} : Finset ℕ) (fun _ => ({5, 7} : Finset ℕ))).card = 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.pi ({0} : Finset ℕ) (fun _ => ({5, 7} : Finset ℕ))).card"
+    },
+    {
+      "id": "pi_empty_fiber_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.pi ({0} : Finset ℕ) (fun _ => (∅ : Finset ℕ)) = ∅ := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.pi ({0} : Finset ℕ) (fun _ => (∅ : Finset ℕ))",
+      "violated_property": "nonempty fiber for each index in s"
+    },
+    {
+      "id": "pi_two_indices_card",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.pi ({0, 1} : Finset ℕ) (fun _ => ({2, 3, 4} : Finset ℕ))).card = 9 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.pi ({0, 1} : Finset ℕ) (fun _ => ({2, 3, 4} : Finset ℕ))).card"
+    },
+    {
+      "id": "pi_singleton_card_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.pi ({0} : Finset ℕ) (fun _ => ({42} : Finset ℕ))).card = 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.pi-2ea5c4bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.pi ({0} : Finset ℕ) (fun _ => ({42} : Finset ℕ))).card"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.pi-2ea5c4bb",
+    "review_status": "unreviewed"
+  }
+}

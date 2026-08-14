@@ -1,0 +1,143 @@
+{
+  "task_id": "List.choose",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.choose",
+  "signature": {
+    "name": "VTask.choose",
+    "type": "{α : Type u_1} -> (p : α → Prop) -> [DecidablePred p] -> (l : List α) -> (hp : ∃ a ∈ l, p a) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "∃ a ∈ l, p a",
+    "variables": [
+      "p",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "first-element selection",
+        "statement": "When multiple elements of `l` satisfy `p`, `VTask.choose` returns the leftmost (first) one.",
+        "note": "Determined by a left-to-right scan; the proof `hp` does not influence which element is chosen."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "choose_mem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : List α) (hp : ∃ a ∈ l, p a), VTask.choose p l hp ∈ l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.choose_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.choose_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.006,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.choose-2b836b42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_property_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : List α) (hp : ∃ a ∈ l, p a), p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.choose_property"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.choose_property"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.378,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.choose-2b836b42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_spec_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : List α) (hp : ∃ a ∈ l, p a), VTask.choose p l hp ∈ l ∧ p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.choose_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.choose_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.135,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.choose-2b836b42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.choose",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.choose-2b836b42",
+    "review_status": "unreviewed"
+  }
+}

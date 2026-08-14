@@ -1,0 +1,444 @@
+{
+  "task_id": "supClosure",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.supClosure",
+  "signature": {
+    "name": "VTask.supClosure",
+    "type": "{α : Type u_3} -> [SemilatticeSup α] -> ClosureOperator (Set α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α"
+    ],
+    "conventions": [
+      {
+        "point": "non-empty finsets only",
+        "statement": "Membership in VTask.supClosure s requires expression as a sup of a *non-empty* finite subset of s; the empty sup is never used.",
+        "note": "This means VTask.supClosure ∅ = ∅, and bottom elements are not automatically added."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "supClosure_extensive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), s ⊆ (VTask.supClosure : ClosureOperator (Set α)) s",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_supClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_supClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.285,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_idempotent",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), (VTask.supClosure : ClosureOperator (Set α)) ((VTask.supClosure : ClosureOperator (Set α)) s) = (VTask.supClosure : ClosureOperator (Set α)) s",
+      "domain_inputs": {},
+      "anchors": [
+        "ClosureOperator.idempotent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ClosureOperator.idempotent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.262,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_supClosed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), SupClosed ((VTask.supClosure : ClosureOperator (Set α)) s)",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosed_supClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosed_supClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.211,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α], Monotone (fun s => (VTask.supClosure : ClosureOperator (Set α)) s)",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.242,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_univ_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α], (VTask.supClosure : ClosureOperator (Set α)) Set.univ = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.294,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_empty_eq_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α], (VTask.supClosure : ClosureOperator (Set α)) ∅ = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_eq_self",
+        "supClosed_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_eq_self",
+        "supClosed_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.203,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_eq_self_iff_supClosed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), (VTask.supClosure : ClosureOperator (Set α)) s = s ↔ SupClosed s",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.235,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_isLUB_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α) (a : α), IsLUB ((VTask.supClosure : ClosureOperator (Set α)) s) a ↔ IsLUB s a",
+      "domain_inputs": {},
+      "anchors": [
+        "isLUB_supClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isLUB_supClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.3,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_finite_of_finite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), s.Finite → ((VTask.supClosure : ClosureOperator (Set α)) s).Finite",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Finite.supClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Finite.supClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.335,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_not_eq_self_if_not_supClosed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s : Set α), ¬SupClosed s → (VTask.supClosure : ClosureOperator (Set α)) s ≠ s",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.233,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_mono_strict_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] (s t : Set α), s ⊆ t → (VTask.supClosure : ClosureOperator (Set α)) s ⊆ (VTask.supClosure : ClosureOperator (Set α)) t",
+      "domain_inputs": {},
+      "anchors": [
+        "supClosure_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "supClosure_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supClosure_empty_ne_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [SemilatticeSup α] [Nonempty α], (VTask.supClosure (∅ : Set α)) ≠ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_supClosure"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_supClosure"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "supClosure-0e8cdfc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "supClosure",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "supClosure-0e8cdfc6",
+    "review_status": "unreviewed"
+  }
+}

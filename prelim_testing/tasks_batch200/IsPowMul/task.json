@@ -1,0 +1,353 @@
+{
+  "task_id": "IsPowMul",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPowMul",
+  "signature": {
+    "name": "VTask.IsPowMul",
+    "type": "{R : Type u_1} -> [Pow R ℕ] -> (f : R → ℝ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "The predicate only requires f(r^n) = (f r)^n for n with 1 ≤ n; the case n = 0 is excluded and imposes no constraint on f.",
+        "note": "Junk value: behaviour at exponent zero is unspecified by the predicate."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ispowmul_map_one_le_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Monoid R] (f : R → ℝ), VTask.IsPowMul f → f 1 ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.38,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_restriction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S : Type*) [CommRing R] [Ring S] [Algebra R S] (A : Subalgebra R S) (f : S → ℝ), VTask.IsPowMul f → VTask.IsPowMul (fun x : A => f x.val)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.restriction"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.restriction"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.97,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_at_n_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Pow R ℕ] (f : R → ℝ), VTask.IsPowMul f → ∀ r : R, f (r ^ 1) = (f r) ^ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_at_n_eq_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Pow R ℕ] (f : R → ℝ), VTask.IsPowMul f → ∀ r : R, f (r ^ 2) = (f r) ^ 2",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.959,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_no_n0_constraint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R : Type*) [Pow R ℕ] (f : R → ℝ), VTask.IsPowMul f → ∀ r : R, f (r ^ 0) = (f r) ^ 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_implies_one_le_one_monoid",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Monoid R] (f : R → ℝ), VTask.IsPowMul f → f 1 ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.34,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_not_requires_multiplicativity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (f : ℝ → ℝ), VTask.IsPowMul f ∧ ¬ ∀ (a b : ℝ), f (a * b) = f a * f b",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPowMul.map_one_le_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_seminorm_from_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [inst : NormedField K] (c : K) (f : RingSeminorm K), VTask.IsPowMul (seminormFromConst' c f)",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromConst_isPowMul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromConst_isPowMul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispowmul_const_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsPowMul (fun _ : ℝ => (0 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun _ : ℝ => (0 : ℝ)"
+    },
+    {
+      "id": "ispowmul_const_two_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsPowMul (fun _ : ℝ => (2 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun _ : ℝ => (2 : ℝ)",
+      "violated_property": "f(r^n) = (f r)^n for all r and n ≥ 1 (fails at n=2: 2 ≠ 4)"
+    },
+    {
+      "id": "ispowmul_const_one_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsPowMul (fun _ : ℝ => (3 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsPowMul-6e6a6323",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun _ : ℝ => (3 : ℝ)",
+      "violated_property": "∀ r n, 1 ≤ n → f (r ^ n) = (f r) ^ n"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsPowMul",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsPowMul-6e6a6323",
+    "review_status": "unreviewed"
+  }
+}

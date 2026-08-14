@@ -1,0 +1,258 @@
+{
+  "task_id": "SimpleGraph.between",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.between",
+  "signature": {
+    "name": "VTask.between",
+    "type": "{V : Type u_1} -> (s t : Set V) -> (G : SimpleGraph V) -> SimpleGraph V",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t",
+      "G"
+    ],
+    "conventions": [
+      {
+        "point": "non-disjoint s and t",
+        "statement": "When s and t overlap, VTask.between s t G is still a well-defined simple graph; vertices in the intersection can appear as endpoints on either side, so the result may fail to be bipartite.",
+        "note": "No junk value is assigned; the predicate is unconditionally well-formed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "between_le_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s t : Set V) (G : SimpleGraph V), VTask.between s t G ≤ G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.39,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_comm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s t : Set V) (G : SimpleGraph V), VTask.between s t G = VTask.between t s G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.404,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_bipartite_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s t : Set V) (G : SimpleGraph V), Disjoint s t → (VTask.between s t G).IsBipartite",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_isBipartite"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_isBipartite"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.389,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_empty_left_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (t : Set V) (G : SimpleGraph V), VTask.between ∅ t G = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_adj",
+        "SimpleGraph.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_adj",
+        "SimpleGraph.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_empty_right_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s : Set V) (G : SimpleGraph V), VTask.between s ∅ G = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_adj",
+        "SimpleGraph.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_adj",
+        "SimpleGraph.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_not_above_G",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s t : Set V) (G : SimpleGraph V), ¬(G < VTask.between s t G)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "between_neighborSet_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (s : Set V) (G : SimpleGraph V) (v : V), (VTask.between s sᶜ G).neighborSet v ⊆ G.neighborSet v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.between_le",
+        "SimpleGraph.neighborSet_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.between_le",
+        "SimpleGraph.neighborSet_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.between-ae04219a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.between",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.between-ae04219a",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "task_id": "Finset.choose",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.choose",
+  "signature": {
+    "name": "VTask.choose",
+    "type": "{α : Type u_1} -> (p : α → Prop) -> [DecidablePred p] -> (l : Finset α) -> (hp : ∃! a, a ∈ l ∧ p a) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "l",
+      "hp"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function requires a proof of unique existence as an explicit argument, so it is always called on valid inputs with a constructively unique element; there are no junk-value or degenerate-input conventions to declare."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "choose_mem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a), VTask.choose p l hp ∈ l",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.53,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_property_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a), p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_property"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_property"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.863,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_spec_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a), VTask.choose p l hp ∈ l ∧ p (VTask.choose p l hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.513,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_unique",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a) (b : α), b ∈ l → p b → b = VTask.choose p l hp",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_mem",
+        "Finset.choose_property"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_mem",
+        "Finset.choose_property"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_nat_singleton_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 0) {0} ⟨0, by simp, by simp⟩ = 0 := by decide",
+      "domain_inputs": {
+        "l": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.choose (· = 0) {0} ⟨0, by simp, by simp⟩"
+    },
+    {
+      "id": "choose_nat_three_elem_eq_two",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩ = 2 := by decide",
+      "domain_inputs": {
+        "l": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩"
+    },
+    {
+      "id": "choose_result_mem_l_concrete",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩ ∈ ({1, 2, 3} : Finset ℕ) := by decide",
+      "domain_inputs": {
+        "l": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩"
+    },
+    {
+      "id": "choose_result_not_three",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩ ≠ 3 := by decide",
+      "domain_inputs": {
+        "l": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩",
+      "violated_property": "p (VTask.choose p l hp) requires the result to equal 2, not 3"
+    },
+    {
+      "id": "choose_result_not_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩ ≠ 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.choose (· = 2) ({1, 2, 3} : Finset ℕ) ⟨2, by simp, by simp⟩",
+      "violated_property": "p (VTask.choose p l hp) requires the result to equal 2, not 1"
+    },
+    {
+      "id": "choose_singleton_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.choose (· = 0) ({0} : Finset ℕ) ⟨0, by simp, by simp⟩ ∈ ({0} : Finset ℕ) := by decide",
+      "domain_inputs": {
+        "l": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.choose (· = 0) ({0} : Finset ℕ) ⟨0, by simp, by simp⟩"
+    },
+    {
+      "id": "choose_not_outside_l",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a) (b : α), b ∉ l → b ≠ VTask.choose p l hp",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "choose_eq_iff_mem_and_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (p : α → Prop) [DecidablePred p] (l : Finset α) (hp : ∃! a, a ∈ l ∧ p a) (b : α), b ∈ l ∧ p b ↔ b = VTask.choose p l hp",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.choose_mem",
+        "Finset.choose_property",
+        "Finset.choose_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.choose_mem",
+        "Finset.choose_property",
+        "Finset.choose_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.choose-6124ae0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.choose",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.choose-6124ae0e",
+    "review_status": "unreviewed"
+  }
+}

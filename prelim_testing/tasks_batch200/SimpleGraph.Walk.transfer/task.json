@@ -1,0 +1,422 @@
+{
+  "task_id": "SimpleGraph.Walk.transfer",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.transfer",
+  "signature": {
+    "name": "VTask.transfer",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v : V} -> (p : G.Walk u v) -> (H : SimpleGraph V) -> (h : ∀ e ∈ p.edges, e ∈ H.edgeSet) -> H.Walk u v",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "H",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all valid inputs with no junk-value conventions; the nil base case is handled structurally and all arguments are fully constrained by types and the explicit proof h."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "transfer_edges_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H : SimpleGraph V) (h : ∀ e ∈ p.edges, e ∈ H.edgeSet), (VTask.transfer p H h).edges = p.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.955,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_support_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H : SimpleGraph V) (h : ∀ e ∈ p.edges, e ∈ H.edgeSet), (VTask.transfer p H h).support = p.support",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.support_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.support_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.746,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_length_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H : SimpleGraph V) (h : ∀ e ∈ p.edges, e ∈ H.edgeSet), (VTask.transfer p H h).length = p.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.735,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_self_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.transfer p G p.edges_subset_edgeSet = p",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.transfer_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.transfer_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.755,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_isPath_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H : SimpleGraph V) (h : ∀ e ∈ p.edges, e ∈ H.edgeSet), p.IsPath → (VTask.transfer p H h).IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.516,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_isCycle_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u : V} (q : G.Walk u u) (H : SimpleGraph V) (h : ∀ e ∈ q.edges, e ∈ H.edgeSet), q.IsCycle → (VTask.transfer q H h).IsCycle",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsCycle.transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsCycle.transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.85,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_transfer_composition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H K : SimpleGraph V) (hp : ∀ e ∈ p.edges, e ∈ H.edgeSet) (hp' : ∀ e ∈ (VTask.transfer p H hp).edges, e ∈ K.edgeSet), VTask.transfer (VTask.transfer p H hp) K hp' = VTask.transfer p K (p.edges_transfer hp ▸ hp')",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.transfer_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.transfer_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.133,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_edgeSet_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (H : SimpleGraph V) (h : ∀ e ∈ p.edges, e ∈ H.edgeSet), (VTask.transfer p H h).edgeSet = p.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edgeSet_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edgeSet_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.625,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_subgraph_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G H : SimpleGraph V} {u v : V} (p : G.Walk u v) (GH : G ≤ H) (hp : ∀ e ∈ p.edges, e ∈ H.edgeSet), VTask.transfer p H hp = p.map (SimpleGraph.Hom.ofLE GH)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.transfer_eq_map_ofLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.transfer_eq_map_ofLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.77,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_neq_wrong_start",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G H : SimpleGraph V) (u v w : V) (p : G.Walk u v) (hp : ∀ e ∈ p.edges, e ∈ H.edgeSet), (VTask.transfer p H hp).support ≠ List.cons w p.support.tail ∨ u = w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.support_transfer"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.support_transfer"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "transfer_edges_ne_extra",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G H : SimpleGraph V) (u v : V) (p : G.Walk u v) (hp : ∀ e ∈ p.edges, e ∈ H.edgeSet) (e : Sym2 V), e ∉ p.edges → e ∉ (VTask.transfer p H hp).edges ∨ e ∈ (VTask.transfer p H hp).edges ∧ e ∈ p.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_transfer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_transfer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.945,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.transfer",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.transfer-365406db",
+    "review_status": "unreviewed"
+  }
+}

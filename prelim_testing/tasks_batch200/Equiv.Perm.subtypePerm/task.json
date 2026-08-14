@@ -1,0 +1,259 @@
+{
+  "task_id": "Equiv.Perm.subtypePerm",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypePerm",
+  "signature": {
+    "name": "VTask.subtypePerm",
+    "type": "{α : Type u_4} -> {p : α → Prop} -> (f : Equiv.Perm α) -> (h : ∀ (x : α), p (f x) ↔ p x) -> Equiv.Perm { x // p x }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and requires explicit proof of subtype invariance; there are no junk-value or edge-case conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypePerm_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (p : α → Prop), VTask.subtypePerm (1 : Equiv.Perm α) (fun _ => Iff.rfl) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.subtypePerm_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.subtypePerm_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypePerm_sameCycle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (p : α → Prop) (f : Equiv.Perm α) (h : ∀ x, p (f x) ↔ p x) (x y : {x // p x}), (VTask.subtypePerm f h).SameCycle x y ↔ f.SameCycle x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.sameCycle_subtypePerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.sameCycle_subtypePerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.909,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypePerm_true_pred_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.subtypePerm (Equiv.swap (0 : Fin 3) 1) (fun x => by simp [Equiv.swap_apply_def]; tauto)) ⟨0, trivial⟩ = ⟨1, trivial⟩ := by decide",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 3) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypePerm_output_is_perm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (p : α → Prop) (f : Equiv.Perm α) (h : ∀ x, p (f x) ↔ p x), Function.Bijective (VTask.subtypePerm f h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.subtypePerm_apply",
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.subtypePerm_apply",
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.779,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypePerm_identity_on_empty_subtype",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.subtypePerm (1 : Equiv.Perm Empty) (fun _ => Iff.rfl) = 1",
+      "domain_inputs": {
+        "f": [
+          "(1 : Equiv.Perm Empty)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.subtypePerm (1 : Equiv.Perm Empty) (fun _ => Iff.rfl)"
+    },
+    {
+      "id": "subtypePerm_reject_nonpreserving",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∃ (h : ∀ x : Fin 2, (fun i => i = 0) (Equiv.swap 0 1 x) ↔ (fun i => i = 0) x), VTask.subtypePerm (Equiv.swap (0 : Fin 2) 1) h = 1)",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 2) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Equiv.swap (0 : Fin 2) 1",
+      "violated_property": "The permutation does not preserve the predicate `fun i => i = 0` on Fin 2: swap sends 0 to 1 which does not satisfy the predicate"
+    },
+    {
+      "id": "subtypePerm_val_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (p : α → Prop) (f : Equiv.Perm α) (h : ∀ x, p (f x) ↔ p x) (x y : {x // p x}), VTask.subtypePerm f h x = VTask.subtypePerm f h y → x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.subtypePerm_apply",
+        "Equiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.subtypePerm_apply",
+        "Equiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.675,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Perm.subtypePerm",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Perm.subtypePerm-6ad21b17",
+    "review_status": "unreviewed"
+  }
+}

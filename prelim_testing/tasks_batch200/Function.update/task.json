@@ -1,0 +1,364 @@
+{
+  "task_id": "Function.update",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.update",
+  "signature": {
+    "name": "VTask.update",
+    "type": "{α : Sort u} -> {β : α → Sort v} -> [DecidableEq α] -> (f : (a : α) → β a) -> (a' : α) -> (v : β a') -> (a : α) -> β a",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "a'",
+      "v",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "evaluation at the updated point",
+        "statement": "When a = a', VTask.update f a' v a returns v (suitably transported), ignoring f a'.",
+        "note": "Follows directly from the decidable-equality case split returning the new value."
+      },
+      {
+        "point": "evaluation away from the updated point",
+        "statement": "When a ≠ a', VTask.update f a' v a returns f a unchanged.",
+        "note": "The update has no effect at any point other than a'."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "update_at_point",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun n : Fin 3 => n.val) ⟨1, by omega⟩ 42 ⟨1, by omega⟩ = 42 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "⟨1, by omega⟩"
+        ],
+        "a": [
+          "⟨1, by omega⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_away_from_point",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun n : Fin 3 => n.val) ⟨1, by omega⟩ 42 ⟨0, by omega⟩ = 0 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "⟨1, by omega⟩"
+        ],
+        "a": [
+          "⟨0, by omega⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_bool_true_at_true",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun _ : Bool => (0 : Nat)) true 7 true = 7 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "true"
+        ],
+        "a": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_bool_true_at_false",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun _ : Bool => (0 : Nat)) true 7 false = 0 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "true"
+        ],
+        "a": [
+          "false"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_double_overwrite",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (VTask.update (fun _ : Bool => (0 : Nat)) true 5) true 9 true = 9 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "true"
+        ],
+        "a": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_self_value_unchanged",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun n : Fin 3 => n.val) ⟨2, by omega⟩ 2 ⟨2, by omega⟩ = 2 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "⟨2, by omega⟩"
+        ],
+        "a": [
+          "⟨2, by omega⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_self_extensional",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} [DecidableEq α] (f : (a : α) → β a) (a' : α), VTask.update f a' (f a') = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.update_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.update_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.272,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_double_same_point",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} [DecidableEq α] (f : (a : α) → β a) (a' : α) (v₁ v₂ : β a'), VTask.update (VTask.update f a' v₁) a' v₂ = VTask.update f a' v₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.update_idem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.update_idem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.279,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_comm_different_points",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Sort*} [DecidableEq α] (f : (a : α) → β a) (a b : α) (va : β a) (vb : β b), a ≠ b → VTask.update (VTask.update f a va) b vb = VTask.update (VTask.update f b vb) a va",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.update_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.update_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.014,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_neq_at_point_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.update (fun _ : Fin 3 => 0) ⟨1, by omega⟩ 42 ⟨1, by omega⟩ ≠ 0 := by decide",
+      "domain_inputs": {
+        "a'": [
+          "⟨1, by omega⟩"
+        ],
+        "v": [
+          "42"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.update-20b6ad45",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.update (fun _ : Fin 3 => 0) ⟨1, by omega⟩ 42 ⟨1, by omega⟩",
+      "violated_property": "evaluation_at_update_point_returns_original"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.update",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.update-20b6ad45",
+    "review_status": "unreviewed"
+  }
+}

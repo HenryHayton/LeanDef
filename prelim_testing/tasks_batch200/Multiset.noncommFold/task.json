@@ -1,0 +1,154 @@
+{
+  "task_id": "Multiset.noncommFold",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.noncommFold",
+  "signature": {
+    "name": "VTask.noncommFold",
+    "type": "{α : Type u_3} -> (op : α → α → α) -> [assoc : Std.Associative op] -> (s : Multiset α) -> (comm : {x | x ∈ s}.Pairwise fun x y => op x y = op y x) -> α → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "op",
+      "s",
+      "comm",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "empty multiset",
+        "statement": "When s = 0 (the empty multiset), VTask.noncommFold op 0 h a = a for any h and any initial value a.",
+        "note": "The pairwise commutativity hypothesis is vacuously true for the empty multiset; the fold simply returns the accumulator."
+      },
+      {
+        "point": "globally commutative op",
+        "statement": "When op is globally commutative (a Std.Commutative instance exists), VTask.noncommFold op s (fun x _ y _ _ => Std.Commutative.comm x y) a equals Multiset.fold op a s.",
+        "note": "The pairwise-local commutativity proof is subsumed by the global commutative instance, making noncommFold reduce to the ordinary fold."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "noncommFold_coe_list",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (op : α → α → α) [Std.Associative op] (l : List α) (comm : ({x | x ∈ (l : Multiset α)}).Pairwise fun x y => op x y = op y x) (a : α), VTask.noncommFold op (l : Multiset α) comm a = List.foldr op a l",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFold_coe"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.noncommFold_coe"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.281,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFold-546ce967",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommFold_cons_decomp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (op : α → α → α) [Std.Associative op] (s : Multiset α) (a : α) (h : ({x | x ∈ a ::ₘ s}).Pairwise fun x y => op x y = op y x) (h' : ({x | x ∈ s}).Pairwise fun x y => op x y = op y x) (x : α), VTask.noncommFold op (a ::ₘ s) h x = op a (VTask.noncommFold op s h' x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFold_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.noncommFold_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.353,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFold-546ce967",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommFold_eq_fold_commutative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (op : α → α → α) [Std.Associative op] [Std.Commutative op] (s : Multiset α) (a : α), VTask.noncommFold op s (fun x _ y _ _ => Std.Commutative.comm x y) a = Multiset.fold op a s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.noncommFold_eq_fold"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.noncommFold_eq_fold"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.48,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.noncommFold-546ce967",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.noncommFold",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.noncommFold-546ce967",
+    "review_status": "unreviewed"
+  }
+}

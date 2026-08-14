@@ -1,0 +1,143 @@
+{
+  "task_id": "SimpleGraph.Hom.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{V : Type u_1} -> {W : Type u_2} -> (f : V → W) -> (G : SimpleGraph V) -> (h : ∀ {u v : V}, G.Adj u v → f u ≠ f v) -> G →g SimpleGraph.map f G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "G",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all inputs satisfying the stated types; no junk-value or edge-case conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_hom_map_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} (f : V → W) (G : SimpleGraph V) (h : ∀ {u v : V}, G.Adj u v → f u ≠ f v) (u v : V), G.Adj u v → (SimpleGraph.map f G).Adj ((VTask.map f G h) u) ((VTask.map f G h) v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.map_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.map_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.8,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.map-65780407",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_le_comap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} (f : V → W) (G : SimpleGraph V) (h : ∀ {u v : V}, G.Adj u v → f u ≠ f v), G ≤ (SimpleGraph.map f G).comap (VTask.map f G h)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.le_comap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.le_comap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.174,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.map-65780407",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_id_complete_graph",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ φ : (⊤ : SimpleGraph (Fin 2)) →g SimpleGraph.map id (⊤ : SimpleGraph (Fin 2)), φ.toFun = id",
+      "domain_inputs": {
+        "G": [
+          "⊤"
+        ],
+        "f": [
+          "id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.map-65780407",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.map id (⊤ : SimpleGraph (Fin 2)) (fun h => SimpleGraph.Adj.ne h)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Hom.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Hom.map-65780407",
+    "review_status": "unreviewed"
+  }
+}

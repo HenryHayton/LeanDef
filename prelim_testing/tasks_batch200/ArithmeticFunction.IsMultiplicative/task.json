@@ -1,0 +1,181 @@
+{
+  "task_id": "ArithmeticFunction.IsMultiplicative",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsMultiplicative",
+  "signature": {
+    "name": "VTask.IsMultiplicative",
+    "type": "{R : Type u_1} -> [MonoidWithZero R] -> (f : ArithmeticFunction R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsMultiplicative is a Prop-valued predicate with no junk-value or boundary conventions; no special meanings are assigned to any edge inputs such as f 0."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ismult_pow_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommSemiring R] (f : ArithmeticFunction R) (k : ℕ), VTask.IsMultiplicative f → VTask.IsMultiplicative (f ^ k)",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.IsMultiplicative.pow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.IsMultiplicative.pow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.607,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.IsMultiplicative-80083a72",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismult_map_prod_primes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommMonoidWithZero R] (f : ArithmeticFunction R), VTask.IsMultiplicative f → ∀ (t : Finset ℕ), (∀ p ∈ t, Nat.Prime p) → f (∏ p ∈ t, p) = ∏ p ∈ t, f p",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.IsMultiplicative.map_prod_of_prime"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.IsMultiplicative.map_prod_of_prime"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.509,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.IsMultiplicative-80083a72",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismult_prodPrimeFactors_one_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommSemiring R] (f : ArithmeticFunction R), VTask.IsMultiplicative f → ∀ n : ℕ, Squarefree n → ∏ p ∈ n.primeFactors, (1 + f p) = ∑ d ∈ n.divisors, f d",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.IsMultiplicative.prodPrimeFactors_one_add_of_squarefree"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.IsMultiplicative.prodPrimeFactors_one_add_of_squarefree"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.03,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.IsMultiplicative-80083a72",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ismult_no_constraint_at_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : MonoidWithZero R] (f : ArithmeticFunction R) (v : R), (∀ g : ArithmeticFunction R, VTask.IsMultiplicative g → g 0 = v) → v = 0 ∨ v ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.isMultiplicative_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.isMultiplicative_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.716,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.IsMultiplicative-80083a72",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ArithmeticFunction.IsMultiplicative",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ArithmeticFunction.IsMultiplicative-80083a72",
+    "review_status": "unreviewed"
+  }
+}

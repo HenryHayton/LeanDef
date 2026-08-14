@@ -1,0 +1,149 @@
+{
+  "task_id": "List.Pi.cons",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cons",
+  "signature": {
+    "name": "VTask.cons",
+    "type": "{ι : Type u_1} -> [DecidableEq ι] -> {α : ι → Sort u_2} -> (i : ι) -> (l : List ι) -> (a : α i) -> (f : (j : ι) → j ∈ l → α j) -> (j : ι) -> j ∈ i :: l → α j",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i",
+      "l",
+      "a",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "head case",
+        "statement": "When the query index j equals i, VTask.cons i l a f j hj returns a (transported along the equality proof).",
+        "note": "Priority is given to the head: if j = i the tail function f is not consulted, even if i also appears in l."
+      },
+      {
+        "point": "tail case",
+        "statement": "When the query index j is not equal to i, membership in i :: l is resolved to membership in l, and f j is returned.",
+        "note": "This means f must cover all j ∈ l; the cons constructor extends f with one new case at i."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cons_def_head_branch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} [DecidableEq ι] {α : ι → Sort*} (i : ι) (l : List ι) (a : α i) (f : ∀ j ∈ l, α j) (hj : i ∈ i :: l), VTask.cons i l a f i hj = a",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Pi.cons_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Pi.cons_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Pi.cons-ba6d77ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_def_tail_branch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} [DecidableEq ι] {α : ι → Sort*} (i : ι) (l : List ι) (a : α i) (f : ∀ j ∈ l, α j) (j : ι) (hj : j ∈ i :: l) (hne : j ≠ i), VTask.cons i l a f j hj = f j ((List.mem_cons.mp hj).resolve_left hne)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Pi.cons_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Pi.cons_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Pi.cons-ba6d77ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_map_commutes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} [DecidableEq ι] {α α' : ι → Sort*} (i : ι) (l : List ι) (a : α i) (f : ∀ j ∈ l, α j) (φ : ∀ ⦃j⦄, α j → α' j) (j : ι) (hj : j ∈ i :: l), φ (VTask.cons i l a f j hj) = VTask.cons i l (φ a) (fun j hj => φ (f j hj)) j hj",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Pi.cons_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Pi.cons_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Pi.cons-ba6d77ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_rel_ext",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} [DecidableEq ι] {α : ι → Sort*} {r : ∀ ⦃i : ι⦄, α i → α i → Prop} {i : ι} {l : List ι} {a₁ a₂ : α i} {f₁ f₂ : ∀ j ∈ l, α j}, r a₁ a₂ → (∀ (k : ι) (hk : k ∈ l), r (f₁ k hk) (f₂ k hk)) → ∀ (j : ι) (hj : j ∈ i :: l), r (VTask.cons i l a₁ f₁ j hj) (VTask.cons i l a₂ f₂ j hj)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Pi.forall_rel_cons_ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Pi.forall_rel_cons_ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Pi.cons-ba6d77ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.Pi.cons",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.Pi.cons-ba6d77ad",
+    "review_status": "unreviewed"
+  }
+}

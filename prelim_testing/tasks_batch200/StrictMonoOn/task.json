@@ -1,0 +1,269 @@
+{
+  "task_id": "StrictMonoOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.StrictMonoOn",
+  "signature": {
+    "name": "VTask.StrictMonoOn",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder α] -> [Preorder β] -> (f : α → β) -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "VTask.StrictMonoOn f ∅ is vacuously true for every function f, since there are no elements in the empty set to instantiate the universal quantifier.",
+        "note": "Vacuous truth by empty quantification domain."
+      },
+      {
+        "point": "s = {a}",
+        "statement": "VTask.StrictMonoOn f {a} is vacuously true for every function f and element a, since there is no strict pair a < b with both in a singleton.",
+        "note": "Vacuous truth because no strict pair can be formed within a singleton."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strictmonoOn_subset_preservation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s t : Set α), VTask.StrictMonoOn f s → t ⊆ s → VTask.StrictMonoOn f t",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMonoOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMonoOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.647,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_univ_iff_strictMono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β), VTask.StrictMonoOn f Set.univ ↔ StrictMono f",
+      "domain_inputs": {},
+      "anchors": [
+        "strictMonoOn_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "strictMonoOn_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.773,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [Preorder α] [Preorder β] [Preorder γ] (f : α → β) (g : β → γ) (s : Set α) (t : Set β), VTask.StrictMonoOn g t → VTask.StrictMonoOn f s → Set.MapsTo f s t → VTask.StrictMonoOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMonoOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMonoOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.828,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_implies_subtype_strictMono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s : Set α), VTask.StrictMonoOn f s → StrictMono (f ∘ Subtype.val : s → β)",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMonoOn.strictMono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMonoOn.strictMono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.021,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_ncard_finite_sets",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.StrictMonoOn (Set.ncard : Set ℕ → ℕ) (setOf Set.Finite)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Finite.ncard_strictMonoOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Finite.ncard_strictMonoOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.072,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_lt_iff_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [Preorder α] [Preorder β] (f : α → β) (s : Set α), VTask.StrictMonoOn f s → ∀ {a b : α}, a ∈ s → b ∈ s → (f a < f b ↔ a < b)",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMonoOn.lt_iff_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMonoOn.lt_iff_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictmonoOn_injOn_linear_order",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [LinearOrder α] [Preorder β] (f : α → β) (s : Set α), VTask.StrictMonoOn f s → Set.InjOn f s",
+      "domain_inputs": {},
+      "anchors": [
+        "StrictMonoOn.injOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StrictMonoOn.injOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.165,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StrictMonoOn-d02e9830",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "StrictMonoOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "StrictMonoOn-d02e9830",
+    "review_status": "unreviewed"
+  }
+}

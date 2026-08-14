@@ -1,0 +1,191 @@
+{
+  "task_id": "Relator.RightTotal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.RightTotal",
+  "signature": {
+    "name": "VTask.RightTotal",
+    "type": "{α : Sort u₁} -> {β : Sort u₂} -> (R : α → β → Prop) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.RightTotal is a straightforward universal-existential Prop with no junk-value conventions; it is defined and meaningful for every binary relation on any two sorts."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "right_total_empty_codomain_vacuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Fin 3 → Fin 0 → Prop), VTask.RightTotal R",
+      "domain_inputs": {},
+      "anchors": [
+        "IsEmpty.forall_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsEmpty.forall_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.226,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Relator.RightTotal-751d9a77",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "right_total_wellfounded_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ → ℕ → Prop), WellFounded r → Nonempty ℕ → ¬ VTask.RightTotal r",
+      "domain_inputs": {},
+      "anchors": [
+        "WellFounded.not_rightTotal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WellFounded.not_rightTotal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.206,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Relator.RightTotal-751d9a77",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "right_total_surjective_fn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β), Function.Surjective f → VTask.RightTotal (fun a b => f a = b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.693,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Relator.RightTotal-751d9a77",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "right_total_implies_nonempty_alpha",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (R : α → β → Prop), VTask.RightTotal R → Nonempty β → Nonempty α",
+      "domain_inputs": {},
+      "anchors": [
+        "Relator.RightTotal.rel_forall"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Relator.RightTotal.rel_forall"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relator.RightTotal-751d9a77",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "right_total_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (R : α → β → Prop) (S : β → γ → Prop), VTask.RightTotal R → VTask.RightTotal S → VTask.RightTotal (fun a c => ∃ b, R a b ∧ S b c)",
+      "domain_inputs": {},
+      "anchors": [
+        "Relator.RightTotal.rel_forall"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Relator.RightTotal.rel_forall"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Relator.RightTotal-751d9a77",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Relator.RightTotal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Relator.RightTotal-751d9a77",
+    "review_status": "unreviewed"
+  }
+}

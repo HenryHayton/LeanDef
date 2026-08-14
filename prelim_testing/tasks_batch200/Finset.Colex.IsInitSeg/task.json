@@ -1,0 +1,191 @@
+{
+  "task_id": "Finset.Colex.IsInitSeg",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsInitSeg",
+  "signature": {
+    "name": "VTask.IsInitSeg",
+    "type": "{α : Type u_1} -> [LinearOrder α] -> (𝒜 : Finset (Finset α)) -> (r : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "𝒜",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": "empty family",
+        "statement": "VTask.IsInitSeg (∅ : Finset (Finset α)) r holds for every r, because both the sizing and downward-closure conditions are vacuously satisfied.",
+        "note": "This is a genuine mathematical convention: the empty family is considered an initial segment of any rank."
+      },
+      {
+        "point": "rank zero",
+        "statement": "VTask.IsInitSeg 𝒜 0 holds iff 𝒜 = ∅ or 𝒜 = {∅}, since the empty set is the unique set of size 0 and there is nothing colex-strictly-smaller than it of size 0.",
+        "note": "r = 0 is a valid, non-degenerate input; no junk value is assigned."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isInitSeg_empty_any_r",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ), VTask.IsInitSeg (∅ : Finset (Finset ℕ)) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.Colex.IsInitSeg.total"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.Colex.IsInitSeg.total"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.076,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.Colex.IsInitSeg-12212fde",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInitSeg_total",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} [LinearOrder α] (𝒜₁ 𝒜₂ : Finset (Finset α)) (r : ℕ), VTask.IsInitSeg 𝒜₁ r → VTask.IsInitSeg 𝒜₂ r → 𝒜₁ ⊆ 𝒜₂ ∨ 𝒜₂ ⊆ 𝒜₁",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.Colex.IsInitSeg.total"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.Colex.IsInitSeg.total"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.121,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.Colex.IsInitSeg-12212fde",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInitSeg_shadow_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} [LinearOrder α] [Finite α] (𝒜 : Finset (Finset α)) (r : ℕ), VTask.IsInitSeg 𝒜 r → VTask.IsInitSeg (Finset.shadow 𝒜) (r - 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.Colex.IsInitSeg.shadow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.Colex.IsInitSeg.shadow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.622,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.Colex.IsInitSeg-12212fde",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInitSeg_empty_is_subset_of_any_init_seg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} [LinearOrder α] (𝒜 : Finset (Finset α)) (r : ℕ), VTask.IsInitSeg 𝒜 r → (∅ : Finset (Finset α)) ⊆ 𝒜",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.empty_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.empty_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.194,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.Colex.IsInitSeg-12212fde",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.Colex.IsInitSeg",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.Colex.IsInitSeg-12212fde",
+    "review_status": "unreviewed"
+  }
+}
