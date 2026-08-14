@@ -683,13 +683,27 @@ def _author_from_dossier(
                 config.server, truth_env, topup.gained, dossier_payload.domain, task_symbol,
                 timeout=config.check_timeout,
             )
+            # THE CAP APPLIES TO TOP-UP FACTS TOO. Previously these were appended straight to
+            # `validated_facts`, after composition had already trimmed to the decide cap -- so a
+            # top-up returning decide facts pushed the suite over it. 13 suites shipped over-cap
+            # in the 200-task run; `Equiv.sumProdDistrib` is the specimen, its last two facts
+            # being reject-polarity decide facts taking it from 6 to 8. Re-running `enforce` over
+            # the ALREADY-KEPT facts plus the new ones applies exactly the same rule to both, so
+            # the cap holds whatever its value -- which matters because it is due to be raised.
+            kept_now = [f for f, _ in validated_facts]
+            recomp = enforce_composition(kept_now + list(extra.accepted))
+            allowed = {id(f) for f in recomp.kept}
             gained_validated = 0
             for f in extra.accepted:
+                if id(f) not in allowed:
+                    continue  # trimmed by the cap, exactly as a first-pass fact would be
                 v = validate_fact(config.server, truth_env, f, task_symbol, definition_input.name,
                                   imports=definition_input.signature_dict.get("imports"))
                 if v.ships:
                     validated_facts.append((f, v))
                     gained_validated += 1
+            if recomp.trimmed_decide:
+                topup.detail += f"; {recomp.trimmed_decide} top-up fact(s) trimmed to the cap"
             topup.after = sum(1 for f, _ in validated_facts if _is_reject_fact(f))
             topup.detail += (f"; {len(extra.accepted)}/{len(topup.gained)} survived mechanical "
                              f"validation, {gained_validated} survived the ladder")

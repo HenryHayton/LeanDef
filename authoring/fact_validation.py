@@ -42,6 +42,7 @@ from dataclasses import dataclass, field
 from lean_interact import AutoLeanServer, Command
 
 from harness.repl import run_checked
+from harness.signature import root_qualify
 from harness.results import CheckStatus
 from harness.admissibility import STANDARD_MATHLIB_AXIOMS
 from ladder.axiom_audit import audit_proof_axioms
@@ -223,6 +224,70 @@ def _schema_status(status: str, mechanism: str | None = None) -> str:
     return CERTIFIED if status == CERTIFIED else "PROVISIONALLY_VALIDATED"
 
 
+def truth_unfolding_tactics(truth_name: str) -> tuple:
+    """Unfold the TRUTH definition, then decide/close. Added 13 Aug 2026 on direct evidence.
+
+    The first re-discharge pass converted only 3 of 116. The residue census showed 58 of the 113
+    survivors (51%) are CLOSED INSTANCES -- the witness is already written into the statement,
+    e.g. `¬ Antivary (fun i : Fin 3 => i.val) (fun i : Fin 3 => i.val)`. Nothing was proving them
+    because **discharge never unfolds anything**: it runs NEGATION_TACTICS plus the pinned forward
+    set, and neither mentions the truth symbol, so `Antivary` stays opaque and `decide` finds no
+    Decidable instance to run.
+
+    Measured on that exact goal: `decide` FAILED, `push_neg <;> simp_all` FAILED,
+    `simp only [_root_.Antivary] <;> decide` PASSED.
+
+    Not a silver bullet -- a sibling goal over `Fin 2` still failed every variant -- so this is
+    added as more shots on the same goal, not a claimed fix for the class.
+    """
+    t = root_qualify(truth_name)
+    return (
+        TacticBudget(f"simp only [{t}] <;> decide", 15.0),
+        TacticBudget(f"intro h; simp only [{t}] at h; revert h; decide", 15.0),
+        TacticBudget(f"simp [{t}] <;> push_neg <;> simp_all", 20.0),
+        TacticBudget(f"simp only [{t}] <;> aesop", 25.0, heavy=True),
+    )
+
+
+def discharge_budgets_for(fact, budgets: LadderBudgets, truth_name: str | None = None) -> LadderBudgets:
+    """Tactics for discharging THIS fact against the truth.
+
+    A reject fact is a NEGATION -- `¬P(w)`, `w ∉ S`, `a ≠ b`. Discharging it means PROVING that
+    negation about the real object, and the pinned tier-2 set (`rfl, omega, norm_num, positivity,
+    simp, exact?, aesop`) is tuned for proving things TRUE: no `push_neg`, no witness search.
+
+    Measured on the 200-task corpus (13 Aug 2026): decide-mechanism reject facts certify at
+    62/63 = 98% because the kernel just computes them, while proof-mechanism reject facts certify
+    at only 121/237 = 51%. All 75 uncertified reject facts are proof-mechanism; not one is
+    decide-mechanism. That gap is the whole distance between "a vacuity detector exists" (126
+    tasks) and "the detector demonstrably works" (88).
+
+    This is the THIRD site where the same lesson has bitten: the tier-5 truth-countercheck could
+    not refute Nat.divisors/divisors_mem_iff until it reused the model's own witness script, and
+    this module's own negation CHECK missed both known-defective facts until the degenerate-value
+    grid was added. `NEGATION_TACTICS` (including that grid) has existed here throughout and was
+    simply never pointed at discharge.
+
+    Negation tactics run FIRST, then the pinned forward set unchanged -- some rejects do fall to
+    `simp` plus definition unfolding, and nothing that already discharged may stop discharging.
+    Non-reject facts get `budgets` byte-identical.
+    """
+    if not _is_reject_shaped(fact):
+        return budgets
+    extra = truth_unfolding_tactics(truth_name) if truth_name else ()
+    return dataclasses.replace(
+        budgets, tier2_tactics=NEGATION_TACTICS + extra + tuple(budgets.tier2_tactics))
+
+
+def _is_reject_shaped(fact) -> bool:
+    """Reject-shaped: the explicit label, or a negative statement. Both, because 42 of the 88
+    reject-shaped facts in the earlier corpus carried no polarity label at all."""
+    if getattr(fact, "polarity", None) == "reject":
+        return True
+    stmt = getattr(fact, "statement", "") or ""
+    return any(tok in stmt for tok in ("¬", "∉", "≠"))
+
+
 def validate_fact(
     server: AutoLeanServer,
     truth_env: int,
@@ -264,8 +329,8 @@ def validate_fact(
         return FactValidation(fact.id, QUARANTINED_FALSE_OF_TRUTH, neg_detail,
                               anchors_resolved=resolved)
 
-    res = adjudicate_tier2(server, truth_env, f"{fact.id}_discharge", truth_prop, budgets,
-                           imports=imports)
+    res = adjudicate_tier2(server, truth_env, f"{fact.id}_discharge", truth_prop,
+                           discharge_budgets_for(fact, budgets, truth_name), imports=imports)
     if res.winning is not None:
         closure = _audit_closure(server, res.env, res.winning_theorem_name)
         v = FactValidation(fact.id, CERTIFIED, "discharged against the truth",

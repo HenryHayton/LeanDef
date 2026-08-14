@@ -67,3 +67,29 @@ def test_suite_floor_reported_but_nothing_invented():
     out2 = enforce([F(id="r", statement="¬ P"), F(id="r2", statement="x ≠ y")])
     assert any("suite_floor" in v for v in out2.violations)
     assert len(out2.kept) == 2, "enforcement must never invent facts to reach the floor"
+
+
+class TestTopUpRespectsTheCap:
+    """The reject top-up must not smuggle facts past the decide cap.
+
+    Measured on the 200-task run: 13 suites shipped over-cap because top-up additions were
+    appended AFTER composition had trimmed. `Equiv.sumProdDistrib` is the specimen -- its last
+    two facts are reject-polarity decide facts taking it from 6 to 8. This matters beyond the
+    count, since the cap is due to be raised to 8 and an unenforced cap is unpredictable at any
+    value.
+    """
+
+    def test_topup_decide_facts_beyond_the_cap_are_trimmed(self):
+        kept = [F(id=f"d{i}", mechanism="decide") for i in range(DECIDE_CAP)]
+        kept += [F(id="g0"), F(id="g1")]
+        topup = [F(id="r0", mechanism="decide", polarity="reject"),
+                 F(id="r1", mechanism="decide", polarity="reject")]
+        out = enforce(kept + topup)
+        n_decide = sum(1 for f in out.kept if f.mechanism == "decide")
+        assert n_decide == DECIDE_CAP, f"cap breached by top-up: {n_decide}"
+
+    def test_proof_mechanism_topup_facts_are_never_trimmed_by_the_decide_cap(self):
+        kept = [F(id=f"d{i}", mechanism="decide") for i in range(DECIDE_CAP)]
+        topup = [F(id="r0", statement="¬ VTask.P w"), F(id="r1", statement="w ∉ VTask.S")]
+        out = enforce(kept + topup)
+        assert {f.id for f in topup} <= {f.id for f in out.kept}
