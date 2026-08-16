@@ -28,23 +28,26 @@ LEDGER = Path("authoring/batches/batch2500_rotated.txt")
 WORKING = Path("authoring/batches/_batch2500_working.txt")
 
 # Stages where the definition's own content is what failed. Anything else is environmental.
-# `round_trip_generation` is deliberately NOT here: it is a model call that can fail
-# transiently, so those names stay in the queue.
-CONTENT_STAGES = {"dossier", "dossier_consistency", "classification", "mechanical_validation",
-                  "fact_proposal", "composition", "emit"}
+# Keyed on the FAILURE, not the stage. Keying on the stage was wrong: `classification` is
+# simply where the first Bedrock call happens, so an expired token rotates every remaining task
+# there. Treating that stage as content-fatal permanently dropped 18 names that had only met a
+# dead credential -- 19 of the first 30 rotations were environmental, not content.
+ENVIRONMENTAL = ("BedrockRetriesExhausted", "redential", "transport error", "ReadTimeout",
+                 "Unknown environment", "Connection", "Throttl")
 
-ROTATION = re.compile(r"^### (\S+) -- ROTATED \(rotated at `([a-z_]+)`\)", re.M)
+ROTATION = re.compile(r"^### (\S+) -- ROTATED \(rotated at `([a-z_]+)`\)(.*?)(?=^### |\Z)",
+                      re.M | re.S)
 
 
 def build_ledger() -> dict:
-    """name -> stage, for every content-stage rotation across all review files."""
+    """name -> stage, for rotations that were the DEFINITION's fault and will recur."""
     rotated = {}
     for review in sorted(OUT_DIR.glob("batch_review_*.md")):
-        for name, stage in ROTATION.findall(review.read_text(encoding="utf-8")):
-            if stage in CONTENT_STAGES:
-                rotated[name] = stage
+        for name, stage, body in ROTATION.findall(review.read_text(encoding="utf-8")):
+            if any(k in body for k in ENVIRONMENTAL):
+                rotated.pop(name, None)  # dead token / dead REPL: back in the queue
             else:
-                rotated.pop(name, None)  # environmental: put it back in the queue
+                rotated[name] = stage
     return rotated
 
 
