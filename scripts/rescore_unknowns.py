@@ -33,12 +33,21 @@ from scoring.samples import load_task
 from scoring.verdicts import Verdict, fidelity, resolution_rate
 
 STAMP = "unfold_rescore"
+# A SEPARATE stamp for the error-recovery pass. Sharing `STAMP` would mean an errors-only run
+# marks a candidate as fully rescored and a later UNKNOWN pass skips it -- the same flat-marker
+# trap the staged negation pass hit. The two passes look at disjoint fact populations, so they
+# get disjoint stamps.
+ERROR_STAMP = "error_recovery"
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--task", default=None, help="restrict to one task (smoke)")
+    ap.add_argument("--errors-only", action="store_true",
+                    help="recover ONLY the restart-voided ERROR facts, leaving UNKNOWNs alone. "
+                         "Use when the ladder has already spent its budget on the unknowns and "
+                         "re-running them would buy nothing; implies --include-errors.")
     ap.add_argument("--include-errors", action="store_true",
                     help="also re-adjudicate ERROR facts. An ERROR is usually a genuine outcome, "
                          "but `LeanError: Unknown environment` is not -- it means a server restart "
@@ -51,21 +60,22 @@ def main() -> int:
     # Only the environment-loss errors are recoverable; a real elaboration failure is a result and
     # re-running it just burns time to reach the same answer.
     RECOVERABLE_ERROR = "Unknown environment"
+    include_errors = args.include_errors or args.errors_only
     scores_dir = cfg.scores_dir()
 
     todo = []
     for record in store.iter_verdicts(scores_dir=scores_dir):
         if not record.get("admissible") or not record.get("extracted_code"):
             continue
-        if record.get(STAMP):
+        if record.get(ERROR_STAMP if args.errors_only else STAMP):
             continue
         if args.task and record["task_name"] != args.task:
             continue
         def wanted(fv) -> bool:
             v = fv.get("verdict")
             if v == Verdict.UNKNOWN.value:
-                return True
-            return (args.include_errors and v == Verdict.ERROR.value
+                return not args.errors_only
+            return (include_errors and v == Verdict.ERROR.value
                     and RECOVERABLE_ERROR in (fv.get("detail") or ""))
 
         unresolved = [fv["fact_id"] for fv in (record.get("fact_verdicts") or []) if wanted(fv)]
@@ -76,7 +86,7 @@ def main() -> int:
 
     n_facts = sum(len(u) for _, u in todo)
     print(f"{len(todo)} candidates carry {n_facts} unresolved facts"
-          f"{' (UNKNOWN + recoverable ERROR)' if args.include_errors else ' (UNKNOWN)'}  "
+          f"{' (recoverable ERROR only)' if args.errors_only else (' (UNKNOWN + recoverable ERROR)' if include_errors else ' (UNKNOWN)')}  "
           f"{dict(collections.Counter(r['model_slug'] for r, _ in todo))}", flush=True)
 
     handle = ServerHandle()
@@ -103,7 +113,7 @@ def main() -> int:
             merged = _merge_with_existing(fresh, model, task, idx, scores_dir)
             for k, v in (record or {}).items():
                 merged.setdefault(k, v)
-            merged[STAMP] = True
+            merged[ERROR_STAMP if args.errors_only else STAMP] = True
             verdicts = [Verdict(fv["verdict"]) for fv in merged["fact_verdicts"]]
             merged["fidelity"] = fidelity(verdicts)
             merged["resolution_rate"] = resolution_rate(verdicts)
