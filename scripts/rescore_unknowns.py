@@ -67,7 +67,11 @@ def main() -> int:
     for record in store.iter_verdicts(scores_dir=scores_dir):
         if not record.get("admissible") or not record.get("extracted_code"):
             continue
-        if record.get(ERROR_STAMP if args.errors_only else STAMP):
+        # No stamp check in errors-only mode: selection is already self-limiting (a fact is
+        # picked only while it is STILL a recoverable ERROR), so a resolved fact drops out by
+        # itself and one that errored AGAIN -- a restart during the recovery run -- must be
+        # retried rather than marked done. Stamping on entry would strand exactly those.
+        if not args.errors_only and record.get(STAMP):
             continue
         if args.task and record["task_name"] != args.task:
             continue
@@ -113,7 +117,8 @@ def main() -> int:
             merged = _merge_with_existing(fresh, model, task, idx, scores_dir)
             for k, v in (record or {}).items():
                 merged.setdefault(k, v)
-            merged[ERROR_STAMP if args.errors_only else STAMP] = True
+            if not args.errors_only:
+                merged[STAMP] = True
             verdicts = [Verdict(fv["verdict"]) for fv in merged["fact_verdicts"]]
             merged["fidelity"] = fidelity(verdicts)
             merged["resolution_rate"] = resolution_rate(verdicts)
