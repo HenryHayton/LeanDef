@@ -43,21 +43,53 @@ def main() -> int:
         print("nothing to do")
         return 0
 
-    server, base = get_warm_environment()
-    if base.status is not CheckStatus.PASSED:
-        raise RuntimeError(base.detail)
+    def _warm():
+        srv, base = get_warm_environment()
+        if base.status is not CheckStatus.PASSED:
+            raise RuntimeError(base.detail)
+        return srv, base.env
+
+    server, base_env = _warm()
+
+    def _stale(results: list) -> bool:
+        """The AutoLeanServer restarted and `base_env` no longer names a live environment.
+
+        Every subsequent name then fails instantly with `LeanError: Unknown environment.`
+        WITHOUT BEING CHECKED. The first run of this script recorded 242 such entries as
+        genuine preflight failures -- a 60% "fail" rate that was pure artefact. `run_batch`
+        recovers from this through its `repl_warmup` hook; `run_preflight` has no equivalent,
+        so the recovery has to live here.
+        """
+        return any(r.status != "pass" and "Unknown environment" in (r.detail or "")
+                   for r in results)
 
     t0 = time.perf_counter()
     results = []
     # Chunked so a crash mid-sweep keeps everything already checked.
     for i in range(0, len(todo), 25):
         chunk = todo[i:i + 25]
-        results.extend(run_preflight(chunk, server, base.env))
-        merged = list(done.values()) + results
-        write_preflight_json(merged, PREFLIGHT)
+        out = run_preflight(chunk, server, base_env)
+        for attempt in range(3):
+            if not _stale(out):
+                break
+            print(f"    REPL environment lost -- re-warming and redoing chunk "
+                  f"(attempt {attempt + 1})", flush=True)
+            try:
+                server.kill()
+            except Exception:  # noqa: BLE001 -- already dead is the common case
+                pass
+            server, base_env = _warm()
+            out = run_preflight(chunk, server, base_env)
+        if _stale(out):
+            # Do not persist unchecked names as failures; leave them absent so a later run
+            # picks them up.
+            out = [r for r in out if not (r.status != "pass"
+                                          and "Unknown environment" in (r.detail or ""))]
+        results.extend(out)
+        write_preflight_json(list(done.values()) + results, PREFLIGHT)
         rate = (i + len(chunk)) / max(time.perf_counter() - t0, 1e-6)
         n_pass = sum(1 for r in results if r.status == "pass")
-        print(f"  {i + len(chunk)}/{len(todo)}  pass={n_pass}  "
+        print(f"  {i + len(chunk)}/{len(todo)}  pass={n_pass}/{len(results)}  "
               f"{rate * 60:.0f}/min  eta {(len(todo) - i - len(chunk)) / rate / 60:.0f} min",
               flush=True)
     server.kill()

@@ -74,7 +74,13 @@ def main() -> int:
     ap.add_argument("--out", default=str(OUT_DIR))
     ap.add_argument("--redo", action="store_true",
                     help="re-author tasks that already have a task.json (default: skip them)")
+    # Batch 2500 (16 Aug) reuses this runner unchanged apart from where it reads names and
+    # preflight from -- deliberately the same code path, so the larger run is comparable to the
+    # 200 rather than being a second implementation of it.
+    ap.add_argument("--names", default=str(NAMES_FILE))
+    ap.add_argument("--preflight", default=str(PREFLIGHT))
     args = ap.parse_args()
+    names_file, preflight_path = Path(args.names), Path(args.preflight)
 
     from bedrock import config as bcfg
     from bedrock.client import BedrockClient
@@ -85,7 +91,7 @@ def main() -> int:
     from authoring.resolve import make_resolver
 
 
-    names = [n for n in NAMES_FILE.read_text(encoding="utf-8").splitlines()
+    names = [n for n in names_file.read_text(encoding="utf-8").splitlines()
              if n.strip() and not n.startswith("#")][: args.limit]
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -121,11 +127,11 @@ def main() -> int:
         authoring_model_id=bcfg.AUTHORING_MODEL_ID,
         flagship_model_id=bcfg.FLAGSHIP_MODEL_ID,
         server=server, base_env=base_env,
-        resolve_definition=make_resolver(PREFLIGHT),
+        resolve_definition=make_resolver(preflight_path),
         output_dir=out_dir, batch_review_dir=out_dir,
     )
     t0 = time.perf_counter()
-    result = run_batch(slice_file, config, preflight_path=PREFLIGHT,
+    result = run_batch(slice_file, config, preflight_path=preflight_path,
                        curation_yaml_path=Path("miner/curation.yaml"),
                        repl_warmup=_warm)
     elapsed = time.perf_counter() - t0
