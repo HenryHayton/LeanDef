@@ -39,7 +39,18 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--task", default=None, help="restrict to one task (smoke)")
+    ap.add_argument("--include-errors", action="store_true",
+                    help="also re-adjudicate ERROR facts. An ERROR is usually a genuine outcome, "
+                         "but `LeanError: Unknown environment` is not -- it means a server restart "
+                         "invalidated the env mid-candidate and the fact was never actually tried. "
+                         "`scoring.runner` warns that a restart contaminates the ERROR population; "
+                         "this recovers it. In the 2026-08-16 pilot ALL 112 errors were of that "
+                         "kind, 72 of them on Nat.FermatPsp -- the one task whose decide-mechanism "
+                         "reject facts are able to produce a FAIL at all.")
     args = ap.parse_args()
+    # Only the environment-loss errors are recoverable; a real elaboration failure is a result and
+    # re-running it just burns time to reach the same answer.
+    RECOVERABLE_ERROR = "Unknown environment"
     scores_dir = cfg.scores_dir()
 
     todo = []
@@ -50,15 +61,22 @@ def main() -> int:
             continue
         if args.task and record["task_name"] != args.task:
             continue
-        unresolved = [fv["fact_id"] for fv in (record.get("fact_verdicts") or [])
-                      if fv.get("verdict") == Verdict.UNKNOWN.value]
+        def wanted(fv) -> bool:
+            v = fv.get("verdict")
+            if v == Verdict.UNKNOWN.value:
+                return True
+            return (args.include_errors and v == Verdict.ERROR.value
+                    and RECOVERABLE_ERROR in (fv.get("detail") or ""))
+
+        unresolved = [fv["fact_id"] for fv in (record.get("fact_verdicts") or []) if wanted(fv)]
         if unresolved:
             todo.append((record, unresolved))
     if args.limit:
         todo = todo[: args.limit]
 
     n_facts = sum(len(u) for _, u in todo)
-    print(f"{len(todo)} candidates carry {n_facts} UNKNOWN facts  "
+    print(f"{len(todo)} candidates carry {n_facts} unresolved facts"
+          f"{' (UNKNOWN + recoverable ERROR)' if args.include_errors else ' (UNKNOWN)'}  "
           f"{dict(collections.Counter(r['model_slug'] for r, _ in todo))}", flush=True)
 
     handle = ServerHandle()
