@@ -27,11 +27,36 @@ from scoring.verdicts import Verdict, fidelity, resolution_rate
 
 # Binders are supplied so the body typechecks against the pinned signature; the point is that the
 # BODY ignores every one of them.
+#
+# `expect_fail` is the KNOWN ANSWER, and it is what makes this a test of the instrument rather than
+# an observation about a definition. Facts are named explicitly rather than counted, so a suite that
+# is edited later fails loudly here instead of quietly changing what was proved.
 SPECIMENS = {
-    "Monotone": "def VTask.Monotone {α : Type u} {β : Type v} [Preorder α] [Preorder β] "
-                "(_f : α → β) : Prop := True",
-    "DependsOn": "def VTask.DependsOn {ι : Type u_1} {α : ι → Type u_2} {β : Type u_3} "
-                 "(_f : ((i : ι) → α i) → β) (_s : Set ι) : Prop := True",
+    # The original two. Both are Prop tasks with NO reject-polarity fact at all, so nothing in
+    # either suite can refute a vacuous body: fidelity 1.000 is the correct, uninformative answer.
+    # Kept as the negative control -- they show the probe does not manufacture failures.
+    "monotone_vacuous": ("Monotone", [],
+                         "def VTask.Monotone {α : Type u} {β : Type v} [Preorder α] [Preorder β] "
+                         "(_f : α → β) : Prop := True"),
+    "dependson_vacuous": ("DependsOn", [],
+                          "def VTask.DependsOn {ι : Type u_1} {α : ι → Type u_2} {β : Type u_3} "
+                          "(_f : ((i : ι) → α i) → β) (_s : Set ι) : Prop := True"),
+
+    # THE DECISIVE ONE. `Nat.FermatPsp` carries four CERTIFIED reject facts adjudicated by tier-1
+    # `decide` -- and tier-1 decide is the only mechanism `scoring.verdicts` permits to return FAIL.
+    # With the body `True`, each reject fact `example : ¬VTask.FermatPsp n b := by decide` becomes
+    # `¬True`, which the kernel evaluates to false. If these four do not come back FAIL, the
+    # instrument cannot produce a FAIL at all and every zero-FAIL result elsewhere is an artifact.
+    "fermatpsp_vacuous": ("Nat.FermatPsp",
+                          ["fermatpsp_7_2_reject_prime", "fermatpsp_4_2_reject_probable_prime",
+                           "fermatpsp_1_1_reject_lower_bound", "fermatpsp_0_0_reject_lower_bound"],
+                          "def VTask.FermatPsp (_n _b : ℕ) : Prop := True"),
+
+    # The opposite pole, on the same suite. An EMPTY definition refutes every mutant and fails the
+    # positive facts -- the mirror image of the vacuous one. Running both against one suite is what
+    # shows the two-sided design works in both directions rather than just being hard to satisfy.
+    "fermatpsp_empty": ("Nat.FermatPsp", ["fermatpsp_base_one_all_composites"],
+                        "def VTask.FermatPsp (_n _b : ℕ) : Prop := False"),
 }
 
 
@@ -43,11 +68,13 @@ def main() -> int:
         raise RuntimeError(base.detail)
 
     summary = {}
-    for task_name, body in SPECIMENS.items():
+    for specimen_id, (task_name, expect_fail, body) in SPECIMENS.items():
         t = load_task(task_name)
         print("=" * 96)
-        print(f"TASK {task_name}   (truth = {t.get('truth_real_name')})")
+        print(f"SPECIMEN {specimen_id}   TASK {task_name}   (truth = {t.get('truth_real_name')})")
         print(body)
+        if expect_fail:
+            print(f"  KNOWN ANSWER: these must come back FAIL -> {', '.join(expect_fail)}")
         rec = score_candidate_body(
             server, base.env, t["signature"], body, t["facts"],
             truth_real_name=t.get("truth_real_name"),
@@ -69,14 +96,30 @@ def main() -> int:
             print(f"  {fv['fact_id']:<44}{(fv.get('verdict') or ''):<10}"
                   f"{str(fv.get('tier') or ''):<6}{fv.get('mechanism') or ''}")
         print(f"\n  FIDELITY = {fid}   RESOLUTION = {res}")
-        (out_dir / f"{task_name}.json").write_text(
+
+        # Adjudicate the INSTRUMENT against the known answer, not the definition against the facts.
+        got = {fv["fact_id"]: (fv.get("verdict") or "").lower()
+               for fv in (rec.get("fact_verdicts") or [])}
+        missed = [f for f in expect_fail if got.get(f) != "fail"]
+        verdict_on_instrument = "INCONCLUSIVE" if not expect_fail else (
+            "INSTRUMENT OK" if not missed else "INSTRUMENT BROKEN")
+        if expect_fail:
+            print(f"  KNOWN-ANSWER CHECK: {verdict_on_instrument}")
+            for f in expect_fail:
+                print(f"     {f:<44}expected fail, got {got.get(f, '<absent>')}")
+
+        (out_dir / f"{specimen_id}.json").write_text(
             json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
-        summary[task_name] = {
+        summary[specimen_id] = {
+            "task": task_name,
             "admissible": rec.get("admissible"), "fidelity": fid, "resolution_rate": res,
             "n_facts": len(rec.get("fact_verdicts") or []),
             "passed": sum(1 for v in verdicts if v is Verdict.PASS),
             "failed": sum(1 for v in verdicts if v is Verdict.FAIL),
             "unknown": sum(1 for v in verdicts if v is Verdict.UNKNOWN),
+            "expected_fail": expect_fail,
+            "expected_fail_not_delivered": missed,
+            "instrument": verdict_on_instrument,
         }
     server.kill()
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
