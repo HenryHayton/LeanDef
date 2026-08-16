@@ -35,12 +35,23 @@ SPECIMENS = {
     # The original two. Both are Prop tasks with NO reject-polarity fact at all, so nothing in
     # either suite can refute a vacuous body: fidelity 1.000 is the correct, uninformative answer.
     # Kept as the negative control -- they show the probe does not manufacture failures.
+    # NOTE: these live in a different task batch and are absent from `tasks_batch200`; the runner
+    # skips specimens whose task is not present rather than aborting the whole probe.
     "monotone_vacuous": ("Monotone", [],
                          "def VTask.Monotone {α : Type u} {β : Type v} [Preorder α] [Preorder β] "
                          "(_f : α → β) : Prop := True"),
     "dependson_vacuous": ("DependsOn", [],
                           "def VTask.DependsOn {ι : Type u_1} {α : ι → Type u_2} {β : Type u_3} "
                           "(_f : ((i : ι) → α i) → β) (_s : Set ι) : Prop := True"),
+
+    # The CONTRAST specimens. Both carry many certified reject facts, but every one is adjudicated
+    # by the `proof` mechanism -- which `scoring.verdicts` forbids from returning FAIL, on the
+    # grounds that a tactic failing to prove something is not a refutation of it. A vacuous body
+    # should therefore come back UNKNOWN here, not FAIL, no matter how wrong it is. These make the
+    # ceiling visible: reject facts alone do not buy refutation, decidable reject facts do.
+    "xor_vacuous": ("Xor", [], "def VTask.Xor (_a _b : Prop) : Prop := True"),
+    "set_nontrivial_vacuous": ("Set.Nontrivial", [],
+                               "def VTask.Nontrivial {α : Type u} (_s : Set α) : Prop := True"),
 
     # THE DECISIVE ONE. `Nat.FermatPsp` carries four CERTIFIED reject facts adjudicated by tier-1
     # `decide` -- and tier-1 decide is the only mechanism `scoring.verdicts` permits to return FAIL.
@@ -69,7 +80,14 @@ def main() -> int:
 
     summary = {}
     for specimen_id, (task_name, expect_fail, body) in SPECIMENS.items():
-        t = load_task(task_name)
+        try:
+            t = load_task(task_name)
+        except FileNotFoundError:
+            # Task batches differ between machines. Skipping is right for a probe whose specimens
+            # are independent; aborting would lose the decisive ones to an absent control.
+            print(f"SKIP {specimen_id}: task {task_name} not in this task root")
+            summary[specimen_id] = {"task": task_name, "instrument": "SKIPPED_TASK_ABSENT"}
+            continue
         print("=" * 96)
         print(f"SPECIMEN {specimen_id}   TASK {task_name}   (truth = {t.get('truth_real_name')})")
         print(body)
