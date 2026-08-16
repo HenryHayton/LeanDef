@@ -79,6 +79,11 @@ def main() -> int:
     # 200 rather than being a second implementation of it.
     ap.add_argument("--names", default=str(NAMES_FILE))
     ap.add_argument("--preflight", default=str(PREFLIGHT))
+    # The resolver's manifest/mentions default to batch 4. Batch 2500 draws from the batch-5
+    # mine, whose names are absent from the batch-4 manifest -- every task rotates at `lookup`
+    # with zero LLM calls if these are left at their defaults.
+    ap.add_argument("--manifest", default=None)
+    ap.add_argument("--mentions", default=None)
     args = ap.parse_args()
     names_file, preflight_path = Path(args.names), Path(args.preflight)
 
@@ -127,7 +132,11 @@ def main() -> int:
         authoring_model_id=bcfg.AUTHORING_MODEL_ID,
         flagship_model_id=bcfg.FLAGSHIP_MODEL_ID,
         server=server, base_env=base_env,
-        resolve_definition=make_resolver(preflight_path),
+        resolve_definition=make_resolver(
+            preflight_path,
+            **({"manifest_path": Path(args.manifest)} if args.manifest else {}),
+            **({"mentions_path": Path(args.mentions)} if args.mentions else {}),
+        ),
         output_dir=out_dir, batch_review_dir=out_dir,
     )
     t0 = time.perf_counter()
