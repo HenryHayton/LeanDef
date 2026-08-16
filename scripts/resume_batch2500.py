@@ -28,8 +28,10 @@ LEDGER = Path("authoring/batches/batch2500_rotated.txt")
 WORKING = Path("authoring/batches/_batch2500_working.txt")
 
 # Stages where the definition's own content is what failed. Anything else is environmental.
-CONTENT_STAGES = {"dossier", "classification", "mechanical_validation", "fact_proposal",
-                  "composition", "emit"}
+# `round_trip_generation` is deliberately NOT here: it is a model call that can fail
+# transiently, so those names stay in the queue.
+CONTENT_STAGES = {"dossier", "dossier_consistency", "classification", "mechanical_validation",
+                  "fact_proposal", "composition", "emit"}
 
 ROTATION = re.compile(r"^### (\S+) -- ROTATED \(rotated at `([a-z_]+)`\)", re.M)
 
