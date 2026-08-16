@@ -66,7 +66,13 @@ SPECIMENS = {
     # The opposite pole, on the same suite. An EMPTY definition refutes every mutant and fails the
     # positive facts -- the mirror image of the vacuous one. Running both against one suite is what
     # shows the two-sided design works in both directions rather than just being hard to satisfy.
-    "fermatpsp_empty": ("Nat.FermatPsp", ["fermatpsp_base_one_all_composites"],
+    #
+    # The expected failures are the two DECIDE-mechanism accept facts. An earlier version of this
+    # entry expected `fermatpsp_base_one_all_composites` instead, which is a `proof` fact -- and
+    # proof facts are forbidden from returning FAIL by `scoring.verdicts`, so that expectation could
+    # never have been met by a working instrument. The probe duly reported INSTRUMENT BROKEN, which
+    # was a bad prediction rather than a bad scorer. Expectations here must name decidable facts.
+    "fermatpsp_empty": ("Nat.FermatPsp", ["fermatpsp_4_1_accept", "fermatpsp_9_1_accept"],
                         "def VTask.FermatPsp (_n _b : ℕ) : Prop := False"),
 }
 
