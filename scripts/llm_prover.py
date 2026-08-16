@@ -70,6 +70,35 @@ def build_prompt(record: dict, statement: str, direction: str) -> str:
     )
 
 
+def build_repair_prompt(record: dict, goal: str, failed_script: str, error: str) -> str:
+    """Second attempt at ONE goal, given the kernel's complaint about the first.
+
+    The pilot's negation pass certified 0 of 1373 -- and a 40-script sample showed why: not one
+    failure was "this goal is false", they were mechanical elaboration errors (a binder name not
+    in scope, a witness at the wrong universe, a proof stopping one step short). The model was
+    writing the right skeleton and failing to make it typecheck, which is exactly the failure mode
+    a kernel error can repair and a bigger token budget cannot -- the first pass used 168 output
+    tokens of an 8192 cap and stopped on `end_turn`.
+
+    The error is quoted verbatim rather than summarised: `unsolved goals ... h : ¬P ⊢ False` names
+    the remaining obligation, and `Unknown identifier 'α'` is only actionable if the model sees
+    which identifier. Soundness is unchanged -- this still only proposes a script, and the kernel
+    plus axiom audit still decide.
+    """
+    return (
+        f"Your previous Lean 4 proof attempt FAILED to compile. Fix it.\n\n"
+        f"The definition (already elaborated in the environment, with Mathlib imported):\n\n"
+        f"```lean\n{record['extracted_code']}\n```\n\n"
+        f"The goal:\n\n```lean\n{goal}\n```\n\n"
+        f"Your previous attempt:\n\n```lean\n{failed_script}\n```\n\n"
+        f"The Lean error it produced:\n\n```\n{error}\n```\n\n"
+        f"Common causes: a binder name used that is not actually in scope; a witness at the wrong "
+        f"universe or type; a proof that stops one step short of closing the goal. If the goal "
+        f"looks unprovable to you, say so by replying with `by sorry` -- do NOT invent a proof.\n\n"
+        f"Reply with only the corrected tactic proof, as a fenced lean block starting with `by`."
+    )
+
+
 def extract_script(text: str) -> str | None:
     """The tactic script from the reply.
 
@@ -273,7 +302,83 @@ def _generate_converse(args) -> int:
     return 0 if errors == 0 else 1
 
 
+def _generate_repair(args) -> int:
+    """Second pass over the goals whose first script did not compile, given the kernel error.
+
+    Deliberately a separate entry point rather than a flag inside `_generate_converse`: the unit
+    of work is a FAILED ATTEMPT (goal + script + error) read from the errors file, not an unknown
+    fact read from the scores tree, and conflating the two would make the resume semantics
+    ambiguous. Output is appended to a scripts file that `check` reads exactly as it reads a first
+    pass -- `scripts[key]` is already a list and each is tried in turn -- so no new check path.
+    """
+    from bedrock.converse import ConverseClient
+
+    rows = []
+    for line in Path(args.errors).read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    out_path = Path(args.scripts)
+    done = set()
+    if out_path.exists():
+        for line in out_path.read_text(encoding="utf-8").splitlines():
+            try:
+                done.add(json.loads(line)["key"])
+            except (json.JSONDecodeError, KeyError):
+                continue
+    rows = [r for r in rows if r["key"] not in done]
+    if args.limit:
+        rows = rows[: args.limit]
+    print(f"{len(rows)} failed attempts to repair with {args.model_id} @ {args.region} "
+          f"({len(done)} already on disk)", flush=True)
+    if not rows:
+        return 0
+
+    client = ConverseClient(region=args.region, read_timeout_s=900.0)
+    done_n = errors = 0
+    t0 = time.perf_counter()
+    with open(out_path, "a", encoding="utf-8") as fh, \
+            ThreadPoolExecutor(max_workers=args.concurrency) as pool:
+        def one(r):
+            prompt = build_repair_prompt({"extracted_code": r["extracted_code"]},
+                                         r["goal"], r["script"], r["error"])
+            res = client.send(SYSTEM, prompt, model_id=args.model_id, max_tokens=args.max_tokens,
+                              temperature=args.temperature)
+            return r, res
+
+        futures = [pool.submit(one, r) for r in rows]
+        for fut in as_completed(futures):
+            try:
+                r, res = fut.result()
+                script = extract_script(res.text)
+                # `by sorry` is the escape hatch the prompt offers for "I think this is false".
+                # Recording it as a normal script would send an unsound proof to the checker, so
+                # it is kept as a distinct signal instead.
+                unprovable = bool(script) and "sorry" in script
+                fh.write(json.dumps({
+                    "key": r["key"], "script": None if unprovable else script,
+                    "model_id": res.model_id, "output_tokens": res.output_tokens,
+                    "stop_reason": res.stop_reason, "repair_of": r["script"],
+                    "model_says_unprovable": unprovable,
+                }, ensure_ascii=False) + "\n")
+                fh.flush()
+            except Exception as exc:  # noqa: BLE001 -- one goal must not kill the batch
+                errors += 1
+                print(f"ERROR repair: {type(exc).__name__}: {exc}"[:200], flush=True)
+            done_n += 1
+            if done_n % 20 == 0:
+                rate = done_n / max(time.perf_counter() - t0, 1e-6)
+                print(f"{done_n}/{len(rows)} (err={errors}) eta "
+                      f"{((len(rows)-done_n)/rate)/60:.0f} min", flush=True)
+    print(f"\nREPAIRED {done_n - errors}, errors {errors}", flush=True)
+    return 0
+
+
 def cmd_generate(args) -> int:
+    if getattr(args, "errors", None):
+        return _generate_repair(args)
     if args.backend == "vllm":
         return _generate_vllm(args)
     if args.backend == "converse":
@@ -451,6 +556,10 @@ def cmd_check(args) -> int:
         stage, stamp = f"{tag}_{args.direction}", f"{tag}_{args.direction}_topup"
     else:
         stage, stamp = STAGE[args.direction], STAMP[args.direction]
+    errors_out = None
+    if getattr(args, "errors_out", None):
+        Path(args.errors_out).parent.mkdir(parents=True, exist_ok=True)
+        errors_out = open(args.errors_out, "w", encoding="utf-8")
     handle = ServerHandle()
     checked = certified = audit_rejected = 0
     by_fact = collections.Counter()
@@ -487,6 +596,18 @@ def cmd_check(args) -> int:
                     checked += 1
                     result = run_checked(server, Command(cmd=decl, env=cand_env), timeout=120.0)
                     ok = result.status is CheckStatus.PASSED
+                    if not ok and errors_out is not None:
+                        # What the repair pass needs, and nothing it does not. Written as we go so
+                        # a run killed midway still leaves usable input for the repair.
+                        errors_out.write(json.dumps({
+                            "key": key_of(record, fid, args.direction),
+                            "task_name": record["task_name"],
+                            "sample_index": record["sample_index"],
+                            "fact_id": fid, "goal": goal, "script": script,
+                            "error": (result.detail or "")[:4000],
+                            "extracted_code": record["extracted_code"],
+                        }, ensure_ascii=False) + "\n")
+                        errors_out.flush()
                     if ok:
                         cand_env = result.env
                         audit = audit_proof_axioms(server, cand_env, name,
@@ -537,6 +658,8 @@ def cmd_check(args) -> int:
             store.write_verdict(record, scores_dir=scores_dir)
     finally:
         handle.close()
+        if errors_out is not None:
+            errors_out.close()
 
     print(f"\nCHECKED {checked} scripts: {certified} kernel-certified, "
           f"{audit_rejected} rejected by axiom audit, "
@@ -569,6 +692,9 @@ def main() -> int:
     g.add_argument("--samples", type=int, default=8, help="vllm backend: pass@k attempts/goal")
     g.add_argument("--temperature", type=float, default=1.0)
     g.add_argument("--scripts", default=None)
+    g.add_argument("--errors", default=None,
+                   help="repair mode: JSONL of failed attempts from `check --errors-out`. Re-prompts "
+                        "with the kernel error and appends the corrected scripts to --scripts.")
     g.add_argument("--concurrency", type=int, default=12)
     g.add_argument("--max-tokens", type=int, default=8192)  # 4096 truncated 57% of Sonnet replies
     g.add_argument("--limit", type=int, default=None)
@@ -578,6 +704,8 @@ def main() -> int:
     c.add_argument("--arm", choices=("sonnet", "goedel", "goedel32b", "all"), default="all")
     c.add_argument("--scripts", default=None)
     c.add_argument("--tag", default=None, help="must match the tag used at generate time")
+    c.add_argument("--errors-out", default=None,
+                   help="write every failed script with its kernel error, as repair-pass input")
     args = ap.parse_args()
     if args.scripts is None:
         backend = getattr(args, "backend", None) or "check"
