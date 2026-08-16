@@ -110,7 +110,16 @@ def main() -> int:
             fresh = score_candidate_body(
                 server, env, t["signature"], record["extracted_code"], facts,
                 truth_real_name=t.get("truth_real_name"),
-                try_equivalence=not record.get("equivalence_certified"),
+                # Do NOT re-attempt equivalence that already ran and did not certify. It buys
+                # nothing (same candidate, same truth, same budgets) and it is actively harmful:
+                # a failing tier-4 attempt can kill the Lean environment, after which every fact
+                # in the walk below returns `LeanError: Unknown environment`. That is where all
+                # 112 of this pilot's ERROR verdicts came from -- reproduced deterministically on
+                # Nat.FermatPsp/sample_00, which scores 6/6 PASS with this flag off and 6/6 ERROR
+                # with it on. The env-death itself is a `scoring.candidate` bug (step 4 poisons
+                # step 5's env); this only stops the rescore from re-triggering it.
+                try_equivalence=not (record.get("equivalence_certified")
+                                     or record.get("equivalence_attempted")),
                 imports=t.get("imports"),
             )
             fresh.update(model_slug=model, task_name=task, sample_index=idx)
