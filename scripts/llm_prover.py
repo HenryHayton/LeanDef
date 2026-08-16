@@ -84,6 +84,11 @@ def build_repair_prompt(record: dict, goal: str, failed_script: str, error: str)
     the remaining obligation, and `Unknown identifier 'α'` is only actionable if the model sees
     which identifier. Soundness is unchanged -- this still only proposes a script, and the kernel
     plus axiom audit still decide.
+
+    The prompt does NOT offer the model a way to declare the goal unprovable. Two attempts, and a
+    goal that survives both stays UNKNOWN -- which is already exactly the verdict for "not
+    adjudicated". An opt-out would invite an uncertain model to take the easy exit (biasing toward
+    false negatives) and would put a model's OPINION into a pipeline where only the kernel decides.
     """
     return (
         f"Your previous Lean 4 proof attempt FAILED to compile. Fix it.\n\n"
@@ -93,8 +98,7 @@ def build_repair_prompt(record: dict, goal: str, failed_script: str, error: str)
         f"Your previous attempt:\n\n```lean\n{failed_script}\n```\n\n"
         f"The Lean error it produced:\n\n```\n{error}\n```\n\n"
         f"Common causes: a binder name used that is not actually in scope; a witness at the wrong "
-        f"universe or type; a proof that stops one step short of closing the goal. If the goal "
-        f"looks unprovable to you, say so by replying with `by sorry` -- do NOT invent a proof.\n\n"
+        f"universe or type; a proof that stops one step short of closing the goal.\n\n"
         f"Reply with only the corrected tactic proof, as a fenced lean block starting with `by`."
     )
 
@@ -353,15 +357,10 @@ def _generate_repair(args) -> int:
             try:
                 r, res = fut.result()
                 script = extract_script(res.text)
-                # `by sorry` is the escape hatch the prompt offers for "I think this is false".
-                # Recording it as a normal script would send an unsound proof to the checker, so
-                # it is kept as a distinct signal instead.
-                unprovable = bool(script) and "sorry" in script
                 fh.write(json.dumps({
-                    "key": r["key"], "script": None if unprovable else script,
+                    "key": r["key"], "script": script,
                     "model_id": res.model_id, "output_tokens": res.output_tokens,
                     "stop_reason": res.stop_reason, "repair_of": r["script"],
-                    "model_says_unprovable": unprovable,
                 }, ensure_ascii=False) + "\n")
                 fh.flush()
             except Exception as exc:  # noqa: BLE001 -- one goal must not kill the batch
