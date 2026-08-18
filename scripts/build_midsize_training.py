@@ -15,12 +15,15 @@ of fidelity's denominator. A task clears T3 when ALL of:
 Reject-shaped is `polarity == "reject"` or a negation token in the statement, matching the
 counting used throughout the batch reports.
 
-**No held-out split is carved out of this corpus, by design.** `pilot_corpus_v1` froze 8 tasks
-as held-out; those are EXCLUDED here rather than shipped with a warning label, because the
-training plan is to author FRESH tasks during the training run and use those as held-out data
-instead. Fresh tasks are the stronger evaluation anyway: a task authored after the model was
-trained cannot have leaked into it, which is not something a frozen carve-out of an existing
-corpus can promise. Pilot `training`/`annex` members are kept and tagged via `pilot_role`.
+**No held-out split is carved out of this corpus, by design.** Held-out data for this run is
+authored FRESH during training instead: a task authored after the model was trained cannot have
+leaked into it, which a frozen carve-out of an existing corpus cannot promise.
+
+Consequently `pilot_corpus_v1`'s former held-out members are INCLUDED here like any other task.
+Nothing was ever evaluated against them as held-out (checked: `pilot_result.json` is an
+unrelated early-August tier-2 discharge measurement, and the scoring runs that mention some of
+them are the general batch-200 sweeps), so holding them back would forfeit 7 qualifying tasks
+to protect a split that is no longer in use. Every entry keeps its `pilot_role` tag.
 
 Each entry is pinned by a SHA-256 prefix of its `task.json`, so later authoring or re-discharge
 work that mutates a task is detectable at harvest time rather than silently changing the corpus.
@@ -53,7 +56,7 @@ def main() -> int:
             for t in p.get(group, []):
                 pilot_role[t["name"]] = group
 
-    entries, skipped, heldout_excluded = [], 0, []
+    entries, skipped = [], 0
     for corpus, d in CORPORA:
         for task_dir in sorted(Path(d).iterdir()):
             tj = task_dir / "task.json"
@@ -72,11 +75,6 @@ def main() -> int:
                 continue
             if not (len(facts) >= 3 and accept and cert_reject):
                 skipped += 1
-                continue
-            if pilot_role.get(task_dir.name) == "heldout":
-                # Excluded on purpose -- see the module docstring. Held-out data for this run
-                # is authored fresh during training, not carved out of the training corpus.
-                heldout_excluded.append(task_dir.name)
                 continue
             entries.append({
                 "name": task_dir.name,
@@ -125,9 +123,12 @@ def main() -> int:
             "plan": ("Held-out data is authored FRESH during the training run rather than "
                      "carved out of this corpus. Tasks authored after training cannot have "
                      "leaked into it, which a frozen carve-out cannot promise."),
-            "excluded_from_this_manifest": sorted(heldout_excluded),
-            "excluded_reason": ("pilot_corpus_v1's frozen held-out split, removed so this "
-                                "file is trainable in full with no filtering step"),
+            "former_pilot_heldout_included": sorted(
+                e["name"] for e in entries if e["pilot_role"] == "heldout"),
+            "former_pilot_heldout_note": (
+                "pilot_corpus_v1 froze these as held-out. That split is retired, nothing was "
+                "ever evaluated against them as held-out, so they are trained on like any "
+                "other task."),
         },
         "warnings": [
             ("Every task in `tasks` is trainable -- there is no held-out subset to filter "
@@ -145,7 +146,6 @@ def main() -> int:
     print(f"{len(entries)} tasks -> {OUT}")
     print(f"  by corpus: {by_corpus}")
     print(f"  excluded (failed the bar or schema): {skipped}")
-    print(f"  excluded (pilot held-out split): {len(heldout_excluded)}")
     print(f"  pilot roles: " + str({r: sum(1 for e in entries if e['pilot_role'] == r)
                                     for r in ('training', 'heldout', 'annex')}))
     return 0
