@@ -15,11 +15,12 @@ of fidelity's denominator. A task clears T3 when ALL of:
 Reject-shaped is `polarity == "reject"` or a negation token in the statement, matching the
 counting used throughout the batch reports.
 
-**Pilot overlap is marked, not silently included.** `training/config/pilot_corpus_v1.json`
-froze an 8-task held-out split; those tasks clear T3 too, so a naive train-on-everything run
-would train on the held-out set. They are listed at `heldout_do_not_train` and tagged
-`pilot_role` per entry. The consuming session decides what to do -- this file just refuses to
-hide it.
+**No held-out split is carved out of this corpus, by design.** `pilot_corpus_v1` froze 8 tasks
+as held-out; those are EXCLUDED here rather than shipped with a warning label, because the
+training plan is to author FRESH tasks during the training run and use those as held-out data
+instead. Fresh tasks are the stronger evaluation anyway: a task authored after the model was
+trained cannot have leaked into it, which is not something a frozen carve-out of an existing
+corpus can promise. Pilot `training`/`annex` members are kept and tagged via `pilot_role`.
 
 Each entry is pinned by a SHA-256 prefix of its `task.json`, so later authoring or re-discharge
 work that mutates a task is detectable at harvest time rather than silently changing the corpus.
@@ -52,7 +53,7 @@ def main() -> int:
             for t in p.get(group, []):
                 pilot_role[t["name"]] = group
 
-    entries, skipped = [], 0
+    entries, skipped, heldout_excluded = [], 0, []
     for corpus, d in CORPORA:
         for task_dir in sorted(Path(d).iterdir()):
             tj = task_dir / "task.json"
@@ -71,6 +72,11 @@ def main() -> int:
                 continue
             if not (len(facts) >= 3 and accept and cert_reject):
                 skipped += 1
+                continue
+            if pilot_role.get(task_dir.name) == "heldout":
+                # Excluded on purpose -- see the module docstring. Held-out data for this run
+                # is authored fresh during training, not carved out of the training corpus.
+                heldout_excluded.append(task_dir.name)
                 continue
             entries.append({
                 "name": task_dir.name,
@@ -91,7 +97,6 @@ def main() -> int:
             })
 
     entries.sort(key=lambda e: (-e["n_certified_reject"], -e["n_facts"], e["name"]))
-    heldout = [e["name"] for e in entries if e["pilot_role"] == "heldout"]
     by_corpus = {c: sum(1 for e in entries if e["corpus"] == c) for c, _ in CORPORA}
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
@@ -115,11 +120,18 @@ def main() -> int:
         "by_corpus": by_corpus,
         "tasks_considered": len(entries) + skipped,
         "tasks_excluded": skipped,
-        "heldout_do_not_train": heldout,
+        "heldout_policy": {
+            "split_in_this_file": None,
+            "plan": ("Held-out data is authored FRESH during the training run rather than "
+                     "carved out of this corpus. Tasks authored after training cannot have "
+                     "leaked into it, which a frozen carve-out cannot promise."),
+            "excluded_from_this_manifest": sorted(heldout_excluded),
+            "excluded_reason": ("pilot_corpus_v1's frozen held-out split, removed so this "
+                                "file is trainable in full with no filtering step"),
+        },
         "warnings": [
-            (f"{len(heldout)} task(s) here are the FROZEN held-out split of "
-             f"pilot_corpus_v1 (see heldout_do_not_train). Training on them destroys that "
-             f"split. Filter on pilot_role != 'heldout' unless you intend otherwise."),
+            ("Every task in `tasks` is trainable -- there is no held-out subset to filter "
+             "out. See `heldout_policy`."),
             ("task_hash_sha256_16 pins each task.json. Authoring and re-discharge work is "
              "ongoing on batch2500, so verify hashes at harvest time; a mismatch means the "
              "task changed after this manifest was written."),
@@ -133,6 +145,7 @@ def main() -> int:
     print(f"{len(entries)} tasks -> {OUT}")
     print(f"  by corpus: {by_corpus}")
     print(f"  excluded (failed the bar or schema): {skipped}")
+    print(f"  excluded (pilot held-out split): {len(heldout_excluded)}")
     print(f"  pilot roles: " + str({r: sum(1 for e in entries if e['pilot_role'] == r)
                                     for r in ('training', 'heldout', 'annex')}))
     return 0
