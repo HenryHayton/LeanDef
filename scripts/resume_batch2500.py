@@ -25,6 +25,10 @@ from pathlib import Path
 OUT_DIR = Path("prelim_testing/tasks_batch2500")
 PASSING = Path("authoring/batches/batch2500_passing.txt")
 LEDGER = Path("authoring/batches/batch2500_rotated.txt")
+# Definitions reserved as held-out evaluation data. They are authored FRESH at training time,
+# from this same pool -- so if authoring is allowed to consume them now, there is nothing
+# uncontaminated left to author later. See training/config/heldout_slate_v1.json.
+HELDOUT = Path("training/config/heldout_slate_v1_names.txt")
 WORKING = Path("authoring/batches/_batch2500_working.txt")
 
 # Stages where the definition's own content is what failed. Anything else is environmental.
@@ -61,9 +65,13 @@ def main() -> int:
     rotated = build_ledger()
     LEDGER.write_text("".join(f"{n}\t{s}\n" for n, s in sorted(rotated.items())), encoding="utf-8")
 
-    todo = [n for n in names if n not in done and n not in rotated]
+    heldout = set()
+    if HELDOUT.exists():
+        heldout = {n.strip() for n in HELDOUT.read_text(encoding="utf-8").splitlines() if n.strip()}
+
+    todo = [n for n in names if n not in done and n not in rotated and n not in heldout]
     print(f"passing {len(names)} | shipped {len(done)} | content-rotated {len(rotated)} "
-          f"| remaining {len(todo)}", flush=True)
+          f"| heldout-reserved {len(heldout)} | remaining {len(todo)}", flush=True)
     if not todo:
         print("nothing left in the passing list -- preflight more names")
         return 0
