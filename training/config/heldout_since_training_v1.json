@@ -1,0 +1,4161 @@
+{
+ "set_id": "heldout_since_training_v1",
+ "created": "2026-08-20",
+ "purpose": "Held-out evaluation set for the mid-size training run. Every task here was authored AFTER the model was trained, so it cannot have leaked into training -- a guarantee a corpus carve-out cannot make.",
+ "trained_on_snapshot": {
+  "manifest": "training/config/midsize_training_v1.json",
+  "git_commit": "d81ba57",
+  "n_tasks": 177
+ },
+ "n_heldout_tasks": 48,
+ "n_facts": 373,
+ "n_certified_facts": 311,
+ "by_corpus": {
+  "batch2500_2026-08-16": 48
+ },
+ "selection_bar": {
+  "id": "T3",
+  "summary": "kernel-proven vacuity detector, two-sided",
+  "requires": [
+   "task.json validates against the current schema",
+   "at least 3 facts",
+   "at least 1 accept-side fact",
+   "at least 1 reject fact with validation_status == CERTIFIED"
+  ],
+  "reject_shaped_rule": "polarity == 'reject' OR statement contains one of ¬ ∉ ≠",
+  "why": "Below this bar a task cannot demonstrably refute a vacuous `def VTask.X _ := True` candidate: its reject fact returns UNKNOWN and drops out of fidelity's denominator."
+ },
+ "disjointness": "Computed by diffing the current manifest against the training snapshot recovered from git, not asserted. Verified zero overlap by name.",
+ "scoring_notes": [
+  "Score only facts with scoring_safe == true (validation_status CERTIFIED). A PROVISIONALLY_VALIDATED fact was never kernel-confirmed against ground truth; 62 of 373 facts here fall in that category.",
+  "Fidelity is near-vacuous on this corpus: FAIL is nearly unreachable on forward facts and UNKNOWN leaves the denominator, so a `:= True` candidate scores ~1.000. Separation against mutant suites is the signal that survived scrutiny.",
+  "n_certified_reject > 0 on every task by construction (the T3 bar), so every task here can demonstrably refute a vacuous candidate."
+ ],
+ "tasks": [
+  {
+   "name": "Equiv.Perm.IsSwap",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Equiv.Perm.IsSwap",
+   "task_json": "prelim_testing/tasks_batch2500/Equiv.Perm.IsSwap/task.json",
+   "task_hash_sha256_16": "80fcbb5ef26dfe30",
+   "mathlib_name": "Equiv.Perm.IsSwap",
+   "signature_name": "VTask.IsSwap",
+   "signature_type": "{α : Type u_1} -> [DecidableEq α] -> (f : Equiv.Perm α) -> Prop",
+   "n_facts": 13,
+   "n_certified": 11,
+   "n_reject": 6,
+   "n_certified_reject": 5,
+   "facts": [
+    {
+     "id": "isswap_iff_swap_ne",
+     "statement": "∀ (α : Type*) [DecidableEq α] (a b : α), VTask.IsSwap (Equiv.swap a b) ↔ a ≠ b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_iff_card_support_two",
+     "statement": "∀ (α : Type*) [DecidableEq α] [Fintype α] (f : Equiv.Perm α), VTask.IsSwap f ↔ f.support.card = 2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_order_two",
+     "statement": "∀ (α : Type*) [DecidableEq α] (f : Equiv.Perm α), VTask.IsSwap f → orderOf f = 2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "isswap_sign_neg_one",
+     "statement": "∀ (α : Type*) [DecidableEq α] [Fintype α] (f : Equiv.Perm α), VTask.IsSwap f → Equiv.Perm.sign f = -1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_is_cycle",
+     "statement": "∀ (α : Type*) [DecidableEq α] (f : Equiv.Perm α), VTask.IsSwap f → f.IsCycle",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_not_iscycle_implies_not_swap",
+     "statement": "∀ (α : Type*) [DecidableEq α] (f : Equiv.Perm α), ¬ f.IsCycle → ¬ VTask.IsSwap f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "isswap_closure_top",
+     "statement": "∀ (α : Type*) [DecidableEq α] [Finite α], Subgroup.closure { σ : Equiv.Perm α | VTask.IsSwap σ } = ⊤",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_accept_swap_distinct",
+     "statement": "VTask.IsSwap (Equiv.swap (0 : Fin 4) 1)",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_accept_swap_23",
+     "statement": "VTask.IsSwap (Equiv.swap (2 : Fin 5) 3)",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_reject_identity",
+     "statement": "¬ VTask.IsSwap (1 : Equiv.Perm (Fin 3))",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_reject_swap_self",
+     "statement": "¬ VTask.IsSwap (Equiv.swap (0 : Fin 3) 0)",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_reject_three_cycle",
+     "statement": "¬ VTask.IsSwap (Equiv.swap (0 : Fin 3) 1 * Equiv.swap 1 2)",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "isswap_reject_unit",
+     "statement": "¬ VTask.IsSwap (1 : Equiv.Perm Unit)",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Matrix.BlockTriangular",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Matrix.BlockTriangular",
+   "task_json": "prelim_testing/tasks_batch2500/Matrix.BlockTriangular/task.json",
+   "task_hash_sha256_16": "83b6346f0955f14b",
+   "mathlib_name": "Matrix.BlockTriangular",
+   "signature_name": "VTask.BlockTriangular",
+   "signature_type": "{α : Type u_1} -> {m : Type u_3} -> {R : Type v} -> [LT α] -> [Zero R] -> (M : Matrix m m R) -> (b : m → α) -> Prop",
+   "n_facts": 11,
+   "n_certified": 7,
+   "n_reject": 3,
+   "n_certified_reject": 3,
+   "facts": [
+    {
+     "id": "bt_submatrix_closure",
+     "statement": "∀ {α : Type*} {m : Type*} {n : Type*} {R : Type*} [LT α] [Zero R] (M : Matrix m m R) (b : m → α) (f : n → m), VTask.BlockTriangular M b → VTask.BlockTriangular (M.submatrix f f) (b ∘ f)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_det_product",
+     "statement": "∀ {α : Type*} {m : Type*} {R : Type*} [DecidableEq α] [LinearOrder α] [CommRing R] [Fintype m] [DecidableEq m] (M : Matrix m m R) (b : m → α), VTask.BlockTriangular M b → M.det = ∏ a ∈ Finset.univ.image b, (M.toSquareBlock b a).det",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_upper_triangular_det",
+     "statement": "∀ {m : Type*} {R : Type*} [LinearOrder m] [Fintype m] [DecidableEq m] [CommRing R] (M : Matrix m m R), VTask.BlockTriangular M id → M.det = ∏ i : m, M i i",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_map_zero_hom",
+     "statement": "∀ {α : Type*} {m : Type*} {R S : Type*} {F : Type*} [LT α] [Zero R] [Zero S] [FunLike F R S] [ZeroHomClass F R S] (f : F) (M : Matrix m m R) (b : m → α), VTask.BlockTriangular M b → VTask.BlockTriangular (M.map f) b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_identity_2x2_accept",
+     "statement": "VTask.BlockTriangular (!![1, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "bt_upper_triangular_accept",
+     "statement": "VTask.BlockTriangular (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "bt_lower_triangular_reject",
+     "statement": "¬ VTask.BlockTriangular (!![0, 0; 1, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_zero_matrix_accept",
+     "statement": "VTask.BlockTriangular (!![0, 0; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "bt_nonzero_offdiag_reject",
+     "statement": "¬ VTask.BlockTriangular (!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "bt_3x3_strict_upper_accept",
+     "statement": "VTask.BlockTriangular (!![1, 2, 3; 0, 4, 5; 0, 0, 6] : Matrix (Fin 3) (Fin 3) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "bt_3x3_lower_reject",
+     "statement": "¬ VTask.BlockTriangular (!![1, 0, 0; 2, 3, 0; 4, 5, 6] : Matrix (Fin 3) (Fin 3) ℤ) id",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "NonUnitalSubring.mk'",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/NonUnitalSubring.mk'",
+   "task_json": "prelim_testing/tasks_batch2500/NonUnitalSubring.mk'/task.json",
+   "task_hash_sha256_16": "e179443a22b937da",
+   "mathlib_name": "NonUnitalSubring.mk'",
+   "signature_name": "VTask.mk'",
+   "signature_type": "{R : Type u} -> [NonUnitalNonAssocRing R] -> (s : Set R) -> (sm : Subsemigroup R) -> (sa : AddSubgroup R) -> (hm : ↑sm = s) -> (ha : ↑sa = s) -> NonUnitalSubring R",
+   "n_facts": 8,
+   "n_certified": 8,
+   "n_reject": 3,
+   "n_certified_reject": 3,
+   "facts": [
+    {
+     "id": "mk'_toAddSubgroup",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (VTask.mk' s sm sa hm ha).toAddSubgroup = sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_toSubsemigroup",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (VTask.mk' s sm sa hm ha).toSubsemigroup = sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_carrier_eq_addsubgroup_carrier",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), ((VTask.mk' s sm sa hm ha).toAddSubgroup : Set R) = ↑sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_carrier_eq_subsemigroup_carrier",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), ((VTask.mk' s sm sa hm ha).toSubsemigroup : Set R) = ↑sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_of_mem_s",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (x : R), x ∈ s → x ∈ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_not_mem_of_not_mem_s",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (x : R), x ∉ s → x ∉ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_toAddSubgroup_ne_different_addsubgroup",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm : Subsemigroup R) (sa sa2 : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (ha2 : ↑sa2 = s), sa ≠ sa2 → (VTask.mk' s sm sa hm ha).toAddSubgroup ≠ sa2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_toSubsemigroup_ne_different_subsemigroup",
+     "statement": "∀ {R : Type*} [inst : NonUnitalNonAssocRing R] (s : Set R) (sm sm2 : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s) (hm2 : ↑sm2 = s) (ha : ↑sa = s), sm ≠ sm2 → (VTask.mk' s sm sa hm ha).toSubsemigroup ≠ sm2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "FixedDetMatrices.reduce",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/FixedDetMatrices.reduce",
+   "task_json": "prelim_testing/tasks_batch2500/FixedDetMatrices.reduce/task.json",
+   "task_hash_sha256_16": "6d83fdd0bb35509c",
+   "mathlib_name": "FixedDetMatrices.reduce",
+   "signature_name": "VTask.reduce",
+   "signature_type": "{m : ℤ} -> FixedDetMatrix (Fin 2) ℤ m → FixedDetMatrix (Fin 2) ℤ m",
+   "n_facts": 5,
+   "n_certified": 3,
+   "n_reject": 4,
+   "n_certified_reject": 3,
+   "facts": [
+    {
+     "id": "reduce_mem_reps_global",
+     "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce A ∈ FixedDetMatrices.reps m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "reduce_image_in_reps_is_reps",
+     "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce (VTask.reduce A) ∈ FixedDetMatrices.reps m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "reduce_idempotent_in_reps",
+     "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce A ∈ FixedDetMatrices.reps m → VTask.reduce (VTask.reduce A) = VTask.reduce A",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "reduce_same_det",
+     "statement": "∀ (m : ℤ) (A : FixedDetMatrix (Fin 2) ℤ m), (VTask.reduce A).1.det = m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "reduce_lower_left_zero_in_reps",
+     "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), (VTask.reduce A).1 1 0 = 0 ∨ (VTask.reduce A).1 1 0 ≠ 0 → VTask.reduce A ∈ FixedDetMatrices.reps m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "MvPolynomial.NonTorsionWeight",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/MvPolynomial.NonTorsionWeight",
+   "task_json": "prelim_testing/tasks_batch2500/MvPolynomial.NonTorsionWeight/task.json",
+   "task_hash_sha256_16": "586c579d8f01b9aa",
+   "mathlib_name": "MvPolynomial.NonTorsionWeight",
+   "signature_name": "VTask.NonTorsionWeight",
+   "signature_type": "{M : Type u_2} -> {σ : Type u_3} -> [AddCommMonoid M] -> (w : σ → M) -> Prop",
+   "n_facts": 5,
+   "n_certified": 3,
+   "n_reject": 3,
+   "n_certified_reject": 3,
+   "facts": [
+    {
+     "id": "nontorsion_implies_nonzero",
+     "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), VTask.NonTorsionWeight w → ∀ x : σ, w x ≠ 0 → True",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "nontorsion_of_torsion_free_nonzero",
+     "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] [IsAddTorsionFree M] (w : σ → M), (∀ i : σ, w i ≠ 0) → VTask.NonTorsionWeight w",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "nontorsion_zero_index_type",
+     "statement": "∀ {M : Type*} [AddCommMonoid M] (w : Empty → M), VTask.NonTorsionWeight w",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nontorsion_values_all_nonzero",
+     "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), VTask.NonTorsionWeight w → ∀ x : σ, 1 • w x = 0 → False",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nontorsion_not_implies_some_torsion",
+     "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), ¬ VTask.NonTorsionWeight w → ∃ n : ℕ, ∃ x : σ, n • w x = 0 ∧ n ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "MonoidHom.mulSingle",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/MonoidHom.mulSingle",
+   "task_json": "prelim_testing/tasks_batch2500/MonoidHom.mulSingle/task.json",
+   "task_hash_sha256_16": "b84cfda39f03ba8d",
+   "mathlib_name": "MonoidHom.mulSingle",
+   "signature_name": "VTask.mulSingle",
+   "signature_type": "{I : Type u} -> (f : I → Type v) -> [DecidableEq I] -> [(i : I) → MulOneClass (f i)] -> (i : I) -> f i →* (i : I) → f i",
+   "n_facts": 10,
+   "n_certified": 10,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "mulSingle_apply_same",
+     "statement": "example : (VTask.mulSingle (fun (_ : Fin 3) => Fin 5) 1) 3 1 = 3 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_apply_diff",
+     "statement": "example : (VTask.mulSingle (fun (_ : Fin 3) => Fin 5) 1) 3 0 = 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_apply_diff2",
+     "statement": "example : (VTask.mulSingle (fun (_ : Fin 3) => Fin 5) 1) 3 2 = 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_one_is_one",
+     "statement": "example : (VTask.mulSingle (fun (_ : Fin 2) => Fin 7) 0) 1 = (fun _ => 1) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_map_one",
+     "statement": "∀ (I : Type) [DecidableEq I] (f : I → Type) [∀ i, MulOneClass (f i)] (i : I), (VTask.mulSingle f i) 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_map_mul",
+     "statement": "∀ (I : Type) [DecidableEq I] (f : I → Type) [∀ i, MulOneClass (f i)] (i : I) (x y : f i), (VTask.mulSingle f i) (x * y) = (VTask.mulSingle f i) x * (VTask.mulSingle f i) y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_eval_at_i",
+     "statement": "∀ (I : Type) [DecidableEq I] (f : I → Type) [∀ i, MulOneClass (f i)] (i : I) (x : f i), (VTask.mulSingle f i x) i = x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_eval_at_j_ne_i",
+     "statement": "∀ (I : Type) [DecidableEq I] (f : I → Type) [∀ i, MulOneClass (f i)] (i j : I), i ≠ j → ∀ (x : f i), (VTask.mulSingle f i x) j = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_image_in_submonoid_pi",
+     "statement": "Submonoid.map (VTask.mulSingle (fun (_ : Fin 2) => ℕ) 0) ⊤ ≤ Submonoid.pi Set.univ (fun _ => ⊤)",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mulSingle_reject_nonidentity_at_other_index",
+     "statement": "example : ¬ ((VTask.mulSingle (fun (_ : Fin 2) => Fin 5) 0) 2 1 = 2) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Ordnode.Balanced",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Ordnode.Balanced",
+   "task_json": "prelim_testing/tasks_batch2500/Ordnode.Balanced/task.json",
+   "task_hash_sha256_16": "0342523983d33e86",
+   "mathlib_name": "Ordnode.Balanced",
+   "signature_name": "VTask.Balanced",
+   "signature_type": "{α : Type u_1} -> Ordnode α → Prop",
+   "n_facts": 10,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "balanced_nil",
+     "statement": "example : VTask.Balanced (Ordnode.nil : Ordnode ℕ) := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_single_node",
+     "statement": "example : VTask.Balanced (Ordnode.node 1 Ordnode.nil (42 : ℕ) Ordnode.nil) := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_two_nodes_left",
+     "statement": "example : VTask.Balanced (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil (1 : ℕ) Ordnode.nil) (2 : ℕ) Ordnode.nil) := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_size3_1_accept",
+     "statement": "example : VTask.Balanced (Ordnode.node 4 (Ordnode.node 3 (Ordnode.node 1 Ordnode.nil (1:ℕ) Ordnode.nil) (2:ℕ) (Ordnode.node 1 Ordnode.nil (3:ℕ) Ordnode.nil)) (4:ℕ) (Ordnode.node 1 Ordnode.nil (5:ℕ) Ordnode.nil)) := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_skewed_reject",
+     "statement": "example : ¬ VTask.Balanced (Ordnode.node 5 (Ordnode.node 4 (Ordnode.node 3 (Ordnode.node 1 Ordnode.nil (1:ℕ) Ordnode.nil) (2:ℕ) (Ordnode.node 1 Ordnode.nil (3:ℕ) Ordnode.nil)) (4:ℕ) Ordnode.nil) (5:ℕ) Ordnode.nil) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_single_child_right_reject",
+     "statement": "example : ¬ VTask.Balanced (Ordnode.node 3 Ordnode.nil (1:ℕ) (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil (2:ℕ) Ordnode.nil) (3:ℕ) Ordnode.nil)) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_dual_preservation",
+     "statement": "∀ {α : Type*} (t : Ordnode α), VTask.Balanced t → VTask.Balanced (Ordnode.dual t)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "balanced_nil_always",
+     "statement": "∀ (α : Type*), VTask.Balanced (Ordnode.nil : Ordnode α)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "balanced_left_subtree",
+     "statement": "∀ {α : Type*} (s : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Balanced (Ordnode.node s l x r) → VTask.Balanced l",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "balanced_right_subtree",
+     "statement": "∀ {α : Type*} (s : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Balanced (Ordnode.node s l x r) → VTask.Balanced r",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "BialgHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/BialgHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/BialgHom.copy/task.json",
+   "task_hash_sha256_16": "a254d913f9e3639f",
+   "mathlib_name": "BialgHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> [CommSemiring R] -> [Semiring A] -> [Semiring B] -> [Algebra R A] -> [Algebra R B] -> [CoalgebraStruct R A] -> [CoalgebraStruct R B] -> (f : A →ₐc[R] B) -> (f' : A → B) -> (h : f' = ⇑f) -> A →ₐc[R] B",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f) (a : A), VTask.copy f f' h a = f a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_original_when_same_fn",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_agrees_with_original",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), ⇑(VTask.copy f f' h) = ⇑f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_not_coalg_only",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), (VTask.copy f f' h : A →ₐc[R] B).toCoalgHom = f.toCoalgHom",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_toAlgHom_eq_original",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), (VTask.copy f f' h).toAlgHom = f.toAlgHom",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_preserves_one",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_comp_identity",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f) (a b : A), VTask.copy f f' h (a * b) = VTask.copy f f' h a * VTask.copy f f' h b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_fun",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₐc[R] B) (f' : A → B) (h : f' = ⇑f), ¬ (⇑(VTask.copy f f' h) ≠ f')",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_ne_different_fun",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f g : A →ₐc[R] B), f ≠ g → VTask.copy f (⇑f) rfl ≠ g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "GenContFract.squashGCF",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/GenContFract.squashGCF",
+   "task_json": "prelim_testing/tasks_batch2500/GenContFract.squashGCF/task.json",
+   "task_hash_sha256_16": "a9e038618952f5fa",
+   "mathlib_name": "GenContFract.squashGCF",
+   "signature_name": "VTask.squashGCF",
+   "signature_type": "{K : Type u_1} -> [DivisionRing K] -> (g : GenContFract K) -> ℕ → GenContFract K",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "squashGCF_empty_seq_n0",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K), g.s.get? 0 = none → VTask.squashGCF g 0 = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_terminated_eq_self",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), GenContFract.TerminatedAt g n → VTask.squashGCF g n = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_succ_conv_eq",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), g.convs' (n + 1) = (VTask.squashGCF g n).convs' n",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_nth_of_lt_global",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (m n : ℕ), m < n → (VTask.squashGCF g (n + 1)).s.get? m = g.s.get? m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_contsAux_le",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (m n : ℕ), m ≤ n → GenContFract.contsAux g m = (VTask.squashGCF g n).contsAux m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_succ_conv_field",
+     "statement": "∀ (K : Type*) [Field K] (g : GenContFract K) (n : ℕ), (∀ {b : K}, g.partDens.get? n = some b → b ≠ 0) → g.convs (n + 1) = (VTask.squashGCF g n).convs n",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_depth1_seq_preserved_entry0",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K), (∀ m : ℕ, m < 1 → (VTask.squashGCF g (1 + 1)).s.get? m = g.s.get? m)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_two_step_depth_reduction",
+     "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), g.convs' (n + 1) = (VTask.squashGCF g n).convs' n",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "squashGCF_head_not_modified_at_depth_one",
+     "statement": "∀ {K : Type*} [DivisionRing K] (g : GenContFract K) (n : ℕ), (VTask.squashGCF g (n + 1)).h ≠ g.h + 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "LinearMap.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/LinearMap.copy",
+   "task_json": "prelim_testing/tasks_batch2500/LinearMap.copy/task.json",
+   "task_hash_sha256_16": "4d4a57d27d406210",
+   "mathlib_name": "LinearMap.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R : Type u_1} -> {S : Type u_5} -> {M : Type u_8} -> {M₃ : Type u_11} -> [Semiring R] -> [Semiring S] -> [AddCommMonoid M] -> [AddCommMonoid M₃] -> [Module R M] -> [Module S M₃] -> {σ : R →+* S} -> (f : M →ₛₗ[σ] M₃) -> (f' : M → M₃) -> (h : f' = ⇑f) -> M →ₛₗ[σ] M₃",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_eq_self",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (x : M), VTask.copy f f' h x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_copy_eq",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (f'' : M → M₃) (h' : f'' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) f'' h' = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_add",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (x y : M), VTask.copy f f' h (x + y) = VTask.copy f f' h x + VTask.copy f f' h y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_smul",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (r : R) (x : M), VTask.copy f f' h (r • x) = σ r • VTask.copy f f' h x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ker_eq_ker",
+     "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f), LinearMap.ker (VTask.copy f f' h) = LinearMap.ker f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_reject_not_different_map",
+     "statement": "∀ {R M M₃ : Type*} [inst1 : CommSemiring R] [inst2 : AddCommMonoid M] [inst3 : AddCommMonoid M₃] [inst4 : Module R M] [inst5 : Module R M₃] (f g : M →ₗ[R] M₃), f ≠ g → VTask.copy f (⇑f) rfl ≠ g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_h_direction_reject",
+     "statement": "∀ {R M M₃ : Type*} [inst1 : CommSemiring R] [inst2 : AddCommMonoid M] [inst3 : AddCommMonoid M₃] [inst4 : Module R M] [inst5 : Module R M₃] (f : M →ₗ[R] M₃) (f' : M → M₃) (h : ⇑f = f'), VTask.copy f f' h.symm = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_neq_wrong_fun",
+     "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (f : M →ₗ[R] M) (g : M →ₗ[R] M), f ≠ g → VTask.copy f (⇑f) rfl ≠ g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "ContinuousOrderHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/ContinuousOrderHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/ContinuousOrderHom.copy/task.json",
+   "task_hash_sha256_16": "059d5e422b537ba9",
+   "mathlib_name": "ContinuousOrderHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{α : Type u_2} -> {β : Type u_3} -> [TopologicalSpace α] -> [Preorder α] -> [TopologicalSpace β] -> [Preorder β] -> (f : α →Co β) -> (f' : α → β) -> (h : f' = ⇑f) -> α →Co β",
+   "n_facts": 8,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_eq_global",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_not_diff_from_original",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), ¬ (VTask.copy f f' h ≠ f)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_preserves_order_hom",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), (VTask.copy f f' h : α →o β) = (f : α →o β)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_comp_eq",
+     "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] [TopologicalSpace γ] [Preorder γ] (f : α →Co β) (g : β →Co γ) (f' : α → β) (h : f' = ⇑f), ContinuousOrderHom.comp g (VTask.copy f f' h) = ContinuousOrderHom.comp g f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_means_not_a_distinct_hom",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f g : α →Co β) (f' : α → β) (h : f' = ⇑f), f = g → VTask.copy f f' h = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_ne_wrong_function",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_coercion",
+     "statement": "∀ (f : (OrderDual ℝ) →Co (OrderDual ℝ)), ¬ (∃ (g : (OrderDual ℝ) →Co (OrderDual ℝ)), (⇑(VTask.copy f (⇑f) rfl) ≠ ⇑g) ∧ VTask.copy f (⇑f) rfl = g)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Finsupp.indicator",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Finsupp.indicator",
+   "task_json": "prelim_testing/tasks_batch2500/Finsupp.indicator/task.json",
+   "task_hash_sha256_16": "9729832cc33a0f5a",
+   "mathlib_name": "Finsupp.indicator",
+   "signature_name": "VTask.indicator",
+   "signature_type": "{ι : Type u_1} -> {α : Type u_2} -> [Zero α] -> (s : Finset ι) -> (f : (i : ι) → i ∈ s → α) -> ι →₀ α",
+   "n_facts": 8,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "indicator_injective_global",
+     "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (s : Finset ι), Function.Injective (fun f : ∀ i ∈ s, α => VTask.indicator s f)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_of_mem_global",
+     "statement": "∀ {ι : Type*} {α : Type*} [Zero α] {i : ι} {s : Finset ι} (hi : i ∈ s) (f : ∀ i ∈ s, α), VTask.indicator s f i = f i hi",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_of_notMem_global",
+     "statement": "∀ {ι : Type*} {α : Type*} [Zero α] {i : ι} {s : Finset ι} (hi : i ∉ s) (f : ∀ i ∈ s, α), VTask.indicator s f i = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_single_eq",
+     "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (i : ι) (b : α), Finsupp.single i b = VTask.indicator {i} (fun _ _ => b)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_eq_indicator_self_iff",
+     "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (s : Finset ι) (d : ι →₀ α), (d = VTask.indicator s (fun i _ => d i)) ↔ d.support ⊆ s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_empty_is_zero",
+     "statement": "example : VTask.indicator (∅ : Finset ℕ) (fun i _ => i) 0 = 0 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_support_subset",
+     "statement": "∀ (ι : Type*) (α : Type*) [inst : DecidableEq ι] [inst2 : Zero α] (s : Finset ι) (f : ∀ i ∈ s, α), (VTask.indicator s f).support ⊆ s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "indicator_ne_wrong_value",
+     "statement": "∀ (i : Fin 3) (b : ℤ), b ≠ 0 → VTask.indicator (Finset.univ : Finset (Fin 3)) (fun j _ => b) i ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "NonUnitalRingHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/NonUnitalRingHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/NonUnitalRingHom.copy/task.json",
+   "task_hash_sha256_16": "f38df256aad9fe7d",
+   "mathlib_name": "NonUnitalRingHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{α : Type u_2} -> {β : Type u_3} -> [NonUnitalNonAssocSemiring α] -> [NonUnitalNonAssocSemiring β] -> (f : α →ₙ+* β) -> (f' : α → β) -> (h : f' = ⇑f) -> α →ₙ+* β",
+   "n_facts": 8,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_eq_original",
+     "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_preserves_map_mul",
+     "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f) (a b : α), VTask.copy f f' h (a * b) = VTask.copy f f' h a * VTask.copy f f' h b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_eq_f_prime_membership_accept",
+     "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 3 = 3 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_id_zero_accept",
+     "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0 = 0 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_is_f_prime_not_other",
+     "statement": "example : ¬ ((VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 5 = 6) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_zero_accept",
+     "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0 = (NonUnitalRingHom.id ℕ) 0 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_result_not_different_hom",
+     "statement": "example : ¬ ((VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 2 = 0) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "NonUnitalStarAlgHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/NonUnitalStarAlgHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/NonUnitalStarAlgHom.copy/task.json",
+   "task_hash_sha256_16": "62146eabb1a012bc",
+   "mathlib_name": "NonUnitalStarAlgHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> [Monoid R] -> [NonUnitalNonAssocSemiring A] -> [DistribMulAction R A] -> [Star A] -> [NonUnitalNonAssocSemiring B] -> [DistribMulAction R B] -> [Star B] -> (f : A →⋆ₙₐ[R] B) -> (f' : A → B) -> (h : f' = ⇑f) -> A →⋆ₙₐ[R] B",
+   "n_facts": 8,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_eq_original",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f) (a : A), VTask.copy f f' h a = f a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_add",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f) (a b : A), VTask.copy f f' h (a + b) = VTask.copy f f' h a + VTask.copy f f' h b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_mul",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f) (a b : A), VTask.copy f f' h (a * b) = VTask.copy f f' h a * VTask.copy f f' h b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_not_different_function",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f), ¬ (⇑(VTask.copy f f' h) ≠ f')",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_f_not_arbitrary",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f), ∀ (g : A →⋆ₙₐ[R] B), g = f → VTask.copy f f' h = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_zero",
+     "statement": "∀ {R A B : Type*} [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h 0 = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_function",
+     "statement": "∀ (R A B : Type*) [Monoid R] [NonUnitalNonAssocSemiring A] [DistribMulAction R A] [Star A] [NonUnitalNonAssocSemiring B] [DistribMulAction R B] [Star B] (f : A →⋆ₙₐ[R] B) (f' : A → B) (h : f' = ⇑f), ¬ (⇑(VTask.copy f f' h) ≠ f')",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Submodule.pOrder",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Submodule.pOrder",
+   "task_json": "prelim_testing/tasks_batch2500/Submodule.pOrder/task.json",
+   "task_hash_sha256_16": "2fc02d4746993428",
+   "mathlib_name": "Submodule.pOrder",
+   "signature_name": "VTask.pOrder",
+   "signature_type": "{R : Type u_1} -> {M : Type u_2} -> [Monoid R] -> [AddCommMonoid M] -> [DistribMulAction R M] -> {p : R} -> (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) -> (x : M) -> [(n : ℕ) → Decidable (p ^ n • x = 0)] -> ℕ",
+   "n_facts": 8,
+   "n_certified": 5,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "pOrder_pow_smul_zero",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], p ^ VTask.pOrder hM x • x = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "pOrder_zero_iff_zero_smul",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) [∀ n : ℕ, Decidable (p ^ n • (0 : M) = 0)], VTask.pOrder hM (0 : M) = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "pOrder_minimality_global",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)] (k : ℕ), k < VTask.pOrder hM x → p ^ k • x ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "pOrder_eq_zero_of_zero_element",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) [∀ n : ℕ, Decidable (p ^ n • (0 : M) = 0)], VTask.pOrder hM (0 : M) = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "pOrder_result_is_nat",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], 0 ≤ VTask.pOrder hM x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "pOrder_nonzero_element_positive",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], x ≠ 0 → 0 < VTask.pOrder hM x → p ^ 0 • x ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "pOrder_upper_bound_exists",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], ∃ n : ℕ, VTask.pOrder hM x ≤ n ∧ p ^ n • x = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "pOrder_characterization",
+     "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)] (m : ℕ), p ^ m • x = 0 → VTask.pOrder hM x ≤ m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Subring.mk'",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Subring.mk'",
+   "task_json": "prelim_testing/tasks_batch2500/Subring.mk'/task.json",
+   "task_hash_sha256_16": "57ac2c57ee1445ce",
+   "mathlib_name": "Subring.mk'",
+   "signature_name": "VTask.mk'",
+   "signature_type": "{R : Type u} -> [NonAssocRing R] -> (s : Set R) -> (sm : Submonoid R) -> (sa : AddSubgroup R) -> (hm : ↑sm = s) -> (ha : ↑sa = s) -> Subring R",
+   "n_facts": 8,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "mk'_toSubmonoid",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (VTask.mk' s sm sa hm ha).toSubmonoid = sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_toAddSubgroup",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (VTask.mk' s sm sa hm ha).toAddSubgroup = sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_of_mem_sm",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (x : R), x ∈ sm → x ∈ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_of_mem_sa",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (x : R), x ∈ sa → x ∈ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "mk'_one_mem",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (1 : R) ∈ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_zero_mem",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s), (0 : R) ∈ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_not_outside_s",
+     "statement": "∀ {R : Type*} [inst : NonAssocRing R] (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s) (ha : ↑sa = s) (x : R), x ∉ s → x ∉ VTask.mk' s sm sa hm ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_carrier_ne_wrong_set",
+     "statement": "∀ (T : Subring ℤ), (↑(VTask.mk' (↑T : Set ℤ) T.toSubmonoid T.toAddSubgroup rfl rfl) : Set ℤ) ≠ (∅ : Set ℤ)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "ContinuousAlgHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/ContinuousAlgHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/ContinuousAlgHom.copy/task.json",
+   "task_hash_sha256_16": "e4aa70ebaf118fde",
+   "mathlib_name": "ContinuousAlgHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R : Type u_1} -> [CommSemiring R] -> {A : Type u_2} -> [Semiring A] -> [TopologicalSpace A] -> {B : Type u_3} -> [Semiring B] -> [TopologicalSpace B] -> [Algebra R A] -> [Algebra R B] -> (f : A →A[R] B) -> (f' : A → B) -> (h : f' = ⇑f) -> A →A[R] B",
+   "n_facts": 7,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "copy_eq_original",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) (a : A), VTask.copy f f' h a = f a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_implies_eq_f",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f g : A →A[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f → VTask.copy f f' h = g → f = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_preserves_map_one",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f), (VTask.copy f f' h) 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_preserves_map_add",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) (a b : A), (VTask.copy f f' h) (a + b) = (VTask.copy f f' h) a + (VTask.copy f f' h) b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_coe",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f), ¬ (⇑(VTask.copy f f' h) = (fun _ => 0) ∧ f' ≠ (fun _ => 0))",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_not_arbitrary",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [TopologicalSpace A] {B : Type*} [Semiring B] [TopologicalSpace B] [Algebra R A] [Algebra R B] (f : A →A[R] B) (f' : A → B) (h : f' = ⇑f) (g : A → B), g ≠ f' → ⇑(VTask.copy f f' h) ≠ g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Equiv.Perm.toCycle",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Equiv.Perm.toCycle",
+   "task_json": "prelim_testing/tasks_batch2500/Equiv.Perm.toCycle/task.json",
+   "task_hash_sha256_16": "af14a1317931f648",
+   "mathlib_name": "Equiv.Perm.toCycle",
+   "signature_name": "VTask.toCycle",
+   "signature_type": "{α : Type u_1} -> [Fintype α] -> [DecidableEq α] -> (f : Equiv.Perm α) -> (hf : f.IsCycle) -> Cycle α",
+   "n_facts": 7,
+   "n_certified": 6,
+   "n_reject": 3,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "toCycle_nodup",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), (VTask.toCycle f hf).Nodup",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_nontrivial",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), (VTask.toCycle f hf).Nontrivial",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_mem_iff_support",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α), x ∈ VTask.toCycle f hf ↔ f x ≠ x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_eq_toList_at_nonfixed",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α), f x ≠ x → VTask.toCycle f hf = Equiv.Perm.toList f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_next_is_f_apply",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α) (hx : x ∈ VTask.toCycle f hf), (VTask.toCycle f hf).next (Equiv.Perm.nodup_toCycle f hf) x hx = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_exists_toList",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), ∃ x : α, VTask.toCycle f hf = Equiv.Perm.toList f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toCycle_toList_rotation_class",
+     "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x y : α), f x ≠ x → f y ≠ y → VTask.toCycle f hf = Equiv.Perm.toList f x ∧ VTask.toCycle f hf = Equiv.Perm.toList f y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Finsupp.embDomain",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Finsupp.embDomain",
+   "task_json": "prelim_testing/tasks_batch2500/Finsupp.embDomain/task.json",
+   "task_hash_sha256_16": "0ec0bb979d4cec41",
+   "mathlib_name": "Finsupp.embDomain",
+   "signature_name": "VTask.embDomain",
+   "signature_type": "{α : Type u_1} -> {β : Type u_2} -> {M : Type u_4} -> [Zero M] -> (f : α ↪ β) -> (v : α →₀ M) -> β →₀ M",
+   "n_facts": 7,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "embDomain_eq_zero_iff",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (l : α →₀ M), VTask.embDomain f l = 0 ↔ l = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_injective_global",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β), Function.Injective (VTask.embDomain f : (α →₀ M) → β →₀ M)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_refl_global",
+     "statement": "∀ {α : Type*} {M : Type*} [inst : Zero M], VTask.embDomain (Function.Embedding.refl α) = (id : (α →₀ M) → α →₀ M)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_notin_range_global",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (v : α →₀ M) (b : β), b ∉ Set.range f → VTask.embDomain f v b = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_eq_mapDomain_global",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : AddCommMonoid M] (f : α ↪ β) (v : α →₀ M), VTask.embDomain f v = Finsupp.mapDomain f v",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_nonzero_not_zero",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (v : α →₀ M), v ≠ 0 → VTask.embDomain f v ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "embDomain_zero_casework",
+     "statement": "example : VTask.embDomain (Function.Embedding.refl (Fin 3)) (0 : Fin 3 →₀ ℕ) = 0 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Submodule.equivOpposite",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Submodule.equivOpposite",
+   "task_json": "prelim_testing/tasks_batch2500/Submodule.equivOpposite/task.json",
+   "task_hash_sha256_16": "46b945ca5f42bef0",
+   "mathlib_name": "Submodule.equivOpposite",
+   "signature_name": "VTask.equivOpposite",
+   "signature_type": "{R : Type u} -> [CommSemiring R] -> {A : Type v} -> [Semiring A] -> [Algebra R A] -> Submodule R Aᵐᵒᵖ ≃+* (Submodule R A)ᵐᵒᵖ",
+   "n_facts": 7,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "equivOpposite_map_add",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [Algebra R A] (p q : Submodule R Aᵐᵒᵖ), VTask.equivOpposite (p + q) = VTask.equivOpposite p + VTask.equivOpposite q",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_map_mul",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [Algebra R A] (p q : Submodule R Aᵐᵒᵖ), VTask.equivOpposite (p * q) = VTask.equivOpposite p * VTask.equivOpposite q",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_map_bot",
+     "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [Semiring A] [Algebra R A], VTask.equivOpposite (⊥ : Submodule R Aᵐᵒᵖ) = MulOpposite.op ⊥",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_accept_bot",
+     "statement": "VTask.equivOpposite (⊥ : Submodule ℕ (ℕᵐᵒᵖ)) = MulOpposite.op ⊥",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_accept_top",
+     "statement": "VTask.equivOpposite (⊤ : Submodule ℕ (ℕᵐᵒᵖ)) = MulOpposite.op ⊤",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_reject_bot_ne_top",
+     "statement": "VTask.equivOpposite (⊥ : Submodule ℕ (ℕᵐᵒᵖ)) ≠ VTask.equivOpposite (⊤ : Submodule ℕ (ℕᵐᵒᵖ))",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equivOpposite_not_trivial_arrow",
+     "statement": "¬ (∀ (R : Type) [CommSemiring R] (A : Type) [Semiring A] [Algebra R A] (p q : Submodule R Aᵐᵒᵖ), VTask.equivOpposite p = VTask.equivOpposite q → p = q → p = q ∧ q = p) → False",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Affine.Simplex.Equilateral",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Affine.Simplex.Equilateral",
+   "task_json": "prelim_testing/tasks_batch2500/Affine.Simplex.Equilateral/task.json",
+   "task_hash_sha256_16": "d6db0e73dde682ef",
+   "mathlib_name": "Affine.Simplex.Equilateral",
+   "signature_name": "VTask.Equilateral",
+   "signature_type": "{R : Type u_1} -> {V : Type u_2} -> {P : Type u_3} -> [Ring R] -> [SeminormedAddCommGroup V] -> [PseudoMetricSpace P] -> [Module R V] -> [NormedAddTorsor V P] -> {n : ℕ} -> (s : Affine.Simplex R P n) -> Prop",
+   "n_facts": 6,
+   "n_certified": 3,
+   "n_reject": 3,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "equilateral_regular_implies",
+     "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), s.Regular → VTask.Equilateral s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equilateral_dist_eq",
+     "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), VTask.Equilateral s → ∀ {i₁ i₂ i₃ i₄ : Fin (n + 1)}, i₁ ≠ i₂ → i₃ ≠ i₄ → dist (s.points i₁) (s.points i₂) = dist (s.points i₃) (s.points i₄)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equilateral_regular_not_implies_equilateral",
+     "statement": "¬ (∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex ℝ P n), VTask.Equilateral s → s.Regular)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "equilateral_one_simplex_always",
+     "statement": "∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] (s : Affine.Simplex ℝ P 1), VTask.Equilateral s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "equilateral_dist_symm",
+     "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), VTask.Equilateral s → ∀ {i₁ i₂ : Fin (n + 1)}, i₁ ≠ i₂ → dist (s.points i₁) (s.points i₂) = dist (s.points i₂) (s.points i₁)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "equilateral_two_implies_dist_eq_all",
+     "statement": "∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] (s : Affine.Simplex ℝ P 2), VTask.Equilateral s → dist (s.points 0) (s.points 1) = dist (s.points 1) (s.points 2) ∧ dist (s.points 0) (s.points 1) = dist (s.points 0) (s.points 2)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Homeomorph.piCongrLeft",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Homeomorph.piCongrLeft",
+   "task_json": "prelim_testing/tasks_batch2500/Homeomorph.piCongrLeft/task.json",
+   "task_hash_sha256_16": "01a2c66950a3e40d",
+   "mathlib_name": "Homeomorph.piCongrLeft",
+   "signature_name": "VTask.piCongrLeft",
+   "signature_type": "{ι : Type u_7} -> {ι' : Type u_8} -> {Y : ι' → Type u_9} -> [(j : ι') → TopologicalSpace (Y j)] -> (e : ι ≃ ι') -> ((i : ι) → Y (e i)) ≃ₜ ((j : ι') → Y j)",
+   "n_facts": 6,
+   "n_certified": 6,
+   "n_reject": 2,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "piCongrLeft_apply_apply",
+     "statement": "∀ (ι ι' : Type*) (Y : ι' → Type*) [inst : ∀ j, TopologicalSpace (Y j)] (e : ι ≃ ι') (x : ∀ i, Y (e i)) (i : ι), VTask.piCongrLeft e x (e i) = x i",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "piCongrLeft_accept_fin_refl",
+     "statement": "example : (VTask.piCongrLeft (Y := fun _ : Fin 2 => Fin 3) (Equiv.refl (Fin 2))).toFun = id := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "piCongrLeft_accept_symm_apply",
+     "statement": "example : (VTask.piCongrLeft (Y := fun _ : Fin 2 => Fin 3) (Equiv.refl (Fin 2))).symm (fun _ => 0) = (fun _ => 0) := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "piCongrLeft_not_trivial_map",
+     "statement": "example : ¬((VTask.piCongrLeft (Y := fun _ : Fin 1 => Fin 2) (Equiv.refl (Fin 1))).toFun (fun _ => 1) = fun _ => 0) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "piCongrLeft_symm_not_identity_when_nontrivial",
+     "statement": "example : ¬((VTask.piCongrLeft (Y := fun _ : Fin 2 => Fin 2) (Equiv.refl (Fin 2))).symm (fun i => i) = fun _ => 0) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "piCongrLeft_apply_apply_concrete",
+     "statement": "example : VTask.piCongrLeft (Y := fun _ : Fin 2 => Fin 3) (Equiv.refl (Fin 2)) (fun _ => 2) 0 = 2 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "HNNExtension.NormalWord.cons",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/HNNExtension.NormalWord.cons",
+   "task_json": "prelim_testing/tasks_batch2500/HNNExtension.NormalWord.cons/task.json",
+   "task_hash_sha256_16": "8a8fb514ae54f940",
+   "mathlib_name": "HNNExtension.NormalWord.cons",
+   "signature_name": "VTask.cons",
+   "signature_type": "{G : Type u_1} -> [Group G] -> {A B : Subgroup G} -> {d : HNNExtension.NormalWord.TransversalPair G A B} -> (g : G) -> (u : ℤˣ) -> (w : HNNExtension.NormalWord d) -> (h1 : w.head ∈ d.set u) -> (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u') -> HNNExtension.NormalWord d",
+   "n_facts": 5,
+   "n_certified": 3,
+   "n_reject": 3,
+   "n_certified_reject": 2,
+   "facts": [
+    {
+     "id": "cons_smul_one_head",
+     "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), (1 : G) • VTask.cons g u w h1 h2 = VTask.cons g u w h1 h2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "cons_ne_ofGroup",
+     "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), VTask.cons g₁ u w h1 h2 ≠ HNNExtension.NormalWord.ofGroup g₂",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "cons_toList_nonempty",
+     "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), (VTask.cons g u w h1 h2).toList ≠ []",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "cons_smul_mul_head",
+     "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ g₃ : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), g₁ • (g₂ • VTask.cons g₃ u w h1 h2) = VTask.cons (g₁ * g₂ * g₃) u w h1 h2",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "cons_ne_cons_different_u",
+     "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ : G) (w₁ w₂ : HNNExtension.NormalWord d) (h1a : w₁.head ∈ d.set 1) (h2a : ∀ u' ∈ Option.map Prod.fst w₁.toList.head?, w₁.head ∈ HNNExtension.toSubgroup A B 1 → (1 : ℤˣ) = u') (h1b : w₂.head ∈ d.set (-1)) (h2b : ∀ u' ∈ Option.map Prod.fst w₂.toList.head?, w₂.head ∈ HNNExtension.toSubgroup A B (-1) → (-1 : ℤˣ) = u'), VTask.cons g₁ 1 w₁ h1a h2a ≠ VTask.cons g₂ (-1) w₂ h1b h2b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "WittVector.lift",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/WittVector.lift",
+   "task_json": "prelim_testing/tasks_batch2500/WittVector.lift/task.json",
+   "task_hash_sha256_16": "69d6a26ffb985c10",
+   "mathlib_name": "WittVector.lift",
+   "signature_name": "VTask.lift",
+   "signature_type": "{p : ℕ} -> {R : Type u_1} -> [CommRing R] -> [Fact (Nat.Prime p)] -> {S : Type u_2} -> [Semiring S] -> (f : (k : ℕ) → S →+* TruncatedWittVector p k R) -> (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) -> S →+* WittVector p R",
+   "n_facts": 13,
+   "n_certified": 13,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "lift_truncate_compat",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ) (s : S), WittVector.truncate n (VTask.lift f f_compat s) = f n s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_comp_truncate",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ), (WittVector.truncate n).comp (VTask.lift f f_compat) = f n",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_unique",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∀ k, (WittVector.truncate k).comp g = f k) → VTask.lift f f_compat = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_is_ring_hom_map_zero",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), VTask.lift f f_compat 0 = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_is_ring_hom_map_one",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), VTask.lift f f_compat 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_map_add",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s t : S), VTask.lift f f_compat (s + t) = VTask.lift f f_compat s + VTask.lift f f_compat t",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_map_mul",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s t : S), VTask.lift f f_compat (s * t) = VTask.lift f f_compat s * VTask.lift f f_compat t",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_truncate_at_zero",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s : S), WittVector.truncate 0 (VTask.lift f f_compat s) = f 0 s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_truncate_level1",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s : S), WittVector.truncate 1 (VTask.lift f f_compat s) = f 1 s",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_not_determined_by_single_truncation",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∀ k, (WittVector.truncate k).comp g = f k) → g = VTask.lift f f_compat",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_comp_is_ring_hom",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] {T : Type*} [Semiring T] (φ : T →+* S) (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), ∀ k, (WittVector.truncate k).comp ((VTask.lift f f_compat).comp φ) = (f k).comp φ",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_self_comp_truncate_eq_id_on_witt",
+     "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ k₁ k₂ (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ), (WittVector.truncate n).comp (VTask.lift f f_compat) = f n",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "lift_unique_neq_wrong_map",
+     "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (R : Type*) [CommRing R] (S : Type*) [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∃ k, (WittVector.truncate k).comp g ≠ f k) → g ≠ VTask.lift f f_compat",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "ZMod.ringEquivCongr",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/ZMod.ringEquivCongr",
+   "task_json": "prelim_testing/tasks_batch2500/ZMod.ringEquivCongr/task.json",
+   "task_hash_sha256_16": "763edede8b8a26e1",
+   "mathlib_name": "ZMod.ringEquivCongr",
+   "signature_name": "VTask.ringEquivCongr",
+   "signature_type": "{m n : ℕ} -> (h : m = n) -> ZMod m ≃+* ZMod n",
+   "n_facts": 12,
+   "n_certified": 12,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "ringEquivCongr_rfl_apply_5",
+     "statement": "example : VTask.ringEquivCongr (rfl : 5 = 5) (3 : ZMod 5) = 3 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_rfl_apply_0_elem",
+     "statement": "example : VTask.ringEquivCongr (rfl : 4 = 4) (2 : ZMod 4) = 2 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_val_preserved",
+     "statement": "example : ZMod.val (VTask.ringEquivCongr (rfl : 4 = 4) (3 : ZMod 4)) = ZMod.val (3 : ZMod 4) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_rfl_zero",
+     "statement": "example : VTask.ringEquivCongr (rfl : 7 = 7) (0 : ZMod 7) = 0 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_rfl_one",
+     "statement": "example : VTask.ringEquivCongr (rfl : 6 = 6) (1 : ZMod 6) = 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_refl_apply_global",
+     "statement": "∀ (a : ℕ) (x : ZMod a), VTask.ringEquivCongr (rfl : a = a) x = x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_val_global",
+     "statement": "∀ (a b : ℕ) (h : a = b) (x : ZMod a), ZMod.val (VTask.ringEquivCongr h x) = ZMod.val x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_intCast_global",
+     "statement": "∀ (a b : ℕ) (h : a = b) (z : ℤ), (VTask.ringEquivCongr h) (z : ZMod a) = (z : ZMod b)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_symm_global",
+     "statement": "∀ (a b : ℕ) (hab : a = b), (VTask.ringEquivCongr hab).symm = VTask.ringEquivCongr hab.symm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_trans_global",
+     "statement": "∀ (a b c : ℕ) (hab : a = b) (hbc : b = c), (VTask.ringEquivCongr hab).trans (VTask.ringEquivCongr hbc) = VTask.ringEquivCongr (hab.trans hbc)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_not_wrong_val",
+     "statement": "example : ¬ (ZMod.val (VTask.ringEquivCongr (rfl : 4 = 4) (3 : ZMod 4)) = 2) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "ringEquivCongr_add_preserved",
+     "statement": "∀ (a b : ℕ) (h : a = b) (x y : ZMod a), VTask.ringEquivCongr h (x + y) = VTask.ringEquivCongr h x + VTask.ringEquivCongr h y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "MonoidAlgebra.mapDomainRingEquiv",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/MonoidAlgebra.mapDomainRingEquiv",
+   "task_json": "prelim_testing/tasks_batch2500/MonoidAlgebra.mapDomainRingEquiv/task.json",
+   "task_hash_sha256_16": "052fcdedbe50e83c",
+   "mathlib_name": "MonoidAlgebra.mapDomainRingEquiv",
+   "signature_name": "VTask.mapDomainRingEquiv",
+   "signature_type": "(R : Type u_3) -> {M : Type u_6} -> {N : Type u_7} -> [Semiring R] -> [Monoid M] -> [Monoid N] -> (e : M ≃* N) -> MonoidAlgebra R M ≃+* MonoidAlgebra R N",
+   "n_facts": 11,
+   "n_certified": 10,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "mapDomainRingEquiv_single_basic",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N) (m : M) (r : R), VTask.mapDomainRingEquiv R e (MonoidAlgebra.single m r) = MonoidAlgebra.single (e m) r",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_trans",
+     "statement": "∀ (R : Type*) [Semiring R] (M N O : Type*) [Monoid M] [Monoid N] [Monoid O] (e₁ : M ≃* N) (e₂ : N ≃* O), VTask.mapDomainRingEquiv R (e₁.trans e₂) = (VTask.mapDomainRingEquiv R e₁).trans (VTask.mapDomainRingEquiv R e₂)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_coeff",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N) (x : MonoidAlgebra R M), (VTask.mapDomainRingEquiv R e x).coeff = Finsupp.equivMapDomain e x.coeff",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_refl_single",
+     "statement": "∀ (R : Type*) [Semiring R] (M : Type*) [Monoid M] (m : M) (r : R), VTask.mapDomainRingEquiv R (MulEquiv.refl M) (MonoidAlgebra.single m r) = MonoidAlgebra.single m r",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_refl_isIdentity",
+     "statement": "∀ (R : Type*) [Semiring R] (M : Type*) [Monoid M] (x : MonoidAlgebra R M), VTask.mapDomainRingEquiv R (MulEquiv.refl M) x = x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_bijective",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N), Function.Bijective (VTask.mapDomainRingEquiv R e)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_symm_single",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N) (n : N) (r : R), (VTask.mapDomainRingEquiv R e).symm (MonoidAlgebra.single n r) = MonoidAlgebra.single (e.symm n) r",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_apply_add",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N) (x y : MonoidAlgebra R M), VTask.mapDomainRingEquiv R e (x + y) = VTask.mapDomainRingEquiv R e x + VTask.mapDomainRingEquiv R e y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_single_coeff_at_image",
+     "statement": "∀ (R : Type*) [Semiring R] (M N : Type*) [Monoid M] [Monoid N] (e : M ≃* N) (m : M) (r : R), (VTask.mapDomainRingEquiv R e (MonoidAlgebra.single m r)).coeff (e m) = r",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_single_coeff_not_at_image",
+     "statement": "¬ ((VTask.mapDomainRingEquiv ℕ (MulEquiv.refl (Multiplicative (Fin 2))) (MonoidAlgebra.single (Multiplicative.ofAdd (1 : Fin 2)) (1 : ℕ))).coeff (Multiplicative.ofAdd (0 : Fin 2)) = 1)",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mapDomainRingEquiv_not_eq_symm",
+     "statement": "∃ (e : Multiplicative ℤ ≃* Multiplicative ℤ), VTask.mapDomainRingEquiv ℤ e ≠ (VTask.mapDomainRingEquiv ℤ e).symm",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Localization.monoidOf",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Localization.monoidOf",
+   "task_json": "prelim_testing/tasks_batch2500/Localization.monoidOf/task.json",
+   "task_hash_sha256_16": "f2e2c5888816e428",
+   "mathlib_name": "Localization.monoidOf",
+   "signature_name": "VTask.monoidOf",
+   "signature_type": "{M : Type u_1} -> [CommMonoid M] -> (S : Submonoid M) -> S.LocalizationMap (Localization S)",
+   "n_facts": 10,
+   "n_certified": 4,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "monoidOf_map_units",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) (s : S), IsUnit ((VTask.monoidOf S).toFun s)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "monoidOf_surj",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) (z : Localization S), ∃ (a : M) (b : S), (VTask.monoidOf S).mk' a b = z",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "monoidOf_eq_iff",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) (x y : M), (VTask.monoidOf S).toFun x = (VTask.monoidOf S).toFun y ↔ ∃ c : S, ↑c * x = ↑c * y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "monoidOf_mk_eq_mk'",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) (x : M) (y : S), Localization.mk x y = (VTask.monoidOf S).mk' x y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "monoidOf_is_localization_map",
+     "statement": "∃ _ : (⊤ : Submonoid ℕ).LocalizationMap (Localization (⊤ : Submonoid ℕ)), True",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "monoidOf_toFun_not_constant",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) (x y : M), (VTask.monoidOf S).toFun x = (VTask.monoidOf S).toFun y → ∃ c : S, ↑c * x = ↑c * y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "monoidOf_liftOn_mk'",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M) {p : Sort*} (f : M → S → p) (H) (a : M) (b : S), Localization.liftOn ((VTask.monoidOf S).mk' a b) f H = f a b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "monoidOf_mk'_surjective",
+     "statement": "∀ {M : Type*} [CommMonoid M] (S : Submonoid M), Function.Surjective (fun p : M × S => (VTask.monoidOf S).mk' p.1 p.2)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "monoidOf_not_mk_one_swapped",
+     "statement": "∀ (M : Type*) [CommMonoid M] (S : Submonoid M) (x : M), ¬ (Localization.mk x 1 ≠ (VTask.monoidOf S) x)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "monoidOf_toFun_ne_const_one",
+     "statement": "¬ ∀ (S : Submonoid ℕ) (x : ℕ), (VTask.monoidOf S).toFun x = (VTask.monoidOf S).toFun 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "MulHom.noncommCoprod",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/MulHom.noncommCoprod",
+   "task_json": "prelim_testing/tasks_batch2500/MulHom.noncommCoprod/task.json",
+   "task_hash_sha256_16": "c7f98db812d96570",
+   "mathlib_name": "MulHom.noncommCoprod",
+   "signature_name": "VTask.noncommCoprod",
+   "signature_type": "{M : Type u_1} -> {N : Type u_2} -> {P : Type u_3} -> [Mul M] -> [Mul N] -> [Semigroup P] -> (f : M →ₙ* P) -> (g : N →ₙ* P) -> (comm : ∀ (m : M) (n : N), Commute (f m) (g n)) -> M × N →ₙ* P",
+   "n_facts": 10,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "noncommCoprod_apply_alt",
+     "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [Semigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (m : M) (n : N), VTask.noncommCoprod f g comm (m, n) = g n * f m",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_comp",
+     "statement": "∀ {M N P Q : Type*} [Mul M] [Mul N] [Semigroup P] [Semigroup Q] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (h : P →ₙ* Q), h.comp (VTask.noncommCoprod f g comm) = VTask.noncommCoprod (h.comp f) (h.comp g) (fun m n => (comm m n).map h)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_map_mul",
+     "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [Semigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (m1 m2 : M) (n1 n2 : N), VTask.noncommCoprod f g comm (m1 * m2, n1 * n2) = VTask.noncommCoprod f g comm (m1, n1) * VTask.noncommCoprod f g comm (m2, n2)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "noncommCoprod_apply_basic",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) = 12 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_apply_zero",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (1, 1) = 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_apply_zero_left",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (2, 5) = 10 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_apply_comm_order",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) = (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (4, 3) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_is_mulhom",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (2, 3) = 6 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_not_wrong_value",
+     "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) ≠ 7 := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "noncommCoprod_neq_swap",
+     "statement": "∃ (f g : MulHom (Multiplicative ℤ) (Multiplicative ℤ)) (comm : ∀ m n, Commute (f m) (g n)), VTask.noncommCoprod f g comm ≠ VTask.noncommCoprod g f (fun n m => (comm m n).symm)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "List.Vector.mmap",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/List.Vector.mmap",
+   "task_json": "prelim_testing/tasks_batch2500/List.Vector.mmap/task.json",
+   "task_hash_sha256_16": "9735eda0d5c9b372",
+   "mathlib_name": "List.Vector.mmap",
+   "signature_name": "VTask.mmap",
+   "signature_type": "{m : Type u → Type u_6} -> [Monad m] -> {α : Type u_7} -> {β : Type u} -> (f : α → m β) -> {n : ℕ} -> List.Vector α n → m (List.Vector β n)",
+   "n_facts": 9,
+   "n_certified": 6,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "mmap_nil_option",
+     "statement": "example : VTask.mmap (some : ℕ → Option ℕ) (List.Vector.nil : List.Vector ℕ 0) = pure List.Vector.nil := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_single_some",
+     "statement": "example : VTask.mmap (some : ℕ → Option ℕ) (⟨[1], rfl⟩ : List.Vector ℕ 1) = some ⟨[1], rfl⟩ := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_two_some",
+     "statement": "example : VTask.mmap (fun x => some (x + 1)) (⟨[3, 5], rfl⟩ : List.Vector ℕ 2) = some ⟨[4, 6], rfl⟩ := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_none_nonempty",
+     "statement": "example : VTask.mmap (fun _ => (none : Option ℕ)) (⟨[1, 2], rfl⟩ : List.Vector ℕ 2) = none := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_pure_eq_map",
+     "statement": "∀ {α β : Type} (f : α → β) {n : ℕ} (v : List.Vector α n), VTask.mmap (fun x => (pure (f x) : Id β)) v = List.Vector.map f v",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "mmap_accept_option_some",
+     "statement": "example : VTask.mmap (fun x => some (x * 2)) (⟨[1, 2, 3], rfl⟩ : List.Vector ℕ 3) = some ⟨[2, 4, 6], rfl⟩ := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_reject_none_first_element",
+     "statement": "example : VTask.mmap (fun x => if x = 1 then none else some x) (⟨[1, 2], rfl⟩ : List.Vector ℕ 2) = none := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "mmap_composition_global",
+     "statement": "∀ {α β γ : Type} (f : α → Option β) (g : β → Option γ) {n : ℕ} (v : List.Vector α n), (VTask.mmap f v >>= VTask.mmap g) = VTask.mmap (fun x => f x >>= g) v",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "mmap_toList_eq_mapM",
+     "statement": "∀ {α β : Type} (f : α → Option β) {n : ℕ} (v : List.Vector α n), (VTask.mmap f v).map List.Vector.toList = (v.toList.mapM f)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Matrix.rowStochastic",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Matrix.rowStochastic",
+   "task_json": "prelim_testing/tasks_batch2500/Matrix.rowStochastic/task.json",
+   "task_hash_sha256_16": "840c9d502f3853c7",
+   "mathlib_name": "Matrix.rowStochastic",
+   "signature_name": "VTask.rowStochastic",
+   "signature_type": "(R : Type u_3) -> (n : Type u_4) -> [Fintype n] -> [DecidableEq n] -> [Semiring R] -> [PartialOrder R] -> [IsOrderedRing R] -> Submonoid (Matrix n n R)",
+   "n_facts": 9,
+   "n_certified": 8,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "rowStochastic_identity_mem",
+     "statement": "(1 : Matrix (Fin 2) (Fin 2) ℝ) ∈ VTask.rowStochastic ℝ (Fin 2)",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_nonneg_entry",
+     "statement": "∀ (M : Matrix (Fin 2) (Fin 2) ℝ), M ∈ VTask.rowStochastic ℝ (Fin 2) → ∀ (i j : Fin 2), 0 ≤ M i j",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_row_sum_one",
+     "statement": "∀ (M : Matrix (Fin 2) (Fin 2) ℝ), M ∈ VTask.rowStochastic ℝ (Fin 2) → ∀ (i : Fin 2), ∑ j, M i j = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_entry_le_one",
+     "statement": "∀ (M : Matrix (Fin 2) (Fin 2) ℝ), M ∈ VTask.rowStochastic ℝ (Fin 2) → ∀ (i j : Fin 2), M i j ≤ 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_convex",
+     "statement": "Convex ℝ (VTask.rowStochastic ℝ (Fin 2) : Set (Matrix (Fin 2) (Fin 2) ℝ))",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_reindex_iff",
+     "statement": "∀ (M : Matrix (Fin 2) (Fin 2) ℝ) (e : Fin 2 ≃ Fin 2), M.reindex e e ∈ VTask.rowStochastic ℝ (Fin 2) ↔ M ∈ VTask.rowStochastic ℝ (Fin 2)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_negative_entry_reject",
+     "statement": "¬ (Matrix.of ![![(-1 : ℝ), 2], ![(0 : ℝ), 1]] ∈ VTask.rowStochastic ℝ (Fin 2))",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rowStochastic_bad_row_sum_reject",
+     "statement": "¬ (Matrix.of ![![(1 : ℝ), 1], ![(0 : ℝ), 1]] ∈ VTask.rowStochastic ℝ (Fin 2))",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rowStochastic_mul_closed",
+     "statement": "∀ (A B : Matrix (Fin 2) (Fin 2) ℝ), A ∈ VTask.rowStochastic ℝ (Fin 2) → B ∈ VTask.rowStochastic ℝ (Fin 2) → A * B ∈ VTask.rowStochastic ℝ (Fin 2)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "MonoidWithZeroHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/MonoidWithZeroHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/MonoidWithZeroHom.copy/task.json",
+   "task_hash_sha256_16": "0fb076a179eee5a9",
+   "mathlib_name": "MonoidWithZeroHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{α : Type u_2} -> {β : Type u_3} -> [MulZeroOneClass α] -> [MulZeroOneClass β] -> (f : α →*₀ β) -> (f' : α → β) -> (h : f' = ⇑f) -> α →* β",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "copy_eq_toMonoidHom",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f), VTask.copy f f' h = f.toMonoidHom",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_output_type_is_MonoidHom",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f), (VTask.copy f f' h : α →* β) = f.toMonoidHom",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f) (x : α), VTask.copy f f' h x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_one",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f), VTask.copy f f' h 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_mul",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f) (x y : α), VTask.copy f f' h (x * y) = VTask.copy f f' h x * VTask.copy f f' h y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_result_not_MonoidWithZeroHom",
+     "statement": "∀ (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β] (f : α →*₀ β) (f' : α → β) (h : f' = ↑f), ¬ (∃ (g : α →*₀ β), (g : α → β) = (VTask.copy f f' h : α → β) ∧ g.toMonoidHom ≠ VTask.copy f f' h)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_at_one_zmod",
+     "statement": "example : VTask.copy (MonoidWithZeroHom.id (ZMod 3)) (↑(MonoidWithZeroHom.id (ZMod 3))) rfl (1 : ZMod 3) = 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_at_zero_zmod",
+     "statement": "example : VTask.copy (MonoidWithZeroHom.id (ZMod 3)) (↑(MonoidWithZeroHom.id (ZMod 3))) rfl (0 : ZMod 3) = 0 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_result_equals_toMonoidHom_membership",
+     "statement": "example : VTask.copy (MonoidWithZeroHom.id (ZMod 2)) (↑(MonoidWithZeroHom.id (ZMod 2))) rfl = (MonoidWithZeroHom.id (ZMod 2)).toMonoidHom := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "ONote.split'",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/ONote.split'",
+   "task_json": "prelim_testing/tasks_batch2500/ONote.split'/task.json",
+   "task_hash_sha256_16": "73581ce9fd705a89",
+   "mathlib_name": "ONote.split'",
+   "signature_name": "VTask.split'",
+   "signature_type": "ONote → ONote × ℕ",
+   "n_facts": 9,
+   "n_certified": 8,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "split'_zero",
+     "statement": "example : VTask.split' 0 = (0, 0) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_finite_1",
+     "statement": "example : VTask.split' (ONote.oadd 0 1 0) = (0, 1) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_omega",
+     "statement": "example : VTask.split' (ONote.oadd 1 1 0) = (ONote.oadd 0 1 0, 0) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_omega2_plus3",
+     "statement": "example : VTask.split' (ONote.oadd 1 2 (ONote.oadd 0 3 0)) = (ONote.oadd 0 2 0, 3) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_finite_5",
+     "statement": "example : VTask.split' (ONote.oadd 0 5 0) = (0, 5) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_omega_sq",
+     "statement": "example : VTask.split' (ONote.oadd 2 1 0) = (ONote.oadd 1 1 0, 0) := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_nf_quotient",
+     "statement": "∀ (o o' : ONote) (m : ℕ) [ONote.NF o], VTask.split' o = (o', m) → ONote.NF o'",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "split'_vs_split",
+     "statement": "∀ (o o' : ONote) (m : ℕ) [ONote.NF o], VTask.split' o = (o', m) → ONote.split o = (ONote.scale 1 o', m)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "split'_zero_ne_omega",
+     "statement": "VTask.split' (ONote.oadd 1 1 0) ≠ (0, 0)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "PEquiv.single",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/PEquiv.single",
+   "task_json": "prelim_testing/tasks_batch2500/PEquiv.single/task.json",
+   "task_hash_sha256_16": "c75e61e5ed67dc6a",
+   "mathlib_name": "PEquiv.single",
+   "signature_name": "VTask.single",
+   "signature_type": "{α : Type u} -> {β : Type v} -> [DecidableEq α] -> [DecidableEq β] -> (a : α) -> (b : β) -> α ≃. β",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "single_apply_at_a",
+     "statement": "example : VTask.single 1 2 1 = some 2 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_apply_of_ne",
+     "statement": "example : VTask.single 1 2 3 = none := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_symm_apply_at_b",
+     "statement": "example : (VTask.single 1 2).symm 2 = some 1 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_symm_apply_of_ne",
+     "statement": "example : (VTask.single 1 2).symm 3 = none := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_trans_single_result",
+     "statement": "example : (VTask.single 1 2).trans (VTask.single 2 3) 1 = some 3 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_trans_single_ne_bot",
+     "statement": "example : (VTask.single 1 2).trans (VTask.single 3 4) 1 = none := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_trans_single_eq_single",
+     "statement": "∀ (α β γ : Type*) [DecidableEq α] [DecidableEq β] [DecidableEq γ] (a : α) (b : β) (c : γ), (VTask.single a b).trans (VTask.single b c) = VTask.single a c",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_trans_single_ne_is_bot",
+     "statement": "∀ (α β γ : Type*) [DecidableEq α] [DecidableEq β] [DecidableEq γ] (a : α) (b₁ b₂ : β) (c : γ), b₁ ≠ b₂ → (VTask.single a b₁).trans (VTask.single b₂ c) = ⊥",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "single_mem_iff",
+     "statement": "∀ (α β : Type*) [DecidableEq α] [DecidableEq β] (a₁ a₂ : α) (b₁ b₂ : β), b₁ ∈ VTask.single a₂ b₂ a₁ ↔ a₁ = a₂ ∧ b₁ = b₂",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Subsemiring.mk'",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Subsemiring.mk'",
+   "task_json": "prelim_testing/tasks_batch2500/Subsemiring.mk'/task.json",
+   "task_hash_sha256_16": "66394d4163fdea70",
+   "mathlib_name": "Subsemiring.mk'",
+   "signature_name": "VTask.mk'",
+   "signature_type": "{R : Type u} -> [NonAssocSemiring R] -> (s : Set R) -> (sm : Submonoid R) -> (hm : ↑sm = s) -> (sa : AddSubmonoid R) -> (ha : ↑sa = s) -> Subsemiring R",
+   "n_facts": 9,
+   "n_certified": 9,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "mk'_toSubmonoid_eq",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (VTask.mk' s sm hm sa ha).toSubmonoid = sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_toAddSubmonoid_eq",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (VTask.mk' s sm hm sa ha).toAddSubmonoid = sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_carrier_eq_sm_carrier",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (VTask.mk' s sm hm sa ha : Set R) = ↑sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_carrier_eq_sa_carrier",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (VTask.mk' s sm hm sa ha : Set R) = ↑sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_one_mem",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (1 : R) ∈ VTask.mk' s sm hm sa ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_zero_mem",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), (0 : R) ∈ VTask.mk' s sm hm sa ha",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_iff_mem_toSubmonoid",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s) (x : R), x ∈ VTask.mk' s sm hm sa ha ↔ x ∈ sm",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_mem_iff_mem_toAddSubmonoid",
+     "statement": "∀ {R : Type*} [inst : NonAssocSemiring R] (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s) (x : R), x ∈ VTask.mk' s sm hm sa ha ↔ x ∈ sa",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "mk'_coe_ne_wrong_set",
+     "statement": "∀ (R : Type) [NonAssocSemiring R] (s t : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R) (ha : ↑sa = s), s ≠ t → (VTask.mk' s sm hm sa ha : Set R) ≠ t",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "LieDerivation.ofGrading",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/LieDerivation.ofGrading",
+   "task_json": "prelim_testing/tasks_batch2500/LieDerivation.ofGrading/task.json",
+   "task_hash_sha256_16": "be93b4ba028c2a39",
+   "mathlib_name": "LieDerivation.ofGrading",
+   "signature_name": "VTask.ofGrading",
+   "signature_type": "{ι : Type u_1} -> {R : Type u_3} -> {L : Type u_4} -> [DecidableEq ι] -> [AddCommMonoid ι] -> [CommRing R] -> [LieRing L] -> [LieAlgebra R L] -> (ℒ : ι → Submodule R L) -> [GradedLieAlgebra ℒ] -> (φ : ι →+ R) -> LieDerivation R L L",
+   "n_facts": 8,
+   "n_certified": 2,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "ofGrading_apply_homogeneous",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R) (i : ι) (a : L) (ha : a ∈ ℒ i), VTask.ofGrading ℒ φ a = φ i • a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofGrading_zero_map_is_zero_derivation",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ], VTask.ofGrading ℒ (0 : ι →+ R) = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofGrading_linear_in_phi",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ ψ : ι →+ R) (i : ι) (a : L) (ha : a ∈ ℒ i), VTask.ofGrading ℒ (φ + ψ) a = VTask.ofGrading ℒ φ a + VTask.ofGrading ℒ ψ a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofGrading_degree_zero_gives_zero",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R) (a : L) (ha : a ∈ ℒ 0), VTask.ofGrading ℒ φ a = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofGrading_homogeneous_scalar_explicit",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R) (i j : ι) (a : L) (ha : a ∈ ℒ i) (ha' : a ∈ ℒ j), VTask.ofGrading ℒ φ a = φ i • a ∧ VTask.ofGrading ℒ φ a = φ j • a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofGrading_add_two_degrees",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R) (i j : ι) (a b : L) (ha : a ∈ ℒ i) (hb : b ∈ ℒ j), VTask.ofGrading ℒ φ (a + b) = φ i • a + φ j • b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofGrading_reject_zero_map",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R), VTask.ofGrading ℒ φ ≠ VTask.ofGrading ℒ φ → False",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofGrading_reject_nonzero_phi_on_zero_element",
+     "statement": "∀ {ι : Type*} {R : Type*} {L : Type*} [DecidableEq ι] [AddCommMonoid ι] [CommRing R] [LieRing L] [LieAlgebra R L] (ℒ : ι → Submodule R L) [GradedLieAlgebra ℒ] (φ : ι →+ R), ¬(VTask.ofGrading ℒ φ = (0 : LieDerivation R L L) ∧ φ ≠ 0 ∧ ∀ i, ℒ i = ⊥ → False)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "StarAlgHom.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/StarAlgHom.copy",
+   "task_json": "prelim_testing/tasks_batch2500/StarAlgHom.copy/task.json",
+   "task_hash_sha256_16": "5b95aede9230fa8d",
+   "mathlib_name": "StarAlgHom.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R : Type u_2} -> {A : Type u_3} -> {B : Type u_4} -> [CommSemiring R] -> [Semiring A] -> [Algebra R A] -> [Star A] -> [Semiring B] -> [Algebra R B] -> [Star B] -> (f : A →⋆ₐ[R] B) -> (f' : A → B) -> (h : f' = ⇑f) -> A →⋆ₐ[R] B",
+   "n_facts": 8,
+   "n_certified": 7,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "copy_eq_original",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_apply_eq_f_apply",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f) (a : A), VTask.copy f f' h a = f a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_copy_eq",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f) (f'' : A → B) (h' : f'' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) f'' h' = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_iff_original",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f g : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = g ↔ f = g",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_arbitrary_other",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), ⇑(VTask.copy f f' h) = ⇑f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_map_one_preserved",
+     "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h 1 = 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_fun",
+     "statement": "∀ (R A B : Type*) [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), (⇑(VTask.copy f f' h) : A → B) ≠ (fun _ => (0 : B)) → True",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_ne_wrong",
+     "statement": "∀ (R A B : Type*) [CommSemiring R] [Semiring A] [Algebra R A] [Star A] [Semiring B] [Algebra R B] [Star B] [Nontrivial B] (f : A →⋆ₐ[R] B) (f' : A → B) (h : f' = ⇑f), ¬ (∀ a : A, VTask.copy f f' h a = (0 : B)) ∨ (∀ a : A, f a = (0 : B))",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "TopCat.GlueData.Rel",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/TopCat.GlueData.Rel",
+   "task_json": "prelim_testing/tasks_batch2500/TopCat.GlueData.Rel/task.json",
+   "task_hash_sha256_16": "4634a73ab4e1f183",
+   "mathlib_name": "TopCat.GlueData.Rel",
+   "signature_name": "VTask.Rel",
+   "signature_type": "(D : TopCat.GlueData) -> (a b : (i : D.J) × ↑(D.U i)) -> Prop",
+   "n_facts": 8,
+   "n_certified": 2,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "rel_reflexive",
+     "statement": "∀ (D : TopCat.GlueData) (a : (i : D.J) × ↑(D.U i)), VTask.Rel D a a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_symmetric",
+     "statement": "∀ (D : TopCat.GlueData) (a b : (i : D.J) × ↑(D.U i)), VTask.Rel D a b → VTask.Rel D b a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_transitive",
+     "statement": "∀ (D : TopCat.GlueData) (a b c : (i : D.J) × ↑(D.U i)), VTask.Rel D a b → VTask.Rel D b c → VTask.Rel D a c",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_is_equivalence",
+     "statement": "∀ (D : TopCat.GlueData), Equivalence (VTask.Rel D)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "rel_accept_reflexive_instance",
+     "statement": "∀ (D : TopCat.GlueData) (a : (i : D.J) × ↑(D.U i)), VTask.Rel D a a",
+     "mechanism": "proof",
+     "polarity": "accept",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_same_piece_iff_eq",
+     "statement": "∀ (D : TopCat.GlueData) (i : D.J) (x y : ↑(D.U i)), VTask.Rel D ⟨i, x⟩ ⟨i, y⟩ ↔ x = y",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_not_antisymmetric_general",
+     "statement": "∀ (D : TopCat.GlueData) (a b : (i : D.J) × ↑(D.U i)), VTask.Rel D a b → VTask.Rel D b a",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "rel_total_domain",
+     "statement": "∀ (D : TopCat.GlueData) (a b : (i : D.J) × ↑(D.U i)), VTask.Rel D a b ∨ ¬VTask.Rel D a b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "nonZeroDivisorsLeft",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/nonZeroDivisorsLeft",
+   "task_json": "prelim_testing/tasks_batch2500/nonZeroDivisorsLeft/task.json",
+   "task_hash_sha256_16": "8e9b7d51f8a8f34b",
+   "mathlib_name": "nonZeroDivisorsLeft",
+   "signature_name": "VTask.nonZeroDivisorsLeft",
+   "signature_type": "(M₀ : Type u_1) -> [MonoidWithZero M₀] -> Submonoid M₀",
+   "n_facts": 8,
+   "n_certified": 4,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "nonZeroDivisorsLeft_zero_not_mem_unconditional",
+     "statement": "∀ (M₀ : Type*) [MonoidWithZero M₀], (0 : M₀) ∉ VTask.nonZeroDivisorsLeft M₀",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nonZeroDivisorsLeft_eq_nonZeroDivisors_comm",
+     "statement": "∀ (M₀ : Type*) [CommMonoidWithZero M₀], VTask.nonZeroDivisorsLeft M₀ = nonZeroDivisors M₀",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "nonZeroDivisorsLeft_eq_right_comm",
+     "statement": "∀ (M₀ : Type*) [CommMonoidWithZero M₀], nonZeroDivisorsRight M₀ = VTask.nonZeroDivisorsLeft M₀",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "nonZeroDivisorsLeft_isLeftRegular_iff",
+     "statement": "∀ (R : Type*) [MonoidWithZero R] (r : R), IsLeftRegular r ↔ r ∈ VTask.nonZeroDivisorsLeft R",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nonZeroDivisorsLeft_mem_two_sided",
+     "statement": "∀ (M₀ : Type*) [MonoidWithZero M₀] (r : M₀), r ∈ nonZeroDivisors M₀ → r ∈ VTask.nonZeroDivisorsLeft M₀",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nonZeroDivisorsLeft_mul_cancel",
+     "statement": "∀ (R : Type*) [MonoidWithZero R] (r x y : R), r ∈ VTask.nonZeroDivisorsLeft R → (r * x = r * y ↔ x = y)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "nonZeroDivisorsLeft_mul_eq_zero_iff",
+     "statement": "∀ (M₀ : Type*) [MonoidWithZero M₀] (r x : M₀), r ∈ VTask.nonZeroDivisorsLeft M₀ → (r * x = 0 ↔ x = 0)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "nonZeroDivisorsLeft_notMem_iff_nonempty",
+     "statement": "∀ (M₀ : Type*) [MonoidWithZero M₀] (x : M₀), x ∉ VTask.nonZeroDivisorsLeft M₀ ↔ {y : M₀ | x * y = 0 ∧ y ≠ 0}.Nonempty",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Lists'.toList",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Lists'.toList",
+   "task_json": "prelim_testing/tasks_batch2500/Lists'.toList/task.json",
+   "task_hash_sha256_16": "bf8ac685330b2ed8",
+   "mathlib_name": "Lists'.toList",
+   "signature_name": "VTask.toList",
+   "signature_type": "{α : Type u_1} -> {b : Bool} -> Lists' α b → List (Lists α)",
+   "n_facts": 7,
+   "n_certified": 6,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "toList_nil",
+     "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) = [] := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_nil_accept",
+     "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) = [] := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_nil_reject_nonempty",
+     "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) ≠ [⟨true, Lists'.nil⟩] := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_to_ofList_roundtrip",
+     "statement": "∀ (l : List (Lists Nat)), VTask.toList (Lists'.ofList l) = l",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_of_toList_roundtrip",
+     "statement": "∀ (l : Lists' Nat true), Lists'.ofList (VTask.toList l) = l",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_subset_def",
+     "statement": "∀ (l₁ l₂ : Lists' Nat true), l₁ ⊆ l₂ ↔ ∀ a ∈ VTask.toList l₁, a ∈ l₂",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "toList_injective_on_list_shaped",
+     "statement": "Function.Injective (fun l : Lists' Nat true => VTask.toList l)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "Finsupp.sumFinsuppEquivProdFinsupp",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Finsupp.sumFinsuppEquivProdFinsupp",
+   "task_json": "prelim_testing/tasks_batch2500/Finsupp.sumFinsuppEquivProdFinsupp/task.json",
+   "task_hash_sha256_16": "7fd7257015cc3b06",
+   "mathlib_name": "Finsupp.sumFinsuppEquivProdFinsupp",
+   "signature_name": "VTask.sumFinsuppEquivProdFinsupp",
+   "signature_type": "{α : Type u_12} -> {β : Type u_13} -> {γ : Type u_14} -> [Zero γ] -> (α ⊕ β →₀ γ) ≃ (α →₀ γ) × (β →₀ γ)",
+   "n_facts": 6,
+   "n_certified": 5,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "sumFinsuppEquivProdFinsupp_is_equiv",
+     "statement": "∀ {α β γ : Type*} [Zero γ], Function.Bijective (@VTask.sumFinsuppEquivProdFinsupp α β γ _)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "sumFinsuppEquivProdFinsupp_left_inv",
+     "statement": "∀ {α β γ : Type*} [Zero γ] (f : α ⊕ β →₀ γ), VTask.sumFinsuppEquivProdFinsupp.symm (VTask.sumFinsuppEquivProdFinsupp f) = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "sumFinsuppEquivProdFinsupp_right_inv",
+     "statement": "∀ {α β γ : Type*} [Zero γ] (fg : (α →₀ γ) × (β →₀ γ)), VTask.sumFinsuppEquivProdFinsupp (VTask.sumFinsuppEquivProdFinsupp.symm fg) = fg",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "sumFinsuppEquivProdFinsupp_zero",
+     "statement": "∀ {α β γ : Type*} [Zero γ], VTask.sumFinsuppEquivProdFinsupp (0 : α ⊕ β →₀ γ) = (0, 0)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "sumFinsuppEquivProdFinsupp_reject_symm_wrong_branch",
+     "statement": "example : ¬ (VTask.sumFinsuppEquivProdFinsupp.symm (Finsupp.single (0 : Fin 1) (7 : ℕ), (0 : Fin 1 →₀ ℕ)) (Sum.inr 0) = 7) := by decide",
+     "mechanism": "decide",
+     "polarity": "reject",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "sumFinsuppEquivProdFinsupp_neq_swap",
+     "statement": "¬ (∀ (f : (Fin 1 ⊕ Fin 1 →₀ ℕ)), (VTask.sumFinsuppEquivProdFinsupp f).1 = (VTask.sumFinsuppEquivProdFinsupp f).2 → f = 0)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    }
+   ]
+  },
+  {
+   "name": "LocalizedModule.liftOn",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/LocalizedModule.liftOn",
+   "task_json": "prelim_testing/tasks_batch2500/LocalizedModule.liftOn/task.json",
+   "task_hash_sha256_16": "c43eb46aa5d440d3",
+   "mathlib_name": "LocalizedModule.liftOn",
+   "signature_name": "VTask.liftOn",
+   "signature_type": "{R : Type u} -> [CommSemiring R] -> {S : Submonoid R} -> {M : Type v} -> [AddCommMonoid M] -> [Module R M] -> {α : Type u_3} -> (x : LocalizedModule S M) -> (f : M × ↥S → α) -> (wd : ∀ (p p' : M × ↥S), p ≈ p' → f p = f p') -> α",
+   "n_facts": 6,
+   "n_certified": 5,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "liftOn_mk_basic",
+     "statement": "example : VTask.liftOn (LocalizedModule.mk (0 : ZMod 2) (1 : (⊤ : Submonoid (ZMod 2)))) (fun _ => (42 : ℕ)) (fun _ _ _ => rfl) = 42 := by decide",
+     "mechanism": "decide",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "liftOn_const_eq_42",
+     "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (x : LocalizedModule S M), VTask.liftOn x (fun _ => (42 : ℕ)) (fun _ _ _ => rfl) = 42",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "liftOn_wd_respected",
+     "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (α : Type*) (f : M × ↥S → α) (wd : ∀ p p' : M × ↥S, p ≈ p' → f p = f p') (m m' : M) (s s' : ↥S), LocalizedModule.mk m s = LocalizedModule.mk m' s' → VTask.liftOn (LocalizedModule.mk m s) f wd = VTask.liftOn (LocalizedModule.mk m' s') f wd",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "liftOn_accept_mk_eq_apply",
+     "statement": "example : VTask.liftOn (LocalizedModule.mk (0 : ZMod 3) (1 : (⊤ : Submonoid (ZMod 3)))) (fun _ => (7 : Fin 10)) (fun _ _ _ => rfl) = 7 := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "liftOn_not_zero_when_f_const_one",
+     "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (m : M) (s : ↥S), VTask.liftOn (LocalizedModule.mk m s) (fun _ => (1 : ℕ)) (fun _ _ _ => rfl) ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "liftOn_independent_of_rep",
+     "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (α : Type*) (f : M × ↥S → α) (wd : ∀ p p' : M × ↥S, p ≈ p' → f p = f p') (x : LocalizedModule S M) (m : M) (s : ↥S), x = LocalizedModule.mk m s → VTask.liftOn x f wd = f ⟨m, s⟩",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "BoundedContinuousFunction.ofNormedAddCommGroup",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/BoundedContinuousFunction.ofNormedAddCommGroup",
+   "task_json": "prelim_testing/tasks_batch2500/BoundedContinuousFunction.ofNormedAddCommGroup/task.json",
+   "task_hash_sha256_16": "6273b48973756810",
+   "mathlib_name": "BoundedContinuousFunction.ofNormedAddCommGroup",
+   "signature_name": "VTask.ofNormedAddCommGroup",
+   "signature_type": "{α : Type u} -> {β : Type v} -> [TopologicalSpace α] -> [SeminormedAddCommGroup β] -> (f : α → β) -> (Hf : Continuous f) -> (C : ℝ) -> (H : ∀ (x : α), ‖f x‖ ≤ C) -> BoundedContinuousFunction α β",
+   "n_facts": 5,
+   "n_certified": 5,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "ofNormedAddCommGroup_norm_le",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (hC : 0 ≤ C) (H : ∀ x, ‖f x‖ ≤ C), ‖VTask.ofNormedAddCommGroup f Hf C H‖ ≤ C",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofNormedAddCommGroup_norm_nonneg",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C), 0 ≤ ‖VTask.ofNormedAddCommGroup f Hf C H‖",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofNormedAddCommGroup_coe_continuous",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C), Continuous (VTask.ofNormedAddCommGroup f Hf C H : α → β)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofNormedAddCommGroup_coercion_recovers_f_pointwise",
+     "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) (x : α), ‖(VTask.ofNormedAddCommGroup f Hf C H : α → β) x‖ ≤ C",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofNormedAddCommGroup_reject_coe_ne_other",
+     "statement": "∀ (f g : ℝ → ℝ) (Hf : Continuous f) (Hg : Continuous g) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) (H2 : ∀ x, ‖g x‖ ≤ C), f ≠ g → (VTask.ofNormedAddCommGroup f Hf C H : ℝ → ℝ) ≠ (VTask.ofNormedAddCommGroup g Hg C H2 : ℝ → ℝ)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "ContinuousLinearMap.copy",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/ContinuousLinearMap.copy",
+   "task_json": "prelim_testing/tasks_batch2500/ContinuousLinearMap.copy/task.json",
+   "task_hash_sha256_16": "7028ecabdda0c521",
+   "mathlib_name": "ContinuousLinearMap.copy",
+   "signature_name": "VTask.copy",
+   "signature_type": "{R₁ : Type u_1} -> {R₂ : Type u_2} -> [Semiring R₁] -> [Semiring R₂] -> {σ₁₂ : R₁ →+* R₂} -> {M₁ : Type u_4} -> [TopologicalSpace M₁] -> [AddCommMonoid M₁] -> {M₂ : Type u_6} -> [TopologicalSpace M₂] -> [AddCommMonoid M₂] -> [Module R₁ M₁] -> [Module R₂ M₂] -> (f : M₁ →SL[σ₁₂] M₂) -> (f' : M₁ → M₂) -> (h : f' = ⇑f) -> M₁ →SL[σ₁₂] M₂",
+   "n_facts": 5,
+   "n_certified": 5,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "copy_eq_self",
+     "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f), VTask.copy f f' h = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_eq_f_implies_coe_eq_original",
+     "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f) (x : M₁), (VTask.copy f f' h) x = f x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_coe_is_f'_not_coercion_of_f_structurally",
+     "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f), (VTask.copy f f' h).toLinearMap = f.toLinearMap",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_comp_eq_comp",
+     "statement": "∀ {R₁ R₂ R₃ : Type*} [Semiring R₁] [Semiring R₂] [Semiring R₃] {σ₁₂ : R₁ →+* R₂} {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R₁ →+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] {M₁ M₂ M₃ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [TopologicalSpace M₃] [AddCommMonoid M₃] [Module R₁ M₁] [Module R₂ M₂] [Module R₃ M₃] (f : M₁ →SL[σ₁₂] M₂) (g : M₂ →SL[σ₂₃] M₃) (f' : M₁ → M₂) (h : f' = ⇑f), g.comp (VTask.copy f f' h) = g.comp f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "copy_ne_wrong_fun",
+     "statement": "∀ (f : ℝ →L[ℝ] ℝ), ¬ (⇑(VTask.copy f (⇑f) rfl) = (fun _ => (0 : ℝ))) ∨ (⇑f = fun _ => (0 : ℝ))",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Finsupp.curry",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Finsupp.curry",
+   "task_json": "prelim_testing/tasks_batch2500/Finsupp.curry/task.json",
+   "task_hash_sha256_16": "2924cb7ae89f0818",
+   "mathlib_name": "Finsupp.curry",
+   "signature_name": "VTask.curry",
+   "signature_type": "{α : Type u_1} -> {β : Type u_2} -> {M : Type u_5} -> [Zero M] -> (f : α × β →₀ M) -> α →₀ β →₀ M",
+   "n_facts": 5,
+   "n_certified": 5,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "curry_uncurry_roundtrip",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] (f : α × β →₀ M), (VTask.curry f).uncurry = f",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "curry_single_splits",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] (a : α) (b : β) (m : M), VTask.curry (Finsupp.single (a, b) m) = Finsupp.single a (Finsupp.single b m)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "curry_support_eq_image_fst",
+     "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] [DecidableEq α] (f : α × β →₀ M), (VTask.curry f).support = f.support.image Prod.fst",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "curry_zero_support_empty",
+     "statement": "example : (VTask.curry (0 : Fin 2 × Fin 2 →₀ ℕ)).support = ∅ := by decide",
+     "mechanism": "decide",
+     "polarity": "accept",
+     "validation_status": "CERTIFIED",
+     "discharge_tier": null,
+     "scoring_safe": true
+    },
+    {
+     "id": "curry_ne_zero_of_nonzero",
+     "statement": "∀ (a : Fin 2) (b : Fin 2) (m : ℕ), m ≠ 0 → VTask.curry (Finsupp.single (a, b) m) ≠ 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "FormalMultilinearSeries.compChangeOfVariables",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/FormalMultilinearSeries.compChangeOfVariables",
+   "task_json": "prelim_testing/tasks_batch2500/FormalMultilinearSeries.compChangeOfVariables/task.json",
+   "task_hash_sha256_16": "367313bb91954804",
+   "mathlib_name": "FormalMultilinearSeries.compChangeOfVariables",
+   "signature_name": "VTask.compChangeOfVariables",
+   "signature_type": "(m M N : ℕ) -> (i : (n : ℕ) × (Fin n → ℕ)) -> (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N) -> (n : ℕ) × Composition n",
+   "n_facts": 5,
+   "n_certified": 5,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "ccov_length_eq_arity",
+     "statement": "∀ (m M N : ℕ) (i : (n : ℕ) × (Fin n → ℕ)) (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N), Composition.length (VTask.compChangeOfVariables m M N i hi).2 = i.1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ccov_composition_length_zero_arity_zero",
+     "statement": "∀ (m M N : ℕ) (i : (n : ℕ) × (Fin n → ℕ)) (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N), i.1 = 0 → Composition.length (VTask.compChangeOfVariables m M N i hi).2 = 0",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ccov_output_fst_eq_composition_sum",
+     "statement": "∀ (m M N : ℕ) (i : (n : ℕ) × (Fin n → ℕ)) (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N), (VTask.compChangeOfVariables m M N i hi).2.length = i.1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ccov_blocks_all_pos",
+     "statement": "∀ (m M N : ℕ) (i : (n : ℕ) × (Fin n → ℕ)) (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N), ∀ b ∈ (VTask.compChangeOfVariables m M N i hi).2.blocks, 0 < b",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ccov_length_not_wrong",
+     "statement": "∀ (m M N : ℕ) (i : (n : ℕ) × (Fin n → ℕ)) (hi : i ∈ FormalMultilinearSeries.compPartialSumSource m M N), ¬ (Composition.length (VTask.compChangeOfVariables m M N i hi).2 = i.1 + 1)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "RestrictedProduct.map",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/RestrictedProduct.map",
+   "task_json": "prelim_testing/tasks_batch2500/RestrictedProduct.map/task.json",
+   "task_hash_sha256_16": "bb4606e7cdf6c9b1",
+   "mathlib_name": "RestrictedProduct.map",
+   "signature_name": "VTask.map",
+   "signature_type": "{ι : Type u_1} -> {𝓕 : Filter ι} -> {G : ι → Type u_9} -> {H : ι → Type u_10} -> {C : (i : ι) → Set (G i)} -> {D : (i : ι) → Set (H i)} -> (φ : (i : ι) → G i → H i) -> (hφ : ∀ᶠ (i : ι) in 𝓕, Set.MapsTo (φ i) (C i) (D i)) -> (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) -> RestrictedProduct (fun i => H i) (fun i => D i) 𝓕",
+   "n_facts": 4,
+   "n_certified": 2,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "map_result_mem_restricted_product",
+     "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕), ∀ᶠ i in 𝓕, VTask.map φ hφ x i ∈ D i",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "map_continuous_global",
+     "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} [∀ i, TopologicalSpace (G i)] [∀ i, TopologicalSpace (H i)] (φ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hcont : ∀ i, Continuous (φ i)) (hopen_C : ∀ i, IsOpen (C i)) (hopen_D : ∀ i, IsOpen (D i)), Continuous (VTask.map φ hφ)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "map_ne_wrong_component",
+     "statement": "¬ (∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ ψ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hψ : ∀ᶠ i in 𝓕, Set.MapsTo (ψ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) (j : ι), φ j (x j) = ψ j (x j) → VTask.map φ hφ x j = VTask.map ψ hψ x j → φ = ψ)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "map_ne_wrong_apply",
+     "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ ψ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hψ : ∀ᶠ i in 𝓕, Set.MapsTo (ψ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) (j : ι), (∃ i, φ i ≠ ψ i) → ¬ (∀ j, (VTask.map φ hφ x) j = (VTask.map ψ hψ x) j) → VTask.map φ hφ x ≠ VTask.map ψ hψ x",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "AffineEquiv.ofEq",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/AffineEquiv.ofEq",
+   "task_json": "prelim_testing/tasks_batch2500/AffineEquiv.ofEq/task.json",
+   "task_hash_sha256_16": "7e3e70e52c2e5830",
+   "mathlib_name": "AffineEquiv.ofEq",
+   "signature_name": "VTask.ofEq",
+   "signature_type": "{k : Type u_1} -> {V₁ : Type u_2} -> {P₁ : Type u_3} -> [Ring k] -> [AddCommGroup V₁] -> [Module k V₁] -> [AddTorsor V₁ P₁] -> (S₁ S₂ : AffineSubspace k P₁) -> [Nonempty ↥S₁] -> [Nonempty ↥S₂] -> (h : S₁ = S₂) -> ↥S₁ ≃ᵃ[k] ↥S₂",
+   "n_facts": 3,
+   "n_certified": 2,
+   "n_reject": 2,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "ofEq_is_affine_equiv",
+     "statement": "∀ (k : Type*) (V₁ : Type*) (P₁ : Type*) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂), Function.Bijective (VTask.ofEq S₁ S₂ h)",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    },
+    {
+     "id": "ofEq_not_nonidentity_on_coe",
+     "statement": "¬ ∀ (k : Type*) (V₁ : Type*) (P₁ : Type*) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂) (x : ↥S₁), (↑(VTask.ofEq S₁ S₂ h x) : P₁) ≠ (↑x : P₁)",
+     "mechanism": "proof",
+     "polarity": "reject",
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "ofEq_ne_symm_when_ne",
+     "statement": "∀ (k : Type) (V₁ : Type) (P₁ : Type) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂), S₁ ≠ S₂ → VTask.ofEq S₁ S₂ h ≠ (VTask.ofEq S₁ S₂ h).symm.symm → False",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  },
+  {
+   "name": "Localization.liftOn",
+   "corpus": "batch2500_2026-08-16",
+   "task_dir": "prelim_testing/tasks_batch2500/Localization.liftOn",
+   "task_json": "prelim_testing/tasks_batch2500/Localization.liftOn/task.json",
+   "task_hash_sha256_16": "2fb2ecc598553bb7",
+   "mathlib_name": "Localization.liftOn",
+   "signature_name": "VTask.liftOn",
+   "signature_type": "{M : Type u_1} -> [CommMonoid M] -> {S : Submonoid M} -> {p : Sort u} -> (x : Localization S) -> (f : M → ↥S → p) -> (H : ∀ {a c : M} {b d : ↥S}, (Localization.r S) (a, b) (c, d) → f a b = f c d) -> p",
+   "n_facts": 3,
+   "n_certified": 1,
+   "n_reject": 1,
+   "n_certified_reject": 1,
+   "facts": [
+    {
+     "id": "liftOn_constant_function",
+     "statement": "∀ {M : Type*} [CommMonoid M] {S : Submonoid M} (x : Localization S) (k : ℕ), VTask.liftOn x (fun _a _b => k) (fun _h => rfl) = k",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "liftOn_independent_of_rep",
+     "statement": "∀ {M : Type*} [CommMonoid M] {S : Submonoid M} {p : Sort*} (x : Localization S) (f g : M → ↥S → p) (Hf : ∀ {a c : M} {b d : ↥S}, Localization.r S (a, b) (c, d) → f a b = f c d) (Hg : ∀ {a c : M} {b d : ↥S}, Localization.r S (a, b) (c, d) → g a b = g c d), (∀ a (b : ↥S), f a b = g a b) → VTask.liftOn x f Hf = VTask.liftOn x g Hg",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "PROVISIONALLY_VALIDATED",
+     "discharge_tier": null,
+     "scoring_safe": false
+    },
+    {
+     "id": "liftOn_reject_mk_neq_wrong",
+     "statement": "∀ (a : ℕ) (b : (⊤ : Submonoid ℕ)) (f : ℕ → (⊤ : Submonoid ℕ) → ℕ) (H : ∀ {a c : ℕ} {b d : (⊤ : Submonoid ℕ)}, Localization.r ⊤ (a, b) (c, d) → f a b = f c d), VTask.liftOn (Localization.mk a b) f H = f a b → VTask.liftOn (Localization.mk a b) f H ≠ f a b + 1",
+     "mechanism": "proof",
+     "polarity": null,
+     "validation_status": "CERTIFIED",
+     "discharge_tier": 2,
+     "scoring_safe": true
+    }
+   ]
+  }
+ ]
+}
