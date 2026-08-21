@@ -12,6 +12,11 @@ was unknown.
 Membership is computed by diffing the CURRENT manifest against the exact snapshot recovered from
 git, so the split is reproducible and auditable rather than asserted.
 
+**FROZEN ONCE WRITTEN.** This set is derived -- it recomputes "everything authored since the
+snapshot" -- so it grows on every authoring run. An evaluation set that moves underneath you
+makes two scoring runs incomparable, so the script REFUSES to overwrite an existing file.
+Use `--version N` to cut a new numbered set, or `--force` to deliberately rewrite one.
+
 Facts are inlined -- id, statement, mechanism, polarity, validation_status, and the discharge
 tier where one exists -- so the evaluation harness can score against this file without walking
 the task directories. `task_json` still points at each task on disk for anything more.
@@ -29,7 +34,7 @@ import sys
 from pathlib import Path
 
 MANIFEST = Path("training/config/midsize_training_v1.json")
-OUT = Path("training/config/heldout_since_training_v1.json")
+OUT_TEMPLATE = "training/config/heldout_since_training_v{n}.json"
 
 
 def snapshot_names(commit: str) -> set:
@@ -42,7 +47,22 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--snapshot", default="d81ba57",
                     help="git commit of the manifest that training consumed")
+    ap.add_argument("--version", type=int, default=1,
+                    help="which numbered held-out set to write")
+    ap.add_argument("--force", action="store_true",
+                    help="overwrite a frozen set (you almost never want this)")
     args = ap.parse_args()
+
+    out = Path(OUT_TEMPLATE.format(n=args.version))
+    if out.exists() and not args.force:
+        existing = json.loads(out.read_text(encoding="utf-8"))
+        print(f"REFUSING to overwrite {out} -- it is frozen at "
+              f"{existing['n_heldout_tasks']} tasks / {existing['n_facts']} facts.\n"
+              f"An evaluation set that grows underneath you makes scoring runs "
+              f"incomparable.\n"
+              f"  to cut a NEW set:      --version {args.version + 1}\n"
+              f"  to rewrite this one:   --force")
+        return 1
 
     trained_on = snapshot_names(args.snapshot)
     current = json.loads(MANIFEST.read_text(encoding="utf-8"))
@@ -85,8 +105,11 @@ def main() -> int:
     for x in entries:
         by_corpus[x["corpus"]] = by_corpus.get(x["corpus"], 0) + 1
 
-    OUT.write_text(json.dumps({
-        "set_id": "heldout_since_training_v1",
+    out.write_text(json.dumps({
+        "set_id": f"heldout_since_training_v{args.version}",
+        "frozen": ("This set is frozen. The generator refuses to overwrite it, because it is "
+                   "derived from 'everything authored since the snapshot' and would otherwise "
+                   "grow on every authoring run, making scoring runs incomparable."),
         "created": "2026-08-20",
         "purpose": ("Held-out evaluation set for the mid-size training run. Every task here was "
                     "authored AFTER the model was trained, so it cannot have leaked into "
@@ -122,7 +145,7 @@ def main() -> int:
           f"({n_cert} certified)")
     print(f"  by corpus: {by_corpus}")
     print(f"  overlap with trained set: {len({e['name'] for e in entries} & trained_on)}")
-    print(f"-> {OUT}")
+    print(f"-> {out}  (frozen; re-running will refuse to overwrite)")
     return 0
 
 
