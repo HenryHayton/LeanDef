@@ -84,6 +84,11 @@ def main() -> int:
     # with zero LLM calls if these are left at their defaults.
     ap.add_argument("--manifest", default=None)
     ap.add_argument("--mentions", default=None)
+    # run_batch kills and re-warms the REPL at the START OF EVERY CHUNK to cap memory growth,
+    # so each chunk boundary costs a full cold Mathlib import. At the default of 8 a 40-task
+    # run pays that ~5 times, which measured as the bulk of its non-Bedrock time. Raising this
+    # trades memory headroom for throughput -- watch REPL RSS if you push it far.
+    ap.add_argument("--chunk-size", type=int, default=None)
     args = ap.parse_args()
     names_file, preflight_path = Path(args.names), Path(args.preflight)
 
@@ -142,7 +147,8 @@ def main() -> int:
     t0 = time.perf_counter()
     result = run_batch(slice_file, config, preflight_path=preflight_path,
                        curation_yaml_path=Path("miner/curation.yaml"),
-                       repl_warmup=_warm)
+                       repl_warmup=_warm,
+                       **({"chunk_size": args.chunk_size} if args.chunk_size else {}))
     elapsed = time.perf_counter() - t0
     cost = _call_log_totals(log_path, start_line)
 

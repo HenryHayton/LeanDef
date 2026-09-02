@@ -36,8 +36,16 @@ WORKING = Path("authoring/batches/_batch2500_working.txt")
 # simply where the first Bedrock call happens, so an expired token rotates every remaining task
 # there. Treating that stage as content-fatal permanently dropped 18 names that had only met a
 # dead credential -- 19 of the first 30 rotations were environmental, not content.
+# Matched against the rotation body. Anything NOT matched here is treated as the definition's
+# own fault and permanently excluded, so this list failing open is expensive: an AccessDenied
+# outage ledgered 264 healthy names in one run before "AccessDenied"/"403" were added. When in
+# doubt about a new failure string, add it -- a name wrongly retried costs one task's spend, a
+# name wrongly ledgered is lost from the corpus silently.
 ENVIRONMENTAL = ("BedrockRetriesExhausted", "redential", "transport error", "ReadTimeout",
-                 "Unknown environment", "Connection", "Throttl")
+                 "Unknown environment", "Connection", "Throttl",
+                 "AccessDenied", "not authorized", "403", "ExpiredToken",
+                 "ServiceUnavailable", "InternalServerException", "ModelNotReady",
+                 "500", "502", "503", "504")
 
 ROTATION = re.compile(r"^### (\S+) -- ROTATED \(rotated at `([a-z_]+)`\)(.*?)(?=^### |\Z)",
                       re.M | re.S)
@@ -58,6 +66,9 @@ def build_ledger() -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=400)
+    ap.add_argument("--chunk-size", type=int, default=20,
+                    help="tasks per REPL lifetime; each chunk boundary costs a cold Mathlib "
+                         "import, so bigger is faster but holds the REPL longer")
     args = ap.parse_args()
 
     names = [n.strip() for n in PASSING.read_text(encoding="utf-8").splitlines() if n.strip()]
@@ -85,6 +96,7 @@ def main() -> int:
         "--manifest", "miner/output/harvest_manifest_batch5.jsonl",
         "--mentions", "miner/output/mention_names_batch5.jsonl",
         "--out", str(OUT_DIR),
+        "--chunk-size", str(args.chunk_size),
     ])
 
 
