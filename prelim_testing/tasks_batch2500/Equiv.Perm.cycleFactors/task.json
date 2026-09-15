@@ -1,0 +1,230 @@
+{
+  "task_id": "Equiv.Perm.cycleFactors",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cycleFactors",
+  "signature": {
+    "name": "VTask.cycleFactors",
+    "type": "{α : Type u_2} -> [Fintype α] -> [LinearOrder α] -> (f : Equiv.Perm α) -> { l // l.prod = f ∧ (∀ g ∈ l, g.IsCycle) ∧ List.Pairwise Equiv.Perm.Disjoint l }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "ordering_of_output",
+        "statement": "The linear order on α determines the order in which cycles appear in the output list: they are listed by scanning α in ascending order and starting a new cycle at each point not yet accounted for.",
+        "note": "The set of cycles is canonical; the list order depends on the LinearOrder instance."
+      },
+      {
+        "point": "fixed_points_excluded",
+        "statement": "Fixed points of f (where f(x) = x) contribute no entry to the list, because the identity is not a cycle.",
+        "note": "IsCycle excludes the identity permutation."
+      },
+      {
+        "point": "identity_permutation",
+        "statement": "For the identity permutation, the output list is empty, and the empty product equals the identity.",
+        "note": "This is the base/boundary case of the construction."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cycleFactors_identity_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α], ((VTask.cycleFactors (1 : Equiv.Perm α)) : List (Equiv.Perm α)) = []",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.cycleFactorsFinset_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.cycleFactorsFinset_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_prod_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α), (VTask.cycleFactors f : List (Equiv.Perm α)).prod = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.cycleFactorsFinset_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.cycleFactorsFinset_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_all_isCycle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α) (g : Equiv.Perm α), g ∈ (VTask.cycleFactors f : List (Equiv.Perm α)) → g.IsCycle",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_pairwise_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α), List.Pairwise Equiv.Perm.Disjoint (VTask.cycleFactors f : List (Equiv.Perm α))",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.pairwise_disjoint_of_mem_zpowers"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.pairwise_disjoint_of_mem_zpowers"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_isCycle_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α), f.IsCycle → (VTask.cycleFactors f : List (Equiv.Perm α)).length = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_nonempty_not_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α), f ≠ 1 → (VTask.cycleFactors f : List (Equiv.Perm α)) ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.cycleFactorsFinset_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.cycleFactorsFinset_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactors_support_nodup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) [Fintype α] [LinearOrder α] (f : Equiv.Perm α), ((VTask.cycleFactors f : List (Equiv.Perm α)).map Equiv.Perm.support).Pairwise Disjoint",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.Disjoint.disjoint_cycleFactorsFinset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.Disjoint.disjoint_cycleFactorsFinset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Perm.cycleFactors",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Perm.cycleFactors-1de8c01e",
+    "review_status": "unreviewed"
+  }
+}

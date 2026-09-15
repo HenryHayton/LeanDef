@@ -1,0 +1,363 @@
+{
+  "task_id": "PFunctor.M.isubtree",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.isubtree",
+  "signature": {
+    "name": "VTask.isubtree",
+    "type": "{F : PFunctor.{uA, uB}} -> [DecidableEq F.A] -> [Inhabited F.M] -> PFunctor.Approx.Path F → F.M → F.M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ps",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "label mismatch",
+        "statement": "When the path head demands label `a` but the current tree node has a different label `a'`, `VTask.isubtree` returns `default (α := F.M)` as a junk value.",
+        "note": "This applies at any step, not only the first; once a mismatch occurs the default is returned immediately."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isubtree_cons_match",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] (ps : PFunctor.Approx.Path F) {a : F.A} (f : F.B a → F.M) (i : F.B a), VTask.isubtree (⟨_, i⟩ :: ps) (PFunctor.M.mk ⟨a, f⟩) = VTask.isubtree ps (f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.686,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_one_step_match",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {a : F.A} (f : F.B a → F.M) (i : F.B a), VTask.isubtree [⟨_, i⟩] (PFunctor.M.mk ⟨a, f⟩) = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.965,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_mismatch_default",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {a a' : F.A} (f : F.B a' → F.M) (i : F.B a) (ps : PFunctor.Approx.Path F), a ≠ a' → VTask.isubtree (⟨a, i⟩ :: ps) (PFunctor.M.mk ⟨a', f⟩) = default",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.164,
+        "at": "authoring",
+        "script": "by simp [_root_.PFunctor.M.isubtree] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.PFunctor.M.isubtree] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_bisim_children_bisim",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {R : F.M → F.M → Prop} (bisim : PFunctor.M.IsBisimulation R) (s₁ s₂ : F.M) (ps : PFunctor.Approx.Path F), R s₁ s₂ → PFunctor.M.IsPath ps s₁ ∨ PFunctor.M.IsPath ps s₂ → ∃ (a : F.A) (f f' : F.B a → F.M), VTask.isubtree ps s₁ = PFunctor.M.mk ⟨a, f⟩ ∧ VTask.isubtree ps s₂ = PFunctor.M.mk ⟨a, f'⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.nth_of_bisim"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.nth_of_bisim"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_empty_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] (x : F.M), VTask.isubtree [] x = x",
+      "domain_inputs": {
+        "ps": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.614,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.isubtree []"
+    },
+    {
+      "id": "isubtree_not_iselect",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] (ps : PFunctor.Approx.Path F) (x : F.M), PFunctor.M.IsPath ps x → ∃ (a : F.A) (f : F.B a → F.M), VTask.isubtree ps x = PFunctor.M.mk ⟨a, f⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.nth_of_bisim"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.nth_of_bisim"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_cons_valid_reduces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {a : F.A} (f : F.B a → F.M) (i : F.B a) (ps : PFunctor.Approx.Path F), VTask.isubtree (⟨a, i⟩ :: ps) (PFunctor.M.mk ⟨a, f⟩) = VTask.isubtree ps (f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.561,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_two_steps_match",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {a b : F.A} (f : F.B a → F.M) (g : F.B b → F.M) (i : F.B a) (j : F.B b), f i = PFunctor.M.mk ⟨b, g⟩ → VTask.isubtree [⟨a, i⟩, ⟨b, j⟩] (PFunctor.M.mk ⟨a, f⟩) = g j",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.196,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_valid_path_not_default_generic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] {a : F.A} (f : F.B a → F.M) (i : F.B a), VTask.isubtree [⟨a, i⟩] (PFunctor.M.mk ⟨a, f⟩) = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.028,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isubtree_label_mismatch_ne_tree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : PFunctor} [DecidableEq F.A] [Inhabited F.M] (a a' : F.A) (f : F.B a' → F.M) (i : F.B a) (ps : PFunctor.Approx.Path F), a ≠ a' → VTask.isubtree (⟨a, i⟩ :: ps) (PFunctor.M.mk ⟨a', f⟩) ≠ PFunctor.M.mk ⟨a', f⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFunctor.M.isubtree_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PFunctor.M.isubtree",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PFunctor.M.isubtree-f8d4e5b7",
+    "review_status": "unreviewed"
+  }
+}

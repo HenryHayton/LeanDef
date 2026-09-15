@@ -1,0 +1,187 @@
+{
+  "task_id": "QuadraticMap.Isometry.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{R : Type u_1} -> {M₁ : Type u_3} -> {M₂ : Type u_4} -> {M₃ : Type u_5} -> {N : Type u_7} -> [CommSemiring R] -> [AddCommMonoid M₁] -> [AddCommMonoid M₂] -> [AddCommMonoid M₃] -> [AddCommMonoid N] -> [Module R M₁] -> [Module R M₂] -> [Module R M₃] -> [Module R N] -> {Q₁ : QuadraticMap R M₁ N} -> {Q₂ : QuadraticMap R M₂ N} -> {Q₃ : QuadraticMap R M₃ N} -> (g : Q₂ →qᵢ Q₃) -> (f : Q₁ →qᵢ Q₂) -> Q₁ →qᵢ Q₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.comp is a total construction; every pair of composable quadratic map isometries yields a valid composite isometry with no junk values or edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_preserves_quadratic_form",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M₁ M₂ M₃ N : Type*) [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid N] [Module R M₁] [Module R M₂] [Module R M₃] [Module R N] (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) (Q₃ : QuadraticMap R M₃ N) (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) (x : M₁), Q₃ ((VTask.comp g f) x) = Q₁ x",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.Isometry.map_app"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.Isometry.map_app"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.115,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Isometry.comp-02188651",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_linear_map_compatibility",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M₁ M₂ M₃ N : Type*) [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid N] [Module R M₁] [Module R M₂] [Module R M₃] [Module R N] (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) (Q₃ : QuadraticMap R M₃ N) (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) (r : R) (x : M₁), (VTask.comp g f) (r • x) = r • (VTask.comp g f) x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.423,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Isometry.comp-02188651",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_add_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M₁ M₂ M₃ N : Type*) [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid N] [Module R M₁] [Module R M₂] [Module R M₃] [Module R N] (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) (Q₃ : QuadraticMap R M₃ N) (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) (x y : M₁), (VTask.comp g f) (x + y) = (VTask.comp g f) x + (VTask.comp g f) y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.264,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Isometry.comp-02188651",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_not_linearmap_comp_alone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M₁ M₂ M₃ N : Type*) [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid N] [Module R M₁] [Module R M₂] [Module R M₃] [Module R N] (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N) (Q₃ : QuadraticMap R M₃ N) (g : Q₂ →qᵢ Q₃) (f : Q₁ →qᵢ Q₂) (x : M₁), Q₃ ((VTask.comp g f) x) = Q₂ (f x)",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.Isometry.map_app",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.Isometry.map_app",
+        "QuadraticMap.Isometry.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.089,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Isometry.comp-02188651",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "QuadraticMap.Isometry.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "QuadraticMap.Isometry.comp-02188651",
+    "review_status": "unreviewed"
+  }
+}

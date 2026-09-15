@@ -1,0 +1,218 @@
+{
+  "task_id": "Ordnode.glue",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.glue",
+  "signature": {
+    "name": "VTask.glue",
+    "type": "{α : Type u_1} -> Ordnode α → Ordnode α → Ordnode α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": "left nil",
+        "statement": "VTask.glue Ordnode.nil r = r for any r",
+        "note": "When the left argument is nil, the right tree is returned unchanged."
+      },
+      {
+        "point": "right nil",
+        "statement": "VTask.glue (Ordnode.node s ll lx lr) Ordnode.nil = Ordnode.node s ll lx lr",
+        "note": "When the right argument is nil and the left is a node, the left tree is returned unchanged."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "glue_size_preservation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l r : Ordnode ℕ) (o₁ o₂ : WithBot ℕ) (x : ℕ), Ordnode.Valid' o₁ l x → Ordnode.Valid' x r o₂ → Ordnode.BalancedSz (Ordnode.size l) (Ordnode.size r) → Ordnode.size (VTask.glue l r) = Ordnode.size l + Ordnode.size r",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.glue"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.glue"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "glue_valid_preserves_validity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l r : Ordnode ℕ) (o₁ o₂ : WithBot ℕ) (x : ℕ), Ordnode.Valid' o₁ l x → Ordnode.Valid' x r o₂ → Ordnode.BalancedSz (Ordnode.size l) (Ordnode.size r) → Ordnode.Valid' o₁ (VTask.glue l r) o₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.glue"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.glue"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "glue_aux_validity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l r : Ordnode ℕ) (o₁ o₂ : WithBot ℕ), Ordnode.Valid' o₁ l o₂ → Ordnode.Valid' o₁ r o₂ → l.All (fun x => r.All (fun y => x < y)) → Ordnode.BalancedSz (Ordnode.size l) (Ordnode.size r) → Ordnode.Valid' o₁ (VTask.glue l r) o₂ ∧ Ordnode.size (VTask.glue l r) = Ordnode.size l + Ordnode.size r",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.glue_aux"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.glue_aux"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.534,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "glue_merge_node_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ls rs : ℕ) (ll lr rl rr : Ordnode ℕ) (lx rx : ℕ), ¬(Ordnode.delta * ls < rs) → ¬(Ordnode.delta * rs < ls) → Ordnode.merge (Ordnode.node ls ll lx lr) (Ordnode.node rs rl rx rr) = VTask.glue (Ordnode.node ls ll lx lr) (Ordnode.node rs rl rx rr)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.merge_node"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.merge_node"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "glue_nil_right_size_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Ordnode.size (VTask.glue (Ordnode.nil : Ordnode ℕ) Ordnode.nil) = 0 := by decide",
+      "domain_inputs": {
+        "l": [
+          "Ordnode.nil"
+        ],
+        "r": [
+          "Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "glue_nil_nil_ne_node",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.glue (@Ordnode.nil Nat) Ordnode.nil ≠ Ordnode.node 1 Ordnode.nil 0 Ordnode.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.glue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.glue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.117,
+        "at": "authoring",
+        "script": "by simp [_root_.Ordnode.glue] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Ordnode.glue] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.glue-c9cf989c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.glue",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.glue-c9cf989c",
+    "review_status": "unreviewed"
+  }
+}

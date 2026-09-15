@@ -1,0 +1,234 @@
+{
+  "task_id": "Topology.WithGeneratedByTopology",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.WithGeneratedByTopology",
+  "signature": {
+    "name": "VTask.WithGeneratedByTopology",
+    "type": "{ι : Type t} -> (X : ι → Type u) -> [(i : ι) → TopologicalSpace (X i)] -> (Y : Type v) -> [TopologicalSpace Y] -> Type v",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "X",
+      "Y"
+    ],
+    "conventions": [
+      {
+        "point": "type_synonym_equality",
+        "statement": "VTask.WithGeneratedByTopology X Y is definitionally equal to Y; no coercion is needed at the term level to move between them.",
+        "note": "This is the defining convention of a type synonym in Lean/Mathlib."
+      },
+      {
+        "point": "empty_index",
+        "statement": "When ι is the empty type, the generated topology is the indiscrete topology on Y (only ∅ and the whole set are open), since no maps impose any constraint.",
+        "note": "Edge case arising from vacuous generation."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "wgbt_accept_real",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.WithGeneratedByTopology (fun _ : Unit => ℝ) ℝ = ℝ",
+      "domain_inputs": {
+        "Y": [
+          "ℝ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.047,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.WithGeneratedByTopology (fun _ : Unit => ℝ) ℝ"
+    },
+    {
+      "id": "wgbt_accept_nat",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.WithGeneratedByTopology (fun _ : Fin 3 => ℕ) ℕ = ℕ",
+      "domain_inputs": {
+        "Y": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.037,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.WithGeneratedByTopology (fun _ : Fin 3 => ℕ) ℕ"
+    },
+    {
+      "id": "wgbt_reject_different_type",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.WithGeneratedByTopology (fun _ : Unit => ℕ) ℝ = ℕ)",
+      "domain_inputs": {
+        "Y": [
+          "ℝ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.WithGeneratedByTopology (fun _ : Unit => ℕ) ℝ",
+      "violated_property": "type synonym preserves the carrier Y, not the index space X i"
+    },
+    {
+      "id": "wgbt_reject_bool_ne_nat",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.WithGeneratedByTopology (fun _ : Unit => Bool) ℕ = Bool)",
+      "domain_inputs": {
+        "Y": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.WithGeneratedByTopology (fun _ : Unit => Bool) ℕ",
+      "violated_property": "the synonym equals Y (here ℕ), not X i (here Bool)"
+    },
+    {
+      "id": "wgbt_canonical_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type) (X : ι → Type) [inst : (i : ι) → TopologicalSpace (X i)] (Y : Type) [TopologicalSpace Y], Nonempty (VTask.WithGeneratedByTopology X Y ≃ Y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "wgbt_prod_index",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.WithGeneratedByTopology (fun _ : Bool => ℝ) ℝ = ℝ",
+      "domain_inputs": {
+        "Y": [
+          "ℝ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.041,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.WithGeneratedByTopology (fun _ : Bool => ℝ) ℝ"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Topology.WithGeneratedByTopology",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Topology.WithGeneratedByTopology-87f52000",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "task_id": "List.dProd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.dProd",
+  "signature": {
+    "name": "VTask.dProd",
+    "type": "{ι : Type u_1} -> {α : Type u_2} -> {A : ι → Type u_3} -> [AddMonoid ι] -> [GradedMonoid.GMonoid A] -> (l : List α) -> (fι : α → ι) -> (fA : (a : α) → A (fι a)) -> A (l.dProdIndex fι)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "fι",
+      "fA"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.dProd is a total function with no junk-value conventions; its behaviour on every input (including the empty list) is fully specified by the graded monoid axioms."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dprod_monoid_specialization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [inst1 : AddMonoid ι] [inst2 : Monoid ℕ] (l : List α) (fι : α → ι) (fA : α → ℕ), @VTask.dProd ι α (fun _ : ι => ℕ) inst1 _ l fι fA = (l.map fA).prod",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dProd_monoid"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dProd_monoid"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.dProd-0eb43394",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dprod_monoid_nat_list",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @VTask.dProd ℕ ℕ (fun _ : ℕ => ℕ) _ _ [1, 2, 3] (fun _ => 0) id = 6 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dProd-0eb43394",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dprod_monoid_empty_list",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @VTask.dProd ℕ ℕ (fun _ : ℕ => ℕ) _ _ ([] : List ℕ) (fun _ => 0) id = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dProd-0eb43394",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dprod_reject_wrong_nil_value",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (@VTask.dProd ℕ ℕ (fun _ : ℕ => ℕ) _ _ ([] : List ℕ) (fun _ => 0) (fun _ => 2) = 2)",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.dProd-0eb43394",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "@VTask.dProd ℕ ℕ (fun _ : ℕ => ℕ) _ _ ([] : List ℕ) (fun _ => 0) (fun _ => 2) = 2",
+      "violated_property": "empty dProd must equal GOne.one (= 1 for ℕ), not an arbitrary value like 2"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.dProd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.dProd-0eb43394",
+    "review_status": "unreviewed"
+  }
+}

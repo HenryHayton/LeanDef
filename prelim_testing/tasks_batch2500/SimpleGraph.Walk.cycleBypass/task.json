@@ -1,0 +1,251 @@
+{
+  "task_id": "SimpleGraph.Walk.cycleBypass",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cycleBypass",
+  "signature": {
+    "name": "VTask.cycleBypass",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {v : V} -> [DecidableEq V] -> G.Walk v v → G.Walk v v",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "Walk.nil input",
+        "statement": "VTask.cycleBypass Walk.nil = Walk.nil — the empty closed walk is mapped to itself.",
+        "note": "This is the base case of the definition; the function is total and returns the empty walk unchanged."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cycleBypass_length_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V] (w : G.Walk v v), (VTask.cycleBypass w).length ≤ w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_cycleBypass_le_length"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_cycleBypass_le_length"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.548,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleBypass_edges_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V] (w : G.Walk v v), (VTask.cycleBypass w).edges ⊆ w.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_cycleBypass_subset_edges"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_cycleBypass_subset_edges"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.341,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleBypass_trail_isCycle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V] (w : G.Walk v v), w ≠ SimpleGraph.Walk.nil → w.IsTrail → (VTask.cycleBypass w).IsCycle",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsTrail.isCycle_cycleBypass"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsTrail.isCycle_cycleBypass"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.924,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleBypass_circuit_isCycle",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V] (w : G.Walk v v), w.IsCircuit → (VTask.cycleBypass w).IsCycle",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsCircuit.isCycle_cycleBypass"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsCircuit.isCycle_cycleBypass"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.288,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleBypass_nil_length_not_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V], ¬ 0 < (VTask.cycleBypass (SimpleGraph.Walk.nil : G.Walk v v)).length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_cycleBypass_le_length"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_cycleBypass_le_length"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.18,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleBypass_edges_not_superset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {v : V} [DecidableEq V] (w : G.Walk v v), ¬ (w.edges ⊆ (VTask.cycleBypass w).edges) ∨ w.edges ⊆ (VTask.cycleBypass w).edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_cycleBypass_subset_edges"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_cycleBypass_subset_edges"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.52,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.cycleBypass",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.cycleBypass-d0a3af0e",
+    "review_status": "unreviewed"
+  }
+}

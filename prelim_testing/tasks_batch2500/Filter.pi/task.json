@@ -1,0 +1,418 @@
+{
+  "task_id": "Filter.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{ι : Type u_3} -> {α : ι → Type u_4} -> (f : (i : ι) → Filter (α i)) -> Filter ((i : ι) → α i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "empty index",
+        "statement": "When ι is empty, VTask.pi f equals the top filter ⊤ on the (one-element) product type, because an infimum over an empty family in the filter lattice is ⊤.",
+        "note": "Standard lattice convention: ⨅ over empty family = ⊤."
+      },
+      {
+        "point": "bottom factor",
+        "statement": "If any f i equals the bottom filter ⊥, then VTask.pi f equals ⊥, because taking the infimum with a comap of ⊥ yields ⊥.",
+        "note": "Follows from the definition as an infimum of comaps."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_mem_pi_basic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (I : Set ι) (s : (i : ι) → Set (α i)), I.Finite → (∀ i ∈ I, s i ∈ f i) → I.pi s ∈ VTask.pi f",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.209,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_mem_pi_iff_basic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (s : Set (∀ i, α i)), s ∈ VTask.pi f ↔ ∃ I : Set ι, I.Finite ∧ ∃ t : ∀ i, Set (α i), (∀ i, t i ∈ f i) ∧ I.pi t ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.516,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_nebot_of_nebot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) [∀ i, Filter.NeBot (f i)], Filter.NeBot (VTask.pi f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_neBot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_neBot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.649,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f g : (i : ι) → Filter (α i)), (∀ i, f i ≤ g i) → VTask.pi f ≤ VTask.pi g",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.764,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_bot_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (i : ι), f i = ⊥ → VTask.pi f = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.232,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_eventually_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (p : ∀ i, α i → Prop) (i : ι), (∀ᶠ x in f i, p i x) → ∀ᶠ x in VTask.pi f, p i (x i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Eventually.eval_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Eventually.eval_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.563,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_mem_pi_iff_nebot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) [∀ i, Filter.NeBot (f i)] (I : Set ι) (s : (i : ι) → Set (α i)), I.Finite → (I.pi s ∈ VTask.pi f ↔ ∀ i ∈ I, s i ∈ f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_mem_pi_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_mem_pi_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.484,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_inf_principal_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (s : (i : ι) → Set (α i)), VTask.pi f ⊓ Filter.principal (Set.pi Set.univ s) = ⊥ ↔ ∃ i, f i ⊓ Filter.principal (s i) = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_inf_principal_univ_pi_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_inf_principal_univ_pi_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.469,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_empty_index_eq_top",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.pi (fun i : PEmpty => (⊤ : Filter (PEmpty.elim i))) = ⊤)",
+      "domain_inputs": {
+        "f": [
+          "fun i : PEmpty => (⊤ : Filter (PEmpty.elim i))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.pi (fun i : PEmpty => (⊤ : Filter (PEmpty.elim i)))"
+    },
+    {
+      "id": "pi_bot_factor_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ Filter.NeBot (VTask.pi (fun i : Fin 1 => (⊥ : Filter ℕ)))",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 1 => (⊥ : Filter ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.077,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.pi (fun i : Fin 1 => (⊥ : Filter ℕ))",
+      "violated_property": "NeBot: when a factor filter is ⊥, the pi filter is ⊥ and hence not NeBot"
+    },
+    {
+      "id": "pi_le_comap_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (f : (i : ι) → Filter (α i)) (i : ι), VTask.pi f ≤ Filter.comap (fun x => x i) (f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.pi_le_pi"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.pi_le_pi"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.pi-7f9fd923",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.pi-7f9fd923",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "task_id": "Sigma.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{α₁ : Type u_2} -> {α₂ : Type u_3} -> {β₁ : α₁ → Type u_5} -> {β₂ : α₂ → Type u_6} -> (f₁ : α₁ → α₂) -> (f₂ : (a : α₁) → β₁ a → β₂ (f₁ a)) -> (x : Sigma β₁) -> Sigma β₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f₁",
+      "f₂",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.map is a total function with no junk-value or boundary conventions; it is well-defined for all inputs without any special edge-case behavior."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_concrete_succ_string",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (β₁ := fun _ : Nat => String) (β₂ := fun _ : Nat => String) Nat.succ (fun _ s => s ++ \"!\") ⟨2, \"hello\"⟩ = ⟨3, \"hello!\"⟩ := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "Nat.succ"
+        ],
+        "x": [
+          "⟨2, \"hello\"⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_concrete_id_double",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (β₁ := fun _ : Bool => Nat) (β₂ := fun _ : Bool => Nat) id (fun _ n => n * 2) ⟨true, 5⟩ = ⟨true, 10⟩ := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "id"
+        ],
+        "x": [
+          "⟨true, 5⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_fst_is_f1_applied",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (β₁ := fun _ : Nat => Nat) (β₂ := fun _ : Nat => Nat) (· + 10) (fun _ n => n) ⟨3, 7⟩).1 = 13 := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "(· + 10)"
+        ],
+        "x": [
+          "⟨3, 7⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_snd_is_f2_applied",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (β₁ := fun _ : Nat => Nat) (β₂ := fun _ : Nat => Nat) id (fun _ n => n + 1) ⟨0, 41⟩).2 = 42 := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "id"
+        ],
+        "x": [
+          "⟨0, 41⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_const_index_merges",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (β₁ := fun _ : Nat => Nat) (β₂ := fun _ : Nat => Nat) (fun _ => 0) (fun _ n => n) ⟨5, 99⟩).1 = 0 := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "(fun _ => 0)"
+        ],
+        "x": [
+          "⟨5, 99⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_injective_implies_fiber_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α₁ α₂ : Type) (β₁ : α₁ → Type) (β₂ : α₂ → Type) (f₁ : α₁ → α₂) (f₂ : (a : α₁) → β₁ a → β₂ (f₁ a)), Function.Injective (VTask.map f₁ f₂) → ∀ a : α₁, Function.Injective (f₂ a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.of_sigma_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.of_sigma_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.096,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_accept_in_set_range",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (β₁ := fun _ : Nat => Nat) (β₂ := fun _ : Nat => Nat) Nat.succ (fun _ n => n + 1) ⟨0, 0⟩) = ⟨1, 1⟩ := by decide",
+      "domain_inputs": {
+        "f₁": [
+          "Nat.succ"
+        ],
+        "x": [
+          "⟨0, 0⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Sigma.map-191b00cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.map (β₁ := fun _ : Nat => Nat) (β₂ := fun _ : Nat => Nat) Nat.succ (fun _ n => n + 1) ⟨0, 0⟩"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Sigma.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Sigma.map-191b00cd",
+    "review_status": "unreviewed"
+  }
+}

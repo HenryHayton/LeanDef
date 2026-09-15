@@ -1,0 +1,236 @@
+{
+  "task_id": "ONote.split",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.split",
+  "signature": {
+    "name": "VTask.split",
+    "type": "ONote → ONote × ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "o"
+    ],
+    "conventions": [
+      {
+        "point": "o = 0",
+        "statement": "VTask.split 0 = (0, 0): both the ω-divisible part and the remainder are zero.",
+        "note": "Base case of the structural recursion."
+      },
+      {
+        "point": "o = oadd 0 n a (leading exponent is zero)",
+        "statement": "VTask.split (oadd 0 n a) = (0, n): the ω-divisible part is 0 and the remainder is the coefficient n; the sub-term a is discarded.",
+        "note": "Any well-formed oadd with exponent 0 has a = 0, so discarding a is lossless for NF inputs."
+      },
+      {
+        "point": "o = oadd e n a with e ≠ 0 (leading exponent is nonzero)",
+        "statement": "VTask.split (oadd e n a) = (oadd e n a', m) where (a', m) = VTask.split a: the leading monomial is kept in the ω-divisible part and the remainder is recursively computed from the tail.",
+        "note": "This propagates the finite remainder from the lower-order tail of the Cantor normal form."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "split_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split 0 = (0, 0) := by decide",
+      "domain_inputs": {
+        "o": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_pure_nat_3",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split (ONote.oadd 0 3 0) = (0, 3) := by decide",
+      "domain_inputs": {
+        "o": [
+          "ONote.oadd 0 3 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_omega_times_2",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split (ONote.oadd 1 2 0) = (ONote.oadd 1 2 0, 0) := by decide",
+      "domain_inputs": {
+        "o": [
+          "ONote.oadd 1 2 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_omega_plus_5",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split (ONote.oadd 1 1 (ONote.oadd 0 5 0)) = (ONote.oadd 1 1 0, 5) := by decide",
+      "domain_inputs": {
+        "o": [
+          "ONote.oadd 1 1 (ONote.oadd 0 5 0)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_pure_nat_1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split (ONote.oadd 0 1 0) = (0, 1) := by decide",
+      "domain_inputs": {
+        "o": [
+          "ONote.oadd 0 1 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_omega_squared_plus_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.split (ONote.oadd 2 1 (ONote.oadd 0 7 0)) = (ONote.oadd 2 1 0, 7) := by decide",
+      "domain_inputs": {
+        "o": [
+          "ONote.oadd 2 1 (ONote.oadd 0 7 0)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "split_repr_sum_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o o' : ONote) (m : ℕ) [ONote.NF o], VTask.split o = (o', m) → ONote.repr o = ONote.repr o' + m",
+      "domain_inputs": {},
+      "anchors": [
+        "ONote.nf_repr_split"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ONote.nf_repr_split"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ONote.split-6c7bf499",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ONote.split",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ONote.split-6c7bf499",
+    "review_status": "unreviewed"
+  }
+}

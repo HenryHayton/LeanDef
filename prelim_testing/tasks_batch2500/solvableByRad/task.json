@@ -1,0 +1,421 @@
+{
+  "task_id": "solvableByRad",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.solvableByRad",
+  "signature": {
+    "name": "VTask.solvableByRad",
+    "type": "(F : Type u_1) -> (E : Type u_2) -> [Field F] -> [Field E] -> [Algebra F E] -> IntermediateField F E",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "F",
+      "E"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0 excluded from root-closure condition",
+        "statement": "The radical-closure property is only enforced for exponents `n ≠ 0`; the case `n = 0` is excluded because `x^0 = 1` for all `x` makes that condition degenerate.",
+        "note": "This matches the hypothesis `n ≠ 0` in theorems like `solvableByRad.rad_mem`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "solvableByRad_rad_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x : E) (n : ℕ) (hn : n ≠ 0), x ^ n ∈ VTask.solvableByRad F E → x ∈ VTask.solvableByRad F E",
+      "domain_inputs": {},
+      "anchors": [
+        "solvableByRad.rad_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "solvableByRad.rad_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.225,
+        "at": "authoring",
+        "script": "by simp only [_root_.solvableByRad] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.solvableByRad] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_algebraMap_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x : F), algebraMap F E x ∈ VTask.solvableByRad F E",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.algebraMap_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.algebraMap_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.499,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_isAlgebraic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E], (VTask.solvableByRad F E).IsAlgebraic",
+      "domain_inputs": {},
+      "anchors": [
+        "isAlgebraic_solvableByRad"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isAlgebraic_solvableByRad"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.53,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_le_algClosure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E], VTask.solvableByRad F E ≤ algebraicClosure F E",
+      "domain_inputs": {},
+      "anchors": [
+        "solvableByRad_le_algClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "solvableByRad_le_algClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.767,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_isIntegral",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x : E), x ∈ VTask.solvableByRad F E → IsIntegral F x",
+      "domain_inputs": {},
+      "anchors": [
+        "isIntegral_of_mem_solvableByRad"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isIntegral_of_mem_solvableByRad"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.628,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_isSolvable_gal_minpoly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x : E), x ∈ VTask.solvableByRad F E → IsSolvable (minpoly F x).Gal",
+      "domain_inputs": {},
+      "anchors": [
+        "isSolvable_gal_minpoly"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isSolvable_gal_minpoly"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.844,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_minimality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (s : IntermediateField F E), (∀ x : E, ∀ n : ℕ, n ≠ 0 → x ^ n ∈ s → x ∈ s) → VTask.solvableByRad F E ≤ s",
+      "domain_inputs": {},
+      "anchors": [
+        "solvableByRad_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "solvableByRad_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.472,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_add_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x y : E), x ∈ VTask.solvableByRad F E → y ∈ VTask.solvableByRad F E → x + y ∈ VTask.solvableByRad F E",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_mul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x y : E), x ∈ VTask.solvableByRad F E → y ∈ VTask.solvableByRad F E → x * y ∈ VTask.solvableByRad F E",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.mul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.mul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.278,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_is_intermediate_field",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E], (VTask.solvableByRad F E : Set E).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.one_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.one_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.138,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "solvableByRad_rad_mem_pow_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) (E : Type*) [Field F] [Field E] [Algebra F E] (x : E), x ^ 2 ∈ VTask.solvableByRad F E → x ∈ VTask.solvableByRad F E",
+      "domain_inputs": {},
+      "anchors": [
+        "solvableByRad.rad_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "solvableByRad.rad_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "solvableByRad-a63d63d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "solvableByRad",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "solvableByRad-a63d63d1",
+    "review_status": "unreviewed"
+  }
+}

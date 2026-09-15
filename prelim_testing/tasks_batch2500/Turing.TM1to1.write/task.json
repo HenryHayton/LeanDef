@@ -1,0 +1,219 @@
+{
+  "task_id": "Turing.TM1to1.write",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.write",
+  "signature": {
+    "name": "VTask.write",
+    "type": "{Γ : Type u_1} -> {Λ : Type u_2} -> {σ : Type u_3} -> List Bool → Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ → Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": "empty list",
+        "statement": "When the list `l` is `[]`, `VTask.write [] q` returns `q` unchanged, performing no writes or head movements.",
+        "note": "Base case of the structural recursion; no junk value, a mathematically natural choice."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "write_singleton_not_eq_cont",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} (b : Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), VTask.write [b] q ≠ q",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "write_supports_stmt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} [DecidableEq (Turing.TM1to1.Λ' Γ Λ σ)] (S : Finset (Turing.TM1to1.Λ' Γ Λ σ)) (l : List Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), Turing.TM1.SupportsStmt S (VTask.write l q) = Turing.TM1.SupportsStmt S q",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.87,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "write_nonempty_is_not_halt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} (b : Bool) (l : List Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), VTask.write (b :: l) q ≠ Turing.TM1.Stmt.halt",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.42,
+        "at": "authoring",
+        "script": "by simp [_root_.Turing.TM1to1.write] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Turing.TM1to1.write] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "write_two_neq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} (b1 b2 : Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), VTask.write [b1, b2] q ≠ VTask.write [b1] q",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "write_support_independent_of_list",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} [DecidableEq (Turing.TM1to1.Λ' Γ Λ σ)] (S : Finset (Turing.TM1to1.Λ' Γ Λ σ)) (l1 l2 : List Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), Turing.TM1.SupportsStmt S (VTask.write l1 q) = Turing.TM1.SupportsStmt S (VTask.write l2 q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "write_append_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type} {Λ : Type} {σ : Type} [DecidableEq (Turing.TM1to1.Λ' Γ Λ σ)] (S : Finset (Turing.TM1to1.Λ' Γ Λ σ)) (l1 l2 : List Bool) (q : Turing.TM1.Stmt Bool (Turing.TM1to1.Λ' Γ Λ σ) σ), Turing.TM1.SupportsStmt S (VTask.write (l1 ++ l2) q) = Turing.TM1.SupportsStmt S q",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1to1.supportsStmt_write"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.771,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.TM1to1.write",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.TM1to1.write-6d9316fe",
+    "review_status": "unreviewed"
+  }
+}

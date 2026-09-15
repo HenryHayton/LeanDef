@@ -1,0 +1,126 @@
+{
+  "task_id": "PowerSeries.Inv_divided_by_X_pow_order",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Inv_divided_by_X_pow_order",
+  "signature": {
+    "name": "VTask.Inv_divided_by_X_pow_order",
+    "type": "{k : Type u_2} -> [Field k] -> {f : PowerSeries k} -> (hf : f ≠ 0) -> PowerSeries k",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "f ≠ 0",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "order zero special case",
+        "statement": "When f has a non-zero constant term (order f = 0), Inv_divided_by_X_pow_order hf equals the standard power-series inverse of f.",
+        "note": "This is the degenerate case where no X-factors need to be stripped."
+      },
+      {
+        "point": "result is always a unit",
+        "statement": "The output of Inv_divided_by_X_pow_order hf always has a non-zero constant term and is hence a unit in k⟦X⟧, regardless of the order of f.",
+        "note": "This follows from invOfUnit always producing an invertible element."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inv_div_X_pow_order_of_unit_is_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) [Field k] (f : PowerSeries k) (hf : f ≠ 0) (hunit : IsUnit f), VTask.Inv_divided_by_X_pow_order hf = hunit.unit⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "IsUnit.inv_mul_cancel"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsUnit.inv_mul_cancel"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PowerSeries.Inv_divided_by_X_pow_order-f7963b74",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_div_X_pow_order_accept_unit",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "IsUnit (VTask.Inv_divided_by_X_pow_order (show (1 : PowerSeries ℚ) ≠ 0 from one_ne_zero))",
+      "domain_inputs": {
+        "f": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PowerSeries.Inv_divided_by_X_pow_order-f7963b74",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Inv_divided_by_X_pow_order (show (1 : PowerSeries ℚ) ≠ 0 from one_ne_zero)"
+    },
+    {
+      "id": "inv_div_X_pow_order_not_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) [Field k] (f : PowerSeries k) (hf : f ≠ 0), VTask.Inv_divided_by_X_pow_order hf ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "IsUnit.ne_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsUnit.ne_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PowerSeries.Inv_divided_by_X_pow_order-f7963b74",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PowerSeries.Inv_divided_by_X_pow_order",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PowerSeries.Inv_divided_by_X_pow_order-f7963b74",
+    "review_status": "unreviewed"
+  }
+}

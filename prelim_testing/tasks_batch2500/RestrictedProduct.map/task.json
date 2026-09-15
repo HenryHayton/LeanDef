@@ -1,0 +1,166 @@
+{
+  "task_id": "RestrictedProduct.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{ι : Type u_1} -> {𝓕 : Filter ι} -> {G : ι → Type u_9} -> {H : ι → Type u_10} -> {C : (i : ι) → Set (G i)} -> {D : (i : ι) → Set (H i)} -> (φ : (i : ι) → G i → H i) -> (hφ : ∀ᶠ (i : ι) in 𝓕, Set.MapsTo (φ i) (C i) (D i)) -> (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) -> RestrictedProduct (fun i => H i) (fun i => D i) 𝓕",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "φ",
+      "hφ",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined on all inputs; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_result_mem_restricted_product",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕), ∀ᶠ i in 𝓕, VTask.map φ hφ x i ∈ D i",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.map_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.map_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.082,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.map-c8f67da5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_continuous_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} [∀ i, TopologicalSpace (G i)] [∀ i, TopologicalSpace (H i)] (φ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hcont : ∀ i, Continuous (φ i)) (hopen_C : ∀ i, IsOpen (C i)) (hopen_D : ∀ i, IsOpen (D i)), Continuous (VTask.map φ hφ)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.mapAlong_continuous"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.mapAlong_continuous"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.map-c8f67da5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_ne_wrong_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ ψ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hψ : ∀ᶠ i in 𝓕, Set.MapsTo (ψ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) (j : ι), φ j (x j) = ψ j (x j) → VTask.map φ hφ x j = VTask.map ψ hψ x j → φ = ψ)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.map_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.map_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.map-c8f67da5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_ne_wrong_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {𝓕 : Filter ι} {G H : ι → Type*} {C : (i : ι) → Set (G i)} {D : (i : ι) → Set (H i)} (φ ψ : (i : ι) → G i → H i) (hφ : ∀ᶠ i in 𝓕, Set.MapsTo (φ i) (C i) (D i)) (hψ : ∀ᶠ i in 𝓕, Set.MapsTo (ψ i) (C i) (D i)) (x : RestrictedProduct (fun i => G i) (fun i => C i) 𝓕) (j : ι), (∃ i, φ i ≠ ψ i) → ¬ (∀ j, (VTask.map φ hφ x) j = (VTask.map ψ hψ x) j) → VTask.map φ hφ x ≠ VTask.map ψ hψ x",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.map_apply",
+        "DFunLike.ne_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.map_apply",
+        "DFunLike.ne_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 41.456,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.map-c8f67da5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RestrictedProduct.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RestrictedProduct.map-c8f67da5",
+    "review_status": "unreviewed"
+  }
+}

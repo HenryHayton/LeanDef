@@ -1,0 +1,306 @@
+{
+  "task_id": "Subgroup.lowerCentralSeries",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lowerCentralSeries",
+  "signature": {
+    "name": "VTask.lowerCentralSeries",
+    "type": "{G : Type u_1} -> [Group G] -> (S : Subgroup G) -> ℕ → Subgroup G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.lowerCentralSeries S 0 = S — the zeroth term is S itself, not the trivial subgroup.",
+        "note": "Base case of the recursive definition; the series is anchored at S."
+      },
+      {
+        "point": "n + 1",
+        "statement": "VTask.lowerCentralSeries S (n+1) = ⁅VTask.lowerCentralSeries S n, S⁆ — each successive term is the commutator subgroup of the previous term with S.",
+        "note": "The fixed right-hand factor is always S, distinguishing this from the derived series."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lcs_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (S : Subgroup G) (n : ℕ), VTask.lowerCentralSeries S (n + 1) ≤ VTask.lowerCentralSeries S n",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lcs_bot_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (n : ℕ), VTask.lowerCentralSeries (⊥ : Subgroup G) n = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_bot_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_bot_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.16,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lcs_not_zero_is_S_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.lowerCentralSeries (⊤ : Subgroup (FreeGroup (Fin 2))) 1 ≠ ⊤",
+      "domain_inputs": {
+        "S": [
+          "⊤"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.lowerCentralSeries (⊤ : Subgroup (FreeGroup (Fin 2))) 1",
+      "violated_property": "The first term equals S only if S is abelian; here S = ⊤ is non-abelian so the commutator subgroup is strictly smaller than ⊤"
+    },
+    {
+      "id": "lcs_le_of_le_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (S : Subgroup G) (m n : ℕ), m ≤ n → VTask.lowerCentralSeries S n ≤ VTask.lowerCentralSeries S m",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lcs_le_S",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (S : Subgroup G) (n : ℕ), VTask.lowerCentralSeries S n ≤ S",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_zero",
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_zero",
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_le_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.296,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lcs_normal_of_normal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (S : Subgroup G) [S.Normal] (n : ℕ), (VTask.lowerCentralSeries S n).Normal",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_normal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_normal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.281,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lcs_one_not_eq_zero_nonabelian",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.lowerCentralSeries (⊤ : Subgroup (DihedralGroup 3)) 1 ≠ VTask.lowerCentralSeries (⊤ : Subgroup (DihedralGroup 3)) 0",
+      "domain_inputs": {
+        "S": [
+          "⊤"
+        ],
+        "n": [
+          "1",
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.lowerCentralSeries (⊤ : Subgroup (DihedralGroup 3)) 1",
+      "violated_property": "The first term of the lower central series of a non-abelian group is strictly smaller than the zeroth term (the group itself)"
+    },
+    {
+      "id": "lcs_monotone_in_S",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] (S T : Subgroup G) (n : ℕ), S ≤ T → VTask.lowerCentralSeries S n ≤ VTask.lowerCentralSeries T n",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.lowerCentralSeries_succ",
+        "Subgroup.commutator_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subgroup.lowerCentralSeries",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subgroup.lowerCentralSeries-c4d71ba8",
+    "review_status": "unreviewed"
+  }
+}

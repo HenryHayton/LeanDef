@@ -1,0 +1,169 @@
+{
+  "task_id": "ConvexCone.Salient",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Salient",
+  "signature": {
+    "name": "VTask.Salient",
+    "type": "{R : Type u_2} -> {G : Type u_3} -> [Semiring R] -> [PartialOrder R] -> [AddCommGroup G] -> [SMul R G] -> (C : ConvexCone R G) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C"
+    ],
+    "conventions": [
+      {
+        "point": "zero vector excluded from quantifier",
+        "statement": "The saliency condition is only required for nonzero elements x; the zero vector is excluded via the guard x ≠ 0, so the zero vector never causes a cone to fail being salient.",
+        "note": "This matches the definition's universal quantifier which includes the hypothesis x ≠ 0."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "salient_trivial_cone_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Salient (ConvexCone.positive ℝ ℝ)",
+      "domain_inputs": {
+        "C": [
+          "ConvexCone.positive ℝ ℝ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.285,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ConvexCone.Salient-cdc155b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "ConvexCone.positive ℝ ℝ"
+    },
+    {
+      "id": "salient_zero_cone_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Salient (⊥ : ConvexCone ℝ ℝ)",
+      "domain_inputs": {
+        "C": [
+          "⊥"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.104,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ConvexCone.Salient-cdc155b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "⊥ : ConvexCone ℝ ℝ"
+    },
+    {
+      "id": "salient_top_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Salient (⊤ : ConvexCone ℝ ℝ)",
+      "domain_inputs": {
+        "C": [
+          "⊤"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.Salient-cdc155b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "⊤ : ConvexCone ℝ ℝ",
+      "violated_property": "∀ x ∈ C, x ≠ 0 → -x ∉ C"
+    },
+    {
+      "id": "salient_subtype_reject_full_space",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Salient (⊤ : ConvexCone ℝ (ℝ × ℝ))",
+      "domain_inputs": {
+        "C": [
+          "⊤"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.Salient-cdc155b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "⊤ : ConvexCone ℝ (ℝ × ℝ)",
+      "violated_property": "∀ x ∈ C, x ≠ 0 → -x ∉ C"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ConvexCone.Salient",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ConvexCone.Salient-cdc155b5",
+    "review_status": "unreviewed"
+  }
+}

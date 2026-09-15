@@ -1,0 +1,259 @@
+{
+  "task_id": "LinearRecurrence.IsSolution",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSolution",
+  "signature": {
+    "name": "VTask.IsSolution",
+    "type": "{R : Type u_1} -> [CommSemiring R] -> (E : LinearRecurrence R) -> (u : ℕ → R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "E",
+      "u"
+    ],
+    "conventions": [
+      {
+        "point": "order = 0",
+        "statement": "When E.order = 0, the recurrence sum is empty (equals zero), so VTask.IsSolution E u holds iff u is identically zero.",
+        "note": "Vacuous sum convention: an empty Finset sum over Fin 0 equals 0."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "is_sol_mkSol",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R) (init : Fin E.order → R), VTask.IsSolution E (E.mkSol init)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.is_sol_mkSol"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.is_sol_mkSol"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.995,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_geom_iff_root_charPoly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] (E : LinearRecurrence R) (q : R), VTask.IsSolution E (fun n => q ^ n) ↔ E.charPoly.IsRoot q",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.geom_sol_iff_root_charPoly"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.geom_sol_iff_root_charPoly"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.437,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_unique_from_init",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R) (u v : ℕ → R), VTask.IsSolution E u → VTask.IsSolution E v → (∀ i : Fin E.order, u i = v i) → u = v",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.eq_iff_eqOn_range_order"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.eq_iff_eqOn_range_order"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R) (u v : ℕ → R), VTask.IsSolution E u → VTask.IsSolution E v → VTask.IsSolution E (fun n => u n + v n)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.add_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.add_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R) (c : R) (u : ℕ → R), VTask.IsSolution E u → VTask.IsSolution E (fun n => c * u n)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.smul_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.smul_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_eq_mk_of_agrees_on_init",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R) (u : ℕ → R) (init : Fin E.order → R), VTask.IsSolution E u → (∀ i : Fin E.order, u i = init i) → ∀ n, u n = E.mkSol init n",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.eq_mk_of_is_sol_of_eq_init"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.eq_mk_of_is_sol_of_eq_init"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.668,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_sol_solutions_form_submodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (E : LinearRecurrence R), ∀ u v : ℕ → R, VTask.IsSolution E u → VTask.IsSolution E v → VTask.IsSolution E (fun n => u n + v n) ∧ VTask.IsSolution E (fun _ => (0 : R))",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.add_mem",
+        "Submodule.zero_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.is_sol_iff_mem_solSpace",
+        "Submodule.add_mem",
+        "Submodule.zero_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearRecurrence.IsSolution",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearRecurrence.IsSolution-7ec3a41f",
+    "review_status": "unreviewed"
+  }
+}

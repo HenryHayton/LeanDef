@@ -1,0 +1,127 @@
+{
+  "task_id": "SimpleGraph.Walk.concatRec",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.concatRec",
+  "signature": {
+    "name": "VTask.concatRec",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {motive : (u v : V) → G.Walk u v → Sort u_1} -> (Hnil : {u : V} → motive u u SimpleGraph.Walk.nil) -> (Hconcat : {u v w : V} → (p : G.Walk u v) → (h : G.Adj v w) → motive u v p → motive u w (p.concat h)) -> {u v : V} -> (p : G.Walk u v) -> motive u v p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.concatRec is a total recursor with no junk-value conventions; it is defined for all walks, all motives, and all vertex types without restriction."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "concatRec_nil_rule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {motive : (u v : V) → G.Walk u v → Sort*} (Hnil : {u : V} → motive u u SimpleGraph.Walk.nil) (Hconcat : {u v w : V} → (p : G.Walk u v) → (h : G.Adj v w) → motive u v p → motive u w (p.concat h)) (u : V), VTask.concatRec Hnil Hconcat (SimpleGraph.Walk.nil : G.Walk u u) = Hnil",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.concatRec_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.concatRec_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.concatRec-fefd0c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "concatRec_concat_rule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {motive : (u v : V) → G.Walk u v → Sort*} (Hnil : {u : V} → motive u u SimpleGraph.Walk.nil) (Hconcat : {u v w : V} → (p : G.Walk u v) → (h : G.Adj v w) → motive u v p → motive u w (p.concat h)) {u v w : V} (p : G.Walk u v) (h : G.Adj v w), VTask.concatRec Hnil Hconcat (p.concat h) = Hconcat p h (VTask.concatRec Hnil Hconcat p)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.concatRec_concat"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.concatRec_concat"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.666,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.concatRec-fefd0c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "concatRec_does_not_call_hconcat_on_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {motive : (u v : V) → G.Walk u v → Sort*} (Hnil : {u : V} → motive u u SimpleGraph.Walk.nil) (Hconcat Hconcat' : {u v w : V} → (p : G.Walk u v) → (h : G.Adj v w) → motive u v p → motive u w (p.concat h)) (u : V), VTask.concatRec Hnil Hconcat (SimpleGraph.Walk.nil : G.Walk u u) = VTask.concatRec Hnil Hconcat' (SimpleGraph.Walk.nil : G.Walk u u)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.concatRec_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.concatRec_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.concatRec-fefd0c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.concatRec",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.concatRec-fefd0c8c",
+    "review_status": "unreviewed"
+  }
+}

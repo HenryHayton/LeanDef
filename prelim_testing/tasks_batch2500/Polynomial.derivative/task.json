@@ -1,0 +1,244 @@
+{
+  "task_id": "Polynomial.derivative",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.derivative",
+  "signature": {
+    "name": "VTask.derivative",
+    "type": "{R : Type u} -> [Semiring R] -> Polynomial R →ₗ[R] Polynomial R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "constant_term",
+        "statement": "The constant term (degree-0 coefficient) contributes 0 to the derivative because it is multiplied by the exponent 0; no junk value arises from the natural-number underflow 0 - 1.",
+        "note": "The subtraction 0 - 1 in ℕ evaluates to 0, but the coefficient factor n = 0 forces the whole term to vanish."
+      },
+      {
+        "point": "characteristic_p_kernel",
+        "statement": "Over a semiring of characteristic p > 0, the formal derivative of X^p is 0, since the coefficient p becomes 0 in R; this is not a special junk convention but the correct algebraic value.",
+        "note": "Polynomials of the form f(X^p) lie entirely in the kernel of the formal derivative in characteristic p."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "deriv_is_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Polynomial ℤ), VTask.derivative (p + q) = VTask.derivative p + VTask.derivative q",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.31,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "deriv_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℤ) (p : Polynomial ℤ), VTask.derivative (r • p) = r • VTask.derivative p",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.293,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "deriv_product_rule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Polynomial ℤ), VTask.derivative (p * q) = VTask.derivative p * q + p * VTask.derivative q",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.derivative_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.derivative_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.266,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "deriv_iterate_map_commute",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Polynomial ℤ) (f : ℤ →+* ℚ) (k : ℕ), (VTask.derivative^[k] (p.map f)) = ((VTask.derivative^[k] p).map f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.iterate_derivative_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.iterate_derivative_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.474,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "deriv_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.derivative (0 : Polynomial ℤ) = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "derivative_const_ne_X",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.derivative (Polynomial.X : Polynomial ℤ) = Polynomial.X)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.derivative_X"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.derivative_X"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.derivative-b504cbaf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.derivative",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.derivative-b504cbaf",
+    "review_status": "unreviewed"
+  }
+}

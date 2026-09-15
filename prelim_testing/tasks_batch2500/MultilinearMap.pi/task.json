@@ -1,0 +1,219 @@
+{
+  "task_id": "MultilinearMap.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{R : Type uR} -> {ι : Type uι} -> {M₁ : ι → Type v₁} -> [Semiring R] -> [(i : ι) → AddCommMonoid (M₁ i)] -> [(i : ι) → Module R (M₁ i)] -> {ι' : Type u_1} -> {M' : ι' → Type u_2} -> [(i : ι') → AddCommMonoid (M' i)] -> [(i : ι') → Module R (M' i)] -> (f : (i : ι') → MultilinearMap R M₁ (M' i)) -> MultilinearMap R M₁ ((i : ι') → M' i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and imposes no junk-value conventions; it is well-defined for every valid family of multilinear maps, including the degenerate cases of empty index types."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_ext_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) (M₁ : ι → Type*) (ι' : Type*) (M' : ι' → Type*) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f g : ∀ i : ι', MultilinearMap R M₁ (M' i)), VTask.pi f = VTask.pi g ↔ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_is_multilinear",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) (M₁ : ι → Type*) (ι' : Type*) (M' : ι' → Type*) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f : ∀ i : ι', MultilinearMap R M₁ (M' i)), ∃ g : MultilinearMap R M₁ (∀ i : ι', M' i), g = VTask.pi f",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.pi_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.pi_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.687,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_empty_codomain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) (M₁ : ι → Type*) (M' : Empty → Type*) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f : ∀ i : Empty, MultilinearMap R M₁ (M' i)) (m : ∀ i, M₁ i), (VTask.pi f) m = (fun i => Empty.elim i)",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.pi_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.pi_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.411,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_inj_iff_family_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) (M₁ : ι → Type*) (ι' : Type*) (M' : ι' → Type*) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f g : ∀ i : ι', MultilinearMap R M₁ (M' i)), (∀ j : ι', f j = g j) → VTask.pi f = VTask.pi g",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 21.535,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_not_eq_single_component_mismatch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) (M₁ : ι → Type*) (ι' : Type*) (M' : ι' → Type*) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f g : ∀ i : ι', MultilinearMap R M₁ (M' i)), VTask.pi f ≠ VTask.pi g → ∃ j : ι', f j ≠ g j",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.pi_ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_ne_wrong_proj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type) (ι' : Type) (M₁ : Fin 1 → Type) (M' : ι' → Type) [Semiring R] [∀ i, AddCommMonoid (M₁ i)] [∀ i, Module R (M₁ i)] [∀ i, AddCommMonoid (M' i)] [∀ i, Module R (M' i)] (f g : (i : ι') → MultilinearMap R M₁ (M' i)), (∀ i, f i ≠ g i) → VTask.pi f ≠ VTask.pi g",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.pi-6a7e6890",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MultilinearMap.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MultilinearMap.pi-6a7e6890",
+    "review_status": "unreviewed"
+  }
+}

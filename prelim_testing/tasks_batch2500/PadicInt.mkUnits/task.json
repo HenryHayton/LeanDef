@@ -1,0 +1,258 @@
+{
+  "task_id": "PadicInt.mkUnits",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mkUnits",
+  "signature": {
+    "name": "VTask.mkUnits",
+    "type": "{p : ℕ} -> [hp : Fact (Nat.Prime p)] -> {u : ℚ_[p]} -> (h : ‖u‖ = 1) -> ℤ_[p]ˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "‖u‖ = 1",
+    "variables": [
+      "u"
+    ],
+    "conventions": [
+      {
+        "point": "coercion round-trip",
+        "statement": "For any `u : ℚ_[p]` with `h : ‖u‖ = 1`, the coercion of `(VTask.mkUnits h : ℤ_[p])` back to `ℚ_[p]` recovers `u` exactly.",
+        "note": "Established by the theorem mkUnits_eq."
+      },
+      {
+        "point": "unit value",
+        "statement": "The `.val` field of `VTask.mkUnits h` is the `ℤ_[p]`-element `⟨u, h.le⟩`, i.e., `u` together with the proof that its norm is at most 1.",
+        "note": "Established by the lemma val_mkUnits."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mkUnits_norm_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), ‖(VTask.mkUnits h).val‖ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.val_mkUnits",
+        "PadicInt.norm_eq_padic_norm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.val_mkUnits",
+        "PadicInt.norm_eq_padic_norm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.17,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkUnits_isUnit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), IsUnit (VTask.mkUnits h).val",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.isUnit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.isUnit"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkUnits_inv_norm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), ‖((VTask.mkUnits h)⁻¹ : ℤ_[p]ˣ).val‖ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.norm_eq_padic_norm",
+        "Units.val_inv_eq_inv_val"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.norm_eq_padic_norm",
+        "Units.val_inv_eq_inv_val"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.281,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkUnits_mul_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), (VTask.mkUnits h) * (VTask.mkUnits h)⁻¹ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.mul_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.mul_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.21,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkUnits_coe_in_integers",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), ‖(VTask.mkUnits h).val‖ ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.norm_le_one",
+        "PadicInt.val_mkUnits"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.norm_le_one",
+        "PadicInt.val_mkUnits"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.791,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkUnits_norm_one_implies_unit_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [hp : Fact (Nat.Prime p)] (u : ℚ_[p]) (h : ‖u‖ = 1), ‖(VTask.mkUnits h).val‖ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicInt.val_mkUnits",
+        "PadicInt.norm_eq_padic_norm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicInt.val_mkUnits",
+        "PadicInt.norm_eq_padic_norm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.154,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicInt.mkUnits-93d5a641",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PadicInt.mkUnits",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PadicInt.mkUnits-93d5a641",
+    "review_status": "unreviewed"
+  }
+}

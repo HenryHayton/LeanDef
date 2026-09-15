@@ -1,0 +1,284 @@
+{
+  "task_id": "Quotient.finLiftOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.finLiftOn",
+  "signature": {
+    "name": "VTask.finLiftOn",
+    "type": "{ι : Type u_1} -> [Fintype ι] -> [DecidableEq ι] -> {α : ι → Sort u_2} -> {S : (i : ι) → Setoid (α i)} -> {β : Sort u_3} -> (q : (i : ι) → Quotient (S i)) -> (f : ((i : ι) → α i) → β) -> (h : ∀ (a b : (i : ι) → α i), (∀ (i : ι), a i ≈ b i) → f a = f b) -> β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "q",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total; all inputs are fully typed (including the proof h), and there are no junk-value conventions — any family of quotient elements and any well-defined function are valid inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "finLiftOn_mk_basic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (a : ∀ i, α i) (f : (∀ i, α i) → β) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), VTask.finLiftOn (fun i => ⟦a i⟧) f h = f a",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.635,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_empty_case",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] [e : IsEmpty ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (q : ∀ i, Quotient (S i)) (f : (∀ i, α i) → β) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), VTask.finLiftOn q f h = f e.elim",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.733,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_well_defined",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (a b : ∀ i, α i) (f : (∀ i, α i) → β) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), (∀ i, a i ≈ b i) → VTask.finLiftOn (fun i => ⟦a i⟧) f h = VTask.finLiftOn (fun i => ⟦b i⟧) f h",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 20.824,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_const_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (q : ∀ i, Quotient (S i)) (c : β), VTask.finLiftOn q (fun _ => c) (fun _ _ _ => rfl) = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_mk",
+        "Quotient.finChoice"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_mk",
+        "Quotient.finChoice"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_mk_equals_direct_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (a : ∀ i, α i) (g : β) (f : (∀ i, α i) → β) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), f a = g → VTask.finLiftOn (fun i => ⟦a i⟧) f h = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.669,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_empty_unique_result",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] [e : IsEmpty ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β : Sort*} (q1 q2 : ∀ i, Quotient (S i)) (f : (∀ i, α i) → β) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), VTask.finLiftOn q1 f h = VTask.finLiftOn q2 f h",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 21.899,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finLiftOn_mk_compose",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Fintype ι] [DecidableEq ι] {α : ι → Sort*} {S : (i : ι) → Setoid (α i)} {β γ : Sort*} (a : ∀ i, α i) (f : (∀ i, α i) → β) (g : β → γ) (h : ∀ a b : ∀ i, α i, (∀ i, a i ≈ b i) → f a = f b), g (VTask.finLiftOn (fun i => ⟦a i⟧) f h) = g (f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.finLiftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.756,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Quotient.finLiftOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Quotient.finLiftOn-b78d80f7",
+    "review_status": "unreviewed"
+  }
+}

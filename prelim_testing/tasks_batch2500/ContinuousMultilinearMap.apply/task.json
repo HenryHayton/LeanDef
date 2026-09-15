@@ -1,0 +1,165 @@
+{
+  "task_id": "ContinuousMultilinearMap.apply",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.apply",
+  "signature": {
+    "name": "VTask.apply",
+    "type": "(𝕜 : Type u_1) -> {ι : Type u_2} -> (E : ι → Type u_3) -> (F : Type u_4) -> [NormedField 𝕜] -> [(i : ι) → TopologicalSpace (E i)] -> [(i : ι) → AddCommGroup (E i)] -> [(i : ι) → Module 𝕜 (E i)] -> [AddCommGroup F] -> [Module 𝕜 F] -> [TopologicalSpace F] -> [IsTopologicalAddGroup F] -> [∀ (i : ι), ContinuousSMul 𝕜 (E i)] -> [ContinuousConstSMul 𝕜 F] -> (m : (i : ι) → E i) -> ContinuousMultilinearMap 𝕜 E F →L[𝕜] F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total and well-defined for all inputs satisfying the stated typeclass hypotheses; no junk-value or edge-case conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "apply_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {ι : Type*} (E : ι → Type*) (F : Type*) [NormedField 𝕜] [∀ i, TopologicalSpace (E i)] [∀ i, AddCommGroup (E i)] [∀ i, Module 𝕜 (E i)] [AddCommGroup F] [Module 𝕜 F] [TopologicalSpace F] [IsTopologicalAddGroup F] [∀ i, ContinuousSMul 𝕜 (E i)] [ContinuousConstSMul 𝕜 F] (m : ∀ i, E i), Continuous (VTask.apply 𝕜 E F m)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.164,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.apply-f631e237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "apply_not_fixing_map_varying_point",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {ι : Type*} (E : ι → Type*) (F : Type*) [NormedField 𝕜] [∀ i, TopologicalSpace (E i)] [∀ i, AddCommGroup (E i)] [∀ i, Module 𝕜 (E i)] [AddCommGroup F] [Module 𝕜 F] [TopologicalSpace F] [IsTopologicalAddGroup F] [∀ i, ContinuousSMul 𝕜 (E i)] [ContinuousConstSMul 𝕜 F] (m₁ m₂ : ∀ i, E i) (c : ContinuousMultilinearMap 𝕜 E F), VTask.apply 𝕜 E F m₁ c = c m₁ ∧ VTask.apply 𝕜 E F m₂ c = c m₂",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.623,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.apply-f631e237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "apply_not_zero_at_nonzero_clm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (m : Fin 1 → ℝ), VTask.apply ℝ (fun _ : Fin 1 => ℝ) ℝ m = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.apply-f631e237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "apply_ne_const_zero_clm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (m : Fin 1 → ℝ), VTask.apply ℝ (fun _ : Fin 1 => ℝ) ℝ m ≠ (0 : ContinuousMultilinearMap ℝ (fun _ : Fin 1 => ℝ) ℝ →L[ℝ] ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.apply-f631e237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousMultilinearMap.apply",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousMultilinearMap.apply-f631e237",
+    "review_status": "unreviewed"
+  }
+}

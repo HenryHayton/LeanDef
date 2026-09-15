@@ -1,0 +1,203 @@
+{
+  "task_id": "DiscreteConvolution.ConvolutionExists",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ConvolutionExists",
+  "signature": {
+    "name": "VTask.ConvolutionExists",
+    "type": "{M : Type u_1} -> {S : Type u_2} -> {E : Type u_3} -> {E' : Type u_4} -> {F : Type u_6} -> [Monoid M] -> [CommSemiring S] -> [AddCommMonoid E] -> [AddCommMonoid E'] -> [AddCommMonoid F] -> [Module S E] -> [Module S E'] -> [Module S F] -> [TopologicalSpace F] -> (L : E →ₗ[S] E' →ₗ[S] F) -> (f : M → E) -> (g : M → E') -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a Prop with no junk-value conventions; it simply asserts that all relevant infinite sums converge, with no special fallback values needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "conv_exists_add_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {S : Type*} {E : Type*} {E' : Type*} {F : Type*} [Monoid M] [CommSemiring S] [AddCommMonoid E] [AddCommMonoid E'] [AddCommMonoid F] [Module S E] [Module S E'] [Module S F] [TopologicalSpace F] [ContinuousAdd F] (L : E →ₗ[S] E' →ₗ[S] F) (f f' : M → E) (g : M → E'), VTask.ConvolutionExists L f g → VTask.ConvolutionExists L f' g → VTask.ConvolutionExists L (f + f') g",
+      "domain_inputs": {},
+      "anchors": [
+        "MeasureTheory.ConvolutionExists.add_distrib"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MeasureTheory.ConvolutionExists.add_distrib"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conv_exists_add_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {S : Type*} {E : Type*} {E' : Type*} {F : Type*} [Monoid M] [CommSemiring S] [AddCommMonoid E] [AddCommMonoid E'] [AddCommMonoid F] [Module S E] [Module S E'] [Module S F] [TopologicalSpace F] [ContinuousAdd F] (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) (g g' : M → E'), VTask.ConvolutionExists L f g → VTask.ConvolutionExists L f g' → VTask.ConvolutionExists L f (g + g')",
+      "domain_inputs": {},
+      "anchors": [
+        "MeasureTheory.ConvolutionExists.distrib_add"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MeasureTheory.ConvolutionExists.distrib_add"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conv_exists_reject_not_pointwise_sufficient",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {M : Type*} {S : Type*} {E : Type*} {E' : Type*} {F : Type*} [Monoid M] [CommSemiring S] [AddCommMonoid E] [AddCommMonoid E'] [AddCommMonoid F] [Module S E] [Module S E'] [Module S F] [TopologicalSpace F] (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E) (g : M → E') (x₀ : M), MeasureTheory.ConvolutionExistsAt L f g x₀ → VTask.ConvolutionExists L f g)",
+      "domain_inputs": {
+        "f": [
+          "f"
+        ],
+        "g": [
+          "g"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "False",
+      "violated_property": "VTask.ConvolutionExists requires convergence at ALL points x : M, not just at one"
+    },
+    {
+      "id": "conv_exists_zero_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {S : Type*} {E : Type*} {E' : Type*} {F : Type*} [Monoid M] [CommSemiring S] [AddCommMonoid E] [AddCommMonoid E'] [AddCommMonoid F] [Module S E] [Module S E'] [Module S F] [TopologicalSpace F] (L : E →ₗ[S] E' →ₗ[S] F) (g : M → E'), VTask.ConvolutionExists L 0 g",
+      "domain_inputs": {},
+      "anchors": [
+        "tsum_zero",
+        "DiscreteConvolution.ConvolutionExistsAt.add_distrib"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "tsum_zero",
+        "DiscreteConvolution.ConvolutionExistsAt.add_distrib"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conv_exists_zero_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {S : Type*} {E : Type*} {E' : Type*} {F : Type*} [Monoid M] [CommSemiring S] [AddCommMonoid E] [AddCommMonoid E'] [AddCommMonoid F] [Module S E] [Module S E'] [Module S F] [TopologicalSpace F] (L : E →ₗ[S] E' →ₗ[S] F) (f : M → E), VTask.ConvolutionExists L f 0",
+      "domain_inputs": {},
+      "anchors": [
+        "tsum_zero",
+        "DiscreteConvolution.ConvolutionExistsAt.distrib_add"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "tsum_zero",
+        "DiscreteConvolution.ConvolutionExistsAt.distrib_add"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conv_exists_reject_infinite_diverge",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.ConvolutionExists (LinearMap.mul ℝ ℝ) (fun _ : ℕ => (1 : ℝ)) (fun _ : ℕ => (1 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.ConvolutionExists (LinearMap.mul ℝ ℝ) (fun _ : ℕ => (1 : ℝ)) (fun _ : ℕ => (1 : ℝ))",
+      "violated_property": "summability of the convolution sum at every point — the sum ∑ y, 1 * 1 over all ℕ diverges"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DiscreteConvolution.ConvolutionExists",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DiscreteConvolution.ConvolutionExists-5a75c17b",
+    "review_status": "unreviewed"
+  }
+}

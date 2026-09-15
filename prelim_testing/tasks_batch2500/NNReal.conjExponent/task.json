@@ -1,0 +1,174 @@
+{
+  "task_id": "NNReal.conjExponent",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.conjExponent",
+  "signature": {
+    "name": "VTask.conjExponent",
+    "type": "(p : NNReal) -> NNReal",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p = 0",
+        "statement": "VTask.conjExponent 0 = 0, because NNReal subtraction truncates 0 - 1 to 0, making the denominator 0, and division by zero in NNReal yields 0.",
+        "note": "Junk value; does not satisfy the Hölder relation."
+      },
+      {
+        "point": "p = 1",
+        "statement": "VTask.conjExponent 1 = 0, because 1 - 1 = 0 in NNReal, so the denominator is 0 and the result is 0 by the convention that division by zero yields 0.",
+        "note": "Junk value; the true Hölder conjugate of 1 would be +∞, which is not in NNReal."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "conjExponent_holder_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : NNReal, 1 < p → NNReal.HolderConjugate p (VTask.conjExponent p)",
+      "domain_inputs": {},
+      "anchors": [
+        "NNReal.HolderConjugate.conjExponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNReal.HolderConjugate.conjExponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.144,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNReal.conjExponent-c636225d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conjExponent_conj_of_conj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : NNReal, 1 < p → VTask.conjExponent (VTask.conjExponent p) = p",
+      "domain_inputs": {},
+      "anchors": [
+        "NNReal.HolderConjugate.conjExponent",
+        "NNReal.HolderConjugate.symm",
+        "NNReal.holderConjugate_iff_eq_conjExponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNReal.HolderConjugate.conjExponent",
+        "NNReal.HolderConjugate.symm",
+        "NNReal.holderConjugate_iff_eq_conjExponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "NNReal.conjExponent-c636225d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conjExponent_two_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.conjExponent 2 = 2",
+      "domain_inputs": {},
+      "anchors": [
+        "NNReal.holderConjugate_iff_eq_conjExponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNReal.holderConjugate_iff_eq_conjExponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "NNReal.conjExponent-c636225d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "conjExponent_ne_zero_at_p0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.conjExponent 0 ≠ 2",
+      "domain_inputs": {},
+      "anchors": [
+        "NNReal.HolderConjugate.conjExponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNReal.HolderConjugate.conjExponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.15,
+        "at": "authoring",
+        "script": "by simp [_root_.NNReal.conjExponent] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.NNReal.conjExponent] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNReal.conjExponent-c636225d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "NNReal.conjExponent",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "NNReal.conjExponent-c636225d",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,540 @@
+{
+  "task_id": "OpenPartialHomeomorph.univBall",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.univBall",
+  "signature": {
+    "name": "VTask.univBall",
+    "type": "{E : Type u_1} -> [SeminormedAddCommGroup E] -> [NormedSpace ℝ E] -> {P : Type u_2} -> [PseudoMetricSpace P] -> [NormedAddTorsor E P] -> (c : P) -> (r : ℝ) -> OpenPartialHomeomorph E P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": "r > 0",
+        "statement": "When r > 0, the source is Set.univ, the target is Metric.ball c r, and the map is a smooth diffeomorphism from all of E onto that open ball.",
+        "note": "Primary intended use case."
+      },
+      {
+        "point": "r ≤ 0",
+        "statement": "When r ≤ 0, the map is defined as the isometric translation by c (the torsor vadd action), with source Set.univ but target not restricted to any ball; no compression occurs.",
+        "note": "Junk/degenerate value convention: the definition is total and always returns a well-typed OpenPartialHomeomorph, but the ball-targeting property is lost."
+      },
+      {
+        "point": "r = 0 or r < 0, value at 0",
+        "statement": "In all cases (including r ≤ 0), the map sends 0 to c.",
+        "note": "Universally guaranteed by univBall_apply_zero."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "univBall_source_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ), (VTask.univBall c r).source = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.univBall_source"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.univBall_source"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.119,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_apply_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ), VTask.univBall c r 0 = c",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.univBall_apply_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.univBall_apply_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.111,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_symm_apply_center",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ), (VTask.univBall c r).symm c = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.univBall_symm_apply_center"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.univBall_symm_apply_center"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.122,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ), Continuous (VTask.univBall c r)",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.continuous_univBall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.continuous_univBall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.174,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_target_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) {r : ℝ}, 0 < r → (VTask.univBall c r).target = Metric.ball c r",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.univBall_target"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.univBall_target"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.29,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_ball_subset_target",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ), Metric.ball c r ⊆ (VTask.univBall c r).target",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.ball_subset_univBall_target"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.ball_subset_univBall_target"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_contDiff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ) (n : ℕ∞), ContDiff ℝ n (VTask.univBall c r)",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.contDiff_univBall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.contDiff_univBall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.25,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_symm_contDiffOn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (r : ℝ) (n : ℕ∞), ContDiffOn ℝ n (VTask.univBall c r).symm (Metric.ball c r)",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.contDiffOn_univBall_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.contDiffOn_univBall_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "univBall_source_mem_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.univBall (0 : ℝ) 1).source = Set.univ",
+      "domain_inputs": {
+        "c": [
+          "0"
+        ],
+        "r": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.077,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.univBall (0 : ℝ) 1).source"
+    },
+    {
+      "id": "univBall_target_mem_accept_pos",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.univBall (0 : ℝ) 2).target = Metric.ball (0 : ℝ) 2",
+      "domain_inputs": {
+        "c": [
+          "0"
+        ],
+        "r": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.univBall (0 : ℝ) 2).target"
+    },
+    {
+      "id": "univBall_target_nonpos_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.univBall (0 : ℝ) 0).target = Metric.ball (0 : ℝ) 0)",
+      "domain_inputs": {
+        "c": [
+          "0"
+        ],
+        "r": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.165,
+        "at": "authoring",
+        "script": "by simp [_root_.OpenPartialHomeomorph.univBall] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.OpenPartialHomeomorph.univBall] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.univBall (0 : ℝ) 0).target",
+      "violated_property": "target equals Metric.ball c r only when r > 0; at r = 0 the ball is empty but the target is not"
+    },
+    {
+      "id": "univBall_target_neg_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.univBall (0 : ℝ) (-1)).target = Metric.ball (0 : ℝ) (-1))",
+      "domain_inputs": {
+        "c": [
+          "0"
+        ],
+        "r": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.univBall (0 : ℝ) (-1)).target",
+      "violated_property": "target equals Metric.ball c r only when r > 0; at r < 0 the map is a pure translation so the target is not constrained to any ball"
+    },
+    {
+      "id": "univBall_apply_zero_specific",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.univBall (3 : ℝ) 5 0 = 3",
+      "domain_inputs": {
+        "c": [
+          "3"
+        ],
+        "r": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.087,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.univBall (3 : ℝ) 5 0"
+    },
+    {
+      "id": "univBall_center_in_target",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) {r : ℝ}, 0 < r → c ∈ (VTask.univBall c r).target",
+      "domain_inputs": {},
+      "anchors": [
+        "OpenPartialHomeomorph.univBall_target",
+        "Metric.mem_ball_self"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OpenPartialHomeomorph.univBall_target",
+        "Metric.mem_ball_self"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "OpenPartialHomeomorph.univBall",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "OpenPartialHomeomorph.univBall-0af74e9f",
+    "review_status": "unreviewed"
+  }
+}

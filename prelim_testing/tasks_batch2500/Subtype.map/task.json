@@ -1,0 +1,169 @@
+{
+  "task_id": "Subtype.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{α : Sort u_1} -> {β : Sort u_2} -> {p : α → Prop} -> {q : β → Prop} -> (f : α → β) -> (h : ∀ (a : α), p a → q (f a)) -> Subtype p → Subtype q",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.map is a total function requiring no junk-value conventions; every valid combination of f and h yields a well-defined function on subtypes."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_injective_of_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Sort*} {p : α → Prop} {q : β → Prop} (f : α → β) (h : ∀ a, p a → q (f a)), Function.Injective f → Function.Injective (VTask.map f h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subtype.map_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subtype.map_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.975,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Subtype.map-b4eae161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_involutive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Sort*} {p : α → Prop} (f : α → α) (h : ∀ a, p a → p (f a)), Function.Involutive f → Function.Involutive (VTask.map f h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subtype.map_involutive"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subtype.map_involutive"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.415,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Subtype.map-b4eae161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_range_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {p : α → Prop} {q : β → Prop} (f : α → β) (h : ∀ a, p a → q (f a)), Set.range (VTask.map f h) = (Subtype.val) ⁻¹' (f '' {x | p x})",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_subtype_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_subtype_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.709,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subtype.map-b4eae161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_reject_id_val_ne",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (fun n : ℕ => n * n) (fun a (h : 0 < a) => Nat.mul_pos h h) ⟨3, by norm_num⟩ ≠ ⟨3, by norm_num⟩ := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n * n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subtype.map-b4eae161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.map (fun n : ℕ => n * n) (fun a h => Nat.mul_pos h h) ⟨3, by norm_num⟩",
+      "violated_property": "The output value must be f applied to the input, not an arbitrary element"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subtype.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subtype.map-b4eae161",
+    "review_status": "unreviewed"
+  }
+}

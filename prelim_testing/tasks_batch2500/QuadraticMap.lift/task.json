@@ -1,0 +1,171 @@
+{
+  "task_id": "QuadraticMap.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> {P : Type u_4} -> [AddCommGroup M] -> [AddCommGroup P] -> [CommRing R] -> [Module R M] -> [Module R P] -> (Q : QuadraticMap R M P) -> (N : Submodule R M) -> (hN : N ≤ Q.radical) -> QuadraticMap R (M ⧸ N) P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "N ≤ Q.radical",
+    "variables": [
+      "Q",
+      "N",
+      "hN"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is a total construction on well-typed inputs satisfying the stated inequality; there are no junk-value conventions or degenerate-input behaviors to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_smul_compatible",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {P : Type*} [AddCommGroup M] [AddCommGroup P] [CommRing R] [Module R M] [Module R P] (Q : QuadraticMap R M P) (N : Submodule R M) (hN : N ≤ Q.radical) (r : R) (m : M), VTask.lift Q N hN (r • Submodule.Quotient.mk m) = r ^ 2 • Q m",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.lift_mk",
+        "QuadraticMap.map_smul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.lift_mk",
+        "QuadraticMap.map_smul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.lift-cee543e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {P : Type*} [AddCommGroup M] [AddCommGroup P] [CommRing R] [Module R M] [Module R P] (Q : QuadraticMap R M P) (N : Submodule R M) (hN : N ≤ Q.radical), VTask.lift Q N hN 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.lift_mk",
+        "QuadraticMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.lift_mk",
+        "QuadraticMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.831,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.lift-cee543e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_not_eq_unrelated",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R : Type*} {M : Type*} {P : Type*} [AddCommGroup M] [AddCommGroup P] [CommRing R] [Module R M] [Module R P] (Q : QuadraticMap R M P) (N : Submodule R M) (hN : N ≤ Q.radical) (m : M), VTask.lift Q N hN (Submodule.Quotient.mk m) = (0 : P)",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.lift_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.lift_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.lift-cee543e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_reject_eval_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {P : Type*} [AddCommGroup M] [AddCommGroup P] [CommRing R] [Module R M] [Module R P] (Q : QuadraticMap R M P) (N : Submodule R M) (hN : N ≤ Q.radical) (m : M), VTask.lift Q N hN (Submodule.Quotient.mk m) ≠ Q m → False",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.lift_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.lift_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.332,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.lift-cee543e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "QuadraticMap.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "QuadraticMap.lift-cee543e3",
+    "review_status": "unreviewed"
+  }
+}

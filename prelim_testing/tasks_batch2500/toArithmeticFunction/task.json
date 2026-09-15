@@ -1,0 +1,175 @@
+{
+  "task_id": "toArithmeticFunction",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toArithmeticFunction",
+  "signature": {
+    "name": "VTask.toArithmeticFunction",
+    "type": "{R : Type u_1} -> [Zero R] -> (f : ℕ → R) -> ArithmeticFunction R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.toArithmeticFunction f 0 = 0, regardless of the value of f 0.",
+        "note": "The zero-value requirement of ArithmeticFunction is enforced by overriding f at 0."
+      },
+      {
+        "point": "n ≠ 0",
+        "statement": "VTask.toArithmeticFunction f n = f n for all n ≠ 0.",
+        "note": "The underlying function is used unchanged at every positive natural number."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toAF_idempotent",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Zero R] (f : ArithmeticFunction R), VTask.toArithmeticFunction f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.toArithmeticFunction_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.toArithmeticFunction_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.18,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "toArithmeticFunction-e2b5ce5a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toAF_dirichlet_char_multiplicative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {N : ℕ} {R : Type*} [CommMonoidWithZero R] (χ : DirichletCharacter R N), (VTask.toArithmeticFunction (χ ·)).IsMultiplicative",
+      "domain_inputs": {},
+      "anchors": [
+        "DirichletCharacter.isMultiplicative_toArithmeticFunction"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DirichletCharacter.isMultiplicative_toArithmeticFunction"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.387,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "toArithmeticFunction-e2b5ce5a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toArithmeticFunction_reject_zero_val",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.toArithmeticFunction (fun _ => (7 : ℕ)) 0 = 7) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => (7 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "toArithmeticFunction-e2b5ce5a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.toArithmeticFunction (fun _ => (7 : ℕ)) 0",
+      "violated_property": "value at 0 must be 0, not f 0"
+    },
+    {
+      "id": "toArithmeticFunction_reject_neq_constant_override",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.toArithmeticFunction (fun n => n + 1) 0 = 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => n + 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "toArithmeticFunction-e2b5ce5a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.toArithmeticFunction (fun n => n + 1) 0",
+      "violated_property": "value at 0 is forced to 0, not f 0 = 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "toArithmeticFunction",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "toArithmeticFunction-e2b5ce5a",
+    "review_status": "unreviewed"
+  }
+}

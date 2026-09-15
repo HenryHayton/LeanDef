@@ -1,0 +1,210 @@
+{
+  "task_id": "RestrictedProduct.structureMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.structureMap",
+  "signature": {
+    "name": "VTask.structureMap",
+    "type": "{ι : Type u_1} -> (R : ι → Type u_2) -> (A : (i : ι) → Set (R i)) -> (𝓕 : Filter ι) -> (x : (i : ι) → ↑(A i)) -> RestrictedProduct (fun i => R i) (fun i => A i) 𝓕",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "A",
+      "𝓕",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The structure map is a total construction; every input yields a well-defined element of the restricted product with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "structureMap_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) (𝓕 : Filter ι), Set.range (VTask.structureMap R A 𝓕) = {f | ∀ i, f.1 i ∈ A i}",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.range_structureMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.range_structureMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.142,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "structureMap_mem_range_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) (𝓕 : Filter ι) (f : RestrictedProduct (fun i => R i) (fun i => A i) 𝓕), f ∈ Set.range (VTask.structureMap R A 𝓕) ↔ ∀ i, f.1 i ∈ A i",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.range_structureMap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.range_structureMap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "structureMap_exists_preimage",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) (𝓕 : Filter ι) (f : RestrictedProduct (fun i => R i) (fun i => A i) 𝓕), (∀ i, f.1 i ∈ A i) → ∃ x : (i : ι) → ↑(A i), VTask.structureMap R A 𝓕 x = f",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.exists_structureMap_eq_of_forall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.exists_structureMap_eq_of_forall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.608,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "structureMap_nhds_cofinite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) [∀ i, TopologicalSpace (R i)] (x : (i : ι) → ↑(A i)), nhds (VTask.structureMap R A Filter.cofinite x) = Filter.map (VTask.structureMap R A Filter.cofinite) (nhds x)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.nhds_eq_map_structureMap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.nhds_eq_map_structureMap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "structureMap_image_subset_restricted_product",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) (𝓕 : Filter ι) (x : (i : ι) → ↑(A i)) (i : ι), (VTask.structureMap R A 𝓕 x).1 i ∈ A i",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.structureMap_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.structureMap_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "structureMap_not_eq_wrong_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R : Fin 2 → Type) (A : (i : Fin 2) → Set (R i)) (𝓕 : Filter (Fin 2)) (x y : (i : Fin 2) → ↑(A i)), VTask.structureMap R A 𝓕 x = VTask.structureMap R A 𝓕 y)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.isEmbedding_structureMap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.isEmbedding_structureMap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RestrictedProduct.structureMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RestrictedProduct.structureMap-6a287e1a",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "task_id": "lp.singleContinuousLinearMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.singleContinuousLinearMap",
+  "signature": {
+    "name": "VTask.singleContinuousLinearMap",
+    "type": "(𝕜 : Type u_1) -> {α : Type u_3} -> (E : α → Type u_4) -> (p : ENNReal) -> [(i : α) → NormedAddCommGroup (E i)] -> [NormedRing 𝕜] -> [(i : α) → Module 𝕜 (E i)] -> [∀ (i : α), IsBoundedSMul 𝕜 (E i)] -> [DecidableEq α] -> [Fact (1 ≤ p)] -> (i : α) -> E i →L[𝕜] ↥(lp E p)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "𝕜",
+      "α",
+      "E",
+      "p",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total under its type-class hypotheses and introduces no junk-value conventions; every well-typed input yields a well-defined continuous linear map."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sclm_ext",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] {F : Type*} [AddCommMonoid F] [Module 𝕜 F] [TopologicalSpace F] [T2Space F] (hp : p ≠ ⊤) (f g : lp E p →L[𝕜] F), (∀ i, f.comp (VTask.singleContinuousLinearMap 𝕜 E p i) = g.comp (VTask.singleContinuousLinearMap 𝕜 E p i)) → f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.ext_continuousLinearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.ext_continuousLinearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 29.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_map_norm_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] (i : α) (x : E i), ‖VTask.singleContinuousLinearMap 𝕜 E p i x‖ = ‖x‖",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.norm_single"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.norm_single"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_apply_same_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] (i : α) (x : E i), (VTask.singleContinuousLinearMap 𝕜 E p i x : ∀ j, E j) i = x",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.single_apply_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.single_apply_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.593,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_apply_diff_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] (i j : α) (hij : i ≠ j) (x : E i), (VTask.singleContinuousLinearMap 𝕜 E p i x : ∀ k, E k) j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.single_apply_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.single_apply_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.716,
+        "at": "authoring",
+        "script": "by simp [_root_.lp.singleContinuousLinearMap] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.lp.singleContinuousLinearMap] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] (i : α), Continuous (VTask.singleContinuousLinearMap 𝕜 E p i)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.083,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) {α : Type*} (E : α → Type*) (p : ENNReal) [∀ i, NormedAddCommGroup (E i)] [NormedRing 𝕜] [∀ i, Module 𝕜 (E i)] [∀ i, IsBoundedSMul 𝕜 (E i)] [DecidableEq α] [Fact (1 ≤ p)] (i : α), VTask.singleContinuousLinearMap 𝕜 E p i 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.538,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_fin2_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.singleContinuousLinearMap ℝ (fun _ : Fin 2 => ℝ) 2 (0 : Fin 2) (3 : ℝ) : lp (fun _ : Fin 2 => ℝ) 2) ∈ {f : lp (fun _ : Fin 2 => ℝ) 2 | True} := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.singleContinuousLinearMap ℝ (fun _ : Fin 2 => ℝ) 2 (0 : Fin 2) (3 : ℝ)"
+    },
+    {
+      "id": "sclm_nonzero_at_i",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ), x ≠ 0 → (VTask.singleContinuousLinearMap ℝ (fun _ : Fin 2 => ℝ) 2 (0 : Fin 2) x : lp (fun _ : Fin 2 => ℝ) 2) 0 ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.single_apply_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.single_apply_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.41,
+        "at": "authoring",
+        "script": "by simp [_root_.lp.singleContinuousLinearMap] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.lp.singleContinuousLinearMap] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sclm_reject_norm_shrink",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (x : ℝ), ‖VTask.singleContinuousLinearMap ℝ (fun _ : Fin 2 => ℝ) 2 (0 : Fin 2) x‖ < ‖x‖)",
+      "domain_inputs": {},
+      "anchors": [
+        "lp.norm_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lp.norm_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.363,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "lp.singleContinuousLinearMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "lp.singleContinuousLinearMap-45f30007",
+    "review_status": "unreviewed"
+  }
+}

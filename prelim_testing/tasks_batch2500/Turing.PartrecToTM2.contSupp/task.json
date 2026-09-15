@@ -1,0 +1,176 @@
+{
+  "task_id": "Turing.PartrecToTM2.contSupp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.contSupp",
+  "signature": {
+    "name": "VTask.contSupp",
+    "type": "Turing.PartrecToTM2.Cont' → Finset Turing.PartrecToTM2.Λ'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": "ret k excluded",
+        "statement": "The initial return state `Λ'.ret k` is not included in `VTask.contSupp k`; only states visited strictly after entering `ret k` are members.",
+        "note": "This is an intentional design choice: the entry point is the caller's responsibility."
+      },
+      {
+        "point": "halt maps to empty",
+        "statement": "`VTask.contSupp Cont'.halt = ∅` because the halt continuation has no internal machine states to visit.",
+        "note": "Base case of the recursion."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "contSupp_cons2_superset_contSupp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Turing.PartrecToTM2.Cont'), VTask.contSupp k ⊆ VTask.contSupp (Turing.PartrecToTM2.Cont'.cons₂ k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.contSupp_cons₂"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.contSupp_cons₂"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.151,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.contSupp-e3dd2f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contSupp_halt_not_nonempty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "Turing.PartrecToTM2.Λ'.ret Turing.PartrecToTM2.Cont'.halt ∉ VTask.contSupp Turing.PartrecToTM2.Cont'.halt",
+      "domain_inputs": {
+        "k": [
+          "Turing.PartrecToTM2.Cont'.halt"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.045,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.contSupp-e3dd2f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Turing.PartrecToTM2.Λ'.ret Turing.PartrecToTM2.Cont'.halt",
+      "violated_property": "contSupp Cont'.halt = ∅"
+    },
+    {
+      "id": "contSupp_ret_not_in_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Turing.PartrecToTM2.Cont'), Turing.PartrecToTM2.Λ'.ret k ∉ VTask.contSupp k",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.contSupp_supports",
+        "Turing.PartrecToTM2.ret_supports"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.contSupp_supports",
+        "Turing.PartrecToTM2.ret_supports"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.contSupp-e3dd2f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contSupp_comp_not_empty_for_succ",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.contSupp (Turing.PartrecToTM2.Cont'.comp Turing.PartrecToTM2.Code.succ Turing.PartrecToTM2.Cont'.halt) ≠ ∅",
+      "domain_inputs": {
+        "k": [
+          "Turing.PartrecToTM2.Cont'.comp Turing.PartrecToTM2.Code.succ Turing.PartrecToTM2.Cont'.halt"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.contSupp-e3dd2f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∅",
+      "violated_property": "contSupp (Cont'.comp Code.succ Cont'.halt) = codeSupp Code.succ Cont'.halt which includes trStmts₁ (trNormal Code.succ Cont'.halt) and is non-empty"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.PartrecToTM2.contSupp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.PartrecToTM2.contSupp-e3dd2f2e",
+    "review_status": "unreviewed"
+  }
+}

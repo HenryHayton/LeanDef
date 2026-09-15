@@ -1,0 +1,410 @@
+{
+  "task_id": "SimpleGraph.Walk.IsEulerian",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsEulerian",
+  "signature": {
+    "name": "VTask.IsEulerian",
+    "type": "{V : Type u_1} -> {G : SimpleGraph V} -> [DecidableEq V] -> {u v : V} -> (p : G.Walk u v) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsEulerian is a universally quantified predicate over edges; it carries no junk-value conventions, and its vacuous truth on edgeless graphs is a direct logical consequence of the definition rather than a declared convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "is_eulerian_implies_is_trail",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} (p : G.Walk u v), VTask.IsEulerian p → p.IsTrail",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.isTrail"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.isTrail"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.39,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_edge_set_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} (p : G.Walk u v), VTask.IsEulerian p → p.edgeSet = G.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.edgeSet_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.edgeSet_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.089,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_trail_eulerian_iff_edge_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} (p : G.Walk u v), p.IsTrail → (VTask.IsEulerian p ↔ p.edgeSet = G.edgeSet)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsTrail.isEulerian_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsTrail.isEulerian_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.06,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_iff_trail_and_forall_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} (p : G.Walk u v), VTask.IsEulerian p ↔ p.IsTrail ∧ ∀ e, e ∈ G.edgeSet → e ∈ p.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.isEulerian_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.isEulerian_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.821,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_mem_edges_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} (p : G.Walk u v), VTask.IsEulerian p → ∀ {e : Sym2 V}, e ∈ p.edges ↔ e ∈ G.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.mem_edges_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.mem_edges_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.674,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_card_odd_degree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] [Fintype V] [DecidableRel G.Adj] {u v : V} {p : G.Walk u v}, VTask.IsEulerian p → Fintype.card { w | Odd (G.degree w) } = 0 ∨ Fintype.card { w | Odd (G.degree w) } = 2",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.card_odd_degree"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.card_odd_degree"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.54,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_even_degree_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] [Fintype V] [DecidableRel G.Adj] {u v : V} {p : G.Walk u v} (x : V), VTask.IsEulerian p → (Even (G.degree x) ↔ u ≠ v → x ≠ u ∧ x ≠ v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.even_degree_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.even_degree_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.51,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_trail_eulerian_of_forall_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} {p : G.Walk u v}, p.IsTrail → (∀ e, e ∈ G.edgeSet → e ∈ p.edges) → VTask.IsEulerian p",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsTrail.isEulerian_of_forall_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsTrail.isEulerian_of_forall_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.599,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_edgesFinset_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] [Fintype G.edgeSet] {u v : V} {p : G.Walk u v} (h : VTask.IsEulerian p), h.isTrail.edgesFinset = G.edgeFinset",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.edgesFinset_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.edgesFinset_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.478,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_implies_edge_mem_graph_edge_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] {u v : V} {p : G.Walk u v}, VTask.IsEulerian p → ∀ {e : Sym2 V}, e ∈ G.edgeSet → e ∈ p.edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.mem_edges_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.mem_edges_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_eulerian_circuit_zero_odd_degree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} [DecidableEq V] [Fintype V] [DecidableRel G.Adj] {u : V} {p : G.Walk u u}, VTask.IsEulerian p → ∀ x : V, Even (G.degree x)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsEulerian.even_degree_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsEulerian.even_degree_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.IsEulerian",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.IsEulerian-a544b4d1",
+    "review_status": "unreviewed"
+  }
+}

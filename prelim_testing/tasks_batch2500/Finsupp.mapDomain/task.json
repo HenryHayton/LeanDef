@@ -1,0 +1,264 @@
+{
+  "task_id": "Finsupp.mapDomain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapDomain",
+  "signature": {
+    "name": "VTask.mapDomain",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {M : Type u_5} -> [AddCommMonoid M] -> (f : α → β) -> (v : α →₀ M) -> β →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "injective f",
+        "statement": "When f is injective, VTask.mapDomain f v preserves individual values: for each x in the support of v, the value at f(x) in the result equals v(x), with no accumulation.",
+        "note": "This is the renaming/relabelling special case."
+      },
+      {
+        "point": "non-injective f",
+        "statement": "When f is not injective and multiple support points of v share the same image, their coefficients are summed at that image point in the result.",
+        "note": "Standard push-forward accumulation behaviour."
+      },
+      {
+        "point": "empty support",
+        "statement": "When v is the zero finsupp (empty support), VTask.mapDomain f v is the zero finsupp for any f.",
+        "note": "Consistent with the sum-over-empty-fibre being zero."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapDomain_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [AddCommMonoid M] (v : α →₀ M), VTask.mapDomain id v = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.256,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} {M : Type*} [AddCommMonoid M] (f : β → γ) (g : α → β) (v : α →₀ M), VTask.mapDomain f (VTask.mapDomain g v) = VTask.mapDomain (f ∘ g) v",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.764,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {M : Type*} [AddCommMonoid M] (f : α → β) (v w : α →₀ M), VTask.mapDomain f (v + w) = VTask.mapDomain f v + VTask.mapDomain f w",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_injective_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {M : Type*} [AddCommMonoid M] (f : α → β) (hf : Function.Injective f) (v : α →₀ M) (a : α), VTask.mapDomain f v (f a) = v a",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.113,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {M : Type*} [AddCommMonoid M] (f : α → β) (a : α) (m : M), VTask.mapDomain f (Finsupp.single a m) = Finsupp.single (f a) m",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.478,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_zero_input_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.mapDomain (fun _ : Fin 2 => (0 : Fin 1)) (0 : Fin 2 →₀ ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 2 => (0 : Fin 1)"
+        ],
+        "v": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapDomain-513ee3da",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.mapDomain (fun _ : Fin 2 => (0 : Fin 1)) (0 : Fin 2 →₀ ℕ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.mapDomain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.mapDomain-513ee3da",
+    "review_status": "unreviewed"
+  }
+}

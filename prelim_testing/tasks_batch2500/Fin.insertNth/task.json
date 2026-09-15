@@ -1,0 +1,464 @@
+{
+  "task_id": "Fin.insertNth",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.insertNth",
+  "signature": {
+    "name": "VTask.insertNth",
+    "type": "{n : ℕ} -> {α : Fin (n + 1) → Sort u_1} -> (i : Fin (n + 1)) -> (x : α i) -> (p : (j : Fin n) → α (i.succAbove j)) -> (j : Fin (n + 1)) -> α j",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i",
+      "x",
+      "p",
+      "j"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-typed by construction for all inputs; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "insertNth_at_i_returns_x",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (i : Fin (n + 1)) (x : α i) (p : ∀ j : Fin n, α (i.succAbove j)), VTask.insertNth i x p i = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_apply_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_apply_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.189,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_at_succAbove_returns_p",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (i : Fin (n + 1)) (x : α i) (p : ∀ j : Fin n, α (i.succAbove j)) (j : Fin n), VTask.insertNth i x p (i.succAbove j) = p j",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_apply_succAbove"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_apply_succAbove"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.181,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_zero_eq_cons",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {β : Sort*} (x : β) (p : Fin n → β), @VTask.insertNth n (fun _ => β) 0 x p = Fin.cons x p",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_zero'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_zero'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.158,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_last_eq_snoc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {β : Sort*} (x : β) (p : Fin n → β), @VTask.insertNth n (fun _ => β) (Fin.last n) x p = Fin.snoc p x",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_last'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_last'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.16,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_self_removeNth",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (p : Fin (n + 1)) (f : ∀ j, α j), VTask.insertNth p (f p) (Fin.removeNth p f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_self_removeNth"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_self_removeNth"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.112,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_injective2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (p : Fin (n + 1)), Function.Injective2 (@VTask.insertNth n α p)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_injective2"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_injective2"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.13,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_left_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (p : Fin (n + 1)) (x : ∀ i, α (p.succAbove i)), Function.Injective (VTask.insertNth p · x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_left_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_left_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.354,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_right_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (p : Fin (n + 1)) (x : α p), Function.Injective (VTask.insertNth p x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.insertNth_right_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.insertNth_right_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.153,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_prepend_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.insertNth (0 : Fin 3) 10 ![20, 30] = ![10, 20, 30] := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ],
+        "x": [
+          "10"
+        ],
+        "p": [
+          "![20, 30]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_append_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.insertNth (Fin.last 2) 30 ![10, 20] = ![10, 20, 30] := by decide",
+      "domain_inputs": {
+        "i": [
+          "2"
+        ],
+        "x": [
+          "30"
+        ],
+        "p": [
+          "![10, 20]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_middle_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.insertNth (1 : Fin 3) 99 ![0, 1] = ![0, 99, 1] := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ],
+        "x": [
+          "99"
+        ],
+        "p": [
+          "![0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insertNth_not_equal_wrong_tuple",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.insertNth (0 : Fin 3) 10 ![20, 30] = ![20, 10, 30]) := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ],
+        "x": [
+          "10"
+        ],
+        "p": [
+          "![20, 30]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.insertNth-cf2c2911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.insertNth",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.insertNth-cf2c2911",
+    "review_status": "unreviewed"
+  }
+}

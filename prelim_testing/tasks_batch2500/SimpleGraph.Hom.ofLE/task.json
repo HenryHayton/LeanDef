@@ -1,0 +1,163 @@
+{
+  "task_id": "SimpleGraph.Hom.ofLE",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLE",
+  "signature": {
+    "name": "VTask.ofLE",
+    "type": "{V : Type u_1} -> {G₁ G₂ : SimpleGraph V} -> (h : G₁ ≤ G₂) -> G₁ →g G₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "G₁ ≤ G₂",
+    "variables": [
+      "G₁",
+      "G₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all inputs satisfying the stated subgraph condition, which is enforced by the type of `h`. There are no junk values or special edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLE_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G₁ G₂ : SimpleGraph V} (h : G₁ ≤ G₂), Function.Injective (VTask.ofLE h)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.527,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.ofLE-9a29924f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLE_map_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G₁ G₂ : SimpleGraph V} (h : G₁ ≤ G₂) (u v : V), G₁.Adj u v → G₂.Adj (VTask.ofLE h u) (VTask.ofLE h v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.739,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.ofLE-9a29924f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLE_not_iso_strict_subgraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (h : (⊥ : SimpleGraph (Fin 2)) ≤ ⊤), ¬ Function.Surjective (VTask.ofLE h).mapEdgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.ofLE-9a29924f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLE_not_eq_const_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G₁ G₂ : SimpleGraph V) (h : G₁ ≤ G₂) (v w : V), v ≠ w → (VTask.ofLE h).toFun v ≠ w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Hom.ofLE_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.476,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.Hom.ofLE] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.Hom.ofLE] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Hom.ofLE-9a29924f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Hom.ofLE",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Hom.ofLE-9a29924f",
+    "review_status": "unreviewed"
+  }
+}

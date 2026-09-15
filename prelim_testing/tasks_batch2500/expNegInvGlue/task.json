@@ -1,0 +1,449 @@
+{
+  "task_id": "expNegInvGlue",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.expNegInvGlue",
+  "signature": {
+    "name": "VTask.expNegInvGlue",
+    "type": "(x : ℝ) -> ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "x = 0",
+        "statement": "VTask.expNegInvGlue 0 = 0; the non-positive branch is used since 0 ≤ 0.",
+        "note": "The value 0 is consistent with the limit from the right, ensuring continuity and smoothness."
+      },
+      {
+        "point": "x < 0",
+        "statement": "VTask.expNegInvGlue x = 0 for all x < 0; the function vanishes identically on the negative reals.",
+        "note": "Not a junk value; this is the intended definition on the non-positive half-line."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "expNegInvGlue_at_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.expNegInvGlue 1 = Real.exp (-1)",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.zero_of_nonpos",
+        "expNegInvGlue.pos_of_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.zero_of_nonpos",
+        "expNegInvGlue.pos_of_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, 0 ≤ VTask.expNegInvGlue x",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.176,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_pos_of_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, 0 < x → 0 < VTask.expNegInvGlue x",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.pos_of_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.pos_of_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.175,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_zero_of_nonpos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, x ≤ 0 → VTask.expNegInvGlue x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.zero_of_nonpos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.zero_of_nonpos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.148,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Monotone VTask.expNegInvGlue",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.05,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_contDiff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ∞, ContDiff ℝ n VTask.expNegInvGlue",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.contDiff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.contDiff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.152,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_not_analyticAt_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ AnalyticAt ℝ VTask.expNegInvGlue 0",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.not_analyticAt_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.not_analyticAt_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.167,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_pos_denom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, 0 < VTask.expNegInvGlue x + VTask.expNegInvGlue (1 - x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Real.smoothTransition.pos_denom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Real.smoothTransition.pos_denom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.12,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "expNegInvGlue_accept_pos",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "0 < VTask.expNegInvGlue 2",
+      "domain_inputs": {
+        "x": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.expNegInvGlue 2"
+    },
+    {
+      "id": "expNegInvGlue_reject_nonpos",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (0 < VTask.expNegInvGlue (-1))",
+      "domain_inputs": {
+        "x": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.104,
+        "at": "authoring",
+        "script": "by simp [_root_.expNegInvGlue] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.expNegInvGlue] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.expNegInvGlue (-1)",
+      "violated_property": "pos_of_pos: function is strictly positive only for x > 0; at x = -1 ≤ 0 the value is 0, not positive"
+    },
+    {
+      "id": "expNegInvGlue_reject_zero_nonzero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.expNegInvGlue 0 ≠ 0)",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.035,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.expNegInvGlue 0",
+      "violated_property": "zero: function equals 0 at x = 0 (boundary is non-positive branch), not nonzero"
+    },
+    {
+      "id": "expNegInvGlue_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Continuous VTask.expNegInvGlue",
+      "domain_inputs": {},
+      "anchors": [
+        "expNegInvGlue.contDiff",
+        "ContDiff.continuous"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "expNegInvGlue.contDiff",
+        "ContDiff.continuous"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "expNegInvGlue-eddcccb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "expNegInvGlue",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "expNegInvGlue-eddcccb8",
+    "review_status": "unreviewed"
+  }
+}

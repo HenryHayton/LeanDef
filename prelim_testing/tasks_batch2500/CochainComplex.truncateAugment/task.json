@@ -1,0 +1,190 @@
+{
+  "task_id": "CochainComplex.truncateAugment",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.truncateAugment",
+  "signature": {
+    "name": "VTask.truncateAugment",
+    "type": "{V : Type u} -> [CategoryTheory.Category.{v, u} V] -> [CategoryTheory.Limits.HasZeroMorphisms V] -> (C : CochainComplex V ℕ) -> {X : V} -> (f : X ⟶ C.X 0) -> (w : CategoryTheory.CategoryStruct.comp f (C.d 0 1) = 0) -> CochainComplex.truncate.obj (C.augment f w) ≅ C",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "f",
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "hom components are identities",
+        "statement": "The forward morphism of the isomorphism has (VTask.truncateAugment C f w).hom.f i = 𝟙 (C.X i) for all i : ℕ.",
+        "note": "Both hom and inv are built from identity maps at every degree."
+      },
+      {
+        "point": "inv components are identities",
+        "statement": "The backward morphism of the isomorphism has (VTask.truncateAugment C f w).inv.f i = 𝟙 ((CochainComplex.truncate.obj (C.augment f w)).X i) for all i : ℕ.",
+        "note": "The two identity maps at each degree form a mutually inverse pair, making this a trivial (identity) isomorphism."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "truncateAugment_hom_comp_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : CochainComplex V ℕ) {X : V} (f : X ⟶ C.X 0) (w : CategoryTheory.CategoryStruct.comp f (C.d 0 1) = 0), CategoryTheory.CategoryStruct.comp (VTask.truncateAugment C f w).hom (VTask.truncateAugment C f w).inv = CategoryTheory.CategoryStruct.id _",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.hom_inv_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.hom_inv_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.868,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.truncateAugment-956e96b6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_inv_comp_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : CochainComplex V ℕ) {X : V} (f : X ⟶ C.X 0) (w : CategoryTheory.CategoryStruct.comp f (C.d 0 1) = 0), CategoryTheory.CategoryStruct.comp (VTask.truncateAugment C f w).inv (VTask.truncateAugment C f w).hom = CategoryTheory.CategoryStruct.id _",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.inv_hom_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.inv_hom_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.659,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.truncateAugment-956e96b6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_hom_is_iso",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : CochainComplex V ℕ) {X : V} (f : X ⟶ C.X 0) (w : CategoryTheory.CategoryStruct.comp f (C.d 0 1) = 0), CategoryTheory.IsIso (VTask.truncateAugment C f w).hom",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.isIso_hom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.isIso_hom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.483,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.truncateAugment-956e96b6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_hom_comm_with_diff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : CochainComplex V ℕ) {X : V} (f : X ⟶ C.X 0) (w : CategoryTheory.CategoryStruct.comp f (C.d 0 1) = 0) (i j : ℕ), CategoryTheory.CategoryStruct.comp ((CochainComplex.truncate.obj (C.augment f w)).d i j) ((VTask.truncateAugment C f w).hom.f j) = CategoryTheory.CategoryStruct.comp ((VTask.truncateAugment C f w).hom.f i) (C.d i j)",
+      "domain_inputs": {},
+      "anchors": [
+        "CochainComplex.truncateAugment_hom_f",
+        "HomologicalComplex.Hom.comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CochainComplex.truncateAugment_hom_f",
+        "HomologicalComplex.Hom.comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.245,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.truncateAugment-956e96b6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CochainComplex.truncateAugment",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CochainComplex.truncateAugment-956e96b6",
+    "review_status": "unreviewed"
+  }
+}

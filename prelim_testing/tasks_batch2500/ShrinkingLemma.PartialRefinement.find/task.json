@@ -1,0 +1,314 @@
+{
+  "task_id": "ShrinkingLemma.PartialRefinement.find",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.find",
+  "signature": {
+    "name": "VTask.find",
+    "type": "{ι : Type u_1} -> {X : Type u_2} -> [TopologicalSpace X] -> {u : ι → Set X} -> {s : Set X} -> {p : Set X → Prop} -> (c : Set (ShrinkingLemma.PartialRefinement u s p)) -> (ne : c.Nonempty) -> (i : ι) -> ShrinkingLemma.PartialRefinement u s p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "ne",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "i not in any carrier",
+        "statement": "When no member v of c has i ∈ carrier v, VTask.find c ne i returns ne.some, the nonempty witness of c.",
+        "note": "This is a fallback to an arbitrary valid element, not a junk value outside the type."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "find_mem_chain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), VTask.find c ne i ∈ c",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.475,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_carrier_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), i ∈ (VTask.find c ne i).carrier ↔ i ∈ ShrinkingLemma.PartialRefinement.chainSupCarrier c",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.602,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_apply_of_mem_carrier",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (hc : IsChain (· ≤ ·) c) (ne : c.Nonempty) {i : ι} {v : ShrinkingLemma.PartialRefinement u s p} (hv : v ∈ c) (hi : i ∈ v.carrier), VTask.find c ne i i = v i",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.find_apply_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.find_apply_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.138,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_result_is_partial_refinement",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), ∃ v ∈ c, VTask.find c ne i = v",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_singleton_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (v : ShrinkingLemma.PartialRefinement u s p) (i : ι), VTask.find {v} ⟨v, Set.mem_singleton v⟩ i = v",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.find_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_not_in_carrier_when_empty_chain_sup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), ¬(i ∈ ShrinkingLemma.PartialRefinement.chainSupCarrier c) → ¬(i ∈ (VTask.find c ne i).carrier)",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_carrier_subset_chain_sup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), i ∈ (VTask.find c ne i).carrier → i ∈ ShrinkingLemma.PartialRefinement.chainSupCarrier c",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_in_carrier_implies_carrier_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), i ∈ ShrinkingLemma.PartialRefinement.chainSupCarrier c → i ∈ (VTask.find c ne i).carrier",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_nonempty_witness_fallback",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {u : ι → Set X} {s : Set X} {p : Set X → Prop} (c : Set (ShrinkingLemma.PartialRefinement u s p)) (ne : c.Nonempty) (i : ι), (∀ v ∈ c, i ∉ v.carrier) → VTask.find c ne i = ne.some",
+      "domain_inputs": {},
+      "anchors": [
+        "ShrinkingLemma.PartialRefinement.find_mem",
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ShrinkingLemma.PartialRefinement.find_mem",
+        "ShrinkingLemma.PartialRefinement.mem_find_carrier_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.345,
+        "at": "authoring",
+        "script": "by simp only [_root_.ShrinkingLemma.PartialRefinement.find] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.ShrinkingLemma.PartialRefinement.find] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ShrinkingLemma.PartialRefinement.find",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ShrinkingLemma.PartialRefinement.find-768c6e6b",
+    "review_status": "unreviewed"
+  }
+}

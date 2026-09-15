@@ -1,0 +1,310 @@
+{
+  "task_id": "GradedRingHom.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{ι : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> {σ : Type u_6} -> {τ : Type u_7} -> [Semiring A] -> [Semiring B] -> [SetLike σ A] -> [SetLike τ B] -> {𝒜 : ι → σ} -> {ℬ : ι → τ} -> (f : 𝒜 →+*ᵍ ℬ) -> (f' : A → B) -> (h : f' = ⇑f) -> 𝒜 →+*ᵍ ℬ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "copy_eq",
+        "statement": "The result of VTask.copy f f' h is propositionally equal to f as a GradedRingHom, i.e., VTask.copy f f' h = f.",
+        "note": "This holds regardless of the choice of f', as long as h witnesses f' = ⇑f."
+      },
+      {
+        "point": "coe_copy",
+        "statement": "The coercion of VTask.copy f f' h to a bare function is exactly f', i.e., ⇑(VTask.copy f f' h) = f'.",
+        "note": "This is the defining purpose of the copy construction: the new term carries f' as its underlying function."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 15.407,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_coe_equals_f_on_input",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f) (a : A), VTask.copy f f' h a = f a",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.coe_copy",
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.coe_copy",
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.467,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_copy_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f) (f'' : A → B) (h' : f'' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) f'' h' = f",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.781,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_eq_iff_original_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f g : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f), VTask.copy f f' h = g ↔ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.389,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_does_not_change_map_not_neq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f), ¬(VTask.copy f f' h ≠ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.604,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_when_f_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f g : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f), f ≠ g → VTask.copy f f' h ≠ g",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.924,
+        "at": "authoring",
+        "script": "by simp only [_root_.GradedRingHom.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.GradedRingHom.copy] <;> aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_underlying_fun_is_f_prime_not_coe_f_directly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' : A → B) (h : f' = ⇑f), ⇑(VTask.copy f f' h) = ⇑f",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.coe_copy",
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.coe_copy",
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.015,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_twice_same_as_once",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {A : Type*} {B : Type*} {σ : Type*} {τ : Type*} [Semiring A] [Semiring B] [SetLike σ A] [SetLike τ B] {𝒜 : ι → σ} {ℬ : ι → τ} (f : 𝒜 →+*ᵍ ℬ) (f' g' : A → B) (h : f' = ⇑f) (h' : g' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) g' h' = VTask.copy f f' h",
+      "domain_inputs": {},
+      "anchors": [
+        "GradedRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GradedRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 15.073,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GradedRingHom.copy-355fc084",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "GradedRingHom.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "GradedRingHom.copy-355fc084",
+    "review_status": "unreviewed"
+  }
+}

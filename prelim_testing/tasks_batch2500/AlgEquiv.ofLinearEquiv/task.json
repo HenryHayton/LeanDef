@@ -1,0 +1,168 @@
+{
+  "task_id": "AlgEquiv.ofLinearEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLinearEquiv",
+  "signature": {
+    "name": "VTask.ofLinearEquiv",
+    "type": "{R : Type uR} -> {A₁ : Type uA₁} -> {A₂ : Type uA₂} -> [CommSemiring R] -> [Semiring A₁] -> [Semiring A₂] -> [Algebra R A₁] -> [Algebra R A₂] -> (l : A₁ ≃ₗ[R] A₂) -> (map_one : l 1 = 1) -> (map_mul : ∀ (x y : A₁), l (x * y) = l x * l y) -> A₁ ≃ₐ[R] A₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "map_one",
+      "map_mul"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: this is a total constructor; all inputs are constrained by their types and no junk-value conventions are needed"
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLinearEquiv_is_algEquiv",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ _ : ℤ ≃ₐ[ℤ] ℤ, True",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.215,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLinearEquiv-a5f0600b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.ofLinearEquiv (LinearEquiv.refl ℤ ℤ) (by simp) (by simp)"
+    },
+    {
+      "id": "ofLinearEquiv_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R A₁ A₂ : Type*) [CommSemiring R] [Semiring A₁] [Semiring A₂] [Algebra R A₁] [Algebra R A₂] (l : A₁ ≃ₗ[R] A₂) (h1 : l 1 = 1) (hm : ∀ x y : A₁, l (x * y) = l x * l y) (a : A₁), (VTask.ofLinearEquiv l h1 hm).symm ((VTask.ofLinearEquiv l h1 hm) a) = a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.111,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLinearEquiv-a5f0600b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearEquiv_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R A₁ A₂ : Type*) [CommSemiring R] [Semiring A₁] [Semiring A₂] [Algebra R A₁] [Algebra R A₂] (l : A₁ ≃ₗ[R] A₂) (h1 : l 1 = 1) (hm : ∀ x y : A₁, l (x * y) = l x * l y) (a : A₂), (VTask.ofLinearEquiv l h1 hm) ((VTask.ofLinearEquiv l h1 hm).symm a) = a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.09,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLinearEquiv-a5f0600b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearEquiv_reject_map_one_violated",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (l : ℤ ≃ₗ[ℤ] ℤ) (hm : ∀ x y : ℤ, l (x * y) = l x * l y), ∃ _ : ℤ ≃ₐ[ℤ] ℤ, ∀ a : ℤ, a = l a)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLinearEquiv-a5f0600b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "LinearEquiv.refl ℤ ℤ",
+      "violated_property": "map_one"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgEquiv.ofLinearEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgEquiv.ofLinearEquiv-a5f0600b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "task_id": "Matrix.IsTotallyUnimodular",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsTotallyUnimodular",
+  "signature": {
+    "name": "VTask.IsTotallyUnimodular",
+    "type": "{m : Type u_1} -> {n : Type u_3} -> {R : Type u_5} -> [CommRing R] -> (A : Matrix m n R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "A"
+    ],
+    "conventions": [
+      {
+        "point": "k = 0 (empty submatrix)",
+        "statement": "The 0×0 submatrix has determinant 1 by convention (empty product), which equals SignType.cast SignType.pos, so the k = 0 case is always satisfied and imposes no constraint.",
+        "note": "Convention inherited from Matrix.det on empty index type."
+      },
+      {
+        "point": "Injectivity of row/column selectors",
+        "statement": "Only injective row-selection and column-selection maps are required to yield determinants in the range of SignType.cast; non-injective selections are not directly constrained by the definition.",
+        "note": "In practice, non-injective submatrices have determinant 0 due to repeated rows/columns, which is also in the range, making the injectivity condition redundant in practice."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "itu_submatrix_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m m' n n' R : Type*) [CommRing R] (A : Matrix m n R) (f : m' → m) (g : n' → n), VTask.IsTotallyUnimodular A → VTask.IsTotallyUnimodular (A.submatrix f g)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.IsTotallyUnimodular.submatrix"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.IsTotallyUnimodular.submatrix"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.069,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "itu_entries_in_signtype_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n R : Type*) [CommRing R] (A : Matrix m n R), VTask.IsTotallyUnimodular A → ∀ (i : m) (j : n), A i j ∈ Set.range SignType.cast",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.IsTotallyUnimodular.apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.IsTotallyUnimodular.apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.387,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "itu_empty_rows",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n R : Type*) [CommRing R] [IsEmpty m] (A : Matrix m n R), VTask.IsTotallyUnimodular A",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.emptyRows_isTotallyUnimodular"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.emptyRows_isTotallyUnimodular"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.746,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "itu_empty_cols",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n R : Type*) [CommRing R] [IsEmpty n] (A : Matrix m n R), VTask.IsTotallyUnimodular A",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.emptyCols_isTotallyUnimodular"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.emptyCols_isTotallyUnimodular"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.723,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "itu_iff_submatrix_det_signtype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n R : Type*) [CommRing R] (A : Matrix m n R), VTask.IsTotallyUnimodular A ↔ ∀ k : ℕ, ∀ f : Fin k → m, ∀ g : Fin k → n, (A.submatrix f g).det ∈ Set.range SignType.cast",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.isTotallyUnimodular_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.isTotallyUnimodular_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.973,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "itu_reindex_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m m' n n' R : Type*) [CommRing R] (A : Matrix m n R) (em : m ≃ m') (en : n ≃ n'), VTask.IsTotallyUnimodular (A.reindex em en) ↔ VTask.IsTotallyUnimodular A",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.reindex_isTotallyUnimodular"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.reindex_isTotallyUnimodular"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.678,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.IsTotallyUnimodular",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.IsTotallyUnimodular-8004bc3f",
+    "review_status": "unreviewed"
+  }
+}

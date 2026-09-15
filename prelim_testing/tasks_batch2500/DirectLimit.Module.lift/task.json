@@ -1,0 +1,116 @@
+{
+  "task_id": "DirectLimit.Module.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "(R : Type u_1) -> (ι : Type u_2) -> [Preorder ι] -> (G : ι → Type u_3) -> {T : ⦃i j : ι⦄ → i ≤ j → Type u_6} -> (f : (x x_1 : ι) → (h : x ≤ x_1) → T h) -> [(i j : ι) → (h : i ≤ j) → FunLike (T h) (G i) (G j)] -> [DirectedSystem G fun x1 x2 x3 => ⇑(f x1 x2 x3)] -> [IsDirectedOrder ι] -> [Semiring R] -> [(i : ι) → AddCommMonoid (G i)] -> [(i : ι) → Module R (G i)] -> [∀ (i j : ι) (h : i ≤ j), LinearMapClass (T h) R (G i) (G j)] -> [Nonempty ι] -> {P : Type u_7} -> [AddCommMonoid P] -> [Module R P] -> (g : (i : ι) → G i →ₗ[R] P) -> (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) -> DirectLimit G f →ₗ[R] P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "ι",
+      "G",
+      "f",
+      "g",
+      "Hg"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total over all inputs satisfying the typeclass assumptions; the compatibility condition Hg is an explicit hypothesis rather than a junk-value convention, so no junk-value or edge-case conventions apply."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_preserves_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) [Preorder ι] [IsDirectedOrder ι] [Nonempty ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] [Semiring R] [∀ i, Module R (G i)] (f : ∀ i j, i ≤ j → G i →ₗ[R] G j) [DirectedSystem G (fun i j h => ⇑(f i j h))] (P : Type*) [AddCommMonoid P] [Module R P] (g : ∀ i, G i →ₗ[R] P) (Hg : ∀ i j (hij : i ≤ j) x, g j (f i j hij x) = g i x), VTask.lift R ι G f g Hg 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.43,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectLimit.Module.lift-b687e01b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_agree_on_inclusions_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (ι : Type*) [Preorder ι] [IsDirectedOrder ι] [Nonempty ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] [Semiring R] [∀ i, Module R (G i)] (f : ∀ i j, i ≤ j → G i →ₗ[R] G j) [DirectedSystem G (fun i j h => ⇑(f i j h))] (P : Type*) [AddCommMonoid P] [Module R P] (g g' : ∀ i, G i →ₗ[R] P) (Hg : ∀ i j (hij : i ≤ j) x, g j (f i j hij x) = g i x) (Hg' : ∀ i j (hij : i ≤ j) x, g' j (f i j hij x) = g' i x) (heq : ∀ i, g i = g' i), VTask.lift R ι G f g Hg = VTask.lift R ι G f g' Hg'",
+      "domain_inputs": {},
+      "anchors": [
+        "DirectLimit.Module.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DirectLimit.Module.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 35.737,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectLimit.Module.lift-b687e01b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DirectLimit.Module.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DirectLimit.Module.lift-b687e01b",
+    "review_status": "unreviewed"
+  }
+}

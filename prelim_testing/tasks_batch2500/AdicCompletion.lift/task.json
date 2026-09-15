@@ -1,0 +1,180 @@
+{
+  "task_id": "AdicCompletion.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{R : Type u_1} -> [CommRing R] -> (I : Ideal R) -> {M : Type u_4} -> [AddCommGroup M] -> [Module R M] -> {N : Type u_5} -> [AddCommGroup N] -> [Module R N] -> (f : (n : ℕ) → M →ₗ[R] N ⧸ I ^ n • ⊤) -> (h : ∀ {m n : ℕ} (hle : m ≤ n), AdicCompletion.transitionMap I N hle ∘ₗ f n = f m) -> M →ₗ[R] AdicCompletion I N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.lift is a total construction with no junk-value conventions; it is well-defined for every ideal I, every module M and N, and every coherent family f satisfying the compatibility hypothesis h."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext",
+    "sorryAx"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_is_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] (I : Ideal R) {M : Type*} [AddCommGroup M] [Module R M] {N : Type*} [AddCommGroup N] [Module R N] (f : ∀ n : ℕ, M →ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N)) (h : ∀ {m n : ℕ} (hle : m ≤ n), AdicCompletion.transitionMap I N hle ∘ₗ f n = f m) (x y : M), VTask.lift I f h (x + y) = VTask.lift I f h x + VTask.lift I f h y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.563,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AdicCompletion.lift-0f78adb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] (I : Ideal R) {M : Type*} [AddCommGroup M] [Module R M] {N : Type*} [AddCommGroup N] [Module R N] (f : ∀ n : ℕ, M →ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N)) (h : ∀ {m n : ℕ} (hle : m ≤ n), AdicCompletion.transitionMap I N hle ∘ₗ f n = f m) (r : R) (x : M), VTask.lift I f h (r • x) = r • VTask.lift I f h x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.799,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AdicCompletion.lift-0f78adb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_zero_map_at_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] (I : Ideal R) {M : Type*} [AddCommGroup M] [Module R M] {N : Type*} [AddCommGroup N] [Module R N] (f : ∀ n : ℕ, M →ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N)) (h : ∀ {m n : ℕ} (hle : m ≤ n), AdicCompletion.transitionMap I N hle ∘ₗ f n = f m) (x : M), VTask.lift I f h 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.331,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AdicCompletion.lift-0f78adb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_uniqueness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] (I : Ideal R) {M : Type*} [AddCommGroup M] [Module R M] {N : Type*} [AddCommGroup N] [Module R N] (f : ∀ n : ℕ, M →ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N)) (h : ∀ {m n : ℕ} (hle : m ≤ n), AdicCompletion.transitionMap I N hle ∘ₗ f n = f m) (g : M →ₗ[R] AdicCompletion I N), (∀ n, AdicCompletion.eval I N n ∘ₗ g = f n) → g = VTask.lift I f h",
+      "domain_inputs": {},
+      "anchors": [
+        "AdicCompletion.eval_lift",
+        "AdicCompletion.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AdicCompletion.eval_lift",
+        "AdicCompletion.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AdicCompletion.lift-0f78adb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AdicCompletion.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AdicCompletion.lift-0f78adb0",
+    "review_status": "unreviewed"
+  }
+}

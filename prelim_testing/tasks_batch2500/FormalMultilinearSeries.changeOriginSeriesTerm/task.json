@@ -1,0 +1,336 @@
+{
+  "task_id": "FormalMultilinearSeries.changeOriginSeriesTerm",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.changeOriginSeriesTerm",
+  "signature": {
+    "name": "VTask.changeOriginSeriesTerm",
+    "type": "{𝕜 : Type u_1} -> {E : Type u_2} -> {F : Type u_3} -> [NontriviallyNormedField 𝕜] -> [NormedAddCommGroup E] -> [NormedSpace 𝕜 E] -> [NormedAddCommGroup F] -> [NormedSpace 𝕜 F] -> (p : FormalMultilinearSeries 𝕜 E F) -> (k l : ℕ) -> (s : Finset (Fin (k + l))) -> (hs : s.card = l) -> E [×l]→L[𝕜] E [×k]→L[𝕜] F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "k",
+      "l",
+      "s",
+      "hs"
+    ],
+    "conventions": [
+      {
+        "point": "norm independence of s",
+        "statement": "For any valid s with s.card = l, ‖VTask.changeOriginSeriesTerm p k l s hs‖ = ‖p (k + l)‖, so the norm depends only on k and l, not on the choice of subset s.",
+        "note": "Confirmed by norm_changeOriginSeriesTerm."
+      },
+      {
+        "point": "zero when p(k+l) = 0",
+        "statement": "If p (k + l) = 0 (e.g. p is a polynomial of degree less than k + l), then VTask.changeOriginSeriesTerm p k l s hs = 0 as a continuous multilinear map.",
+        "note": "Confirmed by changeOriginSeriesTerm_bound."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "changeOriginSeriesTerm_norm_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l), ‖VTask.changeOriginSeriesTerm p k l s hs‖ = ‖p (k + l)‖",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.095,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_nnnorm_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l), ‖VTask.changeOriginSeriesTerm p k l s hs‖₊ = ‖p (k + l)‖₊",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.nnnorm_changeOriginSeriesTerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.nnnorm_changeOriginSeriesTerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.136,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_apply_piecewise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l) (x y : E), VTask.changeOriginSeriesTerm p k l s hs (fun _ => x) (fun _ => y) = p (k + l) (s.piecewise (fun _ => x) (fun _ => y))",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.changeOriginSeriesTerm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.changeOriginSeriesTerm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.132,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_nnnorm_apply_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l) (x y : E), ‖VTask.changeOriginSeriesTerm p k l s hs (fun _ => x) (fun _ => y)‖₊ ≤ ‖p (k + l)‖₊ * ‖x‖₊ ^ l * ‖y‖₊ ^ k",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.nnnorm_changeOriginSeriesTerm_apply_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.nnnorm_changeOriginSeriesTerm_apply_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.673,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_zero_of_vanishing",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (n k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l), (∀ m : ℕ, n ≤ m → p m = 0) → n ≤ k + l → VTask.changeOriginSeriesTerm p k l s hs = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.changeOriginSeriesTerm_bound"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.changeOriginSeriesTerm_bound"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.517,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_norm_independent_of_s",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s₁ s₂ : Finset (Fin (k + l))) (hs₁ : s₁.card = l) (hs₂ : s₂.card = l), ‖VTask.changeOriginSeriesTerm p k l s₁ hs₁‖ = ‖VTask.changeOriginSeriesTerm p k l s₂ hs₂‖",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.4,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_norm_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l), 0 ≤ ‖VTask.changeOriginSeriesTerm p k l s hs‖",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm",
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm",
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.537,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "changeOriginSeriesTerm_norm_ne_zero_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) (F : Type*) [NontriviallyNormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E] [NormedAddCommGroup F] [NormedSpace 𝕜 F] (p : FormalMultilinearSeries 𝕜 E F) (k l : ℕ) (s : Finset (Fin (k + l))) (hs : s.card = l), ¬(‖VTask.changeOriginSeriesTerm p k l s hs‖ = ‖p (k + l + 1)‖ ∧ ‖p (k + l)‖ ≠ ‖p (k + l + 1)‖)",
+      "domain_inputs": {},
+      "anchors": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FormalMultilinearSeries.norm_changeOriginSeriesTerm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.049,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FormalMultilinearSeries.changeOriginSeriesTerm",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FormalMultilinearSeries.changeOriginSeriesTerm-fb677280",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "task_id": "Ordinal.limitRecOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.limitRecOn",
+  "signature": {
+    "name": "VTask.limitRecOn",
+    "type": "{motive : Ordinal.{u_5} → Sort u_4} -> (o : Ordinal.{u_5}) -> (zero : motive 0) -> (add_one : (o : Ordinal.{u_5}) → motive o → motive (o + 1)) -> (limit : (o : Ordinal.{u_5}) → Order.IsSuccLimit o → ((o' : Ordinal.{u_5}) → o' < o → motive o') → motive o) -> motive o",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "o"
+    ],
+    "conventions": [
+      {
+        "point": "zero_case",
+        "statement": "When o = 0, VTask.limitRecOn o zero add_one limit computes to zero.",
+        "note": "Base case; 0 is not treated as a limit ordinal."
+      },
+      {
+        "point": "successor_case",
+        "statement": "When o = a + 1 for some ordinal a, VTask.limitRecOn o zero add_one limit computes to add_one a (VTask.limitRecOn a zero add_one limit).",
+        "note": "Successor step unfolds one layer of recursion."
+      },
+      {
+        "point": "limit_case",
+        "statement": "When o is a limit ordinal (Order.IsSuccLimit o holds, meaning o ≠ 0 and o is not a successor), VTask.limitRecOn o zero add_one limit computes to limit o h (fun o' _ => VTask.limitRecOn o' zero add_one limit).",
+        "note": "The limit step receives access to all recursively computed values at smaller ordinals."
+      },
+      {
+        "point": "zero_not_limit",
+        "statement": "The ordinal 0 is handled by the zero case, not the limit case, even though it has no predecessor; Order.IsSuccLimit 0 is false in Mathlib's convention.",
+        "note": "This is a deliberate split: the three branches are mutually exclusive and exhaustive."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "limitRecOn_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.limitRecOn (0 : Ordinal.{0}) (True) (fun _ _ => True) (fun _ _ _ => True) = True",
+      "domain_inputs": {
+        "o": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.17,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordinal.limitRecOn-eac1d19a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.limitRecOn (0 : Ordinal.{0}) True (fun _ _ => True) (fun _ _ _ => True)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordinal.limitRecOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordinal.limitRecOn-eac1d19a",
+    "review_status": "unreviewed"
+  }
+}

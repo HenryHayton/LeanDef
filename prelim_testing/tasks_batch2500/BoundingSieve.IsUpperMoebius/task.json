@@ -1,0 +1,165 @@
+{
+  "task_id": "BoundingSieve.IsUpperMoebius",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsUpperMoebius",
+  "signature": {
+    "name": "VTask.IsUpperMoebius",
+    "type": "(muPlus : ℕ → ℝ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "muPlus"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "At n = 0, the divisors set is empty in Mathlib, so the divisor sum is 0 and the right-hand side is also 0 (since 0 ≠ 1); the condition 0 ≤ 0 is trivially satisfied for every sequence.",
+        "note": "This is a junk-value convention arising from Mathlib's definition of Nat.divisors at 0."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "upper_moebius_n1_ge_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ muPlus : ℕ → ℝ, VTask.IsUpperMoebius muPlus → 1 ≤ ∑ d ∈ Nat.divisors 1, muPlus d",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.852,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundingSieve.IsUpperMoebius-e12a11d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upper_moebius_muplus1_ge_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ muPlus : ℕ → ℝ, VTask.IsUpperMoebius muPlus → 1 ≤ muPlus 1",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoundingSieve.IsUpperMoebius-e12a11d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upper_moebius_n_gt1_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ muPlus : ℕ → ℝ, VTask.IsUpperMoebius muPlus → ∀ n : ℕ, n ≠ 1 → 0 ≤ ∑ d ∈ Nat.divisors n, muPlus d",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoundingSieve.IsUpperMoebius-e12a11d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upper_moebius_lambdaSquared_hw",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ weights : ℕ → ℝ, weights 1 = 1 → VTask.IsUpperMoebius (BoundingSieve.lambdaSquared weights)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.102,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundingSieve.IsUpperMoebius-e12a11d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoundingSieve.IsUpperMoebius",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoundingSieve.IsUpperMoebius-e12a11d8",
+    "review_status": "unreviewed"
+  }
+}

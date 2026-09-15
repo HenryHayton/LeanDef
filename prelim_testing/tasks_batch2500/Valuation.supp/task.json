@@ -1,0 +1,282 @@
+{
+  "task_id": "Valuation.supp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.supp",
+  "signature": {
+    "name": "VTask.supp",
+    "type": "{R : Type u_3} -> {Γ₀ : Type u_4} -> [CommRing R] -> [LinearOrderedCommMonoidWithZero Γ₀] -> (v : Valuation R Γ₀) -> Ideal R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all commutative rings and all linearly ordered commutative monoids with zero; every valuation has a well-defined support ideal with no junk-value edge cases requiring special conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "supp_quot_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (v : Valuation R Γ₀), VTask.supp (v.onQuot le_rfl) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.supp_quot_supp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.supp_quot_supp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.743,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_map_add_supp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (v : Valuation R Γ₀) (a : R) {s : R}, s ∈ VTask.supp v → v (a + s) = v a",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.map_add_supp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.map_add_supp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.18,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_ideal_le_supp_comap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (J : Ideal R) (v : Valuation (R ⧸ J) Γ₀), J ≤ VTask.supp (v.comap (Ideal.Quotient.mk J))",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.self_le_supp_comap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.self_le_supp_comap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.714,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_is_ideal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (v : Valuation R Γ₀), ∀ a ∈ VTask.supp v, ∀ b : R, b * a ∈ VTask.supp v",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.mem_supp_iff",
+        "Ideal.mul_mem_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.mem_supp_iff",
+        "Ideal.mul_mem_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.151,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_add_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (v : Valuation R Γ₀) (a b : R), a ∈ VTask.supp v → b ∈ VTask.supp v → a + b ∈ VTask.supp v",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.mem_supp_iff",
+        "Ideal.add_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.mem_supp_iff",
+        "Ideal.add_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_comap_quotient_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {Γ₀ : Type*} [CommRing R] [LinearOrderedCommMonoidWithZero Γ₀] (v : Valuation R Γ₀) {J : Ideal R} (hJ : J ≤ VTask.supp v), VTask.supp (v.onQuot hJ) = (VTask.supp v).map (Ideal.Quotient.mk J)",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.supp_quot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.supp_quot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.428,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supp_ne_top_for_field_valuation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] (v : Valuation K NNReal), VTask.supp v ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Valuation.mem_supp_iff",
+        "Ideal.ne_top_iff_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Valuation.mem_supp_iff",
+        "Ideal.ne_top_iff_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.524,
+        "at": "authoring",
+        "script": "by simp [_root_.Valuation.supp] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Valuation.supp] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Valuation.supp-39cf8445",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Valuation.supp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Valuation.supp-39cf8445",
+    "review_status": "unreviewed"
+  }
+}

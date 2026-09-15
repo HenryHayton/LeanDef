@@ -1,0 +1,230 @@
+{
+  "task_id": "Equiv.piUnique",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piUnique",
+  "signature": {
+    "name": "VTask.piUnique",
+    "type": "{α : Sort u} -> [Unique α] -> (β : α → Sort u_1) -> ((i : α) → β i) ≃ β default",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α",
+      "β"
+    ],
+    "conventions": [
+      {
+        "point": "forward map",
+        "statement": "The forward map (toFun) of the equivalence evaluates a dependent function at `default`, the unique element of α.",
+        "note": "This is the canonical projection from the pi-type to the fiber at the unique point."
+      },
+      {
+        "point": "inverse map",
+        "statement": "The inverse map (invFun) extends a single value in `β default` to the unique dependent function on all of α, using the fact that every element of α equals default.",
+        "note": "Implemented via uniqueElim, which propagates the value at default to all indices."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piUnique_toFun_unit_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => ℕ)).toFun (fun _ => 42) = 42 := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piUnique_toFun_unit_int",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => ℤ)).toFun (fun _ => -3) = -3 := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piUnique_invFun_unit_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => ℕ)).invFun 7 = fun _ => 7 := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piUnique_invFun_unit_bool",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => Bool)).invFun true = fun _ => true := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piUnique_roundtrip_forward",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => ℕ)).toFun ((VTask.piUnique (α := Unit) (β := fun _ => ℕ)).invFun 5) = 5 := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piUnique_accept_unit_type",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.piUnique (α := Unit) (β := fun _ => Bool)).toFun (fun _ => true) = true := by decide",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "fun _ => Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.piUnique-0ce7d26e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.piUnique (α := Unit) (β := fun _ => Bool)).toFun (fun _ => true)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.piUnique",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.piUnique-0ce7d26e",
+    "review_status": "unreviewed"
+  }
+}

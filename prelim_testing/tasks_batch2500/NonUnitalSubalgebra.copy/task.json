@@ -1,0 +1,214 @@
+{
+  "task_id": "NonUnitalSubalgebra.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{R : Type u} -> {A : Type v} -> [CommSemiring R] -> [NonUnitalNonAssocSemiring A] -> [Module R A] -> (S : NonUnitalSubalgebra R A) -> (s : Set A) -> (hs : s = ↑S) -> NonUnitalSubalgebra R A",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "hs : s = ↑S",
+    "variables": [
+      "S",
+      "s",
+      "hs"
+    ],
+    "conventions": [
+      {
+        "point": "hs = rfl",
+        "statement": "When `hs` is `rfl`, the copy is definitionally equal to the original subalgebra `S`.",
+        "note": "This is the primary use case: fixing definitional equalities by substituting a preferred but propositionally equal carrier."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S), VTask.copy S s hs = S",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalSubalgebra.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalSubalgebra.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.745,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_carrier_eq_original_carrier",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S), (↑(VTask.copy S s hs) : Set A) = ↑S",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalSubalgebra.coe_copy"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalSubalgebra.coe_copy"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.489,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] (S T : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S), VTask.copy S s hs ≤ T ↔ S ≤ T",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalSubalgebra.copy_eq",
+        "le_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalSubalgebra.copy_eq",
+        "le_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.387,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_copy_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S), VTask.copy S s hs = S",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalSubalgebra.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalSubalgebra.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.743,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_larger",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] (S T : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S), S ≠ T → VTask.copy S s hs ≠ T",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalSubalgebra.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalSubalgebra.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.72,
+        "at": "authoring",
+        "script": "by simp only [_root_.NonUnitalSubalgebra.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.NonUnitalSubalgebra.copy] <;> aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "NonUnitalSubalgebra.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "NonUnitalSubalgebra.copy-20222805",
+    "review_status": "unreviewed"
+  }
+}

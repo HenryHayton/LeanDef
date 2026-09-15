@@ -1,0 +1,306 @@
+{
+  "task_id": "Num.add",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.add",
+  "signature": {
+    "name": "VTask.add",
+    "type": "Num → Num → Num",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "left zero",
+        "statement": "VTask.add 0 a = a for all a : Num",
+        "note": "Zero on the left is the identity: the result is exactly the right argument."
+      },
+      {
+        "point": "right zero",
+        "statement": "VTask.add b 0 = b for all b : Num",
+        "note": "Zero on the right is also the identity: the result is exactly the left argument."
+      },
+      {
+        "point": "both positive",
+        "statement": "VTask.add (pos a) (pos b) = pos (a + b)",
+        "note": "When both arguments are positive, addition is delegated to PosNum addition and the result is wrapped in pos."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "add_zero_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add 0 0 = 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "0"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_zero_pos1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add 0 (Num.pos 1) = Num.pos 1 := by decide",
+      "domain_inputs": {
+        "m": [
+          "0"
+        ],
+        "n": [
+          "Num.pos 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_pos1_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add (Num.pos 1) 0 = Num.pos 1 := by decide",
+      "domain_inputs": {
+        "m": [
+          "Num.pos 1"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_pos1_pos1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add (Num.pos 1) (Num.pos 1) = Num.pos (PosNum.bit0 1) := by decide",
+      "domain_inputs": {
+        "m": [
+          "Num.pos 1"
+        ],
+        "n": [
+          "Num.pos 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_pos_pos_result",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add (Num.pos (PosNum.bit0 1)) (Num.pos 1) = Num.pos (PosNum.bit1 1) := by decide",
+      "domain_inputs": {
+        "m": [
+          "Num.pos (PosNum.bit0 1)"
+        ],
+        "n": [
+          "Num.pos 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_pos_ne_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.add (Num.pos 1) (Num.pos 1) ≠ 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "Num.pos 1"
+        ],
+        "n": [
+          "Num.pos 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_zero_right_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : Num, VTask.add n 0 = n",
+      "domain_inputs": {},
+      "anchors": [
+        "Num.add_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Num.add_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_cast_nat_homomorphism",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m n : Num, (VTask.add m n : ℕ) = (m : ℕ) + (n : ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Num.add_to_nat"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Num.add_to_nat"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "add_pos_pos_is_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ a b : PosNum, VTask.add (Num.pos a) (Num.pos b) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Num.add_to_nat",
+        "PosNum.cast_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Num.add_to_nat",
+        "PosNum.cast_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.155,
+        "at": "authoring",
+        "script": "by simp [_root_.Num.add] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Num.add] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Num.add-220c1120",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Num.add",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Num.add-220c1120",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "task_id": "Submodule.inclusion",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inclusion",
+  "signature": {
+    "name": "VTask.inclusion",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> {p p' : Submodule R M} -> (h : p ≤ p') -> ↥p →ₗ[R] ↥p'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-defined for any proof h : p ≤ p'; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inclusion_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (p p' : Submodule R M) (h : p ≤ p'), Function.Injective (VTask.inclusion h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.inclusion_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.inclusion_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.712,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_bot_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (p' : Submodule R M) (h : ⊥ ≤ p') (x : ↥(⊥ : Submodule R M)), (VTask.inclusion h x : M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.eq_zero_of_bot_submodule",
+        "Submodule.inclusion_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.eq_zero_of_bot_submodule",
+        "Submodule.inclusion_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.788,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_accept_le",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.inclusion (show (⊥ : Submodule ℤ ℤ) ≤ ⊤ from bot_le) ⟨0, Submodule.zero_mem ⊥⟩ : ↥(⊤ : Submodule ℤ ℤ)) = ⟨0, Submodule.mem_top⟩ := by decide",
+      "domain_inputs": {
+        "h": [
+          "bot_le"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.inclusion bot_le ⟨0, Submodule.zero_mem ⊥⟩"
+    },
+    {
+      "id": "inclusion_reject_not_injective_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (p p' : Submodule R M) (h : p ≤ p'), ¬ Function.Injective (VTask.inclusion h))",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.inclusion_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.inclusion_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_not_surjective_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (p p' : Submodule R M) (h : p ≤ p'), Function.Surjective (VTask.inclusion h))",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.inclusion_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.inclusion_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_val_ne_different_submodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (p p' : Submodule R M) (h : p ≤ p') (x y : ↥p), x ≠ y → VTask.inclusion h x ≠ VTask.inclusion h y",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.inclusion_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.inclusion_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.inclusion-b6f074b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.inclusion",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.inclusion-b6f074b0",
+    "review_status": "unreviewed"
+  }
+}

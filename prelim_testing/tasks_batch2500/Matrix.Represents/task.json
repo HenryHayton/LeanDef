@@ -1,0 +1,261 @@
+{
+  "task_id": "Matrix.Represents",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Represents",
+  "signature": {
+    "name": "VTask.Represents",
+    "type": "{ι : Type u_1} -> [Fintype ι] -> {M : Type u_2} -> [AddCommGroup M] -> {R : Type u_3} -> [CommRing R] -> [Module R M] -> (b : ι → M) -> [DecidableEq ι] -> (A : Matrix ι ι R) -> (f : Module.End R M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "A",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a Prop-valued relation with no junk-value output conventions; it either holds or does not for given inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "represents_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M) (A A' : Matrix ι ι R) (f f' : Module.End R M), VTask.Represents b A f → VTask.Represents b A' f' → VTask.Represents b (A + A') (f + f')",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.539,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "represents_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M) (A A' : Matrix ι ι R) (f f' : Module.End R M), VTask.Represents b A f → VTask.Represents b A' f' → VTask.Represents b (A * A') (f * f')",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.304,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "represents_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M) (A : Matrix ι ι R) (f : Module.End R M) (r : R), VTask.Represents b A f → VTask.Represents b (r • A) (r • f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.813,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "represents_uniqueness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M), Submodule.span R (Set.range b) = ⊤ → ∀ (A : Matrix ι ι R) (f f' : Module.End R M), VTask.Represents b A f → VTask.Represents b A f' → f = f'",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.168,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "represents_add_zero_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M) (A : Matrix ι ι R) (f : Module.End R M), VTask.Represents b A f → VTask.Represents b (A + 0) (f + 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.add",
+        "Matrix.Represents.zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.add",
+        "Matrix.Represents.zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.496,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "represents_mul_one_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) [Fintype ι] [DecidableEq ι] (M : Type*) [AddCommGroup M] (R : Type*) [CommRing R] [Module R M] (b : ι → M) (A : Matrix ι ι R) (f : Module.End R M), VTask.Represents b A f → VTask.Represents b (A * 1) (f * 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.Represents.mul",
+        "Matrix.Represents.one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.Represents.mul",
+        "Matrix.Represents.one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.579,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.Represents-c861e69b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.Represents",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.Represents-c861e69b",
+    "review_status": "unreviewed"
+  }
+}

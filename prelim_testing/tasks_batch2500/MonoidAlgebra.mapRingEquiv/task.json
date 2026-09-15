@@ -1,0 +1,262 @@
+{
+  "task_id": "MonoidAlgebra.mapRingEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapRingEquiv",
+  "signature": {
+    "name": "VTask.mapRingEquiv",
+    "type": "{R : Type u_3} -> {S : Type u_4} -> (M : Type u_6) -> [Semiring R] -> [Semiring S] -> [Monoid M] -> (e : R ≃+* S) -> MonoidAlgebra R M ≃+* MonoidAlgebra S M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "e"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total and well-defined for all semirings R, S, monoid M, and ring isomorphism e : R ≃+* S; there are no junk-value or edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapRingEquiv_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S M : Type*) [Semiring R] [Semiring S] [Monoid M] (e : R ≃+* S) (r : R) (m : M), VTask.mapRingEquiv M e (MonoidAlgebra.single m r) = MonoidAlgebra.single m (e r)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidAlgebra.mapRingEquiv_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidAlgebra.mapRingEquiv_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.803,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRingEquiv_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S T M : Type*) [Semiring R] [Semiring S] [Semiring T] [Monoid M] (e₁ : R ≃+* S) (e₂ : S ≃+* T), VTask.mapRingEquiv M (e₁.trans e₂) = (VTask.mapRingEquiv M e₁).trans (VTask.mapRingEquiv M e₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidAlgebra.mapRingEquiv_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidAlgebra.mapRingEquiv_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.164,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRingEquiv_single_zero_coeff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S M : Type*) [Semiring R] [Semiring S] [Monoid M] (e : R ≃+* S) (m : M), (VTask.mapRingEquiv M e (MonoidAlgebra.single m 0)).coeff m = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidAlgebra.mapRingEquiv_single",
+        "MonoidAlgebra.coeff_mapRingEquiv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidAlgebra.mapRingEquiv_single",
+        "MonoidAlgebra.coeff_mapRingEquiv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.574,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRingEquiv_bijective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S M : Type*) [Semiring R] [Semiring S] [Monoid M] (e : R ≃+* S), Function.Bijective (VTask.mapRingEquiv M e)",
+      "domain_inputs": {},
+      "anchors": [
+        "RingEquiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingEquiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.436,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRingEquiv_symm_trans_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S M : Type*) [Semiring R] [Semiring S] [Monoid M] (e : R ≃+* S), ((VTask.mapRingEquiv M e).symm.trans (VTask.mapRingEquiv M e)) = RingEquiv.refl (MonoidAlgebra S M)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidAlgebra.symm_mapRingEquiv",
+        "MonoidAlgebra.mapRingEquiv_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidAlgebra.symm_mapRingEquiv",
+        "MonoidAlgebra.mapRingEquiv_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.008,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRingEquiv_symm_coeff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S M : Type*) [Semiring R] [Semiring S] [Monoid M] (e : R ≃+* S) (x : MonoidAlgebra R M) (m : M), ((VTask.mapRingEquiv M e).symm (VTask.mapRingEquiv M e x)).coeff m = x.coeff m",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidAlgebra.symm_mapRingEquiv",
+        "MonoidAlgebra.coeff_mapRingEquiv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidAlgebra.symm_mapRingEquiv",
+        "MonoidAlgebra.coeff_mapRingEquiv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.952,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidAlgebra.mapRingEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidAlgebra.mapRingEquiv-5e32817f",
+    "review_status": "unreviewed"
+  }
+}

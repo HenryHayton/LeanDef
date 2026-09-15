@@ -1,0 +1,164 @@
+{
+  "task_id": "IntermediateField.equivOfEq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.equivOfEq",
+  "signature": {
+    "name": "VTask.equivOfEq",
+    "type": "{F : Type u_4} -> [Field F] -> {E : Type u_5} -> [Field E] -> [Algebra F E] -> {S T : IntermediateField F E} -> (h : S = T) -> ↥S ≃ₐ[F] ↥T",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "T",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "h = rfl",
+        "statement": "When h is rfl (S and T are the same intermediate field), VTask.equivOfEq h is the identity AlgEquiv on ↥S.",
+        "note": "The identity behavior at reflexivity is the canonical base case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "equivOfEq_is_algequiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (E : Type*) [Field E] [Algebra F E] (S T : IntermediateField F E) (h : S = T), Function.Bijective (VTask.equivOfEq h).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IntermediateField.equivOfEq-0240470c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivOfEq_accept_rfl_is_bijective",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (x : ↥(⊤ : IntermediateField ℚ ℝ)), VTask.equivOfEq (rfl : (⊤ : IntermediateField ℚ ℝ) = ⊤) x = x",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.259,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IntermediateField.equivOfEq-0240470c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.equivOfEq (rfl : (⊥ : IntermediateField ℚ ℝ) = ⊥)"
+    },
+    {
+      "id": "equivOfEq_not_eq_nonidentity_when_S_eq_T_rfl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (E : Type*) [Field E] [Algebra F E] (S : IntermediateField F E), VTask.equivOfEq (rfl : S = S) ≠ (AlgEquiv.refl).symm.symm → False",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.refl",
+        "AlgEquiv.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.refl",
+        "AlgEquiv.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.433,
+        "at": "authoring",
+        "script": "by simp [_root_.IntermediateField.equivOfEq] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.IntermediateField.equivOfEq] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IntermediateField.equivOfEq-0240470c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivOfEq_reject_not_identity_on_different_fields",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((⊥ : IntermediateField ℚ ℝ) = (⊤ : IntermediateField ℚ ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IntermediateField.equivOfEq-0240470c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(⊥ : IntermediateField ℚ ℝ)",
+      "violated_property": "equivOfEq requires a proof that S = T; without such a proof, no such isomorphism can be produced purely from non-equal intermediate fields"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IntermediateField.equivOfEq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IntermediateField.equivOfEq-0240470c",
+    "review_status": "unreviewed"
+  }
+}

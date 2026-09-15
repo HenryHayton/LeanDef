@@ -1,0 +1,244 @@
+{
+  "task_id": "Ordnode.eraseMax",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.eraseMax",
+  "signature": {
+    "name": "VTask.eraseMax",
+    "type": "{α : Type u_1} -> Ordnode α → Ordnode α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "empty input",
+        "statement": "VTask.eraseMax nil = nil",
+        "note": "Erasing the maximum of an empty tree returns the empty tree unchanged."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "eraseMax_size_decreases",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Ordnode.size (VTask.eraseMax (Ordnode.node 1 Ordnode.nil (5 : ℕ) Ordnode.nil)) = Ordnode.size (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil) - 1 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 1 Ordnode.nil 5 Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_valid_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.Valid t → Ordnode.Valid (VTask.eraseMax t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMax.valid"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMax.valid"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.092,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_dual_eraseMin",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.dual (VTask.eraseMax t) = Ordnode.eraseMin (Ordnode.dual t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.dual_eraseMax"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.dual_eraseMax"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.106,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_splitMax_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : ℕ) (l : Ordnode ℕ) (x : ℕ) (r : Ordnode ℕ), (Ordnode.splitMax' l x r).1 = VTask.eraseMax (Ordnode.node s l x r)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.splitMax_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.splitMax_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_nil_size_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Ordnode.size (VTask.eraseMax (Ordnode.nil : Ordnode ℕ)) = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_nonempty_produces_smaller",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.Valid t → Ordnode.size (VTask.eraseMax t) ≤ Ordnode.size t",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMax.valid",
+        "Ordnode.Valid'.eraseMax_aux"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMax.valid",
+        "Ordnode.Valid'.eraseMax_aux"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMax_singleton_ne_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.eraseMax (Ordnode.node 1 Ordnode.nil (3 : ℕ) Ordnode.nil) ≠ Ordnode.node 1 Ordnode.nil 3 Ordnode.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMax.valid"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMax.valid"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.118,
+        "at": "authoring",
+        "script": "by simp [_root_.Ordnode.eraseMax] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Ordnode.eraseMax] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.eraseMax",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.eraseMax-469f9aa0",
+    "review_status": "unreviewed"
+  }
+}

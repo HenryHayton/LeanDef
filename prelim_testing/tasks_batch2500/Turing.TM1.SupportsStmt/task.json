@@ -1,0 +1,145 @@
+{
+  "task_id": "Turing.TM1.SupportsStmt",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SupportsStmt",
+  "signature": {
+    "name": "VTask.SupportsStmt",
+    "type": "{Γ : Type u_1} -> {Λ : Type u_2} -> {σ : Type u_3} -> (S : Finset Λ) -> Turing.TM1.Stmt Γ Λ σ → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": "halt is always supported",
+        "statement": "VTask.SupportsStmt S Turing.TM1.Stmt.halt is True for every S, because halt contains no goto instructions.",
+        "note": "Base case of the recursion; trivially holds."
+      },
+      {
+        "point": "goto requires universal label containment",
+        "statement": "VTask.SupportsStmt S (Turing.TM1.Stmt.goto l) holds iff for all tape symbols a and states v, l a v ∈ S.",
+        "note": "The label function may depend on both tape symbol and internal state; all branches must land in S."
+      },
+      {
+        "point": "branch requires both sub-statements supported",
+        "statement": "VTask.SupportsStmt S (Turing.TM1.Stmt.branch f q₁ q₂) holds iff both VTask.SupportsStmt S q₁ and VTask.SupportsStmt S q₂ hold.",
+        "note": "Conjunctive requirement; either branch failing is sufficient to refute the predicate."
+      },
+      {
+        "point": "sequencing constructors propagate support to continuation",
+        "statement": "For move, write, and load, VTask.SupportsStmt S applied to such a statement holds iff VTask.SupportsStmt S holds for its continuation.",
+        "note": "These constructors add no new goto targets themselves."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "supportsStmt_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ Λ σ : Type} (S S' : Finset Λ) (q : Turing.TM1.Stmt Γ Λ σ), S ⊆ S' → VTask.SupportsStmt S q → VTask.SupportsStmt S' q",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM1.SupportsStmt-bc226ad5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supportsStmt_halt_universal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ Λ σ : Type} (S : Finset Λ), VTask.SupportsStmt S (Turing.TM1.Stmt.halt : Turing.TM1.Stmt Γ Λ σ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM1.SupportsStmt-bc226ad5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supportsStmt_substmt_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ Λ σ : Type} {S : Finset Λ} {q₁ q₂ : Turing.TM1.Stmt Γ Λ σ}, q₁ ∈ Turing.TM1.stmts₁ q₂ → VTask.SupportsStmt S q₂ → VTask.SupportsStmt S q₁",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM1.stmts₁_supportsStmt_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.465,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM1.SupportsStmt-bc226ad5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.TM1.SupportsStmt",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.TM1.SupportsStmt-bc226ad5",
+    "review_status": "unreviewed"
+  }
+}

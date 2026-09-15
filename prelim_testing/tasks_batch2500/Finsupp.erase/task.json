@@ -1,0 +1,398 @@
+{
+  "task_id": "Finsupp.erase",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.erase",
+  "signature": {
+    "name": "VTask.erase",
+    "type": "{α : Type u_1} -> {M : Type u_5} -> [Zero M] -> (a : α) -> (f : α →₀ M) -> α →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "a ∉ f.support",
+        "statement": "If `a` is not in the support of `f`, then `VTask.erase a f = f` (the function is returned unchanged).",
+        "note": "This is a junk-value-free convention: the operation is well-defined and total for all inputs; this case simply produces the identity result."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "erase_at_erased_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α) (f : α →₀ M), (VTask.erase a f) a = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.311,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_at_other_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a a' : α) (f : α →₀ M), a' ≠ a → (VTask.erase a f) a' = f a'",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.326,
+        "at": "authoring",
+        "script": "by simp [_root_.Finsupp.erase] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Finsupp.erase] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_zero_finsupp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α), VTask.erase a (0 : α →₀ M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.262,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_idem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α) (f : α →₀ M), VTask.erase a (VTask.erase a f) = VTask.erase a f",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_idem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_idem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.318,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_single_same",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α) (b : M), VTask.erase a (Finsupp.single a b) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.275,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_not_mem_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α) (f : α →₀ M), a ∉ f.support → VTask.erase a f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_of_notMem_support"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_of_notMem_support"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.115,
+        "at": "authoring",
+        "script": "by simp only [_root_.Finsupp.erase] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Finsupp.erase] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_add_erase",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [AddCommMonoid M] (a : α) (f : α →₀ M), Finsupp.single a (f a) + VTask.erase a f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.single_add_erase"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.single_add_erase"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [DecidableEq α] [Zero M] (a : α) (f : α →₀ M), (VTask.erase a f).support = f.support.erase a",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_update_zero",
+        "Finsupp.erase_eq_update_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_update_zero",
+        "Finsupp.erase_eq_update_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.258,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_eq_update_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (a : α) (f : α →₀ M), VTask.erase a f = Finsupp.update f a 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_eq_update_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_eq_update_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.946,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "erase_add_distributes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [AddCommMonoid M] (a : α) (f g : α →₀ M), VTask.erase a (f + g) = VTask.erase a f + VTask.erase a g",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.erase_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.erase_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.506,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.erase-aff14884",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.erase",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.erase-aff14884",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "task_id": "LinearMap.IsLeftQuasiInverse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsLeftQuasiInverse",
+  "signature": {
+    "name": "VTask.IsLeftQuasiInverse",
+    "type": "{K : Type u_1} -> {V : Type u_2} -> {V₂ : Type u_4} -> [CommRing K] -> [AddCommGroup V] -> [Module K V] -> [AddCommGroup V₂] -> [Module K V₂] -> (u : V →ₗ[K] V₂) -> (v : V₂ →ₗ[K] V) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "u",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a Prop-valued predicate on linear maps with no degenerate or junk inputs requiring special edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lqi_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) (V V₂ V₃ : Type*) [CommRing K] [AddCommGroup V] [Module K V] [AddCommGroup V₂] [Module K V₂] [AddCommGroup V₃] [Module K V₃] (u : V →ₗ[K] V₂) (u' : V₂ →ₗ[K] V) (v : V₂ →ₗ[K] V₃) (v' : V₃ →ₗ[K] V₂), VTask.IsLeftQuasiInverse u' u → VTask.IsLeftQuasiInverse v' v → VTask.IsLeftQuasiInverse (u' ∘ₗ v') (v ∘ₗ u)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsLeftQuasiInverse.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsLeftQuasiInverse.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.9,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.IsLeftQuasiInverse-cf681150",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lqi_not_symmetric_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (K : Type*) (V V₂ : Type*) [CommRing K] [AddCommGroup V] [Module K V] [AddCommGroup V₂] [Module K V₂] (u : V →ₗ[K] V₂) (v : V₂ →ₗ[K] V), VTask.IsLeftQuasiInverse u v → VTask.IsLeftQuasiInverse v u",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.isLeftQuasiInverse_iff_isRightQuasiInverse_swap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.isLeftQuasiInverse_iff_isRightQuasiInverse_swap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsLeftQuasiInverse-cf681150",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lqi_of_exact_left_inverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) (V V₂ : Type*) [CommRing K] [AddCommGroup V] [Module K V] [AddCommGroup V₂] [Module K V₂] (u : V →ₗ[K] V₂) (v : V₂ →ₗ[K] V), u ∘ₗ v = LinearMap.id → VTask.IsLeftQuasiInverse u v",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsLeftQuasiInverse.equiv"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsLeftQuasiInverse.equiv"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsLeftQuasiInverse-cf681150",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lqi_comp_of_comp_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) (V V₂ V₃ : Type*) [CommRing K] [AddCommGroup V] [Module K V] [AddCommGroup V₂] [Module K V₂] [AddCommGroup V₃] [Module K V₃] (u : V →ₗ[K] V₂) (u' : V₂ →ₗ[K] V) (v : V₂ →ₗ[K] V₃) (w : V₃ →ₗ[K] V), u'.IsRightQuasiInverse u → VTask.IsLeftQuasiInverse w (v ∘ₗ u) → VTask.IsLeftQuasiInverse (u ∘ₗ w) v",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsLeftQuasiInverse.of_comp_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsLeftQuasiInverse.of_comp_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.135,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.IsLeftQuasiInverse-cf681150",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.IsLeftQuasiInverse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.IsLeftQuasiInverse-cf681150",
+    "review_status": "unreviewed"
+  }
+}

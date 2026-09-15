@@ -1,0 +1,201 @@
+{
+  "task_id": "ContinuousMap.Homotopy.trans",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.trans",
+  "signature": {
+    "name": "VTask.trans",
+    "type": "{X : Type u} -> {Y : Type v} -> [TopologicalSpace X] -> [TopologicalSpace Y] -> {f₀ f₁ f₂ : C(X, Y)} -> (F : f₀.Homotopy f₁) -> (G : f₁.Homotopy f₂) -> f₀.Homotopy f₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "F",
+      "G"
+    ],
+    "conventions": [
+      {
+        "point": "time_rescaling",
+        "statement": "For t ≤ 1/2 the output is F evaluated at rescaled time 2t; for t > 1/2 the output is G evaluated at rescaled time 2t - 1.",
+        "note": "This piecewise rescaling doubles the speed of each homotopy so each occupies exactly half the unit interval."
+      },
+      {
+        "point": "junction_continuity",
+        "statement": "At t = 1/2 both branches yield f₁(x), so the concatenated map is continuous across the seam.",
+        "note": "This relies on the boundary conditions F(1,x) = f₁(x) and G(0,x) = f₁(x)."
+      },
+      {
+        "point": "boundary_at_zero",
+        "statement": "At t = 0 the concatenated homotopy equals f₀, inherited from F's left boundary condition.",
+        "note": "Follows from the rescaling: 2·0 = 0 and F(0,x) = f₀(x)."
+      },
+      {
+        "point": "boundary_at_one",
+        "statement": "At t = 1 the concatenated homotopy equals f₂, inherited from G's right boundary condition.",
+        "note": "Follows from the rescaling: 2·1 - 1 = 1 and G(1,x) = f₂(x)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "trans_apply_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f₀ f₁ f₂ : C(X, Y)} (F : f₀.Homotopy f₁) (G : f₁.Homotopy f₂) (x : X), VTask.trans F G (0, x) = f₀ x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMap.Homotopy.trans_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMap.Homotopy.trans_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.553,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.Homotopy.trans-7f162f2d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_apply_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f₀ f₁ f₂ : C(X, Y)} (F : f₀.Homotopy f₁) (G : f₁.Homotopy f₂) (x : X), VTask.trans F G (1, x) = f₂ x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMap.Homotopy.trans_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMap.Homotopy.trans_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.514,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.Homotopy.trans-7f162f2d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f₀ f₁ f₂ : C(X, Y)} (F : f₀.Homotopy f₁) (G : f₁.Homotopy f₂), Continuous (VTask.trans F G)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMap.continuous_toFun"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMap.continuous_toFun"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.157,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.Homotopy.trans-7f162f2d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_output_type_correct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} {Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {f₀ f₁ f₂ : C(X, Y)} (F : f₀.Homotopy f₁) (G : f₁.Homotopy f₂), VTask.trans F G ∈ (Set.univ : Set (f₀.Homotopy f₂))",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.452,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.Homotopy.trans-7f162f2d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousMap.Homotopy.trans",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousMap.Homotopy.trans-7f162f2d",
+    "review_status": "unreviewed"
+  }
+}

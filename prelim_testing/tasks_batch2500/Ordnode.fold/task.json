@@ -1,0 +1,218 @@
+{
+  "task_id": "Ordnode.fold",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fold",
+  "signature": {
+    "name": "VTask.fold",
+    "type": "{α : Type u_1} -> {β : Sort u_2} -> (z : β) -> (f : β → α → β → β) -> Ordnode α → β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "z",
+      "f",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "tree_shape_unspecified",
+        "statement": "The exact nesting of applications of f depends on the internal tree structure of the Ordnode, which may differ between trees representing the same ordered set due to rebalancing; the fold result for non-associative f is therefore shape-dependent and unspecified beyond the per-node recursive contract.",
+        "note": "This is an inherent property of folding over a balanced BST whose shape is implementation-defined."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fold_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold 0 (fun l x r => l + x + r) (Ordnode.nil : Ordnode ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "z": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_nil_list",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold [] (fun l x r => l ++ [x] ++ r) (Ordnode.nil : Ordnode ℕ) = [] := by decide",
+      "domain_inputs": {
+        "z": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_single_node",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold 0 (fun l x r => l + x + r) (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil) = 5 := by decide",
+      "domain_inputs": {
+        "z": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_count_nodes_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold 0 (fun l _ r => l + 1 + r) (Ordnode.nil : Ordnode ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "z": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_count_nodes_single",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold 0 (fun l _ r => l + 1 + r) (Ordnode.node 1 Ordnode.nil 42 Ordnode.nil) = 1 := by decide",
+      "domain_inputs": {
+        "z": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_count_nodes_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.fold 0 (fun l _ r => l + 1 + r) (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 Ordnode.nil) = 2 := by decide",
+      "domain_inputs": {
+        "z": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fold_inorder_agrees_toList",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), VTask.fold [] (fun l x r => l ++ [x] ++ r) t = Ordnode.toList t",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.foldr_cons_eq_toList"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.foldr_cons_eq_toList"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.fold-03c55b0c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.fold",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.fold-03c55b0c",
+    "review_status": "unreviewed"
+  }
+}

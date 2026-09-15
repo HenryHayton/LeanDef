@@ -1,0 +1,440 @@
+{
+  "task_id": "MvPowerSeries.weightedHomogeneousComponent",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.weightedHomogeneousComponent",
+  "signature": {
+    "name": "VTask.weightedHomogeneousComponent",
+    "type": "{σ : Type u_1} -> {R : Type u_2} -> [Semiring R] -> (w : σ → ℕ) -> (p : ℕ) -> MvPowerSeries σ R →ₗ[R] MvPowerSeries σ R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "coefficient of d when weight w d = p",
+        "statement": "The coefficient of multi-index d in VTask.weightedHomogeneousComponent w p f equals coeff d f whenever weight w d = p.",
+        "note": "This is the defining retention rule."
+      },
+      {
+        "point": "coefficient of d when weight w d ≠ p",
+        "statement": "The coefficient of multi-index d in VTask.weightedHomogeneousComponent w p f is 0 whenever weight w d ≠ p.",
+        "note": "This is the defining zeroing-out rule."
+      },
+      {
+        "point": "p strictly less than weighted order",
+        "statement": "If p < weightedOrder w f, then VTask.weightedHomogeneousComponent w p f = 0.",
+        "note": "No monomial of that degree appears in f."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "whc_is_weighted_homogeneous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (p : ℕ) (f : MvPowerSeries σ R), MvPowerSeries.IsWeightedHomogeneous w (VTask.weightedHomogeneousComponent w p f) p",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.549,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_lt_order_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p : ℕ), p < MvPowerSeries.weightedOrder w f → VTask.weightedHomogeneousComponent w p f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedHomogeneousComponent_of_lt_weightedOrder_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedHomogeneousComponent_of_lt_weightedOrder_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.586,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_at_order_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p : ℕ), p = MvPowerSeries.weightedOrder w f → VTask.weightedHomogeneousComponent w p f ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedHomogeneousComponent_of_weightedOrder"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedHomogeneousComponent_of_weightedOrder"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.985,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_iff_homogeneous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p : ℕ), MvPowerSeries.IsWeightedHomogeneous w f p ↔ f = VTask.weightedHomogeneousComponent w p f",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.356,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_zero_series",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (p : ℕ), VTask.weightedHomogeneousComponent w p (0 : MvPowerSeries σ R) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.265,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (p : ℕ) (f g : MvPowerSeries σ R), VTask.weightedHomogeneousComponent w p (f + g) = VTask.weightedHomogeneousComponent w p f + VTask.weightedHomogeneousComponent w p g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.361,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (p : ℕ) (r : R) (f : MvPowerSeries σ R), VTask.weightedHomogeneousComponent w p (r • f) = r • VTask.weightedHomogeneousComponent w p f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.486,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_zero_weight_p0_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (f : MvPowerSeries σ R), VTask.weightedHomogeneousComponent (fun _ : σ => 0) 0 f = f",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.coeff_weightedHomogeneousComponent",
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.coeff_weightedHomogeneousComponent",
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_zero_weight_p_pos_eq_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (f : MvPowerSeries σ R) (p : ℕ), 0 < p → VTask.weightedHomogeneousComponent (fun _ : σ => 0) p f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.coeff_weightedHomogeneousComponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.coeff_weightedHomogeneousComponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_idempotent",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [Semiring R] (w : σ → ℕ) (p : ℕ) (f : MvPowerSeries σ R), VTask.weightedHomogeneousComponent w p (VTask.weightedHomogeneousComponent w p f) = VTask.weightedHomogeneousComponent w p f",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent",
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent",
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "whc_reject_nonzero_weight",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.weightedHomogeneousComponent (fun _ : Fin 1 => 1) 2 (MvPowerSeries.X 0 : MvPowerSeries (Fin 1) ℤ) = MvPowerSeries.X 0)",
+      "domain_inputs": {
+        "w": [
+          "fun _ : Fin 1 => 1"
+        ],
+        "p": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.weightedHomogeneousComponent (fun _ : Fin 1 => 1) 2 (MvPowerSeries.X 0 : MvPowerSeries (Fin 1) ℤ)",
+      "violated_property": "weight w d = p condition: coefficient at a multi-index with wrong weight is zero, so the component is not the original series when f has monomials of other degrees"
+    },
+    {
+      "id": "whc_reject_wrong_degree_component",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.weightedHomogeneousComponent (fun _ : Fin 1 => 1) 0 (MvPowerSeries.X 0 : MvPowerSeries (Fin 1) ℤ) = MvPowerSeries.X 0)",
+      "domain_inputs": {
+        "w": [
+          "fun _ : Fin 1 => 1"
+        ],
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.weightedHomogeneousComponent (fun _ : Fin 1 => 1) 0 (MvPowerSeries.X 0 : MvPowerSeries (Fin 1) ℤ)",
+      "violated_property": "weight w d = p: coefficient at a multi-index of weight 1 should be zero when p = 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPowerSeries.weightedHomogeneousComponent",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPowerSeries.weightedHomogeneousComponent-0ef1a8e2",
+    "review_status": "unreviewed"
+  }
+}

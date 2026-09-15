@@ -1,0 +1,244 @@
+{
+  "task_id": "Function.IsPeriodicPt",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPeriodicPt",
+  "signature": {
+    "name": "VTask.IsPeriodicPt",
+    "type": "{α : Type u_1} -> (f : α → α) -> (n : ℕ) -> (x : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "n",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.IsPeriodicPt f 0 x is true for every map f and every point x, because the 0-fold iterate is the identity.",
+        "note": "This is an unconditional junk-value: period 0 is trivially satisfied by all points."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isperiodicpt_id_all_periods",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (n : ℕ) (x : α), VTask.IsPeriodicPt id n x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.is_periodic_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.is_periodic_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.276,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isperiodicpt_fixed_implies_any_period",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : α → α) (x : α) (n : ℕ), Function.IsFixedPt f x → VTask.IsPeriodicPt f n x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.IsFixedPt.isPeriodicPt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.IsFixedPt.isPeriodicPt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.914,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isperiodicpt_iff_minimalperiod_dvd",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : α → α) (n : ℕ) (x : α), VTask.IsPeriodicPt f n x ↔ Function.minimalPeriod f x ∣ n",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.isPeriodicPt_iff_minimalPeriod_dvd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.isPeriodicPt_iff_minimalPeriod_dvd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.961,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isperiodicpt_minimalperiod_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : α → α) (x : α), VTask.IsPeriodicPt f (Function.minimalPeriod f x) x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.isPeriodicPt_minimalPeriod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.isPeriodicPt_minimalPeriod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.549,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isperiodicpt_mul_period",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : α → α) (n k : ℕ) (x : α), VTask.IsPeriodicPt f n x → VTask.IsPeriodicPt f (k * n) x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.isPeriodicPt_iff_minimalPeriod_dvd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.isPeriodicPt_iff_minimalPeriod_dvd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.579,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isperiodicpt_minimalperiod_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (f : α → α) (n : ℕ) (x : α), 0 < n → VTask.IsPeriodicPt f n x → Function.minimalPeriod f x ≤ n",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.IsPeriodicPt.minimalPeriod_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.IsPeriodicPt.minimalPeriod_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.036,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.IsPeriodicPt",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.IsPeriodicPt-10a91eee",
+    "review_status": "unreviewed"
+  }
+}

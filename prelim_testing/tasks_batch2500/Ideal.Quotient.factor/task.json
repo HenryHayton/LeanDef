@@ -1,0 +1,223 @@
+{
+  "task_id": "Ideal.Quotient.factor",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.factor",
+  "signature": {
+    "name": "VTask.factor",
+    "type": "{R : Type u} -> [Ring R] -> {S T : Ideal R} -> [S.IsTwoSided] -> [T.IsTwoSided] -> (H : S ≤ T) -> R ⧸ S →+* R ⧸ T",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "S ≤ T",
+    "variables": [
+      "S",
+      "T"
+    ],
+    "conventions": [
+      {
+        "point": "H = le_refl S",
+        "statement": "When S = T (i.e., H is le_refl S), VTask.factor H equals the identity ring homomorphism RingHom.id (R ⧸ S).",
+        "note": "Stated as Ideal.Quotient.factor_eq in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "factor_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (S T : Ideal R) [S.IsTwoSided] [T.IsTwoSided] (H : S ≤ T), Function.Surjective (VTask.factor H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.mk_surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.mk_surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.006,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factor_ker",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (S T : Ideal R) [S.IsTwoSided] [T.IsTwoSided] (H : S ≤ T), RingHom.ker (VTask.factor H) = T.map (Ideal.Quotient.mk S)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.factor_ker"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.factor_ker"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.417,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factor_comp_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (S T U : Ideal R) [S.IsTwoSided] [T.IsTwoSided] [U.IsTwoSided] (H1 : S ≤ T) (H2 : T ≤ U), (VTask.factor H2).comp (VTask.factor H1) = VTask.factor (H1.trans H2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.factorₐ_comp",
+        "Ideal.Quotient.coe_factorₐ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.factorₐ_comp",
+        "Ideal.Quotient.coe_factorₐ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.398,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factor_not_injective_when_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.factor (show (⊥ : Ideal ℤ) ≤ Ideal.span {2} from bot_le))",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.factor_ker"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.factor_ker"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.518,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "factor_not_surjective_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : Ring R] {S T : Ideal R} [S.IsTwoSided] [T.IsTwoSided] (H : S ≤ T), Function.Surjective (VTask.factor H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.factor_surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.factor_surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.839,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ideal.Quotient.factor",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ideal.Quotient.factor-3f61d244",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,428 @@
+{
+  "task_id": "AddCommGroup.DirectLimit.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{ι : Type u_2} -> [Preorder ι] -> (G : ι → Type u_3) -> [(i : ι) → AddCommMonoid (G i)] -> (f : (i j : ι) → i ≤ j → G i →+ G j) -> [DecidableEq ι] -> (P : Type u_4) -> [AddCommMonoid P] -> (g : (i : ι) → G i →+ P) -> (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) -> AddCommGroup.DirectLimit G f →+ P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "f",
+      "P",
+      "g",
+      "Hg"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.lift is a total construction parameterized by explicit proof data (Hg); there are no junk-value or edge-index conventions — the map is well-defined whenever the compatibility proof is supplied."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_of_factoring",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) (i : ι) (x : G i), VTask.lift G f P g Hg (AddCommGroup.DirectLimit.of G f i x) = g i x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.145,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] [IsDirectedOrder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x), (∀ i, Function.Injective (g i)) → Function.Injective (VTask.lift G f P g Hg)",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.775,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) (a b : AddCommGroup.DirectLimit G f), VTask.lift G f P g Hg (a + b) = VTask.lift G f P g Hg a + VTask.lift G f P g Hg b",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.113,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_accept_factoring_instance",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (Hg : ∀ (i j : Unit) (hij : i ≤ j) (x : ℤ), (AddMonoidHom.id ℤ) ((AddMonoidHom.id ℤ) x) = (AddMonoidHom.id ℤ) x), VTask.lift (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) ℤ (fun _ => AddMonoidHom.id ℤ) Hg (AddCommGroup.DirectLimit.of (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) () 1) = 1",
+      "domain_inputs": {
+        "G": [
+          "fun _ : Unit => ℤ"
+        ],
+        "P": [
+          "ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.255,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.lift (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) ℤ (fun _ => AddMonoidHom.id ℤ) (fun _ _ _ _ => rfl) (AddCommGroup.DirectLimit.of (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) () 1)"
+    },
+    {
+      "id": "lift_reject_not_compatible_gives_different_result",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (Hg : ∀ (i j : Unit) (hij : i ≤ j) (x : ℤ), (AddMonoidHom.id ℤ) ((AddMonoidHom.id ℤ) x) = (AddMonoidHom.id ℤ) x), VTask.lift (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) ℤ (fun _ => AddMonoidHom.id ℤ) Hg = (0 : AddCommGroup.DirectLimit (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) →+ ℤ))",
+      "domain_inputs": {
+        "G": [
+          "fun _ : Unit => ℤ"
+        ],
+        "P": [
+          "ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.lift (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) ℤ (fun _ => AddMonoidHom.id ℤ) (fun _ _ _ _ => rfl)",
+      "violated_property": "compatibility_condition"
+    },
+    {
+      "id": "lift_not_zero_when_maps_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) (i : ι) (x : G i), VTask.lift G f P g Hg (AddCommGroup.DirectLimit.of G f i x) = g i x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.78,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_comp_of_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) (i : ι), (VTask.lift G f P g Hg).comp (AddCommGroup.DirectLimit.of G f i) = g i",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.518,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_zero_of_image_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (g j) ((f i j hij) x) = (g i) x) (i : ι) (x : G i), g i x = 0 → VTask.lift G f P g Hg (AddCommGroup.DirectLimit.of G f i x) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.912,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_reject_not_identity_on_nontrivial",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.lift (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) ℤ (fun _ => AddMonoidHom.id ℤ) (fun _ _ _ _ => rfl) = 0)",
+      "domain_inputs": {
+        "G": [
+          "fun _ : Unit => ℤ"
+        ],
+        "P": [
+          "ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "0 : AddCommGroup.DirectLimit (fun _ : Unit => ℤ) (fun _ _ _ => AddMonoidHom.id ℤ) →+ ℤ",
+      "violated_property": "factoring_property"
+    },
+    {
+      "id": "lift_identity_via_of",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (g : (i : ι) → G i →+ P) (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), g j (f i j hij x) = g i x) (i : ι) (x : G i), (VTask.lift G f P g Hg) (AddCommGroup.DirectLimit.of G f i x) = g i x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.752,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_zero_maps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [Preorder ι] (G : ι → Type*) [∀ i, AddCommMonoid (G i)] (f : (i j : ι) → i ≤ j → G i →+ G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] (Hg : ∀ (i j : ι) (hij : i ≤ j) (x : G i), (0 : G j →+ P) (f i j hij x) = (0 : G i →+ P) x), VTask.lift G f P (fun _ => 0) Hg = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddCommGroup.DirectLimit.lift_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.002,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AddCommGroup.DirectLimit.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AddCommGroup.DirectLimit.lift-7c84033e",
+    "review_status": "unreviewed"
+  }
+}

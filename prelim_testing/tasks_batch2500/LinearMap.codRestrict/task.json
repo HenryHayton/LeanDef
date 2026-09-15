@@ -1,0 +1,291 @@
+{
+  "task_id": "LinearMap.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{R : Type u_1} -> {R₂ : Type u_3} -> {M : Type u_5} -> {M₂ : Type u_7} -> [Semiring R] -> [Semiring R₂] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> [Module R M] -> [Module R₂ M₂] -> {σ₁₂ : R →+* R₂} -> (p : Submodule R₂ M₂) -> (f : M →ₛₗ[σ₁₂] M₂) -> (h : ∀ (c : M), f c ∈ p) -> M →ₛₗ[σ₁₂] ↥p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and requires an explicit membership proof h for every input, so no junk-value or default conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_ker_eq_ker",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [Semiring R₂] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R₂ M₂] {σ₁₂ : R →+* R₂} (p : Submodule R₂ M₂) (f : M →ₛₗ[σ₁₂] M₂) (h : ∀ c, f c ∈ p), LinearMap.ker (VTask.codRestrict p f h) = LinearMap.ker f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.ker_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.ker_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.694,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_injective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [Semiring R₂] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R₂ M₂] {σ₁₂ : R →+* R₂} {p : Submodule R₂ M₂} {f : M →ₛₗ[σ₁₂] M₂} (hf : ∀ x, f x ∈ p), Function.Injective (VTask.codRestrict p f hf) ↔ Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_output_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [Semiring R₂] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R₂ M₂] {σ₁₂ : R →+* R₂} (p : Submodule R₂ M₂) (f : M →ₛₗ[σ₁₂] M₂) (h : ∀ c, f c ∈ p) (x : M), (VTask.codRestrict p f h x : M₂) ∈ p",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.codRestrict_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.codRestrict_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.781,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_zero_map_zero_submodule",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.codRestrict (⊥ : Submodule ℕ ℕ) (0 : ℕ →ₗ[ℕ] ℕ) (fun c => by simp) 0 : (⊥ : Submodule ℕ ℕ)) = ⟨0, Submodule.zero_mem _⟩ := by decide",
+      "domain_inputs": {
+        "p": [
+          "⊥"
+        ],
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.codRestrict (⊥ : Submodule ℕ ℕ) (0 : ℕ →ₗ[ℕ] ℕ) (fun c => by simp) 0"
+    },
+    {
+      "id": "codRestrict_injective_when_f_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Function.Injective (VTask.codRestrict (LinearMap.range (LinearMap.id : ℤ →ₗ[ℤ] ℤ)) (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (fun c => LinearMap.mem_range_self _ c))",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.202,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_not_injective_when_f_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.codRestrict (⊤ : Submodule ℤ (ℤ × ℤ)) (0 : ℤ →ₗ[ℤ] ℤ × ℤ) (fun c => Submodule.mem_top))",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.injective_codRestrict_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_membership_of_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℤ, (VTask.codRestrict (⊤ : Submodule ℤ ℤ) (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (fun c => Submodule.mem_top) x : ℤ) ∈ (⊤ : Submodule ℤ ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mem_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mem_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.406,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_reject_wrong_value",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (∀ x : ZMod 2, (VTask.codRestrict (⊤ : Submodule (ZMod 2) (ZMod 2)) (LinearMap.id) (fun c => Submodule.mem_top) x : ZMod 2) = (0 : ZMod 2)) := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.codRestrict-543aa74a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ x : ZMod 2, (VTask.codRestrict ⊤ LinearMap.id (fun c => Submodule.mem_top) x : ZMod 2) = 0",
+      "violated_property": "The codomain-restricted map should apply `f` pointwise; it does not collapse all values to zero"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.codRestrict-543aa74a",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "task_id": "Monoid.CoprodI.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{ι : Type u_1} -> {M : ι → Type u_2} -> [(i : ι) → Monoid (M i)] -> {N : Type u_3} -> [Monoid N] -> ((i : ι) → M i →* N) ≃ (Monoid.CoprodI M →* N)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ι",
+      "M",
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": "forward direction",
+        "statement": "The forward direction `VTask.lift.toFun fi` is the unique monoid homomorphism `Monoid.CoprodI M →* N` whose composite with each canonical inclusion `of : M i →* Monoid.CoprodI M` equals `fi i`.",
+        "note": "This is the universal property direction: assemble a family into a single map."
+      },
+      {
+        "point": "inverse direction",
+        "statement": "The inverse direction `VTask.lift.invFun f` recovers the family by setting the `i`-th component to `f.comp of`.",
+        "note": "Pre-composing with the canonical inclusions extracts the summand maps."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_of_inclusions_is_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)], VTask.lift (fun i => (Monoid.CoprodI.of : M i →* Monoid.CoprodI M)) = MonoidHom.id (Monoid.CoprodI M)",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.lift_of'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.lift_of'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.633,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.lift-6f398e5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_mrange_eq_iSup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {N : Type*} [Monoid N] (f : (i : ι) → M i →* N), MonoidHom.mrange (VTask.lift f) = ⨆ i, MonoidHom.mrange (f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.mrange_eq_iSup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.mrange_eq_iSup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.lift-6f398e5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_mrange_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {N : Type*} [Monoid N] (f : (i : ι) → M i →* N) (s : Submonoid N), MonoidHom.mrange (VTask.lift f) ≤ s ↔ ∀ i, MonoidHom.mrange (f i) ≤ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.lift_mrange_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.lift_mrange_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.902,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.lift-6f398e5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_reject_not_injective_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {N : Type*} [Monoid N] (fi gi : (i : ι) → M i →* N), VTask.lift fi = VTask.lift gi → ∀ i (m : M i), fi i m = gi i m → fi i m ≠ gi i m)",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.lift_comp_of"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.lift_comp_of"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.lift-6f398e5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Monoid.CoprodI.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Monoid.CoprodI.lift-6f398e5f",
+    "review_status": "unreviewed"
+  }
+}

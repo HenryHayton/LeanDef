@@ -1,0 +1,229 @@
+{
+  "task_id": "IsPGroup",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPGroup",
+  "signature": {
+    "name": "VTask.IsPGroup",
+    "type": "(p : ℕ) -> (G : Type u_1) -> [Group G] -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "G"
+    ],
+    "conventions": [
+      {
+        "point": "p = 0",
+        "statement": "When p = 0, the predicate VTask.IsPGroup 0 G holds for every group G, because for any element g, taking k = 1 gives g ^ (0 ^ 1) = g ^ 0 = 1.",
+        "note": "Edge case arising from 0 ^ k = 0 for k ≥ 1 and the group axiom g ^ 0 = 1."
+      },
+      {
+        "point": "p = 1",
+        "statement": "When p = 1, VTask.IsPGroup 1 G holds if and only if G is the trivial group, because 1 ^ k = 1 for all k, so the condition g ^ 1 = 1 must hold for every g.",
+        "note": "Every element must be the identity."
+      },
+      {
+        "point": "No primality assumption",
+        "statement": "The definition does not require p to be prime; it is stated for any natural number p, though most structural theorems additionally assume Fact p.Prime.",
+        "note": "Primality is a side condition on theorems, not on the definition itself."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ispgroup_of_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (G : Type*) [Group G] (n : ℕ), Nat.card G = p ^ n → VTask.IsPGroup p G",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPGroup.of_card"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPGroup.of_card"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.438,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPGroup-e5654812",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispgroup_to_quotient",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (G : Type*) [Group G] (H : Subgroup G) [H.Normal], VTask.IsPGroup p G → VTask.IsPGroup p (G ⧸ H)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPGroup.to_quotient"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPGroup.to_quotient"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.519,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPGroup-e5654812",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispgroup_coprime_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p₁ p₂ : ℕ) (G₁ G₂ : Type*) [Group G₁] [Group G₂] [Fact (Nat.Prime p₁)] [Fact (Nat.Prime p₂)] (hne : p₁ ≠ p₂) (H₁ : Subgroup G₁) (H₂ : Subgroup G₂) [Finite H₁] [Finite H₂], VTask.IsPGroup p₁ H₁ → VTask.IsPGroup p₂ H₂ → Nat.Coprime (Nat.card H₁) (Nat.card H₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPGroup.coprime_card_of_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPGroup.coprime_card_of_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.062,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPGroup-e5654812",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispgroup_le_sylow_of_normal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (G : Type*) [Group G] (N : Subgroup G) [N.Normal], VTask.IsPGroup p N → ∀ (S : Sylow p G), N ≤ S",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPGroup.le_sylow_of_normal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPGroup.le_sylow_of_normal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.358,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPGroup-e5654812",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispgroup_comap_of_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (G K : Type*) [Group G] [Group K] (H : Subgroup G), VTask.IsPGroup p H → ∀ (ϕ : K →* G), Function.Injective ϕ → VTask.IsPGroup p (H.comap ϕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsPGroup.comap_of_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsPGroup.comap_of_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.074,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsPGroup-e5654812",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsPGroup",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsPGroup-e5654812",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "task_id": "Finsupp.filter",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.filter",
+  "signature": {
+    "name": "VTask.filter",
+    "type": "{α : Type u_1} -> {M : Type u_5} -> [Zero M] -> (p : α → Prop) -> [DecidablePred p] -> (f : α →₀ M) -> α →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "p a = False",
+        "statement": "When the predicate p fails at index a, the output value at a is 0, regardless of f a.",
+        "note": "Standard junk-value convention for masked-out entries."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "filter_zero_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n => n % 2 = 0) (0 : Fin 4 →₀ ℤ) = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n => n % 2 = 0"
+        ],
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_zero_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) [Zero M] (p : α → Prop) [DecidablePred p], VTask.filter p (0 : α →₀ M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.filter_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.filter_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.932,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_add_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) [AddZeroClass M] (p : α → Prop) [DecidablePred p] (v v' : α →₀ M), VTask.filter p (v + v') = VTask.filter p v + VTask.filter p v'",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.filter_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.filter_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.587,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_eq_self_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) [Zero M] (p : α → Prop) [DecidablePred p] (f : α →₀ M), VTask.filter p f = f ↔ ∀ x, f x ≠ 0 → p x",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.filter_eq_self_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.filter_eq_self_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.875,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_eq_zero_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) [Zero M] (p : α → Prop) [DecidablePred p] (f : α →₀ M), VTask.filter p f = 0 ↔ ∀ x, p x → f x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.filter_eq_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.filter_eq_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.156,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_apply_neg_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.filter (fun n => n % 2 = 0) (Finsupp.single 3 (5 : ℤ))) 3 = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n => n % 2 = 0"
+        ],
+        "f": [
+          "Finsupp.single 3 (5 : ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_nonzero_at_failing_index_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.filter (fun n => n = 0) (Finsupp.single (1 : Fin 3) (5 : ℤ))) 1 = 5) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun n => n = 0"
+        ],
+        "f": [
+          "Finsupp.single (1 : Fin 3) (5 : ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.filter-19c455f8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.filter (fun n => n = 0) (Finsupp.single (1 : Fin 3) (5 : ℤ))) 1",
+      "violated_property": "filter_apply_neg: value at index failing predicate must be 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.filter",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.filter-19c455f8",
+    "review_status": "unreviewed"
+  }
+}

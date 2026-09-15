@@ -1,0 +1,347 @@
+{
+  "task_id": "IsWeakAntichain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsWeakAntichain",
+  "signature": {
+    "name": "VTask.IsWeakAntichain",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_2} -> [(i : ι) → Preorder (α i)] -> (s : Set ((i : ι) → α i)) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsWeakAntichain is a pure universally-quantified proposition with no junk-value conventions; every set either satisfies or fails the condition, and no special boundary values receive distinguished treatment."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "weak_antichain_subsingleton_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} [inst : (i : ι) → Preorder (α i)] (s : Set ((i : ι) → α i)), s.Subsingleton → VTask.IsWeakAntichain s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Subsingleton.isWeakAntichain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Subsingleton.isWeakAntichain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.459,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weak_antichain_from_antichain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} [inst : (i : ι) → Preorder (α i)] (s : Set ((i : ι) → α i)), IsAntichain (· ≤ ·) s → VTask.IsWeakAntichain s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAntichain.isWeakAntichain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAntichain.isWeakAntichain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.611,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weak_antichain_subset_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} [inst : (i : ι) → Preorder (α i)] {s t : Set ((i : ι) → α i)}, VTask.IsWeakAntichain s → t ⊆ s → VTask.IsWeakAntichain t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsWeakAntichain.subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsWeakAntichain.subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.881,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weak_antichain_antichain_le_stronger",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (ι : Type) (α : ι → Type) (inst : (i : ι) → Preorder (α i)) (s : Set ((i : ι) → α i)), VTask.IsWeakAntichain s ∧ ¬ IsAntichain (· ≤ ·) s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAntichain.isWeakAntichain"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAntichain.isWeakAntichain"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weak_antichain_subset_of_antichain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {α : ι → Type} [inst : (i : ι) → Preorder (α i)] {s t : Set ((i : ι) → α i)}, IsAntichain (· ≤ ·) s → t ⊆ s → VTask.IsWeakAntichain t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAntichain.isWeakAntichain",
+        "IsWeakAntichain.subset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAntichain.isWeakAntichain",
+        "IsWeakAntichain.subset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weak_antichain_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsWeakAntichain (∅ : Set (Fin 1 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "∅ : Set (Fin 1 → ℕ)"
+    },
+    {
+      "id": "weak_antichain_singleton",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsWeakAntichain ({fun _ => (0 : ℕ)} : Set (Fin 2 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "{fun _ => (0 : ℕ)}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "{fun _ => (0 : ℕ)} : Set (Fin 2 → ℕ)"
+    },
+    {
+      "id": "weak_antichain_two_incomparable_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsWeakAntichain ({![1, 0], ![0, 1]} : Set (Fin 2 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "{![1, 0], ![0, 1]}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "{![1, 0], ![0, 1]} : Set (Fin 2 → ℕ)"
+    },
+    {
+      "id": "weak_antichain_strictly_dominated_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsWeakAntichain ({![0, 0], ![1, 1]} : Set (Fin 2 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "{![0, 0], ![1, 1]}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "{![0, 0], ![1, 1]} : Set (Fin 2 → ℕ)",
+      "violated_property": "no two distinct elements may satisfy the strong less-than relation"
+    },
+    {
+      "id": "weak_antichain_not_antichain_le_but_weak",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsWeakAntichain ({![0, 0], ![0, 0]} : Set (Fin 2 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "{![0, 0], ![0, 0]}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "{![0, 0], ![0, 0]} : Set (Fin 2 → ℕ)"
+    },
+    {
+      "id": "weak_antichain_three_element_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsWeakAntichain ({![0], ![1], ![2]} : Set (Fin 1 → ℕ))",
+      "domain_inputs": {
+        "s": [
+          "{![0], ![1], ![2]}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsWeakAntichain-a10a2267",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "{![0], ![1], ![2]} : Set (Fin 1 → ℕ)",
+      "violated_property": "no two distinct elements may satisfy the strong less-than relation"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsWeakAntichain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsWeakAntichain-a10a2267",
+    "review_status": "unreviewed"
+  }
+}

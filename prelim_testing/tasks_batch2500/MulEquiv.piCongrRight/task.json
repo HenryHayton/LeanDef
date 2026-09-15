@@ -1,0 +1,193 @@
+{
+  "task_id": "MulEquiv.piCongrRight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.piCongrRight",
+  "signature": {
+    "name": "VTask.piCongrRight",
+    "type": "{η : Type u_16} -> {Ms : η → Type u_17} -> {Ns : η → Type u_18} -> [(j : η) → Mul (Ms j)] -> [(j : η) → Mul (Ns j)] -> (es : (j : η) → Ms j ≃* Ns j) -> ((j : η) → Ms j) ≃* ((j : η) → Ns j)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "η",
+      "Ms",
+      "Ns",
+      "es"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is a total construction on well-typed inputs; no junk-value or edge-case output conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "piCongrRight_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {Ms Ns : η → Type*} [inst1 : ∀ j, Mul (Ms j)] [inst2 : ∀ j, Mul (Ns j)] (es : ∀ j, Ms j ≃* Ns j) (x y : ∀ j, Ms j), VTask.piCongrRight es (x * y) = VTask.piCongrRight es x * VTask.piCongrRight es y",
+      "domain_inputs": {},
+      "anchors": [
+        "MulEquiv.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulEquiv.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.844,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulEquiv.piCongrRight-0ea2a7f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "piCongrRight_is_mulequiv",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ _ : (Unit → ℕ) ≃* (Unit → ℕ), True",
+      "domain_inputs": {
+        "η": [
+          "Unit"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.06,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulEquiv.piCongrRight-0ea2a7f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.piCongrRight (fun _ : Unit => MulEquiv.refl ℕ)"
+    },
+    {
+      "id": "piCongrRight_refl_not_ne_refl",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.piCongrRight (fun (_ : Unit) => MulEquiv.refl ℕ) ≠ MulEquiv.refl (Unit → ℕ))",
+      "domain_inputs": {
+        "η": [
+          "Unit"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulEquiv.piCongrRight-0ea2a7f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.piCongrRight (fun (_ : Unit) => MulEquiv.refl ℕ)",
+      "violated_property": "The result is NOT different from the identity equivalence on (Unit → ℕ): it equals MulEquiv.refl (Unit → ℕ), so a claim that they differ is false"
+    },
+    {
+      "id": "piCongrRight_symm_trans_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {Ms Ns : η → Type*} [inst1 : ∀ j, Mul (Ms j)] [inst2 : ∀ j, Mul (Ns j)] (es : ∀ j, Ms j ≃* Ns j), (VTask.piCongrRight es).symm.trans (VTask.piCongrRight es) = MulEquiv.refl (∀ j, Ns j)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulEquiv.piCongrRight_symm",
+        "MulEquiv.piCongrRight_trans",
+        "MulEquiv.piCongrRight_refl",
+        "MulEquiv.symm_trans_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulEquiv.piCongrRight_symm",
+        "MulEquiv.piCongrRight_trans",
+        "MulEquiv.piCongrRight_refl",
+        "MulEquiv.symm_trans_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.609,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulEquiv.piCongrRight-0ea2a7f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulEquiv.piCongrRight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulEquiv.piCongrRight-0ea2a7f5",
+    "review_status": "unreviewed"
+  }
+}

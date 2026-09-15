@@ -1,0 +1,243 @@
+{
+  "task_id": "MonoidAlgebra.mapDomain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapDomain",
+  "signature": {
+    "name": "VTask.mapDomain",
+    "type": "{R : Type u_3} -> {M : Type u_6} -> {N : Type u_7} -> [Semiring R] -> (f : M → N) -> (x : MonoidAlgebra R M) -> MonoidAlgebra R N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "fiber collision",
+        "statement": "When f is not injective, the coefficients of all elements of M in the same fiber of f are summed together in R to form the coefficient of their common image in N.",
+        "note": "This is the standard Finsupp.mapDomain convention: no information is silently dropped, instead coincidences are resolved by addition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapDomain_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) (N : Type*) [Semiring R] (f : M → N) (m : M) (r : R), VTask.mapDomain f (MonoidAlgebra.single m r) = MonoidAlgebra.single (f m) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.443,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) (N : Type*) [Semiring R] (f : M → N) (x y : MonoidAlgebra R M), VTask.mapDomain f (x + y) = VTask.mapDomain f x + VTask.mapDomain f y",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.384,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Semiring R] (x : MonoidAlgebra R M), VTask.mapDomain id x = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.555,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) (N : Type*) (P : Type*) [Semiring R] (f : M → N) (g : N → P) (x : MonoidAlgebra R M), VTask.mapDomain (g ∘ f) x = VTask.mapDomain g (VTask.mapDomain f x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_zero_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.mapDomain (fun _ : Fin 2 => (0 : Fin 1)) (0 : MonoidAlgebra ℕ (Fin 2)) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 2 => (0 : Fin 1)"
+        ],
+        "x": [
+          "(0 : MonoidAlgebra ℕ (Fin 2))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapDomain_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) (N : Type*) [Semiring R] (f : M → N) (r : R) (x : MonoidAlgebra R M), VTask.mapDomain f (r • x) = r • VTask.mapDomain f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapDomain_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapDomain_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.667,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidAlgebra.mapDomain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidAlgebra.mapDomain-d4b90693",
+    "review_status": "unreviewed"
+  }
+}

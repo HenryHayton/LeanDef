@@ -1,0 +1,307 @@
+{
+  "task_id": "TopologicalSpace.induced",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.induced",
+  "signature": {
+    "name": "VTask.induced",
+    "type": "{X : Type u_1} -> {Y : Type u_2} -> (f : X → Y) -> (t : TopologicalSpace Y) -> TopologicalSpace X",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total and meaningful for every function f and every topology t on the codomain; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "induced_nhds",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} (f : X → Y) (t : TopologicalSpace Y) (x : X), @nhds X (VTask.induced f t) x = Filter.comap f (@nhds Y t (f x))",
+      "domain_inputs": {},
+      "anchors": [
+        "nhds_induced"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "nhds_induced"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.452,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induced_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} (f : X → Y) (t : TopologicalSpace Y), @Continuous X Y (VTask.induced f t) t f",
+      "domain_inputs": {},
+      "anchors": [
+        "continuous_iff_le_induced"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuous_iff_le_induced"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induced_le_iff_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} (f : X → Y) (t : TopologicalSpace Y) (s : TopologicalSpace X), s ≤ VTask.induced f t ↔ @Continuous X Y s t f",
+      "domain_inputs": {},
+      "anchors": [
+        "continuous_iff_le_induced"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuous_iff_le_induced"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.758,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induced_galois_connection",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} (f : X → Y), GaloisConnection (TopologicalSpace.coinduced f) (VTask.induced f)",
+      "domain_inputs": {},
+      "anchors": [
+        "gc_coinduced_induced"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "gc_coinduced_induced"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.647,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "homeomorph_induced_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [tX : TopologicalSpace X] [tY : TopologicalSpace Y] (h : X ≃ₜ Y), VTask.induced h tY = tX",
+      "domain_inputs": {},
+      "anchors": [
+        "Homeomorph.induced_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Homeomorph.induced_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.746,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induced_sInf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} (g : X → Y) (s : Set (TopologicalSpace Y)), VTask.induced g (sInf s) = sInf (VTask.induced g '' s)",
+      "domain_inputs": {},
+      "anchors": [
+        "induced_sInf"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "induced_sInf"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.482,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induced_ne_discrete_from_indiscrete",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.induced (fun _ : Fin 2 => (0 : Fin 1)) (⊥ : TopologicalSpace (Fin 1)) ≠ (⊤ : TopologicalSpace (Fin 2))",
+      "domain_inputs": {},
+      "anchors": [
+        "nhds_induced"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "nhds_induced"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    },
+    {
+      "id": "induced_not_coinduced",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (e : Fin 2 ≃ Fin 2), VTask.induced (e : Fin 2 → Fin 2) (⊥ : TopologicalSpace (Fin 2)) ≠ TopologicalSpace.coinduced (e : Fin 2 → Fin 2) (⊥ : TopologicalSpace (Fin 2)) → True",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.induced_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.induced_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.345,
+        "at": "authoring",
+        "script": "by simp [_root_.TopologicalSpace.induced] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.TopologicalSpace.induced] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "TopologicalSpace.induced",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "TopologicalSpace.induced-0bbc9153",
+    "review_status": "unreviewed"
+  }
+}

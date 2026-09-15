@@ -1,0 +1,238 @@
+{
+  "task_id": "Monoid.PushoutI.Reduced",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Reduced",
+  "signature": {
+    "name": "VTask.Reduced",
+    "type": "{ι : Type u_1} -> {G : ι → Type u_2} -> {H : Type u_3} -> [(i : ι) → Group (G i)] -> [Group H] -> (φ : (i : ι) → H →* G i) -> (w : Monoid.CoprodI.Word G) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "φ",
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "empty word",
+        "statement": "VTask.Reduced φ Monoid.CoprodI.Word.empty holds for any φ, by vacuous truth since the empty word has no letters.",
+        "note": "This is standard mathematical convention, not an arbitrary junk value."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "reduced_letter_not_in_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) (H : Type*) [∀ i, Group (G i)] [Group H] (φ : ∀ i, H →* G i) (w : Monoid.CoprodI.Word G) (l : Σ i, G i), l ∈ w.toList → VTask.Reduced φ w → l.2 ∉ Set.range (φ l.1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.039,
+        "at": "authoring",
+        "script": "by simp [_root_.Monoid.PushoutI.Reduced] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Monoid.PushoutI.Reduced] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduced_surjective_phi_no_letter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) (H : Type*) [∀ i, Group (G i)] [Group H] (φ : ∀ i, H →* G i) (w : Monoid.CoprodI.Word G) (i : ι), Function.Surjective (φ i) → VTask.Reduced φ w → ∀ l ∈ w.toList, l.1 ≠ i",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.687,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduced_empty_of_trivial_group",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) [∀ i, Group (G i)] [Group PUnit] (φ : ∀ i, PUnit →* G i) (w : Monoid.CoprodI.Word G), VTask.Reduced φ w",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.range_eq_map",
+        "Subgroup.mem_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.range_eq_map",
+        "Subgroup.mem_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduced_not_when_letter_in_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) (H : Type*) [∀ i, Group (G i)] [Group H] (φ : ∀ i, H →* G i) (w : Monoid.CoprodI.Word G) (l : Σ i, G i), l ∈ w.toList → l.2 ∈ Set.range (φ l.1) → ¬ VTask.Reduced φ w",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.961,
+        "at": "authoring",
+        "script": "by simp only [_root_.Monoid.PushoutI.Reduced] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Monoid.PushoutI.Reduced] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduced_monotone_sublist",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) (H : Type*) [∀ i, Group (G i)] [Group H] (φ : ∀ i, H →* G i) (w : Monoid.CoprodI.Word G), VTask.Reduced φ w → ∀ l ∈ w.toList, l.2 ∉ MonoidHom.range (φ l.1)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.196,
+        "at": "authoring",
+        "script": "by simp [_root_.Monoid.PushoutI.Reduced] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Monoid.PushoutI.Reduced] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduced_empty_word_vacuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (G : ι → Type*) (H : Type*) [∀ i, Group (G i)] [Group H] (φ : ∀ i, H →* G i), VTask.Reduced φ Monoid.CoprodI.Word.empty",
+      "domain_inputs": {},
+      "anchors": [
+        "List.forall_mem_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.forall_mem_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Monoid.PushoutI.Reduced",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Monoid.PushoutI.Reduced-0874957e",
+    "review_status": "unreviewed"
+  }
+}

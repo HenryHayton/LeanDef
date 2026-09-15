@@ -1,0 +1,246 @@
+{
+  "task_id": "Polynomial.cyclotomic",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cyclotomic",
+  "signature": {
+    "name": "VTask.cyclotomic",
+    "type": "(n : ℕ) -> (R : Type u_1) -> [Ring R] -> Polynomial R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "R"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.cyclotomic 0 R = 1 (the constant polynomial 1) for any ring R.",
+        "note": "Junk value: there is no standard mathematical definition of the 0th cyclotomic polynomial, so 1 is returned as a sentinel."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cyclotomic_degree_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 0 < n → (VTask.cyclotomic n ℤ).natDegree = Nat.totient n",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natDegree_cyclotomic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natDegree_cyclotomic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.441,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cyclotomic_prod_divisors",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), 0 < n → ∀ (R : Type*) [CommRing R], ∏ d ∈ Nat.divisors n, VTask.cyclotomic d R = Polynomial.X ^ n - 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.prod_cyclotomic_eq_X_pow_sub_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.prod_cyclotomic_eq_X_pow_sub_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.752,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cyclotomic_monic_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (R : Type*) [Ring R], (VTask.cyclotomic n R).Monic",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.cyclotomic.monic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.cyclotomic.monic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.256,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cyclotomic_map_ring_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (R : Type*) [CommRing R], Polynomial.map (Int.castRingHom R) (VTask.cyclotomic n ℤ) = VTask.cyclotomic n R",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.map_cyclotomic_int"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.map_cyclotomic_int"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.308,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cyclotomic_1_ne_X",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.cyclotomic 1 ℤ ≠ Polynomial.X",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.cyclotomic_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.cyclotomic_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.182,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cyclotomic_4_ne_X_sq_minus_1",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.cyclotomic 4 ℤ ≠ Polynomial.X ^ 2 - 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.cyclotomic_eq_prod_X_pow_sub_one_pow_moebius"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.cyclotomic_eq_prod_X_pow_sub_one_pow_moebius"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.cyclotomic",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.cyclotomic-0dd3700e",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "task_id": "DomMulAct.stabilizerEquiv_invFun",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.stabilizerEquiv_invFun",
+  "signature": {
+    "name": "VTask.stabilizerEquiv_invFun",
+    "type": "{α : Type u_1} -> {ι : Type u_2} -> {f : α → ι} -> (g : (i : ι) → Equiv.Perm { a // f a = i }) -> (a : α) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined for all inputs; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "stabilizerEquiv_invFun_fiber_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} {f : α → ι} (g : ∀ i, Equiv.Perm {a // f a = i}) (a : α), f (VTask.stabilizerEquiv_invFun g a) = f a",
+      "domain_inputs": {},
+      "anchors": [
+        "DomMulAct.comp_stabilizerEquiv_invFun"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DomMulAct.comp_stabilizerEquiv_invFun"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.537,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_eq_at_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} {f : α → ι} (g : ∀ i, Equiv.Perm {a // f a = i}) {a : α} {i : ι} (h : f a = i), VTask.stabilizerEquiv_invFun g a = g i ⟨a, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "DomMulAct.stabilizerEquiv_invFun_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DomMulAct.stabilizerEquiv_invFun_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.184,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_fiber_membership_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (fun i => (i : Fin 2)) (VTask.stabilizerEquiv_invFun (f := fun i => (i : Fin 2)) (fun _ => Equiv.refl _) ⟨0, by decide⟩) = (fun i => (i : Fin 2)) ⟨0, by decide⟩ := by decide",
+      "domain_inputs": {
+        "a": [
+          "⟨0, by decide⟩"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.stabilizerEquiv_invFun (f := fun i => (i : Fin 2)) (fun _ => Equiv.refl _) ⟨0, by decide⟩"
+    },
+    {
+      "id": "stabilizerEquiv_invFun_refl_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.stabilizerEquiv_invFun (α := Fin 3) (ι := Fin 3) (f := id) (fun i => Equiv.refl _) 1 = 1 := by decide",
+      "domain_inputs": {
+        "a": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_refl_at_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.stabilizerEquiv_invFun (α := Fin 3) (ι := Fin 3) (f := id) (fun i => Equiv.refl _) 0 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_refl_at_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.stabilizerEquiv_invFun (α := Fin 3) (ι := Fin 3) (f := id) (fun i => Equiv.refl _) 2 = 2 := by decide",
+      "domain_inputs": {
+        "a": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_not_fixed_by_nontrivial_perm",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.stabilizerEquiv_invFun (α := Fin 2) (ι := Unit) (f := fun _ => ()) (fun _ => Equiv.swap ⟨0, rfl⟩ ⟨1, rfl⟩) 0 ≠ 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.stabilizerEquiv_invFun (α := Fin 2) (ι := Unit) (f := fun _ => ()) (fun _ => Equiv.swap ⟨0, rfl⟩ ⟨1, rfl⟩) 0",
+      "violated_property": "fixed by the permutation"
+    },
+    {
+      "id": "stabilizerEquiv_invFun_swap_maps_zero_to_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.stabilizerEquiv_invFun (α := Fin 2) (ι := Unit) (f := fun _ => ()) (fun _ => Equiv.swap ⟨0, rfl⟩ ⟨1, rfl⟩) 0 = 1 := by decide",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stabilizerEquiv_invFun_maps_fiber_to_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {ι : Type*} {f : α → ι} (g : ∀ i, Equiv.Perm {a // f a = i}) (a : α), ∃ (h : f (VTask.stabilizerEquiv_invFun g a) = f a), (⟨VTask.stabilizerEquiv_invFun g a, h⟩ : {x // f x = f a}) = g (f a) ⟨a, rfl⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "DomMulAct.stabilizerEquiv_invFun_eq",
+        "DomMulAct.comp_stabilizerEquiv_invFun"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DomMulAct.stabilizerEquiv_invFun_eq",
+        "DomMulAct.comp_stabilizerEquiv_invFun"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.194,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DomMulAct.stabilizerEquiv_invFun",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DomMulAct.stabilizerEquiv_invFun-bac850cf",
+    "review_status": "unreviewed"
+  }
+}

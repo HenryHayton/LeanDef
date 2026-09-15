@@ -1,0 +1,421 @@
+{
+  "task_id": "AkraBazziRecurrence.GrowsPolynomially",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.GrowsPolynomially",
+  "signature": {
+    "name": "VTask.GrowsPolynomially",
+    "type": "(f : ℝ → ℝ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "eventual quantification",
+        "statement": "The sandwiching inequalities c₁·f(x) ≤ f(u) ≤ c₂·f(x) are required only for all sufficiently large x, not for every x ∈ ℝ.",
+        "note": "Expressed via the atTop filter; finitely many exceptions are irrelevant."
+      },
+      {
+        "point": "b-dependent constants",
+        "statement": "The positive constants c₁ and c₂ are allowed to depend on the ratio b ∈ (0,1); there is no single pair valid uniformly for all b.",
+        "note": "Each b yields its own existential witness pair."
+      },
+      {
+        "point": "no sign requirement",
+        "statement": "The definition imposes no non-negativity or positivity hypothesis on f; sign conditions appear only in downstream lemmas (e.g., for rpow or zpow).",
+        "note": "Applies to the raw definition; specific closure lemmas may add sign assumptions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "gp_id_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.GrowsPolynomially (fun x => x)",
+      "domain_inputs": {
+        "f": [
+          "fun x => x"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.079,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun x => x"
+    },
+    {
+      "id": "gp_log_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.GrowsPolynomially Real.log",
+      "domain_inputs": {
+        "f": [
+          "Real.log"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.425,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Real.log"
+    },
+    {
+      "id": "gp_mul_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.GrowsPolynomially (fun x => x * x)",
+      "domain_inputs": {
+        "f": [
+          "fun x => x * x"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun x => x * x"
+    },
+    {
+      "id": "gp_rpow_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.GrowsPolynomially (fun x => Real.exp x)",
+      "domain_inputs": {
+        "f": [
+          "fun x => Real.exp x"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun x => Real.exp x",
+      "violated_property": "multiplicative sandwich: exp oscillates with unbounded ratio on sub-proportional intervals"
+    },
+    {
+      "id": "gp_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ f g : ℝ → ℝ, VTask.GrowsPolynomially f → VTask.GrowsPolynomially g → VTask.GrowsPolynomially (fun x => f x * g x)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.713,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_div_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ f g : ℝ → ℝ, VTask.GrowsPolynomially f → VTask.GrowsPolynomially g → VTask.GrowsPolynomially (fun x => f x / g x)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.div"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.div"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_inv_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ f : ℝ → ℝ, VTask.GrowsPolynomially f → VTask.GrowsPolynomially (fun x => (f x)⁻¹)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.067,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_rpow_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℝ) (f : ℝ → ℝ), VTask.GrowsPolynomially f → (∀ᶠ x in Filter.atTop, 0 ≤ f x) → VTask.GrowsPolynomially (fun x => (f x) ^ p)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.rpow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.rpow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.461,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_const_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℝ) (f : ℝ → ℝ), VTask.GrowsPolynomially f → VTask.GrowsPolynomially (fun x => c * f x)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.const_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.const_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.364,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_of_isTheta",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f g : ℝ → ℝ), VTask.GrowsPolynomially g → (f =Θ[Filter.atTop] g) → (∀ᶠ x in Filter.atTop, 0 ≤ f x) → VTask.GrowsPolynomially f",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.of_isTheta"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.of_isTheta"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.651,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gp_add_nonneg_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f g : ℝ → ℝ), VTask.GrowsPolynomially f → VTask.GrowsPolynomially g → (0 ≤ᶠ[Filter.atTop] f) → (0 ≤ᶠ[Filter.atTop] g) → VTask.GrowsPolynomially (fun x => f x + g x)",
+      "domain_inputs": {},
+      "anchors": [
+        "AkraBazziRecurrence.GrowsPolynomially.add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AkraBazziRecurrence.GrowsPolynomially.add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.713,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AkraBazziRecurrence.GrowsPolynomially",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AkraBazziRecurrence.GrowsPolynomially-ae0d9c8c",
+    "review_status": "unreviewed"
+  }
+}

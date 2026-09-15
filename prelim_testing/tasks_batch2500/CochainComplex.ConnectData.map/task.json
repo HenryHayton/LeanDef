@@ -1,0 +1,154 @@
+{
+  "task_id": "CochainComplex.ConnectData.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{C : Type u} -> [CategoryTheory.Category.{v, u} C] -> [CategoryTheory.Limits.HasZeroMorphisms C] -> {K K' : ChainComplex C ℕ} -> {L L' : CochainComplex C ℕ} -> (h : CochainComplex.ConnectData K L) -> (h' : CochainComplex.ConnectData K' L') -> (fK : K ⟶ K') -> (fL : L ⟶ L') -> (f_comm : CategoryTheory.CategoryStruct.comp (fK.f 0) h'.d₀ = CategoryTheory.CategoryStruct.comp h.d₀ (fL.f 0)) -> h.cochainComplex ⟶ h'.cochainComplex",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h",
+      "h'",
+      "fK",
+      "fL",
+      "f_comm"
+    ],
+    "conventions": [
+      {
+        "point": "non-negative degree components",
+        "statement": "At degree ofNat n (i.e., a non-negative integer n), the component of VTask.map h h' fK fL f_comm is fL.f n.",
+        "note": "Follows from the cochain-complex half of the connected complex covering non-negative degrees."
+      },
+      {
+        "point": "negative degree components",
+        "statement": "At degree negSucc n (i.e., the negative integer -(n+1)), the component of VTask.map h h' fK fL f_comm is fK.f n.",
+        "note": "Follows from the chain-complex half of the connected complex covering strictly negative degrees."
+      },
+      {
+        "point": "seam commutativity",
+        "statement": "The commutativity of the morphism at the seam between degree negSucc 0 and ofNat 0 is supplied by the hypothesis f_comm.",
+        "note": "This is the only degree where the two halves interact and an explicit compatibility condition is required."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {C : Type*} [CategoryTheory.Category C] [CategoryTheory.Limits.HasZeroMorphisms C] {K K' : ChainComplex C ℕ} {L L' : CochainComplex C ℕ} (h : CochainComplex.ConnectData K L) (h' : CochainComplex.ConnectData K' L') (fK : K ⟶ K') (fL : L ⟶ L') (f_comm : CategoryTheory.CategoryStruct.comp (fK.f 0) h'.d₀ = CategoryTheory.CategoryStruct.comp h.d₀ (fL.f 0)), VTask.map h h' fK fL f_comm ∈ (Set.univ : Set (h.cochainComplex ⟶ h'.cochainComplex))",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.041,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.ConnectData.map-a92dd42a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_seam_comm_essential",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {C : Type*} [CategoryTheory.Category C] [CategoryTheory.Limits.HasZeroMorphisms C] {K K' : ChainComplex C ℕ} {L L' : CochainComplex C ℕ} (h : CochainComplex.ConnectData K L) (h' : CochainComplex.ConnectData K' L') (fK : K ⟶ K') (fL : L ⟶ L') (f_comm : CategoryTheory.CategoryStruct.comp (fK.f 0) h'.d₀ = CategoryTheory.CategoryStruct.comp h.d₀ (fL.f 0)), CategoryTheory.CategoryStruct.comp ((VTask.map h h' fK fL f_comm).f (Int.negSucc 0)) h'.d₀ = CategoryTheory.CategoryStruct.comp h.d₀ ((VTask.map h h' fK fL f_comm).f (Int.ofNat 0))",
+      "domain_inputs": {},
+      "anchors": [
+        "CochainComplex.ConnectData.map_comp_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CochainComplex.ConnectData.map_comp_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.681,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.ConnectData.map-a92dd42a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_not_eq_zero_when_fL_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {C : Type*} [inst : CategoryTheory.Category C] [inst2 : CategoryTheory.Limits.HasZeroMorphisms C] {K K' : ChainComplex C ℕ} {L L' : CochainComplex C ℕ} (h : CochainComplex.ConnectData K L) (h' : CochainComplex.ConnectData K' L') (fK : K ⟶ K') (fL : L ⟶ L') (f_comm : CategoryTheory.CategoryStruct.comp (fK.f 0) h'.d₀ = CategoryTheory.CategoryStruct.comp h.d₀ (fL.f 0)), (VTask.map h h' fK fL f_comm).f 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "CochainComplex.ConnectData.map_comp_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CochainComplex.ConnectData.map_comp_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CochainComplex.ConnectData.map-a92dd42a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CochainComplex.ConnectData.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CochainComplex.ConnectData.map-a92dd42a",
+    "review_status": "unreviewed"
+  }
+}

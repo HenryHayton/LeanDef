@@ -1,0 +1,164 @@
+{
+  "task_id": "AlgHom.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{R : Type u} -> {A : Type v} -> {B : Type w} -> [CommSemiring R] -> [Semiring A] -> [Algebra R A] -> [Semiring B] -> [Algebra R B] -> (f : A →ₐ[R] B) -> (S : Subalgebra R B) -> (hf : ∀ (x : A), f x ∈ S) -> A →ₐ[R] ↥S",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "S",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total on all inputs satisfying the explicit hypotheses; there are no junk-value or boundary conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_injective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (f : A →ₐ[R] B) (S : Subalgebra R B) (hf : ∀ x : A, f x ∈ S), Function.Injective (VTask.codRestrict f S hf) ↔ Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.597,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.codRestrict-9fa3fc8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_injective_when_f_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (f : A →ₐ[R] B) (S : Subalgebra R B) (hf : ∀ x : A, f x ∈ S), Function.Injective f → Function.Injective (VTask.codRestrict f S hf)",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgHom.codRestrict-9fa3fc8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_reject_coercion_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (f : A →ₐ[R] B) (S : Subalgebra R B) (hf : ∀ x : A, f x ∈ S) (x : A), (VTask.codRestrict f S hf x : B) ≠ f x → False",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.coe_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.coe_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.415,
+        "at": "authoring",
+        "script": "by simp [_root_.AlgHom.codRestrict] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.AlgHom.codRestrict] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.codRestrict-9fa3fc8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_reject_noninjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (f : A →ₐ[R] B) (S : Subalgebra R B) (hf : ∀ x : A, f x ∈ S), ¬ Function.Injective (VTask.codRestrict f S hf) → ¬ Function.Injective f",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.injective_codRestrict"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgHom.codRestrict-9fa3fc8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.codRestrict-9fa3fc8f",
+    "review_status": "unreviewed"
+  }
+}

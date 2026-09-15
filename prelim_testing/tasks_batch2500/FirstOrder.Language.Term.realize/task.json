@@ -1,0 +1,180 @@
+{
+  "task_id": "FirstOrder.Language.Term.realize",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.realize",
+  "signature": {
+    "name": "VTask.realize",
+    "type": "{L : FirstOrder.Language} -> {M : Type w} -> [L.Structure M] -> {α : Type u'} -> (v : α → M) -> (_t : L.Term α) -> M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "v",
+      "_t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all inputs with no junk-value conventions needed; every term and variable assignment yields a unique element of M by structural recursion."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "realize_constants",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α : Type*) (v : α → M) (c : L.Constants), VTask.realize v c.term = c",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_constants"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_constants"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.589,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.realize-bfc82163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "realize_subst_compositional",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α β : Type*) (v : β → M) (t : L.Term α) (tf : α → L.Term β), VTask.realize v (t.subst tf) = VTask.realize (fun a => VTask.realize v (tf a)) t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_subst"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_subst"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.78,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.realize-bfc82163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "realize_subst_var_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α : Type*) (v : α → M) (t : L.Term α), VTask.realize v (t.subst FirstOrder.Language.Term.var) = VTask.realize v t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_subst",
+        "FirstOrder.Language.Term.realize_var"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_subst",
+        "FirstOrder.Language.Term.realize_var"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.473,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.realize-bfc82163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "realize_liftAt_composition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α : Type*) (n n' m : ℕ) (t : L.Term (α ⊕ Fin n)) (v : α ⊕ Fin (n + n') → M), VTask.realize v (t.liftAt n' m) = VTask.realize (v ∘ Sum.map id (fun i : Fin _ => if ↑i < m then Fin.castAdd n' i else Fin.addNat i n')) t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_liftAt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_liftAt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.916,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.realize-bfc82163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Term.realize",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Term.realize-bfc82163",
+    "review_status": "unreviewed"
+  }
+}

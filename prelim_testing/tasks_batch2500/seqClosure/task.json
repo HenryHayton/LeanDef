@@ -1,0 +1,436 @@
+{
+  "task_id": "seqClosure",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.seqClosure",
+  "signature": {
+    "name": "VTask.seqClosure",
+    "type": "{X : Type u_1} -> [TopologicalSpace X] -> (s : Set X) -> Set X",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and meaningful for every set in every topological space, including edge cases like the empty set and the whole space, with no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "seqClosure_subset_s_false",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.seqClosure (Set.Ioo (0:ℝ) 1) ⊆ Set.Ioo (0:ℝ) 1)",
+      "domain_inputs": {
+        "s": [
+          "Set.Ioo (0:ℝ) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.seqClosure (Set.Ioo (0:ℝ) 1) ⊆ Set.Ioo (0:ℝ) 1",
+      "violated_property": "seqClosure s ⊆ s does not hold in general; seqClosure s may strictly contain s"
+    },
+    {
+      "id": "seqClosure_s_subset_seqClosure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (s : Set X), s ⊆ VTask.seqClosure s",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_seqClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_seqClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.434,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_subset_closure_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (s : Set X), VTask.seqClosure s ⊆ closure s",
+      "domain_inputs": {},
+      "anchors": [
+        "seqClosure_subset_closure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seqClosure_subset_closure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.436,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_eq_closure_frechet",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] [FrechetUrysohnSpace X] (s : Set X), VTask.seqClosure s = closure s",
+      "domain_inputs": {},
+      "anchors": [
+        "seqClosure_eq_closure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seqClosure_eq_closure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.892,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_empty_eq_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X], VTask.seqClosure (∅ : Set X) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSeqClosed.seqClosure_eq",
+        "isSeqClosed_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSeqClosed.seqClosure_eq",
+        "isSeqClosed_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_univ_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X], VTask.seqClosure (Set.univ : Set X) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSeqClosed.seqClosure_eq",
+        "subset_seqClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSeqClosed.seqClosure_eq",
+        "subset_seqClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.174,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_isSeqClosed_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (s : Set X), IsSeqClosed s ↔ VTask.seqClosure s = s",
+      "domain_inputs": {},
+      "anchors": [
+        "isSeqClosed_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isSeqClosed_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.986,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_of_isSeqClosed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (s : Set X), IsSeqClosed s → VTask.seqClosure s = s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsSeqClosed.seqClosure_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsSeqClosed.seqClosure_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.263,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_real_Ioo_subset_Icc",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.seqClosure (Set.Ioo (0:ℝ) 1) ⊆ Set.Icc 0 1",
+      "domain_inputs": {
+        "s": [
+          "Set.Ioo (0:ℝ) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.seqClosure (Set.Ioo (0:ℝ) 1) ⊆ Set.Icc 0 1"
+    },
+    {
+      "id": "seqClosure_real_Ioo_eq_Icc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.seqClosure (Set.Ioo (0:ℝ) 1) = Set.Icc 0 1",
+      "domain_inputs": {},
+      "anchors": [
+        "seqClosure_eq_closure"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seqClosure_eq_closure"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (s t : Set X), s ⊆ t → VTask.seqClosure s ⊆ VTask.seqClosure t",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_seqClosure",
+        "seqClosure_subset_closure"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_seqClosure",
+        "seqClosure_subset_closure"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seqClosure_seqClosed_of_closed_real",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.seqClosure (Set.Icc (0:ℝ) 1) = Set.Icc 0 1",
+      "domain_inputs": {
+        "s": [
+          "Set.Icc (0:ℝ) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.seqClosure (Set.Icc (0:ℝ) 1)"
+    },
+    {
+      "id": "zero_mem_seqClosure_Ioo_real",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(0:ℝ) ∈ VTask.seqClosure (Set.Ioo (0:ℝ) 1)",
+      "domain_inputs": {
+        "s": [
+          "Set.Ioo (0:ℝ) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seqClosure-01a07729",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0:ℝ) ∈ VTask.seqClosure (Set.Ioo (0:ℝ) 1)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "seqClosure",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "seqClosure-01a07729",
+    "review_status": "unreviewed"
+  }
+}

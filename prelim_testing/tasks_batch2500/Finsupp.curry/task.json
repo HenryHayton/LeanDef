@@ -1,0 +1,213 @@
+{
+  "task_id": "Finsupp.curry",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.curry",
+  "signature": {
+    "name": "VTask.curry",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {M : Type u_5} -> [Zero M] -> (f : α × β →₀ M) -> α →₀ β →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "zero_convention",
+        "statement": "A value m : M is treated as absent (off-support) exactly when m = 0, using the Zero M instance; this determines the support of both the inner and outer finitely supported functions produced by curry.",
+        "note": "Governs support computation at both levels of the nested finsupp."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "curry_uncurry_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] (f : α × β →₀ M), (VTask.curry f).uncurry = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.uncurry_curry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.uncurry_curry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.316,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.curry-c6c64cb2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_single_splits",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] (a : α) (b : β) (m : M), VTask.curry (Finsupp.single (a, b) m) = Finsupp.single a (Finsupp.single b m)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.curry_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.curry_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.469,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.curry-c6c64cb2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_support_eq_image_fst",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [Zero M] [DecidableEq α] (f : α × β →₀ M), (VTask.curry f).support = f.support.image Prod.fst",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_curry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_curry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.271,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.curry-c6c64cb2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_zero_support_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.curry (0 : Fin 2 × Fin 2 →₀ ℕ)).support = ∅ := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.curry-c6c64cb2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.curry (0 : Fin 2 × Fin 2 →₀ ℕ)).support"
+    },
+    {
+      "id": "curry_ne_zero_of_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : Fin 2) (b : Fin 2) (m : ℕ), m ≠ 0 → VTask.curry (Finsupp.single (a, b) m) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.curry_single",
+        "Finsupp.single_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.curry_single",
+        "Finsupp.single_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.539,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.curry-c6c64cb2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.curry",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.curry-c6c64cb2",
+    "review_status": "unreviewed"
+  }
+}

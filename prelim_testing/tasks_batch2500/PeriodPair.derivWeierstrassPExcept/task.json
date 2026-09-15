@@ -1,0 +1,144 @@
+{
+  "task_id": "PeriodPair.derivWeierstrassPExcept",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.derivWeierstrassPExcept",
+  "signature": {
+    "name": "VTask.derivWeierstrassPExcept",
+    "type": "(L : PeriodPair) -> (l₀ z : ℂ) -> ℂ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "l₀",
+      "z"
+    ],
+    "conventions": [
+      {
+        "point": "l₀ not in lattice",
+        "statement": "If l₀ is not an element of the lattice of L, no term is suppressed and the result equals the full ℘' series over all lattice points.",
+        "note": "The condition l.1 = l₀ is never satisfied, so every summand is included unchanged."
+      },
+      {
+        "point": "z equals a lattice point other than l₀",
+        "statement": "When z is a lattice point distinct from l₀, the sum contains a term of the form −2/(z − z)³, which is not analytically meaningful; Lean's tsum returns a junk value because the family is not summable.",
+        "note": "This is the standard pole location of ℘'; removing l₀ does not remove other poles."
+      },
+      {
+        "point": "z equals l₀ (and l₀ is in the lattice)",
+        "statement": "When z = l₀ ∈ Λ, the diverging term −2/(z − l₀)³ has been zeroed out, and the remaining sum is finite and well-defined.",
+        "note": "This is the primary use case: studying the behavior of ℘' near l₀ without the pole contribution from l₀ itself."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "derivWeierstrassPExcept_neg_congr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ z : ℂ), VTask.derivWeierstrassPExcept L l₀ z = -VTask.derivWeierstrassPExcept L l₀ z → VTask.derivWeierstrassPExcept L l₀ z = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "neg_eq_iff_eq_neg",
+        "eq_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "neg_eq_iff_eq_neg",
+        "eq_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PeriodPair.derivWeierstrassPExcept-ac193993",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "derivWeierstrassPExcept_not_constant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ : ℂ), ∃ z₁ z₂ : ℂ, VTask.derivWeierstrassPExcept L l₀ z₁ = VTask.derivWeierstrassPExcept L l₀ z₁ ∧ VTask.derivWeierstrassPExcept L l₀ z₂ = VTask.derivWeierstrassPExcept L l₀ z₂",
+      "domain_inputs": {},
+      "anchors": [
+        "eq_self_iff_true"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "eq_self_iff_true"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.179,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.derivWeierstrassPExcept-ac193993",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "derivWeierstrassPExcept_value_neq_with_different_exclusion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (L : PeriodPair) (l₀ z : ℂ), VTask.derivWeierstrassPExcept L l₀ z ≠ VTask.derivWeierstrassPExcept L (l₀ + 1) z",
+      "domain_inputs": {},
+      "anchors": [
+        "tsum_ite_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "tsum_ite_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PeriodPair.derivWeierstrassPExcept-ac193993",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PeriodPair.derivWeierstrassPExcept",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PeriodPair.derivWeierstrassPExcept-ac193993",
+    "review_status": "unreviewed"
+  }
+}

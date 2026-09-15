@@ -1,0 +1,186 @@
+{
+  "task_id": "AlgHom.fromOpposite",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fromOpposite",
+  "signature": {
+    "name": "VTask.fromOpposite",
+    "type": "{R : Type u_1} -> {A : Type u_3} -> {B : Type u_4} -> [CommSemiring R] -> [Semiring A] -> [Semiring B] -> [Algebra R A] -> [Algebra R B] -> (f : A →ₐ[R] B) -> (hf : ∀ (x y : A), Commute (f x) (f y)) -> Aᵐᵒᵖ →ₐ[R] B",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is a total construction; every well-typed pair (f, hf) produces a valid algebra homomorphism with no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fromOpposite_map_mul_reversed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₐ[R] B) (hf : ∀ x y : A, Commute (f x) (f y)) (a b : A), VTask.fromOpposite f hf (MulOpposite.op a * MulOpposite.op b) = f b * f a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toRingHom_fromOpposite",
+        "RingHom.fromOpposite_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toRingHom_fromOpposite",
+        "RingHom.fromOpposite_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.818,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.fromOpposite-368824db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromOpposite_comp_op_algHom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₐ[R] B) (hf : ∀ x y : A, Commute (f x) (f y)) (a b : A), VTask.fromOpposite f hf (MulOpposite.op (a * b)) = f b * f a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toRingHom_fromOpposite",
+        "MulOpposite.op_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toRingHom_fromOpposite",
+        "MulOpposite.op_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.462,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.fromOpposite-368824db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromOpposite_not_ring_hom_only",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₐ[R] B) (hf : ∀ x y : A, Commute (f x) (f y)) (r : R), VTask.fromOpposite f hf (algebraMap R Aᵐᵒᵖ r) = algebraMap R B r",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.commutes"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.commutes"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.957,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.fromOpposite-368824db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fromOpposite_ne_wrong_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R A B : Type*) [CommSemiring R] [CommSemiring A] [CommSemiring B] [Algebra R A] [Algebra R B] (f : A →ₐ[R] B) (hf : ∀ x y : A, Commute (f x) (f y)) (a : A), VTask.fromOpposite f hf (MulOpposite.op a) ≠ f (a * a) ∨ f a = f (a * a)",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toRingHom_fromOpposite"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toRingHom_fromOpposite"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.758,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.fromOpposite-368824db",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.fromOpposite",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.fromOpposite-368824db",
+    "review_status": "unreviewed"
+  }
+}

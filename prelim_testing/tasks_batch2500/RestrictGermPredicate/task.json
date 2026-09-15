@@ -1,0 +1,108 @@
+{
+  "task_id": "RestrictGermPredicate",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.RestrictGermPredicate",
+  "signature": {
+    "name": "VTask.RestrictGermPredicate",
+    "type": "{X : Type u_1} -> {Y : Type u_2} -> [TopologicalSpace X] -> (P : (x : X) → (nhds x).Germ Y → Prop) -> (A : Set X) -> (x : X) -> (nhds x).Germ Y → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "A",
+      "x",
+      "φ"
+    ],
+    "conventions": [
+      {
+        "point": "x ∉ A",
+        "statement": "When x does not belong to A, VTask.RestrictGermPredicate P A x φ holds vacuously for every germ φ, because the condition x ∈ A is required as a hypothesis and is false.",
+        "note": "This is the primary 'junk-value' or edge convention: outside the set A the predicate imposes no constraint."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rgp_congr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] (P : (x : X) → (nhds x).Germ Y → Prop) (A : Set X) (x : X) (f g : X → Y), VTask.RestrictGermPredicate P A x f → (∀ᶠ z in nhdsSet A, g z = f z) → VTask.RestrictGermPredicate P A x g",
+      "domain_inputs": {},
+      "anchors": [
+        "restrictGermPredicate_congr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "restrictGermPredicate_congr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.821,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictGermPredicate-4ff8d7ef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rgp_monotone_in_A",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] (P : (x : X) → (nhds x).Germ Y → Prop) (A B : Set X) (x : X) (φ : (nhds x).Germ Y), A ⊆ B → VTask.RestrictGermPredicate P B x φ → VTask.RestrictGermPredicate P A x φ",
+      "domain_inputs": {},
+      "anchors": [
+        "forall_restrictGermPredicate_iff",
+        "Filter.Eventually.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "forall_restrictGermPredicate_iff",
+        "Filter.Eventually.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictGermPredicate-4ff8d7ef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RestrictGermPredicate",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RestrictGermPredicate-4ff8d7ef",
+    "review_status": "unreviewed"
+  }
+}

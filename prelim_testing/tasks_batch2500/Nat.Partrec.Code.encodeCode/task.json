@@ -1,0 +1,320 @@
+{
+  "task_id": "Nat.Partrec.Code.encodeCode",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.encodeCode",
+  "signature": {
+    "name": "VTask.encodeCode",
+    "type": "Nat.Partrec.Code → ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "base constructors",
+        "statement": "The four base constructors are mapped to the values 0, 1, 2, 3 exactly: zero ↦ 0, succ ↦ 1, left ↦ 2, right ↦ 3.",
+        "note": "These are the only codes with encodings in {0,1,2,3}."
+      },
+      {
+        "point": "compound constructors encode to values ≥ 4",
+        "statement": "All four compound constructors (pair, comp, prec, rfind') encode to values ≥ 4, partitioned by arithmetic residue tags.",
+        "note": "The tag arithmetic ensures the four families are disjoint, giving injectivity."
+      },
+      {
+        "point": "agreement with Encodable instance",
+        "statement": "VTask.encodeCode agrees with the canonical `encode` function from the `Encodable` instance for `Nat.Partrec.Code`.",
+        "note": "Expressed by the theorem encodeCode_eq : encode = encodeCode."
+      },
+      {
+        "point": "bijectivity",
+        "statement": "VTask.encodeCode is a bijection from `Nat.Partrec.Code` to ℕ, with computable inverse given by ofNatCode.",
+        "note": "Every natural number is the encoding of exactly one code."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "encodeCode_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Function.Injective VTask.encodeCode",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.encodeCode_eq",
+        "Encodable.encode_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.encodeCode_eq",
+        "Encodable.encode_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_base_values_lt_4",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.encodeCode Nat.Partrec.Code.zero < 4 ∧ VTask.encodeCode Nat.Partrec.Code.succ < 4 ∧ VTask.encodeCode Nat.Partrec.Code.left < 4 ∧ VTask.encodeCode Nat.Partrec.Code.right < 4",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode Nat.Partrec.Code.zero = 0 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.zero"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_succ",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode Nat.Partrec.Code.succ = 1 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.succ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_left",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode Nat.Partrec.Code.left = 2 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.left"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_right",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode Nat.Partrec.Code.right = 3 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.right"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_pair_zero_zero_ge_4",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode (Nat.Partrec.Code.pair Nat.Partrec.Code.zero Nat.Partrec.Code.zero) ≥ 4 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.pair Nat.Partrec.Code.zero Nat.Partrec.Code.zero"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_comp_zero_succ_ge_4",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.encodeCode (Nat.Partrec.Code.comp Nat.Partrec.Code.zero Nat.Partrec.Code.succ) ≥ 4 := by decide",
+      "domain_inputs": {
+        "c": [
+          "Nat.Partrec.Code.comp Nat.Partrec.Code.zero Nat.Partrec.Code.succ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_neq_zero_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.encodeCode Nat.Partrec.Code.zero ≠ VTask.encodeCode Nat.Partrec.Code.succ",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.051,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "encodeCode_pair_zero_zero_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.encodeCode (Nat.Partrec.Code.pair Nat.Partrec.Code.zero Nat.Partrec.Code.zero) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.encodeCode_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.049,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.Partrec.Code.encodeCode",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.Partrec.Code.encodeCode-cb30f8eb",
+    "review_status": "unreviewed"
+  }
+}

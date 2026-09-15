@@ -1,0 +1,416 @@
+{
+  "task_id": "spectralValueTerms",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.spectralValueTerms",
+  "signature": {
+    "name": "VTask.spectralValueTerms",
+    "type": "{R : Type u_1} -> [SeminormedRing R] -> (p : Polynomial R) -> ℕ → ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n ≥ p.natDegree",
+        "statement": "When n ≥ p.natDegree (including n = p.natDegree), VTask.spectralValueTerms p n = 0, avoiding any division-by-zero in the exponent 1/(p.natDegree - n).",
+        "note": "Junk value convention: the formula 1/(d - n) would be 1/0 at n = d and negative-denominator at n > d; the zero convention sidesteps both."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "svt_zero_at_natDegree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R), VTask.spectralValueTerms p p.natDegree = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_natDegree_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_natDegree_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_zero_above_natDegree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R) (n : ℕ), p.natDegree ≤ n → VTask.spectralValueTerms p n = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_natDegree_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_natDegree_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.52,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_formula_lt_natDegree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R) (n : ℕ), n < p.natDegree → VTask.spectralValueTerms p n = ‖p.coeff n‖ ^ (1 / (p.natDegree - n : ℝ))",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_lt_natDegree"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_lt_natDegree"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.853,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R) (n : ℕ), 0 ≤ VTask.spectralValueTerms p n",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.386,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_finite_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R), (Set.range (VTask.spectralValueTerms p)).Finite",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_finite_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_finite_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.215,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_bddAbove",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R), BddAbove (Set.range (VTask.spectralValueTerms p))",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_bddAbove"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_bddAbove"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.31,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_const_poly_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (r : R) (n : ℕ), VTask.spectralValueTerms (Polynomial.C r) n = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_natDegree_le",
+        "Polynomial.natDegree_C"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_natDegree_le",
+        "Polynomial.natDegree_C"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_not_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R) (n : ℕ), ¬ (VTask.spectralValueTerms p n < 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_nonneg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_nonneg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_range_zero_in_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R), (0 : ℝ) ∈ Set.range (VTask.spectralValueTerms p)",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_natDegree_le",
+        "Set.mem_range"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_natDegree_le",
+        "Set.mem_range"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_nonneg_in_Ici",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [SeminormedRing R] (p : Polynomial R) (n : ℕ), VTask.spectralValueTerms p n ∈ Set.Ici (0 : ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_nonneg",
+        "Set.mem_Ici"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_nonneg",
+        "Set.mem_Ici"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_range_not_infinite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (Set.range (VTask.spectralValueTerms (0 : Polynomial ℝ))).Infinite",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_finite_range",
+        "Set.Finite.not_infinite"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_finite_range",
+        "Set.Finite.not_infinite"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "svt_natDegree_le_not_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (0 < VTask.spectralValueTerms (Polynomial.C (1 : ℝ)) 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "spectralValueTerms_of_natDegree_le",
+        "Polynomial.natDegree_C"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "spectralValueTerms_of_natDegree_le",
+        "Polynomial.natDegree_C"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.214,
+        "at": "authoring",
+        "script": "by simp [_root_.spectralValueTerms] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.spectralValueTerms] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "spectralValueTerms-ff04ae8d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "spectralValueTerms",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "spectralValueTerms-ff04ae8d",
+    "review_status": "unreviewed"
+  }
+}

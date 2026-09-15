@@ -1,0 +1,106 @@
+{
+  "task_id": "NonUnitalRingHom.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> {γ : Type u_4} -> [NonUnitalNonAssocSemiring α] -> [NonUnitalNonAssocSemiring β] -> [NonUnitalNonAssocSemiring γ] -> (g : β →ₙ+* γ) -> (f : α →ₙ+* β) -> α →ₙ+* γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "argument order",
+        "statement": "VTask.comp g f applies f first and g second, matching the standard mathematical convention g ∘ f.",
+        "note": "This is the standard 'diagrammatic reverse' argument order seen throughout Mathlib for composition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_eq_iff_funext",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] [NonUnitalNonAssocSemiring γ] (g₁ g₂ : β →ₙ+* γ) (f : α →ₙ+* β), g₁ = g₂ → VTask.comp g₁ f = VTask.comp g₂ f",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalRingHom.ext_iff",
+        "NonUnitalRingHom.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalRingHom.ext_iff",
+        "NonUnitalRingHom.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.546,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.comp-be289911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_reject_ne_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (f : ℤ →ₙ+* ℤ) (g : ℤ →ₙ+* ℤ), VTask.comp g f ≠ VTask.comp f g",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalRingHom.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalRingHom.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.comp-be289911",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "NonUnitalRingHom.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "NonUnitalRingHom.comp-be289911",
+    "review_status": "unreviewed"
+  }
+}

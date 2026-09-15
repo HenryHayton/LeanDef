@@ -1,0 +1,290 @@
+{
+  "task_id": "LinearEquiv.ofLeftInverse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLeftInverse",
+  "signature": {
+    "name": "VTask.ofLeftInverse",
+    "type": "{R : Type u_1} -> {R₂ : Type u_3} -> {M : Type u_5} -> {M₂ : Type u_7} -> [Semiring R] -> [Semiring R₂] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> {module_M : Module R M} -> {module_M₂ : Module R₂ M₂} -> {σ₁₂ : R →+* R₂} -> {σ₂₁ : R₂ →+* R} -> {f : M →ₛₗ[σ₁₂] M₂} -> [RingHomInvPair σ₁₂ σ₂₁] -> [RingHomInvPair σ₂₁ σ₁₂] -> {g : M₂ → M} -> (h : Function.LeftInverse g ⇑f) -> M ≃ₛₗ[σ₁₂] ↥f.range",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total constructor fully determined by its arguments; there are no junk-value or boundary conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLeftInverse_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f) (m : M), (VTask.ofLeftInverse h).symm (VTask.ofLeftInverse h m) = m",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.129,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f) (x : ↥f.range), VTask.ofLeftInverse h ((VTask.ofLeftInverse h).symm x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.244,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f), Function.Injective ⇑(VTask.ofLeftInverse h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.414,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f), Function.Surjective ⇑(VTask.ofLeftInverse h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.446,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_not_zero_if_injective_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f) (m : M), m ≠ 0 → (VTask.ofLeftInverse h m : M₂) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_ne_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_ne_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.811,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_symm_not_identity_unless_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f), Function.LeftInverse (VTask.ofLeftInverse h).symm (VTask.ofLeftInverse h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.56,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_add_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (g : M₂ → M) (h : Function.LeftInverse g ⇑f) (m₁ m₂ : M), (VTask.ofLeftInverse h (m₁ + m₂) : M₂) = VTask.ofLeftInverse h m₁ + VTask.ofLeftInverse h m₂",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.398,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearEquiv.ofLeftInverse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearEquiv.ofLeftInverse-03d9e2f5",
+    "review_status": "unreviewed"
+  }
+}

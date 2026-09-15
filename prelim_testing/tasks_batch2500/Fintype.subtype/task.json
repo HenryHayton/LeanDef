@@ -1,0 +1,197 @@
+{
+  "task_id": "Fintype.subtype",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtype",
+  "signature": {
+    "name": "VTask.subtype",
+    "type": "{α : Type u_1} -> {p : α → Prop} -> (s : Finset α) -> (H : ∀ (x : α), x ∈ s ↔ p x) -> Fintype { x // p x }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is a constructor requiring a well-typed finset and a membership-equivalence proof; there are no junk-value or boundary conventions because ill-typed inputs simply do not typecheck."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtype_elems_cover",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s : Finset α) (p : α → Prop) (H : ∀ x, x ∈ s ↔ p x) (v : { x // p x }), v ∈ (@Fintype.elems { x // p x } (VTask.subtype s H))",
+      "domain_inputs": {},
+      "anchors": [
+        "Fintype.complete"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fintype.complete"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Fintype.subtype-21ca8ab1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_accept_nonempty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ (inst : Fintype { x : ℕ // x ∈ ({0, 1, 2} : Finset ℕ) }), @Fintype.card _ inst = 3",
+      "domain_inputs": {
+        "s": [
+          "{0, 1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Fintype.subtype-21ca8ab1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.subtype ({0, 1, 2} : Finset ℕ) (fun x => Iff.rfl)"
+    },
+    {
+      "id": "subtype_accept_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ (inst : Fintype { x : ℕ // x ∈ (∅ : Finset ℕ) }), @Fintype.card _ inst = 0",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Fintype.subtype-21ca8ab1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.subtype (∅ : Finset ℕ) (fun x => Iff.rfl)"
+    },
+    {
+      "id": "subtype_reject_wrong_card",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (@Fintype.card { x : ℕ // x ∈ ({0, 1, 2} : Finset ℕ) } (VTask.subtype {0, 1, 2} (fun x => Iff.rfl)) = 2)",
+      "domain_inputs": {
+        "s": [
+          "{0, 1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.209,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.subtype-21ca8ab1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.subtype ({0, 1, 2} : Finset ℕ) (fun x => Iff.rfl)",
+      "violated_property": "The resulting Fintype has cardinality 3, not 2"
+    },
+    {
+      "id": "subtype_reject_empty_nonzero_card",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (@Fintype.card { x : ℕ // x ∈ (∅ : Finset ℕ) } (VTask.subtype ∅ (fun x => Iff.rfl)) = 1)",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.054,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.subtype-21ca8ab1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.subtype (∅ : Finset ℕ) (fun x => Iff.rfl)",
+      "violated_property": "The resulting Fintype for the empty subtype must have cardinality 0, not 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fintype.subtype",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fintype.subtype-21ca8ab1",
+    "review_status": "unreviewed"
+  }
+}

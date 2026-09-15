@@ -1,0 +1,198 @@
+{
+  "task_id": "derivedSeries",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.derivedSeries",
+  "signature": {
+    "name": "VTask.derivedSeries",
+    "type": "(G : Type u_1) -> [Group G] -> ℕ → Subgroup G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.derivedSeries G 0 = ⊤, the full group, by definition.",
+        "note": "Base case of the recursion; no junk value, this is the intended mathematical value."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "derivedSeries_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [Group G] (n : ℕ), VTask.derivedSeries G (n + 1) ≤ VTask.derivedSeries G n",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.commutator_le_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.commutator_le_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "derivedSeries-1be1e8a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "derivedSeries_zero_is_top_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.derivedSeries (DihedralGroup 4) 0 = ⊤",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.073,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "derivedSeries-1be1e8a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.derivedSeries (DihedralGroup 4) 0"
+    },
+    {
+      "id": "derivedSeries_zero_not_bot_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.derivedSeries (DihedralGroup 4) 0 = ⊥)",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.072,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "derivedSeries-1be1e8a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.derivedSeries (DihedralGroup 4) 0",
+      "violated_property": "VTask.derivedSeries G 0 = ⊥ (the zeroth term is ⊤, not ⊥)"
+    },
+    {
+      "id": "derivedSeries_nonabelian_one_nontrivial_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.derivedSeries (DihedralGroup 4) 1 = ⊤)",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "derivedSeries-1be1e8a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.derivedSeries (DihedralGroup 4) 1",
+      "violated_property": "VTask.derivedSeries G 1 = ⊥ fails for non-abelian groups"
+    },
+    {
+      "id": "derivedSeries_monotone_decreasing",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.derivedSeries (DihedralGroup 4) 2 ≤ VTask.derivedSeries (DihedralGroup 4) 1",
+      "domain_inputs": {
+        "n": [
+          "2",
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "derivedSeries-1be1e8a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.derivedSeries (DihedralGroup 4) 2 ≤ VTask.derivedSeries (DihedralGroup 4) 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "derivedSeries",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "derivedSeries-1be1e8a6",
+    "review_status": "unreviewed"
+  }
+}

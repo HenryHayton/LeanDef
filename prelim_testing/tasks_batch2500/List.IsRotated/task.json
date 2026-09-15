@@ -1,0 +1,320 @@
+{
+  "task_id": "List.IsRotated",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsRotated",
+  "signature": {
+    "name": "VTask.IsRotated",
+    "type": "{α : Type u} -> (l l' : List α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "l'"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0 witness",
+        "statement": "Rotating by 0 is the identity, so `VTask.IsRotated l l` is always true (reflexivity).",
+        "note": "Every list is trivially a rotation of itself."
+      },
+      {
+        "point": "n beyond length",
+        "statement": "Values of `n` greater than or equal to `l.length` wrap around modulo the length, introducing no extra cases; the existential ranges over all of ℕ without restriction.",
+        "note": "No junk behavior: large n values simply revisit earlier rotations."
+      },
+      {
+        "point": "empty list",
+        "statement": "`VTask.IsRotated [] []` is true, and `VTask.IsRotated [] l'` is false whenever `l'` is non-empty.",
+        "note": "Rotation of the empty list is always the empty list."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isrotated_symm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' : List α), VTask.IsRotated l l' → VTask.IsRotated l' l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.33,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_trans_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' l'' : List α), VTask.IsRotated l l' → VTask.IsRotated l' l'' → VTask.IsRotated l l''",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.509,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_perm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' : List α), VTask.IsRotated l l' → l.Perm l'",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.perm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.perm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_length_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' : List α), VTask.IsRotated l l' → l.length = l'.length",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.perm",
+        "List.Perm.length_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.perm",
+        "List.Perm.length_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_map_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type) (l l' : List α) (f : α → β), VTask.IsRotated l l' → VTask.IsRotated (l.map f) (l'.map f)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.096,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_nodup_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' : List α), VTask.IsRotated l l' → (List.Nodup l ↔ List.Nodup l')",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.nodup_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.nodup_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.322,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_mem_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l l' : List α) (a : α), VTask.IsRotated l l' → (a ∈ l ↔ a ∈ l')",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsRotated.mem_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsRotated.mem_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.717,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isrotated_refl_123",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRotated [1, 2, 3] [1, 2, 3]",
+      "domain_inputs": {
+        "l": [
+          "[1, 2, 3]"
+        ],
+        "l'": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.04,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsRotated-7ff69a1f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "[1, 2, 3]"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.IsRotated",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.IsRotated-7ff69a1f",
+    "review_status": "unreviewed"
+  }
+}

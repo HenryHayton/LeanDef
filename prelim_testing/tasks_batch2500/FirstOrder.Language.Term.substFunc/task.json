@@ -1,0 +1,228 @@
+{
+  "task_id": "FirstOrder.Language.Term.substFunc",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.substFunc",
+  "signature": {
+    "name": "VTask.substFunc",
+    "type": "{L : FirstOrder.Language} -> {L' : FirstOrder.Language} -> {α : Type u'} -> L.Term α → ({n : ℕ} → L.Functions n → L'.Term (Fin n)) → L'.Term α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t",
+      "tf"
+    ],
+    "conventions": [
+      {
+        "point": "variable case independence",
+        "statement": "When the input term is a variable node, the function substitution argument is not consulted and may be arbitrary; the output is always the same variable node.",
+        "note": "This is structural: the recursive definition only applies the substitution at function-application nodes."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "substFunc_term_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} (t : L.Term α), VTask.substFunc t FirstOrder.Language.Functions.term = t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.215,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "substFunc_output_same_variable_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L L' : FirstOrder.Language} {α : Type*} (t : L.Term α) (tf : {n : ℕ} → L.Functions n → L'.Term (Fin n)), ∃ (s : L'.Term α), VTask.substFunc t tf = s",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.09,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "substFunc_term_identity_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*}, Function.LeftInverse (fun t : L.Term α => VTask.substFunc t FirstOrder.Language.Functions.term) id",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "substFunc_func_consults_substitution",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} (t : L.Term α), VTask.substFunc t FirstOrder.Language.Functions.term = t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.154,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "substFunc_var_ne_func",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (a : α) (f : FirstOrder.Language.empty.Functions 0) (tf : {n : ℕ} → FirstOrder.Language.empty.Functions n → FirstOrder.Language.empty.Term (Fin n)), VTask.substFunc (FirstOrder.Language.Term.var a : FirstOrder.Language.empty.Term α) tf ≠ FirstOrder.Language.Term.func f Fin.elim0",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.382,
+        "at": "authoring",
+        "script": "by simp [_root_.FirstOrder.Language.Term.substFunc] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.FirstOrder.Language.Term.substFunc] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "substFunc_not_ignore_func_symbol",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (L L' : FirstOrder.Language) (α : Type) (t : L.Term α) (tf₁ tf₂ : {n : ℕ} → L.Functions n → L'.Term (Fin n)), VTask.substFunc t tf₁ = VTask.substFunc t tf₂",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.substFunc_term"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Term.substFunc",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Term.substFunc-b0ec661a",
+    "review_status": "unreviewed"
+  }
+}

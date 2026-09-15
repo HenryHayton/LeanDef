@@ -1,0 +1,292 @@
+{
+  "task_id": "SimpleGraph.Walk.ofBoxProdRight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofBoxProdRight",
+  "signature": {
+    "name": "VTask.ofBoxProdRight",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {G : SimpleGraph α} -> {H : SimpleGraph β} -> [DecidableEq α] -> [DecidableRel H.Adj] -> {x y : α × β} -> (G □ H).Walk x y → H.Walk x.2 y.2",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "G-direction steps are dropped",
+        "statement": "Any step in the box product walk that moves only the first coordinate (a G-move, leaving the second coordinate unchanged) contributes no edge to the projected walk on H; it is silently skipped.",
+        "note": "This is the core definitional convention: only H-moves are retained."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofBoxProdRight_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel G.Adj] [DecidableRel H.Adj] (a : α) {b₁ b₂ : β} (w : H.Walk b₁ b₂), VTask.ofBoxProdRight (w.boxProdRight G a) = w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_length_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableEq β] [DecidableRel G.Adj] [DecidableRel H.Adj] {a₁ a₂ : α} {b₁ b₂ : β} (w : (G □ H).Walk (a₁, b₁) (a₂, b₂)), w.length = w.ofBoxProdLeft.length + (VTask.ofBoxProdRight w).length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.877,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_length_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel H.Adj] {x y : α × β} (w : (G □ H).Walk x y), (VTask.ofBoxProdRight w).length ≤ w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_boxProd",
+        "Nat.le_add_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_boxProd",
+        "Nat.le_add_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_allGmoves_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel G.Adj] [DecidableRel H.Adj] (a₁ a₂ : α) (b : β) (w : G.Walk a₁ a₂), VTask.ofBoxProdRight (w.boxProdLeft H b) = SimpleGraph.Walk.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight",
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight",
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_allGmoves_length_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel G.Adj] [DecidableRel H.Adj] (a₁ a₂ : α) (b : β) (w : G.Walk a₁ a₂), (VTask.ofBoxProdRight (w.boxProdLeft H b)).length = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_allHmoves_length_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel G.Adj] [DecidableRel H.Adj] (a : α) {b₁ b₂ : β} (w : H.Walk b₁ b₂), (VTask.ofBoxProdRight (w.boxProdRight G a)).length = w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_length_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel H.Adj] {x y : α × β} (w : (G □ H).Walk x y), 0 ≤ (VTask.ofBoxProdRight w).length",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.543,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_boxProdRight_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel G.Adj] [DecidableRel H.Adj] (a : α) {b₁ b₂ : β} (w : H.Walk b₁ b₂), (VTask.ofBoxProdRight (w.boxProdRight G a)).length = w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.ofBoxProdRight_boxProdRight"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofBoxProdRight_length_not_exceed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) (G : SimpleGraph α) (H : SimpleGraph β) [DecidableEq α] [DecidableRel H.Adj] (a₁ a₂ : α) (b₁ b₂ : β) (w : (G □ H).Walk (a₁, b₁) (a₂, b₂)), ¬ (VTask.ofBoxProdRight w).length > w.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_boxProd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.ofBoxProdRight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.ofBoxProdRight-6e3e92b2",
+    "review_status": "unreviewed"
+  }
+}

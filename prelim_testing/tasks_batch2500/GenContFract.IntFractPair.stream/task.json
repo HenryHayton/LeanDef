@@ -1,0 +1,327 @@
+{
+  "task_id": "GenContFract.IntFractPair.stream",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.stream",
+  "signature": {
+    "name": "VTask.stream",
+    "type": "{K : Type u_1} -> [DivisionRing K] -> [LinearOrder K] -> [FloorRing K] -> (v : K) -> Stream' (Option (GenContFract.IntFractPair K))",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "Sequential (IsSeq) property",
+        "statement": "Once VTask.stream v n = none for some n, VTask.stream v m = none for all m ≥ n.",
+        "note": "This is a structural invariant of the stream, not a default/junk convention."
+      },
+      {
+        "point": "Termination for rationals",
+        "statement": "For v : ℚ, there always exists some n such that VTask.stream v n = none.",
+        "note": "For non-rational fields the stream may be infinite with no none entries."
+      },
+      {
+        "point": "Integer inputs terminate after index 0",
+        "statement": "For v an integer (fractional part 0), VTask.stream v k = none for all k ≥ 1.",
+        "note": "This is a special case of the zero-fractional-part rule."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "stream_is_seq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K), (VTask.stream v).IsSeq",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.stream_isSeq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.stream_isSeq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.368,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_succ_fr_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K) (n : ℕ), Int.fract v ≠ 0 → VTask.stream v (n + 1) = VTask.stream (Int.fract v)⁻¹ n",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.stream_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.stream_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 40.745,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_succ_of_some_nonzero_fr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K) (n : ℕ) (p : GenContFract.IntFractPair K), VTask.stream v n = some p → p.fr ≠ 0 → VTask.stream v (n + 1) = some (GenContFract.IntFractPair.of p.fr⁻¹)",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.stream_succ_of_some"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.stream_succ_of_some"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.683,
+        "at": "authoring",
+        "script": "by simp [_root_.GenContFract.IntFractPair.stream] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.GenContFract.IntFractPair.stream] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_none_after_zero_fr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K) (n : ℕ) (ifp : GenContFract.IntFractPair K), VTask.stream v n = some ifp → ifp.fr = 0 → VTask.stream v (n + 1) = none",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.stream_eq_none_of_fr_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.stream_eq_none_of_fr_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 43.017,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_int_succ_none",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] [IsStrictOrderedRing K] (a : ℤ) (n : ℕ), VTask.stream (a : K) (n + 1) = none",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.stream_succ_of_int"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.stream_succ_of_int"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.179,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_rat_terminates",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (q : ℚ), ∃ n : ℕ, VTask.stream q n = none",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.exists_nth_stream_eq_none_of_rat"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.exists_nth_stream_eq_none_of_rat"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.457,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stream_zero_index_never_none",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.stream (0 : ℚ) 0 ≠ none := by decide",
+      "domain_inputs": {
+        "v": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.stream (0 : ℚ) 0",
+      "violated_property": "stream index 0 is always some, never none"
+    },
+    {
+      "id": "stream_succ_none_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] [LinearOrder K] [FloorRing K] (v : K) (n : ℕ), VTask.stream v (n + 1) = none ↔ VTask.stream v n = none ∨ ∃ ifp, VTask.stream v n = some ifp ∧ ifp.fr = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.IntFractPair.succ_nth_stream_eq_none_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.IntFractPair.succ_nth_stream_eq_none_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 49.114,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "GenContFract.IntFractPair.stream",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "GenContFract.IntFractPair.stream-f5e86b46",
+    "review_status": "unreviewed"
+  }
+}

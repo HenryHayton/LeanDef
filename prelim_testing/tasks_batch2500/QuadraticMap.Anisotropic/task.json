@@ -1,0 +1,301 @@
+{
+  "task_id": "QuadraticMap.Anisotropic",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Anisotropic",
+  "signature": {
+    "name": "VTask.Anisotropic",
+    "type": "{R : Type u_3} -> {M : Type u_4} -> {N : Type u_5} -> [CommSemiring R] -> [AddCommMonoid M] -> [AddCommMonoid N] -> [Module R M] -> [Module R N] -> (Q : QuadraticMap R M N) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "Q"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: Anisotropic is a universally quantified Prop with no junk-value or boundary conventions; it is meaningful for every well-typed quadratic map."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "anisotropic_eq_zero_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {N : Type*} [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N] (Q : QuadraticMap R M N), VTask.Anisotropic Q → ∀ x : M, Q x = 0 ↔ x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.Anisotropic.eq_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.Anisotropic.eq_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.867,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_not_iff_exists",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {N : Type*} [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N] (Q : QuadraticMap R M N), ¬VTask.Anisotropic Q ↔ ∃ x : M, x ≠ 0 ∧ Q x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.not_anisotropic_iff_exists"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.not_anisotropic_iff_exists"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.236,
+        "at": "authoring",
+        "script": "by simp only [_root_.QuadraticMap.Anisotropic] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.QuadraticMap.Anisotropic] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_of_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {P : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid P] [Module R M₁] [Module R M₂] [Module R P] (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P), VTask.Anisotropic (Q₁.prod Q₂) → VTask.Anisotropic Q₁ ∧ VTask.Anisotropic Q₂",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.anisotropic_of_prod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.anisotropic_of_prod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.598,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_zero_map_nontrivial_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬VTask.Anisotropic (0 : QuadraticMap ℝ (Fin 1 → ℝ) ℝ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : QuadraticMap ℝ (Fin 1 → ℝ) ℝ)",
+      "violated_property": "∀ x, Q x = 0 → x = 0"
+    },
+    {
+      "id": "anisotropic_prod_implies_both",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {P : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid P] [Module R M₁] [Module R M₂] [Module R P] (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P), VTask.Anisotropic (Q₁.prod Q₂) → VTask.Anisotropic Q₁",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.anisotropic_of_prod"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.anisotropic_of_prod"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_zero_module_trivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {N : Type*} [CommSemiring R] [AddCommMonoid N] [Module R N] (Q : QuadraticMap R (Fin 0 → R) N), VTask.Anisotropic Q",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.not_anisotropic_iff_exists"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.not_anisotropic_iff_exists"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_zero_map_trivial_module_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Anisotropic (0 : QuadraticMap ℝ (Fin 0 → ℝ) ℝ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : QuadraticMap ℝ (Fin 0 → ℝ) ℝ)"
+    },
+    {
+      "id": "anisotropic_not_zero_on_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {N : Type*} [CommSemiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N] (Q : QuadraticMap R M N), VTask.Anisotropic Q → ∀ x : M, x ≠ 0 → Q x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "QuadraticMap.Anisotropic.eq_zero_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuadraticMap.Anisotropic.eq_zero_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.724,
+        "at": "authoring",
+        "script": "by simp only [_root_.QuadraticMap.Anisotropic] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.QuadraticMap.Anisotropic] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "anisotropic_separatingLeft_bilinForm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M), VTask.Anisotropic B.toQuadraticMap → B.SeparatingLeft",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.BilinForm.separatingLeft_of_anisotropic"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.BilinForm.separatingLeft_of_anisotropic"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "QuadraticMap.Anisotropic",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "QuadraticMap.Anisotropic-1e34a536",
+    "review_status": "unreviewed"
+  }
+}

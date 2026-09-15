@@ -1,0 +1,229 @@
+{
+  "task_id": "ChainComplex.truncateAugment",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.truncateAugment",
+  "signature": {
+    "name": "VTask.truncateAugment",
+    "type": "{V : Type u} -> [CategoryTheory.Category.{v, u} V] -> [CategoryTheory.Limits.HasZeroMorphisms V] -> (C : ChainComplex V ℕ) -> {X : V} -> (f : C.X 0 ⟶ X) -> (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0) -> ChainComplex.truncate.obj (C.augment f w) ≅ C",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "f",
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "hom components are identities",
+        "statement": "For every natural number i, the i-th component of the forward morphism (VTask.truncateAugment C f w).hom is the identity 𝟙 (C.X i).",
+        "note": "Recorded in the neighborhood theorem truncateAugment_hom_f."
+      },
+      {
+        "point": "inv components are identities",
+        "statement": "For every natural number i, the i-th component of the inverse morphism (VTask.truncateAugment C f w).inv is the identity 𝟙 ((ChainComplex.truncate.obj (ChainComplex.augment C f w)).X i).",
+        "note": "Recorded in the neighborhood theorem truncateAugment_inv_f."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "truncateAugment_is_iso",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), CategoryTheory.IsIso (VTask.truncateAugment C f w).hom",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.isIso_hom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.isIso_hom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.246,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_hom_inv_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), CategoryTheory.CategoryStruct.comp (VTask.truncateAugment C f w).hom (VTask.truncateAugment C f w).inv = CategoryTheory.CategoryStruct.id _",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.hom_inv_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.hom_inv_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.177,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_inv_hom_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), CategoryTheory.CategoryStruct.comp (VTask.truncateAugment C f w).inv (VTask.truncateAugment C f w).hom = CategoryTheory.CategoryStruct.id _",
+      "domain_inputs": {},
+      "anchors": [
+        "CategoryTheory.Iso.inv_hom_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CategoryTheory.Iso.inv_hom_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.677,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_hom_is_chain_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), (VTask.truncateAugment C f w).hom ∈ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "ChainComplex.truncateAugment_hom_f"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ChainComplex.truncateAugment_hom_f"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.645,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncateAugment_hom_inv_not_swapped",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0) (i : ℕ), ¬ ((VTask.truncateAugment C f w).hom.f i = (VTask.truncateAugment C f w).inv.f i → (VTask.truncateAugment C f w).hom.f i = CategoryTheory.CategoryStruct.id (C.X i) → False)",
+      "domain_inputs": {},
+      "anchors": [
+        "ChainComplex.truncateAugment_hom_f",
+        "ChainComplex.truncateAugment_inv_f"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ChainComplex.truncateAugment_hom_f",
+        "ChainComplex.truncateAugment_inv_f"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.378,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ChainComplex.truncateAugment",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ChainComplex.truncateAugment-670170c1",
+    "review_status": "unreviewed"
+  }
+}

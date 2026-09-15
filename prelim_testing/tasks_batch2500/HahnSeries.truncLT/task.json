@@ -1,0 +1,155 @@
+{
+  "task_id": "HahnSeries.truncLT",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.truncLT",
+  "signature": {
+    "name": "VTask.truncLT",
+    "type": "{Γ : Type u_1} -> {R : Type u_3} -> [Zero R] -> [PartialOrder Γ] -> [DecidableLT Γ] -> (c : Γ) -> ZeroHom (HahnSeries Γ R) (HahnSeries Γ R)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "boundary at cutoff",
+        "statement": "The coefficient at index exactly equal to `c` is zeroed out, because the retention condition is the strict inequality `i < c`.",
+        "note": "Strict less-than means the cutoff index itself is on the killed side."
+      },
+      {
+        "point": "incomparable indices in a partial order",
+        "statement": "For an index `i` that is incomparable to `c` in the partial order (neither `i < c` holds), the coefficient at `i` is set to zero.",
+        "note": "The test `i < c` fails for incomparable elements, so they are treated like indices ≥ c."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "truncLT_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [Zero R] [PartialOrder Γ] [DecidableLT Γ] (c : Γ), VTask.truncLT c (0 : HahnSeries Γ R) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ZeroHom.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZeroHom.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.273,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.truncLT-ab4122c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncLT_is_ZeroHom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [Zero R] [PartialOrder Γ] [DecidableLT Γ] (c : Γ), (VTask.truncLT c).toFun (0 : HahnSeries Γ R) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ZeroHom.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZeroHom.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.258,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.truncLT-ab4122c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "truncLT_reject_nonzero_above_cutoff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : HahnSeries ℤ ℚ), (VTask.truncLT (0 : ℤ) x).coeff 0 ≠ x.coeff 0 ∨ x.coeff 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.44,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.truncLT-ab4122c7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "HahnSeries.truncLT",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "HahnSeries.truncLT-ab4122c7",
+    "review_status": "unreviewed"
+  }
+}

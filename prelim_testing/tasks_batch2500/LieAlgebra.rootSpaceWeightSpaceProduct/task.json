@@ -1,0 +1,150 @@
+{
+  "task_id": "LieAlgebra.rootSpaceWeightSpaceProduct",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.rootSpaceWeightSpaceProduct",
+  "signature": {
+    "name": "VTask.rootSpaceWeightSpaceProduct",
+    "type": "(R : Type u_1) -> (L : Type u_2) -> [CommRing R] -> [LieRing L] -> [LieAlgebra R L] -> (H : LieSubalgebra R L) -> [LieRing.IsNilpotent ↥H] -> (M : Type u_3) -> [AddCommGroup M] -> [Module R M] -> [LieRingModule L M] -> [LieModule R L M] -> (χ₁ χ₂ χ₃ : ↥H → R) -> (hχ : χ₁ + χ₂ = χ₃) -> TensorProduct R ↥(LieAlgebra.rootSpace H χ₁) ↥(LieModule.genWeightSpace M χ₂) →ₗ⁅R,↥H⁆\n    ↥(LieModule.genWeightSpace M χ₃)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "L",
+      "H",
+      "M",
+      "χ₁",
+      "χ₂",
+      "χ₃",
+      "hχ"
+    ],
+    "conventions": [
+      {
+        "point": "pure_tensor_formula",
+        "statement": "On a pure tensor x ⊗ₜ m, the image coerced to M equals the Lie bracket ⁅(x : L), (m : M)⁆.",
+        "note": "This is the defining computational formula for the map on generators of the tensor product."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rwsp_linear_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (L : Type*) [CommRing R] [LieRing L] [LieAlgebra R L] (H : LieSubalgebra R L) [LieRing.IsNilpotent ↥H] (M : Type*) [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M] (χ₁ χ₂ χ₃ : ↥H → R) (hχ : χ₁ + χ₂ = χ₃) (t₁ t₂ : TensorProduct R ↥(LieAlgebra.rootSpace H χ₁) ↥(LieModule.genWeightSpace M χ₂)), VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ χ₃ hχ (t₁ + t₂) = VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ χ₃ hχ t₁ + VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ χ₃ hχ t₂",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.428,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.rootSpaceWeightSpaceProduct-7c5285a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rwsp_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (L : Type*) [CommRing R] [LieRing L] [LieAlgebra R L] (H : LieSubalgebra R L) [LieRing.IsNilpotent ↥H] (M : Type*) [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M] (χ₁ χ₂ χ₃ : ↥H → R) (hχ : χ₁ + χ₂ = χ₃) (r : R) (t : TensorProduct R ↥(LieAlgebra.rootSpace H χ₁) ↥(LieModule.genWeightSpace M χ₂)), VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ χ₃ hχ (r • t) = r • VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ χ₃ hχ t",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.226,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.rootSpaceWeightSpaceProduct-7c5285a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootSpaceWeightSpaceProduct_ne_zero_map_generally",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (R : Type*) (L : Type*) [CommRing R] [LieRing L] [LieAlgebra R L] (H : LieSubalgebra R L) [LieRing.IsNilpotent ↥H] (M : Type*) [AddCommGroup M] [Module R M] [LieRingModule L M] [LieModule R L M] (χ₁ χ₂ : ↥H → R), VTask.rootSpaceWeightSpaceProduct R L H M χ₁ χ₂ (χ₁ + χ₂) rfl = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul",
+        "LieAlgebra.rootSpaceProduct_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.coe_rootSpaceWeightSpaceProduct_tmul",
+        "LieAlgebra.rootSpaceProduct_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.rootSpaceWeightSpaceProduct-7c5285a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LieAlgebra.rootSpaceWeightSpaceProduct",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LieAlgebra.rootSpaceWeightSpaceProduct-7c5285a5",
+    "review_status": "unreviewed"
+  }
+}

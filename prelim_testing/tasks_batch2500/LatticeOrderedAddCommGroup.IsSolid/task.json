@@ -1,0 +1,169 @@
+{
+  "task_id": "LatticeOrderedAddCommGroup.IsSolid",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSolid",
+  "signature": {
+    "name": "VTask.IsSolid",
+    "type": "{α : Type u_1} -> [Lattice α] -> [AddCommGroup α] -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsSolid is a universally quantified Prop that is well-formed for all sets in any lattice-ordered additive commutative group; no junk-value or edge conventions are imposed by the definition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "is_solid_solid_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [AddCommGroup α] (s : Set α), VTask.IsSolid (LatticeOrderedAddCommGroup.solidClosure s)",
+      "domain_inputs": {},
+      "anchors": [
+        "LatticeOrderedAddCommGroup.isSolid_solidClosure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LatticeOrderedAddCommGroup.isSolid_solidClosure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.301,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LatticeOrderedAddCommGroup.IsSolid-b50d0f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_solid_inter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [AddCommGroup α] (s t : Set α), VTask.IsSolid s → VTask.IsSolid t → VTask.IsSolid (s ∩ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_inter_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_inter_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LatticeOrderedAddCommGroup.IsSolid-b50d0f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_solid_solidclosure_min",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [AddCommGroup α] (s t : Set α), s ⊆ t → VTask.IsSolid t → LatticeOrderedAddCommGroup.solidClosure s ⊆ t",
+      "domain_inputs": {},
+      "anchors": [
+        "LatticeOrderedAddCommGroup.solidClosure_min"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LatticeOrderedAddCommGroup.solidClosure_min"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.566,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LatticeOrderedAddCommGroup.IsSolid-b50d0f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_solid_mono_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [AddCommGroup α] (s t : Set α), VTask.IsSolid t → s ⊆ t → ¬ (∃ x ∈ s, ∃ y, |y| ≤ |x| ∧ y ∉ t) → VTask.IsSolid s → True",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_def"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_def"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.374,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LatticeOrderedAddCommGroup.IsSolid-b50d0f2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LatticeOrderedAddCommGroup.IsSolid",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LatticeOrderedAddCommGroup.IsSolid-b50d0f2e",
+    "review_status": "unreviewed"
+  }
+}

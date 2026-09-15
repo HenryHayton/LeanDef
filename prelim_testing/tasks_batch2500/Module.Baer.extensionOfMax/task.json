@@ -1,0 +1,106 @@
+{
+  "task_id": "Module.Baer.extensionOfMax",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.extensionOfMax",
+  "signature": {
+    "name": "VTask.extensionOfMax",
+    "type": "{R : Type u} -> [Ring R] -> {Q : Type v} -> [AddCommGroup Q] -> [Module R Q] -> {M : Type u_1} -> {N : Type u_2} -> [AddCommGroup M] -> [AddCommGroup N] -> [Module R M] -> [Module R N] -> (i : M →ₗ[R] N) -> (f : M →ₗ[R] Q) -> [Fact (Function.Injective ⇑i)] -> Module.Baer.ExtensionOf i f",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "non_constructive_choice",
+        "statement": "The returned maximal extension is chosen by Classical.choice via Zorn's lemma; when multiple maximal extensions exist, the specific one returned is unspecified.",
+        "note": "Zorn's lemma gives existence but not uniqueness; the value is fixed but opaque."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "extensionOfMax_maximality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] {Q : Type*} [AddCommGroup Q] [Module R Q] {M : Type*} {N : Type*} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N] (i : M →ₗ[R] N) (f : M →ₗ[R] Q) [Fact (Function.Injective ⇑i)] (a : Module.Baer.ExtensionOf i f), ¬(VTask.extensionOfMax i f < a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Baer.extensionOfMax_is_max"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Baer.extensionOfMax_is_max"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Baer.extensionOfMax-9d1e440d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "extensionOfMax_domain_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] {Q : Type*} [AddCommGroup Q] [Module R Q] {M : Type*} {N : Type*} [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N] (i : M →ₗ[R] N) (f : M →ₗ[R] Q) [Fact (Function.Injective ⇑i)], (0 : N) ∈ (VTask.extensionOfMax i f).domain",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.947,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Baer.extensionOfMax-9d1e440d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.Baer.extensionOfMax",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.Baer.extensionOfMax-9d1e440d",
+    "review_status": "unreviewed"
+  }
+}

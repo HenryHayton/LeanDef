@@ -1,0 +1,207 @@
+{
+  "task_id": "Monoid.CoprodI.NeWord.last",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.last",
+  "signature": {
+    "name": "VTask.last",
+    "type": "{ι : Type u_1} -> {M : ι → Type u_2} -> [(i : ι) → Monoid (M i)] -> {i j : ι} -> (_w : Monoid.CoprodI.NeWord M i j) -> M j",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "_w"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: the function is total and well-defined on every NeWord by structural recursion; no junk values or edge-case conventions exist"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "last_toList_getLast",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), w.toList.getLast? = Option.some ⟨j, VTask.last w⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_getLast?"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_getLast?"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.592,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "last_inv_eq_head_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {G : ι → Type*} [inst : (i : ι) → Group (G i)] {i j : ι} (w : Monoid.CoprodI.NeWord G i j), VTask.last w.inv = w.head⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.inv_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.inv_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.514,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_head_eq_last_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {G : ι → Type*} [inst : (i : ι) → Group (G i)] {i j : ι} (w : Monoid.CoprodI.NeWord G i j), w.inv.head = (VTask.last w)⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.inv_head"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.inv_head"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.51,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "last_singleton_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.last (Monoid.CoprodI.NeWord.singleton (2 : ZMod 5) (by decide)) = 2 := by decide",
+      "domain_inputs": {
+        "_w": [
+          "Monoid.CoprodI.NeWord.singleton (2 : ZMod 5) (by decide)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.last (Monoid.CoprodI.NeWord.singleton (2 : ZMod 5) (by decide))"
+    },
+    {
+      "id": "last_ne_one_for_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i : ι} (x : M i) (hne : x ≠ 1), VTask.last (Monoid.CoprodI.NeWord.singleton x hne) ≠ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.singleton_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.singleton_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.5,
+        "at": "authoring",
+        "script": "by simp [_root_.Monoid.CoprodI.NeWord.last] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Monoid.CoprodI.NeWord.last] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Monoid.CoprodI.NeWord.last",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Monoid.CoprodI.NeWord.last-53b8a9fc",
+    "review_status": "unreviewed"
+  }
+}

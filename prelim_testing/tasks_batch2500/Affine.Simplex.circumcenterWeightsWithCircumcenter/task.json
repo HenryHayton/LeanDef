@@ -1,0 +1,156 @@
+{
+  "task_id": "Affine.Simplex.circumcenterWeightsWithCircumcenter",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.circumcenterWeightsWithCircumcenter",
+  "signature": {
+    "name": "VTask.circumcenterWeightsWithCircumcenter",
+    "type": "(n : ℕ) -> Affine.Simplex.PointsWithCircumcenterIndex n → ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "idx"
+    ],
+    "conventions": [
+      {
+        "point": "pointIndex case",
+        "statement": "For any valid vertex index i : Fin (n+1), VTask.circumcenterWeightsWithCircumcenter n (pointIndex i) = 0.",
+        "note": "Every vertex is assigned weight zero."
+      },
+      {
+        "point": "circumcenterIndex case",
+        "statement": "VTask.circumcenterWeightsWithCircumcenter n circumcenterIndex = 1.",
+        "note": "The circumcenter index is assigned weight one."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cwwc_global_sum_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, Finset.univ.sum (VTask.circumcenterWeightsWithCircumcenter n) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.sum_circumcenterWeightsWithCircumcenter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.sum_circumcenterWeightsWithCircumcenter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.082,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.circumcenterWeightsWithCircumcenter-ca1765b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "circumcenterWeightsWithCircumcenter_vertex_ne_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (i : Fin (n + 1)), VTask.circumcenterWeightsWithCircumcenter n (Affine.Simplex.PointsWithCircumcenterIndex.pointIndex i) ≠ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "ne_of_eq_of_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ne_of_eq_of_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.137,
+        "at": "authoring",
+        "script": "by simp [_root_.Affine.Simplex.circumcenterWeightsWithCircumcenter] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Affine.Simplex.circumcenterWeightsWithCircumcenter] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.circumcenterWeightsWithCircumcenter-ca1765b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "circumcenterWeightsWithCircumcenter_circumcenter_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), VTask.circumcenterWeightsWithCircumcenter n Affine.Simplex.PointsWithCircumcenterIndex.circumcenterIndex ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "one_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "one_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.233,
+        "at": "authoring",
+        "script": "by simp [_root_.Affine.Simplex.circumcenterWeightsWithCircumcenter] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Affine.Simplex.circumcenterWeightsWithCircumcenter] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.circumcenterWeightsWithCircumcenter-ca1765b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Affine.Simplex.circumcenterWeightsWithCircumcenter",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Affine.Simplex.circumcenterWeightsWithCircumcenter-ca1765b5",
+    "review_status": "unreviewed"
+  }
+}

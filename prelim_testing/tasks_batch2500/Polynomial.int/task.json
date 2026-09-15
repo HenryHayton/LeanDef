@@ -1,0 +1,117 @@
+{
+  "task_id": "Polynomial.int",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.int",
+  "signature": {
+    "name": "VTask.int",
+    "type": "{K : Type u_1} -> [Field K] -> (R : Subring K) -> (P : Polynomial K) -> (hP : ∀ (n : ℕ), P.coeff n ∈ R) -> Polynomial ↥R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "P",
+      "hP"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is a total construction; every polynomial over K whose coefficients all lie in R is validly handled, including the zero polynomial and constants, with no junk-value edge conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "int_map_subtype_eq_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] (R : Subring K) (P : Polynomial K) (hP : ∀ (n : ℕ), P.coeff n ∈ R), Polynomial.map R.subtype (VTask.int R P hP) = P",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.map_map",
+        "Polynomial.map_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.map_map",
+        "Polynomial.map_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.274,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.int-a20b22e4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "int_coeff_neq_wrong",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [Field K] (R : Subring K) (P : Polynomial K) (hP : ∀ (n : ℕ), P.coeff n ∈ R) (n : ℕ), (VTask.int R P hP).coeff n ≠ ⟨P.coeff (n + 1), hP (n + 1)⟩ ∨ (VTask.int R P hP).coeff n = ⟨P.coeff n, hP n⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.coeff_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.coeff_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.095,
+        "at": "authoring",
+        "script": "by simp [_root_.Polynomial.int] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Polynomial.int] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.int-a20b22e4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.int",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.int-a20b22e4",
+    "review_status": "unreviewed"
+  }
+}

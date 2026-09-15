@@ -1,0 +1,114 @@
+{
+  "task_id": "Multiset.cast",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cast",
+  "signature": {
+    "name": "VTask.cast",
+    "type": "{α : Type u_1} -> [DecidableEq α] -> {s t : Multiset α} -> (h : s = t) -> s.ToType ≃ t.ToType",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and every well-typed input produces a genuine equivalence; there are no junk-value or edge-case output conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cast_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] {s t : Multiset α} (h : s = t), Function.Bijective (VTask.cast h).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.294,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.cast-6260ae20",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_not_symm_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (s t : Multiset ℕ) (h : s = t), VTask.cast h ≠ (VTask.cast h.symm).symm → False",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.202,
+        "at": "authoring",
+        "script": "by simp [_root_.Multiset.cast] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Multiset.cast] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.cast-6260ae20",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.cast",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.cast-6260ae20",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "task_id": "SimpleGraph.Subgraph.IsInduced",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsInduced",
+  "signature": {
+    "name": "VTask.IsInduced",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> (G' : G.Subgraph) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G'"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsInduced is a universally-quantified Prop over all subgraphs; it is total and well-defined for every subgraph including those with empty vertex sets, so no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isInduced_iff_exists_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G' ↔ ∃ s : Set V, G' = SimpleGraph.Subgraph.induce ⊤ s",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.622,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_induce_top_verts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G' → SimpleGraph.Subgraph.induce ⊤ G'.verts = G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.214,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_unfold",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G' ↔ ∀ v w : V, v ∈ G'.verts → w ∈ G'.verts → G.Adj v w → G'.Adj v w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_of_le_and_induced",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (s : Set V), VTask.IsInduced (SimpleGraph.Subgraph.induce ⊤ s)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_top_subgraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V}, VTask.IsInduced (⊤ : G.Subgraph)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.062,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_verts_recovers_subgraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G' → ∃ s : Set V, G' = SimpleGraph.Subgraph.induce ⊤ s ∧ s = G'.verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts",
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts",
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.828,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_adj_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G' → ∀ v w : V, v ∈ G'.verts → w ∈ G'.verts → (G'.Adj v w ↔ G.Adj v w)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top",
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top",
+        "SimpleGraph.Subgraph.IsInduced.induce_top_verts"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInduced_not_every_subgraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.IsInduced G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.isInduced_iff_exists_eq_induce_top"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Subgraph.IsInduced",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Subgraph.IsInduced-73a1acef",
+    "review_status": "unreviewed"
+  }
+}

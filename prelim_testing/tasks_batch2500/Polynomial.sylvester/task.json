@@ -1,0 +1,127 @@
+{
+  "task_id": "Polynomial.sylvester",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sylvester",
+  "signature": {
+    "name": "VTask.sylvester",
+    "type": "{R : Type u_1} -> [Semiring R] -> (f g : Polynomial R) -> (m n : ℕ) -> Matrix (Fin (m + n)) (Fin (m + n)) R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "m = 0",
+        "statement": "When m = 0 the g-coefficient block of columns is empty and the matrix reduces to an n × n matrix whose columns are all f-coefficient strips.",
+        "note": "Degenerate case; still well-typed as a (0+n) × (0+n) matrix."
+      },
+      {
+        "point": "n = 0",
+        "statement": "When n = 0 the f-coefficient block of columns is empty and the matrix reduces to an m × m matrix whose columns are all g-coefficient strips.",
+        "note": "Degenerate case; still well-typed as a (m+0) × (m+0) matrix."
+      },
+      {
+        "point": "m = 0 and n = 0",
+        "statement": "When both m = 0 and n = 0 the result is the unique 0 × 0 empty matrix.",
+        "note": "Trivially consistent."
+      },
+      {
+        "point": "natDegree f < n or natDegree g < m",
+        "statement": "If the actual degree of f is less than n (or g less than m), extra coefficient entries beyond the degree are defined to be 0 by the convention of Polynomial.coeff, so the matrix is padded with zeros without any error.",
+        "note": "m and n are free parameters; the matrix is total for all values."
+      },
+      {
+        "point": "Out-of-band entries",
+        "statement": "Matrix entries whose row index does not fall in the shifted coefficient interval are defined to be the zero element of R.",
+        "note": "This makes the matrix sparse / banded."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sylvester_map_map_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S : Type*) [CommSemiring R] [CommSemiring S] (φ : R →+* S) (f g : Polynomial R) (m n : ℕ), VTask.sylvester (Polynomial.map φ f) (Polynomial.map φ g) m n = φ.mapMatrix (VTask.sylvester f g m n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.sylvester_map_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.sylvester_map_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.875,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.sylvester-1429eb2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sylvester_reject_swap_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f g : Polynomial ℤ) (m n : ℕ), VTask.sylvester f g m n = VTask.sylvester g f m n",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.sylvester_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.sylvester_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.sylvester-1429eb2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.sylvester",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.sylvester-1429eb2c",
+    "review_status": "unreviewed"
+  }
+}

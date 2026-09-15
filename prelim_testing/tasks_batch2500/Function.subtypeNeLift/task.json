@@ -1,0 +1,150 @@
+{
+  "task_id": "Function.subtypeNeLift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypeNeLift",
+  "signature": {
+    "name": "VTask.subtypeNeLift",
+    "type": "{ι : Type u_1} -> [DecidableEq ι] -> {M : ι → Type u_2} -> (i₀ : ι) -> (f : (j : { i // i ≠ i₀ }) → M ↑j) -> (x : M i₀) -> (i : ι) -> M i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i₀",
+      "f",
+      "x",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "i = i₀",
+        "statement": "When the evaluation index equals i₀, the result is x regardless of f.",
+        "note": "This is the distinguished branch of the case split."
+      },
+      {
+        "point": "i ≠ i₀",
+        "statement": "When the evaluation index differs from i₀, the result is f ⟨i, h⟩ where h : i ≠ i₀.",
+        "note": "This is the complement branch of the case split."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypeNeLift_at_i0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] {M : ι → Type*} (i₀ : ι) (f : (j : {i // i ≠ i₀}) → M ↑j) (x : M i₀), VTask.subtypeNeLift i₀ f x i₀ = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.subtypeNeLift_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.subtypeNeLift_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.784,
+        "at": "authoring",
+        "script": "by simp [_root_.Function.subtypeNeLift] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Function.subtypeNeLift] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.subtypeNeLift-193df47d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeNeLift_of_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] {M : ι → Type*} (i₀ : ι) (f : (j : {i // i ≠ i₀}) → M ↑j) (x : M i₀) (i : ι) (h : i ≠ i₀), VTask.subtypeNeLift i₀ f x i = f ⟨i, h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.subtypeNeLift_of_neq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.subtypeNeLift_of_neq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.009,
+        "at": "authoring",
+        "script": "by simp only [_root_.Function.subtypeNeLift] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Function.subtypeNeLift] <;> aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.subtypeNeLift-193df47d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeNeLift_restriction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} [DecidableEq ι] {M : ι → Type*} (i₀ : ι) (φ : ∀ i, M i), VTask.subtypeNeLift i₀ (fun i => φ i) (φ i₀) = φ",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.subtypeNeLift_restriction"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.subtypeNeLift_restriction"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.373,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.subtypeNeLift-193df47d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.subtypeNeLift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.subtypeNeLift-193df47d",
+    "review_status": "unreviewed"
+  }
+}

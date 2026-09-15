@@ -1,0 +1,77 @@
+{
+  "task_id": "Quotient.hrecOn'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.hrecOn'",
+  "signature": {
+    "name": "VTask.hrecOn'",
+    "type": "{α : Sort u_1} -> {s₁ : Setoid α} -> {φ : Quotient s₁ → Sort u_5} -> (qa : Quotient s₁) -> (f : (a : α) → φ (Quotient.mk'' a)) -> (c : ∀ (a₁ a₂ : α), a₁ ≈ a₂ → f a₁ ≍ f a₂) -> φ qa",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "qa"
+    ],
+    "conventions": [
+      {
+        "point": "computation on mk''",
+        "statement": "When qa = Quotient.mk'' x for a concrete representative x, VTask.hrecOn' qa f c computes definitionally to f x.",
+        "note": "This is the standard beta-reduction rule for quotient recursors."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "hrecOn'_two_equiv_reps_heq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Sort*} {s₁ : Setoid α} {φ : Quotient s₁ → Sort*} (f : ∀ a, φ (Quotient.mk'' a)) (c : ∀ a₁ a₂, a₁ ≈ a₂ → f a₁ ≍ f a₂) (a₁ a₂ : α), a₁ ≈ a₂ → HEq (VTask.hrecOn' (Quotient.mk'' a₁) f c) (VTask.hrecOn' (Quotient.mk'' a₂) f c)",
+      "domain_inputs": {},
+      "anchors": [
+        "Quotient.hrecOn'_mk''"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quotient.hrecOn'_mk''"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.188,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quotient.hrecOn'-31ddc73a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Quotient.hrecOn'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Quotient.hrecOn'-31ddc73a",
+    "review_status": "unreviewed"
+  }
+}

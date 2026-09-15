@@ -1,0 +1,116 @@
+{
+  "task_id": "SkewMonoidAlgebra.domCongrAlg",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.domCongrAlg",
+  "signature": {
+    "name": "VTask.domCongrAlg",
+    "type": "(k : Type u_1) -> {G : Type u_2} -> {H : Type u_3} -> (A : Type u_4) -> [Monoid G] -> [Monoid H] -> [Semiring A] -> [CommSemiring k] -> [Algebra k A] -> [MulSemiringAction G A] -> [MulSemiringAction H A] -> [SMulCommClass G k A] -> [SMulCommClass H k A] -> {e : G ≃* H} -> (he : ∀ (a : G) (x : A), a • x = e a • x) -> SkewMonoidAlgebra A G ≃ₐ[k] SkewMonoidAlgebra A H",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "k",
+      "G",
+      "H",
+      "A",
+      "e",
+      "he"
+    ],
+    "conventions": [
+      {
+        "point": "identity equivalence",
+        "statement": "When `e = MulEquiv.refl G` and `he = fun _ _ ↦ rfl`, `VTask.domCongrAlg k A he` equals `AlgEquiv.refl`.",
+        "note": "Established by the theorem `domCongr_refl` in the Mathlib neighborhood."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "domCongrAlg_toAlgHom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (G : Type*) (H : Type*) (A : Type*) [Monoid G] [Monoid H] [Semiring A] [CommSemiring k] [Algebra k A] [MulSemiringAction G A] [MulSemiringAction H A] [SMulCommClass G k A] [SMulCommClass H k A] (e : G ≃* H) (he : ∀ (a : G) (x : A), a • x = e a • x), (VTask.domCongrAlg k A he).toAlgHom = SkewMonoidAlgebra.mapDomainAlgHom k A he",
+      "domain_inputs": {},
+      "anchors": [
+        "SkewMonoidAlgebra.domCongrAlg_toAlgHom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SkewMonoidAlgebra.domCongrAlg_toAlgHom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 27.535,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SkewMonoidAlgebra.domCongrAlg-ebd7f170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "domCongrAlg_symm_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (G : Type*) (H : Type*) (A : Type*) [Monoid G] [Monoid H] [Semiring A] [CommSemiring k] [Algebra k A] [MulSemiringAction G A] [MulSemiringAction H A] [SMulCommClass G k A] [SMulCommClass H k A] (e : G ≃* H) (he : ∀ (a : G) (x : A), a • x = e a • x), (VTask.domCongrAlg k A he).symm.trans (VTask.domCongrAlg k A he) = AlgEquiv.refl",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.symm_trans_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.symm_trans_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 64.701,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SkewMonoidAlgebra.domCongrAlg-ebd7f170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SkewMonoidAlgebra.domCongrAlg",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SkewMonoidAlgebra.domCongrAlg-ebd7f170",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,370 @@
+{
+  "task_id": "MulHom.noncommCoprod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.noncommCoprod",
+  "signature": {
+    "name": "VTask.noncommCoprod",
+    "type": "{M : Type u_1} -> {N : Type u_2} -> {P : Type u_3} -> [Mul M] -> [Mul N] -> [Semigroup P] -> (f : M →ₙ* P) -> (g : N →ₙ* P) -> (comm : ∀ (m : M) (n : N), Commute (f m) (g n)) -> M × N →ₙ* P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "comm"
+    ],
+    "conventions": [
+      {
+        "point": "evaluation_order",
+        "statement": "The canonical evaluation of VTask.noncommCoprod f g comm at (m, n) is f m * g n (left factor applied first).",
+        "note": "This is the defining formula; the alternative order g n * f m also holds by the commutativity hypothesis."
+      },
+      {
+        "point": "alternative_evaluation",
+        "statement": "By the commutativity hypothesis comm, VTask.noncommCoprod f g comm applied to (m, n) also equals g n * f m.",
+        "note": "Both orderings are equal precisely because comm m n holds."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "noncommCoprod_apply_alt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [Semigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (m : M) (n : N), VTask.noncommCoprod f g comm (m, n) = g n * f m",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.noncommCoprod_apply'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.noncommCoprod_apply'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.214,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P Q : Type*} [Mul M] [Mul N] [Semigroup P] [Semigroup Q] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (h : P →ₙ* Q), h.comp (VTask.noncommCoprod f g comm) = VTask.noncommCoprod (h.comp f) (h.comp g) (fun m n => (comm m n).map h)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.comp_noncommCoprod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.comp_noncommCoprod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.789,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [Semigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (comm : ∀ m n, Commute (f m) (g n)) (m1 m2 : M) (n1 n2 : N), VTask.noncommCoprod f g comm (m1 * m2, n1 * n2) = VTask.noncommCoprod f g comm (m1, n1) * VTask.noncommCoprod f g comm (m2, n2)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.noncommCoprod_apply'",
+        "MulHom.map_mul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.noncommCoprod_apply'",
+        "MulHom.map_mul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_apply_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) = 12 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_apply_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (1, 1) = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_apply_zero_left",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (2, 5) = 10 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_apply_comm_order",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) = (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (4, 3) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_is_mulhom",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (2, 3) = 6 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n) (2, 3)"
+    },
+    {
+      "id": "noncommCoprod_not_wrong_value",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n)) (3, 4) ≠ 7 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ],
+        "comm": [
+          "fun m n => mul_comm m n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.noncommCoprod (MulHom.id ℕ) (MulHom.id ℕ) (fun m n => mul_comm m n) (3, 4)",
+      "violated_property": "canonical evaluation formula: result should be f m * g n = 12, not 7"
+    },
+    {
+      "id": "noncommCoprod_neq_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (f g : MulHom (Multiplicative ℤ) (Multiplicative ℤ)) (comm : ∀ m n, Commute (f m) (g n)), VTask.noncommCoprod f g comm ≠ VTask.noncommCoprod g f (fun n m => (comm m n).symm)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.noncommCoprod_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.noncommCoprod_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulHom.noncommCoprod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulHom.noncommCoprod-6d1434bb",
+    "review_status": "unreviewed"
+  }
+}

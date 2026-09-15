@@ -1,0 +1,271 @@
+{
+  "task_id": "TypeVec.prod.snd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.snd",
+  "signature": {
+    "name": "VTask.snd",
+    "type": "{n : ℕ} -> {α β : TypeVec.{u} n} -> (α.prod β).Arrow β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "α",
+      "β"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.snd is a total, recursively well-defined morphism for all n, α, β including n = 0; there are no junk-value or default-value conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "snd_at_fz_n1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.snd (n := 1) (α := fun _ => Unit) (β := fun _ => Bool) Fin2.fz (⟨(), true⟩ : Unit × Bool) = true := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "snd_at_fz_pair",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.snd (n := 1) (α := fun _ => Fin 3) (β := fun _ => Fin 5) Fin2.fz (⟨1, 3⟩ : Fin 3 × Fin 5) = 3 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "snd_diag_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : TypeVec n}, TypeVec.comp VTask.snd (TypeVec.prod.diag) = TypeVec.id",
+      "domain_inputs": {},
+      "anchors": [
+        "TypeVec.snd_diag"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TypeVec.snd_diag"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "snd_prod_mk_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α β : TypeVec n} (i : Fin2 n) (a : α i) (b : β i), VTask.snd i (TypeVec.prod.mk i a b) = b",
+      "domain_inputs": {},
+      "anchors": [
+        "TypeVec.prod_snd_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TypeVec.prod_snd_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.249,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "snd_accept_n1_bool",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨true, false⟩ : Bool × Bool) = false := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨true, false⟩)"
+    },
+    {
+      "id": "snd_reject_not_fst",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨true, false⟩ : Bool × Bool) = true) := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨true, false⟩)",
+      "violated_property": "snd returns the second component, not the first"
+    },
+    {
+      "id": "snd_accept_diag_id",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (TypeVec.prod.diag (n := 1) (α := fun _ => Bool) Fin2.fz false) = false := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.snd (n := 1) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨false, false⟩)"
+    },
+    {
+      "id": "snd_n2_second_index",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.snd (n := 2) (α := fun _ => Bool) (β := fun _ => Bool) Fin2.fz (⟨true, false⟩ : Bool × Bool) = false := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TypeVec.prod.snd-75897a39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "TypeVec.prod.snd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "TypeVec.prod.snd-75897a39",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,419 @@
+{
+  "task_id": "CircleDeg1Lift.translate",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.translate",
+  "signature": {
+    "name": "VTask.translate",
+    "type": "Multiplicative ℝ →* CircleDeg1Liftˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "access pattern",
+        "statement": "The translation by a concrete real number x is obtained as VTask.translate (Multiplicative.ofAdd x); the Multiplicative.ofAdd wrapper is always required to pass a real number into the domain.",
+        "note": "standard additive-to-multiplicative bridge in Mathlib"
+      },
+      {
+        "point": "identity",
+        "statement": "VTask.translate maps the multiplicative identity (Multiplicative.ofAdd 0) to the identity unit in CircleDeg1Liftˣ, whose underlying function is the identity on ℝ.",
+        "note": "follows from map_one of the monoid hom"
+      },
+      {
+        "point": "inverse",
+        "statement": "The inverse of VTask.translate (Multiplicative.ofAdd x) in CircleDeg1Liftˣ is VTask.translate (Multiplicative.ofAdd (-x)), i.e., translation by the negation.",
+        "note": "group-inverse corresponds to additive negation under ofAdd"
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "translate_one_is_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.translate 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.101,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_mul_is_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x y : Multiplicative ℝ, VTask.translate (x * y) = VTask.translate x * VTask.translate y",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.208,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_pow_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (n : ℕ), VTask.translate (Multiplicative.ofAdd x) ^ n = VTask.translate (Multiplicative.ofAdd (↑n * x))",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translate_pow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translate_pow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.296,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_zpow_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (n : ℤ), VTask.translate (Multiplicative.ofAdd x) ^ n = VTask.translate (Multiplicative.ofAdd (↑n * x))",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translate_zpow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translate_zpow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.262,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_translation_number",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, CircleDeg1Lift.translationNumber (VTask.translate (Multiplicative.ofAdd x)) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translationNumber_translate"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translationNumber_translate"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.378,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_inv_is_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, (VTask.translate (Multiplicative.ofAdd x))⁻¹ = VTask.translate (Multiplicative.ofAdd (-x))",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translate_inv_apply",
+        "CircleDeg1Lift.translate_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translate_inv_apply",
+        "CircleDeg1Lift.translate_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.231,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_ofAdd_zero_is_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.translate (Multiplicative.ofAdd (0 : ℝ)) = 1",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.105,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.translate (Multiplicative.ofAdd (0 : ℝ))"
+    },
+    {
+      "id": "translate_nonzero_ne_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.translate (Multiplicative.ofAdd (1 : ℝ)) ≠ 1",
+      "domain_inputs": {
+        "x": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.translate (Multiplicative.ofAdd (1 : ℝ))",
+      "violated_property": "identity: translate sends nonzero reals to non-identity units"
+    },
+    {
+      "id": "translate_iterate_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (n : ℕ), (VTask.translate (Multiplicative.ofAdd x) : CircleDeg1Lift)^[n] = VTask.translate (Multiplicative.ofAdd (↑n * x))",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translate_iterate"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translate_iterate"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.374,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_add_comm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x y : ℝ, VTask.translate (Multiplicative.ofAdd x) * VTask.translate (Multiplicative.ofAdd y) = VTask.translate (Multiplicative.ofAdd y) * VTask.translate (Multiplicative.ofAdd x)",
+      "domain_inputs": {},
+      "anchors": [
+        "CircleDeg1Lift.translate_apply",
+        "mul_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CircleDeg1Lift.translate_apply",
+        "mul_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "translate_translation_number_nonzero_ne_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "CircleDeg1Lift.translationNumber (VTask.translate (Multiplicative.ofAdd (2 : ℝ))) ≠ 0",
+      "domain_inputs": {
+        "x": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "CircleDeg1Lift.translationNumber (VTask.translate (Multiplicative.ofAdd (2 : ℝ)))",
+      "violated_property": "zero translation number: the translation number of translate(2) is 2, not 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CircleDeg1Lift.translate",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CircleDeg1Lift.translate-65f7094d",
+    "review_status": "unreviewed"
+  }
+}

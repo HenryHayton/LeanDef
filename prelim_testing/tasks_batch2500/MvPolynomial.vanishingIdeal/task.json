@@ -1,0 +1,475 @@
+{
+  "task_id": "MvPolynomial.vanishingIdeal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.vanishingIdeal",
+  "signature": {
+    "name": "VTask.vanishingIdeal",
+    "type": "(k : Type u_1) -> {K : Type u_2} -> [Field k] -> [Field K] -> [Algebra k K] -> {σ : Type u_3} -> (V : Set (σ → K)) -> Ideal (MvPolynomial σ k)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "V"
+    ],
+    "conventions": [
+      {
+        "point": "empty set input",
+        "statement": "VTask.vanishingIdeal k (∅ : Set (σ → K)) = ⊤, the top ideal (the whole polynomial ring), because every polynomial vacuously vanishes on an empty set of points.",
+        "note": "This is a consequence of the universal quantification being vacuously satisfied."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "vanishingIdeal_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K], VTask.vanishingIdeal k (∅ : Set (σ → K)) = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.vanishingIdeal_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.vanishingIdeal_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.563,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_anti_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (A B : Set (σ → K)), A ≤ B → VTask.vanishingIdeal k B ≤ VTask.vanishingIdeal k A",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.vanishingIdeal_anti_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.vanishingIdeal_anti_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.554,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_singleton_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (x : σ → K) (p : MvPolynomial σ k), p ∈ VTask.vanishingIdeal k ({x} : Set (σ → K)) ↔ MvPolynomial.aeval x p = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mem_vanishingIdeal_singleton_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mem_vanishingIdeal_singleton_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.823,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_galois_connection",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K], @GaloisConnection (Ideal (MvPolynomial σ k)) (Set (σ → K))ᵒᵈ _ _ (MvPolynomial.zeroLocus K) (VTask.vanishingIdeal k)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.zeroLocus_vanishingIdeal_galoisConnection"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.zeroLocus_vanishingIdeal_galoisConnection"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.106,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_zeroLocus_eq_radical",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (I : Ideal (MvPolynomial σ k)), VTask.vanishingIdeal k (MvPolynomial.zeroLocus K I) = I.radical",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.vanishingIdeal_zeroLocus_eq_radical"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.vanishingIdeal_zeroLocus_eq_radical"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_zeroLocus_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (P : Ideal (MvPolynomial σ k)) [P.IsPrime], VTask.vanishingIdeal k (MvPolynomial.zeroLocus K P) = P",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.IsPrime.vanishingIdeal_zeroLocus"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.IsPrime.vanishingIdeal_zeroLocus"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ideal_le_vanishingIdeal_zeroLocus",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (I : Ideal (MvPolynomial σ k)), I ≤ VTask.vanishingIdeal k (MvPolynomial.zeroLocus K I)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.le_vanishingIdeal_zeroLocus"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.le_vanishingIdeal_zeroLocus"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.85,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_vanishingIdeal_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (V : Set (σ → K)), V ≤ MvPolynomial.zeroLocus K (VTask.vanishingIdeal k V)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.zeroLocus_vanishingIdeal_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.zeroLocus_vanishingIdeal_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.335,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_le_zeroLocus_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K] (V : Set (σ → K)) (I : Ideal (MvPolynomial σ k)), V ≤ MvPolynomial.zeroLocus K I ↔ I ≤ VTask.vanishingIdeal k V",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.le_zeroLocus_iff_le_vanishingIdeal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.le_zeroLocus_iff_le_vanishingIdeal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.89,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_univ_is_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (K : Type*) (σ : Type*) [Field k] [Field K] [Algebra k K], VTask.vanishingIdeal k (Set.univ : Set (σ → K)) ≤ VTask.vanishingIdeal k ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.vanishingIdeal_anti_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.vanishingIdeal_anti_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishingIdeal_empty_is_top_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] [Algebra ℚ K], (1 : MvPolynomial (Fin 1) ℚ) ∈ VTask.vanishingIdeal ℚ (∅ : Set (Fin 1 → K))",
+      "domain_inputs": {
+        "V": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.568,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "1"
+    },
+    {
+      "id": "vanishingIdeal_nonempty_one_not_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] [Algebra ℚ K] (x : Fin 1 → K), (1 : MvPolynomial (Fin 1) ℚ) ∉ VTask.vanishingIdeal ℚ ({x} : Set (Fin 1 → K))",
+      "domain_inputs": {
+        "V": [
+          "{x}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.71,
+        "at": "authoring",
+        "script": "by simp [_root_.MvPolynomial.vanishingIdeal] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MvPolynomial.vanishingIdeal] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "1",
+      "violated_property": "The polynomial 1 evaluates to 1 ≠ 0 at any point, so it cannot vanish on a nonempty set"
+    },
+    {
+      "id": "vanishingIdeal_nonempty_set_ne_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : Fin 1 → ℝ), VTask.vanishingIdeal ℝ ({x} : Set (Fin 1 → ℝ)) ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mem_vanishingIdeal_singleton_iff",
+        "Ideal.ne_top_iff_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mem_vanishingIdeal_singleton_iff",
+        "Ideal.ne_top_iff_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.705,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.vanishingIdeal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.vanishingIdeal-50a9019f",
+    "review_status": "unreviewed"
+  }
+}

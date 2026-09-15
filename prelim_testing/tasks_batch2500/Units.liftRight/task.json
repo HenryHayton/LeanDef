@@ -1,0 +1,283 @@
+{
+  "task_id": "Units.liftRight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.liftRight",
+  "signature": {
+    "name": "VTask.liftRight",
+    "type": "{M : Type u} -> {N : Type v} -> [Monoid M] -> [Monoid N] -> (f : M →* N) -> (g : M → Nˣ) -> (h : ∀ (x : M), ↑(g x) = f x) -> M →* Nˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "underlying_function",
+        "statement": "The underlying function of `VTask.liftRight f g h` is definitionally equal to `g`; no new function is constructed.",
+        "note": "The homomorphism wraps `g` directly as its `toFun`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftRight_coe_eq_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x : M), (VTask.liftRight f g h x : N) = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.coe_liftRight"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.coe_liftRight"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.639,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_mul_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x : M), f x * ↑(VTask.liftRight f g h x)⁻¹ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.mul_liftRight_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.mul_liftRight_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.792,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_inv_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x : M), ↑(VTask.liftRight f g h x)⁻¹ * f x = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.liftRight_inv_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.liftRight_inv_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.774,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x), VTask.liftRight f g h 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.612,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x y : M), VTask.liftRight f g h (x * y) = VTask.liftRight f g h x * VTask.liftRight f g h y",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.708,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_coe_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x y : M), (VTask.liftRight f g h (x * y) : N) = f (x * y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.coe_liftRight"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.coe_liftRight"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.738,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftRight_inv_coe_mul_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} [Monoid M] [Monoid N] (f : M →* N) (g : M → Nˣ) (h : ∀ x : M, ↑(g x) = f x) (x : M), (VTask.liftRight f g h x : N) * ↑(VTask.liftRight f g h x)⁻¹ = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.mul_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.mul_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.765,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.liftRight-9863407b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Units.liftRight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Units.liftRight-9863407b",
+    "review_status": "unreviewed"
+  }
+}

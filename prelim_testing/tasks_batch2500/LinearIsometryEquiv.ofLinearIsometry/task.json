@@ -1,0 +1,298 @@
+{
+  "task_id": "LinearIsometryEquiv.ofLinearIsometry",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLinearIsometry",
+  "signature": {
+    "name": "VTask.ofLinearIsometry",
+    "type": "{R : Type u_1} -> {R₂ : Type u_2} -> {E : Type u_5} -> {E₂ : Type u_6} -> [Semiring R] -> [Semiring R₂] -> {σ₁₂ : R →+* R₂} -> {σ₂₁ : R₂ →+* R} -> [RingHomInvPair σ₁₂ σ₂₁] -> [RingHomInvPair σ₂₁ σ₁₂] -> [SeminormedAddCommGroup E] -> [SeminormedAddCommGroup E₂] -> [Module R E] -> [Module R₂ E₂] -> (f : E →ₛₗᵢ[σ₁₂] E₂) -> (g : E₂ →ₛₗ[σ₂₁] E) -> (h₁ : f.toLinearMap ∘ₛₗ g = LinearMap.id) -> (h₂ : g ∘ₛₗ f.toLinearMap = LinearMap.id) -> E ≃ₛₗᵢ[σ₁₂] E₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "h₁",
+      "h₂"
+    ],
+    "conventions": [
+      {
+        "point": "coercion agreement",
+        "statement": "The coercion of `VTask.ofLinearIsometry f g h₁ h₂` to a function `E → E₂` equals the coercion of `f` to a function `E → E₂`.",
+        "note": "Confirmed by coe_ofLinearIsometry."
+      },
+      {
+        "point": "symm coercion agreement",
+        "statement": "The coercion of `(VTask.ofLinearIsometry f g h₁ h₂).symm` to a function `E₂ → E` equals the coercion of `g` to a function `E₂ → E`.",
+        "note": "Confirmed by coe_ofLinearIsometry_symm."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLinearIsometry_norm_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id) (x : E), ‖VTask.ofLinearIsometry f g h₁ h₂ x‖ = ‖x‖",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.norm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.norm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.754,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id) (y : E₂), VTask.ofLinearIsometry f g h₁ h₂ ((VTask.ofLinearIsometry f g h₁ h₂).symm y) = y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 26.968,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id) (x : E), (VTask.ofLinearIsometry f g h₁ h₂).symm (VTask.ofLinearIsometry f g h₁ h₂ x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 27.731,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_isometry",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id), Isometry (VTask.ofLinearIsometry f g h₁ h₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.isometry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.isometry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 26.786,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_norm_map_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id) (y : E₂), ‖(VTask.ofLinearIsometry f g h₁ h₂).symm y‖ = ‖y‖",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.norm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.norm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 28.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_forward_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id) (x y : E), VTask.ofLinearIsometry f g h₁ h₂ (x + y) = VTask.ofLinearIsometry f g h₁ h₂ x + VTask.ofLinearIsometry f g h₁ h₂ y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.905,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearIsometry_bijective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {R₂ : Type*} {E : Type*} {E₂ : Type*} [Semiring R] [Semiring R₂] {σ₁₂ : R →+* R₂} {σ₂₁ : R₂ →+* R} [RingHomInvPair σ₁₂ σ₂₁] [RingHomInvPair σ₂₁ σ₁₂] [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [Module R E] [Module R₂ E₂] (f : E →ₛₗᵢ[σ₁₂] E₂) (g : E₂ →ₛₗ[σ₂₁] E) (h₁ : f.toLinearMap.comp g = LinearMap.id) (h₂ : g.comp f.toLinearMap = LinearMap.id), Function.Bijective (VTask.ofLinearIsometry f g h₁ h₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometryEquiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometryEquiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 26.047,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearIsometryEquiv.ofLinearIsometry",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearIsometryEquiv.ofLinearIsometry-c1494d27",
+    "review_status": "unreviewed"
+  }
+}

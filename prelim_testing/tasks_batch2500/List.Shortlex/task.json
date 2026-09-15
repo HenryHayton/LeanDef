@@ -1,0 +1,224 @@
+{
+  "task_id": "List.Shortlex",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Shortlex",
+  "signature": {
+    "name": "VTask.Shortlex",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> List α → List α → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "Empty list on the right",
+        "statement": "`VTask.Shortlex r s []` is always `False` for any `s` and `r`, since no list has length less than zero and the lex comparison also fails.",
+        "note": "Captured by `List.not_shortlex_nil_right`."
+      },
+      {
+        "point": "Empty list on the left vs non-empty right",
+        "statement": "`VTask.Shortlex r [] s` holds for every non-empty list `s`, because `[].length = 0 < s.length`.",
+        "note": "Captured by `List.shortlex_nil_or_eq_nil` and `List.Shortlex.of_length_lt`."
+      },
+      {
+        "point": "Length determines order when lengths differ",
+        "statement": "When `s.length < t.length`, `VTask.Shortlex r s t` holds unconditionally, regardless of the elements or the relation `r`.",
+        "note": "Captured by `List.Shortlex.of_length_lt`."
+      },
+      {
+        "point": "Lex comparison used only for equal-length lists",
+        "statement": "When `s.length = t.length`, `VTask.Shortlex r s t` holds if and only if `List.Lex r s t`.",
+        "note": "Captured by `List.shortlex_iff_lex`."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "shortlex_def_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s t : List ℕ), VTask.Shortlex (· < ·) s t ↔ s.length < t.length ∨ s.length = t.length ∧ List.Lex (· < ·) s t",
+      "domain_inputs": {},
+      "anchors": [
+        "List.shortlex_def"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.shortlex_def"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.369,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Shortlex-3478789c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "shortlex_of_length_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ → ℕ → Prop) (s t : List ℕ), s.length < t.length → VTask.Shortlex r s t",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Shortlex.of_length_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Shortlex.of_length_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.247,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.Shortlex-3478789c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "shortlex_singleton_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ → ℕ → Prop) (a b : ℕ), VTask.Shortlex r [a] [b] ↔ r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "List.shortlex_singleton_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.shortlex_singleton_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.133,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Shortlex-3478789c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "shortlex_nil_right_never",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ → ℕ → Prop) (s : List ℕ), ¬ VTask.Shortlex r s []",
+      "domain_inputs": {},
+      "anchors": [
+        "List.not_shortlex_nil_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.not_shortlex_nil_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.195,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Shortlex-3478789c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "shortlex_cons_same_head",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : ℕ) (s t : List ℕ), VTask.Shortlex (· < ·) (a :: s) (a :: t) ↔ VTask.Shortlex (· < ·) s t",
+      "domain_inputs": {},
+      "anchors": [
+        "List.shortlex_cons_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.shortlex_cons_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.175,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Shortlex-3478789c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.Shortlex",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.Shortlex-3478789c",
+    "review_status": "unreviewed"
+  }
+}

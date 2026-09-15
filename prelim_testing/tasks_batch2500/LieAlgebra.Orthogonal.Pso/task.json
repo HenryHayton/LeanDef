@@ -1,0 +1,220 @@
+{
+  "task_id": "LieAlgebra.Orthogonal.Pso",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Pso",
+  "signature": {
+    "name": "VTask.Pso",
+    "type": "(p : Type u_2) -> (q : Type u_3) -> (R : Type u₂) -> [DecidableEq p] -> [DecidableEq q] -> [CommRing R] -> (i : R) -> Matrix (p ⊕ q) (p ⊕ q) R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-defined for all elements i of any commutative ring R and all index types p q with decidable equality; no junk values or edge conventions are imposed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pso_i1_is_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Type*) [DecidableEq p] [DecidableEq q] (R : Type*) [CommRing R], VTask.Pso p q R 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.015,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pso_inl_diag_always_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Type*) [DecidableEq p] [DecidableEq q] (R : Type*) [CommRing R] (i : R) (j : p), VTask.Pso p q R i (Sum.inl j) (Sum.inl j) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pso_inr_diag_always_i",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Type*) [DecidableEq p] [DecidableEq q] (R : Type*) [CommRing R] (i : R) (k : q), VTask.Pso p q R i (Sum.inr k) (Sum.inr k) = i",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pso_off_diag_always_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : Type*) [DecidableEq p] [DecidableEq q] (R : Type*) [CommRing R] (i : R) (a b : p ⊕ q), a ≠ b → VTask.Pso p q R i a b = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.639,
+        "at": "authoring",
+        "script": "by simp [_root_.LieAlgebra.Orthogonal.Pso] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.LieAlgebra.Orthogonal.Pso] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pso_empty_p_is_scalar",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (q : Type*) [DecidableEq q] (R : Type*) [CommRing R] (i : R) (k : q), VTask.Pso PEmpty q R i (Sum.inr k) (Sum.inr k) = i",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pso_empty_q_is_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Type*) [DecidableEq p] (R : Type*) [CommRing R] (i : R), VTask.Pso p PEmpty R i = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.94,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LieAlgebra.Orthogonal.Pso",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LieAlgebra.Orthogonal.Pso-daa00f31",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "task_id": "CauSeq.LimZero",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.LimZero",
+  "signature": {
+    "name": "VTask.LimZero",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [Field α] -> [LinearOrder α] -> [IsStrictOrderedRing α] -> [Ring β] -> {abv : β → α} -> (f : CauSeq β abv) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.LimZero is a well-defined proposition for every CauSeq β abv with no junk inputs or degenerate edge cases requiring arbitrary conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "limzero_abv_pos_of_not",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} {α : Type*} [Field α] [LinearOrder α] [IsStrictOrderedRing α] [Ring β] {abv : β → α} {f : CauSeq β abv}, ¬ VTask.LimZero f → ∃ K > 0, ∃ i, ∀ j ≥ i, K ≤ abv (f j)",
+      "domain_inputs": {},
+      "anchors": [
+        "CauSeq.abv_pos_of_not_limZero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CauSeq.abv_pos_of_not_limZero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CauSeq.LimZero-eb46cb24",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "limzero_zero_seq",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.LimZero (0 : CauSeq ℚ (abs))",
+      "domain_inputs": {
+        "f": [
+          "(0 : CauSeq ℚ (abs))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.222,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CauSeq.LimZero-eb46cb24",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : CauSeq ℚ (abs))"
+    },
+    {
+      "id": "limzero_const_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.LimZero (CauSeq.const (abs) (0 : ℚ))",
+      "domain_inputs": {
+        "f": [
+          "CauSeq.const (abs) (0 : ℚ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.206,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CauSeq.LimZero-eb46cb24",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "CauSeq.const (abs) (0 : ℚ)"
+    },
+    {
+      "id": "limzero_const_nonzero_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.LimZero (CauSeq.const (abs) (1 : ℚ))",
+      "domain_inputs": {
+        "f": [
+          "CauSeq.const (abs) (1 : ℚ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.771,
+        "at": "authoring",
+        "script": "by simp only [_root_.CauSeq.LimZero] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.CauSeq.LimZero] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CauSeq.LimZero-eb46cb24",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "CauSeq.const (abs) (1 : ℚ)",
+      "violated_property": "terms must eventually become arbitrarily small; constant nonzero sequence stays at fixed positive size"
+    },
+    {
+      "id": "limzero_const_neg_nonzero_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.LimZero (CauSeq.const (abs) (-2 : ℚ))",
+      "domain_inputs": {
+        "f": [
+          "CauSeq.const (abs) (-2 : ℚ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.666,
+        "at": "authoring",
+        "script": "by simp only [_root_.CauSeq.LimZero] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.CauSeq.LimZero] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CauSeq.LimZero-eb46cb24",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "CauSeq.const (abs) (-2 : ℚ)",
+      "violated_property": "terms must eventually become arbitrarily small; constant nonzero sequence stays at fixed positive size"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CauSeq.LimZero",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CauSeq.LimZero-eb46cb24",
+    "review_status": "unreviewed"
+  }
+}

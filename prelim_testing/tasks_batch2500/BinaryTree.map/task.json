@@ -1,0 +1,431 @@
+{
+  "task_id": "BinaryTree.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{α : Type u} -> {β : Type u_1} -> (f : α → β) -> BinaryTree α → BinaryTree β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total with no junk-value or edge conventions; nil maps to nil and every node is handled structurally."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (fun n : Nat => n + 1) BinaryTree.nil = BinaryTree.nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n : Nat => n + 1"
+        ],
+        "t": [
+          "BinaryTree.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_single_node_succ",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (· + 1) (BinaryTree.node 3 .nil .nil) = BinaryTree.node 4 .nil .nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "(· + 1)"
+        ],
+        "t": [
+          "BinaryTree.node 3 .nil .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_two_node_tree",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (· * 2) (BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil) = BinaryTree.node 2 (BinaryTree.node 4 .nil .nil) .nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "(· * 2)"
+        ],
+        "t": [
+          "BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_preserves_shape_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (fun _ : Nat => 0) BinaryTree.nil) = BinaryTree.nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Nat => 0"
+        ],
+        "t": [
+          "BinaryTree.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_const_node",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (fun _ : Nat => 0) (BinaryTree.node 5 (BinaryTree.node 7 .nil .nil) .nil) = BinaryTree.node 0 (BinaryTree.node 0 .nil .nil) .nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Nat => 0"
+        ],
+        "t": [
+          "BinaryTree.node 5 (BinaryTree.node 7 .nil .nil) .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_id_law",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : BinaryTree Nat), VTask.map id t = t",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.id_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.id_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.734,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_comp_law",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : Nat → Nat) (g : Nat → Nat) (t : BinaryTree Nat), VTask.map (g ∘ f) t = VTask.map g (VTask.map f t)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.comp_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.comp_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.286,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_id_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (t : BinaryTree α), VTask.map id t = t",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.id_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.id_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.166,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_comp_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type} (f : α → β) (g : β → γ) (t : BinaryTree α), VTask.map (g ∘ f) t = VTask.map g (VTask.map f t)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.comp_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.comp_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.492,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_accept_node_value_changed",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.map (· + 1) (BinaryTree.node 3 .nil .nil) = BinaryTree.node 4 .nil .nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "(· + 1)"
+        ],
+        "t": [
+          "BinaryTree.node 3 .nil .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.map (· + 1) (BinaryTree.node 3 .nil .nil)"
+    },
+    {
+      "id": "map_traverse_eq_map_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β) (t : BinaryTree α), t.traverse ((Pure.pure : β → Id β) ∘ f) = Pure.pure (VTask.map f t)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.traverse_eq_map_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.traverse_eq_map_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.318,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_node_value_neq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.map (fun n : Nat => n + 1) (BinaryTree.node 3 BinaryTree.nil BinaryTree.nil) ≠ BinaryTree.node 3 BinaryTree.nil BinaryTree.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.id_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.id_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.098,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_shape_neq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.map (fun n : Nat => n) (BinaryTree.node 1 (BinaryTree.node 2 BinaryTree.nil BinaryTree.nil) BinaryTree.nil) ≠ BinaryTree.node 1 BinaryTree.nil (BinaryTree.node 2 BinaryTree.nil BinaryTree.nil)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.id_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.id_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.map-2f7aa73e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BinaryTree.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BinaryTree.map-2f7aa73e",
+    "review_status": "unreviewed"
+  }
+}

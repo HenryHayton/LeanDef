@@ -1,0 +1,490 @@
+{
+  "task_id": "Nat.IsAtMostAlmostPrime",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsAtMostAlmostPrime",
+  "signature": {
+    "name": "VTask.IsAtMostAlmostPrime",
+    "type": "(k n : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "k",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.IsAtMostAlmostPrime k 0 is always false, regardless of k, because the predicate explicitly requires n ≠ 0.",
+        "note": "Zero is excluded by definition even though Ω(0) could be treated as 0."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "iaaap_global_monotone_k",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k l n : ℕ), k ≤ l → VTask.IsAtMostAlmostPrime k n → VTask.IsAtMostAlmostPrime l n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.IsAlmostPrime.isAtMost"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.IsAlmostPrime.isAtMost"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iaaap_global_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k l m n : ℕ), VTask.IsAtMostAlmostPrime k m → VTask.IsAtMostAlmostPrime l n → VTask.IsAtMostAlmostPrime (k + l) (m * n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.322,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iaaap_global_zero_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : ℕ), ¬ VTask.IsAtMostAlmostPrime k 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.098,
+        "at": "authoring",
+        "script": "by simp [_root_.Nat.IsAtMostAlmostPrime] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Nat.IsAtMostAlmostPrime] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iaaap_global_one_always",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : ℕ), VTask.IsAtMostAlmostPrime k 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.IsAtMostAlmostPrime.mul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iaaap_accept_12_3",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 3 12",
+      "domain_inputs": {
+        "k": [
+          "3"
+        ],
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 3 12"
+    },
+    {
+      "id": "iaaap_accept_1_7",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 1 7",
+      "domain_inputs": {
+        "k": [
+          "1"
+        ],
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 1 7"
+    },
+    {
+      "id": "iaaap_reject_8_2",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAtMostAlmostPrime 2 8",
+      "domain_inputs": {
+        "k": [
+          "2"
+        ],
+        "n": [
+          "8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAtMostAlmostPrime 2 8",
+      "violated_property": "Ω(8) = 3 > 2"
+    },
+    {
+      "id": "iaaap_reject_zero_n",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAtMostAlmostPrime 0 0",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.041,
+        "at": "authoring",
+        "script": "by simp only [_root_.Nat.IsAtMostAlmostPrime] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Nat.IsAtMostAlmostPrime] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAtMostAlmostPrime 0 0",
+      "violated_property": "n ≠ 0 required"
+    },
+    {
+      "id": "iaaap_accept_0_1",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 0 1",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 0 1"
+    },
+    {
+      "id": "iaaap_reject_0_2",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAtMostAlmostPrime 0 2",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ],
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.07,
+        "at": "authoring",
+        "script": "by simp [_root_.Nat.IsAtMostAlmostPrime] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Nat.IsAtMostAlmostPrime] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAtMostAlmostPrime 0 2",
+      "violated_property": "Ω(2) = 1 > 0"
+    },
+    {
+      "id": "iaaap_reject_zero_any_k",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsAtMostAlmostPrime 5 0",
+      "domain_inputs": {
+        "k": [
+          "5"
+        ],
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.042,
+        "at": "authoring",
+        "script": "by simp only [_root_.Nat.IsAtMostAlmostPrime] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Nat.IsAtMostAlmostPrime] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsAtMostAlmostPrime 5 0",
+      "violated_property": "n ≠ 0 required"
+    },
+    {
+      "id": "iaaap_accept_k_1_any",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 5 1",
+      "domain_inputs": {
+        "k": [
+          "5"
+        ],
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 5 1"
+    },
+    {
+      "id": "iaaap_monotone_k",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 2 12",
+      "domain_inputs": {
+        "k": [
+          "2"
+        ],
+        "n": [
+          "12"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 2 12"
+    },
+    {
+      "id": "iaaap_accept_8_3",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsAtMostAlmostPrime 3 8",
+      "domain_inputs": {
+        "k": [
+          "3"
+        ],
+        "n": [
+          "8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsAtMostAlmostPrime 3 8"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.IsAtMostAlmostPrime",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.IsAtMostAlmostPrime-0fbf85be",
+    "review_status": "unreviewed"
+  }
+}

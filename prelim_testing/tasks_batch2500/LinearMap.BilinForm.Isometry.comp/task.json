@@ -1,0 +1,215 @@
+{
+  "task_id": "LinearMap.BilinForm.Isometry.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{R : Type u_1} -> {M₁ : Type u_3} -> {M₂ : Type u_4} -> {M₃ : Type u_5} -> [CommSemiring R] -> [AddCommMonoid M₁] -> [AddCommMonoid M₂] -> [AddCommMonoid M₃] -> [Module R M₁] -> [Module R M₂] -> [Module R M₃] -> {B₁ : LinearMap.BilinForm R M₁} -> {B₂ : LinearMap.BilinForm R M₂} -> {B₃ : LinearMap.BilinForm R M₃} -> (g : B₂ →bᵢ B₃) -> (f : B₁ →bᵢ B₂) -> B₁ →bᵢ B₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "argument order",
+        "statement": "Arguments are in right-to-left order: `VTask.comp g f` applies `f` first and then `g`, matching standard mathematical and Lean function-composition conventions.",
+        "note": "This matches the convention used for LinearMap.comp and function composition in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_map_form",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {M₃ : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] {B₁ : LinearMap.BilinForm R M₁} {B₂ : LinearMap.BilinForm R M₂} {B₃ : LinearMap.BilinForm R M₃} (g : B₂ →bᵢ B₃) (f : B₁ →bᵢ B₂) (x y : M₁), B₃ ((VTask.comp g f) x) ((VTask.comp g f) y) = B₁ x y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.BilinForm.Isometry.map_app"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.BilinForm.Isometry.map_app"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.094,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_linear",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {M₃ : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] {B₁ : LinearMap.BilinForm R M₁} {B₂ : LinearMap.BilinForm R M₂} {B₃ : LinearMap.BilinForm R M₃} (g : B₂ →bᵢ B₃) (f : B₁ →bᵢ B₂) (x y : M₁), (VTask.comp g f) (x + y) = (VTask.comp g f) x + (VTask.comp g f) y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.103,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {M₃ : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] {B₁ : LinearMap.BilinForm R M₁} {B₂ : LinearMap.BilinForm R M₂} {B₃ : LinearMap.BilinForm R M₃} (g : B₂ →bᵢ B₃) (f : B₁ →bᵢ B₂) (r : R) (x : M₁), (VTask.comp g f) (r • x) = r • (VTask.comp g f) x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.27,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_apply_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {M₃ : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] {B₁ : LinearMap.BilinForm R M₁} {B₂ : LinearMap.BilinForm R M₂} {B₃ : LinearMap.BilinForm R M₃} (g : B₂ →bᵢ B₃) (f : B₁ →bᵢ B₂) (x y : M₁), (VTask.comp g f) (x + y) = g (f x) + g (f y)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.135,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_form_via_f_then_g",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M₁ : Type*} {M₂ : Type*} {M₃ : Type*} [CommSemiring R] [AddCommMonoid M₁] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] {B₁ : LinearMap.BilinForm R M₁} {B₂ : LinearMap.BilinForm R M₂} {B₃ : LinearMap.BilinForm R M₃} (g : B₂ →bᵢ B₃) (f : B₁ →bᵢ B₂) (x y : M₁), B₃ ((VTask.comp g f) x) ((VTask.comp g f) y) = B₂ (f x) (f y)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.BilinForm.Isometry.map_app"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.BilinForm.Isometry.map_app"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.162,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.BilinForm.Isometry.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.BilinForm.Isometry.comp-c89cb6a2",
+    "review_status": "unreviewed"
+  }
+}

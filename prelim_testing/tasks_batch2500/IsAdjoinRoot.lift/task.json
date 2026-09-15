@@ -1,0 +1,380 @@
+{
+  "task_id": "IsAdjoinRoot.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{R : Type u} -> {S : Type v} -> [CommRing R] -> [Ring S] -> {f : Polynomial R} -> [Algebra R S] -> (h : IsAdjoinRoot S f) -> {T : Type u_1} -> [CommRing T] -> (i : R →+* T) -> (x : T) -> (hx : Polynomial.eval₂ i x f = 0) -> S →+* T",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h",
+      "i",
+      "x",
+      "hx"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all valid inputs (any h, i, x, hx satisfying the stated types). There are no junk-value conventions because the domain is exactly the set of inputs satisfying the root condition hx, which is explicit in the type."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_root_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0), VTask.lift h i x hx h.root = x",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.789,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_algebraMap_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0) (a : R), VTask.lift h i x hx (algebraMap R S a) = i a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_algebraMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_algebraMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.869,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_poly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0) (z : Polynomial R), VTask.lift h i x hx (h.map z) = Polynomial.eval₂ i x z",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.838,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_uniqueness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0) (g : S →+* T), (∀ a : R, g (algebraMap R S a) = i a) → g h.root = x → g = VTask.lift h i x hx",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.eq_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.eq_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.586,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_algEquiv_compat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} {S' : Type*} [CommRing R] [Ring S] [Ring S'] {f : Polynomial R} [Algebra R S] [Algebra R S'] (h : IsAdjoinRoot S f) (h' : IsAdjoinRoot S' f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0) (z : S), VTask.lift h' i x hx (h.algEquiv h' z) = VTask.lift h i x hx z",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_algEquiv"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_algEquiv"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_is_ring_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0) (a b : S), VTask.lift h i x hx (a * b) = VTask.lift h i x hx a * VTask.lift h i x hx b",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.978,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_zero_poly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0), VTask.lift h i x hx (h.map 0) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_map",
+        "Polynomial.eval₂_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_map",
+        "Polynomial.eval₂_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.889,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_f_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [CommRing R] [Ring S] {f : Polynomial R} [Algebra R S] (h : IsAdjoinRoot S f) {T : Type*} [CommRing T] (i : R →+* T) (x : T) (hx : Polynomial.eval₂ i x f = 0), VTask.lift h i x hx (h.map f) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.858,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_ne_wrong_root",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [Ring S] (f : Polynomial R) [Algebra R S] (h : IsAdjoinRoot S f) (T : Type*) [CommRing T] (i : R →+* T) (x y : T) (hx : Polynomial.eval₂ i x f = 0) (hy : Polynomial.eval₂ i y f = 0), x ≠ y → VTask.lift h i x hx ≠ VTask.lift h i y hy",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_root_ne_wrong_element",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [Ring S] (f : Polynomial R) [Algebra R S] (h : IsAdjoinRoot S f) (T : Type*) [CommRing T] (i : R →+* T) (x y : T) (hx : Polynomial.eval₂ i x f = 0) (hy : Polynomial.eval₂ i y f = 0), x ≠ y → VTask.lift h i x hx h.root ≠ y",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAdjoinRoot.lift_root"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.535,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsAdjoinRoot.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsAdjoinRoot.lift-deda0f35",
+    "review_status": "unreviewed"
+  }
+}

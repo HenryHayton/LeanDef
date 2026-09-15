@@ -1,0 +1,99 @@
+{
+  "task_id": "PeriodPair.weierstrassPSeries",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.weierstrassPSeries",
+  "signature": {
+    "name": "VTask.weierstrassPSeries",
+    "type": "(L : PeriodPair) -> (x : ℂ) -> FormalMultilinearSeries ℂ ℂ ℂ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "i = 0",
+        "statement": "The zeroth coefficient is the value of the Weierstrass elliptic function ℘ at x, not the value of the general-index formula (i+1)*sumInvPow x (i+2).",
+        "note": "Special-cased at index zero because ℘ has an Eisenstein correction term not captured by sumInvPow alone."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "wPSeries_coeff0_not_sumInvPow2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (L : PeriodPair) (x : ℂ), (VTask.weierstrassPSeries L x 0 (fun _ => 1) : ℂ) = L.sumInvPow x 2",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassP",
+        "PeriodPair.sumInvPow"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassP",
+        "PeriodPair.sumInvPow"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPSeries-1ad1448c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPSeries_coeff0_ne_sumInvPow2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (L : PeriodPair) (x : ℂ), (VTask.weierstrassPSeries L x 0 (fun _ => 1)) ≠ (L.sumInvPow x 2 : ℂ)",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassP"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassP"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPSeries-1ad1448c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": "The zeroth coefficient equals ℘(x), not sumInvPow x 2; the two branches differ at i=0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PeriodPair.weierstrassPSeries",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PeriodPair.weierstrassPSeries-1ad1448c",
+    "review_status": "unreviewed"
+  }
+}

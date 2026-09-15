@@ -1,0 +1,266 @@
+{
+  "task_id": "HahnSeries.SummableFamily.single",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.single",
+  "signature": {
+    "name": "VTask.single",
+    "type": "{Γ : Type u_1} -> {R : Type u_3} -> [PartialOrder Γ] -> [AddCommMonoid R] -> {ι : Type u_7} -> [DecidableEq ι] -> (i : ι) -> (x : HahnSeries Γ R) -> HahnSeries.SummableFamily Γ R ι",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "j ≠ i",
+        "statement": "For any index j that is not equal to i, the family evaluates to the zero Hahn series at j.",
+        "note": "This follows from the Pi.single semantics: only the distinguished slot is nonzero."
+      },
+      {
+        "point": "x = 0",
+        "statement": "When x is the zero Hahn series, the resulting summable family is identically zero at every index including i, and its hsum is 0.",
+        "note": "No special junk value; the construction is well-defined and produces the zero family."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "single_hsum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i : ι) (x : HahnSeries Γ R), (VTask.single i x).hsum = x",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.42,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_at_index_i",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i : ι) (x : HahnSeries Γ R), (VTask.single i x).toFun i = x",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_at_other_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i j : ι) (x : HahnSeries Γ R), i ≠ j → (VTask.single i x).toFun j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.418,
+        "at": "authoring",
+        "script": "by simp [_root_.HahnSeries.SummableFamily.single] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.HahnSeries.SummableFamily.single] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_zero_hsum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i : ι), (VTask.single i (0 : HahnSeries Γ R)).hsum = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.892,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_zero_x_all_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i j : ι), (VTask.single i (0 : HahnSeries Γ R)).toFun j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_hsum_equals_at_i_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i : ι) (x : HahnSeries Γ R), (VTask.single i x).hsum = (VTask.single i x).toFun i",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_hsum_two_different_indices_same_series",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} {R : Type*} [PartialOrder Γ] [AddCommMonoid R] {ι : Type*} [DecidableEq ι] (i j : ι) (x : HahnSeries Γ R), i ≠ j → (VTask.single i x).hsum ≠ (VTask.single j x).hsum → x ≠ 0 → False",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.SummableFamily.hsum_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.41,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "HahnSeries.SummableFamily.single",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "HahnSeries.SummableFamily.single-9bae3ff1",
+    "review_status": "unreviewed"
+  }
+}

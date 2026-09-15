@@ -1,0 +1,357 @@
+{
+  "task_id": "CartanMatrix.C",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.C",
+  "signature": {
+    "name": "VTask.C",
+    "type": "(n : ℕ) -> Matrix (Fin n) (Fin n) ℤ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.C 0 is the unique 0×0 matrix; all row and column conditions hold vacuously.",
+        "note": "Junk-value convention: the empty matrix is the only well-typed value at rank 0."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.C 1 equals the 1×1 matrix [[2]], which coincides with the type-A₁ Cartan matrix since there are no off-diagonal entries and the last-row −2 rule has no effect.",
+        "note": "The −2 sub-diagonal entry only appears when the last row index n−1 has a valid predecessor, which requires n ≥ 2."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "C_two_matrix",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 2 = !![2, -1; -2, 2] := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_one_matrix",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 1 = !![2] := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_three_last_row_sub_diag",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 3 ⟨2, by omega⟩ ⟨1, by omega⟩ = -2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_three_super_diag",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 3 ⟨0, by omega⟩ ⟨1, by omega⟩ = -1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_three_diag",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 3 ⟨1, by omega⟩ ⟨1, by omega⟩ = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_three_not_symmetric",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.C 3 ⟨2, by omega⟩ ⟨1, by omega⟩ ≠ VTask.C 3 ⟨1, by omega⟩ ⟨2, by omega⟩ := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_one_eq_A_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.C 1 = CartanMatrix.A 1",
+      "domain_inputs": {},
+      "anchors": [
+        "CartanMatrix.C_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CartanMatrix.C_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.069,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_off_diag_nonpos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (i j : Fin n), i ≠ j → VTask.C n i j ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "CartanMatrix.C_off_diag_nonpos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CartanMatrix.C_off_diag_nonpos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.53,
+        "at": "authoring",
+        "script": "by simp only [_root_.CartanMatrix.C] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.CartanMatrix.C] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_two_eq_worked_example",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.C 2 = !![2, -1; -2, 2]",
+      "domain_inputs": {},
+      "anchors": [
+        "CartanMatrix.C_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CartanMatrix.C_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.192,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "C_global_diag_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (i : Fin n), VTask.C n i i = 2",
+      "domain_inputs": {},
+      "anchors": [
+        "CartanMatrix.C_off_diag_nonpos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CartanMatrix.C_off_diag_nonpos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.151,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CartanMatrix.C-d1a17a59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CartanMatrix.C",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CartanMatrix.C-d1a17a59",
+    "review_status": "unreviewed"
+  }
+}

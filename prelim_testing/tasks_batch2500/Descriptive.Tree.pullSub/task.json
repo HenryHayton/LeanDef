@@ -1,0 +1,176 @@
+{
+  "task_id": "Descriptive.Tree.pullSub",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pullSub",
+  "signature": {
+    "name": "VTask.pullSub",
+    "type": "{A : Type u_1} -> (T : ↥(Descriptive.tree A)) -> (x : List A) -> ↥(Descriptive.tree A)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "T",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total function on unconstrained inputs; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pullSub_empty_prepend_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} (T : ↥(Descriptive.tree A)) (y : List A), y ∈ (VTask.pullSub T [] : Set (List A)) ↔ y ∈ (T : Set (List A))",
+      "domain_inputs": {},
+      "anchors": [
+        "List.take_zero",
+        "List.drop_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.take_zero",
+        "List.drop_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.416,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Descriptive.Tree.pullSub-6ea80958",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pullSub_x_in_result_iff_empty_in_T",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} (T : ↥(Descriptive.tree A)) (x : List A), x ∈ (VTask.pullSub T x : Set (List A)) ↔ [] ∈ (T : Set (List A))",
+      "domain_inputs": {},
+      "anchors": [
+        "List.take_length",
+        "List.drop_length",
+        "List.prefix_refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.take_length",
+        "List.drop_length",
+        "List.prefix_refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Descriptive.Tree.pullSub-6ea80958",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pullSub_mono_in_T",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} (T₁ T₂ : ↥(Descriptive.tree A)) (x : List A), (T₁ : Set (List A)) ⊆ (T₂ : Set (List A)) → (VTask.pullSub T₁ x : Set (List A)) ⊆ (VTask.pullSub T₂ x : Set (List A))",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Descriptive.Tree.pullSub-6ea80958",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pullSub_empty_x_extensionally_eq_T",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} (T : ↥(Descriptive.tree A)), (VTask.pullSub T [] : Set (List A)) = (T : Set (List A))",
+      "domain_inputs": {},
+      "anchors": [
+        "List.take_zero",
+        "List.drop_zero",
+        "Set.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.take_zero",
+        "List.drop_zero",
+        "Set.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.282,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Descriptive.Tree.pullSub-6ea80958",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Descriptive.Tree.pullSub",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Descriptive.Tree.pullSub-6ea80958",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "task_id": "DihedralGroup.reciprocalFactors",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.reciprocalFactors",
+  "signature": {
+    "name": "VTask.reciprocalFactors",
+    "type": "(n : ℕ) -> List ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.reciprocalFactors 0 = [0], a sentinel junk value since commuting probability 1/0 is undefined.",
+        "note": "Junk value by convention; no mathematical meaning."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rf_even_recursive_structure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, n ≠ 0 → Even n → VTask.reciprocalFactors n = 3 :: VTask.reciprocalFactors (n / 2)",
+      "domain_inputs": {},
+      "anchors": [
+        "DihedralGroup.reciprocalFactors_even"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DihedralGroup.reciprocalFactors_even"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DihedralGroup.reciprocalFactors-4c1bd4d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rf_odd_recursive_structure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, n ≠ 1 → Odd n → VTask.reciprocalFactors n = n % 4 * n :: VTask.reciprocalFactors (n / 4 + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "DihedralGroup.reciprocalFactors_odd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DihedralGroup.reciprocalFactors_odd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.011,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DihedralGroup.reciprocalFactors-4c1bd4d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DihedralGroup.reciprocalFactors",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DihedralGroup.reciprocalFactors-4c1bd4d8",
+    "review_status": "unreviewed"
+  }
+}

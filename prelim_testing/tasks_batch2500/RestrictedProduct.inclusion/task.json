@@ -1,0 +1,236 @@
+{
+  "task_id": "RestrictedProduct.inclusion",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inclusion",
+  "signature": {
+    "name": "VTask.inclusion",
+    "type": "{ι : Type u_1} -> (R : ι → Type u_2) -> (A : (i : ι) → Set (R i)) -> {𝓕 𝓖 : Filter ι} -> (h : 𝓕 ≤ 𝓖) -> (x : RestrictedProduct (fun i => R i) (fun i => A i) 𝓖) -> RestrictedProduct (fun i => R i) (fun i => A i) 𝓕",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "pointwise_values",
+        "statement": "For every index i, evaluating VTask.inclusion R A h x at i returns exactly x i; the underlying tuple is unchanged.",
+        "note": "The inclusion only changes the filter annotation, not the tuple data."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inclusion_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) {𝓕 𝓖 : Filter ι} (h : 𝓕 ≤ 𝓖), Function.Injective (VTask.inclusion R A h)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.inclusion_apply",
+        "DFunLike.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.inclusion_apply",
+        "DFunLike.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) [∀ i, TopologicalSpace (R i)] {𝓕 𝓖 : Filter ι} (h : 𝓕 ≤ 𝓖), Continuous (VTask.inclusion R A h)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.continuous_inclusion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.continuous_inclusion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.937,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "range_inclusion_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) {𝓕 𝓖 : Filter ι} (h : 𝓕 ≤ 𝓖), Set.range (VTask.inclusion R A h) = {x | ∀ᶠ i in 𝓖, x i ∈ A i}",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.range_inclusion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.range_inclusion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.26,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_nhds_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) [∀ i, TopologicalSpace (R i)] (hAopen : ∀ i, IsOpen (A i)) {S : Set ι} (hS : Filter.cofinite ≤ Filter.principal S) (x : RestrictedProduct (fun i => R i) (fun i => A i) (Filter.principal S)), nhds (VTask.inclusion R A hS x) = Filter.map (VTask.inclusion R A hS) (nhds x)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.nhds_eq_map_inclusion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.nhds_eq_map_inclusion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.373,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_image_coe_preimage_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) {𝓕 𝓖 : Filter ι} (h : 𝓕 ≤ 𝓖) (U : Set (RestrictedProduct (fun i => R i) (fun i => A i) 𝓕)), (DFunLike.coe '' (VTask.inclusion R A h ⁻¹' U)) ⊆ (DFunLike.coe '' U)",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.image_coe_preimage_inclusion_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.image_coe_preimage_inclusion_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.923,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_not_eq_id_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : ι → Type*) (A : (i : ι) → Set (R i)) {𝓕 𝓖 : Filter ι} (h : 𝓕 ≤ 𝓖), 𝓕 ≠ 𝓖 → ∃ x : RestrictedProduct (fun i => R i) (fun i => A i) 𝓖, (VTask.inclusion R A h x : RestrictedProduct (fun i => R i) (fun i => A i) 𝓕) = VTask.inclusion R A h x",
+      "domain_inputs": {},
+      "anchors": [
+        "RestrictedProduct.inclusion_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RestrictedProduct.inclusion_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RestrictedProduct.inclusion",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RestrictedProduct.inclusion-74229e2a",
+    "review_status": "unreviewed"
+  }
+}

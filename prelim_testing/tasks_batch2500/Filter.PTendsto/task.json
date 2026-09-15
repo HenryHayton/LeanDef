@@ -1,0 +1,240 @@
+{
+  "task_id": "Filter.PTendsto",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.PTendsto",
+  "signature": {
+    "name": "VTask.PTendsto",
+    "type": "{α : Type u} -> {β : Type v} -> (f : α →. β) -> (l₁ : Filter α) -> (l₂ : Filter β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "l₁",
+      "l₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: PTendsto is a universally-defined Prop with no junk-value conventions; every combination of partial function and filters yields a well-formed proposition with no special sentinel or edge-case assignments."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ptendsto_tendsto_iff_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (l₁ : Filter α) (l₂ : Filter β) (f : α → β), Filter.Tendsto f l₁ l₂ ↔ VTask.PTendsto (PFun.res f Set.univ) l₁ l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.tendsto_iff_ptendsto_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.tendsto_iff_ptendsto_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.612,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ptendsto_tendsto_iff_restrict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (l₁ : Filter α) (l₂ : Filter β) (s : Set α) (f : α → β), Filter.Tendsto f (l₁ ⊓ Filter.principal s) l₂ ↔ VTask.PTendsto (PFun.res f s) l₁ l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.tendsto_iff_ptendsto"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.tendsto_iff_ptendsto"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.817,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ptendsto_id_atTop",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.PTendsto (PFun.res id Set.univ) Filter.atTop Filter.atTop",
+      "domain_inputs": {
+        "f": [
+          "PFun.res id Set.univ"
+        ],
+        "l₁": [
+          "Filter.atTop"
+        ],
+        "l₂": [
+          "Filter.atTop"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.PTendsto (PFun.res id Set.univ) Filter.atTop Filter.atTop"
+    },
+    {
+      "id": "ptendsto_not_nontrivial_filter",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.PTendsto (PFun.res (fun _ : ℕ => (0 : ℕ)) Set.univ) Filter.atTop Filter.atTop",
+      "domain_inputs": {
+        "f": [
+          "PFun.res (fun _ : ℕ => (0 : ℕ)) Set.univ"
+        ],
+        "l₁": [
+          "Filter.atTop"
+        ],
+        "l₂": [
+          "Filter.atTop"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.PTendsto (PFun.res (fun _ : ℕ => (0 : ℕ)) Set.univ) Filter.atTop Filter.atTop",
+      "violated_property": "f.core s ∈ l₁ for all s ∈ l₂"
+    },
+    {
+      "id": "ptendsto_antitone_l2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (f : α →. β) (l₁ : Filter α) (l₂ l₂' : Filter β), l₂ ≤ l₂' → VTask.PTendsto f l₁ l₂' → VTask.PTendsto f l₁ l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.ptendsto_def"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.ptendsto_def"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ptendsto_not_wrong_target",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.PTendsto (PFun.res (fun n : ℕ => n + 1) Set.univ) Filter.atTop Filter.atBot",
+      "domain_inputs": {
+        "f": [
+          "PFun.res (fun n : ℕ => n + 1) Set.univ"
+        ],
+        "l₁": [
+          "Filter.atTop"
+        ],
+        "l₂": [
+          "Filter.atBot"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Filter.PTendsto-452720d8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.PTendsto (PFun.res (fun n : ℕ => n + 1) Set.univ) Filter.atTop Filter.atBot",
+      "violated_property": "f.core s ∈ l₁ for all s ∈ l₂"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Filter.PTendsto",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Filter.PTendsto-452720d8",
+    "review_status": "unreviewed"
+  }
+}

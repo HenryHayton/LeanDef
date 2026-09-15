@@ -1,0 +1,167 @@
+{
+  "task_id": "FirstOrder.Language.IsExtensionPair",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsExtensionPair",
+  "signature": {
+    "name": "VTask.IsExtensionPair",
+    "type": "(L : FirstOrder.Language) -> (M : Type w) -> (N : Type w') -> [L.Structure M] -> [L.Structure N] -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "M",
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": "asymmetric_direction",
+        "statement": "IsExtensionPair L M N only requires domains (subsets of M) to be extendable; it says nothing about extending codomains in N. The symmetric condition requires IsExtensionPair L N M separately.",
+        "note": "Directional asymmetry is intrinsic to the definition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ext_pair_iff_cod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) (N : Type*) [L.Structure M] [L.Structure N], VTask.IsExtensionPair L M N ↔ ∀ (f : L.FGEquiv N M) (m : M), ∃ g, m ∈ g.1.cod ∧ f ≤ g",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.isExtensionPair_iff_cod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.isExtensionPair_iff_cod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.89,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.IsExtensionPair-414e51b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ext_pair_ultrahomogeneous_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M], FirstOrder.Language.Structure.CG L M → (L.IsUltrahomogeneous M ↔ VTask.IsExtensionPair L M M)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.isUltrahomogeneous_iff_IsExtensionPair"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.isUltrahomogeneous_iff_IsExtensionPair"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.423,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.IsExtensionPair-414e51b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ext_pair_self_cg_ultrahomogeneous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M], FirstOrder.Language.Structure.CG L M → L.IsUltrahomogeneous M → VTask.IsExtensionPair L M M",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.isUltrahomogeneous_iff_IsExtensionPair"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.isUltrahomogeneous_iff_IsExtensionPair"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.IsExtensionPair-414e51b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ext_pair_one_way_does_not_imply_other",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (L : FirstOrder.Language) (M : Type*) (N : Type*) [L.Structure M] [L.Structure N], VTask.IsExtensionPair L M N → VTask.IsExtensionPair L N M)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.dlo_isExtensionPair"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.dlo_isExtensionPair"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.IsExtensionPair-414e51b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.IsExtensionPair",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.IsExtensionPair-414e51b2",
+    "review_status": "unreviewed"
+  }
+}

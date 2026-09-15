@@ -1,0 +1,234 @@
+{
+  "task_id": "Polynomial.nextCoeff",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.nextCoeff",
+  "signature": {
+    "name": "VTask.nextCoeff",
+    "type": "{R : Type u} -> [Semiring R] -> (p : Polynomial R) -> R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p.natDegree = 0",
+        "statement": "When the polynomial has natural degree 0 (constants and the zero polynomial), VTask.nextCoeff p = 0.",
+        "note": "This covers both the zero polynomial and non-zero constants; the junk value 0 is chosen as the additive identity of R."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nextCoeff_zero_poly",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextCoeff (0 : Polynomial ℤ) = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextCoeff_accept_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextCoeff (0 : Polynomial ℤ) = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.nextCoeff (0 : Polynomial ℤ)"
+    },
+    {
+      "id": "nextCoeff_global_constant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℤ), VTask.nextCoeff (Polynomial.C r) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natDegree_C"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natDegree_C"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.191,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextCoeff_global_coeff_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Polynomial ℤ), p.natDegree ≠ 0 → VTask.nextCoeff p = p.coeff (p.natDegree - 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natDegree_pos_iff_degree_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natDegree_pos_iff_degree_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.27,
+        "at": "authoring",
+        "script": "by simp [_root_.Polynomial.nextCoeff] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Polynomial.nextCoeff] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextCoeff_global_natdeg_zero_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Polynomial ℤ), p.natDegree = 0 → VTask.nextCoeff p = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natDegree_eq_zero_iff_degree_le_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natDegree_eq_zero_iff_degree_le_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextCoeff_linear_nonzero_neq_leading",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℤ), r ≠ 0 → VTask.nextCoeff (Polynomial.C r) ≠ r",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natDegree_C",
+        "Polynomial.coeff_C_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natDegree_C",
+        "Polynomial.coeff_C_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.229,
+        "at": "authoring",
+        "script": "by simp only [_root_.Polynomial.nextCoeff] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Polynomial.nextCoeff] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.nextCoeff",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.nextCoeff-171ecaa1",
+    "review_status": "unreviewed"
+  }
+}

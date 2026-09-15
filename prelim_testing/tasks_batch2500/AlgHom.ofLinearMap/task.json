@@ -1,0 +1,310 @@
+{
+  "task_id": "AlgHom.ofLinearMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLinearMap",
+  "signature": {
+    "name": "VTask.ofLinearMap",
+    "type": "{R : Type u} -> {A : Type v} -> {B : Type w} -> [CommSemiring R] -> [Semiring A] -> [Semiring B] -> [Algebra R A] -> [Algebra R B] -> (f : A →ₗ[R] B) -> (map_one : f 1 = 1) -> (map_mul : ∀ (x y : A), f (x * y) = f x * f y) -> A →ₐ[R] B",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "map_one",
+      "map_mul"
+    ],
+    "conventions": [
+      {
+        "point": "commutes_derived",
+        "statement": "The `commutes` field of the resulting `AlgHom` (compatibility with `algebraMap`) is derived automatically from `R`-linearity of `f` and the hypothesis `map_one`; the caller does not need to supply it.",
+        "note": "This is an implicit convention of the constructor: fewer axioms are required as inputs than the full `AlgHom` structure contains."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLinearMap_map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y), (VTask.ofLinearMap f h1 hmul) 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.007,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y) (a b : A), (VTask.ofLinearMap f h1 hmul) (a * b) = (VTask.ofLinearMap f h1 hmul) a * (VTask.ofLinearMap f h1 hmul) b",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.523,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_commutes_with_algebraMap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y) (r : R), (VTask.ofLinearMap f h1 hmul) (algebraMap R A r) = algebraMap R B r",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "AlgHom.commutes"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "AlgHom.commutes"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.396,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y) (a b : A), (VTask.ofLinearMap f h1 hmul) (a + b) = (VTask.ofLinearMap f h1 hmul) a + (VTask.ofLinearMap f h1 hmul) b",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.398,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_map_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y) (r : R) (a : A), (VTask.ofLinearMap f h1 hmul) (r • a) = r • (VTask.ofLinearMap f h1 hmul) a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap",
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.464,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_not_map_one_for_zero_map",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0 : ℕ →ₗ[ℕ] ℕ) 1 ≠ 1 := by decide",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : ℕ →ₗ[ℕ] ℕ) 1",
+      "violated_property": "map_one"
+    },
+    {
+      "id": "ofLinearMap_id_apply_value",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofLinearMap (LinearMap.id : ℕ →ₗ[ℕ] ℕ) (by simp) (by simp)) 42 = 42 := by decide",
+      "domain_inputs": {
+        "f": [
+          "LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLinearMap_unique_extension",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₗ[R] B) (h1 : f 1 = 1) (hmul : ∀ x y : A, f (x * y) = f x * f y) (g : A →ₗ[R] B) (h1' : g 1 = 1) (hmul' : ∀ x y : A, g (x * y) = g x * g y), f = g → VTask.ofLinearMap f h1 hmul = VTask.ofLinearMap g h1' hmul'",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.toLinearMap_ofLinearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.948,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.ofLinearMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.ofLinearMap-d0eb677c",
+    "review_status": "unreviewed"
+  }
+}

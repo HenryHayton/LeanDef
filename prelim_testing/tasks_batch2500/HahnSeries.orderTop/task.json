@@ -1,0 +1,292 @@
+{
+  "task_id": "HahnSeries.orderTop",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.orderTop",
+  "signature": {
+    "name": "VTask.orderTop",
+    "type": "{Γ : Type u_1} -> {R : Type u_3} -> [PartialOrder Γ] -> [Zero R] -> (x : HahnSeries Γ R) -> WithTop Γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "x = 0",
+        "statement": "When x is the zero Hahn series, VTask.orderTop x is defined to be ⊤ in WithTop Γ.",
+        "note": "Ensures the function is total without requiring a nonemptiness hypothesis."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "orderTop_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R], VTask.orderTop (0 : HahnSeries Γ R) = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.332,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_ne_top_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R] (x : HahnSeries Γ R), VTask.orderTop x ≠ ⊤ ↔ x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_ne_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_ne_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.048,
+        "at": "authoring",
+        "script": "by simp [_root_.HahnSeries.orderTop] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.HahnSeries.orderTop] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_single_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R] (a : Γ) (r : R), r ≠ 0 → VTask.orderTop (HahnSeries.single a r) = ↑a",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.319,
+        "at": "authoring",
+        "script": "by simp [_root_.HahnSeries.orderTop] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.HahnSeries.orderTop] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_single_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R] (a : Γ) (r : R), ↑a ≤ VTask.orderTop (HahnSeries.single a r)",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_single_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_single_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.478,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [AddGroup R] (x : HahnSeries Γ R), VTask.orderTop (-x) = VTask.orderTop x",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.09,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_embDomain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ Γ' : Type*) (R : Type*) [LinearOrder Γ] [PartialOrder Γ'] [Zero R] (f : Γ ↪o Γ') (x : HahnSeries Γ R), VTask.orderTop (HahnSeries.embDomain f x) = WithTop.map f (VTask.orderTop x)",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_embDomain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_embDomain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.177,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderTop_ne_top_iff_support_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (Γ : Type*) (R : Type*) [PartialOrder Γ] [Zero R] (x : HahnSeries Γ R), VTask.orderTop x = ⊤ ↔ x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HahnSeries.orderTop_ne_top",
+        "HahnSeries.orderTop_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HahnSeries.orderTop_ne_top",
+        "HahnSeries.orderTop_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.12,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HahnSeries.orderTop-5ed33170",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "HahnSeries.orderTop",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "HahnSeries.orderTop-5ed33170",
+    "review_status": "unreviewed"
+  }
+}

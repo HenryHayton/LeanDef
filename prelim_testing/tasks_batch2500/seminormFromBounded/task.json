@@ -1,0 +1,398 @@
+{
+  "task_id": "seminormFromBounded",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.seminormFromBounded",
+  "signature": {
+    "name": "VTask.seminormFromBounded",
+    "type": "{R : Type u_1} -> [CommRing R] -> {f : R → ℝ} -> {c : ℝ} -> (f_zero : f 0 = 0) -> (f_nonneg : 0 ≤ f) -> (f_mul : ∀ (x y : R), f (x * y) ≤ c * f x * f y) -> (f_add : ∀ (a b : R), f (a + b) ≤ f a + f b) -> (f_neg : ∀ (x : R), f (-x) = f x) -> RingSeminorm R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f_zero",
+      "f_nonneg",
+      "f_mul",
+      "f_add",
+      "f_neg"
+    ],
+    "conventions": [
+      {
+        "point": "zero evaluation",
+        "statement": "The resulting RingSeminorm always maps 0 to 0, as required by the ring seminorm axioms and guaranteed by f_zero.",
+        "note": "Inherited from seminormFromBounded_zero."
+      },
+      {
+        "point": "value at one",
+        "statement": "The resulting seminorm satisfies seminormFromBounded' f 1 ≤ 1 for any admissible f and c; if f is nonzero then equality holds.",
+        "note": "Inherited from seminormFromBounded_one_le and seminormFromBounded_one."
+      },
+      {
+        "point": "kernel coincidence",
+        "statement": "An element x satisfies (VTask.seminormFromBounded ...) x = 0 if and only if f x = 0.",
+        "note": "Inherited from seminormFromBounded_ker and seminormFromBounded_eq_zero_iff."
+      },
+      {
+        "point": "nonarchimedean inheritance",
+        "statement": "If f is nonarchimedean (satisfies f(a+b) ≤ max(f a, f b)), then the resulting seminorm is also nonarchimedean.",
+        "note": "Inherited from seminormFromBounded_isNonarchimedean."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "seminormFromBounded_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.17,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_map_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) (-x) = (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.239,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_nonneg_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), 0 ≤ (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.309,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_one_le_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) 1 ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_one_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_one_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_one_eq_one_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x), f ≠ 0 → (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_ker_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x), (⇑(VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg)) ⁻¹' {0} = f ⁻¹' {0}",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_ker"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_ker"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_eq_zero_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x = 0 ↔ f x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_eq_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_eq_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_le_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x ≤ c * f x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_ge_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), f x ≤ f 1 * (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_ge"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_ge"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_neg_c_zero_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), c ≤ 0 → (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_eq_zero_iff",
+        "seminormFromBounded_aux"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_eq_zero_iff",
+        "seminormFromBounded_aux"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_of_mul_le_eq_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : 0 ≤ f) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), (∀ y : R, f (x * y) ≤ f x * f y) → f 1 ≤ 1 → (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_of_mul_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_of_mul_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "seminormFromBounded_toFun_eq_seminormFromBounded_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommRing R] {f : R → ℝ} {c : ℝ} (f_zero : f 0 = 0) (f_nonneg : ∀ x, 0 ≤ f x) (f_mul : ∀ x y : R, f (x * y) ≤ c * f x * f y) (f_add : ∀ a b : R, f (a + b) ≤ f a + f b) (f_neg : ∀ x : R, f (-x) = f x) (x : R), (VTask.seminormFromBounded f_zero f_nonneg f_mul f_add f_neg) x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "seminormFromBounded_zero",
+        "seminormFromBounded_nonneg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "seminormFromBounded_zero",
+        "seminormFromBounded_nonneg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "seminormFromBounded-3e851625",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "seminormFromBounded",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "seminormFromBounded-3e851625",
+    "review_status": "unreviewed"
+  }
+}

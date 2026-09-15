@@ -1,0 +1,308 @@
+{
+  "task_id": "ContinuousMap.modulus",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.modulus",
+  "signature": {
+    "name": "VTask.modulus",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [PseudoMetricSpace α] -> [CompactSpace α] -> [PseudoMetricSpace β] -> (f : C(α, β)) -> (ε : ℝ) -> (h : 0 < ε) -> ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "0 < ε",
+    "variables": [
+      "ε"
+    ],
+    "conventions": [
+      {
+        "point": "positivity",
+        "statement": "The returned value VTask.modulus f ε h is always strictly positive.",
+        "note": "Any valid modulus of uniform continuity must be positive; the classical choice respects this."
+      },
+      {
+        "point": "opacity",
+        "statement": "The exact numerical value of VTask.modulus f ε h is not determined beyond satisfying the uniform continuity condition; it is an arbitrary classical choice.",
+        "note": "Users should not rely on any specific value, only on the specification it satisfies."
+      },
+      {
+        "point": "uniform_continuity_spec",
+        "statement": "For all x y : α with dist x y < VTask.modulus f ε h, we have dist (f x) (f y) < ε.",
+        "note": "This is the defining property the chosen modulus satisfies, inherited from the underlying uniform continuity witness."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "modulus_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε), 0 < VTask.modulus f ε h",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.267,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_uniform_continuity_spec",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε) (x y : α), dist x y < VTask.modulus f ε h → dist (f x) (f y) < ε",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.588,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_real_valued",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε), VTask.modulus f ε h ∈ Set.Ioi (0 : ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε), VTask.modulus f ε h ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_not_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε), ¬ (VTask.modulus f ε h < 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_half_still_close",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε) (x y : α), dist x y < VTask.modulus f ε h / 2 → dist (f x) (f y) < ε",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε), 0 ≤ VTask.modulus f ε h",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_of_const_map_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (b : β) (ε : ℝ) (h : 0 < ε) (x y : α), dist x y < VTask.modulus (ContinuousMap.const α b) ε h → dist (ContinuousMap.const α b x) (ContinuousMap.const α b y) < ε",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.532,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "modulus_dist_image_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [PseudoMetricSpace α] [CompactSpace α] [PseudoMetricSpace β] (f : C(α, β)) (ε : ℝ) (h : 0 < ε) (x y : α), dist x y < VTask.modulus f ε h → dist (f x) (f y) ≤ ε",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.uniformContinuous_iff",
+        "le_of_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.uniformContinuous_iff",
+        "le_of_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousMap.modulus",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousMap.modulus-7d440bf1",
+    "review_status": "unreviewed"
+  }
+}

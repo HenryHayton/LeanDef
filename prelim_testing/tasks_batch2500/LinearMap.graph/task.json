@@ -1,0 +1,289 @@
+{
+  "task_id": "LinearMap.graph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.graph",
+  "signature": {
+    "name": "VTask.graph",
+    "type": "{R : Type u} -> {M : Type v} -> {M₂ : Type w} -> [Semiring R] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> [Module R M] -> [Module R M₂] -> (f : M →ₗ[R] M₂) -> Submodule R (M × M₂)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.graph is a total construction; it produces a well-defined submodule for every linear map over any semiring, with no junk values or special edge-case conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "graph_eq_range_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂), VTask.graph f = LinearMap.range (LinearMap.id.prod f)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.graph_eq_range_prod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.graph_eq_range_prod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.385,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_eq_ker_coprod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Ring R] [AddCommGroup M] [AddCommGroup M₂] [Module R M] [Module R M₂] (g : M →ₗ[R] M₂), VTask.graph g = LinearMap.ker ((-g).coprod LinearMap.id)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.graph_eq_ker_coprod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.graph_eq_ker_coprod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.881,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_submodule_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (x y : M × M₂), x ∈ VTask.graph f → y ∈ VTask.graph f → x + y ∈ VTask.graph f",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.add_mem",
+        "LinearMap.mem_graph_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.add_mem",
+        "LinearMap.mem_graph_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.83,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_smul_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (r : R) (x : M × M₂), x ∈ VTask.graph f → r • x ∈ VTask.graph f",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.smul_mem",
+        "LinearMap.mem_graph_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.smul_mem",
+        "LinearMap.mem_graph_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.289,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂), (VTask.graph f : Set (M × M₂)).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.nonempty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.nonempty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.86,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_exists_eq_of_bijective_fst",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (G : Submodule R (M × M₂)), Function.Bijective (Prod.fst ∘ G.subtype) → ∃ f : M →ₗ[R] M₂, G = VTask.graph f",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.exists_eq_graph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.exists_eq_graph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.155,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_range_not_eq_graph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {M₂ : Type*} [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂), (LinearMap.range f : Submodule R M₂) ≠ (VTask.graph f).map (LinearMap.snd R M M₂) ∨ True",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.mem_graph_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.mem_graph_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.819,
+        "at": "authoring",
+        "script": "by simp [_root_.LinearMap.graph] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.LinearMap.graph] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.graph-c577968a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.graph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.graph-c577968a",
+    "review_status": "unreviewed"
+  }
+}

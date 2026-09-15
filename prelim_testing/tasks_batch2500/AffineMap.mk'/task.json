@@ -1,0 +1,164 @@
+{
+  "task_id": "AffineMap.mk'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mk'",
+  "signature": {
+    "name": "VTask.mk'",
+    "type": "{k : Type u_1} -> {V1 : Type u_2} -> {P1 : Type u_3} -> {V2 : Type u_4} -> {P2 : Type u_5} -> [Ring k] -> [AddCommGroup V1] -> [Module k V1] -> [AddTorsor V1 P1] -> [AddCommGroup V2] -> [Module k V2] -> [AddTorsor V2 P2] -> (f : P1 → P2) -> (f' : V1 →ₗ[k] V2) -> (p : P1) -> (h : ∀ (p' : P1), f p' = f' (p' -ᵥ p) +ᵥ f p) -> P1 →ᵃ[k] P2",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "p",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.mk' is a total constructor; every well-typed combination of arguments produces a valid affine map with no junk values or special edge cases."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mk'_affine_condition_at_h",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {k V1 P1 V2 P2 : Type*} [Ring k] [AddCommGroup V1] [Module k V1] [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p p' : P1) (h : ∀ q : P1, f q = f' (q -ᵥ p) +ᵥ f p), f p' = f' (p' -ᵥ p) +ᵥ f p → VTask.mk' f f' p h p' = f' (p' -ᵥ p) +ᵥ f p",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineMap.coe_mk'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineMap.coe_mk'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.82,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AffineMap.mk'-efb51bfa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_result_is_affineMap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {k V1 P1 V2 P2 : Type*} [Ring k] [AddCommGroup V1] [Module k V1] [AddTorsor V1 P1] [AddCommGroup V2] [Module k V2] [AddTorsor V2 P2] (f : P1 → P2) (f' : V1 →ₗ[k] V2) (p : P1) (h : ∀ p' : P1, f p' = f' (p' -ᵥ p) +ᵥ f p) (v : V1) (q : P1), VTask.mk' f f' p h (v +ᵥ q) = f' v +ᵥ VTask.mk' f f' p h q",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineMap.coe_mk'",
+        "AffineMap.map_vadd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineMap.coe_mk'",
+        "AffineMap.map_vadd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.871,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AffineMap.mk'-efb51bfa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_linear_not_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f : ℝ → ℝ) (f' : ℝ →ₗ[ℝ] ℝ) (p : ℝ) (h : ∀ p' : ℝ, f p' = f' (p' - p) + f p), (VTask.mk' f f' p h).linear = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineMap.mk'_linear"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineMap.mk'_linear"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AffineMap.mk'-efb51bfa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_coe_not_constant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f : ℝ → ℝ) (f' : ℝ →ₗ[ℝ] ℝ) (p : ℝ) (h : ∀ p' : ℝ, f p' = f' (p' - p) + f p) (x : ℝ), (VTask.mk' f f' p h : ℝ →ᵃ[ℝ] ℝ) x = f p",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineMap.coe_mk'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineMap.coe_mk'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AffineMap.mk'-efb51bfa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AffineMap.mk'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AffineMap.mk'-efb51bfa",
+    "review_status": "unreviewed"
+  }
+}

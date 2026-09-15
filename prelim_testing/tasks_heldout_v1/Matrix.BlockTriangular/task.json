@@ -1,0 +1,401 @@
+{
+  "task_id": "Matrix.BlockTriangular",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.BlockTriangular",
+  "signature": {
+    "name": "VTask.BlockTriangular",
+    "type": "{α : Type u_1} -> {m : Type u_3} -> {R : Type v} -> [LT α] -> [Zero R] -> (M : Matrix m m R) -> (b : m → α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "LT only",
+        "statement": "The predicate requires only a bare `LT` instance on the block-index type α; no transitivity, reflexivity, or linearity is assumed for the predicate itself.",
+        "note": "Stronger order assumptions (e.g., LinearOrder) appear only in derived theorems."
+      },
+      {
+        "point": "Same-block entries unconstrained",
+        "statement": "When `b i = b j` the condition `b j < b i` is false, so entries within the same diagonal block are subject to no constraint whatsoever.",
+        "note": "This is a direct consequence of the strict inequality in the definition."
+      },
+      {
+        "point": "Constant b",
+        "statement": "If `b` is constant, the predicate is vacuously true for every matrix, treating the whole matrix as one block.",
+        "note": "No junk value; the predicate is simply true in this degenerate case."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bt_submatrix_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {m : Type*} {n : Type*} {R : Type*} [LT α] [Zero R] (M : Matrix m m R) (b : m → α) (f : n → m), VTask.BlockTriangular M b → VTask.BlockTriangular (M.submatrix f f) (b ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.BlockTriangular.submatrix"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.BlockTriangular.submatrix"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.183,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bt_det_product",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {m : Type*} {R : Type*} [DecidableEq α] [LinearOrder α] [CommRing R] [Fintype m] [DecidableEq m] (M : Matrix m m R) (b : m → α), VTask.BlockTriangular M b → M.det = ∏ a ∈ Finset.univ.image b, (M.toSquareBlock b a).det",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.BlockTriangular.det"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.BlockTriangular.det"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.604,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bt_upper_triangular_det",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {m : Type*} {R : Type*} [LinearOrder m] [Fintype m] [DecidableEq m] [CommRing R] (M : Matrix m m R), VTask.BlockTriangular M id → M.det = ∏ i : m, M i i",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.det_of_upperTriangular"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.det_of_upperTriangular"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.55,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bt_map_zero_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {m : Type*} {R S : Type*} {F : Type*} [LT α] [Zero R] [Zero S] [FunLike F R S] [ZeroHomClass F R S] (f : F) (M : Matrix m m R) (b : m → α), VTask.BlockTriangular M b → VTask.BlockTriangular (M.map f) b",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.BlockTriangular.map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.BlockTriangular.map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.15,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bt_identity_2x2_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.BlockTriangular (!![1, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![1, 0; 0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![1, 0; 0, 1] : Matrix (Fin 2) (Fin 2) ℤ)"
+    },
+    {
+      "id": "bt_upper_triangular_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.BlockTriangular (!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![0, 1; 0, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![0, 1; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ)"
+    },
+    {
+      "id": "bt_lower_triangular_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.BlockTriangular (!![0, 0; 1, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![0, 0; 1, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.152,
+        "at": "authoring",
+        "script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(!![0, 0; 1, 0] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "violated_property": "M i j = 0 whenever b j < b i"
+    },
+    {
+      "id": "bt_zero_matrix_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.BlockTriangular (!![0, 0; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![0, 0; 0, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![0, 0; 0, 0] : Matrix (Fin 2) (Fin 2) ℤ)"
+    },
+    {
+      "id": "bt_nonzero_offdiag_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.BlockTriangular (!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![1, 1; 1, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.15,
+        "at": "authoring",
+        "script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "violated_property": "M i j = 0 whenever b j < b i"
+    },
+    {
+      "id": "bt_3x3_strict_upper_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.BlockTriangular (!![1, 2, 3; 0, 4, 5; 0, 0, 6] : Matrix (Fin 3) (Fin 3) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2, 3; 0, 4, 5; 0, 0, 6]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![1, 2, 3; 0, 4, 5; 0, 0, 6] : Matrix (Fin 3) (Fin 3) ℤ)"
+    },
+    {
+      "id": "bt_3x3_lower_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.BlockTriangular (!![1, 0, 0; 2, 3, 0; 4, 5, 6] : Matrix (Fin 3) (Fin 3) ℤ) id",
+      "domain_inputs": {
+        "M": [
+          "!![1, 0, 0; 2, 3, 0; 4, 5, 6]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.152,
+        "at": "authoring",
+        "script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Matrix.BlockTriangular] <;> decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(!![1, 0, 0; 2, 3, 0; 4, 5, 6] : Matrix (Fin 3) (Fin 3) ℤ)",
+      "violated_property": "M i j = 0 whenever b j < b i"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.BlockTriangular",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.BlockTriangular-9c4c34ca",
+    "review_status": "unreviewed"
+  }
+}

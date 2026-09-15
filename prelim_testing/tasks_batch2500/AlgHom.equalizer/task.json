@@ -1,0 +1,248 @@
+{
+  "task_id": "AlgHom.equalizer",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.equalizer",
+  "signature": {
+    "name": "VTask.equalizer",
+    "type": "{R : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> [CommSemiring R] -> [Semiring A] -> [Algebra R A] -> [Semiring B] -> [Algebra R B] -> (ϕ ψ : A →ₐ[R] B) -> Subalgebra R A",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ϕ",
+      "ψ"
+    ],
+    "conventions": [
+      {
+        "point": "scalar membership",
+        "statement": "For any r : R, the element algebraMap R A r is always a member of VTask.equalizer ϕ ψ, because every R-algebra homomorphism commutes with the algebra map.",
+        "note": "This is a definitional property built into the Subalgebra structure, requiring no hypotheses."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "equalizer_algebraMap_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (ϕ ψ : A →ₐ[R] B) (r : R), algebraMap R A r ∈ VTask.equalizer ϕ ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.commutes",
+        "AlgHom.mem_equalizer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.commutes",
+        "AlgHom.mem_equalizer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.729,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equalizer_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (ϕ ψ : A →ₐ[R] B), VTask.equalizer ϕ ψ = VTask.equalizer ψ ϕ",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.308,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equalizer_add_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (ϕ ψ : A →ₐ[R] B) (a b : A), a ∈ VTask.equalizer ϕ ψ → b ∈ VTask.equalizer ϕ ψ → a + b ∈ VTask.equalizer ϕ ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.938,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equalizer_mul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (ϕ ψ : A →ₐ[R] B) (a b : A), a ∈ VTask.equalizer ϕ ψ → b ∈ VTask.equalizer ϕ ψ → a * b ∈ VTask.equalizer ϕ ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.mul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.mem_equalizer",
+        "Subalgebra.mul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.83,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equalizer_le_of_eqOn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] (ϕ ψ : A →ₐ[R] B) (S : Subalgebra R A), Set.EqOn ϕ ψ ↑S → S ≤ VTask.equalizer ϕ ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.le_equalizer"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.le_equalizer"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.773,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equalizer_ne_top_when_homs_differ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (R A B : Type) (_ : CommSemiring R) (_ : Semiring A) (_ : Algebra R A) (_ : Semiring B) (_ : Algebra R B) (ϕ ψ : A →ₐ[R] B), VTask.equalizer ϕ ψ ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.le_equalizer"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.le_equalizer"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgHom.equalizer-1c1efd85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.equalizer",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.equalizer-1c1efd85",
+    "review_status": "unreviewed"
+  }
+}

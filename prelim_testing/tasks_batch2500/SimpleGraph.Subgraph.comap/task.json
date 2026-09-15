@@ -1,0 +1,340 @@
+{
+  "task_id": "SimpleGraph.Subgraph.comap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comap",
+  "signature": {
+    "name": "VTask.comap",
+    "type": "{V : Type u} -> {W : Type v} -> {G : SimpleGraph V} -> {G' : SimpleGraph W} -> (f : G →g G') -> (H : G'.Subgraph) -> G.Subgraph",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.comap is a total construction with no junk-value or edge-case conventions; it is well-defined for every graph homomorphism and every subgraph of the codomain."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comap_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G'), Monotone (VTask.comap f)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.301,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_galois_connection",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G.Subgraph) (H' : G'.Subgraph), H.map f ≤ H' ↔ H ≤ VTask.comap f H'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.map_le_iff_le_comap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.map_le_iff_le_comap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.588,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_top_verts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (v : V), v ∈ (VTask.comap f ⊤).verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.219,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_top_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (u v : V), (VTask.comap f ⊤).Adj u v ↔ G.Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.222,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_bot_verts_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (v : V), v ∉ (VTask.comap f ⊥).verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.282,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.Subgraph.comap] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.Subgraph.comap] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_bot_no_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (u v : V), ¬ (VTask.comap f ⊥).Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.273,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.Subgraph.comap] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.Subgraph.comap] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_le_comap_of_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (H₁ H₂ : G'.Subgraph), H₁ ≤ H₂ → VTask.comap f H₁ ≤ VTask.comap f H₂",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_adj_requires_G_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) (u v : V), (VTask.comap f H).Adj u v → G.Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.342,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comap_adj_requires_H_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {W : Type*} {G : SimpleGraph V} {G' : SimpleGraph W} (f : G →g G') (H : G'.Subgraph) (u v : V), (VTask.comap f H).Adj u v → H.Adj (f u) (f v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.comap_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.901,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Subgraph.comap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Subgraph.comap-022cf525",
+    "review_status": "unreviewed"
+  }
+}

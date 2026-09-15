@@ -1,0 +1,342 @@
+{
+  "task_id": "DMatrix",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.DMatrix",
+  "signature": {
+    "name": "VTask.DMatrix",
+    "type": "(m : Type u) -> (n : Type u') -> (α : m → n → Type v) -> Type (max u u' v)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "n",
+      "α"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.DMatrix is a total type former with no partial cases or junk-value conventions; it is defined for all choices of index types m, n and entry-type family α."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dmatrix_const_bool_nat_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (fun (_ : Bool) (_ : Bool) => (0 : ℕ)) = (fun (_ : Bool) (_ : Bool) => (0 : ℕ) : VTask.DMatrix Bool Bool (fun _ _ => ℕ)) := by decide",
+      "domain_inputs": {
+        "m": [
+          "Bool"
+        ],
+        "n": [
+          "Bool"
+        ],
+        "α": [
+          "fun _ _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_unit_unit_single_entry",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (fun (_ : Unit) (_ : Unit) => (42 : ℕ)) = (fun (_ : Unit) (_ : Unit) => (42 : ℕ) : VTask.DMatrix Unit Unit (fun _ _ => ℕ)) := by decide",
+      "domain_inputs": {
+        "m": [
+          "Unit"
+        ],
+        "n": [
+          "Unit"
+        ],
+        "α": [
+          "fun _ _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_fin0_inhabited",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "Inhabited (VTask.DMatrix (Fin 0) (Fin 0) (fun _ _ => ℕ))",
+      "domain_inputs": {
+        "m": [
+          "Fin 0"
+        ],
+        "n": [
+          "Fin 0"
+        ],
+        "α": [
+          "fun _ _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun i _ => Fin.elim0 i"
+    },
+    {
+      "id": "dmatrix_unit_unit_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Unit → Unit → Type*), Nonempty (VTask.DMatrix Unit Unit α ≃ α () ())",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.funUnique"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.funUnique"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_funext",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : VTask.DMatrix Bool Bool (fun _ _ => ℕ)), (∀ i j, M i j = N i j) → M = N",
+      "domain_inputs": {},
+      "anchors": [
+        "funext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "funext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.436,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_bool_bool_nat_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(fun (_ : Bool) (_ : Bool) => (0 : ℕ)) ∈ (Set.univ : Set (VTask.DMatrix Bool Bool (fun _ _ => ℕ)))",
+      "domain_inputs": {
+        "m": [
+          "Bool"
+        ],
+        "n": [
+          "Bool"
+        ],
+        "α": [
+          "fun _ _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.05,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun (_ : Bool) (_ : Bool) => (0 : ℕ)"
+    },
+    {
+      "id": "dmatrix_not_sigma",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (m n : Type) (α : m → n → Type), VTask.DMatrix m n α = (Σ i : m, Σ j : n, α i j))",
+      "domain_inputs": {},
+      "anchors": [
+        "not_forall"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_forall"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_nonempty_when_entries_inhabited",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Bool → Bool → Type*), (∀ i j, Nonempty (α i j)) → Nonempty (VTask.DMatrix Bool Bool α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.choice"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.choice"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dmatrix_ne_sigma_type",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.DMatrix (Fin 2) (Fin 2) (fun _ _ => ℕ) = (Σ _ : Fin 2, Σ _ : Fin 2, ℕ))",
+      "domain_inputs": {
+        "m": [
+          "Fin 2"
+        ],
+        "n": [
+          "Fin 2"
+        ],
+        "α": [
+          "fun _ _ => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.DMatrix (Fin 2) (Fin 2) (fun _ _ => ℕ) = (Σ _ : Fin 2, Σ _ : Fin 2, ℕ)",
+      "violated_property": "DMatrix packages values at ALL index pairs simultaneously, not a single index pair with one value"
+    },
+    {
+      "id": "dmatrix_two_distinct_elements",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (M N : VTask.DMatrix Bool Bool (fun _ _ => ℕ)), M ≠ N",
+      "domain_inputs": {},
+      "anchors": [
+        "ne_of_apply_ne"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ne_of_apply_ne"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DMatrix-87dd3e12",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DMatrix",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DMatrix-87dd3e12",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "task_id": "SimpleGraph.IsCompleteBetween",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsCompleteBetween",
+  "signature": {
+    "name": "VTask.IsCompleteBetween",
+    "type": "{V : Type u} -> (G : SimpleGraph V) -> (s t : Set V) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsCompleteBetween is a universally quantified proposition; when s or t is empty the quantifier is vacuously true, which is standard mathematical behaviour requiring no special junk-value convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isCompleteBetween_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) (s t : Set V), VTask.IsCompleteBetween G s t ↔ VTask.IsCompleteBetween G t s",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isCompleteBetween_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isCompleteBetween_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.202,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isCompleteBetween_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) (s t : Set V), VTask.IsCompleteBetween G s t → Disjoint s t",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.316,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isCompleteBetween_subgraph_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G H : SimpleGraph V) (s t : Set V), G ≤ H → VTask.IsCompleteBetween G s t → VTask.IsCompleteBetween H s t",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isCompleteBetween_inter_disjoint_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) (s : Set V), VTask.IsCompleteBetween G s s → s = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsCompleteBetween.disjoint",
+        "Set.disjoint_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsCompleteBetween.disjoint",
+        "Set.disjoint_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isCompleteBetween_empty_implies_vacuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) (t : Set V), VTask.IsCompleteBetween G ∅ t",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "Set.empty_subset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "Set.empty_subset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isCompleteBetween_singleton_iff_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} (G : SimpleGraph V) (u v : V), VTask.IsCompleteBetween G {u} {v} ↔ G.Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isCompleteBetween_comm",
+        "SimpleGraph.IsCompleteBetween.disjoint"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.IsCompleteBetween",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.IsCompleteBetween-be2107b7",
+    "review_status": "unreviewed"
+  }
+}

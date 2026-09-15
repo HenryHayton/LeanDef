@@ -1,0 +1,251 @@
+{
+  "task_id": "QuotientAddGroup.equivIocMod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.equivIocMod",
+  "signature": {
+    "name": "VTask.equivIocMod",
+    "type": "{α : Type u_1} -> [AddCommGroup α] -> [LinearOrder α] -> [IsOrderedAddMonoid α] -> [hα : Archimedean α] -> {p : α} -> (hp : 0 < p) -> (a : α) -> α ⧸ AddSubgroup.zmultiples p ≃ ↑(Set.Ioc a (a + p))",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "0 < p",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "forward map on coset [b]",
+        "statement": "The forward map sends the coset of b to the unique representative of b in (a, a+p], computed by toIocMod hp a b.",
+        "note": "This is the defining computational content of the equivalence."
+      },
+      {
+        "point": "inverse map on subtype element",
+        "statement": "The inverse map sends a subtype element ⟨x, hx⟩ with x ∈ (a, a+p] to the coset [x] in the quotient.",
+        "note": "No choice is needed here; inclusion into the quotient is canonical."
+      },
+      {
+        "point": "left endpoint a is excluded",
+        "statement": "The element a itself does not appear as a representative; the coset of a maps to a+p, the right (closed) endpoint.",
+        "note": "This is forced by the Ioc (open on left, closed on right) convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "equivIocMod_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a : α), Function.Bijective (VTask.equivIocMod hp a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.733,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivIocMod_inverse_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a : α) (q : α ⧸ AddSubgroup.zmultiples p), (VTask.equivIocMod hp a).symm (VTask.equivIocMod hp a q) = q",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.602,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivIocMod_inverse_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a : α) (x : ↑(Set.Ioc a (a + p))), VTask.equivIocMod hp a ((VTask.equivIocMod hp a).symm x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.381,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivIocMod_image_in_Ioc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a : α) (q : α ⧸ AddSubgroup.zmultiples p), a < (VTask.equivIocMod hp a q : α) ∧ (VTask.equivIocMod hp a q : α) ≤ a + p",
+      "domain_inputs": {},
+      "anchors": [
+        "toIocMod_mem_Ioc",
+        "QuotientAddGroup.equivIocMod_coe"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "toIocMod_mem_Ioc",
+        "QuotientAddGroup.equivIocMod_coe"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivIocMod_coset_of_endpoint_maps_to_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a : α), (VTask.equivIocMod hp a ((a + p : α) : α ⧸ AddSubgroup.zmultiples p) : α) = a + p",
+      "domain_inputs": {},
+      "anchors": [
+        "toIocMod_add_right",
+        "QuotientAddGroup.equivIocMod_coe"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "toIocMod_add_right",
+        "QuotientAddGroup.equivIocMod_coe"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.769,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equivIocMod_symm_recovers_class",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] [Archimedean α] {p : α} (hp : 0 < p) (a b : α), (VTask.equivIocMod hp a).symm ⟨toIocMod hp a b, toIocMod_mem_Ioc hp a b⟩ = (b : α ⧸ AddSubgroup.zmultiples p)",
+      "domain_inputs": {},
+      "anchors": [
+        "QuotientAddGroup.equivIocMod_coe",
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "QuotientAddGroup.equivIocMod_coe",
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "QuotientAddGroup.equivIocMod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "QuotientAddGroup.equivIocMod-aa2ae3f5",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "task_id": "Pi.compRightL",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.compRightL",
+  "signature": {
+    "name": "VTask.compRightL",
+    "type": "(R : Type u_1) -> [Semiring R] -> {ι : Type u_4} -> (φ : ι → Type u_5) -> [(i : ι) → TopologicalSpace (φ i)] -> [(i : ι) → AddCommMonoid (φ i)] -> [(i : ι) → Module R (φ i)] -> {α : Type u_6} -> (f : α → ι) -> ((i : ι) → φ i) →L[R] (i : α) → φ (f i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "φ",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total and applies for any semiring R, type family φ, and function f without restriction; there are no junk-value or edge conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "compRightL_is_clm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] {α : Type*} (f : α → ι), Continuous (VTask.compRightL R φ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.748,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compRightL_non_injective_repeat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] {α : Type*} (f : α → ι) (a1 a2 : α) (h : f a1 = f a2) (v : (i : ι) → φ i), VTask.compRightL R φ f v a1 = v (f a1) ∧ VTask.compRightL R φ f v a2 = v (f a2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.219,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compRightL_const_f_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.compRightL ℕ (fun _ : Fin 2 => ℕ) (fun _ : Fin 1 => (0 : Fin 2)) (![3, 5])) = ![(![3, 5] : Fin 2 → ℕ) 0] := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ : Fin 1 => (0 : Fin 2)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.compRightL ℕ (fun _ : Fin 2 => ℕ) (fun _ : Fin 1 => (0 : Fin 2)) (![3, 5])"
+    },
+    {
+      "id": "compRightL_identity_f_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (id : Fin 3 → Fin 3) (![1, 2, 3])) = ![1, 2, 3] := by decide",
+      "domain_inputs": {
+        "f": [
+          "id : Fin 3 → Fin 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (id : Fin 3 → Fin 3) (![1, 2, 3])"
+    },
+    {
+      "id": "compRightL_embedding_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (Fin.castLE (by norm_num : 2 ≤ 3)) (![10, 20, 30])) = ![10, 20] := by decide",
+      "domain_inputs": {
+        "f": [
+          "Fin.castLE (by norm_num : 2 ≤ 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (Fin.castLE (by norm_num : 2 ≤ 3)) (![10, 20, 30])"
+    },
+    {
+      "id": "compRightL_not_proj_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.compRightL ℕ (fun _ : Fin 2 => ℕ) (id : Fin 2 → Fin 2) (![7, 8])) = ![8, 7]) := by decide",
+      "domain_inputs": {
+        "f": [
+          "id : Fin 2 → Fin 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.compRightL ℕ (fun _ : Fin 2 => ℕ) (id : Fin 2 → Fin 2) (![7, 8])",
+      "violated_property": "The identity reindexing preserves order, so the output equals the input; reversing would require a non-identity f."
+    },
+    {
+      "id": "compRightL_wrong_component_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (Fin.castLE (by norm_num : 2 ≤ 3)) (![10, 20, 30])) = ![20, 30]) := by decide",
+      "domain_inputs": {
+        "f": [
+          "Fin.castLE (by norm_num : 2 ≤ 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.compRightL ℕ (fun _ : Fin 3 => ℕ) (Fin.castLE (by norm_num : 2 ≤ 3)) (![10, 20, 30])",
+      "violated_property": "Pre-composition with the embedding selects the first two components (indices 0,1), not indices 1,2."
+    },
+    {
+      "id": "compRightL_empty_domain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (f : Empty → ι) (v : (i : ι) → φ i), VTask.compRightL R φ f v = fun e => e.elim",
+      "domain_inputs": {},
+      "anchors": [
+        "funext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "funext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.2,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Pi.compRightL-8ec0ea78",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Pi.compRightL",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Pi.compRightL-8ec0ea78",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,360 @@
+{
+  "task_id": "MulHom.coprod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.coprod",
+  "signature": {
+    "name": "VTask.coprod",
+    "type": "{M : Type u_3} -> {N : Type u_4} -> {P : Type u_5} -> [Mul M] -> [Mul N] -> [CommSemigroup P] -> (f : M →ₙ* P) -> (g : N →ₙ* P) -> M × N →ₙ* P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "Commutativity of codomain",
+        "statement": "The codomain P must be a CommSemigroup; this is enforced by the typeclass constraint and is not a junk-value convention but a hard requirement.",
+        "note": "NONE_DECLARED: The definition is total over all inputs satisfying the stated typeclasses; there are no junk-value or boundary conventions beyond the typeclass requirements."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "coprod_comp_distrib",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P Q : Type*} [Mul M] [Mul N] [CommSemigroup P] [CommSemigroup Q] (h : P →ₙ* Q) (f : M →ₙ* P) (g : N →ₙ* P), MulHom.comp h (VTask.coprod f g) = VTask.coprod (MulHom.comp h f) (MulHom.comp h g)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.comp_coprod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.comp_coprod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.204,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_mul_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [CommSemigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (p q : M × N), VTask.coprod f g (p * q) = VTask.coprod f g p * VTask.coprod f g q",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.coprod_apply",
+        "MulHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.coprod_apply",
+        "MulHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.971,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_apply_decide_15",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (3, 5) = 15 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_apply_decide_one_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (1, 1) = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_apply_decide_2_3",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (2, 3) = 6 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_not_constant_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (2, 3) = 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (2, 3)",
+      "violated_property": "coprod sends (2,3) to f 2 * g 3 = 6, not 1"
+    },
+    {
+      "id": "coprod_fst_contribution_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (3, 5) = 5) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (3, 5)",
+      "violated_property": "coprod sends (3,5) to 15, not merely g 5 = 5 (the first component is not ignored)"
+    },
+    {
+      "id": "coprod_swap_symmetry",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Mul M] [Mul N] [CommSemigroup P] (f : M →ₙ* P) (g : N →ₙ* P) (m : M) (n : N), VTask.coprod f g (m, n) = VTask.coprod g f (n, m)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.coprod_apply",
+        "mul_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.coprod_apply",
+        "mul_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_comp_fst",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P Q : Type*} [Mul M] [Mul N] [CommSemigroup P] [CommSemigroup Q] (h : P →ₙ* Q) (f : M →ₙ* P) (g : N →ₙ* P) (m : M) (n : N), MulHom.comp h (VTask.coprod f g) (m, n) = h (f m) * h (g n)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulHom.comp_coprod",
+        "MulHom.coprod_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulHom.comp_coprod",
+        "MulHom.coprod_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.048,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprod_apply_decide_4_1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprod (MulHom.id ℕ) (MulHom.id ℕ) (4, 1) = 4 := by decide",
+      "domain_inputs": {
+        "f": [
+          "MulHom.id ℕ"
+        ],
+        "g": [
+          "MulHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulHom.coprod-1e4ae303",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulHom.coprod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulHom.coprod-1e4ae303",
+    "review_status": "unreviewed"
+  }
+}

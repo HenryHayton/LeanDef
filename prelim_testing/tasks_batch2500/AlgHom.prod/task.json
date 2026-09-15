@@ -1,0 +1,279 @@
+{
+  "task_id": "AlgHom.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{R : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> {C : Type u_4} -> [CommSemiring R] -> [Semiring A] -> [Algebra R A] -> [Semiring B] -> [Algebra R B] -> [Semiring C] -> [Algebra R C] -> (f : A →ₐ[R] B) -> (g : A →ₐ[R] C) -> A →ₐ[R] B × C",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction; all inputs are fully typed algebra homomorphisms and there are no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_commutes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B C : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C] (f : A →ₐ[R] B) (g : A →ₐ[R] C) (r : R), VTask.prod f g (algebraMap R A r) = algebraMap R (B × C) r",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.commutes",
+        "AlgHom.prod_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.commutes",
+        "AlgHom.prod_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.866,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B C : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C] (f : A →ₐ[R] B) (g : A →ₐ[R] C) (a₁ a₂ : A), VTask.prod f g (a₁ + a₂) = VTask.prod f g a₁ + VTask.prod f g a₂",
+      "domain_inputs": {},
+      "anchors": [
+        "map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.97,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R A B C : Type*} [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B] [Semiring C] [Algebra R C] (f : A →ₐ[R] B) (g : A →ₐ[R] C) (a₁ a₂ : A), VTask.prod f g (a₁ * a₂) = VTask.prod f g a₁ * VTask.prod f g a₂",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.871,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_accept_nat",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 3 = (3, 3) := by decide",
+      "domain_inputs": {
+        "f": [
+          "AlgHom.id ℕ ℕ"
+        ],
+        "g": [
+          "AlgHom.id ℕ ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 3"
+    },
+    {
+      "id": "prod_reject_fst_mismatch",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 3 = (4, 3)) := by decide",
+      "domain_inputs": {
+        "f": [
+          "AlgHom.id ℕ ℕ"
+        ],
+        "g": [
+          "AlgHom.id ℕ ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 3",
+      "violated_property": "first component equals f a"
+    },
+    {
+      "id": "prod_reject_snd_mismatch",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 5 = (5, 7)) := by decide",
+      "domain_inputs": {
+        "f": [
+          "AlgHom.id ℕ ℕ"
+        ],
+        "g": [
+          "AlgHom.id ℕ ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 5",
+      "violated_property": "second component equals g a"
+    },
+    {
+      "id": "prod_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 0 = (0, 0) := by decide",
+      "domain_inputs": {
+        "f": [
+          "AlgHom.id ℕ ℕ"
+        ],
+        "g": [
+          "AlgHom.id ℕ ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.prod-9de980a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.prod (AlgHom.id ℕ ℕ) (AlgHom.id ℕ ℕ)) 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.prod-9de980a1",
+    "review_status": "unreviewed"
+  }
+}

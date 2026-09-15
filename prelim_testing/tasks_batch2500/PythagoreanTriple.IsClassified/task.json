@@ -1,0 +1,290 @@
+{
+  "task_id": "PythagoreanTriple.IsClassified",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsClassified",
+  "signature": {
+    "name": "VTask.IsClassified",
+    "type": "{x y z : ℤ} -> PythagoreanTriple x y z → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "y",
+      "z"
+    ],
+    "conventions": [
+      {
+        "point": "coprimality of witnesses",
+        "statement": "The integers m and n in the existential witness are required to satisfy gcd(m, n) = 1; this is a condition on the witnesses, not a restriction on which triples are classified.",
+        "note": "Part of the formal definition; every Pythagorean triple is still classified."
+      },
+      {
+        "point": "symmetry in x and y",
+        "statement": "The predicate treats x and y symmetrically: either may play the role of k*(m^2-n^2) or k*(2*m*n).",
+        "note": "Explicit disjunction in the definition."
+      },
+      {
+        "point": "k = 0 edge case",
+        "statement": "When k = 0 the parametric expressions both vanish, so the zero triple (0, 0, 0) is classified.",
+        "note": "k is an arbitrary integer with no positivity constraint."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "classified_universal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.classified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.classified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.129,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z) (k : ℤ), VTask.IsClassified h → VTask.IsClassified (h.mul k)",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.mul_isClassified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.mul_isClassified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.375,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_from_primitive_classified",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), h.IsPrimitiveClassified → VTask.IsClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isClassified_of_isPrimitiveClassified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isClassified_of_isPrimitiveClassified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.148,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_from_normalize_primitive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), h.normalize.IsPrimitiveClassified → VTask.IsClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isClassified_of_normalize_isPrimitiveClassified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isClassified_of_normalize_isPrimitiveClassified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.291,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_mul_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsClassified (h.mul 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.classified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.classified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.247,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_implies_pythagorean",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsClassified h → x ^ 2 + y ^ 2 = z ^ 2",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.classified"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.classified"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "classified_symmetry_xy",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsClassified h → VTask.IsClassified h.symm",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.classified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.classified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.145,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PythagoreanTriple.IsClassified",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PythagoreanTriple.IsClassified-0a5619b0",
+    "review_status": "unreviewed"
+  }
+}

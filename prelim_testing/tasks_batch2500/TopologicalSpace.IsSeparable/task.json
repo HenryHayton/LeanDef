@@ -1,0 +1,330 @@
+{
+  "task_id": "TopologicalSpace.IsSeparable",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSeparable",
+  "signature": {
+    "name": "VTask.IsSeparable",
+    "type": "{α : Type u} -> [t : TopologicalSpace α] -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "witnessing set need not be contained in s",
+        "statement": "The countable set c whose closure covers s is allowed to lie anywhere in the ambient space α, not necessarily inside s itself.",
+        "note": "This distinguishes VTask.IsSeparable from the intrinsic SeparableSpace notion on the subtype."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isSeparable_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {s u : Set α}, VTask.IsSeparable s → u ⊆ s → VTask.IsSeparable u",
+      "domain_inputs": {},
+      "anchors": [
+        "TopologicalSpace.IsSeparable.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TopologicalSpace.IsSeparable.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.469,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {s u : Set α}, VTask.IsSeparable s → VTask.IsSeparable u → VTask.IsSeparable (s ∪ u)",
+      "domain_inputs": {},
+      "anchors": [
+        "TopologicalSpace.IsSeparable.union"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TopologicalSpace.IsSeparable.union"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.304,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_iUnion_countable",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {ι : Sort*} [Countable ι] {s : ι → Set α}, (∀ i, VTask.IsSeparable (s i)) → VTask.IsSeparable (⋃ i, s i)",
+      "domain_inputs": {},
+      "anchors": [
+        "TopologicalSpace.IsSeparable.iUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TopologicalSpace.IsSeparable.iUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.242,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_finite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {s : Set α}, s.Finite → VTask.IsSeparable s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Finite.isSeparable"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Finite.isSeparable"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.171,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_countable_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {s : Set α}, s.Countable → VTask.IsSeparable s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Countable.isSeparable"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Countable.isSeparable"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.231,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_closure_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [TopologicalSpace α] {s : Set α}, VTask.IsSeparable s → VTask.IsSeparable (closure s)",
+      "domain_inputs": {},
+      "anchors": [
+        "TopologicalSpace.IsSeparable.mono",
+        "Set.Finite.isSeparable",
+        "Set.Countable.isSeparable"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TopologicalSpace.IsSeparable.mono",
+        "Set.Finite.isSeparable",
+        "Set.Countable.isSeparable"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.183,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_totally_bounded",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) [UniformSpace α] {s : Set α}, TotallyBounded s → VTask.IsSeparable s",
+      "domain_inputs": {},
+      "anchors": [
+        "TotallyBounded.isSeparable"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "TotallyBounded.isSeparable"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSeparable_reject_dense_nonseparable",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (α : Type*) [TopologicalSpace α] (s : Set α), VTask.IsSeparable s)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ (α : Type*) [TopologicalSpace α] (s : Set α), VTask.IsSeparable s",
+      "violated_property": "existence of countable c with s ⊆ closure c"
+    },
+    {
+      "id": "isSeparable_reject_univ_not_separable",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (α : Type*) (_ : TopologicalSpace α), ¬ VTask.IsSeparable (Set.univ : Set α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Dense.isSeparable_iff",
+        "TopologicalSpace.IsSeparable.of_separableSpace"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dense.isSeparable_iff",
+        "TopologicalSpace.IsSeparable.of_separableSpace"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "TopologicalSpace.IsSeparable",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "TopologicalSpace.IsSeparable-c9e5b260",
+    "review_status": "unreviewed"
+  }
+}

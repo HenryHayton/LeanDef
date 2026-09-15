@@ -1,0 +1,280 @@
+{
+  "task_id": "Equiv.Perm.toCycle",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toCycle",
+  "signature": {
+    "name": "VTask.toCycle",
+    "type": "{α : Type u_1} -> [Fintype α] -> [DecidableEq α] -> (f : Equiv.Perm α) -> (hf : f.IsCycle) -> Cycle α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "f.IsCycle",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "rotation_independence",
+        "statement": "The output Cycle α is the same regardless of which non-fixed point of f is used as the starting element for iteration, because any two choices yield rotations of each other and Cycle α identifies rotations.",
+        "note": "This is the core well-definedness convention of VTask.toCycle."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toCycle_nodup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), (VTask.toCycle f hf).Nodup",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.nodup_toCycle"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.nodup_toCycle"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), (VTask.toCycle f hf).Nontrivial",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.nontrivial_toCycle"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.nontrivial_toCycle"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.292,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_mem_iff_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α), x ∈ VTask.toCycle f hf ↔ f x ≠ x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.mem_toCycle_iff_support"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.mem_toCycle_iff_support"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.908,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_eq_toList_at_nonfixed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α), f x ≠ x → VTask.toCycle f hf = Equiv.Perm.toList f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.toCycle_eq_toList"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.toCycle_eq_toList"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.278,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_next_is_f_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x : α) (hx : x ∈ VTask.toCycle f hf), (VTask.toCycle f hf).next (Equiv.Perm.nodup_toCycle f hf) x hx = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.toCycle_next"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.toCycle_next"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.377,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_exists_toList",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle), ∃ x : α, VTask.toCycle f hf = Equiv.Perm.toList f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.exists_toCycle_toList"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.exists_toCycle_toList"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.747,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toCycle_toList_rotation_class",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Fintype α] [DecidableEq α] (f : Equiv.Perm α) (hf : f.IsCycle) (x y : α), f x ≠ x → f y ≠ y → VTask.toCycle f hf = Equiv.Perm.toList f x ∧ VTask.toCycle f hf = Equiv.Perm.toList f y",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.toCycle_eq_toList"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.toCycle_eq_toList"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Perm.toCycle",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Perm.toCycle-a65de070",
+    "review_status": "unreviewed"
+  }
+}

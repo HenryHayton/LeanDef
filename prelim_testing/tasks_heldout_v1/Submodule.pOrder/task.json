@@ -1,0 +1,296 @@
+{
+  "task_id": "Submodule.pOrder",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pOrder",
+  "signature": {
+    "name": "VTask.pOrder",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [Monoid R] -> [AddCommMonoid M] -> [DistribMulAction R M] -> {p : R} -> (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) -> (x : M) -> [(n : ℕ) → Decidable (p ^ n • x = 0)] -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "hM",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "x = 0",
+        "statement": "VTask.pOrder hM 0 = 0, since p^0 • 0 = 0 holds immediately.",
+        "note": "The zero element has p-order 0 because the zeroth power already annihilates it."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pOrder_pow_smul_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], p ^ VTask.pOrder hM x • x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.514,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_zero_iff_zero_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) [∀ n : ℕ, Decidable (p ^ n • (0 : M) = 0)], VTask.pOrder hM (0 : M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_minimality_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)] (k : ℕ), k < VTask.pOrder hM x → p ^ k • x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_min"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_min"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.649,
+        "at": "authoring",
+        "script": "by simp [_root_.Submodule.pOrder] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Submodule.pOrder] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_eq_zero_of_zero_element",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) [∀ n : ℕ, Decidable (p ^ n • (0 : M) = 0)], VTask.pOrder hM (0 : M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_eq_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_eq_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_result_is_nat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], 0 ≤ VTask.pOrder hM x",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.312,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_nonzero_element_positive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], x ≠ 0 → 0 < VTask.pOrder hM x → p ^ 0 • x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_min"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_min"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.963,
+        "at": "authoring",
+        "script": "by simp [_root_.Submodule.pOrder] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Submodule.pOrder] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_upper_bound_exists",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)], ∃ n : ℕ, VTask.pOrder hM x ≤ n ∧ p ^ n • x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.pow_pOrder_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.718,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pOrder_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Monoid R] [AddCommMonoid M] [DistribMulAction R M] {p : R} (hM : Module.IsTorsion' M ↥(Submonoid.powers p)) (x : M) [∀ n : ℕ, Decidable (p ^ n • x = 0)] (m : ℕ), p ^ m • x = 0 → VTask.pOrder hM x ≤ m",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_min'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_min'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.pOrder-b1cc45ec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.pOrder",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.pOrder-b1cc45ec",
+    "review_status": "unreviewed"
+  }
+}

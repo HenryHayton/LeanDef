@@ -1,0 +1,440 @@
+{
+  "task_id": "Computation.Results",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Results",
+  "signature": {
+    "name": "VTask.Results",
+    "type": "{α : Type u} -> (s : Computation α) -> (a : α) -> (n : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "a",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "zero steps",
+        "statement": "When n = 0, the computation s is required to produce a immediately, with no delay; VTask.Results s a 0 holds iff a ∈ s and the length is 0.",
+        "note": "The step count is 0-indexed, so an immediate computation has n = 0."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "results_unique_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a a' : α) (n n' : ℕ), VTask.Results s a n → VTask.Results s a' n' → a = a'",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.mem_unique"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.mem_unique"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_unique_step",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a a' : α) (n n' : ℕ), VTask.Results s a n → VTask.Results s a' n' → n = n'",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.mem_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.mem_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.398,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_implies_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a : α) (n : ℕ), VTask.Results s a n → a ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.terminates_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.terminates_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.479,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_implies_terminates",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a : α) (n : ℕ), VTask.Results s a n → s.Terminates",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.terminates_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.terminates_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.458,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_pure_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a b : α) (n : ℕ), VTask.Results (Computation.pure a) b n ↔ b = a ∧ n = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.mem_pure_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.mem_pure_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_at_most_one_n",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a : α) (n m : ℕ), VTask.Results s a n → VTask.Results s a m → n = m",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.mem_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.mem_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.956,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_think_step_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : Computation α) (a : α) (n : ℕ), VTask.Results s a n → VTask.Results (Computation.think s) a (n + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.terminates_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.terminates_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.189,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "results_pure_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Results (Computation.pure (0 : ℕ)) 0 0",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.031,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Results (Computation.pure (0 : ℕ)) 0 0"
+    },
+    {
+      "id": "results_pure_wrong_step",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Results (Computation.pure (0 : ℕ)) 0 1",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.07,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Results (Computation.pure (0 : ℕ)) 0 1",
+      "violated_property": "exact step count"
+    },
+    {
+      "id": "results_pure_wrong_value",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Results (Computation.pure (0 : ℕ)) 1 0",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.061,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Results (Computation.pure (0 : ℕ)) 1 0",
+      "violated_property": "result value matches"
+    },
+    {
+      "id": "results_think_pure_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Results (Computation.think (Computation.pure (0 : ℕ))) 0 1",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Results (Computation.think (Computation.pure (0 : ℕ))) 0 1"
+    },
+    {
+      "id": "results_think_pure_zero_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Results (Computation.think (Computation.pure (0 : ℕ))) 0 0",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.Results] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Results (Computation.think (Computation.pure (0 : ℕ))) 0 0",
+      "violated_property": "exact step count"
+    },
+    {
+      "id": "results_think_think_pure_two",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Results (Computation.think (Computation.think (Computation.pure (0 : ℕ)))) 0 2",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.Results-36269edd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Results (Computation.think (Computation.think (Computation.pure (0 : ℕ)))) 0 2"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Computation.Results",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Computation.Results-36269edd",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "task_id": "ZMod.unitsMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.unitsMap",
+  "signature": {
+    "name": "VTask.unitsMap",
+    "type": "{n m : ℕ} -> (hm : n ∣ m) -> (ZMod m)ˣ →* (ZMod n)ˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "n ∣ m",
+    "variables": [
+      "n",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "n = 1",
+        "statement": "When n = 1, the target group (ZMod 1)ˣ is trivial and VTask.unitsMap sends every unit of (ZMod m)ˣ to the unique element of (ZMod 1)ˣ.",
+        "note": "Trivial target group."
+      },
+      {
+        "point": "n = m",
+        "statement": "When n = m and the divisibility witness is dvd_refl n, VTask.unitsMap acts as the identity homomorphism on (ZMod n)ˣ.",
+        "note": "Identity case."
+      },
+      {
+        "point": "m = 0",
+        "statement": "When m = 0, ZMod 0 is identified with ℤ and its units are {1, -1}; for any n dividing 0, VTask.unitsMap reduces units of ℤ to units of ZMod n by the canonical cast.",
+        "note": "Zero modulus edge case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "unitsMap_map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (hm : n ∣ m), VTask.unitsMap hm 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.187,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "unitsMap_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (hm : n ∣ m) (u v : (ZMod m)ˣ), VTask.unitsMap hm (u * v) = VTask.unitsMap hm u * VTask.unitsMap hm v",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.299,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "unitsMap_two_six_codomain",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ∀ u : (ZMod 6)ˣ, VTask.unitsMap (show 2 ∣ 6 from ⟨3, rfl⟩) u ∈ (Set.univ : Set (ZMod 2)ˣ) := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "m": [
+          "6"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.unitsMap (show 2 ∣ 6 from ⟨3, rfl⟩) _"
+    },
+    {
+      "id": "unitsMap_one_dvd_trivial",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.unitsMap (show 1 ∣ 5 from one_dvd 5) = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ],
+        "m": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.unitsMap (show 1 ∣ 5 from one_dvd 5)"
+    },
+    {
+      "id": "unitsMap_three_three_id",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.unitsMap (dvd_refl 3) = MonoidHom.id (ZMod 3)ˣ := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ],
+        "m": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.unitsMap (dvd_refl 3)"
+    },
+    {
+      "id": "unitsMap_map_not_surjective_2_4",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬Function.Injective (VTask.unitsMap (show 2 ∣ 4 from ⟨2, rfl⟩) : (ZMod 4)ˣ → (ZMod 2)ˣ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.116,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ZMod.unitsMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ZMod.unitsMap-4a4e78b0",
+    "review_status": "unreviewed"
+  }
+}

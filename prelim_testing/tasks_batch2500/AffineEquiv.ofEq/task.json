@@ -1,0 +1,147 @@
+{
+  "task_id": "AffineEquiv.ofEq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofEq",
+  "signature": {
+    "name": "VTask.ofEq",
+    "type": "{k : Type u_1} -> {V₁ : Type u_2} -> {P₁ : Type u_3} -> [Ring k] -> [AddCommGroup V₁] -> [Module k V₁] -> [AddTorsor V₁ P₁] -> (S₁ S₂ : AffineSubspace k P₁) -> [Nonempty ↥S₁] -> [Nonempty ↥S₂] -> (h : S₁ = S₂) -> ↥S₁ ≃ᵃ[k] ↥S₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S₁",
+      "S₂",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total under its stated hypotheses (ring, module, torsor structure, nonemptiness of both subspaces, and a proof of equality). No junk-value or edge conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofEq_is_affine_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V₁ : Type*) (P₁ : Type*) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂), Function.Bijective (VTask.ofEq S₁ S₂ h)",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineEquiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineEquiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.538,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AffineEquiv.ofEq-69ccb0d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofEq_not_nonidentity_on_coe",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (k : Type*) (V₁ : Type*) (P₁ : Type*) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂) (x : ↥S₁), (↑(VTask.ofEq S₁ S₂ h x) : P₁) ≠ (↑x : P₁)",
+      "domain_inputs": {
+        "S₁": [
+          "S₁"
+        ],
+        "S₂": [
+          "S₂"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AffineEquiv.ofEq-69ccb0d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ (k : Type*) (V₁ : Type*) (P₁ : Type*) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂) (x : ↥S₁), (↑(VTask.ofEq S₁ S₂ h x) : P₁) ≠ (↑x : P₁)",
+      "violated_property": "coe_ofEq_apply: the coercion of the image equals the coercion of the input"
+    },
+    {
+      "id": "ofEq_ne_symm_when_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type) (V₁ : Type) (P₁ : Type) [Ring k] [AddCommGroup V₁] [Module k V₁] [AddTorsor V₁ P₁] (S₁ S₂ : AffineSubspace k P₁) [Nonempty ↥S₁] [Nonempty ↥S₂] (h : S₁ = S₂), S₁ ≠ S₂ → VTask.ofEq S₁ S₂ h ≠ (VTask.ofEq S₁ S₂ h).symm.symm → False",
+      "domain_inputs": {},
+      "anchors": [
+        "AffineEquiv.ofEq_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AffineEquiv.ofEq_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.707,
+        "at": "authoring",
+        "script": "by simp [_root_.AffineEquiv.ofEq] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.AffineEquiv.ofEq] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AffineEquiv.ofEq-69ccb0d1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AffineEquiv.ofEq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AffineEquiv.ofEq-69ccb0d1",
+    "review_status": "unreviewed"
+  }
+}

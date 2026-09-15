@@ -1,0 +1,231 @@
+{
+  "task_id": "CochainComplex.mkHom",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mkHom",
+  "signature": {
+    "name": "VTask.mkHom",
+    "type": "{V : Type u} -> [CategoryTheory.Category.{v, u} V] -> [CategoryTheory.Limits.HasZeroMorphisms V] -> (P Q : CochainComplex V ℕ) -> (zero : P.X 0 ⟶ Q.X 0) -> (one : P.X 1 ⟶ Q.X 1) -> (one_zero_comm : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) -> (succ :\n    (n : ℕ) →\n      (p :\n          (f : P.X n ⟶ Q.X n) ×'\n            (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×'\n              CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) =\n                CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') →\n        (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×'\n          CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) =\n            CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f'') -> P ⟶ Q",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "Q",
+      "zero",
+      "one",
+      "one_zero_comm",
+      "succ"
+    ],
+    "conventions": [
+      {
+        "point": "differentials outside consecutive degrees",
+        "statement": "The differential `d i j` of the cochain complex is zero whenever `j ≠ i + 1`; consequently the commutativity condition for the chain map is vacuous for non-consecutive index pairs and the constructor only enforces it for pairs `(n, n+1)`.",
+        "note": "Standard Mathlib convention for HomologicalComplex differentials."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mkHom_is_chain_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1) (h : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) (succ : ∀ (n : ℕ), (p : (f : P.X n ⟶ Q.X n) ×' (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×' CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') → (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×' CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f'') (n : ℕ), CategoryTheory.CategoryStruct.comp ((VTask.mkHom P Q zero one h succ).f n) (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) ((VTask.mkHom P Q zero one h succ).f (n + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "HomologicalComplex.Hom.comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HomologicalComplex.Hom.comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.215,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkHom_comm_zero_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1) (h : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) (succ : ∀ (n : ℕ), (p : (f : P.X n ⟶ Q.X n) ×' (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×' CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') → (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×' CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f''), CategoryTheory.CategoryStruct.comp ((VTask.mkHom P Q zero one h succ).f 0) (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) ((VTask.mkHom P Q zero one h succ).f 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "CochainComplex.mkHom_f_0",
+        "CochainComplex.mkHom_f_1",
+        "HomologicalComplex.Hom.comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CochainComplex.mkHom_f_0",
+        "CochainComplex.mkHom_f_1",
+        "HomologicalComplex.Hom.comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.701,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkHom_f0_ne_f1_when_different",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1) (h : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) (succ : ∀ (n : ℕ), (p : (f : P.X n ⟶ Q.X n) ×' (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×' CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') → (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×' CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f''), (VTask.mkHom P Q zero one h succ).f 0 = zero ∧ (VTask.mkHom P Q zero one h succ).f 1 = one",
+      "domain_inputs": {},
+      "anchors": [
+        "CochainComplex.mkHom_f_0",
+        "CochainComplex.mkHom_f_1"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CochainComplex.mkHom_f_0",
+        "CochainComplex.mkHom_f_1"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.216,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkHom_comm_one_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1) (h : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) (succ : ∀ (n : ℕ), (p : (f : P.X n ⟶ Q.X n) ×' (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×' CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') → (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×' CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f''), CategoryTheory.CategoryStruct.comp ((VTask.mkHom P Q zero one h succ).f 1) (Q.d 1 2) = CategoryTheory.CategoryStruct.comp (P.d 1 2) ((VTask.mkHom P Q zero one h succ).f 2)",
+      "domain_inputs": {},
+      "anchors": [
+        "HomologicalComplex.Hom.comm",
+        "CochainComplex.mkHom_f_succ_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HomologicalComplex.Hom.comm",
+        "CochainComplex.mkHom_f_succ_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.039,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkHom_succ_comm_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (P Q : CochainComplex V ℕ) (zero : P.X 0 ⟶ Q.X 0) (one : P.X 1 ⟶ Q.X 1) (h : CategoryTheory.CategoryStruct.comp zero (Q.d 0 1) = CategoryTheory.CategoryStruct.comp (P.d 0 1) one) (succ : ∀ (n : ℕ), (p : (f : P.X n ⟶ Q.X n) ×' (f' : P.X (n + 1) ⟶ Q.X (n + 1)) ×' CategoryTheory.CategoryStruct.comp f (Q.d n (n + 1)) = CategoryTheory.CategoryStruct.comp (P.d n (n + 1)) f') → (f'' : P.X (n + 2) ⟶ Q.X (n + 2)) ×' CategoryTheory.CategoryStruct.comp p.snd.fst (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) f'') (n : ℕ), CategoryTheory.CategoryStruct.comp ((VTask.mkHom P Q zero one h succ).f (n + 1)) (Q.d (n + 1) (n + 2)) = CategoryTheory.CategoryStruct.comp (P.d (n + 1) (n + 2)) ((VTask.mkHom P Q zero one h succ).f (n + 2))",
+      "domain_inputs": {},
+      "anchors": [
+        "HomologicalComplex.Hom.comm",
+        "CochainComplex.mkHom_f_succ_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HomologicalComplex.Hom.comm",
+        "CochainComplex.mkHom_f_succ_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.362,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CochainComplex.mkHom",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CochainComplex.mkHom-c6af6fc1",
+    "review_status": "unreviewed"
+  }
+}

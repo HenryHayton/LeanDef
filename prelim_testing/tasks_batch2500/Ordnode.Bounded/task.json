@@ -1,0 +1,286 @@
+{
+  "task_id": "Ordnode.Bounded",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Bounded",
+  "signature": {
+    "name": "VTask.Bounded",
+    "type": "{α : Type u_1} -> [Preorder α] -> Ordnode α → WithBot α → WithTop α → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t",
+      "lo",
+      "hi"
+    ],
+    "conventions": [
+      {
+        "point": "nil with finite bounds",
+        "statement": "When the tree is nil and both lo and hi are finite (Some values), VTask.Bounded nil lo hi is definitionally equal to lo < hi.",
+        "note": "This means the predicate is not trivially True for nil when both bounds are given; the bounds must be consistent."
+      },
+      {
+        "point": "nil with at least one infinite bound",
+        "statement": "When the tree is nil and lo = ⊥ or hi = ⊤ (or both), VTask.Bounded nil lo hi is True.",
+        "note": "The infinite bound cases are handled separately and are trivially satisfied."
+      },
+      {
+        "point": "top and bottom as unconstrained sentinels",
+        "statement": "Setting lo = ⊥ and hi = ⊤ expresses the pure internal BST ordering of the tree with no external constraints.",
+        "note": "This is the idiomatic way to check whether a tree is internally well-ordered without caring about its relationship to an enclosing context."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bounded_weak",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (lo : WithBot α) (hi : WithTop α), VTask.Bounded t lo hi → VTask.Bounded t ⊥ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.weak"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.weak"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.009,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_weak_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (lo : WithBot α) (hi : WithTop α), VTask.Bounded t lo hi → VTask.Bounded t ⊥ hi",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.weak_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.weak_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.785,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_weak_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (lo : WithBot α) (hi : WithTop α), VTask.Bounded t lo hi → VTask.Bounded t lo ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.weak_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.weak_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.503,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_dual",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (lo : WithBot α) (hi : WithTop α), VTask.Bounded t lo hi → @VTask.Bounded αᵒᵈ _ (Ordnode.dual t) hi lo",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.dual"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.dual"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.342,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_to_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (x y : α), VTask.Bounded t (x : WithBot α) (y : WithTop α) → x < y",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.to_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.to_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.357,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_to_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (lo : WithBot α) (hi : WithTop α), VTask.Bounded t lo hi → VTask.Bounded Ordnode.nil lo hi",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.to_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.to_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.42,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bounded_mem_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] (t : Ordnode α) (x : α) (hi : WithTop α), VTask.Bounded t (x : WithBot α) hi → Ordnode.All (· > x) t",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Bounded.mem_gt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Bounded.mem_gt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.314,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Bounded-f16f2824",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.Bounded",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.Bounded-f16f2824",
+    "review_status": "unreviewed"
+  }
+}

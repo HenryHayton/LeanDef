@@ -1,0 +1,355 @@
+{
+  "task_id": "Matrix.blockDiagonal'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.blockDiagonal'",
+  "signature": {
+    "name": "VTask.blockDiagonal'",
+    "type": "{o : Type u_4} -> {m' : o → Type u_7} -> {n' : o → Type u_8} -> {α : Type u_12} -> [DecidableEq o] -> [Zero α] -> (M : (i : o) → Matrix (m' i) (n' i) α) -> Matrix ((i : o) × m' i) ((i : o) × n' i) α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M"
+    ],
+    "conventions": [
+      {
+        "point": "on-diagonal entry",
+        "statement": "VTask.blockDiagonal' M ⟨k, i⟩ ⟨k, j⟩ = M k i j for any block index k and row/column indices i, j.",
+        "note": "Entry lies inside a diagonal block; the block-index check succeeds."
+      },
+      {
+        "point": "off-diagonal entry",
+        "statement": "VTask.blockDiagonal' M ⟨k, i⟩ ⟨k', j⟩ = 0 whenever k ≠ k', for any i, j.",
+        "note": "Entry lies outside all diagonal blocks; filled with the zero of α."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "blockDiagonal'_apply_eq_on_diagonal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α] (M : ∀ i, Matrix (m' i) (n' i) α) (k : o) (i : m' k) (j : n' k), VTask.blockDiagonal' M ⟨k, i⟩ ⟨k, j⟩ = M k i j",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_apply_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_apply_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.843,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_apply_ne_off_diagonal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α] (M : ∀ i, Matrix (m' i) (n' i) α) (k k' : o) (i : m' k) (j : n' k') (h : k ≠ k'), VTask.blockDiagonal' M ⟨k, i⟩ ⟨k', j⟩ = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_apply_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_apply_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.78,
+        "at": "authoring",
+        "script": "by simp [_root_.Matrix.blockDiagonal'] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Matrix.blockDiagonal'] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_zero_eq_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α], VTask.blockDiagonal' (0 : ∀ i, Matrix (m' i) (n' i) α) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.312,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_one_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' : o → Type*) (α : Type*) [DecidableEq o] [∀ i, DecidableEq (m' i)] [One α] [Zero α], VTask.blockDiagonal' (1 : ∀ i, Matrix (m' i) (m' i) α) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.171,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α], Function.Injective (VTask.blockDiagonal' : (∀ i, Matrix (m' i) (n' i) α) → Matrix _ _ α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.758,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_inj_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α] (M N : ∀ i, Matrix (m' i) (n' i) α), VTask.blockDiagonal' M = VTask.blockDiagonal' N ↔ M = N",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_inj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_inj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.971,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiag'_blockDiagonal'_inverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α] (M : ∀ i, Matrix (m' i) (n' i) α), Matrix.blockDiag' (VTask.blockDiagonal' M) = M",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiag'_blockDiagonal'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiag'_blockDiagonal'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.642,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [AddGroup α] (M : ∀ i, Matrix (m' i) (n' i) α), VTask.blockDiagonal' (-M) = -VTask.blockDiagonal' M",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.707,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blockDiagonal'_not_injective_dropped",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (o : Type*) (m' n' : o → Type*) (α : Type*) [DecidableEq o] [Zero α] (M N : ∀ i, Matrix (m' i) (n' i) α), M ≠ N → VTask.blockDiagonal' M ≠ VTask.blockDiagonal' N",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.blockDiagonal'_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.blockDiagonal'_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.383,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.blockDiagonal'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.blockDiagonal'-b18e132c",
+    "review_status": "unreviewed"
+  }
+}

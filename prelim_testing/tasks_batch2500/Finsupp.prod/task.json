@@ -1,0 +1,193 @@
+{
+  "task_id": "Finsupp.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{α : Type u_1} -> {M : Type u_8} -> {N : Type u_10} -> [Zero M] -> [CommMonoid N] -> (f : α →₀ M) -> (g : α → M → N) -> N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "empty support",
+        "statement": "When the support of `f` is empty (in particular when `f = 0`), `VTask.prod f g = 1`, the identity element of `N`.",
+        "note": "Standard convention for the empty product in a monoid."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_single_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) (N : Type*) [DecidableEq α] [Zero M] [CommMonoid N] (a : α) (m : M) (g : α → M → N), VTask.prod (Finsupp.single a m) g = g a m",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.prod_single_index"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.prod_single_index"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finsupp.prod-39728cea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_mul_distrib",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (M : Type*) (N : Type*) [Zero M] [CommMonoid N] (f : α →₀ M) (g h : α → M → N), VTask.prod f (fun a m => g a m * h a m) = VTask.prod f g * VTask.prod f h",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.prod_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.prod_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.462,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.prod-39728cea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_zero_g_gives_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (0 : Fin 3 →₀ ℕ) (fun a m => m + 1) = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.prod-39728cea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.prod (0 : Fin 3 →₀ ℕ) (fun a m => m + 1)"
+    },
+    {
+      "id": "prod_reject_trivial_g",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f : Fin 3 →₀ ℕ) (g : Fin 3 → ℕ → ℕ), VTask.prod f g = 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.prod_single_index"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.prod_single_index"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finsupp.prod-39728cea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_reject_nonidentity_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.prod (Finsupp.single (0 : Fin 3) 2) (fun a m => m + 1) = 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.prod_single_index"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.prod_single_index"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.141,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.prod-39728cea",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.prod-39728cea",
+    "review_status": "unreviewed"
+  }
+}

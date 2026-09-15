@@ -1,0 +1,269 @@
+{
+  "task_id": "Part.Fix.approx",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.approx",
+  "signature": {
+    "name": "VTask.approx",
+    "type": "{α : Type u_1} -> {β : α → Type u_2} -> (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) -> Stream' ((a : α) → Part (β a))",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all inputs; no junk-value or edge-case conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "approx_mono_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (i : ℕ), VTask.approx f i ≤ VTask.approx f (i + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_mono'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_mono'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_mono_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) ⦃i j : ℕ⦄, i ≤ j → VTask.approx f i ≤ VTask.approx f j",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_le_fix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (i : ℕ), VTask.approx f i ≤ Part.fix f",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_le_fix"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_le_fix"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fix_mem_iff_approx",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (a : α) (b : β a), b ∈ Part.fix f a ↔ ∃ i, b ∈ VTask.approx f i a",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.mem_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.mem_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_bot_le_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (i : ℕ), VTask.approx f 0 ≤ VTask.approx f i",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_zero_ne_fix_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (a : α) (b : β a), b ∈ Part.fix f a → ∃ i, b ∈ VTask.approx f i a",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.mem_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.mem_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_succ_le_fix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (n : ℕ), VTask.approx f (n + 1) ≤ Part.fix f",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_le_fix"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_le_fix"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_zero_ne_bot_wrong",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {β : α → Type} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (n : ℕ), VTask.approx f 0 ≠ f (VTask.approx f 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_mono'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_mono'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_succ_ne_prev",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {α : Type} {β : α → Type} (f : ((a : α) → Part (β a)) → (a : α) → Part (β a)) (n : ℕ), VTask.approx f (n + 1) = VTask.approx f n",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.Fix.approx_mono'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.Fix.approx_mono'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Fix.approx-7445589b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Part.Fix.approx",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Part.Fix.approx-7445589b",
+    "review_status": "unreviewed"
+  }
+}

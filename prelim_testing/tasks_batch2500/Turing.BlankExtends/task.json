@@ -1,0 +1,165 @@
+{
+  "task_id": "Turing.BlankExtends",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.BlankExtends",
+  "signature": {
+    "name": "VTask.BlankExtends",
+    "type": "{Γ : Type u_1} -> [Inhabited Γ] -> (l₁ l₂ : List Γ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l₁",
+      "l₂"
+    ],
+    "conventions": [
+      {
+        "point": "blank element",
+        "statement": "The padding element is always `default : Γ` from the `Inhabited` instance; no special treatment is given to any other value of `Γ`.",
+        "note": "This means the relation depends on which `Inhabited` instance is in scope."
+      },
+      {
+        "point": "zero padding",
+        "statement": "The witness `n = 0` is allowed, making `l₂ = l₁`; reflexivity is a degenerate case of the relation.",
+        "note": "No strictly-positive padding is required."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "blank_extends_transitive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} [inst : Inhabited Γ] (l₁ l₂ l₃ : List Γ), VTask.BlankExtends l₁ l₂ → VTask.BlankExtends l₂ l₃ → VTask.BlankExtends l₁ l₃",
+      "domain_inputs": {},
+      "anchors": [
+        "List.replicate_add",
+        "List.append_assoc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.replicate_add",
+        "List.append_assoc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.602,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.BlankExtends-46e9bb59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blank_extends_length_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} [inst : Inhabited Γ] (l₁ l₂ : List Γ), VTask.BlankExtends l₁ l₂ → l₁.length ≤ l₂.length",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_append",
+        "List.length_replicate",
+        "Nat.le_add_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_append",
+        "List.length_replicate",
+        "Nat.le_add_right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.BlankExtends-46e9bb59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blank_extends_is_prefix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} [inst : Inhabited Γ] (l₁ l₂ : List Γ), VTask.BlankExtends l₁ l₂ → l₁ <+: l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsPrefix",
+        "List.prefix_iff_eq_append"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsPrefix",
+        "List.prefix_iff_eq_append"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.BlankExtends-46e9bb59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "blank_extends_empty_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {Γ : Type*} [inst : Inhabited Γ] (l : List Γ), (∀ x ∈ l, x = (default : Γ)) → VTask.BlankExtends [] l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.eq_replicate_iff",
+        "List.nil_append"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.eq_replicate_iff",
+        "List.nil_append"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.BlankExtends-46e9bb59",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.BlankExtends",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.BlankExtends-46e9bb59",
+    "review_status": "unreviewed"
+  }
+}

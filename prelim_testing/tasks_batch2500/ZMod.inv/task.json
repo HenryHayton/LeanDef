@@ -1,0 +1,232 @@
+{
+  "task_id": "ZMod.inv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inv",
+  "signature": {
+    "name": "VTask.inv",
+    "type": "(n : ℕ) -> ZMod n → ZMod n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0 case",
+        "statement": "When n = 0, ZMod 0 is identified with ℤ and VTask.inv 0 is the integer sign function: it maps positive integers to 1, negative integers to -1, and 0 to 0.",
+        "note": "This is an edge case where the general gcd identity holds in ℤ but the sign function is used as the inversion map."
+      },
+      {
+        "point": "zero element",
+        "statement": "For every n : ℕ, VTask.inv n 0 = 0; equivalently (0 : ZMod n)⁻¹ = 0.",
+        "note": "Consistent with the identity a * a⁻¹ = gcd(val a, n) since gcd(0, n) = n which equals 0 in ZMod n."
+      },
+      {
+        "point": "non-units",
+        "statement": "When gcd(val(a), n) > 1, VTask.inv n a is still a well-defined element of ZMod n, but a * (VTask.inv n a) = gcd(val a, n) ≠ 1, so it is not a true multiplicative inverse.",
+        "note": "The function is total and assigns a junk value (in the group-inverse sense) to non-units; it is the Bézout coefficient from the extended Euclidean algorithm reduced mod n."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inv_zero_n",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.inv n 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.inv_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.inv_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_neg_one_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.inv n (-1) = -1",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.inv_neg_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.inv_neg_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mul_inv_eq_gcd_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (a : ZMod n), a * VTask.inv n a = (Nat.gcd (ZMod.val a) n : ZMod n)",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.mul_inv_eq_gcd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.mul_inv_eq_gcd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_unit_mul_cancel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (a : ZMod n), IsUnit a → a * VTask.inv n a = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.mul_inv_of_unit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.mul_inv_of_unit"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_unit_mul_cancel_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (a : ZMod n), IsUnit a → VTask.inv n a * a = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.inv_mul_of_unit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.inv_mul_of_unit"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_coe_unit_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (u : (ZMod n)ˣ), VTask.inv n (u : ZMod n) = ((u⁻¹ : (ZMod n)ˣ) : ZMod n)",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.inv_coe_unit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.inv_coe_unit"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inv_coprime_is_unit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (a : ZMod n), IsUnit a → IsUnit (VTask.inv n a)",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.isUnit_inv",
+        "ZMod.inv_coe_unit"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.isUnit_inv",
+        "ZMod.inv_coe_unit"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod.inv-99471abb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ZMod.inv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ZMod.inv-99471abb",
+    "review_status": "unreviewed"
+  }
+}

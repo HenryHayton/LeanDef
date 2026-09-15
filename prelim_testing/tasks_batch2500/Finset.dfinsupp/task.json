@@ -1,0 +1,327 @@
+{
+  "task_id": "Finset.dfinsupp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.dfinsupp",
+  "signature": {
+    "name": "VTask.dfinsupp",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_2} -> [DecidableEq ι] -> [(i : ι) → Zero (α i)] -> (s : Finset ι) -> (t : (i : ι) → Finset (α i)) -> Finset (Π₀ (i : ι), α i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "Indices outside s",
+        "statement": "For any i ∉ s, every element f of VTask.dfinsupp s t satisfies f i = 0; the sets t i for i ∉ s are ignored entirely.",
+        "note": "This is the defining convention making the output genuinely finitely-supported within s."
+      },
+      {
+        "point": "Empty s",
+        "statement": "When s = ∅, VTask.dfinsupp s t is the singleton {0}, the finset containing only the zero DFinsupp function.",
+        "note": "Follows from the empty Cartesian product being a single empty function, mapped to the zero DFinsupp."
+      },
+      {
+        "point": "Empty t i for i ∈ s",
+        "statement": "If t i = ∅ for some i ∈ s, then VTask.dfinsupp s t = ∅, since no valid assignment exists.",
+        "note": "Inherited from the emptiness of the pi finset when any factor is empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dfinsupp_singleton_support_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (i₀ : Fin 3) (t : Fin 3 → Finset ℕ), (VTask.dfinsupp {i₀} t).card = (t i₀).card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.card_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.card_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.169,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dfinsupp_card_eq_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Finset (Fin 3)) (t : Fin 3 → Finset ℕ), (VTask.dfinsupp s t).card = ∏ i ∈ s, (t i).card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.card_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.card_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.178,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dfinsupp_empty_ti_gives_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (i₀ : Fin 3) (t : Fin 3 → Finset ℕ), (t i₀).card = 0 → (VTask.dfinsupp {i₀} t) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.card_eq_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.card_eq_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dfinsupp_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Finset (Fin 3)) (t : Fin 3 → Finset ℕ) (f : Π₀ i, ℕ), f ∈ VTask.dfinsupp s t ↔ (∀ i ∈ s, f i ∈ t i) ∧ (∀ i, i ∉ s → f i = 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.mem_support_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.mem_support_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.731,
+        "at": "authoring",
+        "script": "by simp only [_root_.Finset.dfinsupp] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Finset.dfinsupp] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dfinsupp_zero_mem_empty_support",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0 : Π₀ _ : Fin 2, ℕ) ∈ VTask.dfinsupp (∅ : Finset (Fin 2)) (fun _ => {1, 2}) := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : Π₀ _ : Fin 2, ℕ)"
+    },
+    {
+      "id": "dfinsupp_empty_ti_in_s_gives_empty_finset",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.dfinsupp ({0} : Finset (Fin 2)) (fun _ => (∅ : Finset ℕ)) = ∅ := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.dfinsupp ({0} : Finset (Fin 2)) (fun _ => (∅ : Finset ℕ))",
+      "violated_property": "t i nonempty for i ∈ s"
+    },
+    {
+      "id": "dfinsupp_outside_s_ti_empty_irrelevant",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0 : Π₀ _ : Fin 2, ℕ) ∈ VTask.dfinsupp (∅ : Finset (Fin 2)) (fun _ => (∅ : Finset ℕ)) := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : Π₀ _ : Fin 2, ℕ)"
+    },
+    {
+      "id": "dfinsupp_card_two_indices_two_values",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.dfinsupp ({0, 1} : Finset (Fin 3)) (fun _ => ({5, 7} : Finset ℕ))).card = 4 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dfinsupp_nonempty_when_s_nonempty_ti_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Finset (Fin 3)) (t : Fin 3 → Finset ℕ), (∀ i ∈ s, (t i).Nonempty) → (VTask.dfinsupp s t).Nonempty ∨ s = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.Nonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.Nonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.dfinsupp-a3a0e140",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.dfinsupp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.dfinsupp-a3a0e140",
+    "review_status": "unreviewed"
+  }
+}

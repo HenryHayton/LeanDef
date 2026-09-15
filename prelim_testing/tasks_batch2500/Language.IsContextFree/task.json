@@ -1,0 +1,264 @@
+{
+  "task_id": "Language.IsContextFree",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsContextFree",
+  "signature": {
+    "name": "VTask.IsContextFree",
+    "type": "{T : Type u_1} -> (L : Language T) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a purely existential Prop over all languages; no junk-value conventions or special boundary defaults apply."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "iscontextfree_regular_implies_cf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : Language Bool), Language.IsRegular L → VTask.IsContextFree L",
+      "domain_inputs": {},
+      "anchors": [
+        "Language.IsRegular"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Language.IsRegular"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_union_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L₁ L₂ : Language Bool), VTask.IsContextFree L₁ → VTask.IsContextFree L₂ → VTask.IsContextFree (L₁ + L₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Language.IsRegular"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Language.IsRegular"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_concat_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L₁ L₂ : Language Bool), VTask.IsContextFree L₁ → VTask.IsContextFree L₂ → VTask.IsContextFree (L₁ * L₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Language.IsRegular"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Language.IsRegular"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_singleton_terminal_string",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsContextFree ({[true, false]} : Language Bool)",
+      "domain_inputs": {
+        "L": [
+          "{[true, false]}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "{[true, false]} : Language Bool"
+    },
+    {
+      "id": "iscontextfree_not_intersection_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (L₁ L₂ : Language (Fin 3)), VTask.IsContextFree L₁ → VTask.IsContextFree L₂ → VTask.IsContextFree (L₁ ⊓ L₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Language.IsRegular"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Language.IsRegular"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_prop_not_decidable",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : Language Bool), VTask.IsContextFree L ∨ ¬ VTask.IsContextFree L",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.em"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.em"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.299,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_exists_grammar",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (T : Type) (L : Language T), VTask.IsContextFree L → ∃ (g : ContextFreeGrammar T), g.language = L",
+      "domain_inputs": {},
+      "anchors": [
+        "ContextFreeGrammar.language"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContextFreeGrammar.language"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.642,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscontextfree_not_complement_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (L : Language (Fin 3)), VTask.IsContextFree L → VTask.IsContextFree (Lᶜ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Language.IsRegular"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Language.IsRegular"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Language.IsContextFree-baaffc11",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Language.IsContextFree",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Language.IsContextFree-baaffc11",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "task_id": "Equidecomp.IsDecompOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsDecompOn",
+  "signature": {
+    "name": "VTask.IsDecompOn",
+    "type": "{X : Type u_1} -> {G : Type u_2} -> [SMul G X] -> (f : X → X) -> (A : Set X) -> (S : Finset G) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "A",
+      "S"
+    ],
+    "conventions": [
+      {
+        "point": "A = ∅",
+        "statement": "VTask.IsDecompOn f ∅ S holds vacuously for any f and any S, including S = ∅.",
+        "note": "The universal quantifier over an empty set has no obligations."
+      },
+      {
+        "point": "S = ∅",
+        "statement": "VTask.IsDecompOn f A ∅ holds if and only if A = ∅, since no element of the empty finset can witness any point.",
+        "note": "The existential over an empty finset is false for every point, so the predicate forces A to be empty."
+      },
+      {
+        "point": "behavior outside A",
+        "statement": "The predicate is entirely unconstrained on the values of f outside A; only points in A are checked.",
+        "note": "This is a purely local condition on A."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isDecompOn_mono_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] (f : X → X) (A A' : Set X) (S : Finset G), VTask.IsDecompOn f A S → A' ⊆ A → VTask.IsDecompOn f A' S",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.527,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_mono_eqon",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] (f f' : X → X) (A A' : Set X) (S : Finset G), VTask.IsDecompOn f A S → A' ⊆ A → Set.EqOn f f' A' → VTask.IsDecompOn f' A' S",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.177,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] [inst2 : Mul (Finset G)] (f g : X → X) (A B : Set X) (S T : Finset G), VTask.IsDecompOn f A S → VTask.IsDecompOn g B T → Set.MapsTo f A B → VTask.IsDecompOn (g ∘ f) A (T * S)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_superset_S_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] (f : X → X) (A : Set X) (S S' : Finset G), VTask.IsDecompOn f A S → S ⊆ S' → VTask.IsDecompOn f A S'",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_outside_A_unconstrained",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] (f f' : X → X) (A : Set X) (S : Finset G), VTask.IsDecompOn f A S → Set.EqOn f f' A → VTask.IsDecompOn f' A S",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.708,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_comp_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] [inst2 : Mul (Finset G)] (f g : X → X) (A B : Set X) (S T : Finset G), VTask.IsDecompOn f A S → VTask.IsDecompOn g B T → VTask.IsDecompOn (g ∘ f) (A ∩ f ⁻¹' B) (T * S)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.comp'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.comp'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isDecompOn_leftInvOn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X G : Type*} [inst : SMul G X] [inst2 : Inv (Finset G)] (f g : X → X) (A : Set X) (S : Finset G), VTask.IsDecompOn f A S → Set.LeftInvOn g f A → VTask.IsDecompOn g (f '' A) S⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "Equidecomp.IsDecompOn.of_leftInvOn"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equidecomp.IsDecompOn.of_leftInvOn"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equidecomp.IsDecompOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equidecomp.IsDecompOn-79fb2c8a",
+    "review_status": "unreviewed"
+  }
+}

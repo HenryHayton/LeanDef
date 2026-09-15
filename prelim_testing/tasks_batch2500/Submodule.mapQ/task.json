@@ -1,0 +1,322 @@
+{
+  "task_id": "Submodule.mapQ",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapQ",
+  "signature": {
+    "name": "VTask.mapQ",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [Ring R] -> [AddCommGroup M] -> [Module R M] -> (p : Submodule R M) -> {R₂ : Type u_3} -> {M₂ : Type u_4} -> [Ring R₂] -> [AddCommGroup M₂] -> [Module R₂ M₂] -> {τ₁₂ : R →+* R₂} -> (q : Submodule R₂ M₂) -> (f : M →ₛₗ[τ₁₂] M₂) -> (h : p ≤ Submodule.comap f q) -> M ⧸ p →ₛₗ[τ₁₂] M₂ ⧸ q",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "q",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.mapQ is a total function; all arguments including the compatibility hypothesis h are genuine mathematical data, not junk-value conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapQ_id_is_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (h : p ≤ Submodule.comap LinearMap.id p), VTask.mapQ p p LinearMap.id h = LinearMap.id",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.67,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_zero_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {R₂ : Type*} {M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂} (q : Submodule R₂ M₂) (h : p ≤ Submodule.comap (0 : M →ₛₗ[τ₁₂] M₂) q), VTask.mapQ p q (0 : M →ₛₗ[τ₁₂] M₂) h = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.246,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_comp_functorial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {R₂ : Type*} {M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂} {R₃ : Type*} {M₃ : Type*} [Ring R₃] [AddCommGroup M₃] [Module R₃ M₃] {τ₂₃ : R₂ →+* R₃} {τ₁₃ : R →+* R₃} [RingHomCompTriple τ₁₂ τ₂₃ τ₁₃] (p₂ : Submodule R₂ M₂) (p₃ : Submodule R₃ M₃) (f : M →ₛₗ[τ₁₂] M₂) (g : M₂ →ₛₗ[τ₂₃] M₃) (hf : p ≤ Submodule.comap f p₂) (hg : p₂ ≤ Submodule.comap g p₃), VTask.mapQ p p₃ (g.comp f) (hf.trans (Submodule.comap_mono hg)) = (VTask.mapQ p₂ p₃ g hg).comp (VTask.mapQ p p₂ f hf)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 18.171,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_ker",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {R₂ : Type*} {M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂} (q : Submodule R₂ M₂) (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ Submodule.comap f q), LinearMap.ker (VTask.mapQ p q f h) = (Submodule.comap f q).map p.mkQ",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.ker_mapQ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.ker_mapQ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.523,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_top_codomain_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {R₂ : Type*} {M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂} (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ Submodule.comap f ⊤), VTask.mapQ p ⊤ f h = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_zero",
+        "Submodule.Quotient.subsingleton_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_zero",
+        "Submodule.Quotient.subsingleton_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.179,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_range_fact",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {R₂ : Type*} {M₂ : Type*} [Ring R₂] [AddCommGroup M₂] [Module R₂ M₂] {τ₁₂ : R →+* R₂} [RingHomSurjective τ₁₂] (q : Submodule R₂ M₂) (f : M →ₛₗ[τ₁₂] M₂) (h : p ≤ Submodule.comap f q), LinearMap.range (VTask.mapQ p q f h) = (LinearMap.range f).map q.mkQ",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.range_mapQ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.range_mapQ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.59,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_comp_comp_coherence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) {τ₁₂ : R →+* R} (f g : M →ₗ[R] M) (hf : p ≤ Submodule.comap f p) (hg : p ≤ Submodule.comap g p), VTask.mapQ p p (g.comp f) (hf.trans (Submodule.comap_mono hg)) = (VTask.mapQ p p g hg).comp (VTask.mapQ p p f hf)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.92,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapQ_reject_zero_ne_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (p : Submodule ℤ ℤ) (h : p ≤ Submodule.comap (0 : ℤ →ₗ[ℤ] ℤ) p), VTask.mapQ p p (0 : ℤ →ₗ[ℤ] ℤ) h = LinearMap.id)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mapQ_zero",
+        "Submodule.mapQ_id"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mapQ_zero",
+        "Submodule.mapQ_id"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.mapQ-7474fb66",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.mapQ",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.mapQ-7474fb66",
+    "review_status": "unreviewed"
+  }
+}

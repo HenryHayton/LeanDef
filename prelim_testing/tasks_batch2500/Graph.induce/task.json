@@ -1,0 +1,203 @@
+{
+  "task_id": "Graph.induce",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.induce",
+  "signature": {
+    "name": "VTask.induce",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (G : Graph α β) -> (X : Set α) -> Graph α β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "X"
+    ],
+    "conventions": [
+      {
+        "point": "X need not be a subset of V(G)",
+        "statement": "When X contains vertices outside V(G), those vertices appear in the induced subgraph with no incident edges; the result is a subgraph of G in the graph order if and only if X ⊆ V(G).",
+        "note": "Explicitly documented in the docstring as a deliberate design choice."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "induce_vertexSet_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β), VTask.induce G (Graph.vertexSet G) = G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.induce_vertexSet"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.induce_vertexSet"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.121,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.induce-3be12981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_le_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β) (X : Set α), VTask.induce G X ≤ G ↔ X ⊆ Graph.vertexSet G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.induce_le_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.induce_le_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.199,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.induce-3be12981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_le_of_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β) (X : Set α), X ⊆ Graph.vertexSet G → VTask.induce G X ≤ G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.induce_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.induce_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.203,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.induce-3be12981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_empty_no_edges",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β), Graph.edgeSet (VTask.induce G ∅) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.edgeSet_induce"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.edgeSet_induce"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.induce-3be12981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_mono_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β) (X Y : Set α), X ⊆ Y → VTask.induce G X ≤ VTask.induce G Y",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.induce_le_iff",
+        "Graph.edgeSet_induce"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.induce_le_iff",
+        "Graph.edgeSet_induce"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.induce-3be12981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Graph.induce",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Graph.induce-3be12981",
+    "review_status": "unreviewed"
+  }
+}

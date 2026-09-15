@@ -1,0 +1,224 @@
+{
+  "task_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toPrenexImpRight",
+  "signature": {
+    "name": "VTask.toPrenexImpRight",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> {n : ℕ} -> L.BoundedFormula α n → L.BoundedFormula α n → L.BoundedFormula α n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "φ",
+      "ψ"
+    ],
+    "conventions": [
+      {
+        "point": "meaningful_precondition",
+        "statement": "The semantic-equivalence and prenex-normality guarantees hold only when the first argument φ is quantifier-free and the second argument ψ is already in prenex normal form; outside these preconditions the function still computes a formula but offers no structural guarantee.",
+        "note": "Documented in the docstring and neighborhood theorems (isPrenex_toPrenexImpRight, realize_toPrenexImpRight)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toPrenexImpRight_isqf_base",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} {n : ℕ} (φ ψ : L.BoundedFormula α n), FirstOrder.Language.BoundedFormula.IsQF ψ → VTask.toPrenexImpRight φ ψ = φ.imp ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.IsQF.toPrenexImpRight"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.IsQF.toPrenexImpRight"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.489,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toPrenexImpRight_isPrenex_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} {n : ℕ} (φ ψ : L.BoundedFormula α n), FirstOrder.Language.BoundedFormula.IsQF φ → FirstOrder.Language.BoundedFormula.IsPrenex ψ → FirstOrder.Language.BoundedFormula.IsPrenex (VTask.toPrenexImpRight φ ψ)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.493,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toPrenexImpRight_realize_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} [inst : L.Structure M] {α : Type*} {n : ℕ} (φ ψ : L.BoundedFormula α n), FirstOrder.Language.BoundedFormula.IsQF φ → FirstOrder.Language.BoundedFormula.IsPrenex ψ → ∀ (v : α → M) (xs : Fin n → M), (VTask.toPrenexImpRight φ ψ).Realize v xs ↔ (φ.imp ψ).Realize v xs",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.realize_toPrenexImpRight"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.realize_toPrenexImpRight"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toPrenexImpRight_qf_antecedent_equals_toPrenexImp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} {n : ℕ} (φ ψ : L.BoundedFormula α n), FirstOrder.Language.BoundedFormula.IsQF φ → φ.toPrenexImp ψ = VTask.toPrenexImpRight φ ψ",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.IsQF.toPrenexImp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.IsQF.toPrenexImp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.518,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toPrenexImpRight_isqf_gives_isPrenex",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} {n : ℕ} (φ ψ : L.BoundedFormula α n), FirstOrder.Language.BoundedFormula.IsQF φ → FirstOrder.Language.BoundedFormula.IsQF ψ → FirstOrder.Language.BoundedFormula.IsPrenex (VTask.toPrenexImpRight φ ψ)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight",
+        "FirstOrder.Language.BoundedFormula.IsQF.isPrenex"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight",
+        "FirstOrder.Language.BoundedFormula.IsQF.isPrenex"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toPrenexImpRight_not_prenex_when_phi_not_qf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (φ ψ : FirstOrder.Language.empty.BoundedFormula Empty 0), FirstOrder.Language.BoundedFormula.IsPrenex (VTask.toPrenexImpRight φ ψ)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.isPrenex_toPrenexImpRight"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.BoundedFormula.toPrenexImpRight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.BoundedFormula.toPrenexImpRight-850a92f7",
+    "review_status": "unreviewed"
+  }
+}

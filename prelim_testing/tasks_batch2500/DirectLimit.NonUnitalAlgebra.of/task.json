@@ -1,0 +1,107 @@
+{
+  "task_id": "DirectLimit.NonUnitalAlgebra.of",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.of",
+  "signature": {
+    "name": "VTask.of",
+    "type": "{R : Type u_1} -> {ι : Type u_2} -> [Preorder ι] -> (G : ι → Type u_3) -> {T : ⦃i j : ι⦄ → i ≤ j → Type u_6} -> (f : (x x_1 : ι) → (h : x ≤ x_1) → T h) -> [(i j : ι) → (h : i ≤ j) → FunLike (T h) (G i) (G j)] -> [DirectedSystem G fun x1 x2 x3 => ⇑(f x1 x2 x3)] -> [IsDirectedOrder ι] -> [CommSemiring R] -> [(i : ι) → NonUnitalNonAssocSemiring (G i)] -> [(i : ι) → DistribMulAction R (G i)] -> [∀ (i j : ι) (h : i ≤ j), NonUnitalAlgHomClass (T h) R (G i) (G j)] -> [Nonempty ι] -> (i : ι) -> G i →ₙₐ[R] DirectLimit G f",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.of is a total construction with no junk-value conventions; it produces a valid non-unital algebra homomorphism for every index i and every valid directed system."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "of_funlike_congr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {ι : Type*} [Preorder ι] (G : ι → Type*) {T : ⦃i j : ι⦄ → i ≤ j → Type*} (f : ∀ x x_1 : ι, ∀ h : x ≤ x_1, T h) [∀ i j : ι, ∀ h : i ≤ j, FunLike (T h) (G i) (G j)] [DirectedSystem G (fun x1 x2 x3 => ⇑(f x1 x2 x3))] [IsDirectedOrder ι] [CommSemiring R] [∀ i : ι, NonUnitalNonAssocSemiring (G i)] [∀ i : ι, DistribMulAction R (G i)] [∀ i j : ι, ∀ h : i ≤ j, NonUnitalAlgHomClass (T h) R (G i) (G j)] [Nonempty ι] (i : ι) (x y : G i), x = y → VTask.of G f i x = VTask.of G f i y",
+      "domain_inputs": {},
+      "anchors": [
+        "congrArg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "congrArg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.207,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectLimit.NonUnitalAlgebra.of-defc5c15",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_scalar_mul_commutes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {ι : Type*} [Preorder ι] (G : ι → Type*) {T : ⦃i j : ι⦄ → i ≤ j → Type*} (f : ∀ x x_1 : ι, ∀ h : x ≤ x_1, T h) [∀ i j : ι, ∀ h : i ≤ j, FunLike (T h) (G i) (G j)] [DirectedSystem G (fun x1 x2 x3 => ⇑(f x1 x2 x3))] [IsDirectedOrder ι] [CommSemiring R] [∀ i : ι, NonUnitalNonAssocSemiring (G i)] [∀ i : ι, DistribMulAction R (G i)] [∀ i j : ι, ∀ h : i ≤ j, NonUnitalAlgHomClass (T h) R (G i) (G j)] [Nonempty ι] (i : ι) (r s : R) (x : G i), VTask.of G f i ((r * s) • x) = r • s • VTask.of G f i x",
+      "domain_inputs": {},
+      "anchors": [
+        "smul_smul",
+        "NonUnitalAlgHom.map_smul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "smul_smul",
+        "NonUnitalAlgHom.map_smul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DirectLimit.NonUnitalAlgebra.of-defc5c15",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DirectLimit.NonUnitalAlgebra.of",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DirectLimit.NonUnitalAlgebra.of-defc5c15",
+    "review_status": "unreviewed"
+  }
+}

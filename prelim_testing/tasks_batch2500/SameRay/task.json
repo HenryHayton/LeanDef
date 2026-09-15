@@ -1,0 +1,167 @@
+{
+  "task_id": "SameRay",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SameRay",
+  "signature": {
+    "name": "VTask.SameRay",
+    "type": "(R : Type u_1) -> [CommSemiring R] -> [PartialOrder R] -> [IsStrictOrderedRing R] -> {M : Type u_2} -> [AddCommMonoid M] -> [Module R M] -> (v₁ v₂ : M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "v₁",
+      "v₂"
+    ],
+    "conventions": [
+      {
+        "point": "v₁ = 0",
+        "statement": "If the first vector is zero, the relation VTask.SameRay R 0 v₂ holds for any v₂.",
+        "note": "Zero is treated as lying on every ray."
+      },
+      {
+        "point": "v₂ = 0",
+        "statement": "If the second vector is zero, the relation VTask.SameRay R v₁ 0 holds for any v₁.",
+        "note": "Zero is treated as lying on every ray."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sameray_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (v w : ℝ), VTask.SameRay ℝ v w → VTask.SameRay ℝ w v",
+      "domain_inputs": {},
+      "anchors": [
+        "SameRay.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SameRay.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.97,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SameRay-78873edb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sameray_norm_eq_implies_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y : ℝ), VTask.SameRay ℝ x y → ‖x‖ = ‖y‖ → x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "SameRay.eq_of_norm_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SameRay.eq_of_norm_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SameRay-78873edb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sameray_injective_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ →ₗ[ℝ] ℝ), Function.Injective f → ∀ x y : ℝ, VTask.SameRay ℝ (f x) (f y) ↔ VTask.SameRay ℝ x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.sameRay_map_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.sameRay_map_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.878,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SameRay-78873edb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sameray_reject_neg_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ v : ℝ, v ≠ 0 → ¬ VTask.SameRay ℝ v (-v)",
+      "domain_inputs": {},
+      "anchors": [
+        "SameRay.refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SameRay.refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SameRay-78873edb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SameRay",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SameRay-78873edb",
+    "review_status": "unreviewed"
+  }
+}

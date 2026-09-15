@@ -1,0 +1,313 @@
+{
+  "task_id": "Module.Basis.toDual",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toDual",
+  "signature": {
+    "name": "VTask.toDual",
+    "type": "{R : Type uR} -> {M : Type uM} -> {ι : Type uι} -> [CommSemiring R] -> [AddCommMonoid M] -> [Module R M] -> [DecidableEq ι] -> (b : Module.Basis ι R M) -> M →ₗ[R] Module.Dual R M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction with no junk inputs or distinguished edge values requiring special conventions; it is well-defined for every basis of every free module over every commutative semiring."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toDual_is_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M), Function.Injective (VTask.toDual b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.repr_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.repr_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.921,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_apply_basis_coord",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (i : ι), VTask.toDual b (b i) = b.coord i",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.coord_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.coord_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.556,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_apply_basis_same_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (i : ι), VTask.toDual b (b i) (b i) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.coord_apply",
+        "Module.Basis.repr_self"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.coord_apply",
+        "Module.Basis.repr_self"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_apply_basis_diff_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (i j : ι), i ≠ j → VTask.toDual b (b i) (b j) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.coord_apply",
+        "Module.Basis.repr_self_apply",
+        "Finsupp.single_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.coord_apply",
+        "Module.Basis.repr_self_apply",
+        "Finsupp.single_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.363,
+        "at": "authoring",
+        "script": "by simp only [_root_.Module.Basis.toDual] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Module.Basis.toDual] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (x y : M), VTask.toDual b x = VTask.toDual b y → x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.repr_injective",
+        "LinearMap.ker_eq_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.repr_injective",
+        "LinearMap.ker_eq_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_zero_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M), VTask.toDual b 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.619,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_add_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (x y : M), VTask.toDual b (x + y) = VTask.toDual b x + VTask.toDual b y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.732,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toDual_smul_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {ι : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] [DecidableEq ι] (b : Module.Basis ι R M) (r : R) (x : M), VTask.toDual b (r • x) = r • VTask.toDual b x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.916,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.toDual-ae2261ae",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.Basis.toDual",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.Basis.toDual-ae2261ae",
+    "review_status": "unreviewed"
+  }
+}

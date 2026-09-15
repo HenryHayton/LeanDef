@@ -1,0 +1,130 @@
+{
+  "task_id": "Asymptotics.SuperpolynomialDecay",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SuperpolynomialDecay",
+  "signature": {
+    "name": "VTask.SuperpolynomialDecay",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [TopologicalSpace β] -> [CommSemiring β] -> (l : Filter α) -> (k f : α → β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "k",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: SuperpolynomialDecay is a universally-quantified Prop defined for all inputs without any junk-value overrides or edge conventions; every input combination has a well-defined mathematical meaning."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "spd_n0_implies_tendsto",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace β] [CommSemiring β] (l : Filter α) (k f : α → β), VTask.SuperpolynomialDecay l k f → Filter.Tendsto f l (nhds 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Tendsto"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Tendsto"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.SuperpolynomialDecay-c42f151c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "spd_imp_polynomial_decay",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace β] [CommSemiring β] (l : Filter α) (k f : α → β) (n : ℕ), VTask.SuperpolynomialDecay l k f → Filter.Tendsto (fun a => k a ^ n * f a) l (nhds 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Tendsto"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Tendsto"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.83,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Asymptotics.SuperpolynomialDecay-c42f151c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "spd_of_tendsto_zero_and_mul_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace β] [CommSemiring β] (l : Filter α) (k : α → β), VTask.SuperpolynomialDecay l k (fun _ => (0 : β))",
+      "domain_inputs": {},
+      "anchors": [
+        "tendsto_const_nhds"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "tendsto_const_nhds"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.SuperpolynomialDecay-c42f151c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Asymptotics.SuperpolynomialDecay",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Asymptotics.SuperpolynomialDecay-c42f151c",
+    "review_status": "unreviewed"
+  }
+}

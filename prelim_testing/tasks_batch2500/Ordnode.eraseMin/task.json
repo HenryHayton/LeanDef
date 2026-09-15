@@ -1,0 +1,250 @@
+{
+  "task_id": "Ordnode.eraseMin",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.eraseMin",
+  "signature": {
+    "name": "VTask.eraseMin",
+    "type": "{α : Type u_1} -> Ordnode α → Ordnode α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "empty input",
+        "statement": "When the input tree is empty (`nil`), `VTask.eraseMin` returns `nil` unchanged.",
+        "note": "This is the genuine base case; the function is total and well-defined on empty trees."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "eraseMin_size_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Ordnode.size (VTask.eraseMin (Ordnode.nil : Ordnode ℕ)) = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_valid_preservation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.Valid t → Ordnode.Valid (VTask.eraseMin t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.103,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_dual_eraseMax",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.dual (VTask.eraseMin t) = Ordnode.eraseMax (Ordnode.dual t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.dual_eraseMin"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.dual_eraseMin"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.127,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_dual_eraseMin",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Ordnode ℕ), Ordnode.dual (Ordnode.eraseMax t) = VTask.eraseMin (Ordnode.dual t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.dual_eraseMax"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.dual_eraseMax"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.112,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_size_reduction_valid",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : Ordnode ℕ) (x : ℕ) (r : Ordnode ℕ), Ordnode.Valid (Ordnode.node' l x r) → Ordnode.size (Ordnode.node' l x r) = Ordnode.size (VTask.eraseMin (Ordnode.node' l x r)) + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.eraseMin_aux"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.eraseMin_aux"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_singleton_ne_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.eraseMin (Ordnode.node 1 Ordnode.nil (0 : ℕ) Ordnode.nil) ≠ Ordnode.node 1 Ordnode.nil 0 Ordnode.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.126,
+        "at": "authoring",
+        "script": "by simp [_root_.Ordnode.eraseMin] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Ordnode.eraseMin] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eraseMin_two_node_ne_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.eraseMin (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil (1 : ℕ) Ordnode.nil) 2 Ordnode.nil) ≠ Ordnode.node 2 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 Ordnode.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.eraseMin.valid"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.eraseMin-694875f7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.eraseMin",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.eraseMin-694875f7",
+    "review_status": "unreviewed"
+  }
+}

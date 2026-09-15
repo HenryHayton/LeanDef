@@ -1,0 +1,395 @@
+{
+  "task_id": "MonoidHom.noncommCoprod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.noncommCoprod",
+  "signature": {
+    "name": "VTask.noncommCoprod",
+    "type": "{M : Type u_1} -> {N : Type u_2} -> {P : Type u_3} -> [MulOneClass M] -> [MulOneClass N] -> [Monoid P] -> (f : M →* P) -> (g : N →* P) -> (comm : ∀ (m : M) (n : N), Commute (f m) (g n)) -> M × N →* P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "comm"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total with no junk-value conventions; every valid triple (f, g, comm) of the given types produces a well-defined monoid homomorphism."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "noncommCoprod_comp_inl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)), (VTask.noncommCoprod f g comm).comp (MonoidHom.inl M N) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_comp_inl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_comp_inl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.706,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_comp_inr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)), (VTask.noncommCoprod f g comm).comp (MonoidHom.inr M N) = g",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_comp_inr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_comp_inr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.602,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_inl_inr_is_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N : Type*} [Monoid M] [Monoid N], VTask.noncommCoprod (MonoidHom.inl M N) (MonoidHom.inr M N) MonoidHom.commute_inl_inr = MonoidHom.id (M × N)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_inl_inr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_inl_inr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.431,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_unique",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] (h : M × N →* P), VTask.noncommCoprod (h.comp (MonoidHom.inl M N)) (h.comp (MonoidHom.inr M N)) (fun m n => (MonoidHom.commute_inl_inr m n).map h) = h",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.898,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_comp_outer",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P Q : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] [Monoid Q] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)) (h : P →* Q), h.comp (VTask.noncommCoprod f g comm) = VTask.noncommCoprod (h.comp f) (h.comp g) (fun m n => (comm m n).map h)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.comp_noncommCoprod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.comp_noncommCoprod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.969,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_one_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (1 : P) (g n)), ∀ n : N, VTask.noncommCoprod (1 : M →* P) g comm (1, n) = g n",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_apply'",
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_apply'",
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.705,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_maps_one_to_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [MulOneClass M] [MulOneClass N] [Monoid P] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)), VTask.noncommCoprod f g comm 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.809,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_range_eq_sup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Group M] [Group N] [Group P] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)), (VTask.noncommCoprod f g comm).range = f.range ⊔ g.range",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.303,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_injective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N P : Type*} [Group M] [Group N] [Group P] (f : M →* P) (g : N →* P) (comm : ∀ (m : M) (n : N), Commute (f m) (g n)), Function.Injective (VTask.noncommCoprod f g comm) ↔ (Function.Injective f ∧ Function.Injective g ∧ Disjoint f.range g.range)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.noncommCoprod_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.noncommCoprod_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.325,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "noncommCoprod_not_injective_when_f_not_injective",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.noncommCoprod (1 : ZMod 2 →* ZMod 2) (MonoidHom.id (ZMod 2)) (fun _ _ => mul_comm _ _))",
+      "domain_inputs": {
+        "f": [
+          "1"
+        ],
+        "g": [
+          "MonoidHom.id (ZMod 2)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.123,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.noncommCoprod (1 : ZMod 2 →* ZMod 2) (MonoidHom.id (ZMod 2)) (fun _ _ => mul_comm _ _)",
+      "violated_property": "Function.Injective f"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidHom.noncommCoprod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidHom.noncommCoprod-4fbcb838",
+    "review_status": "unreviewed"
+  }
+}

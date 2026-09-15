@@ -1,0 +1,246 @@
+{
+  "task_id": "LieAlgebra.InvariantForm.orthogonal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.orthogonal",
+  "signature": {
+    "name": "VTask.orthogonal",
+    "type": "{R : Type u_1} -> {L : Type u_2} -> {M : Type u_3} -> [CommRing R] -> [LieRing L] -> [AddCommGroup M] -> [Module R M] -> [LieRingModule L M] -> (Φ : LinearMap.BilinForm R M) -> (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) -> (N : LieSubmodule R L M) -> LieSubmodule R L M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "Φ",
+      "hΦ_inv",
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The construction is total with no junk-value or boundary conventions; it is well-defined for any Lie-invariant bilinear form and any Lie submodule."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "orthogonal_is_lie_submodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L : Type*} {M : Type*} [CommRing R] [LieRing L] [AddCommGroup M] [Module R M] [LieRingModule L M] (Φ : LinearMap.BilinForm R M) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (N : LieSubmodule R L M), ∃ (S : LieSubmodule R L M), S = VTask.orthogonal Φ hΦ_inv N",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.mem_orthogonal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.mem_orthogonal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.693,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_isCompl_toSubmodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [LieRing L] [LieAlgebra K L] (Φ : LinearMap.BilinForm K L) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (hΦ_nondeg : Φ.Nondegenerate) (hL : ∀ I : LieIdeal K L, IsAtom I → ¬IsLieAbelian I) (I : LieIdeal K L) (hI : IsAtom I), IsCompl I.toSubmodule (VTask.orthogonal Φ hΦ_inv I).toSubmodule",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.orthogonal_isCompl_toSubmodule"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.orthogonal_isCompl_toSubmodule"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_isCompl_atom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [LieRing L] [LieAlgebra K L] (Φ : LinearMap.BilinForm K L) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (hΦ_nondeg : Φ.Nondegenerate) (hL : ∀ I : LieIdeal K L, IsAtom I → ¬IsLieAbelian I) (I : LieIdeal K L) (hI : IsAtom I), IsCompl I (VTask.orthogonal Φ hΦ_inv I)",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.orthogonal_isCompl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.orthogonal_isCompl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_disjoint_atom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L : Type*} [CommRing R] [LieRing L] [LieAlgebra R L] (Φ : LinearMap.BilinForm R L) (hΦ_nondeg : Φ.Nondegenerate) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (hL : ∀ I : LieIdeal R L, IsAtom I → ¬IsLieAbelian I) (I : LieIdeal R L) (hI : IsAtom I), Disjoint I (VTask.orthogonal Φ hΦ_inv I)",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.orthogonal_disjoint"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.orthogonal_disjoint"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.09,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_restrict_nondegenerate",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [LieRing L] [LieAlgebra K L] (Φ : LinearMap.BilinForm K L) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (hΦ_nondeg : Φ.Nondegenerate) (hL : ∀ I : LieIdeal K L, IsAtom I → ¬IsLieAbelian I) (I : LieIdeal K L) (hI : IsAtom I), (Φ.restrict (VTask.orthogonal Φ hΦ_inv I).toSubmodule).Nondegenerate",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.restrict_orthogonal_nondegenerate"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.restrict_orthogonal_nondegenerate"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_lie_invariance_used",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L : Type*} {M : Type*} [CommRing R] [LieRing L] [AddCommGroup M] [Module R M] [LieRingModule L M] (Φ : LinearMap.BilinForm R M) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (N : LieSubmodule R L M) (x : L) (y : M), y ∈ VTask.orthogonal Φ hΦ_inv N → ⁅x, y⁆ ∈ VTask.orthogonal Φ hΦ_inv N",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.mem_orthogonal",
+        "LieSubmodule.lie_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.mem_orthogonal",
+        "LieSubmodule.lie_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_toSubmodule_eq_bilform_orthogonal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L : Type*} {M : Type*} [CommRing R] [LieRing L] [AddCommGroup M] [Module R M] [LieRingModule L M] (Φ : LinearMap.BilinForm R M) (hΦ_inv : LinearMap.BilinForm.lieInvariant L Φ) (N₁ N₂ : LieSubmodule R L M), N₁ ≤ N₂ → VTask.orthogonal Φ hΦ_inv N₂ ≤ VTask.orthogonal Φ hΦ_inv N₁",
+      "domain_inputs": {},
+      "anchors": [
+        "LieAlgebra.InvariantForm.mem_orthogonal",
+        "LieAlgebra.InvariantForm.orthogonal_toSubmodule",
+        "LinearMap.BilinForm.orthogonal_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieAlgebra.InvariantForm.mem_orthogonal",
+        "LieAlgebra.InvariantForm.orthogonal_toSubmodule",
+        "LinearMap.BilinForm.orthogonal_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LieAlgebra.InvariantForm.orthogonal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LieAlgebra.InvariantForm.orthogonal-b4841f5f",
+    "review_status": "unreviewed"
+  }
+}

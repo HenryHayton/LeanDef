@@ -1,0 +1,412 @@
+{
+  "task_id": "Turing.TM2to1.addBottom",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.addBottom",
+  "signature": {
+    "name": "VTask.addBottom",
+    "type": "{K : Type u_1} -> {Γ : K → Type u_2} -> (L : Turing.ListBlank ((k : K) → Option (Γ k))) -> Turing.ListBlank (Turing.TM2to1.Γ' K Γ)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L"
+    ],
+    "conventions": [
+      {
+        "point": "head marker",
+        "statement": "The Boolean component of the head cell of `VTask.addBottom L` is always `true`, marking it as the bottom position.",
+        "note": "This is the defining positional convention introduced by addBottom."
+      },
+      {
+        "point": "tail marker",
+        "statement": "Every cell after the head in `VTask.addBottom L` carries the Boolean component `false`, indicating it is not the bottom.",
+        "note": "Uniformly applied to all tail positions via a map."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "addBottom_head_bool_true",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))), (VTask.addBottom L).head.1 = true",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.head_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.head_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.342,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_head_data_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))), (VTask.addBottom L).head.2 = L.head",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.head_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.head_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_nth_zero_bool",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))), ((VTask.addBottom L).nth 0).1 = true",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.nth_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.nth_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_nth_succ_bool_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))) (i : ℕ), ((VTask.addBottom L).nth (i + 1)).1 = false",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.nth_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.nth_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.304,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_nth_data_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))) (i : ℕ), ((VTask.addBottom L).nth i).2 = L.nth i",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.nth_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.nth_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.382,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_accept_blank_head_true",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.addBottom (Turing.ListBlank.mk [] : Turing.ListBlank ((k : Fin 1) → Option (Fin 2)))).head.1 = true",
+      "domain_inputs": {
+        "L": [
+          "Turing.ListBlank.mk []"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.064,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.addBottom (Turing.ListBlank.mk [])).head.1"
+    },
+    {
+      "id": "addBottom_reject_head_false",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.addBottom (Turing.ListBlank.mk [] : Turing.ListBlank ((k : Fin 1) → Option (Fin 2)))).head.1 = false",
+      "domain_inputs": {
+        "L": [
+          "Turing.ListBlank.mk []"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.addBottom (Turing.ListBlank.mk [])).head.1 = false",
+      "violated_property": "head Boolean marker must be true"
+    },
+    {
+      "id": "addBottom_reject_nth1_bool_true",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.addBottom (Turing.ListBlank.mk [] : Turing.ListBlank ((k : Fin 1) → Option (Fin 2)))).nth 1).1 = true",
+      "domain_inputs": {
+        "L": [
+          "Turing.ListBlank.mk []"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.072,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "((VTask.addBottom (Turing.ListBlank.mk [])).nth 1).1 = true",
+      "violated_property": "non-head positions must have Boolean marker false"
+    },
+    {
+      "id": "addBottom_preserves_equivalence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L₁ L₂ : Turing.ListBlank ((k : K) → Option (Γ k))), L₁ = L₂ → VTask.addBottom L₁ = VTask.addBottom L₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.208,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_result_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))), ∃ (v : Turing.TM2to1.Γ' K Γ), (VTask.addBottom L).head = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.head_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.head_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.15,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "addBottom_unique_true_marker",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} (L : Turing.ListBlank ((k : K) → Option (Γ k))) (i j : ℕ), ((VTask.addBottom L).nth i).1 = true → ((VTask.addBottom L).nth j).1 = true → i = j",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.ListBlank.nth_zero",
+        "Turing.ListBlank.nth_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.ListBlank.nth_zero",
+        "Turing.ListBlank.nth_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.TM2to1.addBottom",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.TM2to1.addBottom-f2009be1",
+    "review_status": "unreviewed"
+  }
+}

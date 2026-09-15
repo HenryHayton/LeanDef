@@ -1,0 +1,131 @@
+{
+  "task_id": "Int.gcdA",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.gcdA",
+  "signature": {
+    "name": "VTask.gcdA",
+    "type": "ℤ → ℤ → ℤ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": "negative first argument",
+        "statement": "When the first argument x is negative, gcdA x y equals the negation of gcdA |x| y, following the convention that the Bézout coefficient is adjusted to maintain the identity gcd x y = x * gcdA x y + y * gcdB x y.",
+        "note": "Canonical choice inherited from natural-number extended GCD."
+      },
+      {
+        "point": "zero inputs",
+        "statement": "When x = 0, gcdA 0 y = 0; when y = 0, gcdA x 0 = 1 for positive x and -1 for negative x; when both are 0, gcdA 0 0 = 0.",
+        "note": "Degenerate cases where the Bézout identity degenerates are handled by the natural-number gcdA convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "gcdA_bezout_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x y : ℤ, (Int.gcd x y : ℤ) = x * VTask.gcdA x y + y * Int.gcdB x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.255,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Int.gcdA-545a2a50",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gcdA_neg_first_negates",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x y : ℤ, VTask.gcdA (-x) y = -VTask.gcdA x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.gcdA-545a2a50",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gcdA_divides_gcd",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x y : ℤ, (Int.gcd x y : ℤ) ∣ x * VTask.gcdA x y + y * Int.gcdB x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Int.gcd_eq_gcd_ab"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Int.gcdA-545a2a50",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Int.gcdA",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Int.gcdA-545a2a50",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "task_id": "VectorAllP",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.VectorAllP",
+  "signature": {
+    "name": "VTask.VectorAllP",
+    "type": "{α : Type u_1} -> {n : ℕ} -> (p : α → Prop) -> (v : Vector3 α n) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "empty vector",
+        "statement": "When v is the empty vector (n = 0), VTask.VectorAllP p v is definitionally equal to True.",
+        "note": "Vacuous truth: a universal statement over an empty collection holds unconditionally."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "vectorallp_cons_equiv_and",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {n : ℕ} (p : α → Prop) (a : α) (v : Vector3 α n), VTask.VectorAllP p (Vector3.cons a v) ↔ p a ∧ VTask.VectorAllP p v",
+      "domain_inputs": {},
+      "anchors": [
+        "Iff.intro"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Iff.intro"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.881,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "VectorAllP-dc9882ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vectorallp_monotone_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {n : ℕ} (p q : α → Prop) (v : Vector3 α n), (∀ x, p x → q x) → VTask.VectorAllP p v → VTask.VectorAllP q v",
+      "domain_inputs": {},
+      "anchors": [
+        "And.imp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.imp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.806,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "VectorAllP-dc9882ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vectorallp_true_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {n : ℕ} (v : Vector3 α n), VTask.VectorAllP (fun _ => True) v",
+      "domain_inputs": {},
+      "anchors": [
+        "trivial"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "trivial"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "VectorAllP-dc9882ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vectorallp_false_pred_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {n : ℕ} (a : α) (v : Vector3 α n), ¬ VTask.VectorAllP (fun _ => False) (Vector3.cons a v)",
+      "domain_inputs": {},
+      "anchors": [
+        "And.left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.366,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "VectorAllP-dc9882ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vectorallp_and_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} {n : ℕ} (p q : α → Prop) (v : Vector3 α n), VTask.VectorAllP (fun x => p x ∧ q x) v ↔ VTask.VectorAllP p v ∧ VTask.VectorAllP q v",
+      "domain_inputs": {},
+      "anchors": [
+        "And.intro",
+        "And.left",
+        "And.right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.intro",
+        "And.left",
+        "And.right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "VectorAllP-dc9882ad",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "VectorAllP",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "VectorAllP-dc9882ad",
+    "review_status": "unreviewed"
+  }
+}

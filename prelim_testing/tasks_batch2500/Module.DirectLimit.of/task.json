@@ -1,0 +1,380 @@
+{
+  "task_id": "Module.DirectLimit.of",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.of",
+  "signature": {
+    "name": "VTask.of",
+    "type": "(R : Type u_1) -> [Semiring R] -> (ι : Type u_2) -> [Preorder ι] -> (G : ι → Type u_3) -> [(i : ι) → AddCommMonoid (G i)] -> [(i : ι) → Module R (G i)] -> (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) -> [DecidableEq ι] -> (i : ι) -> G i →ₗ[R] Module.DirectLimit G f",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "ι",
+      "G",
+      "f",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The map VTask.of is total and well-defined for all valid inputs with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "of_f_compatibility",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i j : ι) (hij : i ≤ j) (x : G i), VTask.of R ι G f j (f i j hij x) = VTask.of R ι G f i x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.of_f"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.of_f"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.884,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_zero_maps_to_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι), VTask.of R ι G f i 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.998,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι) (x y : G i), VTask.of R ι G f i (x + y) = VTask.of R ι G f i x + VTask.of R ι G f i y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.346,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι) (r : R) (x : G i), VTask.of R ι G f i (r • x) = r • VTask.of R ι G f i x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.694,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "exists_of_surjective_directed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] [Nonempty ι] [IsDirectedOrder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (z : Module.DirectLimit G f), ∃ i x, VTask.of R ι G f i x = z",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.exists_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.exists_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 15.086,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_not_injective_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι), Function.Injective (VTask.of R ι G f i))",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.of.zero_exact"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.of.zero_exact"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_at_le_index_commutes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι) (x : G i), VTask.of R ι G f i (f i i (le_refl i) x) = VTask.of R ι G f i x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.of_f"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.of_f"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.181,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hom_ext_via_of",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (P : Type*) [AddCommMonoid P] [Module R P] (g₁ g₂ : Module.DirectLimit G f →ₗ[R] P), (∀ i, g₁ ∘ₗ VTask.of R ι G f i = g₂ ∘ₗ VTask.of R ι G f i) → g₁ = g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.hom_ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.hom_ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.316,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "of_zero_in_kernel_submodule",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (ι : Type*) [Preorder ι] (G : ι → Type*) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι), VTask.of R ι G f i 0 ∈ (⊥ : Submodule R (Module.DirectLimit G f))",
+      "domain_inputs": {
+        "i": [
+          "i"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.115,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "0"
+    },
+    {
+      "id": "of_not_zero_map_on_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (R : Type) [Semiring R] (ι : Type) [Preorder ι] (G : ι → Type) [(i : ι) → AddCommMonoid (G i)] [(i : ι) → Module R (G i)] (f : (i j : ι) → i ≤ j → G i →ₗ[R] G j) [DecidableEq ι] (i : ι) (x : G i), VTask.of R ι G f i x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.DirectLimit.exists_of"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.DirectLimit.exists_of"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DirectLimit.of-7f144353",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.DirectLimit.of",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.DirectLimit.of-7f144353",
+    "review_status": "unreviewed"
+  }
+}

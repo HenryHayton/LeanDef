@@ -1,0 +1,217 @@
+{
+  "task_id": "SuperChain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.SuperChain",
+  "signature": {
+    "name": "VTask.SuperChain",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (s t : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.SuperChain is a straightforward conjunction of IsChain and strict subset; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "superchain_implies_ischain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), VTask.SuperChain r s t → IsChain r t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMaxChain.not_superChain"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMaxChain.not_superChain"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "superchain_implies_ssubset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), VTask.SuperChain r s t → s ⊂ t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.superChain_succChain"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.superChain_succChain"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "superchain_implies_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), VTask.SuperChain r s t → s ⊆ t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.superChain_succChain"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.superChain_succChain"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "superchain_maxchain_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), IsMaxChain r s → ¬ VTask.SuperChain r s t",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMaxChain.not_superChain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMaxChain.not_superChain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.56,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "superchain_succchain_of_not_maxchain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s : Set α), IsChain r s → ¬ IsMaxChain r s → VTask.SuperChain r s (SuccChain r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsChain.superChain_succChain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsChain.superChain_succChain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.341,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "superchain_nonempty_t",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (s t : Set α), VTask.SuperChain r s t → t.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.nonempty_of_ssubset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.nonempty_of_ssubset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SuperChain-019bca06",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SuperChain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SuperChain-019bca06",
+    "review_status": "unreviewed"
+  }
+}

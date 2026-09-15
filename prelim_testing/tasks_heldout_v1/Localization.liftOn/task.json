@@ -1,0 +1,129 @@
+{
+  "task_id": "Localization.liftOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.liftOn",
+  "signature": {
+    "name": "VTask.liftOn",
+    "type": "{M : Type u_1} -> [CommMonoid M] -> {S : Submonoid M} -> {p : Sort u} -> (x : Localization S) -> (f : M → ↥S → p) -> (H : ∀ {a c : M} {b d : ↥S}, (Localization.r S) (a, b) (c, d) → f a b = f c d) -> p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.liftOn is a total recursion principle; it carries no junk-value conventions because it is defined for every element of Localization S given the well-definedness hypothesis H, with an arbitrary target sort p."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftOn_constant_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [CommMonoid M] {S : Submonoid M} (x : Localization S) (k : ℕ), VTask.liftOn x (fun _a _b => k) (fun _h => rfl) = k",
+      "domain_inputs": {},
+      "anchors": [
+        "Localization.liftOn_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Localization.liftOn_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Localization.liftOn-5cd36024",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_independent_of_rep",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [CommMonoid M] {S : Submonoid M} {p : Sort*} (x : Localization S) (f g : M → ↥S → p) (Hf : ∀ {a c : M} {b d : ↥S}, Localization.r S (a, b) (c, d) → f a b = f c d) (Hg : ∀ {a c : M} {b d : ↥S}, Localization.r S (a, b) (c, d) → g a b = g c d), (∀ a (b : ↥S), f a b = g a b) → VTask.liftOn x f Hf = VTask.liftOn x g Hg",
+      "domain_inputs": {},
+      "anchors": [
+        "Localization.liftOn_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Localization.liftOn_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Localization.liftOn-5cd36024",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_reject_mk_neq_wrong",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : ℕ) (b : (⊤ : Submonoid ℕ)) (f : ℕ → (⊤ : Submonoid ℕ) → ℕ) (H : ∀ {a c : ℕ} {b d : (⊤ : Submonoid ℕ)}, Localization.r ⊤ (a, b) (c, d) → f a b = f c d), VTask.liftOn (Localization.mk a b) f H = f a b → VTask.liftOn (Localization.mk a b) f H ≠ f a b + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Localization.liftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Localization.liftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.681,
+        "at": "authoring",
+        "script": "by simp [_root_.Localization.liftOn] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Localization.liftOn] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Localization.liftOn-5cd36024",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Localization.liftOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Localization.liftOn-5cd36024",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,339 @@
+{
+  "task_id": "MonoidHom.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{I : Type u} -> {f : I → Type v} -> [(i : I) → MulOneClass (f i)] -> {γ : Type w} -> [MulOneClass γ] -> (g : (i : I) → γ →* f i) -> γ →* (i : I) → f i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and imposes no junk-value conventions; it is well-defined for all inputs including empty and singleton index types."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_maps_one_to_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} {f : I → Type} [inst : (i : I) → MulOneClass (f i)] {γ : Type} [MulOneClass γ] (g : (i : I) → γ →* f i), VTask.pi g 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.71,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_maps_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} {f : I → Type} [inst : (i : I) → MulOneClass (f i)] {γ : Type} [MulOneClass γ] (g : (i : I) → γ →* f i) (x y : γ), VTask.pi g (x * y) = VTask.pi g x * VTask.pi g y",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.022,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} {f : I → Type} [inst : (i : I) → MulOneClass (f i)] {γ : Type} [MulOneClass γ] [Nonempty I] (g : (i : I) → γ →* f i), (∀ i, Function.Injective (g i)) → Function.Injective (VTask.pi g)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.pi_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.pi_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.607,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_casework_fin1_eval",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.pi (fun (i : Fin 1) => MonoidHom.id ℕ) 3 ⟨0, by omega⟩ = 3 := by decide",
+      "domain_inputs": {
+        "g": [
+          "fun (i : Fin 1) => MonoidHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_casework_one_val",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.pi (fun (i : Fin 2) => MonoidHom.id (Multiplicative (ZMod 3))) 1 = 1 := by decide",
+      "domain_inputs": {
+        "g": [
+          "fun (i : Fin 2) => MonoidHom.id (Multiplicative (ZMod 3))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_not_injective_empty_index",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.pi (fun (i : Empty) => MonoidHom.id ℕ))",
+      "domain_inputs": {
+        "g": [
+          "fun (i : Empty) => MonoidHom.id ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.178,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.pi (fun (i : Empty) => MonoidHom.id ℕ)",
+      "violated_property": "Function.Injective (VTask.pi g) requires Nonempty I"
+    },
+    {
+      "id": "pi_not_injective_non_injective_component",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.pi (fun (i : Fin 1) => (1 : ℕ →* ℕ)))",
+      "domain_inputs": {
+        "g": [
+          "fun (i : Fin 1) => (1 : ℕ →* ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.109,
+        "at": "authoring",
+        "script": "by simp [_root_.MonoidHom.pi] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MonoidHom.pi] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.pi (fun (i : Fin 1) => (1 : ℕ →* ℕ))",
+      "violated_property": "all component homomorphisms must be injective for VTask.pi g to be injective"
+    },
+    {
+      "id": "pi_unique_by_components",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} {f : I → Type} [inst : (i : I) → MulOneClass (f i)] {γ : Type} [MulOneClass γ] (g h : (i : I) → γ →* f i), (∀ i, g i = h i) → VTask.pi g = VTask.pi h",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.pi_apply",
+        "MonoidHom.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.pi_apply",
+        "MonoidHom.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.286,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_casework_mul_check",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.pi (fun (i : Fin 1) => MonoidHom.id (Multiplicative (ZMod 5))) (Multiplicative.ofAdd 2 * Multiplicative.ofAdd 3) = VTask.pi (fun (i : Fin 1) => MonoidHom.id (Multiplicative (ZMod 5))) (Multiplicative.ofAdd 2) * VTask.pi (fun (i : Fin 1) => MonoidHom.id (Multiplicative (ZMod 5))) (Multiplicative.ofAdd 3) := by decide",
+      "domain_inputs": {
+        "g": [
+          "fun (i : Fin 1) => MonoidHom.id (Multiplicative (ZMod 5))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.pi-ef56bf17",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidHom.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidHom.pi-ef56bf17",
+    "review_status": "unreviewed"
+  }
+}

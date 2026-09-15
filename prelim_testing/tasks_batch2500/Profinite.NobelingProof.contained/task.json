@@ -1,0 +1,336 @@
+{
+  "task_id": "Profinite.NobelingProof.contained",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.contained",
+  "signature": {
+    "name": "VTask.contained",
+    "type": "{I : Type u} -> (C : Set (I → Bool)) -> [LinearOrder I] -> [WellFoundedLT I] -> (o : Ordinal.{u}) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "o"
+    ],
+    "conventions": [
+      {
+        "point": "o = 0",
+        "statement": "VTask.contained C 0 holds if and only if every function f in C satisfies f i = false for all i : I (i.e., C contains only the constantly-false function, or C is empty), because no ordinal rank can be strictly less than 0.",
+        "note": "Logically forced by the definition; not an arbitrary junk-value convention."
+      },
+      {
+        "point": "C = ∅",
+        "statement": "VTask.contained ∅ o holds for every ordinal o by vacuous truth of the universal quantification over membership in the empty set.",
+        "note": "Standard vacuous-truth behavior."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "contained_proj_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C : Set (I → Bool)) (o : Ordinal.{0}), VTask.contained (Profinite.NobelingProof.π C (fun i => Profinite.NobelingProof.ord I i < o)) o",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.636,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_eq_proj_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C : Set (I → Bool)) (o : Ordinal.{0}), VTask.contained C o → C = Profinite.NobelingProof.π C (fun i => Profinite.NobelingProof.ord I i < o)",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.978,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_monotone_ordinal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C : Set (I → Bool)) (o o' : Ordinal.{0}), VTask.contained C o → o ≤ o' → VTask.contained C o'",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_prop_of_isGood",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C : Set (I → Bool)) (o : Ordinal.{0}) (l : Profinite.NobelingProof.Products I), l.isGood C → VTask.contained C o → ∀ i ∈ l.val, Profinite.NobelingProof.ord I i < o",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.Products.prop_of_isGood_of_contained"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.Products.prop_of_isGood_of_contained"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.079,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_zero_implies_all_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C : Set (I → Bool)), VTask.contained C 0 → ∀ f ∈ C, ∀ i : I, f i = false",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_eq_proj",
+        "Ordinal.not_lt_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_eq_proj",
+        "Ordinal.not_lt_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_subset_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C D : Set (I → Bool)) (o : Ordinal.{0}), VTask.contained C o → D ⊆ C → VTask.contained D o",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_eq_proj",
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_eq_proj",
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.583,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_intersection",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C D : Set (I → Bool)) (o : Ordinal.{0}), VTask.contained C o → VTask.contained (C ∩ D) o",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_union_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type} [LinearOrder I] [WellFoundedLT I] (C D : Set (I → Bool)) (o : Ordinal.{0}), VTask.contained (C ∪ D) o ↔ VTask.contained C o ∧ VTask.contained D o",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_proj",
+        "Profinite.NobelingProof.contained_eq_proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "contained_reject_const_true_at_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ VTask.contained ({fun _ => true} : Set (Fin 1 → Bool)) 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.contained_proj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.257,
+        "at": "authoring",
+        "script": "by simp [_root_.Profinite.NobelingProof.contained] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Profinite.NobelingProof.contained] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Profinite.NobelingProof.contained",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Profinite.NobelingProof.contained-182871aa",
+    "review_status": "unreviewed"
+  }
+}

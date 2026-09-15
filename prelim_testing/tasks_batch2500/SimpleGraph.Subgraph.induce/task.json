@@ -1,0 +1,353 @@
+{
+  "task_id": "SimpleGraph.Subgraph.induce",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.induce",
+  "signature": {
+    "name": "VTask.induce",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> (G' : G.Subgraph) -> (s : Set V) -> G.Subgraph",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G'",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total in all arguments. No junk-value conventions arise: any subgraph G' and any set s yield a well-defined G.Subgraph, with vertices outside G'.verts simply being isolated in the result."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "induce_self_verts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), VTask.induce G' G'.verts = G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.induce_self_verts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.induce_self_verts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.121,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_mono_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph) (s s' : Set V), s ⊆ s' → VTask.induce G' s ≤ VTask.induce G' s'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.induce_mono_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.induce_mono_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.345,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_mono_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' G'' : G.Subgraph) (s : Set V), G' ≤ G'' → VTask.induce G' s ≤ VTask.induce G'' s",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.induce_mono_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.induce_mono_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.446,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_le_induce_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph) (s s' : Set V), VTask.induce G' s ⊔ VTask.induce G' s' ≤ VTask.induce G' (s ∪ s')",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.le_induce_union"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.le_induce_union"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.738,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_le_union_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph) (s s' : Set V), VTask.induce G' s ≤ VTask.induce G' (s ∪ s')",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.le_induce_union_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.le_induce_union_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.273,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_top_coe_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (s : Set V), (VTask.induce (⊤ : G.Subgraph) s).coe = G.induce s",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.induce_eq_coe_induce_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.induce_eq_coe_induce_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.244,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_empty_no_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph) (u v : V), ¬ (VTask.induce G' ∅).Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.induce_self_verts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.induce_self_verts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.195,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.Subgraph.induce] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.Subgraph.induce] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_adj_requires_edge_in_G_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph) (s : Set V) (u v : V), (VTask.induce G' s).Adj u v → G'.Adj u v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.induce_mono_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.induce_mono_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.495,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "induce_le_top_induce_verts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} (G' : G.Subgraph), G' ≤ VTask.induce (⊤ : G.Subgraph) G'.verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Subgraph.le_induce_top_verts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Subgraph.le_induce_top_verts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.189,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Subgraph.induce",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Subgraph.induce-4a2189af",
+    "review_status": "unreviewed"
+  }
+}

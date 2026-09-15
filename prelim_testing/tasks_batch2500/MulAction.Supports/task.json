@@ -1,0 +1,179 @@
+{
+  "task_id": "MulAction.Supports",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Supports",
+  "signature": {
+    "name": "VTask.Supports",
+    "type": "(G : Type u_1) -> {α : Type u_3} -> {β : Type u_4} -> [SMul G α] -> [SMul G β] -> (s : Set α) -> (b : β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Supports is a universally quantified Prop defined for all sets s and elements b with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "supports_empty_iff_all_fix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) (α β : Type*) [SMul G α] [SMul G β] (b : β), VTask.Supports G (∅ : Set α) b ↔ ∀ g : G, g • b = b",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.supports_of_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.supports_of_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.Supports-c84a6559",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supports_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) (α β : Type*) [SMul G α] [SMul G β] (s t : Set α) (b : β), s ⊆ t → VTask.Supports G s b → VTask.Supports G t b",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.Supports.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.Supports.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 48.946,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "MulAction.Supports-c84a6559",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supports_monotone_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) (α β : Type*) [SMul G α] [SMul G β] (b : β), Monotone (fun s : Set α => VTask.Supports G s b)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.Supports.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.Supports.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.Supports-c84a6559",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supports_empty_fixed_point_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) (α β : Type*) [SMul G α] [SMul G β] (b : β), (∀ g : G, g • b = b) → VTask.Supports G (∅ : Set α) b",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.supports_of_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.supports_of_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.Supports-c84a6559",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "supports_implies_pointwise_stabilizer_fixes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) (α β : Type*) [SMul G α] [SMul G β] (s : Set α) (b : β), VTask.Supports G s b → ∀ g : G, (∀ a ∈ s, g • a = a) → g • b = b",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.Supports.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.Supports.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.686,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "MulAction.Supports-c84a6559",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulAction.Supports",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulAction.Supports-c84a6559",
+    "review_status": "unreviewed"
+  }
+}

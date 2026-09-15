@@ -1,0 +1,360 @@
+{
+  "task_id": "List.ranges",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ranges",
+  "signature": {
+    "name": "VTask.ranges",
+    "type": "List ℕ → List (List ℕ)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty input",
+        "statement": "VTask.ranges [] = []",
+        "note": "The empty list maps to the empty list of blocks."
+      },
+      {
+        "point": "zero-sized block",
+        "statement": "A 0 entry in the input produces an empty sublist [] at that position.",
+        "note": "No integers are assigned to that block, but its position is still represented in the output."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ranges_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ranges [] = [] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_123",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ranges [1, 2, 3] = [[0], [1, 2], [3, 4, 5]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_zero_3",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ranges [0, 3] = [[], [0, 1, 2]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_all_zeros",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ranges [0, 0, 0] = [[], [], []] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 0, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_single",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ranges [4] = [[0, 1, 2, 3]] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[4]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_length_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ l : List ℕ, (VTask.ranges l).map List.length = l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.ranges_length"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.ranges_length"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.105,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_flatten_eq_range_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ l : List ℕ, (VTask.ranges l).flatten = List.range l.sum",
+      "domain_inputs": {},
+      "anchors": [
+        "List.ranges_flatten"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.ranges_flatten"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.101,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_nodup_sublists",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : List ℕ) (s : List ℕ), s ∈ VTask.ranges l → s.Nodup",
+      "domain_inputs": {},
+      "anchors": [
+        "List.ranges_nodup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.ranges_nodup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.141,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_mem_iff_lt_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : List ℕ) (n : ℕ), (∃ s ∈ VTask.ranges l, n ∈ s) ↔ n < l.sum",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_mem_ranges_iff_lt_sum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_mem_ranges_iff_lt_sum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.291,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_length_outer",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ l : List ℕ, (VTask.ranges l).length = l.length",
+      "domain_inputs": {},
+      "anchors": [
+        "List.ranges_length",
+        "List.length_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.ranges_length",
+        "List.length_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ranges_accept_flatten_23",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ranges [2, 3]).flatten = List.range 5 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.ranges-e70d2f87",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.ranges [2, 3]).flatten"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.ranges",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.ranges-e70d2f87",
+    "review_status": "unreviewed"
+  }
+}

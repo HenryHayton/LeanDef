@@ -1,0 +1,299 @@
+{
+  "task_id": "Lagrange.interpolate",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.interpolate",
+  "signature": {
+    "name": "VTask.interpolate",
+    "type": "{F : Type u_1} -> [Field F] -> {ι : Type u_2} -> [DecidableEq ι] -> (s : Finset ι) -> (v : ι → F) -> (ι → F) →ₗ[F] Polynomial F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "When s is the empty finset, VTask.interpolate s v r = 0 for all v and r, since the defining sum is empty.",
+        "note": "Edge case: empty interpolation produces the zero polynomial."
+      },
+      {
+        "point": "v not injective on s",
+        "statement": "When v is not injective on s, the linear map is still defined and returns a polynomial, but the uniqueness and exact-interpolation guarantees do not hold.",
+        "note": "Junk-value regime: the construction is total but the mathematical interpretation degrades."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "interpolate_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (ι : Type*) [DecidableEq ι] (s : Finset ι) (v : ι → F) (r₁ r₂ : ι → F), VTask.interpolate s v (r₁ + r₂) = VTask.interpolate s v r₁ + VTask.interpolate s v r₂",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.835,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "interpolate_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (ι : Type*) [DecidableEq ι] (s : Finset ι) (v : ι → F) (c : F) (r : ι → F), VTask.interpolate s v (c • r) = c • VTask.interpolate s v r",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.533,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "interpolate_zero_values",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (ι : Type*) [DecidableEq ι] (s : Finset ι) (v : ι → F), VTask.interpolate s v 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.321,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "interpolate_empty_reject_nonzero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.interpolate (∅ : Finset ℕ) (fun _ => (0 : ℚ)) (fun _ => 1) ≠ Polynomial.C 1",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.328,
+        "at": "authoring",
+        "script": "by simp [_root_.Lagrange.interpolate] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Lagrange.interpolate] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.interpolate (∅ : Finset ℕ) (fun _ => (0 : ℚ)) (fun _ => 1)",
+      "violated_property": "The output polynomial equals 0 for empty s; a non-zero polynomial cannot be produced"
+    },
+    {
+      "id": "interpolate_empty_is_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.interpolate (∅ : Finset ℕ) (fun _ => (0 : ℚ)) (fun _ => 5) = 0",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.126,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.interpolate (∅ : Finset ℕ) (fun _ => (0 : ℚ)) (fun _ => 5)"
+    },
+    {
+      "id": "interpolate_neg_values",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (ι : Type*) [DecidableEq ι] (s : Finset ι) (v : ι → F) (r : ι → F), VTask.interpolate s v (-r) = -(VTask.interpolate s v r)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_neg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_neg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.554,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "interpolate_sub_values",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [Field F] (ι : Type*) [DecidableEq ι] (s : Finset ι) (v : ι → F) (r₁ r₂ : ι → F), VTask.interpolate s v (r₁ - r₂) = VTask.interpolate s v r₁ - VTask.interpolate s v r₂",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_sub"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_sub"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.077,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lagrange.interpolate-07ef3985",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Lagrange.interpolate",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Lagrange.interpolate-07ef3985",
+    "review_status": "unreviewed"
+  }
+}

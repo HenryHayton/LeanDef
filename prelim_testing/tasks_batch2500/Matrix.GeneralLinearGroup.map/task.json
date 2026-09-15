@@ -1,0 +1,293 @@
+{
+  "task_id": "Matrix.GeneralLinearGroup.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{n : Type u} -> [DecidableEq n] -> [Fintype n] -> {R : Type v} -> [CommRing R] -> {S : Type u_1} -> [CommRing S] -> (f : R →+* S) -> GL n R →* GL n S",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-defined for all ring homomorphisms and all invertible matrices; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_comp_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : Type*) [DecidableEq n] [Fintype n] (R S T : Type*) [CommRing R] [CommRing S] [CommRing T] (f : R →+* S) (g : S →+* T), VTask.map (g.comp f) = (VTask.map g).comp (VTask.map f)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.ext",
+        "Units.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.ext",
+        "Units.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : Type*) [DecidableEq n] [Fintype n] (R S : Type*) [CommRing R] [CommRing S] (f : R →+* S) (M N : GL n R), VTask.map f (M * N) = VTask.map f M * VTask.map f N",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.984,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : Type*) [DecidableEq n] [Fintype n] (R S : Type*) [CommRing R] [CommRing S] (f : R →+* S), VTask.map f 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "map_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_is_monoidhom",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (M N : GL (Fin 2) ℤ), VTask.map (RingHom.id ℤ) (M * N) = VTask.map (RingHom.id ℤ) M * VTask.map (RingHom.id ℤ) N",
+      "domain_inputs": {
+        "f": [
+          "RingHom.id ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.242,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.map (RingHom.id ℤ)"
+    },
+    {
+      "id": "map_fin0_trivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R S : Type*) [CommRing R] [CommRing S] (f : R →+* S) (M : GL (Fin 0) R), VTask.map f M = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Subsingleton.elim",
+        "Units.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subsingleton.elim",
+        "Units.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.003,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_id_not_zero_hom",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (M : GL (Fin 1) ℤ), VTask.map (RingHom.id ℤ) M = 1)",
+      "domain_inputs": {
+        "f": [
+          "RingHom.id ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.map (RingHom.id ℤ)",
+      "violated_property": "The identity ring hom induces the identity GL map, not the trivial map"
+    },
+    {
+      "id": "map_zpow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : Type*) [DecidableEq n] [Fintype n] (R S : Type*) [CommRing R] [CommRing S] (f : R →+* S) (M : GL n R) (k : ℤ), VTask.map f (M ^ k) = (VTask.map f M) ^ k",
+      "domain_inputs": {},
+      "anchors": [
+        "map_zpow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_zpow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.933,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_not_id_for_nontrivial_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (M : GL (Fin 1) ℤ), (VTask.map (Int.castRingHom (ZMod 2))) M = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.GeneralLinearGroup.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.GeneralLinearGroup.map-da882e2e",
+    "review_status": "unreviewed"
+  }
+}

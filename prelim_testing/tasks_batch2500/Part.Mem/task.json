@@ -1,0 +1,375 @@
+{
+  "task_id": "Part.Mem",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Mem",
+  "signature": {
+    "name": "VTask.Mem",
+    "type": "{α : Type u_1} -> (o : Part α) -> (a : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "o",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The predicate is total and meaningful for all inputs; when o is undefined, the predicate is straightforwardly False with no special junk-value convention needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mem_some_iff_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a x : ℕ), VTask.Mem (Part.some x) a ↔ a = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.mem_some_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.mem_some_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_unique",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (o : Part α) (a b : α), VTask.Mem o a → VTask.Mem o b → a = b",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.mem_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.mem_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.897,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_implies_dom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (o : Part α) (a : α), VTask.Mem o a → Part.Dom o",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.dom_iff_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.dom_iff_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β) (o : Part α) (b : β), VTask.Mem (Part.map f o) b ↔ ∃ a, VTask.Mem o a ∧ f a = b",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.mem_map"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.mem_map"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_bind",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (o : Part α) (f : α → Part β) (b : β), VTask.Mem (Part.bind o f) b ↔ ∃ a, VTask.Mem o a ∧ VTask.Mem (f a) b",
+      "domain_inputs": {},
+      "anchors": [
+        "Part.mem_bind"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Part.mem_bind"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_some_self",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Mem (Part.some 3) 3",
+      "domain_inputs": {
+        "o": [
+          "Part.some 3"
+        ],
+        "a": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Part.some 3"
+    },
+    {
+      "id": "mem_none_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Mem (Part.none : Part ℕ) 0",
+      "domain_inputs": {
+        "o": [
+          "Part.none"
+        ],
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.047,
+        "at": "authoring",
+        "script": "by simp only [_root_.Part.Mem] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Part.Mem] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Part.none",
+      "violated_property": "Part.none is never defined, so membership is False for all a"
+    },
+    {
+      "id": "mem_some_wrong_value_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Mem (Part.some 5) 7",
+      "domain_inputs": {
+        "o": [
+          "Part.some 5"
+        ],
+        "a": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by simp only [_root_.Part.Mem] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Part.Mem] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Part.some 5",
+      "violated_property": "The only member of Part.some 5 is 5, not 7"
+    },
+    {
+      "id": "mem_some_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Mem (Part.some 0) 0",
+      "domain_inputs": {
+        "o": [
+          "Part.some 0"
+        ],
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Part.some 0"
+    },
+    {
+      "id": "mem_none_five_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Mem (Part.none : Part ℕ) 5",
+      "domain_inputs": {
+        "o": [
+          "Part.none"
+        ],
+        "a": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.045,
+        "at": "authoring",
+        "script": "by simp only [_root_.Part.Mem] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Part.Mem] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Part.none",
+      "violated_property": "Part.none is never defined"
+    },
+    {
+      "id": "mem_some_not_zero_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Mem (Part.some 1) 0",
+      "domain_inputs": {
+        "o": [
+          "Part.some 1"
+        ],
+        "a": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by simp only [_root_.Part.Mem] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Part.Mem] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.Mem-bc9ff86a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Part.some 1",
+      "violated_property": "The only member of Part.some 1 is 1, not 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Part.Mem",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Part.Mem-bc9ff86a",
+    "review_status": "unreviewed"
+  }
+}

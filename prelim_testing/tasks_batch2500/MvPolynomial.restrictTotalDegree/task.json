@@ -1,0 +1,240 @@
+{
+  "task_id": "MvPolynomial.restrictTotalDegree",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrictTotalDegree",
+  "signature": {
+    "name": "VTask.restrictTotalDegree",
+    "type": "(σ : Type u) -> (R : Type v) -> [CommSemiring R] -> (m : ℕ) -> Submodule R (MvPolynomial σ R)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "m = 0",
+        "statement": "VTask.restrictTotalDegree σ R 0 consists exactly of the constant polynomials, i.e., polynomials whose only nonzero term is the degree-0 monomial.",
+        "note": "The zero polynomial is included at every m."
+      },
+      {
+        "point": "zero polynomial",
+        "statement": "The zero polynomial belongs to VTask.restrictTotalDegree σ R m for all m, since it has no nonzero terms and its total degree is conventionally taken to be 0 (or −∞).",
+        "note": "Follows from the submodule containing 0 by definition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restrictTotalDegree_zero_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type*) (R : Type*) [CommSemiring R] (m : ℕ), (0 : MvPolynomial σ R) ∈ VTask.restrictTotalDegree σ R m",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.214,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictTotalDegree_monotone_in_m",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type*) (R : Type*) [CommSemiring R] (m : ℕ), VTask.restrictTotalDegree σ R m ≤ VTask.restrictTotalDegree σ R (m + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mk_le_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mk_le_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictTotalDegree_mem_iff_totalDegree_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type*) (R : Type*) [CommSemiring R] (m : ℕ) (p : MvPolynomial σ R), p ∈ VTask.restrictTotalDegree σ R m ↔ MvPolynomial.totalDegree p ≤ m",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mem_restrictTotalDegree"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mem_restrictTotalDegree"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.877,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictTotalDegree_add_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type*) (R : Type*) [CommSemiring R] (m : ℕ) (p q : MvPolynomial σ R), p ∈ VTask.restrictTotalDegree σ R m → q ∈ VTask.restrictTotalDegree σ R m → p + q ∈ VTask.restrictTotalDegree σ R m",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.164,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictTotalDegree_smul_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type*) (R : Type*) [CommSemiring R] (m : ℕ) (r : R) (p : MvPolynomial σ R), p ∈ VTask.restrictTotalDegree σ R m → r • p ∈ VTask.restrictTotalDegree σ R m",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.smul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.smul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.033,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictTotalDegree_fin0_everything",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (m : ℕ) (p : MvPolynomial (Fin 0) R), p ∈ VTask.restrictTotalDegree (Fin 0) R m",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.totalDegree_eq_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.totalDegree_eq_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.restrictTotalDegree",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.restrictTotalDegree-7f1f6653",
+    "review_status": "unreviewed"
+  }
+}

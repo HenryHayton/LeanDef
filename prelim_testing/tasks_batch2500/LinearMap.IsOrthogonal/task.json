@@ -1,0 +1,204 @@
+{
+  "task_id": "LinearMap.IsOrthogonal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsOrthogonal",
+  "signature": {
+    "name": "VTask.IsOrthogonal",
+    "type": "{R : Type u_20} -> {M : Type u_21} -> [CommRing R] -> [AddCommGroup M] -> [Module R M] -> (B : LinearMap.BilinForm R M) -> (f : M → M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "B",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsOrthogonal is a universally quantified Prop defined for all B and f without any domain restriction or junk-value convention; it is simply true or false for each pair (B, f)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "is_orthogonal_comp_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M) (f g : M → M), VTask.IsOrthogonal B f → VTask.IsOrthogonal B g → VTask.IsOrthogonal B (f ∘ g)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_orthogonal_adjoint_pair_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M) (f : M ≃ M), LinearMap.IsAdjointPair B B f f.symm ↔ VTask.IsOrthogonal B f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.isAdjointPair_symm_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.isAdjointPair_symm_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.578,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_orthogonal_forall_apply_same",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M) (f : M →ₗ[R] M), IsLeftRegular (2 : R) → B.IsSymm → (∀ x : M, B (f x) (f x) = B x x) → VTask.IsOrthogonal B f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.isOrthogonal_of_forall_apply_same"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.isOrthogonal_of_forall_apply_same"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_orthogonal_comp_global_prop",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M) (f : M → M), VTask.IsOrthogonal B f → VTask.IsOrthogonal B (f ∘ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.isOrthogonal_of_forall_apply_same"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.isOrthogonal_of_forall_apply_same"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_orthogonal_sum_form_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B₁ B₂ : LinearMap.BilinForm R M) (f : M → M), VTask.IsOrthogonal B₁ f → VTask.IsOrthogonal B₂ f → VTask.IsOrthogonal (B₁ + B₂) f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_orthogonal_scalar_form_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (B : LinearMap.BilinForm R M) (r : R) (f : M → M), VTask.IsOrthogonal B f → VTask.IsOrthogonal (r • B) f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.IsAdjointPair"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.IsOrthogonal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.IsOrthogonal-7951c3eb",
+    "review_status": "unreviewed"
+  }
+}

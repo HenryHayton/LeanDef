@@ -1,0 +1,276 @@
+{
+  "task_id": "Subalgebra.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{ι : Type u_1} -> {R : Type u_2} -> {S : ι → Type u_3} -> [CommSemiring R] -> [(i : ι) → Semiring (S i)] -> [(i : ι) → Algebra R (S i)] -> (s : Set ι) -> (t : (i : ι) → Subalgebra R (S i)) -> Subalgebra R ((i : ι) → S i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "When the active index set is empty, every element of the product belongs to VTask.pi ∅ t, making it the full product subalgebra regardless of t.",
+        "note": "Design choice: indices outside s impose no constraint."
+      },
+      {
+        "point": "i ∉ s",
+        "statement": "For any index i not in s, the subalgebra t i is ignored; there is no constraint on the i-th coordinate of elements in VTask.pi s t.",
+        "note": "Only active indices (those in s) restrict membership."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_mem_univ_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (t : (i : ι) → Subalgebra R (S i)) (f : Π i, S i), f ∈ VTask.pi Set.univ t ↔ ∀ i, f i ∈ t i",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.467,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_mem_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (t : (i : ι) → Subalgebra R (S i)) (f : Π i, S i), f ∈ VTask.pi ∅ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.023,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_antitone_index_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (t : (i : ι) → Subalgebra R (S i)) (s₁ s₂ : Set ι), s₁ ⊆ s₂ → VTask.pi s₂ t ≤ VTask.pi s₁ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.mem_pi",
+        "Subalgebra.mem_toSubmodule"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.mem_pi",
+        "Subalgebra.mem_toSubmodule"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_mem_monotone_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (s : Set ι) (t₁ t₂ : (i : ι) → Subalgebra R (S i)), (∀ i ∈ s, t₁ i ≤ t₂ i) → VTask.pi s t₁ ≤ VTask.pi s t₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.461,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_algebraMap_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (s : Set ι) (t : (i : ι) → Subalgebra R (S i)) (r : R), algebraMap R (Π i, S i) r ∈ VTask.pi s t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.algebraMap_mem",
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.algebraMap_mem",
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.121,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_one_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (s : Set ι) (t : (i : ι) → Subalgebra R (S i)), (1 : Π i, S i) ∈ VTask.pi s t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.one_mem",
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.one_mem",
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.07,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_subset_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} {S : ι → Type*} [CommSemiring R] [∀ i, Semiring (S i)] [∀ i, Algebra R (S i)] (t : (i : ι) → Subalgebra R (S i)), VTask.pi Set.univ t ≤ VTask.pi ∅ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.mem_pi"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.mem_pi"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subalgebra.pi-54958e3e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subalgebra.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subalgebra.pi-54958e3e",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,255 @@
+{
+  "task_id": "IsDenseEmbedding.subtypeEmb",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypeEmb",
+  "signature": {
+    "name": "VTask.subtypeEmb",
+    "type": "{β : Type u_2} -> [TopologicalSpace β] -> {α : Type u_5} -> (p : α → Prop) -> (e : α → β) -> (x : { x // p x }) -> { x // x ∈ closure (e '' {x | p x}) }",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "e",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and carries no junk-value conventions; every input produces a well-typed output by construction."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypeEmb_mem_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [TopologicalSpace β] {α : Type*} (p : α → Prop) (e : α → β) (x : {x // p x}), (VTask.subtypeEmb p e x).val ∈ closure (e '' {x | p x})",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_closure",
+        "Set.mem_image"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_closure",
+        "Set.mem_image"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.77,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEmb_dense_embedding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [TopologicalSpace β] {α : Type*} [TopologicalSpace α] (p : α → Prop) (e : α → β), IsDenseEmbedding e → IsDenseEmbedding (VTask.subtypeEmb p e)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsDenseEmbedding.subtype"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsDenseEmbedding.subtype"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.767,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEmb_uniform_embedding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [UniformSpace β] {α : Type*} [UniformSpace α] (p : α → Prop) (e : α → β), IsUniformEmbedding e → IsDenseEmbedding e → IsUniformEmbedding (VTask.subtypeEmb p e)",
+      "domain_inputs": {},
+      "anchors": [
+        "isUniformEmbedding_subtypeEmb"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isUniformEmbedding_subtypeEmb"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.781,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEmb_closed_image_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [TopologicalSpace β] {α : Type*} (p : α → Prop) (e : α → β), IsClosed (e '' {x | p x}) → ∀ (x : {x // p x}), (VTask.subtypeEmb p e x).val ∈ e '' {x | p x}",
+      "domain_inputs": {},
+      "anchors": [
+        "IsClosed.closure_eq",
+        "Set.mem_image_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsClosed.closure_eq",
+        "Set.mem_image_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.45,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEmb_val_mem_image_directly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [TopologicalSpace β] {α : Type*} (p : α → Prop) (e : α → β) (x : {x // p x}), (VTask.subtypeEmb p e x).val ∈ e '' {x | p x}",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_image_of_mem",
+        "subset_closure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_image_of_mem",
+        "subset_closure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.08,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeEmb_ne_subtype_inclusion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β : Type*} [TopologicalSpace β] {α : Type*} (p : α → Prop) (e : α → β) (x : {x // p x}), (VTask.subtypeEmb p e x).val ∈ closure (e '' {x | p x}) ∧ (VTask.subtypeEmb p e x).val = e x.val",
+      "domain_inputs": {},
+      "anchors": [
+        "subset_closure",
+        "Set.mem_image_of_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "subset_closure",
+        "Set.mem_image_of_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsDenseEmbedding.subtypeEmb",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsDenseEmbedding.subtypeEmb-3799dee2",
+    "review_status": "unreviewed"
+  }
+}

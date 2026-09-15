@@ -1,0 +1,152 @@
+{
+  "task_id": "FirstOrder.Language.Hom.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{L : FirstOrder.Language} -> {M : Type w} -> {N : Type u_1} -> [L.Structure M] -> [L.Structure N] -> (p : L.Substructure N) -> (f : L.Hom M N) -> (h : ∀ (c : M), f c ∈ p) -> L.Hom M ↥p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction with no junk-value conventions; it is well-defined for every homomorphism f and proof h that the image lies in p."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_mem_p",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Hom M N) (h : ∀ c : M, f c ∈ p) (m : M), (VTask.codRestrict p f h m : N) ∈ p",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Substructure.mem_carrier"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Substructure.mem_carrier"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.574,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Hom.codRestrict-35ef840f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_injective_of_f_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Hom M N) (h : ∀ c : M, f c ∈ p), Function.Injective f → Function.Injective (VTask.codRestrict p f h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.of_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.of_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Hom.codRestrict-35ef840f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_comp_subtype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Hom M N) (h : ∀ c : M, f c ∈ p), Function.Injective (↑(VTask.codRestrict p f h) : M → ↥p) → Function.Injective (f : M → N)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective.of_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective.of_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Hom.codRestrict-35ef840f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_surjective_onto_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (f : L.Hom M N), Function.Surjective (VTask.codRestrict (FirstOrder.Language.Hom.range f) f (fun c => FirstOrder.Language.Hom.mem_range.mpr ⟨c, rfl⟩))",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Hom.mem_range"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Hom.mem_range"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Hom.codRestrict-35ef840f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Hom.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Hom.codRestrict-35ef840f",
+    "review_status": "unreviewed"
+  }
+}

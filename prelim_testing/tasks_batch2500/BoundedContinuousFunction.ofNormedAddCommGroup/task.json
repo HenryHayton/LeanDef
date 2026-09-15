@@ -1,0 +1,230 @@
+{
+  "task_id": "BoundedContinuousFunction.ofNormedAddCommGroup",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofNormedAddCommGroup",
+  "signature": {
+    "name": "VTask.ofNormedAddCommGroup",
+    "type": "{α : Type u} -> {β : Type v} -> [TopologicalSpace α] -> [SeminormedAddCommGroup β] -> (f : α → β) -> (Hf : Continuous f) -> (C : ℝ) -> (H : ∀ (x : α), ‖f x‖ ≤ C) -> BoundedContinuousFunction α β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "Hf",
+      "C",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "C may be any real number",
+        "statement": "The uniform bound C is not required to be non-negative; any real number satisfying ∀ x, ‖f x‖ ≤ C is accepted.",
+        "note": "Negative values of C are logically impossible to satisfy unless f is trivial, but the constructor imposes no syntactic non-negativity requirement."
+      },
+      {
+        "point": "Coercion recovers f exactly",
+        "statement": "Coercing the resulting BoundedContinuousFunction back to a plain function α → β yields exactly f, with no change to values.",
+        "note": "This follows from coe_ofNormedAddCommGroup."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofNormedAddCommGroup_norm_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (hC : 0 ≤ C) (H : ∀ x, ‖f x‖ ≤ C), ‖VTask.ofNormedAddCommGroup f Hf C H‖ ≤ C",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.norm_ofNormedAddCommGroup_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.norm_ofNormedAddCommGroup_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.578,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofNormedAddCommGroup_norm_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C), 0 ≤ ‖VTask.ofNormedAddCommGroup f Hf C H‖",
+      "domain_inputs": {},
+      "anchors": [
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.047,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofNormedAddCommGroup_coe_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C), Continuous (VTask.ofNormedAddCommGroup f Hf C H : α → β)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup",
+        "BoundedContinuousFunction.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup",
+        "BoundedContinuousFunction.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.098,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofNormedAddCommGroup_coercion_recovers_f_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [SeminormedAddCommGroup β] (f : α → β) (Hf : Continuous f) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) (x : α), ‖(VTask.ofNormedAddCommGroup f Hf C H : α → β) x‖ ≤ C",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.277,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofNormedAddCommGroup_reject_coe_ne_other",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f g : ℝ → ℝ) (Hf : Continuous f) (Hg : Continuous g) (C : ℝ) (H : ∀ x, ‖f x‖ ≤ C) (H2 : ∀ x, ‖g x‖ ≤ C), f ≠ g → (VTask.ofNormedAddCommGroup f Hf C H : ℝ → ℝ) ≠ (VTask.ofNormedAddCommGroup g Hg C H2 : ℝ → ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.coe_ofNormedAddCommGroup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.782,
+        "at": "authoring",
+        "script": "by simp [_root_.BoundedContinuousFunction.ofNormedAddCommGroup] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.BoundedContinuousFunction.ofNormedAddCommGroup] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoundedContinuousFunction.ofNormedAddCommGroup",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoundedContinuousFunction.ofNormedAddCommGroup-343b4077",
+    "review_status": "unreviewed"
+  }
+}

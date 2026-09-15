@@ -1,0 +1,277 @@
+{
+  "task_id": "Composition.cast",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cast",
+  "signature": {
+    "name": "VTask.cast",
+    "type": "{n m : ℕ} -> (c : Composition m) -> (hmn : m = n) -> Composition n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "hmn"
+    ],
+    "conventions": [
+      {
+        "point": "cast along rfl",
+        "statement": "When hmn is rfl, VTask.cast c rfl is propositionally equal to c (i.e., cast_rfl holds).",
+        "note": "The identity-cast convention: transporting along a trivial proof is the identity."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cast_heq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c : Composition m) (hmn : m = n), HEq (VTask.cast c hmn) c",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_heq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_heq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.175,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_eq_cast_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c : Composition m) (hmn : m = n), VTask.cast c hmn = cast (hmn ▸ rfl) c",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_eq_cast"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_eq_cast"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.225,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_reverse_append",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c₁ : Composition m) (c₂ : Composition n), Composition.reverse (Composition.append c₁ c₂) = VTask.cast (Composition.append c₂.reverse c₁.reverse) (Nat.add_comm n m)",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.reverse_append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.reverse_append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.233,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_not_changes_sum_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c : Composition m) (hmn : m = n), (VTask.cast c hmn).blocks.sum = n",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_heq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_heq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.091,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_heq_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c : Composition m) (hmn : m = n), HEq c (VTask.cast c hmn)",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_heq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_heq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.137,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_blocks_nonempty_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m n : ℕ) (c : Composition m) (hmn : m = n), ∀ i ∈ (VTask.cast c hmn).blocks, 0 < i",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_heq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_heq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.467,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_blocks_ne_injective_counterexample",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (c₁ c₂ : Composition 2), c₁ ≠ c₂ → VTask.cast c₁ rfl ≠ VTask.cast c₂ rfl",
+      "domain_inputs": {},
+      "anchors": [
+        "Composition.cast_rfl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Composition.cast_rfl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.199,
+        "at": "authoring",
+        "script": "by simp only [_root_.Composition.cast] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Composition.cast] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Composition.cast-e9270fc1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Composition.cast",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Composition.cast-e9270fc1",
+    "review_status": "unreviewed"
+  }
+}

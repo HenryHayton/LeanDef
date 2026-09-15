@@ -1,0 +1,333 @@
+{
+  "task_id": "BoxIntegral.Box.mk'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mk'",
+  "signature": {
+    "name": "VTask.mk'",
+    "type": "{ι : Type u_1} -> (l u : ι → ℝ) -> WithBot (BoxIntegral.Box ι)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "u"
+    ],
+    "conventions": [
+      {
+        "point": "degenerate input",
+        "statement": "When `∃ i, u i ≤ l i`, `VTask.mk' l u` returns `⊥` (the bottom element of `WithBot (BoxIntegral.Box ι)`) rather than raising an error or producing a zero-volume box.",
+        "note": "This is the canonical junk value; the set interpretation is still well-defined (it is the empty set, matching the empty product of Ioc intervals)."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mk'_eq_bot_iff_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), VTask.mk' l u = ⊥ ↔ ∃ i, u i ≤ l i",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.758,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_ne_bot_when_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), (∀ i, l i < u i) → VTask.mk' l u ≠ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.663,
+        "at": "authoring",
+        "script": "by simp [_root_.BoxIntegral.Box.mk'] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.BoxIntegral.Box.mk'] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_coe_set_eq_pi_Ioc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), (VTask.mk' l u : Set (ι → ℝ)) = Set.pi Set.univ (fun i => Set.Ioc (l i) (u i))",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.coe_mk'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.coe_mk'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.019,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_set_bot_empty_when_degenerate",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), (∃ i, u i ≤ l i) → (VTask.mk' l u : Set (ι → ℝ)) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.coe_mk'",
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.coe_mk'",
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_eq_coe_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ) (I : BoxIntegral.Box ι), VTask.mk' l u = ↑I ↔ l = I.lower ∧ u = I.upper",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_coe"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_coe"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.557,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_bot_iff_empty_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), VTask.mk' l u = ⊥ ↔ (VTask.mk' l u : Set (ι → ℝ)) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_bot",
+        "BoxIntegral.Box.coe_mk'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_bot",
+        "BoxIntegral.Box.coe_mk'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_lower_upper_when_coe",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ) (I : BoxIntegral.Box ι), VTask.mk' l u = ↑I → I.lower = l ∧ I.upper = u",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_coe"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_coe"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.411,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_empty_index_ne_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l u : Fin 0 → ℝ), VTask.mk' l u ≠ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.222,
+        "at": "authoring",
+        "script": "by simp [_root_.BoxIntegral.Box.mk'] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.BoxIntegral.Box.mk'] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_set_nonempty_iff_ne_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (l u : ι → ℝ), (VTask.mk' l u : Set (ι → ℝ)).Nonempty ↔ VTask.mk' l u ≠ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Box.coe_mk'",
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Box.coe_mk'",
+        "BoxIntegral.Box.mk'_eq_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoxIntegral.Box.mk'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoxIntegral.Box.mk'-e125b352",
+    "review_status": "unreviewed"
+  }
+}

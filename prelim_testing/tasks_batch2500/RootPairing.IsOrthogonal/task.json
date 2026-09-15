@@ -1,0 +1,430 @@
+{
+  "task_id": "RootPairing.IsOrthogonal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsOrthogonal",
+  "signature": {
+    "name": "VTask.IsOrthogonal",
+    "type": "{ι : Type u_1} -> {R : Type u_2} -> {M : Type u_3} -> {N : Type u_4} -> [CommRing R] -> [AddCommGroup M] -> [Module R M] -> [AddCommGroup N] -> [Module R N] -> (P : RootPairing ι R M N) -> (i j : ι) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "i",
+      "j"
+    ],
+    "conventions": [
+      {
+        "point": "conjunction",
+        "statement": "VTask.IsOrthogonal P i j requires BOTH pairing P i j = 0 AND pairing P j i = 0; neither condition alone is sufficient in general.",
+        "note": "The pairing in a root pairing is not assumed symmetric, so both directions must be checked."
+      },
+      {
+        "point": "symmetry",
+        "statement": "VTask.IsOrthogonal P i j holds if and only if VTask.IsOrthogonal P j i holds; the relation is symmetric in i and j.",
+        "note": "Follows directly from the conjunction structure by swapping the two conjuncts."
+      },
+      {
+        "point": "single-pairing-sufficiency",
+        "statement": "Under [NeZero (2 : R)], [IsDomain R], and [Module.IsTorsionFree R M], one pairing vanishing implies the other, so VTask.IsOrthogonal P i j ↔ pairing P i j = 0.",
+        "note": "Without these hypotheses the two conditions are independent."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isOrthogonal_symm_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j ↔ VTask.IsOrthogonal P j i",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.isOrthogonal_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.isOrthogonal_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.82,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_symm_impl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → VTask.IsOrthogonal P j i",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.IsOrthogonal.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.IsOrthogonal.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.732,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_reflection_apply_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → P.reflection j (P.root i) = P.root i",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.IsOrthogonal.reflection_apply_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.IsOrthogonal.reflection_apply_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.977,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_reflection_apply_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P j i → P.reflection j (P.root i) = P.root i",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.IsOrthogonal.reflection_apply_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.IsOrthogonal.reflection_apply_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.998,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_coreflection_apply_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → P.coreflection j (P.coroot i) = P.coroot i",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.IsOrthogonal.coreflection_apply_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.IsOrthogonal.coreflection_apply_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.881,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_commute_reflections",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → Commute (P.reflection i) (P.reflection j)",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.isOrthogonal_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.isOrthogonal_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.845,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_iff_pairing_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) [NeZero (2 : R)] [IsDomain R] [Module.IsTorsionFree R M] (i j : ι), VTask.IsOrthogonal P i j ↔ P.pairing i j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.isOrthogonal_iff_pairing_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.isOrthogonal_iff_pairing_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.498,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_coxeterWeight_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) [NeZero (2 : R)] [IsDomain R] (i j : ι), P.coxeterWeight i j = 0 ↔ VTask.IsOrthogonal P i j",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.coxeterWeight_zero_iff_isOrthogonal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.coxeterWeight_zero_iff_isOrthogonal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.962,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_flip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → VTask.IsOrthogonal P.flip i j",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.IsOrthogonal.flip"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.IsOrthogonal.flip"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.797,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isOrthogonal_both_pairings_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M N : Type*} [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i j : ι), VTask.IsOrthogonal P i j → P.pairing i j = 0 ∧ P.pairing j i = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.isOrthogonal_symm",
+        "RootPairing.isOrthogonal_iff_pairing_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.isOrthogonal_symm",
+        "RootPairing.isOrthogonal_iff_pairing_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.347,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isorthogonal_reject_not_symmetric_vacuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (ι : Type*) (R : Type*) (M : Type*) (N : Type*) [CommRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (P : RootPairing ι R M N) (i : ι), VTask.IsOrthogonal P i i)",
+      "domain_inputs": {},
+      "anchors": [
+        "RootPairing.isOrthogonal_symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RootPairing.isOrthogonal_symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RootPairing.IsOrthogonal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RootPairing.IsOrthogonal-f6bf75f0",
+    "review_status": "unreviewed"
+  }
+}

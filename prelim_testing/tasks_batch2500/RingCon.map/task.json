@@ -1,0 +1,189 @@
+{
+  "task_id": "RingCon.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{M : Type u_1} -> [NonAssocSemiring M] -> (c d : RingCon M) -> (h : c ≤ d) -> c.Quotient →+* d.Quotient",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "d",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total with no junk-value conventions; it is defined for all ring congruences c, d on M with a proof h : c ≤ d, and always produces a valid ring homomorphism."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [NonAssocSemiring M] (c d : RingCon M) (h : c ≤ d), Function.Surjective (VTask.map c d h)",
+      "domain_inputs": {},
+      "anchors": [
+        "RingCon.mk'_surjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingCon.mk'_surjective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RingCon.map-6a86f1a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_preserves_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [NonAssocSemiring M] (c d : RingCon M) (h : c ≤ d) (x y : c.Quotient), VTask.map c d h (x + y) = VTask.map c d h x + VTask.map c d h y",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.747,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RingCon.map-6a86f1a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_preserves_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [NonAssocSemiring M] (c d : RingCon M) (h : c ≤ d) (x y : c.Quotient), VTask.map c d h (x * y) = VTask.map c d h x * VTask.map c d h y",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.567,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RingCon.map-6a86f1a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_not_injective_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {M : Type*} [NonAssocSemiring M] (c d : RingCon M) (h : c ≤ d), Function.Injective (VTask.map c d h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RingCon.map-6a86f1a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_total_codomain_zero_ring",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [NonAssocSemiring M] (c : RingCon M) (d : RingCon M) (h : c ≤ d) (htop : ∀ x y : M, d x y), ∀ z : c.Quotient, VTask.map c d h z = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "RingCon.eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingCon.eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RingCon.map-6a86f1a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RingCon.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RingCon.map-6a86f1a0",
+    "review_status": "unreviewed"
+  }
+}

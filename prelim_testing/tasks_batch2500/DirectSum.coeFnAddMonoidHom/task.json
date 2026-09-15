@@ -1,0 +1,216 @@
+{
+  "task_id": "DirectSum.coeFnAddMonoidHom",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.coeFnAddMonoidHom",
+  "signature": {
+    "name": "VTask.coeFnAddMonoidHom",
+    "type": "{ι : Type v} -> (β : ι → Type w) -> [(i : ι) → AddCommMonoid (β i)] -> (DirectSum ι fun i => β i) →+ (i : ι) → β i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ι",
+      "β"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction with no junk-value conventions; every well-typed input yields a well-defined additive monoid homomorphism."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "coeFnAddMonoidHom_isAddMonoidHom",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (x y : DirectSum (Fin 2) (fun _ => ℕ)), (VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)) (x + y) = (VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)) x + (VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)) y",
+      "domain_inputs": {
+        "β": [
+          "fun (_ : Fin 2) => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.345,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)"
+    },
+    {
+      "id": "coeFnAddMonoidHom_zero_nat",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)) 0 = 0",
+      "domain_inputs": {
+        "β": [
+          "fun (_ : Fin 2) => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.098,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.coeFnAddMonoidHom (fun (_ : Fin 2) => ℕ)) 0"
+    },
+    {
+      "id": "coeFnAddMonoidHom_empty_index",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.coeFnAddMonoidHom (fun (_ : Empty) => ℕ)) 0 = 0",
+      "domain_inputs": {
+        "β": [
+          "fun (_ : Empty) => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.166,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coeFnAddMonoidHom (fun (_ : Empty) => ℕ)"
+    },
+    {
+      "id": "coeFnAddMonoidHom_map_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (β : ι → Type*) [inst : (i : ι) → AddCommMonoid (β i)] {α : Type*} (s : Finset α) (f : α → DirectSum ι β), (VTask.coeFnAddMonoidHom β) (∑ a ∈ s, f a) = ∑ a ∈ s, (VTask.coeFnAddMonoidHom β) (f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "map_sum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_sum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.642,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coeFnAddMonoidHom_not_zero_hom_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (x : DirectSum (Fin 1) (fun _ => ℕ)), (VTask.coeFnAddMonoidHom (fun (_ : Fin 1) => ℕ)) x = 0)",
+      "domain_inputs": {
+        "β": [
+          "fun (_ : Fin 1) => ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.coeFnAddMonoidHom (fun (_ : Fin 1) => ℕ)",
+      "violated_property": "The homomorphism is injective, so it cannot send all elements to zero"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DirectSum.coeFnAddMonoidHom",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DirectSum.coeFnAddMonoidHom-bd1c49f2",
+    "review_status": "unreviewed"
+  }
+}

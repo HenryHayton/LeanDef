@@ -1,0 +1,98 @@
+{
+  "task_id": "Polynomial.nextCoeffUp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.nextCoeffUp",
+  "signature": {
+    "name": "VTask.nextCoeffUp",
+    "type": "{R : Type u} -> [Semiring R] -> (p : Polynomial R) -> R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p.natTrailingDegree = 0",
+        "statement": "When the natural trailing degree of p is 0 (covering constants, the zero polynomial, and any polynomial whose lowest-degree nonzero term is degree 0), VTask.nextCoeffUp p = 0.",
+        "note": "Junk-value convention: constants have no meaningful second-lowest coefficient, so 0 is returned as a sentinel."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nextCoeffUp_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.nextCoeffUp (0 : Polynomial ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeffUp-53384db7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nextCoeffUp_global_not_trailing_coeff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Polynomial ℕ), VTask.nextCoeffUp p = Polynomial.coeff p (p.natTrailingDegree + 1) ∨ VTask.nextCoeffUp p = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.natTrailingDegree_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.natTrailingDegree_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.nextCoeffUp-53384db7",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.nextCoeffUp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.nextCoeffUp-53384db7",
+    "review_status": "unreviewed"
+  }
+}

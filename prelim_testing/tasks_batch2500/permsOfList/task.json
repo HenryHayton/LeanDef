@@ -1,0 +1,351 @@
+{
+  "task_id": "permsOfList",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.permsOfList",
+  "signature": {
+    "name": "VTask.permsOfList",
+    "type": "{α : Type u_1} -> [DecidableEq α] -> List α → List (Equiv.Perm α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty list input",
+        "statement": "VTask.permsOfList [] = [1], i.e., the empty list yields the singleton list containing only the identity permutation.",
+        "note": "This is the intended base case, not a junk value."
+      },
+      {
+        "point": "singleton list input",
+        "statement": "VTask.permsOfList [a] = [1], because swap a a is the identity, so only the identity permutation is produced.",
+        "note": "A list with one element generates no non-trivial transpositions."
+      },
+      {
+        "point": "duplicate elements",
+        "statement": "If l contains repeated elements, VTask.permsOfList l may contain duplicate Equiv.Perm values; the function does not deduplicate.",
+        "note": "No uniqueness guarantee is made for inputs with repeated entries."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "permsOfList_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permsOfList ([] : List Empty) = [1] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_empty_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permsOfList ([] : List Empty)).length = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_singleton_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permsOfList ([0] : List (Fin 3))).length = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_singleton_is_identity",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.permsOfList ([0] : List (Fin 3)) = [1] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_fin3_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permsOfList ([0, 1, 2] : List (Fin 3))).length = 6 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_fin2_length",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.permsOfList ([0, 1] : List (Fin 2))).length = 2 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_identity_always_member",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (l : List α), (1 : Equiv.Perm α) ∈ VTask.permsOfList l",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_cons",
+        "List.mem_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_cons",
+        "List.mem_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (l : List α), (VTask.permsOfList l).length ≥ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_pos_iff_ne_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_pos_iff_ne_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_empty_neq_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.permsOfList ([] : List Empty) ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "List.ne_nil_iff_length_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.ne_nil_iff_length_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.098,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "permsOfList_singleton_not_length_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.permsOfList ([0] : List (Fin 2))).length = 2",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_eq_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_eq_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.061,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "permsOfList-65159101",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "permsOfList",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "permsOfList-65159101",
+    "review_status": "unreviewed"
+  }
+}

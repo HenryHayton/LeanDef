@@ -1,0 +1,488 @@
+{
+  "task_id": "Stream'.Seq.Pairwise",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Pairwise",
+  "signature": {
+    "name": "VTask.Pairwise",
+    "type": "{α : Type u} -> (R : α → α → Prop) -> (s : Stream'.Seq α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "vacuous quantification over absent elements",
+        "statement": "If `s.get? i = none` or `s.get? j = none` for some pair `i < j`, the condition for that pair is vacuously true; terminated or empty portions of the sequence impose no constraint.",
+        "note": "This makes `VTask.Pairwise R nil` and `VTask.Pairwise R (cons hd nil)` trivially true for all `R`."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pairwise_nil_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Pairwise (· < ·) (Stream'.Seq.nil : Stream'.Seq ℕ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.062,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Stream'.Seq.nil"
+    },
+    {
+      "id": "pairwise_singleton_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Pairwise (· < ·) (Stream'.Seq.cons 5 Stream'.Seq.nil : Stream'.Seq ℕ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.065,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Stream'.Seq.cons 5 Stream'.Seq.nil"
+    },
+    {
+      "id": "pairwise_sorted_three_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Pairwise (· < ·) (Stream'.Seq.cons 1 (Stream'.Seq.cons 2 (Stream'.Seq.cons 3 Stream'.Seq.nil)) : Stream'.Seq ℕ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Stream'.Seq.cons 1 (Stream'.Seq.cons 2 (Stream'.Seq.cons 3 Stream'.Seq.nil))"
+    },
+    {
+      "id": "pairwise_unsorted_three_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Pairwise (· < ·) (Stream'.Seq.cons 1 (Stream'.Seq.cons 3 (Stream'.Seq.cons 2 Stream'.Seq.nil)) : Stream'.Seq ℕ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Stream'.Seq.cons 1 (Stream'.Seq.cons 3 (Stream'.Seq.cons 2 Stream'.Seq.nil))",
+      "violated_property": "R x y must hold for all i < j with s.get? i = some x and s.get? j = some y"
+    },
+    {
+      "id": "pairwise_equal_elements_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Pairwise (· ≠ ·) (Stream'.Seq.cons 1 (Stream'.Seq.cons 1 Stream'.Seq.nil) : Stream'.Seq ℕ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.074,
+        "at": "authoring",
+        "script": "by intro h; have := h 0 1; simp at this",
+        "self_cited": false
+      },
+      "cached_script": "by intro h; have := h 0 1; simp at this",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Stream'.Seq.cons 1 (Stream'.Seq.cons 1 Stream'.Seq.nil)",
+      "violated_property": "R x y must hold for all i < j with s.get? i = some x and s.get? j = some y"
+    },
+    {
+      "id": "pairwise_nil_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop), VTask.Pairwise R Stream'.Seq.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise.nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise.nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.199,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_cons_nil_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (hd : α), VTask.Pairwise R (Stream'.Seq.cons hd Stream'.Seq.nil)",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise_cons_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise_cons_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.323,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_tail_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (s : Stream'.Seq α), VTask.Pairwise R s → VTask.Pairwise R s.tail",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise_tail"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise_tail"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.324,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_drop_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (s : Stream'.Seq α) (n : ℕ), VTask.Pairwise R s → VTask.Pairwise R (s.drop n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise_drop"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise_drop"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.438,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_cons_elim_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (hd : α) (tl : Stream'.Seq α), VTask.Pairwise R (Stream'.Seq.cons hd tl) → (∀ x ∈ tl, R hd x) ∧ VTask.Pairwise R tl",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise.cons_elim"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise.cons_elim"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.73,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_cons_intro_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (hd : α) (tl : Stream'.Seq α), (∀ x ∈ tl, R hd x) → VTask.Pairwise R tl → VTask.Pairwise R (Stream'.Seq.cons hd tl)",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise.cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise.cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.929,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_cons_cons_head_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (hd tl_hd : α) (tl_tl : Stream'.Seq α), VTask.Pairwise R (Stream'.Seq.cons hd (Stream'.Seq.cons tl_hd tl_tl)) → R hd tl_hd",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise_cons_cons_head"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise_cons_cons_head"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.374,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_not_antisymmetric_constraint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) (hd : α) (tl : Stream'.Seq α), VTask.Pairwise R (Stream'.Seq.cons hd tl) → VTask.Pairwise R tl",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise.cons_elim",
+        "Stream'.Seq.Pairwise_tail"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise.cons_elim",
+        "Stream'.Seq.Pairwise_tail"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_trans_cons_cons",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (R : α → α → Prop) [IsTrans α R] (hd tl_hd : α) (tl_tl : Stream'.Seq α), R hd tl_hd → VTask.Pairwise R (Stream'.Seq.cons tl_hd tl_tl) → VTask.Pairwise R (Stream'.Seq.cons hd (Stream'.Seq.cons tl_hd tl_tl))",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.Pairwise.cons_cons_of_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.Pairwise.cons_cons_of_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.532,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Stream'.Seq.Pairwise",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Stream'.Seq.Pairwise-f6732945",
+    "review_status": "unreviewed"
+  }
+}

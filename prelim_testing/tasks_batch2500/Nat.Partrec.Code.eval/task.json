@@ -1,0 +1,182 @@
+{
+  "task_id": "Nat.Partrec.Code.eval",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.eval",
+  "signature": {
+    "name": "VTask.eval",
+    "type": "Nat.Partrec.Code → ℕ →. ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all inputs in the sense that VTask.eval c n is always a well-defined Part ℕ value; divergence is represented by Part.none and there are no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "eval_prec_zero_law",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (cf cg : Nat.Partrec.Code) (a : ℕ), VTask.eval (Nat.Partrec.Code.prec cf cg) (Nat.pair a 0) = VTask.eval cf a",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.eval_prec_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.eval_prec_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.347,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.eval-072d650d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eval_prec_succ_law",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (cf cg : Nat.Partrec.Code) (a k : ℕ), VTask.eval (Nat.Partrec.Code.prec cf cg) (Nat.pair a (k + 1)) = do { let ih ← VTask.eval (Nat.Partrec.Code.prec cf cg) (Nat.pair a k); VTask.eval cg (Nat.pair a (Nat.pair k ih)) }",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.eval_prec_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.eval_prec_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.82,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.eval-072d650d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "eval_curry_law",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : Nat.Partrec.Code) (n x : ℕ), VTask.eval (Nat.Partrec.Code.curry c n) x = VTask.eval c (Nat.pair n x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.eval_curry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.eval_curry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.339,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.eval-072d650d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "exists_code_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ →. ℕ), Nat.Partrec f ↔ ∃ c : Nat.Partrec.Code, VTask.eval c = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partrec.Code.exists_code"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partrec.Code.exists_code"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.69,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partrec.Code.eval-072d650d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.Partrec.Code.eval",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.Partrec.Code.eval-072d650d",
+    "review_status": "unreviewed"
+  }
+}

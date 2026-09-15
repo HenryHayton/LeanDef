@@ -1,0 +1,407 @@
+{
+  "task_id": "ContinuousMultilinearMap.opNorm",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.opNorm",
+  "signature": {
+    "name": "VTask.opNorm",
+    "type": "{𝕜 : Type u} -> {ι : Type v} -> {E : ι → Type wE} -> {G : Type wG} -> [NontriviallyNormedField 𝕜] -> [(i : ι) → SeminormedAddCommGroup (E i)] -> [(i : ι) → NormedSpace 𝕜 (E i)] -> [SeminormedAddCommGroup G] -> [NormedSpace 𝕜 G] -> [Fintype ι] -> (f : ContinuousMultilinearMap 𝕜 E G) -> ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "nonnegativity",
+        "statement": "VTask.opNorm f ≥ 0 for every continuous multilinear map f.",
+        "note": "Continuity guarantees the bounding set is non-empty and bounded below by 0, so the infimum is non-negative."
+      },
+      {
+        "point": "zero map",
+        "statement": "VTask.opNorm 0 = 0; equivalently, VTask.opNorm f = 0 if and only if f = 0.",
+        "note": "The zero map satisfies the bound with constant 0, and the norm axiom forces the converse."
+      },
+      {
+        "point": "isLeast",
+        "statement": "VTask.opNorm f is actually achieved as the least element of the set of admissible bounds, not merely a greatest lower bound that falls outside the set.",
+        "note": "This is stronger than being an infimum; the map f attains its operator norm as a true minimum."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "opNorm_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G), 0 ≤ VTask.opNorm f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_nonneg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_nonneg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι], VTask.opNorm (0 : ContinuousMultilinearMap 𝕜 E G) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_zero_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] {f : ContinuousMultilinearMap 𝕜 E G}, VTask.opNorm f = 0 ↔ f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_le_opNorm_of_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G) (m : ∀ i, E i), ‖f m‖ ≤ VTask.opNorm f * ∏ i, ‖m i‖",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.le_opNorm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.le_opNorm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_add_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f g : ContinuousMultilinearMap 𝕜 E G), VTask.opNorm (f + g) ≤ VTask.opNorm f + VTask.opNorm g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_add_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_add_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G), VTask.opNorm (-f) = VTask.opNorm f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_neg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_neg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_isLeast",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G), IsLeast {c : ℝ | 0 ≤ c ∧ ∀ m, ‖f m‖ ≤ c * ∏ i, ‖m i‖} (VTask.opNorm f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.isLeast_opNorm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.isLeast_opNorm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_le_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] {f : ContinuousMultilinearMap 𝕜 E G} {M : ℝ}, 0 ≤ M → (∀ m, ‖f m‖ ≤ M * ∏ i, ‖m i‖) → VTask.opNorm f ≤ M",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_le_bound"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_le_bound"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_nonpos_iff_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G), VTask.opNorm f ≤ 0 ↔ f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_nonneg",
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_nonneg",
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_ratio_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G) (m : ∀ i, E i), ‖f m‖ / ∏ i, ‖m i‖ ≤ VTask.opNorm f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.ratio_le_opNorm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.ratio_le_opNorm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_smul_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} {𝕜' : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] [NormedField 𝕜'] [NormedSpace 𝕜' G] [SMulCommClass 𝕜 𝕜' G] (c : 𝕜') (f : ContinuousMultilinearMap 𝕜 E G), VTask.opNorm (c • f) ≤ ‖c‖ * VTask.opNorm f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_smul_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_smul_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_unit_ball_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [(i : ι) → SeminormedAddCommGroup (E i)] [(i : ι) → NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : ContinuousMultilinearMap 𝕜 E G) {m : ∀ i, E i}, ‖m‖ ≤ 1 → ‖f m‖ ≤ VTask.opNorm f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.unit_le_opNorm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.unit_le_opNorm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_nonzero_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ContinuousMultilinearMap ℝ (fun _ : Fin 1 => ℝ) ℝ), VTask.opNorm f = 0 → f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "opNorm_neg_one_neq_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.opNorm (0 : ContinuousMultilinearMap ℝ (fun _ : Fin 1 => ℝ) ℝ) < 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.opNorm_nonneg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.opNorm_nonneg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousMultilinearMap.opNorm",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousMultilinearMap.opNorm-1d3bf0a0",
+    "review_status": "unreviewed"
+  }
+}

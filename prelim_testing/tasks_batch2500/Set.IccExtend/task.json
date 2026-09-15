@@ -1,0 +1,361 @@
+{
+  "task_id": "Set.IccExtend",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IccExtend",
+  "signature": {
+    "name": "VTask.IccExtend",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> [LinearOrder α] -> {a b : α} -> (h : a ≤ b) -> (f : ↑(Set.Icc a b) → β) -> α → β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h",
+      "f",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "x ≤ a",
+        "statement": "VTask.IccExtend h f x = f ⟨a, left_mem_Icc.2 h⟩",
+        "note": "Left-endpoint clamping: any input at or below a is mapped to the value of f at a."
+      },
+      {
+        "point": "x ∈ Set.Icc a b",
+        "statement": "VTask.IccExtend h f x = f ⟨x, hx⟩",
+        "note": "On-interval behavior: for x inside [a,b], the extension agrees with f."
+      },
+      {
+        "point": "b ≤ x",
+        "statement": "VTask.IccExtend h f x = f ⟨b, right_mem_Icc.2 h⟩",
+        "note": "Right-endpoint clamping: any input at or above b is mapped to the value of f at b."
+      },
+      {
+        "point": "range",
+        "statement": "Set.range (VTask.IccExtend h f) = Set.range f",
+        "note": "The extension does not introduce new values; its range equals the range of the original f."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "IccExtend_left_endpoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β), VTask.IccExtend h f a = f ⟨a, Set.left_mem_Icc.2 h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.481,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_right_endpoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β), VTask.IccExtend h f b = f ⟨b, Set.right_mem_Icc.2 h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.49,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_of_mem_interval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β) {x : α} (hx : x ∈ Set.Icc a b), VTask.IccExtend h f x = f ⟨x, hx⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.574,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_of_le_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β) {x : α} (hx : x ≤ a), VTask.IccExtend h f x = f ⟨a, Set.left_mem_Icc.2 h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_of_le_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_of_le_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.025,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_of_right_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β) {x : α} (hx : b ≤ x), VTask.IccExtend h f x = f ⟨b, Set.right_mem_Icc.2 h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_of_right_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_of_right_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.364,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_range_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β), Set.range (VTask.IccExtend h f) = Set.range f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.628,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_degenerate_interval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a : α} (h : a ≤ a) (f : Set.Icc a a → β) (x : α), VTask.IccExtend h f x = f ⟨a, Set.left_mem_Icc.2 h⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_of_le_left",
+        "Set.IccExtend_of_right_le",
+        "Set.IccExtend_of_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_of_le_left",
+        "Set.IccExtend_of_right_le",
+        "Set.IccExtend_of_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_val_on_subtype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [LinearOrder α] {a b : α} (h : a ≤ b) (f : Set.Icc a b → β) (x : Set.Icc a b), VTask.IccExtend h f (x : α) = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_val"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_val"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.648,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "IccExtend_reject_range_superset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f : Set.Icc (0 : ℤ) 10 → ℤ) (h : (0 : ℤ) ≤ 10) (y : ℤ), y ∈ Set.range (VTask.IccExtend h f) → ¬ y ∈ Set.range f",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.IccExtend_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.IccExtend_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.863,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.IccExtend-490bfaa8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.IccExtend",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.IccExtend-490bfaa8",
+    "review_status": "unreviewed"
+  }
+}

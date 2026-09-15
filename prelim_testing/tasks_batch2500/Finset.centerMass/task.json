@@ -1,0 +1,112 @@
+{
+  "task_id": "Finset.centerMass",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.centerMass",
+  "signature": {
+    "name": "VTask.centerMass",
+    "type": "{R : Type u_1} -> {E : Type u_3} -> {ι : Type u_5} -> [Field R] -> [AddCommGroup E] -> [Module R E] -> (t : Finset ι) -> (w : ι → R) -> (z : ι → E) -> E",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t",
+      "w",
+      "z"
+    ],
+    "conventions": [
+      {
+        "point": "zero total weight",
+        "statement": "When `∑ i ∈ t, w i = 0`, the field reciprocal of 0 is 0, so `VTask.centerMass t w z = 0` (the zero vector of E).",
+        "note": "This follows from the junk-value convention `(0 : R)⁻¹ = 0` in any `Field`."
+      },
+      {
+        "point": "empty index set",
+        "statement": "When `t = ∅`, both the weighted sum and total weight are 0, so `VTask.centerMass ∅ w z = 0`.",
+        "note": "Special case of the zero-total-weight convention; holds for all w and z."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "centerMass_smul_weights",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : Finset (Fin 3)) (w : Fin 3 → ℚ) (z : Fin 3 → ℚ) (c : ℚ), c ≠ 0 → VTask.centerMass t (fun i => c * w i) z = VTask.centerMass t w z",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.centerMass_smul_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.centerMass_smul_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.centerMass-fd16a620",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "centerMass_pair_weighted_average",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a b : ℚ) (wa wb : ℚ), wa + wb ≠ 0 → VTask.centerMass ({0, 1} : Finset (Fin 2)) (fun i => if i = 0 then wa else wb) (fun i => if i = 0 then a else b) = (wa + wb)⁻¹ * (wa * a + wb * b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.centerMass_pair"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.centerMass_pair"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.185,
+        "at": "authoring",
+        "script": "by simp [_root_.Finset.centerMass] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Finset.centerMass] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.centerMass-fd16a620",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.centerMass",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.centerMass-fd16a620",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "task_id": "Function.graph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.graph",
+  "signature": {
+    "name": "VTask.graph",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (f : α → β) -> SetRel α β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and imposes no junk-value conventions; every function f on any types α and β yields a well-defined graph with no special edge cases requiring a convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "graph_unique_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (a : α) (b c : β), (a, b) ∈ VTask.graph f → (a, c) ∈ VTask.graph f → b = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.431,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.graph-ce4730cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_injective_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β), Function.Injective f ↔ ∀ a₁ a₂ : α, ∀ b : β, (a₁, b) ∈ VTask.graph f → (a₂, b) ∈ VTask.graph f → a₁ = a₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.graph-ce4730cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "graph_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (g : β → γ) (a : α) (c : γ), (a, c) ∈ VTask.graph (g ∘ f) ↔ ∃ b : β, (a, b) ∈ VTask.graph f ∧ (b, c) ∈ VTask.graph g",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.564,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.graph-ce4730cf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.graph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.graph-ce4730cf",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "task_id": "Computation.thinkN",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.thinkN",
+  "signature": {
+    "name": "VTask.thinkN",
+    "type": "{α : Type u} -> (c : Computation α) -> ℕ → Computation α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.thinkN c 0 = c; zero delay is the identity on computations.",
+        "note": "Base case of the recursive definition."
+      },
+      {
+        "point": "n = k + 1",
+        "statement": "VTask.thinkN c (k + 1) = Computation.think (VTask.thinkN c k); each successor step wraps the partially-delayed computation in one additional think.",
+        "note": "Inductive case: delays are counted outward-inward, so the outermost think is the last one added."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "thinkN_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (c : Computation α) (m n : ℕ), VTask.thinkN (VTask.thinkN c m) n = VTask.thinkN c (m + n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.add_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.add_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.thinkN-06d50215",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "thinkN_one_neq_original",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ (c : Computation Unit), VTask.thinkN c 1 ≠ c",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.thinkN-06d50215",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.thinkN (Computation.pure ()) 1",
+      "violated_property": "zero delay identity"
+    },
+    {
+      "id": "thinkN_nonzero_not_pure",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.thinkN (Computation.pure (0 : ℕ)) 1 ≠ Computation.pure 0",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.thinkN-06d50215",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.thinkN (Computation.pure 0) 1",
+      "violated_property": "immediacy: thinkN with n>0 is not a pure/immediate computation"
+    },
+    {
+      "id": "thinkN_add_comm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (c : Computation α) (m n : ℕ), VTask.thinkN (VTask.thinkN c m) n = VTask.thinkN (VTask.thinkN c n) m",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.add_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.add_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.thinkN-06d50215",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "thinkN_assoc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (c : Computation α) (a b c_n : ℕ), VTask.thinkN (VTask.thinkN (VTask.thinkN c a) b) c_n = VTask.thinkN c (a + b + c_n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.add_assoc"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.add_assoc"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.thinkN-06d50215",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Computation.thinkN",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Computation.thinkN-06d50215",
+    "review_status": "unreviewed"
+  }
+}

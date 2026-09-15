@@ -1,0 +1,291 @@
+{
+  "task_id": "PythagoreanTriple.IsPrimitiveClassified",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPrimitiveClassified",
+  "signature": {
+    "name": "VTask.IsPrimitiveClassified",
+    "type": "{x y z : ℤ} -> PythagoreanTriple x y z → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "y",
+      "z"
+    ],
+    "conventions": [
+      {
+        "point": "parity_requirement",
+        "statement": "The parametrising integers m and n are required to have opposite parity (one even, one odd); this is part of the definition, not derived from other conditions.",
+        "note": "Ensures the two expressions m²−n² and 2mn are not both even, matching the primitive case."
+      },
+      {
+        "point": "symmetry_in_legs",
+        "statement": "Both orderings of the legs are admitted: either x = m²−n² and y = 2mn, or x = 2mn and y = m²−n², so the predicate treats x and y symmetrically.",
+        "note": "This reflects the fact that labelling of odd and even legs is a convention, not intrinsic."
+      },
+      {
+        "point": "coprimality_of_parameters",
+        "statement": "The witnesses m and n must satisfy gcd(m, n) = 1 (coprime as integers), independently of whether the triple itself is primitive.",
+        "note": "Uses Int.gcd, returning a natural number equal to 1."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prim_class_implies_classified",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsPrimitiveClassified h → h.IsClassified",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isClassified_of_isPrimitiveClassified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isClassified_of_isPrimitiveClassified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.255,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_of_coprime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), Int.gcd x y = 1 → VTask.IsPrimitiveClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.658,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_of_coprime_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), Int.gcd x y = 1 → 0 < z → VTask.IsPrimitiveClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.431,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_of_coprime_zero_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), Int.gcd x y = 1 → x = 0 → VTask.IsPrimitiveClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_zero_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_zero_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.357,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_of_coprime_odd_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), Int.gcd x y = 1 → y % 2 = 1 → 0 < z → VTask.IsPrimitiveClassified h",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_odd_of_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime_of_odd_of_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.533,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_normalize_implies_classified",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z), VTask.IsPrimitiveClassified h.normalize → h.IsClassified",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isClassified_of_normalize_isPrimitiveClassified"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isClassified_of_normalize_isPrimitiveClassified"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.29,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prim_class_sym_implies_sym",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y z : ℤ) (h : PythagoreanTriple x y z) (h' : PythagoreanTriple y x z), VTask.IsPrimitiveClassified h → VTask.IsPrimitiveClassified h'",
+      "domain_inputs": {},
+      "anchors": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime",
+        "PythagoreanTriple.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PythagoreanTriple.isPrimitiveClassified_of_coprime",
+        "PythagoreanTriple.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PythagoreanTriple.IsPrimitiveClassified",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PythagoreanTriple.IsPrimitiveClassified-936cf0e1",
+    "review_status": "unreviewed"
+  }
+}

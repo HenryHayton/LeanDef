@@ -1,0 +1,271 @@
+{
+  "task_id": "PointedCone.DualFG",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.DualFG",
+  "signature": {
+    "name": "VTask.DualFG",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> {N : Type u_3} -> [CommRing R] -> [PartialOrder R] -> [IsOrderedRing R] -> [AddCommGroup M] -> [Module R M] -> [AddCommGroup N] -> [Module R N] -> (p : M →ₗ[R] N →ₗ[R] R) -> (C : PointedCone R N) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "C"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: DualFG is a Prop with no junk-value or boundary conventions; it is simply true or false depending on whether a witnessing finset exists, with no special behavior assigned to degenerate or edge inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dualfg_inf_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C D : PointedCone R N), VTask.DualFG p C → VTask.DualFG p D → VTask.DualFG p (C ⊓ D)",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.inf"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.inf"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.03,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_iff_exists_fg_dual",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C : PointedCone R N), VTask.DualFG p C ↔ ∃ D : PointedCone R M, D.FG ∧ PointedCone.dual p D = C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.iff_exists_fg_dual"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.iff_exists_fg_dual"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.225,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_of_fg_dual",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C : PointedCone R M), C.FG → VTask.DualFG p (PointedCone.dual p C)",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.dual_of_fg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.dual_of_fg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.401,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_implies_exists_fg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C : PointedCone R N), VTask.DualFG p C → ∃ D : PointedCone R M, D.FG ∧ PointedCone.dual p D = C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.exists_fg_dual"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.exists_fg_dual"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_dual_dual_flip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C : PointedCone R N), VTask.DualFG p C → PointedCone.dual p (PointedCone.dual p.flip C) = C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.dual_dual_flip"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.dual_dual_flip"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.559,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_finite_set_witness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (s : Set M), s.Finite → VTask.DualFG p (PointedCone.dual p s)",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.dual_of_finite"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.dual_of_finite"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.517,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dualfg_inf_assoc_three",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M N : Type*) [CommRing R] [PartialOrder R] [IsOrderedRing R] [AddCommGroup M] [Module R M] [AddCommGroup N] [Module R N] (p : M →ₗ[R] N →ₗ[R] R) (C D E : PointedCone R N), VTask.DualFG p C → VTask.DualFG p D → VTask.DualFG p E → VTask.DualFG p (C ⊓ D ⊓ E)",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.DualFG.inf"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.DualFG.inf"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PointedCone.DualFG-b9525a85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PointedCone.DualFG",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PointedCone.DualFG-b9525a85",
+    "review_status": "unreviewed"
+  }
+}

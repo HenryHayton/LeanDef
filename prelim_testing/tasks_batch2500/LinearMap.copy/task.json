@@ -1,0 +1,338 @@
+{
+  "task_id": "LinearMap.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{R : Type u_1} -> {S : Type u_5} -> {M : Type u_8} -> {M₃ : Type u_11} -> [Semiring R] -> [Semiring S] -> [AddCommMonoid M] -> [AddCommMonoid M₃] -> [Module R M] -> [Module S M₃] -> {σ : R →+* S} -> (f : M →ₛₗ[σ] M₃) -> (f' : M → M₃) -> (h : f' = ⇑f) -> M →ₛₗ[σ] M₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total with no junk-value or boundary conventions; it is well-defined for all valid inputs satisfying the type constraints."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.779,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_apply_eq_f_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (x : M), VTask.copy f f' h x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.796,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_copy_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (f'' : M → M₃) (h' : f'' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) f'' h' = f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.712,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (x y : M), VTask.copy f f' h (x + y) = VTask.copy f f' h x + VTask.copy f f' h y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq",
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq",
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.078,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_map_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f) (r : R) (x : M), VTask.copy f f' h (r • x) = σ r • VTask.copy f f' h x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq",
+        "LinearMap.map_smulₛₗ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq",
+        "LinearMap.map_smulₛₗ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.16,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ker_eq_ker",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S M M₃ : Type*} [Semiring R] [Semiring S] [AddCommMonoid M] [AddCommMonoid M₃] [Module R M] [Module S M₃] {σ : R →+* S} (f : M →ₛₗ[σ] M₃) (f' : M → M₃) (h : f' = ⇑f), LinearMap.ker (VTask.copy f f' h) = LinearMap.ker f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.974,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_reject_not_different_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R M M₃ : Type*} [inst1 : CommSemiring R] [inst2 : AddCommMonoid M] [inst3 : AddCommMonoid M₃] [inst4 : Module R M] [inst5 : Module R M₃] (f g : M →ₗ[R] M₃), f ≠ g → VTask.copy f (⇑f) rfl ≠ g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.575,
+        "at": "authoring",
+        "script": "by simp only [_root_.LinearMap.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.LinearMap.copy] <;> aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_h_direction_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R M M₃ : Type*} [inst1 : CommSemiring R] [inst2 : AddCommMonoid M] [inst3 : AddCommMonoid M₃] [inst4 : Module R M] [inst5 : Module R M₃] (f : M →ₗ[R] M₃) (f' : M → M₃) (h : ⇑f = f'), VTask.copy f f' h.symm = f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.271,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_neq_wrong_fun",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (f : M →ₗ[R] M) (g : M →ₗ[R] M), f ≠ g → VTask.copy f (⇑f) rfl ≠ g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.395,
+        "at": "authoring",
+        "script": "by simp only [_root_.LinearMap.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.LinearMap.copy] <;> aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "LinearMap.copy-8b4fe177",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.copy-8b4fe177",
+    "review_status": "unreviewed"
+  }
+}

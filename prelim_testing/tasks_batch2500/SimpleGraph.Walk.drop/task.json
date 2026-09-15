@@ -1,0 +1,176 @@
+{
+  "task_id": "SimpleGraph.Walk.drop",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.drop",
+  "signature": {
+    "name": "VTask.drop",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v : V} -> (p : G.Walk u v) -> (n : ℕ) -> G.Walk (p.getVert n) v",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "Dropping zero darts returns the entire original walk, with the start vertex identified via `p.getVert 0 = u`.",
+        "note": "Junk-free: n=0 is well-defined and returns the full walk."
+      },
+      {
+        "point": "n ≥ p.length",
+        "statement": "When n is at least the length of p, `p.getVert n` equals the terminal vertex v, and the result is a nil walk at v.",
+        "note": "Out-of-bounds drop saturates to a nil walk at the endpoint."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "drop_zero_eq_copy",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.drop p 0 = p.copy (p.getVert_zero.symm) rfl",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.drop_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.drop_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.31,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.drop-785d0c2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "drop_isPath_of_isPath",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (n : ℕ), p.IsPath → (VTask.drop p n).IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.drop"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.drop"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.798,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.drop-785d0c2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "drop_of_drop_isPath",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} {n k : ℕ} (p : G.Walk u v), (VTask.drop p k).IsPath → k ≤ n → (VTask.drop p n).IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.drop_of_drop"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.drop_of_drop"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.839,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.drop-785d0c2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "drop_reject_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (V : Type) (G : SimpleGraph V) (u v : V) (p : G.Walk u v) (n : ℕ), (VTask.drop p n).length ≠ p.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.drop"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.drop"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.drop-785d0c2c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.drop",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.drop-785d0c2c",
+    "review_status": "unreviewed"
+  }
+}

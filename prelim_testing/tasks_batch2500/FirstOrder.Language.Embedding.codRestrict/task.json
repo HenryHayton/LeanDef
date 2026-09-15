@@ -1,0 +1,148 @@
+{
+  "task_id": "FirstOrder.Language.Embedding.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{L : FirstOrder.Language} -> {M : Type w} -> {N : Type u_1} -> [L.Structure M] -> [L.Structure N] -> (p : L.Substructure N) -> (f : L.Embedding M N) -> (h : ∀ (c : M), f c ∈ p) -> L.Embedding M ↥p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total and fully determined by its inputs; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Embedding M N) (h : ∀ (c : M), f c ∈ p), Function.Injective (VTask.codRestrict p f h)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Embedding.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Embedding.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.027,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Embedding.codRestrict-040c4a5d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_inj_from_f_inj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Embedding M N) (h : ∀ c, f c ∈ p) (m₁ m₂ : M), VTask.codRestrict p f h m₁ = VTask.codRestrict p f h m₂ → m₁ = m₂",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Embedding.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Embedding.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.572,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Embedding.codRestrict-040c4a5d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_image_subset_p",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {M : Type*} {N : Type*} [instM : L.Structure M] [instN : L.Structure N] (p : L.Substructure N) (f : L.Embedding M N) (h : ∀ c, f c ∈ p), Set.range (VTask.codRestrict p f h) ⊆ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_subset_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_subset_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.522,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Embedding.codRestrict-040c4a5d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Embedding.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Embedding.codRestrict-040c4a5d",
+    "review_status": "unreviewed"
+  }
+}

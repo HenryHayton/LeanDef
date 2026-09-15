@@ -1,0 +1,371 @@
+{
+  "task_id": "Fin.castLEEmb",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.castLEEmb",
+  "signature": {
+    "name": "VTask.castLEEmb",
+    "type": "{n m : ℕ} -> (h : n ≤ m) -> Fin n ↪ Fin m",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "n ≤ m",
+    "variables": [
+      "n",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all inputs satisfying the type constraint n ≤ m; there are no junk-value or degenerate-input conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "castLEEmb_val_preserved_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.castLEEmb (show 2 ≤ 5 from by omega) ⟨1, by omega⟩).val = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "m": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_zero_val_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.castLEEmb (show 1 ≤ 3 from by omega) ⟨0, by omega⟩).val = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ],
+        "m": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_eq_case_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.castLEEmb (show 3 ≤ 3 from by omega) ⟨2, by omega⟩).val = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ],
+        "m": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (h : n ≤ m), Function.Injective (VTask.castLEEmb h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Embedding.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Embedding.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.265,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_map_Icc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (h : n ≤ m) (a b : Fin n), (Finset.Icc a b).map (VTask.castLEEmb h) = Finset.Icc (Fin.castLE h a) (Fin.castLE h b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.map_castLEEmb_Icc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.map_castLEEmb_Icc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.21,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_map_Ico",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (h : n ≤ m) (a b : Fin n), (Finset.Ico a b).map (VTask.castLEEmb h) = Finset.Ico (Fin.castLE h a) (Fin.castLE h b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.map_castLEEmb_Ico"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.map_castLEEmb_Ico"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.218,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_map_Iic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n m : ℕ) (h : n ≤ m) (a : Fin n), (Finset.Iic a).map (VTask.castLEEmb h) = Finset.Iic (Fin.castLE h a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.map_castLEEmb_Iic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.map_castLEEmb_Iic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.194,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLEEmb_n0_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : Finset.univ.map (VTask.castLEEmb (show 0 ≤ 3 from by omega)) = ∅ := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ],
+        "m": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Finset.univ.map (VTask.castLEEmb (show 0 ≤ 3 from by omega))"
+    },
+    {
+      "id": "castLEEmb_image_not_full_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (⟨2, by omega⟩ : Fin 5) ∉ Finset.univ.map (VTask.castLEEmb (show 2 ≤ 5 from by omega)) := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "m": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(⟨2, by omega⟩ : Fin 5)",
+      "violated_property": "The image of castLEEmb with n=2, m=5 only contains elements with val < 2; val=2 is out of range"
+    },
+    {
+      "id": "castLEEmb_image_in_range_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (⟨1, by omega⟩ : Fin 5) ∈ Finset.univ.map (VTask.castLEEmb (show 2 ≤ 5 from by omega)) := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "m": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.castLEEmb-8547873e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(⟨1, by omega⟩ : Fin 5)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.castLEEmb",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.castLEEmb-8547873e",
+    "review_status": "unreviewed"
+  }
+}

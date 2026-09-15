@@ -1,0 +1,313 @@
+{
+  "task_id": "BumpCovering.IsSubordinate",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSubordinate",
+  "signature": {
+    "name": "VTask.IsSubordinate",
+    "type": "{ι : Type u} -> {X : Type v} -> [TopologicalSpace X] -> {s : Set X} -> (f : BumpCovering ι X s) -> (U : ι → Set X) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "U"
+    ],
+    "conventions": [
+      {
+        "point": "empty index type",
+        "statement": "When ι is empty, VTask.IsSubordinate f U holds vacuously for any f and U.",
+        "note": "Universal quantification over an empty type is trivially true."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isSubordinate_mono_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U V : ι → Set X), VTask.IsSubordinate f U → (∀ i, U i ⊆ V i) → VTask.IsSubordinate f V",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.39,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_toPartitionOfUnity_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U : ι → Set X), VTask.IsSubordinate f U → f.toPartitionOfUnity.IsSubordinate U",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.toPartitionOfUnity"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.toPartitionOfUnity"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.431,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_exists_normal_paracompact",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] [NormalSpace X] [ParacompactSpace X] {s : Set X}, IsClosed s → ∀ (U : ι → Set X), (∀ i, IsOpen (U i)) → s ⊆ ⋃ i, U i → ∃ f : BumpCovering ι X s, VTask.IsSubordinate f U",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.exists_isSubordinate"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.exists_isSubordinate"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.036,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_implies_tsupport_in_U",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U : ι → Set X) (i : ι), VTask.IsSubordinate f U → tsupport (f i) ⊆ U i",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.264,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_inter_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U V : ι → Set X), VTask.IsSubordinate f (fun i => U i ∩ V i) → VTask.IsSubordinate f U",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_inter_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U V : ι → Set X), VTask.IsSubordinate f (fun i => U i ∩ V i) → VTask.IsSubordinate f V",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_not_stronger_than_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U : ι → Set X), VTask.IsSubordinate f U → ∀ i, Function.support (f i) ⊆ U i",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isSubordinate_partitionOfUnity_subordinate_same_U",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {X : Type*} [TopologicalSpace X] {s : Set X} (f : BumpCovering ι X s) (U V : ι → Set X), VTask.IsSubordinate f U → (∀ i, U i ⊆ V i) → f.toPartitionOfUnity.IsSubordinate V",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.toPartitionOfUnity",
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.toPartitionOfUnity",
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "issubordinate_reject_not_monotone_converse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (ι : Type) (X : Type) [TopologicalSpace X] (s : Set X) (f : BumpCovering ι X s) (U V : ι → Set X), VTask.IsSubordinate f V → (∀ i, U i ⊆ V i) → VTask.IsSubordinate f U",
+      "domain_inputs": {},
+      "anchors": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BumpCovering.IsSubordinate.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BumpCovering.IsSubordinate",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BumpCovering.IsSubordinate-12ff1217",
+    "review_status": "unreviewed"
+  }
+}

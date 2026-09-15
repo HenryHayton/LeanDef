@@ -1,0 +1,335 @@
+{
+  "task_id": "Asymptotics.IsEquivalent",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsEquivalent",
+  "signature": {
+    "name": "VTask.IsEquivalent",
+    "type": "{α : Type u_1} -> {E' : Type u_6} -> [SeminormedAddCommGroup E'] -> (l : Filter α) -> (u v : α → E') -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l",
+      "u",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "v eventually zero",
+        "statement": "When v is eventually zero along l, VTask.IsEquivalent l u v holds vacuously for any u, because IsLittleO of the zero function is trivially satisfied.",
+        "note": "Degenerate case: the condition loses its usual meaning of 'same leading order'."
+      },
+      {
+        "point": "l = ⊥",
+        "statement": "When l is the bottom filter, VTask.IsEquivalent l u v holds for all u and v, since every eventual property is trivially satisfied.",
+        "note": "Standard degenerate filter convention inherited from IsLittleO."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isEquivalent_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] (l : Filter α) (u : α → E'), VTask.IsEquivalent l u u",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v : α → E'}, VTask.IsEquivalent l u v → VTask.IsEquivalent l v u",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v w : α → E'}, VTask.IsEquivalent l u v → VTask.IsEquivalent l v w → VTask.IsEquivalent l u w",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.isLittleO",
+        "Asymptotics.IsEquivalent.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.isLittleO",
+        "Asymptotics.IsEquivalent.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_implies_isLittleO",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v : α → E'}, VTask.IsEquivalent l u v → (u - v) =o[l] v",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.isLittleO"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.isLittleO"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.974,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_implies_isTheta",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v : α → E'}, VTask.IsEquivalent l u v → u =Θ[l] v",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.isTheta"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.isTheta"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_isBigO_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v : α → E'}, VTask.IsEquivalent l u v → v =O[l] u",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.isBigO_symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.isBigO_symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_neg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v : α → E'}, VTask.IsEquivalent l u v → VTask.IsEquivalent l (fun x => -u x) (fun x => -v x)",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.neg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.neg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_add_littleO",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {u v w : α → E'}, VTask.IsEquivalent l u v → w =o[l] v → VTask.IsEquivalent l (u + w) v",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.add_isLittleO"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.add_isLittleO"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isEquivalent_comp_tendsto",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α α₂ : Type*} {E' : Type*} [inst : SeminormedAddCommGroup E'] {l : Filter α} {l' : Filter α₂} {f g : α₂ → E'} {k : α → α₂}, VTask.IsEquivalent l' f g → Filter.Tendsto k l l' → VTask.IsEquivalent l (f ∘ k) (g ∘ k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Asymptotics.IsEquivalent.comp_tendsto"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Asymptotics.IsEquivalent.comp_tendsto"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isequiv_reject_not_littleo",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsEquivalent Filter.atTop (fun n : ℕ => (n : ℝ)) (fun n : ℕ => (2 : ℝ) * n)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsEquivalent Filter.atTop (fun n : ℕ => (n : ℝ)) (fun n : ℕ => (2 : ℝ) * n)",
+      "violated_property": "(u - v) =o[l] v, i.e., (n - 2n) = -n is not o(2n) since ‖-n‖/‖2n‖ → 1/2 ≠ 0"
+    },
+    {
+      "id": "isequiv_reject_nonzero_constant_vs_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsEquivalent Filter.atTop (fun _n : ℕ => (1 : ℝ)) (fun _n : ℕ => (0 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsEquivalent Filter.atTop (fun _n : ℕ => (1 : ℝ)) (fun _n : ℕ => (0 : ℝ))",
+      "violated_property": "(u - v) =o[l] v fails: (1 - 0) =o[atTop] 0 would require 1 = o(0) which is false since any nonzero function is not little-o of the zero function in Mathlib's convention"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Asymptotics.IsEquivalent",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Asymptotics.IsEquivalent-d89432b2",
+    "review_status": "unreviewed"
+  }
+}

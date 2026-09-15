@@ -1,0 +1,174 @@
+{
+  "task_id": "Nat.roughNumbersUpTo",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.roughNumbersUpTo",
+  "signature": {
+    "name": "VTask.roughNumbersUpTo",
+    "type": "(N k : ℕ) -> Finset ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "N",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": "zero_excluded",
+        "statement": "The integer 0 is never a member of VTask.roughNumbersUpTo N k for any N and k, because the definition explicitly requires n ≠ 0.",
+        "note": "By definition, rough numbers are positive."
+      },
+      {
+        "point": "one_excluded",
+        "statement": "The integer 1 is never a member of VTask.roughNumbersUpTo N k for any N and k, because 1 has no prime factors and is therefore vacuously k-smooth for every k.",
+        "note": "Follows from the Mathlib convention that 1 ∈ smoothNumbers k for all k."
+      },
+      {
+        "point": "k_below_all_primes",
+        "statement": "When k = 0 or k = 1, VTask.roughNumbersUpTo N k equals {2, 3, …, N} (all integers from 2 to N), since every integer ≥ 2 has a prime factor > 1 = k.",
+        "note": "Edge case for small thresholds."
+      },
+      {
+        "point": "N_zero",
+        "statement": "VTask.roughNumbersUpTo 0 k = ∅ for all k, because there are no positive integers ≤ 0.",
+        "note": "Empty-range edge case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rough_N0_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.roughNumbersUpTo 0 4 = ∅ := by decide",
+      "domain_inputs": {
+        "N": [
+          "0"
+        ],
+        "k": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.roughNumbersUpTo-bc1125a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rough_subset_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (N k : ℕ), ∀ n ∈ VTask.roughNumbersUpTo N k, n ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.mem_filter",
+        "Finset.mem_range"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.mem_filter",
+        "Finset.mem_range"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.roughNumbersUpTo-bc1125a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rough_monotone_N",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k N M : ℕ), N ≤ M → VTask.roughNumbersUpTo N k ⊆ VTask.roughNumbersUpTo M k",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.subset_iff",
+        "Finset.mem_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.subset_iff",
+        "Finset.mem_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.roughNumbersUpTo-bc1125a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rough_antitone_k",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (N j k : ℕ), j ≤ k → VTask.roughNumbersUpTo N k ⊆ VTask.roughNumbersUpTo N j",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smoothNumbers_mono",
+        "Finset.mem_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smoothNumbers_mono",
+        "Finset.mem_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.roughNumbersUpTo-bc1125a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.roughNumbersUpTo",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.roughNumbersUpTo-bc1125a9",
+    "review_status": "unreviewed"
+  }
+}

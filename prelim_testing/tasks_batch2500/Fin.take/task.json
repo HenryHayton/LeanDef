@@ -1,0 +1,298 @@
+{
+  "task_id": "Fin.take",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.take",
+  "signature": {
+    "name": "VTask.take",
+    "type": "{n : ℕ} -> {α : Fin n → Sort u_1} -> (m : ℕ) -> (h : m ≤ n) -> (v : (i : Fin n) → α i) -> (i : Fin m) -> α (Fin.castLE h i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "m ≤ n",
+    "variables": [
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total over its stated domain (m ≤ n is an explicit proof argument, not a junk-value convention), and no sentinel or default outputs are used at any boundary."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "take_pointwise_value",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 3 (by norm_num : 3 ≤ 5) (fun i : Fin 5 => i.val) ⟨1, by norm_num⟩ = 1 := by decide",
+      "domain_inputs": {
+        "m": [
+          "3"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_zero_value_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 0 (Nat.zero_le 4) (fun i : Fin 4 => i.val) = fun i => Fin.elim0 i := by decide",
+      "domain_inputs": {
+        "m": [
+          "0"
+        ],
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_all_eq_self_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 3 (le_refl 3) (fun i : Fin 3 => i.val) = (fun i : Fin 3 => i.val) := by decide",
+      "domain_inputs": {
+        "m": [
+          "3"
+        ],
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_first_index",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 2 (by norm_num : 2 ≤ 4) (fun i : Fin 4 => i.val * 2) ⟨0, by norm_num⟩ = 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "2"
+        ],
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_last_retained_index",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 3 (by norm_num : 3 ≤ 5) (fun i : Fin 5 => i.val * 3) ⟨2, by norm_num⟩ = 6 := by decide",
+      "domain_inputs": {
+        "m": [
+          "3"
+        ],
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_append_left_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n n' : ℕ} {α : Sort*} (m : ℕ) (h : m ≤ n) (u : Fin n → α) (v : Fin n' → α), VTask.take m (Nat.le_add_right_of_le h) (Fin.append u v) = VTask.take m h u",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.take_append_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.take_append_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.009,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_ofFn_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n m : ℕ} (h : m ≤ n) (v : Fin n → α), List.ofFn (VTask.take m h v) = (List.ofFn v).take m",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.ofFn_take_eq_take_ofFn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.ofFn_take_eq_take_ofFn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.253,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_accept_membership",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.take 2 (by norm_num : 2 ≤ 3) (fun i : Fin 3 => i.val) ⟨0, by norm_num⟩ = 0 := by decide",
+      "domain_inputs": {
+        "m": [
+          "2"
+        ],
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.take-44c41be1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.take 2 (by norm_num : 2 ≤ 3) (fun i : Fin 3 => i.val) ⟨0, by norm_num⟩"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.take",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.take-44c41be1",
+    "review_status": "unreviewed"
+  }
+}

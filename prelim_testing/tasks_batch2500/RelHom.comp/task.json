@@ -1,0 +1,125 @@
+{
+  "task_id": "RelHom.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> {r : α → α → Prop} -> {s : β → β → Prop} -> {t : γ → γ → Prop} -> (g : s →r t) -> (f : r →r s) -> r →r t",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The composition of two relation homomorphisms is a total, well-defined operation for any composable pair; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_preserves_rel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} {r : α → α → Prop} {s : β → β → Prop} {t : γ → γ → Prop} (g : s →r t) (f : r →r s) {a b : α}, r a b → t ((VTask.comp g f) a) ((VTask.comp g f) b)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelHom.comp_assoc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelHom.comp_assoc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.829,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "RelHom.comp-75d4613f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_not_commutative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {α β γ : Type*} {r : α → α → Prop} {s : β → β → Prop} {t : γ → γ → Prop} (g : s →r t) (f : r →r s) (g' : r →r s) (f' : s →r t), VTask.comp f' g' = VTask.comp g f)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelHom.comp_id"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelHom.comp_id"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RelHom.comp-75d4613f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_ne_swapped",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (f : (· < · : ℕ → ℕ → Prop) →r (· < · : ℕ → ℕ → Prop)) (g : (· < · : ℕ → ℕ → Prop) →r (· < · : ℕ → ℕ → Prop)), VTask.comp g f ≠ VTask.comp f g",
+      "domain_inputs": {},
+      "anchors": [
+        "RelHom.comp_id",
+        "RelHom.id_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelHom.comp_id",
+        "RelHom.id_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RelHom.comp-75d4613f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RelHom.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RelHom.comp-75d4613f",
+    "review_status": "unreviewed"
+  }
+}

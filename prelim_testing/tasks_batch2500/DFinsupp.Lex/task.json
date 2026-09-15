@@ -1,0 +1,175 @@
+{
+  "task_id": "DFinsupp.Lex",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Lex",
+  "signature": {
+    "name": "VTask.Lex",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_2} -> [(i : ι) → Zero (α i)] -> (r : ι → ι → Prop) -> (s : (i : ι) → α i → α i → Prop) -> (x y : Π₀ (i : ι), α i) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s",
+      "x",
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Lex is a pure proposition with no junk-value or boundary conventions; it is defined for all inputs without special-casing any edge cases beyond the mathematical definition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lex_unique_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [inst : (i : ι) → Zero (α i)] [Unique ι] [inst2 : ∀ i, LT (α i)] {r : ι → ι → Prop} [Std.Irrefl r] {x y : Π₀ i, α i}, VTask.Lex r (fun _ => (· < ·)) x y ↔ x default < y default",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.lex_iff_of_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.lex_iff_of_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.516,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.Lex-5c34b692",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lex_wellFounded",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [inst : (i : ι) → Zero (α i)] {r : ι → ι → Prop} {s : (i : ι) → α i → α i → Prop}, (∀ ⦃i : ι⦄ ⦃a : α i⦄, ¬s i a 0) → (∀ i, WellFounded (s i)) → WellFounded (rᶜ ⊓ (· ≠ ·)) → WellFounded (VTask.Lex r s)",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.Lex.wellFounded"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.Lex.wellFounded"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.433,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.Lex-5c34b692",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lex_acc_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [inst : (i : ι) → Zero (α i)] {r : ι → ι → Prop} {s : (i : ι) → α i → α i → Prop}, (∀ ⦃i : ι⦄ ⦃a : α i⦄, ¬s i a 0) → Acc (VTask.Lex r s) 0",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.Lex.acc_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.Lex.acc_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.183,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.Lex-5c34b692",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lex_irrefl_of_fiber_irrefl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} [inst : (i : ι) → Zero (α i)] {r : ι → ι → Prop} {s : (i : ι) → α i → α i → Prop}, (∀ i, Irreflexive (s i)) → ∀ (x : Π₀ i, α i), ¬VTask.Lex r s x x",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.lex_eq_dfinsupp_lex"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.lex_eq_dfinsupp_lex"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DFinsupp.Lex-5c34b692",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DFinsupp.Lex",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DFinsupp.Lex-5c34b692",
+    "review_status": "unreviewed"
+  }
+}

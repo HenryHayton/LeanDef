@@ -1,0 +1,281 @@
+{
+  "task_id": "Turing.PartrecToTM2.splitAtPred",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.splitAtPred",
+  "signature": {
+    "name": "VTask.splitAtPred",
+    "type": "{α : Type u_1} -> (p : α → Bool) -> List α → List α × Option α × List α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "L"
+    ],
+    "conventions": [
+      {
+        "point": "no_element_found_suffix",
+        "statement": "When no element of L satisfies p, the third component of the result is [] (the empty list), not some slice of L.",
+        "note": "This is an asymmetric convention: the whole list appears as the prefix, nothing as the pivot, and an empty list as the suffix."
+      },
+      {
+        "point": "first_match_only",
+        "statement": "Only the first element satisfying p is used as the pivot; elements after it that also satisfy p are left untouched in the suffix.",
+        "note": "This ensures the decomposition L = l₁ ++ [a] ++ l₂ is uniquely determined by the leftmost satisfying position."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "splitAtPred_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (· == 3) ([] : List Nat) = ([], none, []) := by decide",
+      "domain_inputs": {
+        "p": [
+          "· == 3"
+        ],
+        "L": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_found_middle",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (· == 3) [1, 2, 3, 4, 5] = ([1, 2], some 3, [4, 5]) := by decide",
+      "domain_inputs": {
+        "p": [
+          "· == 3"
+        ],
+        "L": [
+          "[1, 2, 3, 4, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_not_found",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (· == 3) [1, 2, 4, 5] = ([1, 2, 4, 5], none, []) := by decide",
+      "domain_inputs": {
+        "p": [
+          "· == 3"
+        ],
+        "L": [
+          "[1, 2, 4, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_always_true",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (fun _ => true) [1, 2, 3] = ([], some 1, [2, 3]) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun _ => true"
+        ],
+        "L": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_always_false",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (fun _ => false) [1, 2, 3] = ([1, 2, 3], none, []) := by decide",
+      "domain_inputs": {
+        "p": [
+          "fun _ => false"
+        ],
+        "L": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_pivot_at_end",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.splitAtPred (· == 5) [1, 2, 3, 4, 5] = ([1, 2, 3, 4], some 5, []) := by decide",
+      "domain_inputs": {
+        "p": [
+          "· == 5"
+        ],
+        "L": [
+          "[1, 2, 3, 4, 5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_false_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (L : List α), VTask.splitAtPred (fun _ => false) L = (L, none, [])",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.splitAtPred_false"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.splitAtPred_false"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.431,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "splitAtPred_eq_characterisation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (p : α → Bool) (L l₁ l₂ : List α) (o : Option α), (∀ x ∈ l₁, p x = false) → Option.elim' (L = l₁ ∧ l₂ = []) (fun a => p a = true ∧ L = l₁ ++ a :: l₂) o → VTask.splitAtPred p L = (l₁, o, l₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.splitAtPred_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.splitAtPred_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.487,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.PartrecToTM2.splitAtPred",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.PartrecToTM2.splitAtPred-53934d2b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,267 @@
+{
+  "task_id": "Polynomial.rootMultiplicity",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.rootMultiplicity",
+  "signature": {
+    "name": "VTask.rootMultiplicity",
+    "type": "{R : Type u} -> [Ring R] -> (a : R) -> (p : Polynomial R) -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p = 0",
+        "statement": "VTask.rootMultiplicity a 0 = 0 for every a, even though every power of (X - C a) divides the zero polynomial.",
+        "note": "Sentinel value: the zero polynomial is assigned multiplicity 0 rather than infinity."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rootMultiplicity_zero_poly",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.rootMultiplicity (3 : ℤ) 0 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_trailing_degree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : Polynomial ℤ), VTask.rootMultiplicity 0 p = p.natTrailingDegree",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.rootMultiplicity_eq_natTrailingDegree'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.rootMultiplicity_eq_natTrailingDegree'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.415,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_C_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (a r : R), VTask.rootMultiplicity a (Polynomial.C r) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.rootMultiplicity_C"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.rootMultiplicity_C"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.253,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_X_sub_C_self_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] [Nontrivial R] (x : R), VTask.rootMultiplicity x (Polynomial.X - Polynomial.C x) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.rootMultiplicity_X_sub_C_self"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.rootMultiplicity_X_sub_C_self"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_pow_dvd",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (a : R) (p : Polynomial R), (Polynomial.X - Polynomial.C a) ^ VTask.rootMultiplicity a p ∣ p",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.pow_rootMultiplicity_dvd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.pow_rootMultiplicity_dvd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.684,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_pos_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Ring R] (a : R) (p : Polynomial R), 0 < VTask.rootMultiplicity a p ↔ p ≠ 0 ∧ Polynomial.IsRoot p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.rootMultiplicity_pos'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.rootMultiplicity_pos'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rootMultiplicity_zero_poly_reject_infinite",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.rootMultiplicity (5 : ℤ) (0 : Polynomial ℤ) = 1) := by decide",
+      "domain_inputs": {
+        "a": [
+          "5"
+        ],
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.rootMultiplicity (5 : ℤ) 0 = 1",
+      "violated_property": "zero polynomial has rootMultiplicity 0, not any positive value"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.rootMultiplicity",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.rootMultiplicity-d7b84c0b",
+    "review_status": "unreviewed"
+  }
+}

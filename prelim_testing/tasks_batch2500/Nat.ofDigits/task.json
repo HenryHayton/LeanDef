@@ -1,0 +1,424 @@
+{
+  "task_id": "Nat.ofDigits",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofDigits",
+  "signature": {
+    "name": "VTask.ofDigits",
+    "type": "{α : Type u_1} -> [Semiring α] -> (b : α) -> List ℕ → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "L"
+    ],
+    "conventions": [
+      {
+        "point": "L = []",
+        "statement": "VTask.ofDigits b [] = 0 for any base b and any semiring α.",
+        "note": "Empty list yields the additive identity of the semiring."
+      },
+      {
+        "point": "all digits are 0",
+        "statement": "VTask.ofDigits b (List.replicate k 0) = 0 for any base b and any k.",
+        "note": "A list of all zeros always evaluates to zero regardless of base."
+      },
+      {
+        "point": "trailing zeros",
+        "statement": "VTask.ofDigits b (l ++ List.replicate k 0) = VTask.ofDigits b l for any l, k, b.",
+        "note": "Appending zero digits at the high end does not change the value."
+      },
+      {
+        "point": "base b = 1 over ℕ",
+        "statement": "VTask.ofDigits 1 L = L.sum for any list L of natural numbers.",
+        "note": "When the base is 1, positional weights all equal 1 so the result is the digit sum."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofDigits_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 10 ([] : List ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "b": [
+          "10"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_single",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 10 [7] = 7 := by decide",
+      "domain_inputs": {
+        "b": [
+          "10"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_base10_three_digits",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 10 [3, 2, 1] = 123 := by decide",
+      "domain_inputs": {
+        "b": [
+          "10"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_base2_binary",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 2 [1, 0, 1] = 5 := by decide",
+      "domain_inputs": {
+        "b": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_base0_first_digit",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 0 [9, 3, 7] = 9 := by decide",
+      "domain_inputs": {
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_base0_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofDigits 0 ([] : List ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_one_equals_list_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ L : List ℕ, VTask.ofDigits 1 L = L.sum",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ofDigits_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ofDigits_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.207,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_replicate_zero_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ b k : ℕ, VTask.ofDigits b (List.replicate k 0) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ofDigits_replicate_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ofDigits_replicate_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_append_trailing_zeros",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ b k : ℕ, ∀ l : List ℕ, VTask.ofDigits b (l ++ List.replicate k 0) = VTask.ofDigits b l",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ofDigits_append_replicate_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ofDigits_append_replicate_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.099,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_eq_sum_mapIdx",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ b : ℕ, ∀ L : List ℕ, VTask.ofDigits b L = (L.mapIdx fun i a => a * b ^ i).sum",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ofDigits_eq_sum_mapIdx"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ofDigits_eq_sum_mapIdx"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.19,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_neg_one_alternating_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ L : List ℕ, VTask.ofDigits (-1 : ℤ) L = (L.map (fun n : ℕ => (n : ℤ))).alternatingSum",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ofDigits_neg_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ofDigits_neg_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.158,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofDigits_sum_le_ofDigits",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ L : List ℕ, ∀ p : ℕ, 1 ≤ p → L.sum ≤ VTask.ofDigits p L",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.sum_le_ofDigits"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.sum_le_ofDigits"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.302,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.ofDigits-d43a5c2a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.ofDigits",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.ofDigits-d43a5c2a",
+    "review_status": "unreviewed"
+  }
+}

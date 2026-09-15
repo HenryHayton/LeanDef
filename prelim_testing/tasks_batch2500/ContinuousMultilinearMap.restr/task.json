@@ -1,0 +1,251 @@
+{
+  "task_id": "ContinuousMultilinearMap.restr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restr",
+  "signature": {
+    "name": "VTask.restr",
+    "type": "{𝕜 : Type u} -> {G : Type wG} -> {G' : Type wG'} -> [NontriviallyNormedField 𝕜] -> [SeminormedAddCommGroup G] -> [NormedSpace 𝕜 G] -> [SeminormedAddCommGroup G'] -> [NormedSpace 𝕜 G'] -> {k n : ℕ} -> (f : G [×n]→L[𝕜] G') -> (s : Finset (Fin n)) -> (hk : s.card = k) -> (z : G) -> G [×k]→L[𝕜] G'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "hk",
+      "z"
+    ],
+    "conventions": [
+      {
+        "point": "canonical bijection",
+        "statement": "The identification between `Fin k` and `s` used when evaluating `f.restr s hk z` at a tuple `m : Fin k → G` is the unique order-preserving (increasing) bijection `s.orderIsoOfFin hk : Fin k ≃o s`.",
+        "note": "Variables not in s receive the value z; variables in s receive m applied to their rank in the increasing enumeration of s."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restr_norm_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {k n : ℕ} (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = k) (z : G), ‖VTask.restr f s hk z‖ ≤ ‖f‖ * ‖z‖ ^ (n - k)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.208,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_norm_bound_full",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {n : ℕ} (f : G [×n]→L[𝕜] G') (z : G), ‖VTask.restr f Finset.univ (Finset.card_fin n) z‖ ≤ ‖f‖",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_norm_zero_frozen",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {n : ℕ} (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = 0) (h : 0 < n), ‖VTask.restr f s hk 0‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_norm_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {k n : ℕ} (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = k) (z : G), 0 ≤ ‖VTask.restr f s hk z‖",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr",
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr",
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.414,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_norm_le_norm_mul_norm_pow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {k n : ℕ} (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = k) (z : G), ‖VTask.restr f s hk z‖ ≤ ‖f‖ * ‖z‖ ^ (n - k)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.951,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_norm_zero_z_positive_diff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {G : Type*} {G' : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] {k n : ℕ} (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = k) (h : k < n), ‖VTask.restr f s hk 0‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restr_reject_norm_bound_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (G G' : Type*) [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [SeminormedAddCommGroup G'] [NormedSpace 𝕜 G'] (k n : ℕ) (f : G [×n]→L[𝕜] G') (s : Finset (Fin n)) (hk : s.card = k) (z : G), ¬ (‖VTask.restr f s hk z‖ > ‖f‖ * ‖z‖ ^ (n - k))",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.norm_restr"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousMultilinearMap.restr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousMultilinearMap.restr-e0d7ab89",
+    "review_status": "unreviewed"
+  }
+}

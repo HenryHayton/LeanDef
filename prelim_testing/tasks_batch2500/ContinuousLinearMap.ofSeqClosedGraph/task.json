@@ -1,0 +1,383 @@
+{
+  "task_id": "ContinuousLinearMap.ofSeqClosedGraph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofSeqClosedGraph",
+  "signature": {
+    "name": "VTask.ofSeqClosedGraph",
+    "type": "{𝕜 : Type u_1} -> [NontriviallyNormedField 𝕜] -> {E : Type u_3} -> [NormedAddCommGroup E] -> [NormedSpace 𝕜 E] -> [CompleteSpace E] -> {F : Type u_5} -> [NormedAddCommGroup F] -> [NormedSpace 𝕜 F] -> [CompleteSpace F] -> {g : E →ₗ[𝕜] F} -> (hg :\n    ∀ (u : ℕ → E) (x : E) (y : F),\n      Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) -> E →L[𝕜] F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "hg"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all inputs satisfying the stated type-class assumptions and the closed-graph hypothesis; there are no junk values or distinguished boundary inputs requiring special conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofSeqClosedGraph_isContinuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x), Continuous (VTask.ofSeqClosedGraph hg)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.875,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_isBoundedLinearMap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x), IsBoundedLinearMap 𝕜 (VTask.ofSeqClosedGraph hg)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.isBoundedLinearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.isBoundedLinearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.993,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) (x y : E), VTask.ofSeqClosedGraph hg (x + y) = VTask.ofSeqClosedGraph hg x + VTask.ofSeqClosedGraph hg y",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_add",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_add",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.03,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_map_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) (c : 𝕜) (x : E), VTask.ofSeqClosedGraph hg (c • x) = c • VTask.ofSeqClosedGraph hg x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_smul",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_smul",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.294,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x), VTask.ofSeqClosedGraph hg 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_zero",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_zero",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.808,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_tendsto_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) (u : ℕ → E) (x : E), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑(VTask.ofSeqClosedGraph hg) ∘ u) Filter.atTop (nhds (VTask.ofSeqClosedGraph hg x))",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous",
+        "Filter.Tendsto.comp",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous",
+        "Filter.Tendsto.comp",
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_norm_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) (x : E), ‖VTask.ofSeqClosedGraph hg x‖ ≤ ‖VTask.ofSeqClosedGraph hg‖ * ‖x‖",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.le_opNorm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.le_opNorm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 18.709,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_coeFn_ne_wrong_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g h : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x), g ≠ h → ⇑(VTask.ofSeqClosedGraph hg) ≠ ⇑h",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.068,
+        "at": "authoring",
+        "script": "by simp [_root_.ContinuousLinearMap.ofSeqClosedGraph] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.ContinuousLinearMap.ofSeqClosedGraph] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_two_clm_eq_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] [CompleteSpace F] {g : E →ₗ[𝕜] F} (hg : ∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) (f : E →L[𝕜] F), (∀ x, f x = g x) → ∀ x, f x = VTask.ofSeqClosedGraph hg x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coeFn_ofSeqClosedGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.849,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofSeqClosedGraph_not_discontinuous_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {𝕜 : Type*} [inst1 : NontriviallyNormedField 𝕜] {E : Type*} [inst2 : NormedAddCommGroup E] [inst3 : NormedSpace 𝕜 E] [inst4 : CompleteSpace E] {F : Type*} [inst5 : NormedAddCommGroup F] [inst6 : NormedSpace 𝕜 F] [inst7 : CompleteSpace F] (g : E →ₗ[𝕜] F), (∀ (u : ℕ → E) (x : E) (y : F), Filter.Tendsto u Filter.atTop (nhds x) → Filter.Tendsto (⇑g ∘ u) Filter.atTop (nhds y) → y = g x) → ¬Continuous g)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "LinearMap.id (R := ℝ) (M := ℝ)",
+      "violated_property": "sequential closed graph hypothesis"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.ofSeqClosedGraph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.ofSeqClosedGraph-ecf81b39",
+    "review_status": "unreviewed"
+  }
+}

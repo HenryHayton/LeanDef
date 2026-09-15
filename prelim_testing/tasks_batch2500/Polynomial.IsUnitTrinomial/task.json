@@ -1,0 +1,400 @@
+{
+  "task_id": "Polynomial.IsUnitTrinomial",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsUnitTrinomial",
+  "signature": {
+    "name": "VTask.IsUnitTrinomial",
+    "type": "(p : Polynomial ℤ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "exponent ordering",
+        "statement": "The three exponents k, m, n witnessing the trinomial structure are required to satisfy k < m < n, ensuring the three terms correspond to three distinct monomials of strictly increasing degree.",
+        "note": "Enforced by the existential; no junk convention needed."
+      },
+      {
+        "point": "unit coefficients",
+        "statement": "Each of the three nonzero coefficients must be a unit of ℤ, i.e., equal to +1 or −1; coefficients of magnitude greater than 1 or equal to 0 are disallowed.",
+        "note": "Enforced by the existential over Units ℤ."
+      },
+      {
+        "point": "non-membership default",
+        "statement": "For any polynomial not expressible in this form, the predicate is simply false; there is no junk-value convention because the object is Prop-valued.",
+        "note": "NONE_DECLARED: Prop-valued predicate has no junk values, only truth or falsity."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "is_unit_trinomial_iff_support_size_and_units",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : Polynomial ℤ, VTask.IsUnitTrinomial p ↔ p.support.card = 3 ∧ ∀ k ∈ p.support, IsUnit (p.coeff k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.433,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_unit_trinomial_support_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : Polynomial ℤ, VTask.IsUnitTrinomial p → p.support.card = 3",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.576,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_unit_trinomial_coeff_unit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p : Polynomial ℤ, VTask.IsUnitTrinomial p → ∀ k ∈ p.support, IsUnit (p.coeff k)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.isUnitTrinomial_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.344,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_unit_trinomial_not_zero_poly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (0 : Polynomial ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.isUnitTrinomial_iff",
+        "Polynomial.support_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.isUnitTrinomial_iff",
+        "Polynomial.support_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "is_unit_trinomial_x2_minus_x_plus_1",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUnitTrinomial (Polynomial.X ^ 2 - Polynomial.X + 1 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "Polynomial.X ^ 2 - Polynomial.X + 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Polynomial.X ^ 2 - Polynomial.X + 1"
+    },
+    {
+      "id": "is_unit_trinomial_x3_plus_x_plus_1",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUnitTrinomial (Polynomial.X ^ 3 + Polynomial.X + 1 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "Polynomial.X ^ 3 + Polynomial.X + 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Polynomial.X ^ 3 + Polynomial.X + 1"
+    },
+    {
+      "id": "is_unit_trinomial_reject_nonunit_coeff",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (2 * Polynomial.X ^ 2 + Polynomial.X + 1 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "2 * Polynomial.X ^ 2 + Polynomial.X + 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "2 * Polynomial.X ^ 2 + Polynomial.X + 1",
+      "violated_property": "all nonzero coefficients must be units of ℤ (±1)"
+    },
+    {
+      "id": "is_unit_trinomial_reject_binomial",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (Polynomial.X ^ 2 + Polynomial.X : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "Polynomial.X ^ 2 + Polynomial.X"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Polynomial.X ^ 2 + Polynomial.X",
+      "violated_property": "polynomial must have exactly three nonzero terms"
+    },
+    {
+      "id": "is_unit_trinomial_reject_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (0 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "0",
+      "violated_property": "polynomial must have exactly three nonzero terms"
+    },
+    {
+      "id": "is_unit_trinomial_reject_monomial",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (Polynomial.X ^ 5 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "Polynomial.X ^ 5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Polynomial.X ^ 5",
+      "violated_property": "polynomial must have exactly three nonzero terms"
+    },
+    {
+      "id": "is_unit_trinomial_reject_four_terms",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUnitTrinomial (Polynomial.X ^ 3 + Polynomial.X ^ 2 + Polynomial.X + 1 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "Polynomial.X ^ 3 + Polynomial.X ^ 2 + Polynomial.X + 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Polynomial.X ^ 3 + Polynomial.X ^ 2 + Polynomial.X + 1",
+      "violated_property": "polynomial must have exactly three nonzero terms"
+    },
+    {
+      "id": "is_unit_trinomial_accept_all_minus_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsUnitTrinomial (-Polynomial.X ^ 4 - Polynomial.X ^ 2 - 1 : Polynomial ℤ)",
+      "domain_inputs": {
+        "p": [
+          "-Polynomial.X ^ 4 - Polynomial.X ^ 2 - 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "-Polynomial.X ^ 4 - Polynomial.X ^ 2 - 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.IsUnitTrinomial",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.IsUnitTrinomial-6071ed46",
+    "review_status": "unreviewed"
+  }
+}

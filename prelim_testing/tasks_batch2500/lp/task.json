@@ -1,0 +1,250 @@
+{
+  "task_id": "lp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lp",
+  "signature": {
+    "name": "VTask.lp",
+    "type": "{α : Type u_3} -> (E : α → Type u_5) -> [(i : α) → NormedAddCommGroup (E i)] -> (p : ENNReal) -> AddSubgroup (PreLp E)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "E",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "finite index type",
+        "statement": "When α is a Fintype, every function f : Π i, E i satisfies Memℓp f p for all p ∈ ℝ≥0∞, so VTask.lp E p equals all of PreLp E.",
+        "note": "Standard consequence of finiteness; no special junk value, just a degenerate case."
+      },
+      {
+        "point": "p = 0 membership",
+        "statement": "A function belongs to VTask.lp E 0 if and only if it has finite support (finitely many nonzero coordinates), regardless of the norms of those coordinates.",
+        "note": "The Memℓp predicate at p = 0 counts nonzero entries rather than summing norms."
+      },
+      {
+        "point": "p = ∞ membership",
+        "statement": "A function belongs to VTask.lp E ⊤ if and only if the supremum of ‖f i‖ over all i is finite.",
+        "note": "The Memℓp predicate at p = ∞ is a boundedness condition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lp_add_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (E : α → Type*) [∀ i, NormedAddCommGroup (E i)] (p : ENNReal) (f g : PreLp E), f ∈ VTask.lp E p → g ∈ VTask.lp E p → f + g ∈ VTask.lp E p",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubgroup.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubgroup.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.175,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lp_neg_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (E : α → Type*) [∀ i, NormedAddCommGroup (E i)] (p : ENNReal) (f : PreLp E), f ∈ VTask.lp E p → -f ∈ VTask.lp E p",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubgroup.neg_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubgroup.neg_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.724,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lp_subgroup_of_preLp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (E : α → Type*) [∀ i, NormedAddCommGroup (E i)] (p : ENNReal), (VTask.lp E p : AddSubgroup (PreLp E)).toAddSubmonoid ≤ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "le_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "le_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.665,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lp_sub_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (E : α → Type*) [∀ i, NormedAddCommGroup (E i)] (p : ENNReal) (f g : PreLp E), f ∈ VTask.lp E p → g ∈ VTask.lp E p → f - g ∈ VTask.lp E p",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubgroup.sub_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubgroup.sub_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.63,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lp_const_one_not_mem_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(fun _ : ℕ => (1 : ℝ)) ∉ VTask.lp (fun _ : ℕ => ℝ) 1",
+      "domain_inputs": {
+        "p": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(fun _ : ℕ => (1 : ℝ))",
+      "violated_property": "Memℓp f 1 (absolute summability: ∑ ‖f i‖ must be finite)"
+    },
+    {
+      "id": "lp_not_contain_unbounded",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(fun n : ℕ => (n : ℝ)) ∉ VTask.lp (fun _ : ℕ => ℝ) ⊤",
+      "domain_inputs": {
+        "p": [
+          "⊤"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "lp-4d41063d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(fun n : ℕ => (n : ℝ))",
+      "violated_property": "Memℓp f ⊤ (essential boundedness: supi ‖f i‖ must be finite)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "lp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "lp-4d41063d",
+    "review_status": "unreviewed"
+  }
+}

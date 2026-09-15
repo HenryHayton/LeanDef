@@ -1,0 +1,406 @@
+{
+  "task_id": "Partition.Rel",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Rel",
+  "signature": {
+    "name": "VTask.Rel",
+    "type": "{α : Type u_1} -> {s : Set α} -> (P : Partition s) -> (a b : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "irreflexivity outside s",
+        "statement": "If a ∉ s, then VTask.Rel P a a is false (and VTask.Rel P a b is false for all b).",
+        "note": "The relation is irreflexive — and in fact universally false in one argument — for elements outside the partitioned set s."
+      },
+      {
+        "point": "reflexivity inside s",
+        "statement": "VTask.Rel P a a holds if and only if a ∈ s.",
+        "note": "This is the boundary between the 'in-domain' and 'junk' regimes for this relation."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rel_rfl_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x : α), VTask.Rel P x x ↔ x ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.rel_rfl_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.rel_rfl_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.182,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_comm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), VTask.Rel P x y ↔ VTask.Rel P y x",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.rel_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.rel_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.332,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y z : α), VTask.Rel P x y → VTask.Rel P y z → VTask.Rel P x z",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.619,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_left_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), VTask.Rel P x y → x ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.left_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.left_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.21,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_right_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), VTask.Rel P x y → y ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.right_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.right_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.881,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_iff_partOf_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), VTask.Rel P x y ↔ ∃ (_ : x ∈ s) (_ : y ∈ s), P.partOf x = P.partOf y",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.rel_iff_partOf_eq_partOf"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.rel_iff_partOf_eq_partOf"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.491,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_exists_block",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), VTask.Rel P x y → ∃ t ∈ P, x ∈ t ∧ y ∈ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.exists"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.exists"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.584,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_le_iff_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P Q : Partition s), (∀ x y : α, VTask.Rel P x y → VTask.Rel Q x y) ↔ P ≤ Q",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.rel_le_iff_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.rel_le_iff_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_not_outside_s_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), x ∉ s → ¬ VTask.Rel P x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.left_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.left_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_not_outside_s_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α), y ∉ s → ¬ VTask.Rel P x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.right_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.right_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rel_forall_block",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set α} (P : Partition s) (x y : α) (t : Set α), VTask.Rel P x y → t ∈ P → (x ∈ t ↔ y ∈ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Partition.Rel.forall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Partition.Rel.forall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.893,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Partition.Rel-7ad1076f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Partition.Rel",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Partition.Rel-7ad1076f",
+    "review_status": "unreviewed"
+  }
+}

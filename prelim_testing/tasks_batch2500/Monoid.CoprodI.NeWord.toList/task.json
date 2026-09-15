@@ -1,0 +1,223 @@
+{
+  "task_id": "Monoid.CoprodI.NeWord.toList",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toList",
+  "signature": {
+    "name": "VTask.toList",
+    "type": "{ι : Type u_1} -> {M : ι → Type u_2} -> [(i : ι) → Monoid (M i)] -> {i j : ι} -> (_w : Monoid.CoprodI.NeWord M i j) -> List ((i : ι) × M i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "_w"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.toList is a total structural recursion on NeWord, which is non-empty by construction; there are no junk inputs or degenerate edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toList_ne_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), VTask.toList w ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_ne_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_ne_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.989,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_head_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), (VTask.toList w).head? = some ⟨i, w.head⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_head?"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_head?"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.489,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_getLast_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), (VTask.toList w).getLast? = some ⟨j, w.last⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_getLast?"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_getLast?"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.484,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_head_fst_eq_start_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), ∃ hne : VTask.toList w ≠ [], ((VTask.toList w).head hne).1 = i",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_head?",
+        "List.head?_eq_head"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_head?",
+        "List.head?_eq_head"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_getLast_fst_eq_end_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j : ι} (w : Monoid.CoprodI.NeWord M i j), ∃ hne : VTask.toList w ≠ [], ((VTask.toList w).getLast hne).1 = j",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_getLast?",
+        "List.getLast?_eq_getLast"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_getLast?",
+        "List.getLast?_eq_getLast"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_append_nonempty_left_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : ι → Type*} [inst : (i : ι) → Monoid (M i)] {i j k : ι} (w₁ : Monoid.CoprodI.NeWord M i j) (w₂ : Monoid.CoprodI.NeWord M j k) (hne : i ≠ j), VTask.toList w₁ ≠ [] ∧ VTask.toList w₂ ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "Monoid.CoprodI.NeWord.toList_ne_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Monoid.CoprodI.NeWord.toList_ne_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Monoid.CoprodI.NeWord.toList",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Monoid.CoprodI.NeWord.toList-2a599a97",
+    "review_status": "unreviewed"
+  }
+}

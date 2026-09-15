@@ -1,0 +1,451 @@
+{
+  "task_id": "Set.sigma",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sigma",
+  "signature": {
+    "name": "VTask.sigma",
+    "type": "{ι : Type u_1} -> {α : ι → Type u_3} -> (s : Set ι) -> (t : (i : ι) → Set (α i)) -> Set ((i : ι) × α i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-behaved for all inputs including empty index sets, empty fibre sets, and universal sets; no junk-value conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sigma_empty_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (t : ∀ i, Set (α i)), VTask.sigma (∅ : Set ι) t = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.empty_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.empty_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.28,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_empty_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι), VTask.sigma s (fun _ => (∅ : Set (α _))) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.sigma_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.sigma_empty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_singleton_eq_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (i : ι) (t : ∀ i, Set (α i)), VTask.sigma ({i} : Set ι) t = Sigma.mk i '' t i",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.singleton_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.singleton_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.356,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_eq_biUnion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)), VTask.sigma s t = ⋃ i ∈ s, Sigma.mk i '' t i",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.sigma_eq_biUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.sigma_eq_biUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.916,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_mk_preimage_in_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)) (i : ι), i ∈ s → Sigma.mk i ⁻¹' VTask.sigma s t = t i",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mk_preimage_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mk_preimage_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.747,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_mk_preimage_not_in_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)) (i : ι), i ∉ s → Sigma.mk i ⁻¹' VTask.sigma s t = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mk_preimage_sigma_eq_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mk_preimage_sigma_eq_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.579,
+        "at": "authoring",
+        "script": "by simp only [_root_.Set.sigma] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Set.sigma] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_fst_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)), (∀ i, (t i).Nonempty) → Sigma.fst '' VTask.sigma s t = s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.fst_image_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.fst_image_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.751,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_univ_fibers",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι), VTask.sigma s (fun _ => Set.univ : ∀ i, Set (α i)) = Sigma.fst ⁻¹' s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.sigma_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.sigma_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.129,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_insert",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (i : ι) (s : Set ι) (t : ∀ i, Set (α i)), VTask.sigma (insert i s) t = Sigma.mk i '' t i ∪ VTask.sigma s t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.insert_sigma"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.insert_sigma"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.615,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_image_mk_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (i : ι) (s : Set ι) (t : ∀ i, Set (α i)), i ∈ s → Sigma.mk i '' t i ⊆ VTask.sigma s t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.image_sigmaMk_subset_sigma_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.image_sigmaMk_subset_sigma_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.903,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_nonempty_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : ι → Type*} (s : Set ι) (t : ∀ i, Set (α i)), (VTask.sigma s t).Nonempty ↔ ∃ i ∈ s, (t i).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Nonempty.sigma_fst",
+        "Set.Nonempty.sigma_snd",
+        "Set.sigma_nonempty_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Nonempty.sigma_fst",
+        "Set.Nonempty.sigma_snd",
+        "Set.sigma_nonempty_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.639,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigma_empty_reject_nonempty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.sigma (∅ : Set ℕ) (fun _ => Set.univ : ∀ _ : ℕ, Set ℕ)).Nonempty",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.041,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.sigma-38f61655",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.sigma (∅ : Set ℕ) (fun _ => Set.univ)",
+      "violated_property": "index must belong to s"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.sigma",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.sigma-38f61655",
+    "review_status": "unreviewed"
+  }
+}

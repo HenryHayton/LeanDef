@@ -1,0 +1,205 @@
+{
+  "task_id": "Fin.tail",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.tail",
+  "signature": {
+    "name": "VTask.tail",
+    "type": "{n : ℕ} -> {α : Fin (n + 1) → Sort u} -> (q : (i : Fin (n + 1)) → α i) -> (i : Fin n) -> α i.succ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "α",
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.tail is a total function with no junk-value or boundary conventions needed; it is well-defined for all inputs including the empty-tail case n=0."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cons_head_tail_recovers_q",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (q : (i : Fin (n + 1)) → α i), Fin.cons (q 0) (VTask.tail q) = q",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.cons_self_tail"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.cons_self_tail"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.125,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.tail-9fc5938b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tail_range_insert",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Type*} (f : Fin (n + 1) → α), Set.range f = insert (f 0) (Set.range (VTask.tail f))",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.range_fin_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.range_fin_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.494,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.tail-9fc5938b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tail_partialProd_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {M : Type*} [inst : Monoid M] (f : Fin (n + 1) → M) (j : Fin (n + 1)), Fin.partialProd f j.succ = f 0 * Fin.partialProd (VTask.tail f) j",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.partialProd_succ'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.partialProd_succ'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.864,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.tail-9fc5938b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tail_reject_zeroth_element",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.tail (fun (i : Fin 3) => i.val) ⟨0, by omega⟩ ≠ 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.tail-9fc5938b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.tail (fun (i : Fin 3) => i.val) ⟨0, by omega⟩",
+      "violated_property": "tail does not include the zeroth element; the 0th entry of the tail is q(1) = 1, not q(0) = 0"
+    },
+    {
+      "id": "tail_reject_constant_not_head",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.tail (fun (i : Fin 4) => i.val) ⟨0, by omega⟩ ≠ 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.tail-9fc5938b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.tail (fun (i : Fin 4) => i.val) ⟨0, by omega⟩",
+      "violated_property": "tail at index 0 yields q(1) = 1, not q(0) = 0; the head element is excluded from the tail"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.tail",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.tail-9fc5938b",
+    "review_status": "unreviewed"
+  }
+}

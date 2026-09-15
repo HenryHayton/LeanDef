@@ -1,0 +1,453 @@
+{
+  "task_id": "Multiset.filter",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.filter",
+  "signature": {
+    "name": "VTask.filter",
+    "type": "{α : Type u_1} -> (p : α → Prop) -> [DecidablePred p] -> (s : Multiset α) -> Multiset α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.filter is a total function on all multisets and all decidable predicates; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "filter_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n : ℕ => decide (n % 2 = 0) = true) (0 : Multiset ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_even_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n : ℕ => decide (n % 2 = 0) = true) ({0, 1, 2, 3, 4} : Multiset ℕ) = {0, 2, 4} := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1, 2, 3, 4}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_gt1_concrete",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n : ℕ => decide (n > 1) = true) ({1, 2, 3, 2, 1} : Multiset ℕ) = {2, 3, 2} := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3, 2, 1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_all_fail",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n : ℕ => decide (n > 10) = true) ({1, 2, 3} : Multiset ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_all_pass",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.filter (fun n : ℕ => decide (n > 0) = true) ({1, 2, 3} : Multiset ℕ) = {1, 2, 3} := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_singleton_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (2 : ℕ) ∈ VTask.filter (fun n : ℕ => decide (n % 2 = 0) = true) ({1, 2, 3} : Multiset ℕ) := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(2 : ℕ)"
+    },
+    {
+      "id": "filter_nodup_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (s : Multiset ℕ), Multiset.Nodup s → Multiset.Nodup (VTask.filter p s)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.Nodup.filter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.Nodup.filter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.171,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_le_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (s : Multiset ℕ), VTask.filter p s ≤ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.filter_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.filter_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.139,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_subset_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (s : Multiset ℕ), VTask.filter p s ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.filter_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.filter_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.126,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (a : ℕ) (s : Multiset ℕ), a ∈ VTask.filter p s ↔ a ∈ s ∧ p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.mem_filter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.mem_filter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.15,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_eq_nil_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (s : Multiset ℕ), VTask.filter p s = 0 ↔ ∀ a ∈ s, ¬p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.filter_eq_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.filter_eq_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.396,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_eq_self_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (s : Multiset ℕ), VTask.filter p s = s ↔ ∀ a ∈ s, p a",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.filter_eq_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.filter_eq_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.484,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "filter_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p], Monotone (VTask.filter p)",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.monotone_filter_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.monotone_filter_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.137,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Multiset.filter-f55ffdbc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Multiset.filter",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Multiset.filter-f55ffdbc",
+    "review_status": "unreviewed"
+  }
+}

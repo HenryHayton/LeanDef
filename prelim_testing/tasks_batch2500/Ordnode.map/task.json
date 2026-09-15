@@ -1,0 +1,186 @@
+{
+  "task_id": "Ordnode.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (f : α → β) -> Ordnode α → Ordnode β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "precondition_violation",
+        "statement": "If `f` is not strictly monotone, `VTask.map f t` still returns a well-typed `Ordnode β` of the same shape, but the ordering invariants of the result are not guaranteed to hold.",
+        "note": "Documented precondition: caller must supply a strictly monotone function for the result to be a valid ordered-set tree."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_size_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (· * 2) (Ordnode.nil : Ordnode ℕ)).size = (Ordnode.nil : Ordnode ℕ).size := by decide",
+      "domain_inputs": {
+        "f": [
+          "· * 2"
+        ],
+        "t": [
+          "Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.map-67c6472c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_size_single",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.map (· + 1) (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil)).size = (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil).size := by decide",
+      "domain_inputs": {
+        "f": [
+          "· + 1"
+        ],
+        "t": [
+          "Ordnode.node 1 Ordnode.nil 5 Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.map-67c6472c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_size_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ) (t : Ordnode ℕ), (VTask.map f t).size = t.size",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Valid'.map_aux"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Valid'.map_aux"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ordnode.map-67c6472c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_valid_monotone_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) [Preorder α] [Preorder β] (f : α → β), StrictMono f → ∀ (t : Ordnode α), Ordnode.Valid t → Ordnode.Valid (VTask.map f t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.map.valid"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.map.valid"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.298,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.map-67c6472c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_size_nil_not_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.map (· + 1) (Ordnode.nil : Ordnode ℕ)).size = 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "· + 1"
+        ],
+        "t": [
+          "Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.map-67c6472c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.map (· + 1) (Ordnode.nil : Ordnode ℕ)).size",
+      "violated_property": "Empty tree has size 0, not 1"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.map-67c6472c",
+    "review_status": "unreviewed"
+  }
+}

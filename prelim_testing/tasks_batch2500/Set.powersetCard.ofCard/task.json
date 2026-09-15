@@ -1,0 +1,140 @@
+{
+  "task_id": "Set.powersetCard.ofCard",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofCard",
+  "signature": {
+    "name": "VTask.ofCard",
+    "type": "{α : Type u_1} -> {n : ℕ} -> {s : Finset α} -> (s_card : s.card = n) -> ↑(Set.powersetCard α n)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s_card"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is a total constructor; its only non-implicit argument is a proof, so there are no junk-value or edge-case conventions to declare."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofCard_val_card_eq_n",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} {s : Finset α} (h : s.card = n), (VTask.ofCard h).val.card = n",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.powersetCard.val_ofCard"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.powersetCard.val_ofCard"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.151,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.ofCard-56c2e9c5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofCard_eq_iff_val_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} {s t : Finset α} (hs : s.card = n) (ht : t.card = n), VTask.ofCard hs = VTask.ofCard ht ↔ s = t",
+      "domain_inputs": {},
+      "anchors": [
+        "Subtype.ext_iff",
+        "Set.powersetCard.val_ofCard"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subtype.ext_iff",
+        "Set.powersetCard.val_ofCard"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.ofCard-56c2e9c5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofCard_val_ne_wrong_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (h : ({1, 2} : Finset ℕ).card = 2), (VTask.ofCard h).val ≠ ({1, 2, 3} : Finset ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.powersetCard.val_ofCard"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.powersetCard.val_ofCard"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.219,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.ofCard-56c2e9c5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.powersetCard.ofCard",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.powersetCard.ofCard-56c2e9c5",
+    "review_status": "unreviewed"
+  }
+}

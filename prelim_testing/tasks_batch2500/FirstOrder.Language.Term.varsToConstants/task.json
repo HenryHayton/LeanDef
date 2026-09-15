@@ -1,0 +1,102 @@
+{
+  "task_id": "FirstOrder.Language.Term.varsToConstants",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.varsToConstants",
+  "signature": {
+    "name": "VTask.varsToConstants",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> {γ : Type u_1} -> L.Term (γ ⊕ α) → (L.withConstants γ).Term α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and structurally recursive with no junk-value or boundary conventions; every case is handled with a canonical output."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "varsToConstants_pure_syntactic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} {γ : Type*} (t : L.Term (γ ⊕ α)), ∃ (s : (L.withConstants γ).Term α), s = VTask.varsToConstants t",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_varsToConstants"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_varsToConstants"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.235,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.varsToConstants-97280397",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "varsToConstants_func_recursive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α γ : Type*} {n : ℕ} (f : L.Functions n) (ts : Fin n → L.Term (γ ⊕ α)) (i : Fin n), (VTask.varsToConstants (FirstOrder.Language.Term.func f ts)).realize = (FirstOrder.Language.Term.func (Sum.inl f) (fun j => VTask.varsToConstants (ts j))).realize",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_varsToConstants"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_varsToConstants"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.varsToConstants-97280397",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Term.varsToConstants",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Term.varsToConstants-97280397",
+    "review_status": "unreviewed"
+  }
+}

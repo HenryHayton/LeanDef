@@ -1,0 +1,286 @@
+{
+  "task_id": "DirectSum.mk",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mk",
+  "signature": {
+    "name": "VTask.mk",
+    "type": "{ι : Type v} -> (β : ι → Type w) -> [(i : ι) → AddCommMonoid (β i)] -> [DecidableEq ι] -> (s : Finset ι) -> ((i : ↑↑s) → β ↑i) →+ DirectSum ι fun i => β i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "index outside s",
+        "statement": "For any index i not in s, the coefficient of VTask.mk β s x at i is the zero element of β i.",
+        "note": "This is the defining junk-value convention: the element is zero outside the support set s."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mk_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (β : ι → Type*) [inst : (i : ι) → AddCommMonoid (β i)] [DecidableEq ι] (s : Finset ι), VTask.mk β s 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.92,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (β : ι → Type*) [inst : (i : ι) → AddCommMonoid (β i)] [DecidableEq ι] (s : Finset ι) (x y : (i : s) → β i), VTask.mk β s (x + y) = VTask.mk β s x + VTask.mk β s y",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.412,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_is_add_monoid_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (β : ι → Type*) [inst : (i : ι) → AddCommMonoid (β i)] [DecidableEq ι] (s : Finset ι), Function.Surjective (VTask.mk β s) ∨ True",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.592,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_map_nsmul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (β : ι → Type*) [inst : (i : ι) → AddCommMonoid (β i)] [DecidableEq ι] (s : Finset ι) (x : (i : s) → β i) (n : ℕ), VTask.mk β s (n • x) = n • VTask.mk β s x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_nsmul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_nsmul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.447,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_empty_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.mk (fun _ : Fin 2 => ℕ) ∅ 0 = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.mk (fun _ : Fin 3 => ℕ) Finset.univ 0 = 0",
+      "domain_inputs": {
+        "s": [
+          "Finset.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.143,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.mk (fun _ : Fin 3 => ℕ) Finset.univ 0"
+    },
+    {
+      "id": "mk_empty_unique_source",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (x : (i : (∅ : Finset ℕ)) → ℤ), VTask.mk (fun _ : ℕ => ℤ) ∅ x = 0",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.535,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DirectSum.mk-aa72044c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.mk (fun _ : ℕ => ℤ) ∅"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DirectSum.mk",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DirectSum.mk-aa72044c",
+    "review_status": "unreviewed"
+  }
+}

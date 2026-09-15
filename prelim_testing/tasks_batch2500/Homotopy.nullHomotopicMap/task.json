@@ -1,0 +1,147 @@
+{
+  "task_id": "Homotopy.nullHomotopicMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.nullHomotopicMap",
+  "signature": {
+    "name": "VTask.nullHomotopicMap",
+    "type": "{ι : Type u_1} -> {V : Type u} -> [CategoryTheory.Category.{v, u} V] -> [CategoryTheory.Preadditive V] -> {c : ComplexShape ι} -> {C D : HomologicalComplex V c} -> (hom : (i j : ι) → C.X i ⟶ D.X j) -> C ⟶ D",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "hom"
+    ],
+    "conventions": [
+      {
+        "point": "isolated degree gives zero component",
+        "statement": "If k₀ is an index such that neither c.Rel k₀ l nor c.Rel l k₀ holds for any l, then (VTask.nullHomotopicMap hom).f k₀ = 0 for any hom.",
+        "note": "Both the dNext and prevD summands vanish at an isolated degree."
+      },
+      {
+        "point": "irrelevant hom values ignored",
+        "statement": "The values hom i j for pairs (i, j) where c.Rel j i is false and c.Rel i j is false have no effect on the resulting chain map.",
+        "note": "Only hom values along adjacent (rel) pairs contribute to component maps."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nullHomotopicMap_f_isolated_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Preadditive V] {c : ComplexShape ι} {C D : HomologicalComplex V c} (hom : ∀ i j, C.X i ⟶ D.X j) {k₀ : ι} (hk₀ : ∀ l : ι, ¬c.Rel k₀ l) (hk₀' : ∀ l : ι, ¬c.Rel l k₀), (VTask.nullHomotopicMap hom).f k₀ = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Homotopy.nullHomotopicMap_f_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Homotopy.nullHomotopicMap_f_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.711,
+        "at": "authoring",
+        "script": "by simp only [_root_.Homotopy.nullHomotopicMap] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Homotopy.nullHomotopicMap] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Homotopy.nullHomotopicMap-d68618a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nullHomotopicMap_zero_hom_is_zero_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Preadditive V] {c : ComplexShape ι} {C D : HomologicalComplex V c}, VTask.nullHomotopicMap (fun i j => (0 : C.X i ⟶ D.X j)) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Homotopy.nullHomotopicMap_f_eq_zero",
+        "HomologicalComplex.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Homotopy.nullHomotopicMap_f_eq_zero",
+        "HomologicalComplex.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Homotopy.nullHomotopicMap-d68618a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nullHomotopicMap_map_additive_functor",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Preadditive V] {W : Type*} [CategoryTheory.Category W] [CategoryTheory.Preadditive W] {c : ComplexShape ι} {C D : HomologicalComplex V c} (G : CategoryTheory.Functor V W) [G.Additive] (hom : ∀ i j, C.X i ⟶ D.X j), (G.mapHomologicalComplex c).map (VTask.nullHomotopicMap hom) = VTask.nullHomotopicMap (fun i j => G.map (hom i j))",
+      "domain_inputs": {},
+      "anchors": [
+        "Homotopy.map_nullHomotopicMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Homotopy.map_nullHomotopicMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.826,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Homotopy.nullHomotopicMap-d68618a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Homotopy.nullHomotopicMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Homotopy.nullHomotopicMap-d68618a9",
+    "review_status": "unreviewed"
+  }
+}

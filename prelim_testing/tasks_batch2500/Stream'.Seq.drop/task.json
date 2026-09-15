@@ -1,0 +1,106 @@
+{
+  "task_id": "Stream'.Seq.drop",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.drop",
+  "signature": {
+    "name": "VTask.drop",
+    "type": "{α : Type u} -> (s : Stream'.Seq α) -> ℕ → Stream'.Seq α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.drop s 0 = s for any sequence s.",
+        "note": "Base case of the recursion; dropping nothing is the identity."
+      },
+      {
+        "point": "n exceeds length of s",
+        "statement": "When n is greater than or equal to the number of elements in a finite sequence s, VTask.drop s n is the empty sequence Stream'.Seq.nil.",
+        "note": "Tailing past the end of a finite Seq yields nil; no error is raised."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "drop_nil_eq_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (n : ℕ), VTask.drop (Stream'.Seq.nil : Stream'.Seq α) n = Stream'.Seq.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.drop_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.drop_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.072,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.drop-0b50744c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "drop_drop_zero_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (α : Type) (s : Stream'.Seq α) (n : ℕ), VTask.drop s (n + 1) = s",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.drop-0b50744c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Stream'.Seq.drop",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Stream'.Seq.drop-0b50744c",
+    "review_status": "unreviewed"
+  }
+}

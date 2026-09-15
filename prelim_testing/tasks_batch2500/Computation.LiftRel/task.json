@@ -1,0 +1,394 @@
+{
+  "task_id": "Computation.LiftRel",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.LiftRel",
+  "signature": {
+    "name": "VTask.LiftRel",
+    "type": "{α : Type u} -> {β : Type v} -> (R : α → β → Prop) -> (ca : Computation α) -> (cb : Computation β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "ca",
+      "cb"
+    ],
+    "conventions": [
+      {
+        "point": "Both computations diverge",
+        "statement": "If both `ca` and `cb` diverge (never produce a value), then `VTask.LiftRel R ca cb` holds vacuously for any relation `R`, because both universal premises are empty.",
+        "note": "Vacuous truth from empty membership"
+      },
+      {
+        "point": "One diverges, one terminates",
+        "statement": "If exactly one of `ca` or `cb` terminates with a value while the other diverges, then `VTask.LiftRel R ca cb` is false, because the terminating side cannot be matched by the diverging side.",
+        "note": "Asymmetric termination breaks the bilateral correspondence"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftrel_swap_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (R : α → β → Prop) (ca : Computation α) (cb : Computation β), VTask.LiftRel (Function.swap R) cb ca ↔ VTask.LiftRel R ca cb",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.LiftRel.swap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.LiftRel.swap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.501,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_imp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {R S : α → β → Prop}, (∀ {a b}, R a b → S a b) → ∀ (ca : Computation α) (cb : Computation β), VTask.LiftRel R ca cb → VTask.LiftRel S ca cb",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.LiftRel.imp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.LiftRel.imp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.176,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_eq_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (R : α → α → Prop), Equivalence R → Equivalence (VTask.LiftRel R)",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.LiftRel.equiv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.LiftRel.equiv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.234,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_both_terminate_right_clause",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (R : α → β → Prop) (a : α) (b : β), VTask.LiftRel R (Computation.pure a) (Computation.pure b) → R a b",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.LiftRelAux.ret_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.LiftRelAux.ret_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.327,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_eq_implies_rel_when_R_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (R : α → α → Prop), Reflexive R → ∀ (ca cb : Computation α), VTask.LiftRel Eq ca cb → VTask.LiftRel R ca cb",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.LiftRel.imp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.LiftRel.imp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftrel_pure_le",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.LiftRel (fun a b => a ≤ b) (Computation.pure 3) (Computation.pure 5)",
+      "domain_inputs": {
+        "ca": [
+          "Computation.pure 3"
+        ],
+        "cb": [
+          "Computation.pure 5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.055,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.LiftRel (fun a b => a ≤ b) (Computation.pure 3) (Computation.pure 5)"
+    },
+    {
+      "id": "liftrel_pure_le_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.LiftRel (fun a b => a ≤ b) (Computation.pure 5) (Computation.pure 3)",
+      "domain_inputs": {
+        "ca": [
+          "Computation.pure 5"
+        ],
+        "cb": [
+          "Computation.pure 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.159,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.LiftRel (fun a b => a ≤ b) (Computation.pure 5) (Computation.pure 3)",
+      "violated_property": "For every b such that cb terminates with output b, there exists a such that ca terminates with output a and R a b holds"
+    },
+    {
+      "id": "liftrel_pure_eq",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.LiftRel Eq (Computation.pure 7) (Computation.pure 7)",
+      "domain_inputs": {
+        "ca": [
+          "Computation.pure 7"
+        ],
+        "cb": [
+          "Computation.pure 7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.037,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.LiftRel Eq (Computation.pure 7) (Computation.pure 7)"
+    },
+    {
+      "id": "liftrel_pure_eq_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.LiftRel Eq (Computation.pure 7) (Computation.pure 8)",
+      "domain_inputs": {
+        "ca": [
+          "Computation.pure 7"
+        ],
+        "cb": [
+          "Computation.pure 8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.092,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.LiftRel Eq (Computation.pure 7) (Computation.pure 8)",
+      "violated_property": "For every a such that ca terminates with output a, there exists b such that cb terminates with output b and R a b holds"
+    },
+    {
+      "id": "liftrel_false_rel_pure_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.LiftRel (fun (_a : ℕ) (_b : ℕ) => False) (Computation.pure 1) (Computation.pure 2)",
+      "domain_inputs": {
+        "ca": [
+          "Computation.pure 1"
+        ],
+        "cb": [
+          "Computation.pure 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.087,
+        "at": "authoring",
+        "script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Computation.LiftRel] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Computation.LiftRel-1732aeb0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.LiftRel (fun (_a : ℕ) (_b : ℕ) => False) (Computation.pure 1) (Computation.pure 2)",
+      "violated_property": "For every a such that ca terminates with output a, there exists b such that cb terminates with output b and R a b holds"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Computation.LiftRel",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Computation.LiftRel-1732aeb0",
+    "review_status": "unreviewed"
+  }
+}

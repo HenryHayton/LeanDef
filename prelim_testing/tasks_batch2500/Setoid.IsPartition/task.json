@@ -1,0 +1,308 @@
+{
+  "task_id": "Setoid.IsPartition",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPartition",
+  "signature": {
+    "name": "VTask.IsPartition",
+    "type": "{α : Type u_1} -> (c : Set (Set α)) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.IsPartition is a Prop-valued predicate; when its conditions are not met the proposition is simply false, and no junk-value or out-of-domain convention is needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ispartition_sUnion_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {c : Set (Set α)}, VTask.IsPartition c → ⋃₀ c = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.IsPartition.sUnion_eq_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.IsPartition.sUnion_eq_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.42,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_pairwise_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {c : Set (Set α)}, VTask.IsPartition c → c.PairwiseDisjoint id",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.IsPartition.pairwiseDisjoint"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.IsPartition.pairwiseDisjoint"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.487,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_nonempty_pieces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {c : Set (Set α)}, VTask.IsPartition c → ∀ s ∈ c, s.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.nonempty_of_mem_partition"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.nonempty_of_mem_partition"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.627,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_empty_not_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {c : Set (Set α)}, VTask.IsPartition c → ∅ ∉ c",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.nonempty_of_mem_partition"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.nonempty_of_mem_partition"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.25,
+        "at": "authoring",
+        "script": "by simp only [_root_.Setoid.IsPartition] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Setoid.IsPartition] <;> aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_classes_mkClasses",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (c : Set (Set α)) (hc : VTask.IsPartition c), (Setoid.mkClasses c hc.2).classes = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.classes_mkClasses"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.classes_mkClasses"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.213,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_implies_exists_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {c : Set (Set α)}, VTask.IsPartition c → ∀ a : α, ∃ s ∈ c, a ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Setoid.IsPartition.sUnion_eq_univ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Setoid.IsPartition.sUnion_eq_univ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_from_pairwise_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {s : Set (Set α)}, s.PairwiseDisjoint id → (∀ a : α, ∃ x ∈ s, a ∈ x) → ∅ ∉ s → VTask.IsPartition s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PairwiseDisjoint.isPartition_of_exists_of_ne_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PairwiseDisjoint.isPartition_of_exists_of_ne_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.837,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispartition_finpartition_parts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (f : Finpartition (Set.univ : Set α)), VTask.IsPartition (f.parts : Set (Set α))",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.isPartition_parts"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.isPartition_parts"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.179,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Setoid.IsPartition-ef139ddf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Setoid.IsPartition",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Setoid.IsPartition-ef139ddf",
+    "review_status": "unreviewed"
+  }
+}

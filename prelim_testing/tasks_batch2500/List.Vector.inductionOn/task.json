@@ -1,0 +1,290 @@
+{
+  "task_id": "List.Vector.inductionOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inductionOn",
+  "signature": {
+    "name": "VTask.inductionOn",
+    "type": "{α : Type u_1} -> {C : {n : ℕ} → List.Vector α n → Sort u_6} -> {n : ℕ} -> (v : List.Vector α n) -> (nil : C List.Vector.nil) -> (cons : {n : ℕ} → {x : α} → {w : List.Vector α n} → C w → C (x ::ᵥ w)) -> C v",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total with no junk inputs; all arguments are well-typed by construction and no special edge-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inductionOn_cons_computes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {C : ∀ {n : ℕ}, List.Vector α n → Sort*} {n : ℕ} (x : α) (w : List.Vector α n) (b : C List.Vector.nil) (s : ∀ {n : ℕ} {x : α} {w : List.Vector α n}, C w → C (x ::ᵥ w)), VTask.inductionOn (x ::ᵥ w) b s = s (VTask.inductionOn w b s)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.inductionOn_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.inductionOn_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductionOn_nil_nat_base",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.inductionOn (List.Vector.nil (α := ℕ)) 42 (fun {_n} {_x} {_w} ih => ih + 1) = 42 := by decide",
+      "domain_inputs": {
+        "v": [
+          "List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductionOn_singleton_cons",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.inductionOn (List.Vector.cons 5 List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 1 := by decide",
+      "domain_inputs": {
+        "v": [
+          "List.Vector.cons 5 List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductionOn_length2_counts_twice",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.inductionOn (3 ::ᵥ 7 ::ᵥ List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 2 := by decide",
+      "domain_inputs": {
+        "v": [
+          "3 ::ᵥ 7 ::ᵥ List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductionOn_not_wrong_base",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.inductionOn (List.Vector.nil (α := ℕ)) 7 (fun {_n} {_x} {_w} ih => ih + 1) = 8) := by decide",
+      "domain_inputs": {
+        "v": [
+          "List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.inductionOn (List.Vector.nil (α := ℕ)) 7 (fun {_n} {_x} {_w} ih => ih + 1) = 8",
+      "violated_property": "nil branch: result must equal the nil argument directly, not a step application"
+    },
+    {
+      "id": "inductionOn_cons_not_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.inductionOn (5 ::ᵥ List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 0) := by decide",
+      "domain_inputs": {
+        "v": [
+          "5 ::ᵥ List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.inductionOn (5 ::ᵥ List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 0",
+      "violated_property": "cons branch: result must invoke the cons step, not return the nil base case directly"
+    },
+    {
+      "id": "inductionOn_length2_not_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.inductionOn (1 ::ᵥ 2 ::ᵥ List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 1) := by decide",
+      "domain_inputs": {
+        "v": [
+          "1 ::ᵥ 2 ::ᵥ List.Vector.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.inductionOn (1 ::ᵥ 2 ::ᵥ List.Vector.nil) 0 (fun {_n} {_x} {_w} ih => ih + 1) = 1",
+      "violated_property": "cons branch must recurse fully: two-element vector requires two step applications, not one"
+    },
+    {
+      "id": "inductionOn_length_counts_elements",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (v : List.Vector α n), VTask.inductionOn v 0 (fun {_n} {_x} {_w} ih => ih + 1) = n",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.inductionOn_nil",
+        "List.Vector.inductionOn_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.inductionOn_nil",
+        "List.Vector.inductionOn_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductionOn_converts_to_list",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (v : List.Vector α n), VTask.inductionOn v ([] : List α) (fun {_n} {x} {_w} ih => x :: ih) = v.toList",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.inductionOn_nil",
+        "List.Vector.inductionOn_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.inductionOn_nil",
+        "List.Vector.inductionOn_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Vector.inductionOn-233c155f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.Vector.inductionOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.Vector.inductionOn-233c155f",
+    "review_status": "unreviewed"
+  }
+}

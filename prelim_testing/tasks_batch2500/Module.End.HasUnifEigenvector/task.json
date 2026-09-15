@@ -1,0 +1,413 @@
+{
+  "task_id": "Module.End.HasUnifEigenvector",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.HasUnifEigenvector",
+  "signature": {
+    "name": "VTask.HasUnifEigenvector",
+    "type": "{R : Type v} -> {M : Type w} -> [CommRing R] -> [AddCommGroup M] -> [Module R M] -> (f : Module.End R M) -> (μ : R) -> (k : ℕ∞) -> (x : M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "μ",
+      "k",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The predicate is total and well-defined for all inputs; the two conjuncts (generalized eigenspace membership and nonzero) handle all cases without any junk-value conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "hasUnifEigenvector_zero_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (x : M), ¬ VTask.HasUnifEigenvector f μ 0 x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.332,
+        "at": "authoring",
+        "script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_zero_vector_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞), ¬ VTask.HasUnifEigenvector f μ k 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.425,
+        "at": "authoring",
+        "script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_implies_hasUnifEigenvalue",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞) (x : M), VTask.HasUnifEigenvector f μ k x → Module.End.HasUnifEigenvalue f μ k",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.855,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvalue_implies_exists_eigenvector",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞), Module.End.HasUnifEigenvalue f μ k → ∃ v : M, VTask.HasUnifEigenvector f μ k v",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvalue.exists_hasUnifEigenvector"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvalue.exists_hasUnifEigenvector"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.816,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_k1_apply_eq_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (x : M), VTask.HasUnifEigenvector f μ 1 x → f x = μ • x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.apply_eq_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.apply_eq_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.011,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_k1_pow_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (x : M), VTask.HasUnifEigenvector f μ 1 x → ∀ n : ℕ, (f ^ n) x = μ ^ n • x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.pow_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.pow_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.4,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞) (x : M), VTask.HasUnifEigenvector f μ k x → x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.484,
+        "at": "authoring",
+        "script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Module.End.HasUnifEigenvector] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_mem_genEigenspace",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞) (x : M), VTask.HasUnifEigenvector f μ k x → x ∈ Module.End.genEigenspace f μ k",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_k1_not_implies_arbitrary_k",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (x : M), VTask.HasUnifEigenvector f μ 1 x → VTask.HasUnifEigenvector f μ ⊤ x",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_implies_exists_witness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (k : ℕ∞) (x : M), VTask.HasUnifEigenvector f μ k x → ∃ v : M, VTask.HasUnifEigenvector f μ k v ∧ v ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.691,
+        "at": "authoring",
+        "script": "by simp only [_root_.Module.End.HasUnifEigenvector] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Module.End.HasUnifEigenvector] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasUnifEigenvector_k1_eigenvalue",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommRing R] [AddCommGroup M] [Module R M] (f : Module.End R M) (μ : R) (x : M), VTask.HasUnifEigenvector f μ 1 x → Module.End.HasUnifEigenvalue f μ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.End.HasUnifEigenvector.hasUnifEigenvalue"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.111,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.End.HasUnifEigenvector",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.End.HasUnifEigenvector-b22a8695",
+    "review_status": "unreviewed"
+  }
+}

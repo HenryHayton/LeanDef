@@ -1,0 +1,447 @@
+{
+  "task_id": "StarConvex",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.StarConvex",
+  "signature": {
+    "name": "VTask.StarConvex",
+    "type": "(𝕜 : Type u_4) -> {E : Type u_5} -> [Semiring 𝕜] -> [PartialOrder 𝕜] -> [AddCommMonoid E] -> [SMul 𝕜 E] -> (x : E) -> (s : Set E) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "𝕜",
+      "x",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "Empty set",
+        "statement": "VTask.StarConvex 𝕜 x ∅ is vacuously true for any x, since there are no points y ∈ ∅ to check.",
+        "note": "Standard vacuous universal quantification."
+      },
+      {
+        "point": "Center membership",
+        "statement": "When s is nonempty and 𝕜 has ZeroLEOneClass, VTask.StarConvex 𝕜 x s implies x ∈ s; without ZeroLEOneClass the center need not belong to s.",
+        "note": "Governed by StarConvex.mem in Mathlib."
+      },
+      {
+        "point": "No topological structure required",
+        "statement": "The predicate is stated purely algebraically via an ordered semiring and additive commutative monoid; no norm, metric, or topological space is assumed.",
+        "note": "Allows use in purely algebraic settings."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "starconvex_nonempty_mem_center",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (s : Set ℝ), VTask.StarConvex ℝ x s → s.Nonempty → x ∈ s",
+      "domain_inputs": {},
+      "anchors": [
+        "StarConvex.mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StarConvex.mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_inter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (s t : Set ℝ), VTask.StarConvex ℝ x s → VTask.StarConvex ℝ x t → VTask.StarConvex ℝ x (s ∩ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "StarConvex.inter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StarConvex.inter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.276,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_from_convex",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set ℝ) (x : ℝ), Convex ℝ s → x ∈ s → VTask.StarConvex ℝ x s",
+      "domain_inputs": {},
+      "anchors": [
+        "Convex.starConvex"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Convex.starConvex"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.279,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_segment_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (s : Set ℝ), VTask.StarConvex ℝ x s → ∀ y ∈ s, Set.uIcc x y ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "StarConvex.segment_subset",
+        "Set.uIcc_eq_union"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StarConvex.segment_subset",
+        "Set.uIcc_eq_union"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (s t : Set ℝ), VTask.StarConvex ℝ x s → VTask.StarConvex ℝ x t → VTask.StarConvex ℝ x (s ∪ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "StarConvex.union"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StarConvex.union"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.265,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_balanced_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set ℝ), Balanced ℝ s → VTask.StarConvex ℝ 0 s",
+      "domain_inputs": {},
+      "anchors": [
+        "Balanced.starConvex"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Balanced.starConvex"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.117,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_linear_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ) (s : Set ℝ) (f : ℝ →ₗ[ℝ] ℝ), VTask.StarConvex ℝ x s → VTask.StarConvex ℝ (f x) (f '' s)",
+      "domain_inputs": {},
+      "anchors": [
+        "StarConvex.linear_image"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "StarConvex.linear_image"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.497,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "starconvex_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StarConvex ℝ (0 : ℝ) (∅ : Set ℝ)",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.046,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.StarConvex ℝ (0 : ℝ) (∅ : Set ℝ)"
+    },
+    {
+      "id": "starconvex_univ",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StarConvex ℝ (0 : ℝ) (Set.univ : Set ℝ)",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "s": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.044,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.StarConvex ℝ (0 : ℝ) (Set.univ : Set ℝ)"
+    },
+    {
+      "id": "starconvex_not_segment_missing",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.StarConvex ℝ (0 : ℝ) ({1, 2} : Set ℝ)",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "s": [
+          "{1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.StarConvex ℝ (0 : ℝ) ({1, 2} : Set ℝ)",
+      "violated_property": "segment from center to every element of s lies in s"
+    },
+    {
+      "id": "starconvex_not_wrong_center",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.StarConvex ℝ (1 : ℝ) (Set.Icc (2 : ℝ) 3)",
+      "domain_inputs": {
+        "x": [
+          "1"
+        ],
+        "s": [
+          "Set.Icc (2 : ℝ) 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.StarConvex ℝ (1 : ℝ) (Set.Icc (2 : ℝ) 3)",
+      "violated_property": "center must belong to nonempty star-convex set"
+    },
+    {
+      "id": "starconvex_icc_at_left",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.StarConvex ℝ (0 : ℝ) (Set.Ici (0 : ℝ))",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "s": [
+          "Set.Ici (0 : ℝ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StarConvex-d9c4365c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.StarConvex ℝ (0 : ℝ) (Set.Ici (0 : ℝ))"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "StarConvex",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "StarConvex-d9c4365c",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,375 @@
+{
+  "task_id": "PointedCone.lineal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lineal",
+  "signature": {
+    "name": "VTask.lineal",
+    "type": "{R : Type u_1} -> {E : Type u_2} -> [Ring R] -> [LinearOrder R] -> [IsOrderedRing R] -> [AddCommGroup E] -> [Module R E] -> (C : PointedCone R E) -> Submodule R E",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C"
+    ],
+    "conventions": [
+      {
+        "point": "zero_mem",
+        "statement": "The lineality space always contains the zero vector, since every pointed cone contains 0 and −0 = 0.",
+        "note": "Forced by the definition of PointedCone and the submodule structure."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lineal_zero_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E), (0 : E) ∈ VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.661,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_le_cone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E), VTask.lineal C ≤ C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.lineal_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.lineal_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.678,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_eq_sSup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E), VTask.lineal C = sSup {S : Submodule R E | S ≤ C}",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.lineal_eq_sSup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.lineal_eq_sSup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.825,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_largest_submodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E) (S : Submodule R E), S ≤ C → S ≤ VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_neg_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E) (x : E), x ∈ VTask.lineal C → -x ∈ VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.neg_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.neg_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.916,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_smul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E) (r : R) (x : E), x ∈ VTask.lineal C → r • x ∈ VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.smul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.smul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.747,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_add_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E) (x y : E), x ∈ VTask.lineal C → y ∈ VTask.lineal C → x + y ∈ VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.03,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_ofSubmodule_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (S : Submodule R E), VTask.lineal (PointedCone.ofSubmodule S) = S",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.105,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C D : PointedCone R E), C ≤ D → VTask.lineal C ≤ VTask.lineal D",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.gc_ofSubmodule_lineal"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lineal_is_submodule_not_merely_subcone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (E : Type*) [Ring R] [LinearOrder R] [IsOrderedRing R] [AddCommGroup E] [Module R E] (C : PointedCone R E), ∃ (S : Submodule R E), S = VTask.lineal C",
+      "domain_inputs": {},
+      "anchors": [
+        "PointedCone.lineal_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PointedCone.lineal_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.588,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PointedCone.lineal-e8571ee2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PointedCone.lineal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PointedCone.lineal-e8571ee2",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,202 @@
+{
+  "task_id": "PowerSeries.Unit_of_divided_by_X_pow_order",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Unit_of_divided_by_X_pow_order",
+  "signature": {
+    "name": "VTask.Unit_of_divided_by_X_pow_order",
+    "type": "{k : Type u_2} -> [Field k] -> (f : PowerSeries k) -> (PowerSeries k)ˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "f = 0",
+        "statement": "When f = 0, the function returns the unit 1 as a junk value, since zero has no well-defined X-adic order.",
+        "note": "This makes the function total; no mathematical meaning should be attached to the output in this case."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "unit_of_divided_val_is_unit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : PowerSeries ℚ), IsUnit (VTask.Unit_of_divided_by_X_pow_order f : (PowerSeries ℚ)ˣ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.isUnit"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.isUnit"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.228,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "unit_of_divided_reject_val_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.Unit_of_divided_by_X_pow_order (0 : PowerSeries ℚ)).val = 0)",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.155,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.Unit_of_divided_by_X_pow_order (0 : PowerSeries ℚ)).val",
+      "violated_property": "The unit is never zero (it is always a unit, hence invertible, and the zero element is not a unit)"
+    },
+    {
+      "id": "unit_of_divided_reject_wrong_val",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.Unit_of_divided_by_X_pow_order (PowerSeries.X : PowerSeries ℚ)).val = PowerSeries.X)",
+      "domain_inputs": {
+        "f": [
+          "PowerSeries.X"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.Unit_of_divided_by_X_pow_order (PowerSeries.X : PowerSeries ℚ)).val",
+      "violated_property": "The value of the unit should be X/X = 1, not X itself"
+    },
+    {
+      "id": "unit_of_divided_accept_x_gives_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.Unit_of_divided_by_X_pow_order (PowerSeries.X : PowerSeries ℚ)).val = 1",
+      "domain_inputs": {
+        "f": [
+          "PowerSeries.X"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.Unit_of_divided_by_X_pow_order (PowerSeries.X : PowerSeries ℚ)).val"
+    },
+    {
+      "id": "unit_of_divided_zero_returns_one_unit",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.Unit_of_divided_by_X_pow_order (0 : PowerSeries ℚ) = 1",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.056,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.Unit_of_divided_by_X_pow_order (0 : PowerSeries ℚ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PowerSeries.Unit_of_divided_by_X_pow_order",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PowerSeries.Unit_of_divided_by_X_pow_order-f921f988",
+    "review_status": "unreviewed"
+  }
+}

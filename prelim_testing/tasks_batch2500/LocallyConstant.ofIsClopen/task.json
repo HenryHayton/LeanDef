@@ -1,0 +1,316 @@
+{
+  "task_id": "LocallyConstant.ofIsClopen",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofIsClopen",
+  "signature": {
+    "name": "VTask.ofIsClopen",
+    "type": "{X : Type u_5} -> [TopologicalSpace X] -> {U : Set X} -> [(x : X) → Decidable (x ∈ U)] -> (hU : IsClopen U) -> LocallyConstant X (Fin 2)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "IsClopen U",
+    "variables": [
+      "U"
+    ],
+    "conventions": [
+      {
+        "point": "value on U",
+        "statement": "Points in U are mapped to 0 : Fin 2.",
+        "note": "Convention: membership in the clopen set yields 0, not 1."
+      },
+      {
+        "point": "value on complement",
+        "statement": "Points not in U (i.e., in Uᶜ) are mapped to 1 : Fin 2.",
+        "note": "Convention: non-membership yields 1."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofIsClopen_fiber_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U), (VTask.ofIsClopen hU) ⁻¹' ({0} : Set (Fin 2)) = U",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.308,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_fiber_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U), (VTask.ofIsClopen hU) ⁻¹' ({1} : Set (Fin 2)) = Uᶜ",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.275,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_in_U_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U) (x : X), x ∈ U → (VTask.ofIsClopen hU) x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_not_in_U_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U) (x : X), x ∉ U → (VTask.ofIsClopen hU) x = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.703,
+        "at": "authoring",
+        "script": "by simp [_root_.LocallyConstant.ofIsClopen] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.LocallyConstant.ofIsClopen] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_is_locally_constant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U), IsLocallyConstant (VTask.ofIsClopen hU).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.isLocallyConstant"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.isLocallyConstant"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.003,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U), Continuous (VTask.ofIsClopen hU).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.continuous"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.continuous"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_val_mem_fin2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U) (x : X), (VTask.ofIsClopen hU) x = 0 ∨ (VTask.ofIsClopen hU) x = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_zero",
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_zero",
+        "LocallyConstant.ofIsClopen_fiber_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.884,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofIsClopen_fiber_zero_ne_fiber_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) [TopologicalSpace X] (U : Set X) [∀ x, Decidable (x ∈ U)] (hU : IsClopen U), (VTask.ofIsClopen hU) ⁻¹' ({0} : Set (Fin 2)) ∪ (VTask.ofIsClopen hU) ⁻¹' ({1} : Set (Fin 2)) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyConstant.ofIsClopen_fiber_zero",
+        "LocallyConstant.ofIsClopen_fiber_one",
+        "Set.union_compl_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyConstant.ofIsClopen_fiber_zero",
+        "LocallyConstant.ofIsClopen_fiber_one",
+        "Set.union_compl_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.317,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LocallyConstant.ofIsClopen",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LocallyConstant.ofIsClopen-48664576",
+    "review_status": "unreviewed"
+  }
+}

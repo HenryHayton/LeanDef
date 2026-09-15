@@ -1,0 +1,175 @@
+{
+  "task_id": "Module.DualBases.lc",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lc",
+  "signature": {
+    "name": "VTask.lc",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [CommSemiring R] -> [AddCommMonoid M] -> [Module R M] -> {ι : Type u_4} -> (e : ι → M) -> (l : ι →₀ R) -> M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "e",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "l = 0",
+        "statement": "When the coefficient finsupp `l` is zero (empty support), `VTask.lc e l = 0`, the additive identity of `M`.",
+        "note": "Follows from `Finsupp.sum` over an empty support being `0`."
+      },
+      {
+        "point": "l i = 0 for some i",
+        "statement": "Any index `i` with zero coefficient does not contribute to the sum; `0 • e i = 0` and such indices are excluded from the support of `l`.",
+        "note": "Standard `Finsupp` convention: only indices in the support are summed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lc_single_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] {ι : Type*} (e : ι → M) (i : ι) (c : R), VTask.lc e (Finsupp.single i c) = c • e i",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.linearCombination_single"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.linearCombination_single"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DualBases.lc-75d4ec75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lc_add_finsupp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] {ι : Type*} (e : ι → M) (l₁ l₂ : ι →₀ R), VTask.lc e (l₁ + l₂) = VTask.lc e l₁ + VTask.lc e l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "map_add"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_add"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DualBases.lc-75d4ec75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lc_smul_finsupp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] {ι : Type*} (e : ι → M) (r : R) (l : ι →₀ R), VTask.lc e (r • l) = r • VTask.lc e l",
+      "domain_inputs": {},
+      "anchors": [
+        "map_smul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_smul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DualBases.lc-75d4ec75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lc_empty_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] (e : Empty → M) (l : Empty →₀ R), VTask.lc e l = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.linearCombination_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.linearCombination_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DualBases.lc-75d4ec75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lc_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [CommSemiring R] [AddCommMonoid M] [Module R M] {ι : Type*} (e : ι → M), Function.Injective (fun l : ι →₀ R => VTask.lc e l) → ∀ (l₁ l₂ : ι →₀ R), VTask.lc e (l₁ + l₂) = VTask.lc e l₁ + VTask.lc e l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "map_add"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_add"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.DualBases.lc-75d4ec75",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.DualBases.lc",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.DualBases.lc-75d4ec75",
+    "review_status": "unreviewed"
+  }
+}

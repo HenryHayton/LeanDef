@@ -1,0 +1,131 @@
+{
+  "task_id": "Turing.TM2to1.trNormal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.trNormal",
+  "signature": {
+    "name": "VTask.trNormal",
+    "type": "{K : Type u_1} -> {Γ : K → Type u_2} -> {Λ : Type u_3} -> {σ : Type u_4} -> Turing.TM2.Stmt Γ Λ σ → Turing.TM1.Stmt (Turing.TM2to1.Γ' K Γ) (Turing.TM2to1.Λ' K Γ Λ σ) σ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and every constructor of TM2.Stmt maps to a meaningful TM1.Stmt; there are no junk inputs or default outputs to declare."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "trNormal_goto_is_goto",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} {Λ : Type} {σ : Type} (l : σ → Λ), ∃ f, VTask.trNormal (Turing.TM2.Stmt.goto l) = Turing.TM1.Stmt.goto f",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.trNormal-46884960",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trNormal_stRun_is_goto",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type} {Γ : K → Type} {Λ : Type} {σ : Type} {k : K} (s : Turing.TM2to1.StAct K Γ σ k) (q : Turing.TM2.Stmt Γ Λ σ), VTask.trNormal (Turing.TM2to1.stRun s q) = Turing.TM1.Stmt.goto (fun _ _ => Turing.TM2to1.Λ'.go k s q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.889,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.trNormal-46884960",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trNormal_push_ne_halt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type) [DecidableEq K] (Γ : K → Type) (Λ σ : Type) (k : K) (f : σ → Γ k) (q : Turing.TM2.Stmt Γ Λ σ), VTask.trNormal (Turing.TM2.Stmt.push k f q) ≠ Turing.TM1.Stmt.halt",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.TM2to1.trNormal_run"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 37.831,
+        "at": "authoring",
+        "script": "by simp [_root_.Turing.TM2to1.trNormal] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Turing.TM2to1.trNormal] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.TM2to1.trNormal-46884960",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.TM2to1.trNormal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.TM2to1.trNormal-46884960",
+    "review_status": "unreviewed"
+  }
+}

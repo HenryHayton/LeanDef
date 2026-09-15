@@ -1,0 +1,253 @@
+{
+  "task_id": "Lists'.toList",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toList",
+  "signature": {
+    "name": "VTask.toList",
+    "type": "{α : Type u_1} -> {b : Bool} -> Lists' α b → List (Lists α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "atom input",
+        "statement": "When the prelist is an atom (b = false), VTask.toList returns [] regardless of the atom's value.",
+        "note": "Atoms are not list-shaped; there are no ZFA-list elements to enumerate."
+      },
+      {
+        "point": "nil input",
+        "statement": "When the prelist is nil (the empty list-shaped prelist), VTask.toList returns [].",
+        "note": "The nil prelist represents the empty ZFA list."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toList_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) = [] := by decide",
+      "domain_inputs": {
+        "b": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_nil_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) = [] := by decide",
+      "domain_inputs": {
+        "b": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.toList (Lists'.nil : Lists' Nat true)"
+    },
+    {
+      "id": "toList_nil_reject_nonempty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.toList (Lists'.nil : Lists' Nat true) ≠ [⟨true, Lists'.nil⟩] := by decide",
+      "domain_inputs": {
+        "b": [
+          "true"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.toList (Lists'.nil : Lists' Nat true)",
+      "violated_property": "nil prelist must map to the empty list"
+    },
+    {
+      "id": "toList_to_ofList_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : List (Lists Nat)), VTask.toList (Lists'.ofList l) = l",
+      "domain_inputs": {},
+      "anchors": [
+        "Lists'.to_ofList"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Lists'.to_ofList"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.1,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_of_toList_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : Lists' Nat true), Lists'.ofList (VTask.toList l) = l",
+      "domain_inputs": {},
+      "anchors": [
+        "Lists'.of_toList"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Lists'.of_toList"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.085,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_subset_def",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l₁ l₂ : Lists' Nat true), l₁ ⊆ l₂ ↔ ∀ a ∈ VTask.toList l₁, a ∈ l₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Lists'.subset_def"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Lists'.subset_def"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.342,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toList_injective_on_list_shaped",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Function.Injective (fun l : Lists' Nat true => VTask.toList l)",
+      "domain_inputs": {},
+      "anchors": [
+        "Lists'.of_toList"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Lists'.of_toList"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Lists'.toList-d0e9ef65",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Lists'.toList",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Lists'.toList-d0e9ef65",
+    "review_status": "unreviewed"
+  }
+}

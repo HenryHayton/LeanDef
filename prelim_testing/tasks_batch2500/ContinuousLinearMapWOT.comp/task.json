@@ -1,0 +1,180 @@
+{
+  "task_id": "ContinuousLinearMapWOT.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{𝕜₁ : Type u_5} -> {𝕜₂ : Type u_6} -> {𝕜₃ : Type u_7} -> {E : Type u_9} -> {F : Type u_10} -> {G : Type u_11} -> [NormedField 𝕜₁] -> [NormedField 𝕜₂] -> [NormedField 𝕜₃] -> {σ₁₂ : 𝕜₁ →+* 𝕜₂} -> {σ₁₃ : 𝕜₁ →+* 𝕜₃} -> {σ₂₃ : 𝕜₂ →+* 𝕜₃} -> [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] -> [AddCommGroup E] -> [TopologicalSpace E] -> [Module 𝕜₁ E] -> [AddCommGroup F] -> [TopologicalSpace F] -> [Module 𝕜₂ F] -> [AddCommGroup G] -> [TopologicalSpace G] -> [Module 𝕜₃ G] -> (g : F →SWOT[σ₂₃] G) -> (f : E →SWOT[σ₁₂] F) -> E →SWOT[σ₁₃] G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.comp is a total, structurally well-typed composition operation with no junk values or degenerate edge cases — its behaviour is fully determined by the algebra and topology of its inputs in all cases."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_continuous_precomp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜₁ : Type*} {𝕜₂ : Type*} {𝕜₃ : Type*} {E : Type*} {F : Type*} {G : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] [NormedField 𝕜₃] {σ₁₂ : 𝕜₁ →+* 𝕜₂} {σ₁₃ : 𝕜₁ →+* 𝕜₃} {σ₂₃ : 𝕜₂ →+* 𝕜₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [AddCommGroup E] [TopologicalSpace E] [Module 𝕜₁ E] [AddCommGroup F] [TopologicalSpace F] [Module 𝕜₂ F] [AddCommGroup G] [TopologicalSpace G] [Module 𝕜₃ G] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] (f : E →SWOT[σ₁₂] F), Continuous (fun g : F →SWOT[σ₂₃] G ↦ VTask.comp g f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMapWOT.continuous_precomp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMapWOT.continuous_precomp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.514,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMapWOT.comp-fe92dd93",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_result_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜₁ : Type*} {𝕜₂ : Type*} {𝕜₃ : Type*} {E : Type*} {F : Type*} {G : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] [NormedField 𝕜₃] {σ₁₂ : 𝕜₁ →+* 𝕜₂} {σ₁₃ : 𝕜₁ →+* 𝕜₃} {σ₂₃ : 𝕜₂ →+* 𝕜₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [AddCommGroup E] [TopologicalSpace E] [Module 𝕜₁ E] [AddCommGroup F] [TopologicalSpace F] [Module 𝕜₂ F] [AddCommGroup G] [TopologicalSpace G] [Module 𝕜₃ G] (g : F →SWOT[σ₂₃] G) (f : E →SWOT[σ₁₂] F), ∃ h : E →SWOT[σ₁₃] G, h = VTask.comp g f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMapWOT.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMapWOT.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.904,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMapWOT.comp-fe92dd93",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_apply_additive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜₁ : Type*} {𝕜₂ : Type*} {𝕜₃ : Type*} {E : Type*} {F : Type*} {G : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] [NormedField 𝕜₃] {σ₁₂ : 𝕜₁ →+* 𝕜₂} {σ₁₃ : 𝕜₁ →+* 𝕜₃} {σ₂₃ : 𝕜₂ →+* 𝕜₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [AddCommGroup E] [TopologicalSpace E] [Module 𝕜₁ E] [AddCommGroup F] [TopologicalSpace F] [Module 𝕜₂ F] [AddCommGroup G] [TopologicalSpace G] [Module 𝕜₃ G] (g : F →SWOT[σ₂₃] G) (f : E →SWOT[σ₁₂] F) (x y : E), VTask.comp g f (x + y) = VTask.comp g f x + VTask.comp g f y",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMapWOT.comp_apply",
+        "ContinuousLinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMapWOT.comp_apply",
+        "ContinuousLinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.241,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMapWOT.comp-fe92dd93",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_not_commutative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {𝕜 : Type*} {E : Type*} [NormedField 𝕜] [AddCommGroup E] [TopologicalSpace E] [Module 𝕜 E] [IsTopologicalAddGroup E] (f g : E →WOT[𝕜] E), VTask.comp f g = VTask.comp g f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMapWOT.comp_apply",
+        "ContinuousLinearMap.comp_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMapWOT.comp_apply",
+        "ContinuousLinearMap.comp_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMapWOT.comp-fe92dd93",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMapWOT.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMapWOT.comp-fe92dd93",
+    "review_status": "unreviewed"
+  }
+}

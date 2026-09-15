@@ -1,0 +1,111 @@
+{
+  "task_id": "FirstOrder.Language.BoundedFormula.Realize",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Realize",
+  "signature": {
+    "name": "VTask.Realize",
+    "type": "{L : FirstOrder.Language} -> {M : Type w} -> [L.Structure M] -> {α : Type u'} -> {l : ℕ} -> (_f : L.BoundedFormula α l) -> (_v : α → M) -> (_xs : Fin l → M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "_f",
+      "_v",
+      "_xs"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Realize is a structurally recursive total function on BoundedFormula constructors; every constructor is handled explicitly and no junk-value or out-of-domain conventions are required."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "realize_relabel_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α β : Type*) (m n : ℕ) (φ : L.BoundedFormula α n) (g : α → β ⊕ Fin m) (v : β → M) (xs : Fin (m + n) → M), VTask.Realize (φ.relabel g) v xs ↔ VTask.Realize φ (Sum.elim v (xs ∘ Fin.castAdd n) ∘ g) (xs ∘ Fin.natAdd m)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.realize_relabel"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.realize_relabel"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.5,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.Realize-3bc6fc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "realize_toFormula_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [L.Structure M] (α : Type*) (n : ℕ) (φ : L.BoundedFormula α n) (v : α ⊕ Fin n → M), φ.toFormula.Realize v ↔ VTask.Realize φ (v ∘ Sum.inl) (v ∘ Sum.inr)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.realize_toFormula"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.realize_toFormula"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.827,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.Realize-3bc6fc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.BoundedFormula.Realize",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.BoundedFormula.Realize-3bc6fc00",
+    "review_status": "unreviewed"
+  }
+}

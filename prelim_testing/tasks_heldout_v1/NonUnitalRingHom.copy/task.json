@@ -1,0 +1,303 @@
+{
+  "task_id": "NonUnitalRingHom.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> [NonUnitalNonAssocSemiring α] -> [NonUnitalNonAssocSemiring β] -> (f : α →ₙ+* β) -> (f' : α → β) -> (h : f' = ⇑f) -> α →ₙ+* β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total and well-behaved on all valid inputs; no junk-value or edge-case conventions are established."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.292,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_apply_eq_f_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalRingHom.coe_copy",
+        "NonUnitalRingHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalRingHom.coe_copy",
+        "NonUnitalRingHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.401,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_preserves_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} [NonUnitalNonAssocSemiring α] [NonUnitalNonAssocSemiring β] (f : α →ₙ+* β) (f' : α → β) (h : f' = ⇑f) (a b : α), VTask.copy f f' h (a * b) = VTask.copy f f' h a * VTask.copy f f' h b",
+      "domain_inputs": {},
+      "anchors": [
+        "NonUnitalRingHom.copy_eq",
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NonUnitalRingHom.copy_eq",
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.563,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_coe_eq_f_prime_membership_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 3 = 3 := by decide",
+      "domain_inputs": {
+        "f": [
+          "NonUnitalRingHom.id ℕ"
+        ],
+        "f'": [
+          "⇑(NonUnitalRingHom.id ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 3"
+    },
+    {
+      "id": "copy_id_zero_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0 = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "NonUnitalRingHom.id ℕ"
+        ],
+        "f'": [
+          "⇑(NonUnitalRingHom.id ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0"
+    },
+    {
+      "id": "copy_coe_is_f_prime_not_other",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 5 = 6) := by decide",
+      "domain_inputs": {
+        "f": [
+          "NonUnitalRingHom.id ℕ"
+        ],
+        "f'": [
+          "⇑(NonUnitalRingHom.id ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 5 = 6",
+      "violated_property": "The copy applies f' (which equals ⇑f), so the value at 5 must be 5, not 6"
+    },
+    {
+      "id": "copy_map_zero_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0 = (NonUnitalRingHom.id ℕ) 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "NonUnitalRingHom.id ℕ"
+        ],
+        "f'": [
+          "⇑(NonUnitalRingHom.id ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 0"
+    },
+    {
+      "id": "copy_result_not_different_hom",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 2 = 0) := by decide",
+      "domain_inputs": {
+        "f": [
+          "NonUnitalRingHom.id ℕ"
+        ],
+        "f'": [
+          "⇑(NonUnitalRingHom.id ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.copy (NonUnitalRingHom.id ℕ) (⇑(NonUnitalRingHom.id ℕ)) rfl) 2 = 0",
+      "violated_property": "copy preserves the original function values; 2 maps to 2, not 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "NonUnitalRingHom.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "NonUnitalRingHom.copy-a8551ef4",
+    "review_status": "unreviewed"
+  }
+}

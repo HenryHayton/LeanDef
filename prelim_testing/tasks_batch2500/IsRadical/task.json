@@ -1,0 +1,385 @@
+{
+  "task_id": "IsRadical",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsRadical",
+  "signature": {
+    "name": "VTask.IsRadical",
+    "type": "{R : Type u_1} -> [Dvd R] -> [Pow R ℕ] -> (y : R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0 included",
+        "statement": "The universal quantification over `n : ℕ` includes `n = 0`; no special case is carved out, so the condition `y ∣ x ^ 0` must be handled according to how `x ^ 0` is defined in `R`.",
+        "note": "This can make the predicate stronger than expected in structures where `x ^ 0` is not always the identity."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isradical_squarefree_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst1 : Monoid R] [inst2 : HasDistribNeg R] (x : R), Squarefree x → VTask.IsRadical x",
+      "domain_inputs": {},
+      "anchors": [
+        "Squarefree.isRadical"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Squarefree.isRadical"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isradical_prime_ideal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommSemiring R] (I : Ideal R), I.IsPrime → VTask.IsRadical I",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.IsPrime.isRadical"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.IsPrime.isRadical"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isradical_radical_eq_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommSemiring R] (I : Ideal R), I.radical = I ↔ VTask.IsRadical I",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.radical_eq_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.radical_eq_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isradical_unfolding",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst1 : Dvd R] [inst2 : Pow R ℕ] (y : R), VTask.IsRadical y ↔ ∀ (x : R) (n : ℕ), y ∣ x ^ n → y ∣ x",
+      "domain_inputs": {},
+      "anchors": [
+        "Squarefree.isRadical",
+        "IsRadical.squarefree"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Squarefree.isRadical",
+        "IsRadical.squarefree"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isradical_jacobson_ideal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommRing R] (I : Ideal R), VTask.IsRadical I.jacobson",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.isRadical_jacobson"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.isRadical_jacobson"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isradical_one_int",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRadical (1 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1 : ℤ)"
+    },
+    {
+      "id": "isradical_four_int_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsRadical (4 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(4 : ℤ)",
+      "violated_property": "absorption: 4 ∣ 2^2 but 4 ∤ 2"
+    },
+    {
+      "id": "isradical_neg_one_int",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRadical (-1 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(-1 : ℤ)"
+    },
+    {
+      "id": "isradical_two_int",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRadical (2 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(2 : ℤ)"
+    },
+    {
+      "id": "isradical_eight_int_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsRadical (8 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "8"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(8 : ℤ)",
+      "violated_property": "absorption: 8 ∣ 2^3 but 8 ∤ 2"
+    },
+    {
+      "id": "isradical_six_int",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRadical (6 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "6"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(6 : ℤ)"
+    },
+    {
+      "id": "isradical_nine_int_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsRadical (9 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "9"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(9 : ℤ)",
+      "violated_property": "absorption: 9 ∣ 3^2 but 9 ∤ 3"
+    },
+    {
+      "id": "isradical_not_vacuous_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsRadical (0 : ℤ)",
+      "domain_inputs": {
+        "y": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsRadical-472f6ce2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : ℤ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsRadical",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsRadical-472f6ce2",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "task_id": "Set.powersetCard.prodEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prodEquiv",
+  "signature": {
+    "name": "VTask.prodEquiv",
+    "type": "{α : Type u_1} -> (n : ℕ) × ↑(Set.powersetCard α n) ≃ Finset α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.prodEquiv is a total equivalence of types with no junk-value or edge-case conventions; every element of either side maps to a well-defined counterpart."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prodEquiv_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (x : (n : ℕ) × ↑(Set.powersetCard α n)), VTask.prodEquiv.symm (VTask.prodEquiv x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.263,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.prodEquiv-d4200508",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodEquiv_bijective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*}, Function.Bijective (@VTask.prodEquiv α)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.127,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.prodEquiv-d4200508",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodEquiv_reject_wrong_card",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.prodEquiv (α := Fin 3) ⟨1, ⟨{0}, by simp [Set.powersetCard]⟩⟩) ≠ ({0, 1} : Finset (Fin 3)) := by decide",
+      "domain_inputs": {
+        "α": [
+          "Fin 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.powersetCard.prodEquiv-d4200508",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prodEquiv ⟨1, ⟨{0}, _⟩⟩ ≠ {0, 1}",
+      "violated_property": "forward map returns x.2, not an arbitrary finset"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.powersetCard.prodEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.powersetCard.prodEquiv-d4200508",
+    "review_status": "unreviewed"
+  }
+}

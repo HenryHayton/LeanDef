@@ -1,0 +1,361 @@
+{
+  "task_id": "GenContFract.squashGCF",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.squashGCF",
+  "signature": {
+    "name": "VTask.squashGCF",
+    "type": "{K : Type u_1} -> [DivisionRing K] -> (g : GenContFract K) -> ℕ → GenContFract K",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "empty sequence at depth 0",
+        "statement": "If `g.s.get? 0 = none`, then `squashGCF g 0 = g`; the function returns the original fraction unchanged rather than producing a junk value.",
+        "note": "Graceful identity fallback when there is no first partial-quotient pair to absorb."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "squashGCF_empty_seq_n0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K), g.s.get? 0 = none → VTask.squashGCF g 0 = g",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.918,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_terminated_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), GenContFract.TerminatedAt g n → VTask.squashGCF g n = g",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_succ_conv_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), g.convs' (n + 1) = (VTask.squashGCF g n).convs' n",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.succ_nth_conv'_eq_squashGCF_nth_conv'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.succ_nth_conv'_eq_squashGCF_nth_conv'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.758,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_nth_of_lt_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (m n : ℕ), m < n → (VTask.squashGCF g (n + 1)).s.get? m = g.s.get? m",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashGCF_nth_of_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashGCF_nth_of_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.0,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_contsAux_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (m n : ℕ), m ≤ n → GenContFract.contsAux g m = (VTask.squashGCF g n).contsAux m",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.contsAux_eq_contsAux_squashGCF_of_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.contsAux_eq_contsAux_squashGCF_of_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.356,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_succ_conv_field",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] (g : GenContFract K) (n : ℕ), (∀ {b : K}, g.partDens.get? n = some b → b ≠ 0) → g.convs (n + 1) = (VTask.squashGCF g n).convs n",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.succ_nth_conv_eq_squashGCF_nth_conv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.succ_nth_conv_eq_squashGCF_nth_conv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.268,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_depth1_seq_preserved_entry0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K), (∀ m : ℕ, m < 1 → (VTask.squashGCF g (1 + 1)).s.get? m = g.s.get? m)",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashGCF_nth_of_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashGCF_nth_of_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.829,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_two_step_depth_reduction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [DivisionRing K] (g : GenContFract K) (n : ℕ), g.convs' (n + 1) = (VTask.squashGCF g n).convs' n",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.succ_nth_conv'_eq_squashGCF_nth_conv'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.succ_nth_conv'_eq_squashGCF_nth_conv'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.726,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashGCF_head_not_modified_at_depth_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [DivisionRing K] (g : GenContFract K) (n : ℕ), (VTask.squashGCF g (n + 1)).h ≠ g.h + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashGCF_eq_self_of_terminated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.505,
+        "at": "authoring",
+        "script": "by simp [_root_.GenContFract.squashGCF] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.GenContFract.squashGCF] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashGCF-08c62de8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "GenContFract.squashGCF",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "GenContFract.squashGCF-08c62de8",
+    "review_status": "unreviewed"
+  }
+}

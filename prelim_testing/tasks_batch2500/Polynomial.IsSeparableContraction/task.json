@@ -1,0 +1,224 @@
+{
+  "task_id": "Polynomial.IsSeparableContraction",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsSeparableContraction",
+  "signature": {
+    "name": "VTask.IsSeparableContraction",
+    "type": "{F : Type u_1} -> [CommSemiring F] -> (q : ℕ) -> (f g : Polynomial F) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "q",
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "q is arbitrary",
+        "statement": "The definition is well-formed for any natural number q; the mathematically intended case is when q is the exponential characteristic of F, but this is not enforced by the bare definition.",
+        "note": "q = 0 or q = 1 are degenerate but valid inputs."
+      },
+      {
+        "point": "m = 0 is trivial",
+        "statement": "When m = 0, expanding g by q^0 = 1 is the identity, so any separable g satisfies IsSeparableContraction q g g.",
+        "note": "This means every separable polynomial is its own separable contraction."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isc_global_dvd_degree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (f g : Polynomial F), VTask.IsSeparableContraction q f g → ∃ m : ℕ, g.natDegree * q ^ m = f.natDegree",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.IsSeparableContraction.dvd_degree'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.IsSeparableContraction.dvd_degree'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.549,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isc_global_separable_implies_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (f : Polynomial F), Polynomial.Separable f → VTask.IsSeparableContraction q f f",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.expand_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.expand_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isc_global_implies_separable",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (f g : Polynomial F), VTask.IsSeparableContraction q f g → Polynomial.Separable g",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.IsSeparableContraction.dvd_degree'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.IsSeparableContraction.dvd_degree'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isc_global_m0_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (g : Polynomial F), Polynomial.Separable g → VTask.IsSeparableContraction q g g",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.expand_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.expand_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isc_global_hasSeparableContraction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (f : Polynomial F) (hf : Polynomial.HasSeparableContraction q f), VTask.IsSeparableContraction q f hf.contraction",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.HasSeparableContraction.isSeparableContraction"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.HasSeparableContraction.isSeparableContraction"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.252,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isc_global_natDegree_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {F : Type*} [CommSemiring F] (q : ℕ) (f g : Polynomial F), VTask.IsSeparableContraction q f g → g.natDegree ≤ f.natDegree",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.IsSeparableContraction.dvd_degree'",
+        "Nat.le_mul_of_pos_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.IsSeparableContraction.dvd_degree'",
+        "Nat.le_mul_of_pos_right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.IsSeparableContraction",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.IsSeparableContraction-963dd163",
+    "review_status": "unreviewed"
+  }
+}

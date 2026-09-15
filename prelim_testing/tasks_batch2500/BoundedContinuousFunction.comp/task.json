@@ -1,0 +1,200 @@
+{
+  "task_id": "BoundedContinuousFunction.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{α : Type u} -> {β : Type v} -> {γ : Type w} -> [TopologicalSpace α] -> [PseudoMetricSpace β] -> [PseudoMetricSpace γ] -> (G : β → γ) -> {C : NNReal} -> (H : LipschitzWith C G) -> (f : BoundedContinuousFunction α β) -> BoundedContinuousFunction α γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "H",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "Lipschitz constant C = 0",
+        "statement": "When the Lipschitz constant C is 0, G is a constant map, and VTask.comp G H f is the corresponding constant bounded continuous function with bound 0.",
+        "note": "NNReal ensures C is always non-negative; C = 0 is the minimal admissible value."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_lipschitz_on_function_space",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [PseudoMetricSpace β] [PseudoMetricSpace γ] (G : β → γ) {C : NNReal} (H : LipschitzWith C G), LipschitzWith C (VTask.comp G H : BoundedContinuousFunction α β → BoundedContinuousFunction α γ)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.lipschitz_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.lipschitz_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.36,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_continuous_on_function_space",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [PseudoMetricSpace β] [PseudoMetricSpace γ] {G : β → γ} {C : NNReal} (H : LipschitzWith C G), Continuous (VTask.comp G H : BoundedContinuousFunction α β → BoundedContinuousFunction α γ)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.continuous_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.continuous_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.305,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_uniformContinuous_on_function_space",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [PseudoMetricSpace β] [PseudoMetricSpace γ] {G : β → γ} {C : NNReal} (H : LipschitzWith C G), UniformContinuous (VTask.comp G H : BoundedContinuousFunction α β → BoundedContinuousFunction α γ)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.uniformContinuous_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.uniformContinuous_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.184,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_dist_bound",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [PseudoMetricSpace β] [PseudoMetricSpace γ] (G : β → γ) {C : NNReal} (H : LipschitzWith C G) (f g : BoundedContinuousFunction α β), dist (VTask.comp G H f) (VTask.comp G H g) ≤ C * dist f g",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundedContinuousFunction.lipschitz_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundedContinuousFunction.lipschitz_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_reject_non_lipschitz",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ LipschitzWith 1 (fun n : ℕ => n * n)",
+      "domain_inputs": {
+        "G": [
+          "fun n : ℕ => n * n"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun n : ℕ => n * n",
+      "violated_property": "LipschitzWith condition on G"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoundedContinuousFunction.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoundedContinuousFunction.comp-69dc11cb",
+    "review_status": "unreviewed"
+  }
+}

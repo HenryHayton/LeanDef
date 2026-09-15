@@ -1,0 +1,278 @@
+{
+  "task_id": "Hypergraph.IsLoop",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsLoop",
+  "signature": {
+    "name": "VTask.IsLoop",
+    "type": "{α : Type u_1} -> (H : Hypergraph α) -> (e : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "H",
+      "e"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsLoop is a universally defined Prop over all hypergraphs and all sets; it simply evaluates to False outside its intended domain (non-member or non-singleton sets) with no special junk-value convention needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isloop_iff_ncard_one_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e ↔ (e ∈ H.edgeSet ∧ Set.ncard e = 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.isLoop_iff_mem_and_ncard_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.isLoop_iff_mem_and_ncard_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.704,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_implies_ncard_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → Set.ncard e = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsLoop.ncard_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsLoop.ncard_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.094,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_implies_mem_edgeSet",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → e ∈ H.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.isLoop_iff_mem_and_ncard_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.isLoop_iff_mem_and_ncard_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_implies_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → e.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsLoop.ncard_one",
+        "Set.ncard_eq_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsLoop.ncard_one",
+        "Set.ncard_eq_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_implies_singleton_exists",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → ∃ x : α, e = {x}",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.isLoop_iff_mem_edgeSet_and_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.isLoop_iff_mem_edgeSet_and_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_not_iff_ncard_one_alone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → e ∈ H.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.isLoop_iff_mem_edgeSet_and_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.isLoop_iff_mem_edgeSet_and_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_finite_of_loop",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → Set.Finite e",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsLoop.ncard_one",
+        "Set.ncard_eq_one",
+        "Set.finite_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsLoop.ncard_one",
+        "Set.ncard_eq_one",
+        "Set.finite_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isloop_ncard_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (H : Hypergraph α) (e : Set α), VTask.IsLoop H e → Set.ncard e ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsLoop.ncard_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsLoop.ncard_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.356,
+        "at": "authoring",
+        "script": "by simp [_root_.Hypergraph.IsLoop] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Hypergraph.IsLoop] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsLoop-86310c42",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Hypergraph.IsLoop",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Hypergraph.IsLoop-86310c42",
+    "review_status": "unreviewed"
+  }
+}

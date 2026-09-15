@@ -1,0 +1,528 @@
+{
+  "task_id": "Set.MapsTo",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.MapsTo",
+  "signature": {
+    "name": "VTask.MapsTo",
+    "type": "{α : Type u} -> {β : Type v} -> (f : α → β) -> (s : Set α) -> (t : Set β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "empty source",
+        "statement": "VTask.MapsTo f ∅ t is vacuously true for any f and any t.",
+        "note": "No element exists in ∅ to violate the universal condition."
+      },
+      {
+        "point": "empty target",
+        "statement": "VTask.MapsTo f s ∅ holds if and only if s is empty.",
+        "note": "Any element of a nonempty s would need to map into ∅, which is impossible."
+      },
+      {
+        "point": "universal target",
+        "statement": "VTask.MapsTo f s Set.univ is always true.",
+        "note": "Every value lies in the universal set by definition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "maps_to_empty_source_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (t : Set β), VTask.MapsTo f ∅ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mapsTo_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mapsTo_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.674,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "maps_to_univ_target_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (s : Set α), VTask.MapsTo f s Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mapsTo_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mapsTo_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.447,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "maps_to_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α → β) (g : β → γ) (s : Set α) (t : Set β) (u : Set γ), VTask.MapsTo f s t → VTask.MapsTo g t u → VTask.MapsTo (g ∘ f) s u",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.MapsTo.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.MapsTo.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.86,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "maps_to_image_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (s : Set α) (t : Set β), VTask.MapsTo f s t ↔ f '' s ⊆ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mapsTo_iff_image_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mapsTo_iff_image_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.197,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "maps_to_mono_target",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (f : α → β) (s : Set α) (t₁ t₂ : Set β), t₁ ⊆ t₂ → VTask.MapsTo f s t₁ → VTask.MapsTo f s t₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.MapsTo.mono_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.MapsTo.mono_right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "maps_to_succ_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} {1, 2, 3}",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n + 1"
+        ],
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} {1, 2, 3}"
+    },
+    {
+      "id": "maps_to_succ_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} {1, 2}",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n + 1"
+        ],
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "{1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.14,
+        "at": "authoring",
+        "script": "by simp [_root_.Set.MapsTo] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Set.MapsTo] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} {1, 2}",
+      "violated_property": "f 2 = 3 ∉ {1, 2}"
+    },
+    {
+      "id": "maps_to_empty_source_vacuous",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.MapsTo (fun n : ℕ => n + 1) ∅ ∅",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n + 1"
+        ],
+        "s": [
+          "∅"
+        ],
+        "t": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.038,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.MapsTo (fun n : ℕ => n + 1) ∅ ∅"
+    },
+    {
+      "id": "maps_to_empty_target_nonempty_source_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.MapsTo (fun n : ℕ => n) ({0} : Set ℕ) ∅",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n"
+        ],
+        "s": [
+          "{0}"
+        ],
+        "t": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.071,
+        "at": "authoring",
+        "script": "by simp [_root_.Set.MapsTo] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Set.MapsTo] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.MapsTo (fun n : ℕ => n) ({0} : Set ℕ) ∅",
+      "violated_property": "f 0 = 0 ∉ ∅"
+    },
+    {
+      "id": "maps_to_univ_target_always_true",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} Set.univ",
+      "domain_inputs": {
+        "f": [
+          "fun n : ℕ => n + 1"
+        ],
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.042,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.MapsTo (fun n : ℕ => n + 1) {0, 1, 2} Set.univ"
+    },
+    {
+      "id": "maps_to_const_zero_univ",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.MapsTo (fun _ : ℕ => (0 : ℕ)) ({0, 1, 2} : Set ℕ) {0}",
+      "domain_inputs": {
+        "f": [
+          "fun _ : ℕ => (0 : ℕ)"
+        ],
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.066,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.MapsTo (fun _ : ℕ => (0 : ℕ)) ({0, 1, 2} : Set ℕ) {0}"
+    },
+    {
+      "id": "maps_to_const_zero_wrong_target_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.MapsTo (fun _ : ℕ => (0 : ℕ)) ({0, 1, 2} : Set ℕ) {1}",
+      "domain_inputs": {
+        "f": [
+          "fun _ : ℕ => (0 : ℕ)"
+        ],
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "t": [
+          "{1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.213,
+        "at": "authoring",
+        "script": "by simp only [_root_.Set.MapsTo] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Set.MapsTo] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.MapsTo (fun _ : ℕ => (0 : ℕ)) ({0, 1, 2} : Set ℕ) {1}",
+      "violated_property": "f 0 = 0 ∉ {1}"
+    },
+    {
+      "id": "maps_to_id_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.MapsTo (id : ℕ → ℕ) ∅ ∅",
+      "domain_inputs": {
+        "f": [
+          "id"
+        ],
+        "s": [
+          "∅"
+        ],
+        "t": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.028,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.MapsTo-e7ab079b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.MapsTo (id : ℕ → ℕ) ∅ ∅"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.MapsTo",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.MapsTo-e7ab079b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "task_id": "castNum",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.castNum",
+  "signature": {
+    "name": "VTask.castNum",
+    "type": "{α : Type u_1} -> [One α] -> [Add α] -> [Zero α] -> Num → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "zero input",
+        "statement": "When the `Num` argument is `0`, `VTask.castNum 0 = (0 : α)` via the `Zero` instance.",
+        "note": "Explicit base case: no addition or use of `1` occurs."
+      },
+      {
+        "point": "positive input",
+        "statement": "When the `Num` argument is `Num.pos p`, the result is `castPosNum p`, which builds the value from `1 : α` and `+` following the binary representation of `p`.",
+        "note": "Delegates entirely to the `PosNum` cast for positive values."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "castNum_monotone_nat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a b : Num), a ≤ b → VTask.castNum a ≤ (VTask.castNum b : ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Num.cast_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Num.cast_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.228,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "castNum-a6d7e861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castNum_zero_ne_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.castNum 0 ≠ VTask.castNum (Num.pos 1) ∨ (0 : ℕ) = (1 : ℕ) → False",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_ne_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_ne_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "castNum-a6d7e861",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "castNum",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "castNum-a6d7e861",
+    "review_status": "unreviewed"
+  }
+}

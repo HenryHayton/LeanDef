@@ -1,0 +1,254 @@
+{
+  "task_id": "MonoidHom.mgraph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mgraph",
+  "signature": {
+    "name": "VTask.mgraph",
+    "type": "{G : Type u_1} -> {H : Type u_2} -> [Monoid G] -> [Monoid H] -> (f : G →* H) -> Submonoid (G × H)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all monoid homomorphisms; there are no junk-value or boundary conventions since every input yields a well-defined submonoid."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mgraph_one_always_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G H : Type*} [Monoid G] [Monoid H] (f : G →* H), (1 : G × H) ∈ VTask.mgraph f",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.one_mem",
+        "MonoidHom.mem_mgraph",
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.one_mem",
+        "MonoidHom.mem_mgraph",
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.35,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mgraph_eq_mrange_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G H : Type*} [Monoid G] [Monoid H] (f : G →* H), VTask.mgraph f = MonoidHom.mrange ((MonoidHom.id G).prod f)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mgraph_eq_mrange_prod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mgraph_eq_mrange_prod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.094,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mgraph_fst_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G H : Type*} [Monoid G] [Monoid H] (f : G →* H) (g : G), ∃ x ∈ VTask.mgraph f, x.1 = g",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.443,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mgraph_second_coord_determined",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G H : Type*} [Monoid G] [Monoid H] (f : G →* H) (g : G) (h : H), (g, h) ∈ VTask.mgraph f → h = f g",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.369,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mgraph_identity_offdiagonal_not_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Monoid G] (g h : G), (g, h) ∈ VTask.mgraph (MonoidHom.id G) → g = h",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mem_mgraph",
+        "MonoidHom.id_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mem_mgraph",
+        "MonoidHom.id_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.188,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mgraph_graph_pairs_form",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G H : Type*} [Monoid G] [Monoid H] (f : G →* H) (x : G × H), x ∈ VTask.mgraph f ↔ ∃ g : G, x = (g, f g)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.mem_mgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.092,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.mgraph-3685f880",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidHom.mgraph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidHom.mgraph-3685f880",
+    "review_status": "unreviewed"
+  }
+}

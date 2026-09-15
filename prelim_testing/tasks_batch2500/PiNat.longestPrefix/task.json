@@ -1,0 +1,131 @@
+{
+  "task_id": "PiNat.longestPrefix",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.longestPrefix",
+  "signature": {
+    "name": "VTask.longestPrefix",
+    "type": "{E : ℕ → Type u_2} -> (x : (n : ℕ) → E n) -> (s : Set ((n : ℕ) → E n)) -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅ or no element of s shares any prefix with x",
+        "statement": "VTask.longestPrefix x s = 0",
+        "note": "Truncated natural-number subtraction: shortestPrefixDiff x s = 0 gives 0 - 1 = 0."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "longestPrefix_empty_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (E : ℕ → Type*) (x : ∀ n, E n), VTask.longestPrefix x (∅ : Set (∀ n, E n)) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "PiNat.inter_cylinder_longestPrefix_nonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiNat.inter_cylinder_longestPrefix_nonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiNat.longestPrefix-f1682d25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "longestPrefix_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (E : ℕ → Type*) (x : ∀ n, E n) (s : Set (∀ n, E n)), 0 ≤ VTask.longestPrefix x s",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.561,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiNat.longestPrefix-f1682d25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "longestPrefix_reject_disjoint_cylinder",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set (∀ n : ℕ, Fin 2)) (x : ∀ n : ℕ, Fin 2), IsClosed s → x ∉ s → ¬ (s ∩ PiNat.cylinder x (VTask.longestPrefix x s + 1)).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "PiNat.disjoint_cylinder_of_longestPrefix_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiNat.disjoint_cylinder_of_longestPrefix_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiNat.longestPrefix-f1682d25",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PiNat.longestPrefix",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PiNat.longestPrefix-f1682d25",
+    "review_status": "unreviewed"
+  }
+}

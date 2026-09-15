@@ -1,0 +1,93 @@
+{
+  "task_id": "Sigma.curry",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.curry",
+  "signature": {
+    "name": "VTask.curry",
+    "type": "{α : Type u_1} -> {β : α → Type u_4} -> {γ : (a : α) → β a → Type u_7} -> (f : (x : Sigma β) → γ x.fst x.snd) -> (x : α) -> (y : β x) -> γ x y",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "x",
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.curry is a total, definitionally transparent function with no junk-value or edge conventions; every well-typed input is handled uniformly."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "curry_injective_in_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} {γ : ∀ a, β a → Type*} (f g : ∀ x : Sigma β, γ x.1 x.2), VTask.curry f = VTask.curry g → f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Sigma.uncurry_curry"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sigma.uncurry_curry"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sigma.curry-328f6495",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_ne_swapped_args",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (α : Type) (β : α → Type) (γ : ∀ a, β a → Type) (f : (x : Sigma β) → γ x.fst x.snd) (x : α) (y : β x), VTask.curry f x y = f ⟨x, y⟩ → False)",
+      "domain_inputs": {},
+      "anchors": [
+        "Sigma.curry_uncurry"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sigma.curry_uncurry"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sigma.curry-328f6495",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Sigma.curry",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Sigma.curry-328f6495",
+    "review_status": "unreviewed"
+  }
+}

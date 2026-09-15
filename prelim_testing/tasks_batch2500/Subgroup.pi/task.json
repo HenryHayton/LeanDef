@@ -1,0 +1,261 @@
+{
+  "task_id": "Subgroup.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{η : Type u_7} -> {f : η → Type u_8} -> [(i : η) → Group (f i)] -> (I : Set η) -> (H : (i : η) → Subgroup (f i)) -> Subgroup ((i : η) → f i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "I = Set.univ",
+        "statement": "When I is the universal set, every index is active and x belongs to VTask.pi Set.univ H iff x i ∈ H i for all i.",
+        "note": "Full constraint regime."
+      },
+      {
+        "point": "I = ∅",
+        "statement": "When I is the empty set, there are no constraints and VTask.pi ∅ H equals the top subgroup ⊤.",
+        "note": "Vacuously true for all elements."
+      },
+      {
+        "point": "i ∉ I",
+        "statement": "For indices i not in I, the value of H i is ignored for membership purposes; the i-th component is unconstrained.",
+        "note": "Junk-value convention: H i for i ∉ I is irrelevant."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_empty_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)] (H : ∀ i, Subgroup (f i)), VTask.pi ∅ H = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.pi_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.pi_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.849,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_bot_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)], VTask.pi Set.univ (fun i => (⊥ : Subgroup (f i))) = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.pi_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.pi_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.885,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_univ_top_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)], VTask.pi Set.univ (fun i => (⊤ : Subgroup (f i))) = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.pi_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.pi_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.545,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_eq_bot_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)] (H : ∀ i, Subgroup (f i)), VTask.pi Set.univ H = ⊥ ↔ ∀ i, H i = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.pi_eq_bot_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.pi_eq_bot_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.65,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_index_set_constrains_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)] (I : Set η) (H : ∀ i, Subgroup (f i)) (x : ∀ i, f i), x ∈ VTask.pi I H → ∀ i ∈ I, x i ∈ H i",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.mem_pi"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.mem_pi"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.437,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_commutator_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {η : Type*} {f : η → Type*} [inst : ∀ i, Group (f i)] (H K : ∀ i, Subgroup (f i)), ⁅VTask.pi Set.univ H, VTask.pi Set.univ K⁆ ≤ VTask.pi Set.univ (fun i => ⁅H i, K i⁆)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.commutator_pi_pi_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.commutator_pi_pi_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.424,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subgroup.pi-46665051",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subgroup.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subgroup.pi-46665051",
+    "review_status": "unreviewed"
+  }
+}

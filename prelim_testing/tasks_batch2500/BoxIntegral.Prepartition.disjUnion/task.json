@@ -1,0 +1,281 @@
+{
+  "task_id": "BoxIntegral.Prepartition.disjUnion",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.disjUnion",
+  "signature": {
+    "name": "VTask.disjUnion",
+    "type": "{ι : Type u_1} -> {I : BoxIntegral.Box ι} -> (π₁ π₂ : BoxIntegral.Prepartition I) -> (h : Disjoint π₁.iUnion π₂.iUnion) -> BoxIntegral.Prepartition I",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "Disjoint π₁.iUnion π₂.iUnion",
+    "variables": [
+      "π₁",
+      "π₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The operation is guarded by an explicit proof obligation (disjointness hypothesis h), so there are no junk-value or boundary conventions; the result is always a fully valid prepartition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "disjUnion_mem_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion) (J : BoxIntegral.Box ι), J ∈ π₁ → J ∈ VTask.disjUnion π₁ π₂ h",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.046,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_mem_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion) (J : BoxIntegral.Box ι), J ∈ π₂ → J ∈ VTask.disjUnion π₁ π₂ h",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.825,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion) (J : BoxIntegral.Box ι), J ∈ VTask.disjUnion π₁ π₂ h ↔ J ∈ π₁ ∨ J ∈ π₂",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.mem_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.728,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_iUnion_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion), (VTask.disjUnion π₁ π₂ h).iUnion = π₁.iUnion ∪ π₂.iUnion",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.223,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_iUnion_contains_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion), π₁.iUnion ⊆ (VTask.disjUnion π₁ π₂ h).iUnion",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.244,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_iUnion_contains_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion), π₂.iUnion ⊆ (VTask.disjUnion π₁ π₂ h).iUnion",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.24,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnion_iUnion_not_superset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π₁ π₂ : BoxIntegral.Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion), ¬((VTask.disjUnion π₁ π₂ h).iUnion ⊂ π₁.iUnion)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.iUnion_disjUnion"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoxIntegral.Prepartition.disjUnion",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoxIntegral.Prepartition.disjUnion-e35b1266",
+    "review_status": "unreviewed"
+  }
+}

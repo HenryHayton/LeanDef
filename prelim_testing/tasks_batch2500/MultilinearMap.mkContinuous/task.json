@@ -1,0 +1,346 @@
+{
+  "task_id": "MultilinearMap.mkContinuous",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mkContinuous",
+  "signature": {
+    "name": "VTask.mkContinuous",
+    "type": "{𝕜 : Type u} -> {ι : Type v} -> {E : ι → Type wE} -> {G : Type wG} -> [NontriviallyNormedField 𝕜] -> [(i : ι) → SeminormedAddCommGroup (E i)] -> [(i : ι) → NormedSpace 𝕜 (E i)] -> [SeminormedAddCommGroup G] -> [NormedSpace 𝕜 G] -> [Fintype ι] -> (f : MultilinearMap 𝕜 E G) -> (C : ℝ) -> (H : ∀ (m : (i : ι) → E i), ‖f m‖ ≤ C * ∏ i, ‖m i‖) -> ContinuousMultilinearMap 𝕜 E G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "C",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "C may be negative",
+        "statement": "When C < 0, the constructor still accepts the bound proof H and produces a valid ContinuousMultilinearMap; the operator norm satisfies ‖f.mkContinuous C H‖ ≤ max C 0, which equals 0.",
+        "note": "No domain restriction on C; junk-value behaviour is to fall back to the max C 0 estimate."
+      },
+      {
+        "point": "Coercion identity",
+        "statement": "The underlying function of f.mkContinuous C H is definitionally equal to f; evaluation at any input tuple gives the same result as f.",
+        "note": "This is a coercion convention: the continuous wrapper does not change values."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mkContinuous_norm_le_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) {C : ℝ} (hC : 0 ≤ C) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ C",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.885,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_le_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) {C : ℝ} (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ max C 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 20.201,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) (C : ℝ) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), 0 ≤ ‖VTask.mkContinuous f C H‖",
+      "domain_inputs": {},
+      "anchors": [
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.125,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_neg_C_norm_le_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) {C : ℝ} (hC : C < 0) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le'",
+        "max_eq_right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le'",
+        "max_eq_right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_zero_C_norm_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) (H : ∀ m, ‖f m‖ ≤ 0 * ∏ i, ‖m i‖), ‖VTask.mkContinuous f 0 H‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_not_norm_gt_C_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) {C : ℝ} (hC : 0 ≤ C) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), C < ‖VTask.mkContinuous f C H‖)",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le",
+        "not_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le",
+        "not_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    },
+    {
+      "id": "mkContinuous_norm_le_max_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) (C : ℝ) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ max C 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 20.471,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_le_iff_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {ι : Type*} {E : ι → Type*} {G : Type*} [NontriviallyNormedField 𝕜] [∀ i, SeminormedAddCommGroup (E i)] [∀ i, NormedSpace 𝕜 (E i)] [SeminormedAddCommGroup G] [NormedSpace 𝕜 G] [Fintype ι] (f : MultilinearMap 𝕜 E G) {C : ℝ} (hC : 0 ≤ C) (H : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ max C 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.mkContinuous_norm_le'",
+        "le_max_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.mkContinuous_norm_le'",
+        "le_max_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 20.471,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_coe_ne_wrong_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f g : MultilinearMap ℝ (fun _ : Fin 1 => ℝ) ℝ) (C : ℝ) (Hf : ∀ m : Fin 1 → ℝ, ‖f m‖ ≤ C * ∏ i, ‖m i‖) (Hg : ∀ m : Fin 1 → ℝ, ‖g m‖ ≤ C * ∏ i, ‖m i‖), f ≠ g → (VTask.mkContinuous f C Hf : ContinuousMultilinearMap ℝ (fun _ : Fin 1 => ℝ) ℝ) ≠ VTask.mkContinuous g C Hg",
+      "domain_inputs": {},
+      "anchors": [
+        "MultilinearMap.coe_mkContinuous",
+        "ContinuousMultilinearMap.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MultilinearMap.coe_mkContinuous",
+        "ContinuousMultilinearMap.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.844,
+        "at": "authoring",
+        "script": "by simp [_root_.MultilinearMap.mkContinuous] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MultilinearMap.mkContinuous] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MultilinearMap.mkContinuous",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MultilinearMap.mkContinuous-cf62b381",
+    "review_status": "unreviewed"
+  }
+}

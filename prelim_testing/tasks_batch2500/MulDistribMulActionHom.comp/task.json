@@ -1,0 +1,206 @@
+{
+  "task_id": "MulDistribMulActionHom.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{M : Type u_1} -> [Monoid M] -> {N : Type u_2} -> [Monoid N] -> {P : Type u_3} -> [Monoid P] -> {φ : M →* N} -> {ψ : N →* P} -> {χ : M →* P} -> {A : Type u_4} -> [Monoid A] -> [MulDistribMulAction M A] -> {B : Type u_5} -> [Monoid B] -> [MulDistribMulAction N B] -> {C : Type u_7} -> [Monoid C] -> [MulDistribMulAction P C] -> [κ : φ.CompTriple ψ χ] -> (g : B →ₑ*[ψ] C) -> (f : A →ₑ*[φ] B) -> A →ₑ*[χ] C",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction; every well-typed combination of equivariant monoid homomorphisms and a CompTriple witness yields a meaningful composite, with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [Monoid M] {N : Type*} [Monoid N] {P : Type*} [Monoid P] {φ : M →* N} {ψ : N →* P} {χ : M →* P} {A : Type*} [Monoid A] [MulDistribMulAction M A] {B : Type*} [Monoid B] [MulDistribMulAction N B] {C : Type*} [Monoid C] [MulDistribMulAction P C] [κ : φ.CompTriple ψ χ] (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B), VTask.comp g f 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.228,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [Monoid M] {N : Type*} [Monoid N] {P : Type*} [Monoid P] {φ : M →* N} {ψ : N →* P} {χ : M →* P} {A : Type*} [Monoid A] [MulDistribMulAction M A] {B : Type*} [Monoid B] [MulDistribMulAction N B] {C : Type*} [Monoid C] [MulDistribMulAction P C] [κ : φ.CompTriple ψ χ] (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) (a b : A), VTask.comp g f (a * b) = VTask.comp g f a * VTask.comp g f b",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.397,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_equivariant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [Monoid M] {N : Type*} [Monoid N] {P : Type*} [Monoid P] {φ : M →* N} {ψ : N →* P} {χ : M →* P} {A : Type*} [Monoid A] [MulDistribMulAction M A] {B : Type*} [Monoid B] [MulDistribMulAction N B] {C : Type*} [Monoid C] [MulDistribMulAction P C] [κ : φ.CompTriple ψ χ] (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) (m : M) (a : A), VTask.comp g f (m • a) = χ m • VTask.comp g f a",
+      "domain_inputs": {},
+      "anchors": [
+        "MulActionHom.comp_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulActionHom.comp_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 23.861,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_toFun_eq_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [Monoid M] {N : Type*} [Monoid N] {P : Type*} [Monoid P] {φ : M →* N} {ψ : N →* P} {χ : M →* P} {A : Type*} [Monoid A] [MulDistribMulAction M A] {B : Type*} [Monoid B] [MulDistribMulAction N B] {C : Type*} [Monoid C] [MulDistribMulAction P C] [κ : φ.CompTriple ψ χ] (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) (a b : A), VTask.comp g f (a * b) = VTask.comp g f a * VTask.comp g f b",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.37,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_chi_action",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [Monoid M] {N : Type*} [Monoid N] {P : Type*} [Monoid P] {φ : M →* N} {ψ : N →* P} {χ : M →* P} {A : Type*} [Monoid A] [MulDistribMulAction M A] {B : Type*} [Monoid B] [MulDistribMulAction N B] {C : Type*} [Monoid C] [MulDistribMulAction P C] [κ : φ.CompTriple ψ χ] (g : B →ₑ*[ψ] C) (f : A →ₑ*[φ] B) (m : M) (a : A), VTask.comp g f (m • a) = (ψ (φ m)) • (VTask.comp g f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.CompTriple.comp_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.CompTriple.comp_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulDistribMulActionHom.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulDistribMulActionHom.comp-639a651b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "task_id": "FirstOrder.Language.Term.listEncode",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.listEncode",
+  "signature": {
+    "name": "VTask.listEncode",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> L.Term α → List (α ⊕ (i : ℕ) × L.Functions i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.listEncode is a total function on all first-order terms with no junk-value or edge-case conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "listEncode_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*}, Function.Injective (VTask.listEncode : L.Term α → List (α ⊕ (i : ℕ) × L.Functions i))",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.369,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.listEncode-bd488161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listEncode_var_inl_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "Sum.inl (0 : Fin 3) ∈ VTask.listEncode (FirstOrder.Language.Term.var (0 : Fin 3) : (FirstOrder.Language.empty).Term (Fin 3))",
+      "domain_inputs": {
+        "t": [
+          "FirstOrder.Language.Term.var (0 : Fin 3)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.196,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.listEncode-bd488161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Sum.inl (0 : Fin 3)"
+    },
+    {
+      "id": "listEncode_var_not_func",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} (x : α) {n : ℕ} (f : L.Functions n) (ts : Fin n → L.Term α), VTask.listEncode (FirstOrder.Language.Term.var x : L.Term α) ≠ VTask.listEncode (FirstOrder.Language.Term.func f ts)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.74,
+        "at": "authoring",
+        "script": "by simp [_root_.FirstOrder.Language.Term.listEncode] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.FirstOrder.Language.Term.listEncode] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.listEncode-bd488161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listEncode_two_vars_distinct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α : Type*} (x y : α), x ≠ y → VTask.listEncode (FirstOrder.Language.Term.var x : L.Term α) ≠ VTask.listEncode (FirstOrder.Language.Term.var y : L.Term α)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.listEncode_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.336,
+        "at": "authoring",
+        "script": "by simp [_root_.FirstOrder.Language.Term.listEncode] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.FirstOrder.Language.Term.listEncode] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.listEncode-bd488161",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Term.listEncode",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Term.listEncode-bd488161",
+    "review_status": "unreviewed"
+  }
+}

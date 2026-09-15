@@ -1,0 +1,235 @@
+{
+  "task_id": "Affine.Simplex.Equilateral",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Equilateral",
+  "signature": {
+    "name": "VTask.Equilateral",
+    "type": "{R : Type u_1} -> {V : Type u_2} -> {P : Type u_3} -> [Ring R] -> [SeminormedAddCommGroup V] -> [PseudoMetricSpace P] -> [Module R V] -> [NormedAddTorsor V P] -> {n : ℕ} -> (s : Affine.Simplex R P n) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "r = 0 allowed",
+        "statement": "The common edge length r may be zero; a degenerate simplex with all vertices at the same point satisfies VTask.Equilateral with r = 0.",
+        "note": "No restriction on r in the existential"
+      },
+      {
+        "point": "vacuous for n = 0",
+        "statement": "A 0-simplex (single vertex) has no pairs of distinct vertices, so VTask.Equilateral holds vacuously for every 0-simplex.",
+        "note": "Universal over an empty domain"
+      },
+      {
+        "point": "vacuous for n = 1",
+        "statement": "A 1-simplex has exactly one pair of distinct vertices, so VTask.Equilateral holds for every 1-simplex by taking r to be that single edge length.",
+        "note": "Only one distance to match"
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "equilateral_regular_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), s.Regular → VTask.Equilateral s",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.Regular.equilateral"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.Regular.equilateral"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.45,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equilateral_dist_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), VTask.Equilateral s → ∀ {i₁ i₂ i₃ i₄ : Fin (n + 1)}, i₁ ≠ i₂ → i₃ ≠ i₄ → dist (s.points i₁) (s.points i₂) = dist (s.points i₃) (s.points i₄)",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.608,
+        "at": "authoring",
+        "script": "by simp [_root_.Affine.Simplex.Equilateral] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Affine.Simplex.Equilateral] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equilateral_regular_not_implies_equilateral",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex ℝ P n), VTask.Equilateral s → s.Regular)",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.Regular.equilateral"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.Regular.equilateral"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equilateral_one_simplex_always",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] (s : Affine.Simplex ℝ P 1), VTask.Equilateral s",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equilateral_dist_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {V : Type*} {P : Type*} [Ring R] [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module R V] [NormedAddTorsor V P] {n : ℕ} (s : Affine.Simplex R P n), VTask.Equilateral s → ∀ {i₁ i₂ : Fin (n + 1)}, i₁ ≠ i₂ → dist (s.points i₁) (s.points i₂) = dist (s.points i₂) (s.points i₁)",
+      "domain_inputs": {},
+      "anchors": [
+        "dist_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "dist_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.428,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "equilateral_two_implies_dist_eq_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {P : Type*} [SeminormedAddCommGroup V] [PseudoMetricSpace P] [Module ℝ V] [NormedAddTorsor V P] (s : Affine.Simplex ℝ P 2), VTask.Equilateral s → dist (s.points 0) (s.points 1) = dist (s.points 1) (s.points 2) ∧ dist (s.points 0) (s.points 1) = dist (s.points 0) (s.points 2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.Equilateral.dist_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Affine.Simplex.Equilateral",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Affine.Simplex.Equilateral-898881d3",
+    "review_status": "unreviewed"
+  }
+}

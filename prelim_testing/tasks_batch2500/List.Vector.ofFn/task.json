@@ -1,0 +1,371 @@
+{
+  "task_id": "List.Vector.ofFn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofFn",
+  "signature": {
+    "name": "VTask.ofFn",
+    "type": "{α : Type u_1} -> {n : ℕ} -> (Fin n → α) → List.Vector α n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and meaningful for all n : ℕ and all f : Fin n → α, including n = 0 where the result is simply the empty vector. No junk values arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofFn_get_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (v : List.Vector α n), VTask.ofFn (List.Vector.get v) = v",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.ofFn_get"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.ofFn_get"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.325,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_get_at_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (f : Fin n → α) (i : Fin n), List.Vector.get (VTask.ofFn f) i = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.get_ofFn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.get_ofFn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.419,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_toList_eq_listOfFn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (f : Fin n → α), (VTask.ofFn f).toList = List.ofFn f",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.toList_ofFn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.toList_ofFn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.402,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (f : Fin n → α), (VTask.ofFn f).toList.length = n",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.toList_ofFn",
+        "List.length_ofFn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.toList_ofFn",
+        "List.length_ofFn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.419,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_injective_on_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {n : ℕ} (f g : Fin n → α), VTask.ofFn f = VTask.ofFn g → f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.get_ofFn"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.get_ofFn"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_empty_toList",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofFn (fun i : Fin 0 => (42 : ℕ))).toList = [] := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 0 => (42 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_length_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofFn (fun i : Fin 0 => (42 : ℕ))).toList.length = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 0 => (42 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_singleton_toList",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofFn (fun i : Fin 1 => (7 : ℕ))).toList = [7] := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 1 => (7 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_three_entries",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofFn (fun i : Fin 3 => (i : ℕ) * 2)).toList = [0, 2, 4] := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 3 => (i : ℕ) * 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_accept_inType",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.ofFn (fun i : Fin 3 => (i : ℕ) * 2)).toList = [0, 2, 4] := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 3 => (i : ℕ) * 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.ofFn (fun i : Fin 3 => (i : ℕ) * 2)"
+    },
+    {
+      "id": "ofFn_reject_wrong_entry",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.ofFn (fun i : Fin 3 => (i : ℕ) * 2)).toList = [0, 2, 5]) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun i : Fin 3 => (i : ℕ) * 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.ofFn-26151064",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.ofFn (fun i : Fin 3 => (i : ℕ) * 2)",
+      "violated_property": "get_ofFn: the i-th element must be f i"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.Vector.ofFn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.Vector.ofFn-26151064",
+    "review_status": "unreviewed"
+  }
+}

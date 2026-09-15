@@ -1,0 +1,214 @@
+{
+  "task_id": "Matrix.diagonal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.diagonal",
+  "signature": {
+    "name": "VTask.diagonal",
+    "type": "{n : Type u_3} -> {α : Type v} -> [DecidableEq n] -> [Zero α] -> (d : n → α) -> Matrix n n α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "d"
+    ],
+    "conventions": [
+      {
+        "point": "empty index type",
+        "statement": "When `n` is an empty type (e.g., `Fin 0`), `VTask.diagonal d` is the unique empty square matrix, consistent with all stated entry conditions vacuously.",
+        "note": "No junk value; the definition is total and well-behaved."
+      },
+      {
+        "point": "zero diagonal function",
+        "statement": "When `d` is identically zero, `VTask.diagonal d` equals the zero matrix, since both on-diagonal entries `d i = 0` and off-diagonal entries `0` coincide.",
+        "note": "Special case of the general definition, not a separate convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "diagonal_diag_extraction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (d : Fin 3 → ℤ) (i : Fin 3), VTask.diagonal d i i = d i",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.081,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.diagonal-cc6b1097",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "diagonal_off_diag_zero_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (d : Fin 3 → ℤ) (i j : Fin 3), i ≠ j → VTask.diagonal d i j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.diagonal_apply_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.diagonal_apply_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.297,
+        "at": "authoring",
+        "script": "by simp [_root_.Matrix.diagonal] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Matrix.diagonal] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.diagonal-cc6b1097",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "diagonal_isDiag_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (d : Fin 4 → ℤ), (VTask.diagonal d).IsDiag",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.isDiag_diagonal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.isDiag_diagonal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.061,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.diagonal-cc6b1097",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "diagonal_diag_round_trip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : Type*} [DecidableEq n] [Fintype n] (A : Matrix n n ℤ), A.IsDiag → VTask.diagonal (Matrix.diag A) = A",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.IsDiag.diagonal_diag"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.IsDiag.diagonal_diag"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.446,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.diagonal-cc6b1097",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "diagonal_reject_offdiag_nonzero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.diagonal (fun i : Fin 2 => (i.val + 1 : ℕ)) 0 1 ≠ 1 := by decide",
+      "domain_inputs": {
+        "d": [
+          "fun i : Fin 2 => (i.val + 1 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.diagonal-cc6b1097",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.diagonal (fun i : Fin 2 => (i.val + 1 : ℕ)) 0 1",
+      "violated_property": "off-diagonal entries must be zero"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.diagonal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.diagonal-cc6b1097",
+    "review_status": "unreviewed"
+  }
+}

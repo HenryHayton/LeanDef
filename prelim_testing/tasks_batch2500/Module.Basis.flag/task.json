@@ -1,0 +1,228 @@
+{
+  "task_id": "Module.Basis.flag",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.flag",
+  "signature": {
+    "name": "VTask.flag",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> {n : ℕ} -> (b : Module.Basis (Fin n) R M) -> (k : Fin (n + 1)) -> Submodule R M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": "k = 0",
+        "statement": "When k = 0, the set {i | i.castSucc < k} is empty, so VTask.flag b 0 = ⊥ (the zero submodule).",
+        "note": "Junk-value convention: the empty span is the zero submodule by definition of Submodule.span."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "flag_zero_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M), VTask.flag b ⟨0, Nat.zero_lt_succ n⟩ = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.span_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.span_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.448,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "flag_top_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M), VTask.flag b ⟨n, Nat.lt_succ_self n⟩ = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.span_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.span_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "flag_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M) (k l : Fin (n + 1)), k ≤ l → VTask.flag b k ≤ VTask.flag b l",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.span_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.span_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "flag_bot_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M) (k : Fin (n + 1)), ⊥ ≤ VTask.flag b k",
+      "domain_inputs": {},
+      "anchors": [
+        "bot_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "bot_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.406,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "flag_le_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M) (k : Fin (n + 1)), VTask.flag b k ≤ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "le_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "le_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.381,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "flag_nested_chain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} [Semiring R] [AddCommMonoid M] [Module R M] {n : ℕ} (b : Module.Basis (Fin n) R M) (k : Fin n), VTask.flag b k.castSucc ≤ VTask.flag b k.succ",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.span_mono",
+        "Fin.castSucc_lt_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.span_mono",
+        "Fin.castSucc_lt_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.flag-0b4f5fca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.Basis.flag",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.Basis.flag-0b4f5fca",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "task_id": "SimpleGraph.Walk.toSubgraph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toSubgraph",
+  "signature": {
+    "name": "VTask.toSubgraph",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v : V} -> G.Walk u v → G.Subgraph",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "nil walk",
+        "statement": "VTask.toSubgraph (Walk.nil : G.Walk u u) = G.singletonSubgraph u, the subgraph containing only the vertex u and no edges.",
+        "note": "Base case of the recursive definition; nil walk at u yields the singleton subgraph at u."
+      },
+      {
+        "point": "cons walk",
+        "statement": "VTask.toSubgraph (Walk.cons h p) = G.subgraphOfAdj h ⊔ VTask.toSubgraph p, the join of the single-edge subgraph for h and the subgraph of the tail.",
+        "note": "Recursive case: prepending an edge h to a walk joins the subgraph of that edge with the subgraph of the rest."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toSubgraph_start_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), u ∈ (VTask.toSubgraph p).verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.start_mem_verts_toSubgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.start_mem_verts_toSubgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.606,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_end_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), v ∈ (VTask.toSubgraph p).verts",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.end_mem_verts_toSubgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.end_mem_verts_toSubgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.23,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_verts_iff_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v), w ∈ (VTask.toSubgraph p).verts ↔ w ∈ p.support",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.mem_verts_toSubgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.mem_verts_toSubgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.256,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_edgeSet_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), (VTask.toSubgraph p).edgeSet = p.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edgeSet_toSubgraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edgeSet_toSubgraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.216,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_append",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), VTask.toSubgraph (p.append q) = VTask.toSubgraph p ⊔ VTask.toSubgraph q",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.375,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_reverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.toSubgraph p.reverse = VTask.toSubgraph p",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_reverse"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_reverse"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.206,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_connected",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), (VTask.toSubgraph p).Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_connected"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_connected"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.925,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_cons_nil_eq_subgraphOfAdj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (h : G.Adj u v), VTask.toSubgraph (SimpleGraph.Walk.cons h SimpleGraph.Walk.nil) = G.subgraphOfAdj h",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_cons_nil_eq_subgraphOfAdj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_cons_nil_eq_subgraphOfAdj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.166,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_le_iff_non_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} {w : G.Walk u v} (hnil : ¬w.Nil) {G' : G.Subgraph}, VTask.toSubgraph w ≤ G' ↔ w.edgeSet ⊆ G'.edgeSet",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_le_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_le_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.984,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSubgraph_le_induce_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.toSubgraph p ≤ (⊤ : G.Subgraph).induce {w | w ∈ p.support}",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.toSubgraph_le_induce_support"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.toSubgraph_le_induce_support"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.483,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.toSubgraph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.toSubgraph-2e72c91d",
+    "review_status": "unreviewed"
+  }
+}

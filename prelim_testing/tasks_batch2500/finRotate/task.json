@@ -1,0 +1,360 @@
+{
+  "task_id": "finRotate",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.finRotate",
+  "signature": {
+    "name": "VTask.finRotate",
+    "type": "(n : ℕ) -> Equiv.Perm (Fin n)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.finRotate 0 is the identity permutation on the empty type Fin 0.",
+        "note": "Fin 0 has no elements; the identity is the only possible permutation."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.finRotate 1 equals the identity permutation on the singleton Fin 1.",
+        "note": "The sole element 0 maps to itself; there is no non-trivial rotation."
+      },
+      {
+        "point": "last element wraps to zero",
+        "statement": "For any n, VTask.finRotate (n + 1) applied to the last element Fin.last n returns 0.",
+        "note": "This is the unique wrap-around case that distinguishes rotation from a plain increment."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "finRotate_zero_is_refl",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 0 = Equiv.refl (Fin 0) := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_one_is_refl",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 1 = Equiv.refl (Fin 1) := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_3_maps_0_to_1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 3 ⟨0, by omega⟩ = ⟨1, by omega⟩ := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_4_last_wraps",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 4 ⟨3, by omega⟩ = ⟨0, by omega⟩ := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_2_swaps",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 2 ⟨0, by omega⟩ = ⟨1, by omega⟩ ∧ VTask.finRotate 2 ⟨1, by omega⟩ = ⟨0, by omega⟩ := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by simp",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_apply_zero_succ",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.finRotate 5 0 = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_support_n_plus_2",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, Equiv.Perm.support (VTask.finRotate (n + 2)) = Finset.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "support_finRotate"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "support_finRotate"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.094,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_sign_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, Equiv.Perm.sign (VTask.finRotate n) = (-1 : ℤˣ) ^ (n - 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "sign_finRotate"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "sign_finRotate"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.679,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_last_maps_to_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.finRotate (n + 1) (Fin.last n) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "finRotate_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "finRotate_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.098,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "finRotate_non_last_increases",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (i : Fin (n + 1)), i ≠ Fin.last n → (VTask.finRotate (n + 1) i : ℕ) = i + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "coe_finRotate_of_ne_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "coe_finRotate_of_ne_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.56,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "finRotate-97f12d98",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "finRotate",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "finRotate-97f12d98",
+    "review_status": "unreviewed"
+  }
+}

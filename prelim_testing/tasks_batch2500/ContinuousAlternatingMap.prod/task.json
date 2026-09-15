@@ -1,0 +1,121 @@
+{
+  "task_id": "ContinuousAlternatingMap.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> {N : Type u_4} -> {N' : Type u_5} -> {ι : Type u_6} -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> [TopologicalSpace M] -> [AddCommMonoid N] -> [Module R N] -> [TopologicalSpace N] -> [AddCommMonoid N'] -> [Module R N'] -> [TopologicalSpace N'] -> (f : M [⋀^ι]→L[R] N) -> (g : M [⋀^ι]→L[R] N') -> M [⋀^ι]→L[R] (N × N')",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.prod is a total construction; every pair of continuous alternating maps with compatible types yields a well-defined product map, with no junk values or special edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_ne_zero_when_components_ne",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.prod (0 : (Fin 2 → ℝ) [⋀^Fin 2]→L[ℝ] ℝ) (0 : (Fin 2 → ℝ) [⋀^Fin 2]→L[ℝ] ℝ) ≠ 0)",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ],
+        "g": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.193,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousAlternatingMap.prod-cb7c99ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prod (0 : (Fin 2 → ℝ) [⋀^Fin 2]→L[ℝ] ℝ) (0 : (Fin 2 → ℝ) [⋀^Fin 2]→L[ℝ] ℝ)",
+      "violated_property": "non-zero: VTask.prod of two zero maps is itself zero"
+    },
+    {
+      "id": "prod_alternating_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {N : Type*} {N' : Type*} {ι : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [TopologicalSpace M] [AddCommMonoid N] [Module R N] [TopologicalSpace N] [AddCommMonoid N'] [Module R N'] [TopologicalSpace N'] (f : M [⋀^ι]→L[R] N) (g : M [⋀^ι]→L[R] N') (v : ι → M) (i j : ι), i ≠ j → v i = v j → VTask.prod f g v = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousAlternatingMap.map_eq_zero_of_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousAlternatingMap.map_eq_zero_of_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.714,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousAlternatingMap.prod-cb7c99ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousAlternatingMap.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousAlternatingMap.prod-cb7c99ce",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "task_id": "fourier",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fourier",
+  "signature": {
+    "name": "VTask.fourier",
+    "type": "{T : ℝ} -> (n : ℤ) -> C(AddCircle T, ℂ)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "T",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "T = 0",
+        "statement": "When T = 0 the circle AddCircle 0 is degenerate; VTask.fourier n still type-checks and equals the constant map to 1 for every n, because every element of the circle is sent to 0 under n-scaling.",
+        "note": "Junk value: mathematically uninteresting but well-defined by the formula."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fourier_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (T : ℝ) (n : ℤ), Continuous (VTask.fourier n : AddCircle T → ℂ)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.223,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fourier_zero_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (T : ℝ), (VTask.fourier (0 : ℤ) : C(AddCircle T, ℂ)) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "fourier_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "fourier_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.133,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fourier_mem_continuous_map",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℤ), VTask.fourier n ∈ (Set.univ : Set (C(AddCircle (1 : ℝ), ℂ)))",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.071,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.fourier (1 : ℤ)"
+    },
+    {
+      "id": "fourier_neg_one_neq_one",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (x : AddCircle (1 : ℝ)), (VTask.fourier (-1 : ℤ) : AddCircle (1 : ℝ) → ℂ) x = 1",
+      "domain_inputs": {
+        "n": [
+          "-1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.fourier (-1 : ℤ)",
+      "violated_property": "fourier (-1) is not the constant function 1 (it is a nontrivial character)"
+    },
+    {
+      "id": "fourier_one_neq_zero_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (T : ℝ) (n : ℤ) (x : AddCircle T), (VTask.fourier n : AddCircle T → ℂ) x ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Complex.exp_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Complex.exp_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.324,
+        "at": "authoring",
+        "script": "by simp [_root_.fourier] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.fourier] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fourier_nonzero_n_not_constant",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.fourier (1 : ℤ) : C(AddCircle (1 : ℝ), ℂ)) = 1",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.fourier (1 : ℤ)",
+      "violated_property": "fourier 1 is not the constant function 1 on the non-degenerate circle"
+    },
+    {
+      "id": "fourier_zero_apply_explicit",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ (x : AddCircle (2 : ℝ)), (VTask.fourier (0 : ℤ) : AddCircle (2 : ℝ) → ℂ) x = 1",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.118,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "fourier-cf0a5ef9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.fourier (0 : ℤ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "fourier",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "fourier-cf0a5ef9",
+    "review_status": "unreviewed"
+  }
+}

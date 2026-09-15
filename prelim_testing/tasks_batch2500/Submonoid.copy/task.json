@@ -1,0 +1,204 @@
+{
+  "task_id": "Submonoid.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{M : Type u_1} -> [MulOneClass M] -> (S : Submonoid M) -> (s : Set M) -> (hs : s = ↑S) -> Submonoid M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "s",
+      "hs"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and the proof argument hs fully constrains the input set to equal the original carrier, leaving no room for junk values or edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_carrier_eq_original_carrier",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [inst : MulOneClass M] (S : Submonoid M) (s : Set M) (hs : s = ↑S), (VTask.copy S s hs : Set M) = ↑S",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.coe_copy"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.coe_copy"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.239,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submonoid.copy-89f9f488",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_one_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [inst : MulOneClass M] (S : Submonoid M) (s : Set M) (hs : s = ↑S), (1 : M) ∈ VTask.copy S s hs",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.one_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.one_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.267,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submonoid.copy-89f9f488",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_mul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [inst : MulOneClass M] (S : Submonoid M) (s : Set M) (hs : s = ↑S) (a b : M), a ∈ VTask.copy S s hs → b ∈ VTask.copy S s hs → a * b ∈ VTask.copy S s hs",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.mul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.mul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.235,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Submonoid.copy-89f9f488",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_eq_iff_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [inst : MulOneClass M] (S T : Submonoid M) (s : Set M) (hs : s = ↑S), VTask.copy S s hs = T ↔ S = T",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.857,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Submonoid.copy-89f9f488",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_other_submonoid",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [MulOneClass M] (S T : Submonoid M), S ≠ T → VTask.copy S ↑S rfl ≠ T",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.807,
+        "at": "authoring",
+        "script": "by simp only [_root_.Submonoid.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Submonoid.copy] <;> aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Submonoid.copy-89f9f488",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submonoid.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submonoid.copy-89f9f488",
+    "review_status": "unreviewed"
+  }
+}

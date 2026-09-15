@@ -1,0 +1,208 @@
+{
+  "task_id": "FixedDetMatrices.reduce",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.reduce",
+  "signature": {
+    "name": "VTask.reduce",
+    "type": "{m : ℤ} -> FixedDetMatrix (Fin 2) ℤ m → FixedDetMatrix (Fin 2) ℤ m",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "A"
+    ],
+    "conventions": [
+      {
+        "point": "m = 0",
+        "statement": "When m = 0 the function is still defined and returns a well-typed element of FixedDetMatrix (Fin 2) ℤ 0, but the guarantee that the output lies in reps m is only asserted for m ≠ 0.",
+        "note": "Junk-value convention: totality is preserved but the canonical-form guarantee does not apply."
+      },
+      {
+        "point": "integer division",
+        "statement": "Integer division inside VTask.reduce follows Lean's truncated-toward-zero convention for ℤ, so A.1 0 1 / A.1 1 1 and -A.1 0 1 / -A.1 1 1 may differ even when the inputs are sign-negations of each other.",
+        "note": "Arithmetic convention affecting the two branches of the base case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "reduce_mem_reps_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce A ∈ FixedDetMatrices.reps m",
+      "domain_inputs": {},
+      "anchors": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.16,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduce_image_in_reps_is_reps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce (VTask.reduce A) ∈ FixedDetMatrices.reps m",
+      "domain_inputs": {},
+      "anchors": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.156,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduce_idempotent_in_reps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), VTask.reduce A ∈ FixedDetMatrices.reps m → VTask.reduce (VTask.reduce A) = VTask.reduce A",
+      "domain_inputs": {},
+      "anchors": [
+        "FixedDetMatrices.reduce_mem_reps",
+        "FixedDetMatrices.reduce_of_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FixedDetMatrices.reduce_mem_reps",
+        "FixedDetMatrices.reduce_of_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduce_same_det",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℤ) (A : FixedDetMatrix (Fin 2) ℤ m), (VTask.reduce A).1.det = m",
+      "domain_inputs": {},
+      "anchors": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reduce_lower_left_zero_in_reps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (m : ℤ) (hm : m ≠ 0) (A : FixedDetMatrix (Fin 2) ℤ m), (VTask.reduce A).1 1 0 = 0 ∨ (VTask.reduce A).1 1 0 ≠ 0 → VTask.reduce A ∈ FixedDetMatrices.reps m",
+      "domain_inputs": {},
+      "anchors": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FixedDetMatrices.reduce_mem_reps"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.472,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FixedDetMatrices.reduce",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FixedDetMatrices.reduce-ca6ffdb8",
+    "review_status": "unreviewed"
+  }
+}

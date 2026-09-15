@@ -1,0 +1,488 @@
+{
+  "task_id": "openSegment",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.openSegment",
+  "signature": {
+    "name": "VTask.openSegment",
+    "type": "(𝕜 : Type u_1) -> {E : Type u_2} -> [Semiring 𝕜] -> [PartialOrder 𝕜] -> [AddCommMonoid E] -> [SMul 𝕜 E] -> (x y : E) -> Set E",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": "x = y",
+        "statement": "VTask.openSegment 𝕜 x x = {x} (not ∅) whenever 𝕜 contains an element strictly between 0 and 1.",
+        "note": "This is an intentional design choice: any a, b > 0 with a + b = 1 give a • x + b • x = (a + b) • x = x, so the degenerate open segment is the singleton, not empty."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "openSegment_eq_ioo_real",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.openSegment ℝ (0 : ℝ) 1 = Set.Ioo 0 1",
+      "domain_inputs": {},
+      "anchors": [
+        "openSegment_eq_Ioo"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "openSegment_eq_Ioo"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.24,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_self_eq_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ x : ℝ, VTask.openSegment ℝ x x = {x}",
+      "domain_inputs": {},
+      "anchors": [
+        "openSegment_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "openSegment_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.107,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y : ℝ), VTask.openSegment ℝ x y = VTask.openSegment ℝ y x",
+      "domain_inputs": {},
+      "anchors": [
+        "openSegment_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "openSegment_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_subset_segment",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y : ℝ), VTask.openSegment ℝ x y ⊆ segment ℝ x y",
+      "domain_inputs": {},
+      "anchors": [
+        "openSegment_subset_segment"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "openSegment_subset_segment"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.727,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_convex_contains",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s : Set ℝ), Convex ℝ s → ∀ x ∈ s, ∀ y ∈ s, VTask.openSegment ℝ x y ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Convex.openSegment_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Convex.openSegment_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.566,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_endpoint_not_mem_distinct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y : ℝ), x ≠ y → x ∉ VTask.openSegment ℝ x y",
+      "domain_inputs": {},
+      "anchors": [
+        "left_mem_openSegment_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "left_mem_openSegment_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.372,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "openSegment_mem_midpoint",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(1/2 : ℝ) ∈ VTask.openSegment ℝ (0 : ℝ) 1",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "y": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.078,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1/2 : ℝ)"
+    },
+    {
+      "id": "openSegment_zero_not_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(0 : ℝ) ∉ VTask.openSegment ℝ (0 : ℝ) 1",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "y": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.196,
+        "at": "authoring",
+        "script": "by simp [_root_.openSegment] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.openSegment] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : ℝ)",
+      "violated_property": "strict positivity of b (the coefficient of y = 1 forces b > 0, but membership of 0 forces b = 0)"
+    },
+    {
+      "id": "openSegment_one_not_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(1 : ℝ) ∉ VTask.openSegment ℝ (0 : ℝ) 1",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "y": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.192,
+        "at": "authoring",
+        "script": "by simp [_root_.openSegment] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.openSegment] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(1 : ℝ)",
+      "violated_property": "strict positivity of a (the coefficient of x = 0 forces a > 0, but membership of 1 forces a = 0)"
+    },
+    {
+      "id": "openSegment_self_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(3 : ℝ) ∈ VTask.openSegment ℝ (3 : ℝ) 3",
+      "domain_inputs": {
+        "x": [
+          "3"
+        ],
+        "y": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.061,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(3 : ℝ)"
+    },
+    {
+      "id": "openSegment_quarter_mem",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(1/4 : ℝ) ∈ VTask.openSegment ℝ (0 : ℝ) 1",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ],
+        "y": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.067,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1/4 : ℝ)"
+    },
+    {
+      "id": "openSegment_neg_two_pos_two_contains_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(0 : ℝ) ∈ VTask.openSegment ℝ (-2 : ℝ) 2",
+      "domain_inputs": {
+        "x": [
+          "-2"
+        ],
+        "y": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.06,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "openSegment-b29f0668",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(0 : ℝ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "openSegment",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "openSegment-b29f0668",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "task_id": "Polynomial.IsPrimitive",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPrimitive",
+  "signature": {
+    "name": "VTask.IsPrimitive",
+    "type": "{R : Type u_1} -> [CommSemiring R] -> (p : Polynomial R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "zero polynomial",
+        "statement": "The zero polynomial is in the domain but is not primitive in any nontrivial ring, because every constant divides 0 and non-units exist.",
+        "note": "Consistent with the universal quantifier returning False when a non-unit r is found."
+      },
+      {
+        "point": "trivial ring",
+        "statement": "In the zero ring (where every element is a unit), every polynomial, including 0, satisfies IsPrimitive vacuously.",
+        "note": "The predicate is total and makes sense even in degenerate rings."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isPrimitive_monic_implies_primitive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (p : Polynomial R), p.Monic → VTask.IsPrimitive p",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.Monic.isPrimitive"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.Monic.isPrimitive"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.26,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsPrimitive-c0bf6b85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isPrimitive_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] (p q : Polynomial R), VTask.IsPrimitive p → VTask.IsPrimitive q → VTask.IsPrimitive (p * q)",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.IsPrimitive.mul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.IsPrimitive.mul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polynomial.IsPrimitive-c0bf6b85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isPrimitive_ne_zero_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] [Nontrivial R] (p : Polynomial R), VTask.IsPrimitive p → p ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.IsPrimitive.ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.IsPrimitive.ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.431,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.IsPrimitive-c0bf6b85",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.IsPrimitive",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.IsPrimitive-c0bf6b85",
+    "review_status": "unreviewed"
+  }
+}

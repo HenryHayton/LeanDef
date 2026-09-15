@@ -1,0 +1,244 @@
+{
+  "task_id": "CommMonoid.primaryComponent",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.primaryComponent",
+  "signature": {
+    "name": "VTask.primaryComponent",
+    "type": "(G : Type u_1) -> [CommMonoid G] -> (p : ℕ) -> Submonoid G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "p = 0",
+        "statement": "When p = 0, every element of G belongs to VTask.primaryComponent G 0 because 0^k = 0 for k ≥ 1, making g^0 = 1 hold trivially.",
+        "note": "Junk value: p = 0 is not a prime but the definition is total and returns the full submonoid."
+      },
+      {
+        "point": "p = 1",
+        "statement": "When p = 1, only the identity element belongs to VTask.primaryComponent G 1, since 1^k = 1 for all k, so g^1 = g must equal 1.",
+        "note": "Junk value: p = 1 is not a prime; the result is the trivial submonoid."
+      },
+      {
+        "point": "p not prime",
+        "statement": "The definition is valid for any natural number p, but the intended mathematical interpretation (elements of p-power order) is only meaningful when p is prime.",
+        "note": "Convention: prime hypothesis is not enforced by the type."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "primary_identity_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G] (p : ℕ), (1 : G) ∈ VTask.primaryComponent G p",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.one_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.one_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.227,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "primary_mul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G] (p : ℕ) (g h : G), g ∈ VTask.primaryComponent G p → h ∈ VTask.primaryComponent G p → g * h ∈ VTask.primaryComponent G p",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.mul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.mul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.24,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "primary_le_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G] (p : ℕ), VTask.primaryComponent G p ≤ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "le_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "le_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.191,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "primary_p0_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G], VTask.primaryComponent G 0 = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.eq_top_iff'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.eq_top_iff'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "primary_monotone_p_not_implied",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G] (p : ℕ), (1 : G) ∈ VTask.primaryComponent G p ∧ ∀ g h : G, g ∈ VTask.primaryComponent G p → h ∈ VTask.primaryComponent G p → g * h ∈ VTask.primaryComponent G p",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.one_mem",
+        "Submonoid.mul_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.one_mem",
+        "Submonoid.mul_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "primary_submonoid_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [CommMonoid G] (p : ℕ), (VTask.primaryComponent G p : Set G).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Submonoid.one_mem",
+        "Set.nonempty_iff_ne_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submonoid.one_mem",
+        "Set.nonempty_iff_ne_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.269,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CommMonoid.primaryComponent",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CommMonoid.primaryComponent-9afa341b",
+    "review_status": "unreviewed"
+  }
+}

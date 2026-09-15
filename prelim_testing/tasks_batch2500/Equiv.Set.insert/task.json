@@ -1,0 +1,203 @@
+{
+  "task_id": "Equiv.Set.insert",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.insert",
+  "signature": {
+    "name": "VTask.insert",
+    "type": "{α : Type u} -> {s : Set α} -> [DecidablePred fun x => x ∈ s] -> {a : α} -> (H : a ∉ s) -> ↑(insert a s) ≃ ↑s ⊕ PUnit.{u + 1}",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "a ∉ s",
+    "variables": [
+      "a",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition requires the proof H : a ∉ s as an explicit argument, so there are no out-of-domain inputs and hence no junk-value conventions to declare."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "insert_equiv_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) [DecidablePred (· ∈ s)] (a : α) (H : a ∉ s), Function.Bijective (VTask.insert H).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Set.insert-c62327a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insert_equiv_left_inverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) [DecidablePred (· ∈ s)] (a : α) (H : a ∉ s), Function.LeftInverse (VTask.insert H).invFun (VTask.insert H).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.leftInverse_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.leftInverse_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.093,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Set.insert-c62327a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insert_equiv_new_element_maps_inr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) [DecidablePred (· ∈ s)] (a : α) (H : a ∉ s), VTask.insert H ⟨a, Set.mem_insert a s⟩ = Sum.inr PUnit.unit",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_insert"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_insert"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.481,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Set.insert-c62327a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insert_equiv_old_element_maps_inl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) [DecidablePred (· ∈ s)] (a : α) (H : a ∉ s) (x : α) (hx : x ∈ s), VTask.insert H ⟨x, Set.mem_insert_of_mem a hx⟩ = Sum.inl ⟨x, hx⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_insert_of_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_insert_of_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Set.insert-c62327a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "insert_not_defined_when_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) [DecidablePred (· ∈ s)] (a : α) (H : a ∉ s), (VTask.insert H).toFun ∘ (VTask.insert H).invFun = id",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.toFun_as_coe",
+        "Equiv.self_trans_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.toFun_as_coe",
+        "Equiv.self_trans_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.458,
+        "at": "authoring",
+        "script": "by simp only [_root_.Equiv.Set.insert] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Equiv.Set.insert] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Set.insert-c62327a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Set.insert",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Set.insert-c62327a6",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "task_id": "IntermediateField.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{K : Type u_1} -> {L : Type u_2} -> [Field K] -> [Field L] -> [Algebra K L] -> (S : IntermediateField K L) -> (s : Set L) -> (hs : s = ↑S) -> IntermediateField K L",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "s",
+      "hs"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.copy is a total construction for any intermediate field S, any set s, and any proof hs : s = ↑S; there are no junk-value or edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_with_hs_eq_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : IntermediateField K L) (s : Set L) (hs : s = ↑S), VTask.copy S s hs = S",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.119,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IntermediateField.copy-f374bca4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_different_field",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K L : Type*) [Field K] [Field L] [Algebra K L] (S T : IntermediateField K L), (↑S : Set L) ≠ (↑T : Set L) → VTask.copy S (↑S) rfl ≠ T",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.192,
+        "at": "authoring",
+        "script": "by simp only [_root_.IntermediateField.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.IntermediateField.copy] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IntermediateField.copy-f374bca4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IntermediateField.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IntermediateField.copy-f374bca4",
+    "review_status": "unreviewed"
+  }
+}

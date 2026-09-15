@@ -1,0 +1,365 @@
+{
+  "task_id": "MvPolynomial.mapEquivMonic",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapEquivMonic",
+  "signature": {
+    "name": "VTask.mapEquivMonic",
+    "type": "(R : Type u_1) -> (S : Type u_2) -> [CommRing R] -> [CommRing S] -> [Algebra R S] -> (n : ℕ) -> (MvPolynomial (Fin n) R →ₐ[R] S) ≃ Polynomial.MonicDegreeEq S n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "S",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is a total equivalence of types for all valid inputs (any commutative rings R, S with an algebra structure and any natural number n), with no junk values or special edge-case conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapEquivMonic_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [CommRing S] [Algebra R S] (n : ℕ), Function.Bijective (VTask.mapEquivMonic R S n).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_toFun_leftInverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [CommRing S] [Algebra R S] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S), (VTask.mapEquivMonic R S n).symm ((VTask.mapEquivMonic R S n) f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.871,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_toFun_rightInverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [CommRing S] [Algebra R S] (n : ℕ) (p : Polynomial.MonicDegreeEq S n), (VTask.mapEquivMonic R S n) ((VTask.mapEquivMonic R S n).symm p) = p",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.911,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_naturality_forward",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) (T : Type*) [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S) (g : S →ₐ[R] T), VTask.mapEquivMonic R T n (g.comp f) = (VTask.mapEquivMonic R S n f).map g",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.coe_mapEquivMonic_comp'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.coe_mapEquivMonic_comp'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.141,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_symm_naturality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) (T : Type*) [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] (n : ℕ) (p : Polynomial.MonicDegreeEq S n) (g : S →ₐ[R] T), (VTask.mapEquivMonic R T n).symm (p.map g) = g.comp ((VTask.mapEquivMonic R S n).symm p)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mapEquivMonic_symm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mapEquivMonic_symm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 51.278,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_symm_algebraMap_scalar_tower",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) (T : Type*) [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] [Algebra S T] [IsScalarTower R S T] (n : ℕ) (p : Polynomial.MonicDegreeEq S n), (VTask.mapEquivMonic R T n).symm (p.map (algebraMap S T)) = (IsScalarTower.toAlgHom R S T).comp ((VTask.mapEquivMonic R S n).symm p)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mapEquivMonic_symm_map_algebraMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mapEquivMonic_symm_map_algebraMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.617,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_image_is_monic",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [CommRing S] [Algebra R S] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S), (VTask.mapEquivMonic R S n f).1.Monic",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.MonicDegreeEq.monic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.MonicDegreeEq.monic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.168,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_image_natDegree",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) [CommRing R] [CommRing S] [Algebra R S] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S), (VTask.mapEquivMonic R S n f).1.natDegree = n",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.MonicDegreeEq.natDegree"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.MonicDegreeEq.natDegree"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_symm_comp_preserves_structure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) (T : Type*) [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S) (g : S →ₐ[R] T), (VTask.mapEquivMonic R T n).symm ((VTask.mapEquivMonic R S n f).map g) = g.comp f",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.mapEquivMonic_symm_map",
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.mapEquivMonic_symm_map",
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapEquivMonic_forward_coe_map_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (S : Type*) (T : Type*) [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T] (n : ℕ) (f : MvPolynomial (Fin n) R →ₐ[R] S) (g : S →ₐ[R] T), (VTask.mapEquivMonic R T n (g.comp f)).1 = (VTask.mapEquivMonic R S n f).1.map g",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.coe_mapEquivMonic_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.coe_mapEquivMonic_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.011,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.mapEquivMonic",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.mapEquivMonic-9cdb32c1",
+    "review_status": "unreviewed"
+  }
+}

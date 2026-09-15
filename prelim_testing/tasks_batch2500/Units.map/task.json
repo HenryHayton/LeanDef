@@ -1,0 +1,204 @@
+{
+  "task_id": "Units.map",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.map",
+  "signature": {
+    "name": "VTask.map",
+    "type": "{M : Type u} -> {N : Type v} -> [Monoid M] -> [Monoid N] -> (f : M →* N) -> Mˣ →* Nˣ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total, structure-preserving construction with no junk values or special edge conventions; it is well-defined for every monoid homomorphism f and every choice of monoids M and N."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "map_is_monoid_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) [Monoid M] [Monoid N] (f : M →* N) (u v : Mˣ), VTask.map f (u * v) = VTask.map f u * VTask.map f v",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.597,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.map-fa8ad4cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) [Monoid M] [Monoid N] (f : M →* N), VTask.map f 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.503,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.map-fa8ad4cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_injective_of_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) [Monoid M] [Monoid N] (f : M →* N), Function.Injective f → Function.Injective (VTask.map f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Units.map_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Units.map_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.676,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.map-fa8ad4cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_not_surjective_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (M N : Type*) [Monoid M] [Monoid N] (f : M →* N), Function.Surjective f → Function.Surjective (VTask.map f))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Surjective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Surjective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Units.map-fa8ad4cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "map_id_ne_const_one_when_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.map (MonoidHom.id ℤˣ) ≠ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "MonoidHom.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MonoidHom.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.204,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Units.map-fa8ad4cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Units.map",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Units.map-fa8ad4cd",
+    "review_status": "unreviewed"
+  }
+}

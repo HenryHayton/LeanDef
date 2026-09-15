@@ -1,0 +1,222 @@
+{
+  "task_id": "MvPolynomial.IsWeightedHomogeneous",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsWeightedHomogeneous",
+  "signature": {
+    "name": "VTask.IsWeightedHomogeneous",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [CommSemiring R] -> {σ : Type u_3} -> [AddCommMonoid M] -> (w : σ → M) -> (φ : MvPolynomial σ R) -> (m : M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w",
+      "φ",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "zero polynomial",
+        "statement": "VTask.IsWeightedHomogeneous w (0 : MvPolynomial σ R) m holds for every m : M, because the zero polynomial has no nonzero monomials and the condition is vacuously satisfied.",
+        "note": "This is the unique case where a polynomial is weighted homogeneous of more than one degree."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "wh_component_same",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {σ : Type*} [CommSemiring R] [AddCommMonoid M] (w : σ → M) (m : M) (p : MvPolynomial σ R), VTask.IsWeightedHomogeneous w p m → MvPolynomial.weightedHomogeneousComponent w m p = p",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.IsWeightedHomogeneous.weightedHomogeneousComponent_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.IsWeightedHomogeneous.weightedHomogeneousComponent_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.218,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "wh_component_ne_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {σ : Type*} [CommSemiring R] [AddCommMonoid M] (w : σ → M) (m n : M) (p : MvPolynomial σ R), VTask.IsWeightedHomogeneous w p m → n ≠ m → MvPolynomial.weightedHomogeneousComponent w n p = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.IsWeightedHomogeneous.weightedHomogeneousComponent_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.IsWeightedHomogeneous.weightedHomogeneousComponent_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.406,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "wh_add_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {σ : Type*} [CommSemiring R] [AddCommMonoid M] (w : σ → M) (m : M) (p q : MvPolynomial σ R), VTask.IsWeightedHomogeneous w p m → VTask.IsWeightedHomogeneous w q m → VTask.IsWeightedHomogeneous w (p + q) m",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.IsWeightedHomogeneous.add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.IsWeightedHomogeneous.add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.501,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "wh_mul_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {σ : Type*} [CommSemiring R] [AddCommMonoid M] (w : σ → M) (m n : M) (p q : MvPolynomial σ R), VTask.IsWeightedHomogeneous w p m → VTask.IsWeightedHomogeneous w q n → VTask.IsWeightedHomogeneous w (p * q) (m + n)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.IsWeightedHomogeneous.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.IsWeightedHomogeneous.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.848,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "wh_component_is_wh",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {M : Type*} {σ : Type*} [CommSemiring R] [AddCommMonoid M] (w : σ → M) (n : M) (φ : MvPolynomial σ R), VTask.IsWeightedHomogeneous w (MvPolynomial.weightedHomogeneousComponent w n φ) n",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.weightedHomogeneousComponent_isWeightedHomogeneous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.weightedHomogeneousComponent_isWeightedHomogeneous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.767,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.IsWeightedHomogeneous",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.IsWeightedHomogeneous-16fca06b",
+    "review_status": "unreviewed"
+  }
+}

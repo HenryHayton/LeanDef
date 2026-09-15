@@ -1,0 +1,375 @@
+{
+  "task_id": "Dynamics.dynEntourage",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.dynEntourage",
+  "signature": {
+    "name": "VTask.dynEntourage",
+    "type": "{X : Type u_1} -> (T : X → X) -> (U : SetRel X X) -> (n : ℕ) -> SetRel X X",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "T",
+      "U",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "When n = 0, dynEntourage T U 0 equals the universal relation univ on X, since the intersection is over an empty index set and imposes no conditions.",
+        "note": "Edge case: empty time window makes every pair related."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "dynEntourage_n0_universal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)), VTask.dynEntourage T U 0 = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.31,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_n1_eq_U",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)), VTask.dynEntourage T U 1 = U",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.288,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_univ_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (n : ℕ), VTask.dynEntourage T (Set.univ : Set (X × X)) n = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.266,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)) (n : ℕ) (x y : X), (x, y) ∈ VTask.dynEntourage T U n ↔ ∀ k < n, (T^[k] x, T^[k] y) ∈ U",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.mem_dynEntourage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.793,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_antitone_in_n",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)), Antitone (fun n : ℕ ↦ VTask.dynEntourage T U n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_antitone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_antitone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.503,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_monotone_in_U",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (n : ℕ), Monotone (fun U : Set (X × X) ↦ VTask.dynEntourage T U n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.495,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_eq_inter_Ico_fact",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)) (n : ℕ), VTask.dynEntourage T U n = ⋂ k : Set.Ico 0 n, (Prod.map T T)^[k] ⁻¹' U",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_eq_inter_Ico"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_eq_inter_Ico"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.273,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_subset_U_for_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type*) (T : X → X) (U : Set (X × X)) (n : ℕ), 0 < n → VTask.dynEntourage T U n ⊆ U",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_antitone",
+        "Dynamics.mem_dynEntourage"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_antitone",
+        "Dynamics.mem_dynEntourage"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_semiconj_preimage",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) (S : X → X) (T : Y → Y) (φ : X → Y) (U : Set (Y × Y)) (n : ℕ), Function.Semiconj φ S T → (Prod.map φ φ) ⁻¹' (VTask.dynEntourage T U n) = VTask.dynEntourage S ((Prod.map φ φ) ⁻¹' U) n",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Semiconj.preimage_dynEntourage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Semiconj.preimage_dynEntourage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.321,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "dynEntourage_reject_antitone_neq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (T : ℕ → ℕ) (U : Set (ℕ × ℕ)) (n : ℕ), VTask.dynEntourage T U n = VTask.dynEntourage T U (n + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "Dynamics.dynEntourage_antitone",
+        "Dynamics.mem_dynEntourage"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dynamics.dynEntourage_antitone",
+        "Dynamics.mem_dynEntourage"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Dynamics.dynEntourage",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Dynamics.dynEntourage-d54c7cc8",
+    "review_status": "unreviewed"
+  }
+}

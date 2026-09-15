@@ -1,0 +1,341 @@
+{
+  "task_id": "Matrix.toSquareBlock",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toSquareBlock",
+  "signature": {
+    "name": "VTask.toSquareBlock",
+    "type": "{m : Type u_2} -> {α : Type u_12} -> {β : Type u_13} -> (M : Matrix m m α) -> (b : m → β) -> (k : β) -> Matrix { a // b a = k } { a // b a = k } α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "b",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total with no junk-value conventions; when the fiber is empty the result is the unique empty matrix, which is the natural mathematical value."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toSquareBlock_det_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {m : Type*} {R : Type*} [inst : CommRing R] [inst2 : Fintype m] [inst3 : DecidableEq m] (M : Matrix m m R) (i : m), (VTask.toSquareBlock M id i).det = M i i",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.det_toSquareBlock_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.det_toSquareBlock_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.074,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_charmatrix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : Type*} {α : Type*} [inst : Fintype n] [inst2 : DecidableEq n] [inst3 : CommRing α] [inst4 : DecidableEq α] (M : Matrix n n α) (b : n → α) (a : α), (VTask.toSquareBlock M b a).charmatrix = M.charmatrix.toSquareBlock b a",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.charmatrix_toSquareBlock"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.charmatrix_toSquareBlock"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.767,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_fin2_id_0_entry",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.toSquareBlock !![1, 2; 3, 4] id (0 : Fin 2)) ⟨0, rfl⟩ ⟨0, rfl⟩ = 1 := by decide",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2; 3, 4]"
+        ],
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_fin2_id_1_entry",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.toSquareBlock !![1, 2; 3, 4] id (1 : Fin 2)) ⟨1, rfl⟩ ⟨1, rfl⟩ = 4 := by decide",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2; 3, 4]"
+        ],
+        "k": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_fin2_id_0_det",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.toSquareBlock (!![1, 2; 3, 4] : Matrix (Fin 2) (Fin 2) ℤ) id (0 : Fin 2)).det = 1 := by decide",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2; 3, 4]"
+        ],
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_fin2_id_1_det",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.toSquareBlock (!![1, 2; 3, 4] : Matrix (Fin 2) (Fin 2) ℤ) id (1 : Fin 2)).det = 4 := by decide",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2; 3, 4]"
+        ],
+        "k": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_accept_subtype_index",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (⟨(0 : Fin 2), rfl⟩ : { a : Fin 2 // id a = 0 }) = ⟨0, rfl⟩ := by decide",
+      "domain_inputs": {
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(⟨0, rfl⟩ : { a : Fin 2 // id a = 0 })"
+    },
+    {
+      "id": "toSquareBlock_charpoly_block_triangular",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : Type*} {α : Type*} [inst : Fintype n] [inst2 : LinearOrder α] [inst3 : CommRing α] [inst4 : DecidableEq n] (M : Matrix n n α) (b : n → α), Matrix.BlockTriangular M b → M.charpoly = ∏ a ∈ Finset.image b Finset.univ, (VTask.toSquareBlock M b a).charpoly",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.BlockTriangular.charpoly"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.BlockTriangular.charpoly"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.217,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toSquareBlock_reject_wrong_entry",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.toSquareBlock (!![1, 2; 3, 4] : Matrix (Fin 2) (Fin 2) ℕ) id 0) ⟨0, rfl⟩ ⟨0, rfl⟩ ≠ 2 := by decide",
+      "domain_inputs": {
+        "M": [
+          "!![1, 2; 3, 4]"
+        ],
+        "b": [
+          "id"
+        ],
+        "k": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.toSquareBlock (!![1, 2; 3, 4] : Matrix (Fin 2) (Fin 2) ℕ) id 0) ⟨0, rfl⟩ ⟨0, rfl⟩ ≠ 2",
+      "violated_property": "The (i,j) entry of toSquareBlock M b k equals M i j, not an off-diagonal entry"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.toSquareBlock",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.toSquareBlock-ee445ea9",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "task_id": "StandardEtalePair.HasMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.HasMap",
+  "signature": {
+    "name": "VTask.HasMap",
+    "type": "{R : Type u_1} -> {S : Type u_2} -> [CommRing R] -> [CommRing S] -> [Algebra R S] -> (P : StandardEtalePair R) -> (x : S) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: HasMap is a straightforward conjunction of two algebraic conditions with no junk-value conventions needed; the definition is total and meaningful for all inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "hasmap_implies_root",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), VTask.HasMap P x → Polynomial.aeval x P.f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "And.left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_implies_unit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), VTask.HasMap P x → IsUnit (Polynomial.aeval x P.g)",
+      "domain_inputs": {},
+      "anchors": [
+        "And.right"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.right"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_zero_f_reduces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), P.f = 0 → (VTask.HasMap P x ↔ IsUnit (Polynomial.aeval x P.g))",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.aeval_zero",
+        "map_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.aeval_zero",
+        "map_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_zero_g_false",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] [Nontrivial S] (P : StandardEtalePair R) (x : S), P.g = 0 → ¬VTask.HasMap P x",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.aeval_zero",
+        "map_zero",
+        "not_isUnit_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.aeval_zero",
+        "map_zero",
+        "not_isUnit_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.855,
+        "at": "authoring",
+        "script": "by simp only [_root_.StandardEtalePair.HasMap] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.StandardEtalePair.HasMap] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_both_conditions_necessary",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), (Polynomial.aeval x P.f = 0 ∧ IsUnit (Polynomial.aeval x P.g)) → VTask.HasMap P x",
+      "domain_inputs": {},
+      "anchors": [
+        "And.intro"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "And.intro"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.261,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_not_implied_by_root_alone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), Polynomial.aeval x P.f = 0 → VTask.HasMap P x",
+      "domain_inputs": {},
+      "anchors": [
+        "not_isUnit_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_isUnit_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasmap_not_implied_by_unit_alone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R S : Type*} [CommRing R] [CommRing S] [Algebra R S] (P : StandardEtalePair R) (x : S), IsUnit (Polynomial.aeval x P.g) → VTask.HasMap P x",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.aeval_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.aeval_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "StandardEtalePair.HasMap-92372669",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "StandardEtalePair.HasMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "StandardEtalePair.HasMap-92372669",
+    "review_status": "unreviewed"
+  }
+}

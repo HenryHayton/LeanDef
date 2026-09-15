@@ -1,0 +1,373 @@
+{
+  "task_id": "BinaryTree.traverse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.traverse",
+  "signature": {
+    "name": "VTask.traverse",
+    "type": "{m : Type u_1 → Type u_2} -> [Applicative m] -> {α : Type u_3} -> {β : Type u_1} -> (f : α → m β) -> BinaryTree α → m (BinaryTree β)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "BinaryTree.nil input",
+        "statement": "When the input tree is BinaryTree.nil, the result is pure .nil and f is never called.",
+        "note": "Base case of the structural recursion; no effects are produced for an empty tree."
+      },
+      {
+        "point": "Node-left-right traversal order",
+        "statement": "Effects from f are sequenced in root-node first, then left subtree, then right subtree order.",
+        "note": "This matches the standard pre-order structural recursion on BinaryTree constructors."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "traverse_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.traverse (fun n => some (n + 1)) (BinaryTree.nil) = some BinaryTree.nil := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => some (n + 1)"
+        ],
+        "t": [
+          "BinaryTree.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_single_node_option",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.traverse (fun n => some (n + 1)) (BinaryTree.node 3 .nil .nil) = some (BinaryTree.node 4 .nil .nil) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => some (n + 1)"
+        ],
+        "t": [
+          "BinaryTree.node 3 .nil .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_none_short_circuits",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.traverse (fun _ => (none : Option Nat)) (BinaryTree.node 1 .nil .nil) = none := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => (none : Option Nat)"
+        ],
+        "t": [
+          "BinaryTree.node 1 .nil .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_two_level_option",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.traverse (fun n => some (n * 2)) (BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil) = some (BinaryTree.node 2 (BinaryTree.node 4 .nil .nil) .nil) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => some (n * 2)"
+        ],
+        "t": [
+          "BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_right_child_none_short_circuits",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.traverse (fun n => if n = 2 then none else some n) (BinaryTree.node 1 .nil (BinaryTree.node 2 .nil .nil)) = none := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => if n = 2 then none else some n"
+        ],
+        "t": [
+          "BinaryTree.node 1 .nil (BinaryTree.node 2 .nil .nil)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_list_two_level",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.traverse (fun n => [n, n * 10]) (BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil)).length = 4 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun n => [n, n * 10]"
+        ],
+        "t": [
+          "BinaryTree.node 1 (BinaryTree.node 2 .nil .nil) .nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_pure_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (t : BinaryTree α), VTask.traverse (pure : α → Id α) t = pure t",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.traverse_pure"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.traverse_pure"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.226,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_eq_map_id_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type) (f : α → β) (t : BinaryTree α), VTask.traverse ((pure : β → Id β) ∘ f) t = pure (BinaryTree.map f t)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.traverse_eq_map_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.traverse_eq_map_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.82,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_naturality_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F G : Type → Type) [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) (α β : Type) (f : α → F β) (t : BinaryTree α), η (VTask.traverse f t) = VTask.traverse (η.app β ∘ f) t",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.naturality"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.naturality"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.11,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_comp_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F G : Type → Type) [Applicative F] [Applicative G] [LawfulApplicative G] (α β γ : Type) (f : β → F γ) (g : α → G β) (t : BinaryTree α), VTask.traverse (Functor.Comp.mk ∘ (f <$> ·) ∘ g) t = Functor.Comp.mk ((fun s => VTask.traverse f s) <$> VTask.traverse g t)",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.comp_traverse"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.comp_traverse"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.632,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "traverse_preserves_shape_option",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (t : BinaryTree Nat) (r : BinaryTree Nat), VTask.traverse (fun n => some (n + 1)) t = some r → BinaryTree.map (fun _ => ()) t = BinaryTree.map (fun _ => ()) r",
+      "domain_inputs": {},
+      "anchors": [
+        "BinaryTree.traverse_pure"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BinaryTree.traverse_pure"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BinaryTree.traverse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BinaryTree.traverse-7cc45a8a",
+    "review_status": "unreviewed"
+  }
+}

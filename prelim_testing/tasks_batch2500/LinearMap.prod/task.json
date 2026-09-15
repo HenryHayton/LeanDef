@@ -1,0 +1,180 @@
+{
+  "task_id": "LinearMap.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{R : Type u} -> {M : Type v} -> {M₂ : Type w} -> {M₃ : Type y} -> [Semiring R] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> [AddCommMonoid M₃] -> [Module R M] -> [Module R M₂] -> [Module R M₃] -> (f : M →ₗ[R] M₂) -> (g : M →ₗ[R] M₃) -> M →ₗ[R] M₂ × M₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction with no junk-value or boundary conventions; it is well-defined for all linear maps f and g sharing the same domain module."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_id_id_apply",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (LinearMap.id : (Fin 2 → ℤ) →ₗ[ℤ] (Fin 2 → ℤ)) LinearMap.id 0 = (0, 0) := by decide",
+      "domain_inputs": {
+        "f": [
+          "LinearMap.id"
+        ],
+        "g": [
+          "LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prod-60491a5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.prod LinearMap.id LinearMap.id (0 : Fin 2 → ℤ)"
+    },
+    {
+      "id": "prod_zero_apply_is_zero_pair",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.prod (0 : (Fin 1 → ℤ) →ₗ[ℤ] (Fin 1 → ℤ)) (0 : (Fin 1 → ℤ) →ₗ[ℤ] (Fin 1 → ℤ))) 0 = (0, 0) := by decide",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ],
+        "g": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prod-60491a5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.prod (0 : (Fin 1 → ℤ) →ₗ[ℤ] (Fin 1 → ℤ)) (0 : (Fin 1 → ℤ) →ₗ[ℤ] (Fin 1 → ℤ))) 0"
+    },
+    {
+      "id": "prod_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M M₂ M₃ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [AddCommMonoid M₃] [Module R M] [Module R M₂] [Module R M₃] (f : M →ₗ[R] M₂) (g : M →ₗ[R] M₃) (x y : M), VTask.prod f g (x + y) = VTask.prod f g x + VTask.prod f g y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.043,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prod-60491a5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_fst_ne_snd_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f g : ℤ →ₗ[ℤ] ℤ), (LinearMap.fst ℤ ℤ ℤ).comp (VTask.prod f g) = (LinearMap.snd ℤ ℤ ℤ).comp (VTask.prod f g)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.fst_comp_prod",
+        "LinearMap.snd_comp_prod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.fst_comp_prod",
+        "LinearMap.snd_comp_prod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.394,
+        "at": "authoring",
+        "script": "by intro h; have := h 0 1; simp at this",
+        "self_cited": false
+      },
+      "cached_script": "by intro h; have := h 0 1; simp at this",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prod-60491a5c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.prod-60491a5c",
+    "review_status": "unreviewed"
+  }
+}

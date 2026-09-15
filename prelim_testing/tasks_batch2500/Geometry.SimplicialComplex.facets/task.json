@@ -1,0 +1,242 @@
+{
+  "task_id": "Geometry.SimplicialComplex.facets",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.facets",
+  "signature": {
+    "name": "VTask.facets",
+    "type": "{𝕜 : Type u_1} -> {E : Type u_2} -> [Ring 𝕜] -> [PartialOrder 𝕜] -> [AddCommGroup E] -> [Module 𝕜 E] -> (K : Geometry.SimplicialComplex 𝕜 E) -> Set (Finset E)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "K"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-defined for every simplicial complex, including the empty one; there are no junk-value or edge-case conventions to declare."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "facets_subset_faces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E), VTask.facets K ⊆ K.faces",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.9,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_empty_complex",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E), K.faces = ∅ → VTask.facets K = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.eq_empty_of_subset_empty",
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.eq_empty_of_subset_empty",
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_antichain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E) (s t : Finset E), s ∈ VTask.facets K → t ∈ VTask.facets K → s ⊆ t → s = t",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Geometry.SimplicialComplex.mem_facets"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Geometry.SimplicialComplex.mem_facets"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_subset_faces_strict_when_non_maximal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E) (s t : Finset E), s ∈ VTask.facets K → t ∈ VTask.facets K → s ≠ t → ¬ (s ⊆ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.mem_facets",
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.mem_facets",
+        "Geometry.SimplicialComplex.facets_subset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_empty_iff_faces_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E), VTask.facets K = ∅ ↔ K.faces = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Geometry.SimplicialComplex.mem_facets"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Geometry.SimplicialComplex.mem_facets"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_nonempty_of_nonempty_faces",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K : Geometry.SimplicialComplex 𝕜 E), K.faces.Nonempty → (VTask.facets K).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Set.Nonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.facets_subset",
+        "Set.Nonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "facets_faces_eq_implies_facets_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [Ring 𝕜] [PartialOrder 𝕜] [AddCommGroup E] [Module 𝕜 E] (K L : Geometry.SimplicialComplex 𝕜 E), K.faces = L.faces → VTask.facets K = VTask.facets L",
+      "domain_inputs": {},
+      "anchors": [
+        "Geometry.SimplicialComplex.mem_facets",
+        "Set.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Geometry.SimplicialComplex.mem_facets",
+        "Set.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Geometry.SimplicialComplex.facets",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Geometry.SimplicialComplex.facets-1170437d",
+    "review_status": "unreviewed"
+  }
+}

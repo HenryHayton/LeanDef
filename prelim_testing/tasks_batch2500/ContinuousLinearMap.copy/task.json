@@ -1,0 +1,210 @@
+{
+  "task_id": "ContinuousLinearMap.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{R₁ : Type u_1} -> {R₂ : Type u_2} -> [Semiring R₁] -> [Semiring R₂] -> {σ₁₂ : R₁ →+* R₂} -> {M₁ : Type u_4} -> [TopologicalSpace M₁] -> [AddCommMonoid M₁] -> {M₂ : Type u_6} -> [TopologicalSpace M₂] -> [AddCommMonoid M₂] -> [Module R₁ M₁] -> [Module R₂ M₂] -> (f : M₁ →SL[σ₁₂] M₂) -> (f' : M₁ → M₂) -> (h : f' = ⇑f) -> M₁ →SL[σ₁₂] M₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is total and requires an explicit proof h that f' equals the coercion of f; there are no junk-value or edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.461,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_eq_f_implies_coe_eq_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f) (x : M₁), (VTask.copy f f' h) x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.968,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_coe_is_f'_not_coercion_of_f_structurally",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₁ M₁] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (f' : M₁ → M₂) (h : f' = ⇑f), (VTask.copy f f' h).toLinearMap = f.toLinearMap",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.329,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_comp_eq_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ R₃ : Type*} [Semiring R₁] [Semiring R₂] [Semiring R₃] {σ₁₂ : R₁ →+* R₂} {σ₂₃ : R₂ →+* R₃} {σ₁₃ : R₁ →+* R₃} [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] {M₁ M₂ M₃ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [TopologicalSpace M₃] [AddCommMonoid M₃] [Module R₁ M₁] [Module R₂ M₂] [Module R₃ M₃] (f : M₁ →SL[σ₁₂] M₂) (g : M₂ →SL[σ₂₃] M₃) (f' : M₁ → M₂) (h : f' = ⇑f), g.comp (VTask.copy f f' h) = g.comp f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.123,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_wrong_fun",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ →L[ℝ] ℝ), ¬ (⇑(VTask.copy f (⇑f) rfl) = (fun _ => (0 : ℝ))) ∨ (⇑f = fun _ => (0 : ℝ))",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coe_copy"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coe_copy"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.147,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.copy-31a5686c",
+    "review_status": "unreviewed"
+  }
+}

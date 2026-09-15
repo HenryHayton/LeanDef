@@ -1,0 +1,121 @@
+{
+  "task_id": "BoxIntegral.Prepartition.biUnionTagged",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.biUnionTagged",
+  "signature": {
+    "name": "VTask.biUnionTagged",
+    "type": "{ι : Type u_1} -> {I : BoxIntegral.Box ι} -> (π : BoxIntegral.Prepartition I) -> (πi : (J : BoxIntegral.Box ι) → BoxIntegral.TaggedPrepartition J) -> BoxIntegral.TaggedPrepartition I",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "π",
+      "πi"
+    ],
+    "conventions": [
+      {
+        "point": "πi defined on all boxes",
+        "statement": "The family πi is accepted for all boxes of type BoxIntegral.Box ι; values at boxes not in π are ignored and do not influence the result.",
+        "note": "Lean requires a total function; junk values outside π are harmless."
+      },
+      {
+        "point": "tag provenance",
+        "statement": "The tag of a box K in the output is taken from (πi J).tag K, where J is the unique box in π that contains K as determined by the biUnionIndex function; if K does not belong to any J in π (a degenerate case), the index falls back to a default box, but K itself would not be a member of the result.",
+        "note": "This is a structural convention of biUnionIndex: it returns a canonical default when the box is not found."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "biUnionTagged_tag_mem_Icc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π : BoxIntegral.Prepartition I) (πi : (J : BoxIntegral.Box ι) → BoxIntegral.TaggedPrepartition J) (K : BoxIntegral.Box ι), K ∈ VTask.biUnionTagged π πi → (VTask.biUnionTagged π πi).tag K ∈ BoxIntegral.Box.Icc I",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.tag_mem_Icc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.tag_mem_Icc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.092,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.biUnionTagged-c1bc5da8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "biUnionTagged_isPartition_of_isPartitions",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π : BoxIntegral.Prepartition I) (πi : (J : BoxIntegral.Box ι) → BoxIntegral.TaggedPrepartition J), π.IsPartition → (∀ J ∈ π, (πi J).IsPartition) → (VTask.biUnionTagged π πi).IsPartition",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.Prepartition.IsPartition.biUnion"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.Prepartition.IsPartition.biUnion"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.584,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.Prepartition.biUnionTagged-c1bc5da8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoxIntegral.Prepartition.biUnionTagged",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoxIntegral.Prepartition.biUnionTagged-c1bc5da8",
+    "review_status": "unreviewed"
+  }
+}

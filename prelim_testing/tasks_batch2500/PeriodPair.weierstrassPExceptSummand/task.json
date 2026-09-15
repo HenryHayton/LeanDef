@@ -1,0 +1,134 @@
+{
+  "task_id": "PeriodPair.weierstrassPExceptSummand",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.weierstrassPExceptSummand",
+  "signature": {
+    "name": "VTask.weierstrassPExceptSummand",
+    "type": "(L : PeriodPair) -> (l₀ x : ℂ) -> (i : ℕ) -> (l : ↥L.lattice) -> ℂ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "l₀",
+      "x",
+      "i",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "l.1 = l₀",
+        "statement": "When the underlying complex number of the lattice element equals l₀, the summand is 0 (the l₀-th term is omitted).",
+        "note": "This is the exclusion device; the full sum over l then skips the l₀ term."
+      },
+      {
+        "point": "i = 0",
+        "statement": "When i = 0 and l.1 ≠ l₀, the summand equals (l.1 − x)^(−2 : ℤ) − l.1^(−2 : ℤ), incorporating the Weierstrass normalization subtraction.",
+        "note": "The correction term l.1^(−2) is the standard ℘-normalization for the constant coefficient."
+      },
+      {
+        "point": "i ≥ 1",
+        "statement": "When i ≥ 1 and l.1 ≠ l₀, the summand equals (i + 1) · (l.1 − x)^(−(i+2) : ℤ) with no subtracted correction term.",
+        "note": "The casesOn on i removes the correction for all positive indices."
+      },
+      {
+        "point": "l.1 = x (lattice point equals expansion base-point)",
+        "statement": "The factor (l.1 − x)^(−(i+2) : ℤ) becomes 0^(negative integer), which Mathlib's zpow junk-value convention evaluates to 0.",
+        "note": "No error is raised; the function returns a junk value of 0 in this degenerate case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "weierstrassPExceptSummand_i0_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ) (l : ↥L.lattice), (l : ℂ) ≠ l₀ → VTask.weierstrassPExceptSummand L l₀ x 0 l = ((l : ℂ) - x) ^ (-2 : ℤ) - (l : ℂ) ^ (-2 : ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Complex.cpow_natCast"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Complex.cpow_natCast"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.837,
+        "at": "authoring",
+        "script": "by simp [_root_.PeriodPair.weierstrassPExceptSummand] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.PeriodPair.weierstrassPExceptSummand] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSummand-1e28d981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSummand_is_complex",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ) (i : ℕ) (l : ↥L.lattice), VTask.weierstrassPExceptSummand L l₀ x i l ∈ (Set.univ : Set ℂ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.162,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSummand-1e28d981",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PeriodPair.weierstrassPExceptSummand",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PeriodPair.weierstrassPExceptSummand-1e28d981",
+    "review_status": "unreviewed"
+  }
+}

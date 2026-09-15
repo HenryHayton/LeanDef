@@ -1,0 +1,260 @@
+{
+  "task_id": "Nat.Partition.restricted",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restricted",
+  "signature": {
+    "name": "VTask.restricted",
+    "type": "(n : ℕ) -> (p : ℕ → Prop) -> [DecidablePred p] -> Finset n.Partition",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "vacuous satisfaction when n = 0",
+        "statement": "When n = 0 the unique partition is the empty partition; it has no parts, so the condition ∀ i ∈ parts, p i holds vacuously and VTask.restricted 0 p is always a singleton.",
+        "note": "This holds for every decidable predicate p, including p = fun _ => False."
+      },
+      {
+        "point": "predicate tested on each part value, not on the partition globally",
+        "statement": "The predicate p is evaluated on each individual part (a positive natural number) of the partition; the whole-partition sum n is never passed to p.",
+        "note": "Parts with multiplicity > 1 must each individually satisfy p."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restricted_zero_card",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.restricted 0 (fun _ => False)).card = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_1_true_card",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.restricted 1 (fun _ => True)).card = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_subset_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (p : ℕ → Prop) [DecidablePred p], VTask.restricted n p ⊆ Finset.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.subset_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.subset_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.266,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_false_pos_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), 0 < n → (VTask.restricted n (fun _ => False)).card = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.powerSeriesMk_card_restricted_eq_tprod"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.powerSeriesMk_card_restricted_eq_tprod"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_true_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), VTask.restricted n (fun _ => True) = Finset.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.eq_univ_iff_forall"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.eq_univ_iff_forall"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_glaisher_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) {m : ℕ}, 0 < m → (VTask.restricted n (fun k => ¬ m ∣ k)).card = (Nat.Partition.countRestricted n m).card",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.Partition.card_restricted_eq_card_countRestricted"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.Partition.card_restricted_eq_card_countRestricted"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.017,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restricted_monotone_n_false",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.restricted 1 (fun _ => False)).card = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.restricted 1 (fun _ => False)",
+      "violated_property": "n > 0 so no partition satisfies the always-false predicate"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.Partition.restricted",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.Partition.restricted-aad38b9c",
+    "review_status": "unreviewed"
+  }
+}

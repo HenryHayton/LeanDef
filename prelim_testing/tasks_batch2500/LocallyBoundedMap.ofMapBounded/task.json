@@ -1,0 +1,178 @@
+{
+  "task_id": "LocallyBoundedMap.ofMapBounded",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofMapBounded",
+  "signature": {
+    "name": "VTask.ofMapBounded",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> [Bornology α] -> [Bornology β] -> (f : α → β) -> (h : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (f '' s)) -> LocallyBoundedMap α β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total constructor; it is well-defined for all inputs and has no junk-value or edge-case conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofMapBounded_preserves_bounded_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) [Bornology α] [Bornology β] (f : α → β) (h : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (f '' s)) (s : Set α), Bornology.IsBounded s → Bornology.IsBounded ((VTask.ofMapBounded f h) '' s)",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyBoundedMap.coe_ofMapBounded",
+        "LocallyBoundedMap.ofMapBounded_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyBoundedMap.coe_ofMapBounded",
+        "LocallyBoundedMap.ofMapBounded_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.514,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyBoundedMap.ofMapBounded-601f2e68",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofMapBounded_id_ne_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (h1 : ∀ ⦃s : Set ℝ⦄, Bornology.IsBounded s → Bornology.IsBounded ((id : ℝ → ℝ) '' s)) (h2 : ∀ ⦃s : Set ℝ⦄, Bornology.IsBounded s → Bornology.IsBounded ((fun _ : ℝ => (0 : ℝ)) '' s)), VTask.ofMapBounded (id : ℝ → ℝ) h1 ≠ VTask.ofMapBounded (fun _ => 0) h2",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyBoundedMap.ofMapBounded_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyBoundedMap.ofMapBounded_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LocallyBoundedMap.ofMapBounded-601f2e68",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofMapBounded_extensionality",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) [Bornology α] [Bornology β] (f g : α → β) (hf : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (f '' s)) (hg : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (g '' s)), f = g → VTask.ofMapBounded f hf = VTask.ofMapBounded g hg",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyBoundedMap.coe_ofMapBounded"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyBoundedMap.coe_ofMapBounded"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.551,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyBoundedMap.ofMapBounded-601f2e68",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofMapBounded_ne_wrong_fn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) [Bornology α] [Bornology β] (f g : α → β) (hf : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (f '' s)) (hg : ∀ ⦃s : Set α⦄, Bornology.IsBounded s → Bornology.IsBounded (g '' s)), f ≠ g → VTask.ofMapBounded f hf ≠ VTask.ofMapBounded g hg",
+      "domain_inputs": {},
+      "anchors": [
+        "LocallyBoundedMap.coe_ofMapBounded"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocallyBoundedMap.coe_ofMapBounded"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.952,
+        "at": "authoring",
+        "script": "by simp [_root_.LocallyBoundedMap.ofMapBounded] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.LocallyBoundedMap.ofMapBounded] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocallyBoundedMap.ofMapBounded-601f2e68",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LocallyBoundedMap.ofMapBounded",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LocallyBoundedMap.ofMapBounded-601f2e68",
+    "review_status": "unreviewed"
+  }
+}

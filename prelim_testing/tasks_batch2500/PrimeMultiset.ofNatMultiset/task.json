@@ -1,0 +1,105 @@
+{
+  "task_id": "PrimeMultiset.ofNatMultiset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofNatMultiset",
+  "signature": {
+    "name": "VTask.ofNatMultiset",
+    "type": "(v : Multiset ℕ) -> (h : ∀ p ∈ v, Nat.Prime p) -> PrimeMultiset",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "∀ p ∈ v, Nat.Prime p",
+    "variables": [
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total over all inputs satisfying the explicit primality hypothesis; the empty multiset is handled uniformly with no special junk-value convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofNatMultiset_card_eq_input_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (v : Multiset ℕ) (h : ∀ p ∈ v, Nat.Prime p), Multiset.card (VTask.ofNatMultiset v h : PrimeMultiset) = Multiset.card v",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.card_pmap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.card_pmap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PrimeMultiset.ofNatMultiset-e132dfab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofNatMultiset_toNatMultiset_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (v : Multiset ℕ) (h : ∀ p ∈ v, Nat.Prime p), (VTask.ofNatMultiset v h : PrimeMultiset).toNatMultiset = v",
+      "domain_inputs": {},
+      "anchors": [
+        "Multiset.map_pmap",
+        "Multiset.pmap_eq_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Multiset.map_pmap",
+        "Multiset.pmap_eq_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.13,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PrimeMultiset.ofNatMultiset-e132dfab",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PrimeMultiset.ofNatMultiset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PrimeMultiset.ofNatMultiset-e132dfab",
+    "review_status": "unreviewed"
+  }
+}

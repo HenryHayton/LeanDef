@@ -1,0 +1,324 @@
+{
+  "task_id": "Matrix.HasOrthogonalRows",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.HasOrthogonalRows",
+  "signature": {
+    "name": "VTask.HasOrthogonalRows",
+    "type": "{α : Type u_1} -> {n : Type u_2} -> {m : Type u_3} -> [Mul α] -> [AddCommMonoid α] -> (A : Matrix m n α) -> [Fintype n] -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "A"
+    ],
+    "conventions": [
+      {
+        "point": "vacuous_single_row",
+        "statement": "When the row-index type `m` is empty or a singleton, `VTask.HasOrthogonalRows A` holds vacuously because there are no two distinct rows to test.",
+        "note": "Follows from universal quantification over an empty or trivially-non-distinct set of pairs."
+      },
+      {
+        "point": "vacuous_empty_columns",
+        "statement": "When the column-index type `n` is empty, `VTask.HasOrthogonalRows A` holds vacuously because the dot product is an empty sum equal to zero for every pair of rows.",
+        "note": "Follows from the zero value of empty `Finset.sum`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "hasOrthogonalRows_not_require_unit_norm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (c : ℤ), VTask.HasOrthogonalRows (!![c, 0; 0, c] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.mul_transpose_self_isDiag_iff_hasOrthogonalRows"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.mul_transpose_self_isDiag_iff_hasOrthogonalRows"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hasOrthogonalRows_identity_2x2",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (1 : Matrix (Fin 2) (Fin 2) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(1 : Matrix (Fin 2) (Fin 2) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1 : Matrix (Fin 2) (Fin 2) ℤ)"
+    },
+    {
+      "id": "hasOrthogonalRows_allOnes_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.HasOrthogonalRows (!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.126,
+        "at": "authoring",
+        "script": "by simp only [_root_.Matrix.HasOrthogonalRows] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Matrix.HasOrthogonalRows] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(!![1, 1; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "violated_property": "dot product of distinct rows must be zero"
+    },
+    {
+      "id": "hasOrthogonalRows_vacuous_empty_rows",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (Matrix.of (fun (i : Fin 0) (j : Fin 3) => (0 : ℤ)))",
+      "domain_inputs": {
+        "A": [
+          "Matrix.of (fun (i : Fin 0) (j : Fin 3) => (0 : ℤ))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.076,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Matrix.of (fun (i : Fin 0) (j : Fin 3) => (0 : ℤ))"
+    },
+    {
+      "id": "hasOrthogonalRows_vacuous_singleton_row",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (!![1, 2, 3] : Matrix (Fin 1) (Fin 3) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(!![1, 2, 3] : Matrix (Fin 1) (Fin 3) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![1, 2, 3] : Matrix (Fin 1) (Fin 3) ℤ)"
+    },
+    {
+      "id": "hasOrthogonalRows_empty_cols",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (Matrix.of (fun (i : Fin 3) (j : Fin 0) => (0 : ℤ)))",
+      "domain_inputs": {
+        "A": [
+          "Matrix.of (fun (i : Fin 3) (j : Fin 0) => (0 : ℤ))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.071,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Matrix.of (fun (i : Fin 3) (j : Fin 0) => (0 : ℤ))"
+    },
+    {
+      "id": "hasOrthogonalRows_non_orthonormal_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (!![2, 0; 0, 3] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(!![2, 0; 0, 3] : Matrix (Fin 2) (Fin 2) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(!![2, 0; 0, 3] : Matrix (Fin 2) (Fin 2) ℤ)"
+    },
+    {
+      "id": "hasOrthogonalRows_reject_partial",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.HasOrthogonalRows (!![1, 0; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(!![1, 0; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.12,
+        "at": "authoring",
+        "script": "by simp only [_root_.Matrix.HasOrthogonalRows] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Matrix.HasOrthogonalRows] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(!![1, 0; 1, 1] : Matrix (Fin 2) (Fin 2) ℤ)",
+      "violated_property": "dot product of distinct rows must be zero"
+    },
+    {
+      "id": "hasOrthogonalRows_identity_3x3",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.HasOrthogonalRows (1 : Matrix (Fin 3) (Fin 3) ℤ)",
+      "domain_inputs": {
+        "A": [
+          "(1 : Matrix (Fin 3) (Fin 3) ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1 : Matrix (Fin 3) (Fin 3) ℤ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.HasOrthogonalRows",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.HasOrthogonalRows-ffa11ae4",
+    "review_status": "unreviewed"
+  }
+}

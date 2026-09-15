@@ -1,0 +1,251 @@
+{
+  "task_id": "Finset.orderEmbOfFin",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.orderEmbOfFin",
+  "signature": {
+    "name": "VTask.orderEmbOfFin",
+    "type": "{α : Type u_1} -> [LinearOrder α] -> (s : Finset α) -> {k : ℕ} -> (h : s.card = k) -> Fin k ↪o α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "k = 0 (empty finset)",
+        "statement": "When s.card = 0 (so k = 0), the embedding VTask.orderEmbOfFin s h is the unique map out of Fin 0, which is vacuously an order embedding with empty range matching s = ∅.",
+        "note": "Junk-value convention: the result is well-typed and mathematically correct but has no elements to evaluate."
+      },
+      {
+        "point": "Proof irrelevance for h",
+        "statement": "Any two proofs of s.card = k yield the same order embedding; the embedding depends only on s and k, not on which proof of the cardinality equality is supplied.",
+        "note": "Lean's proof irrelevance ensures this automatically."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "orderEmbOfFin_range_equals_coe",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [LinearOrder α] (s : Finset α) {k : ℕ} (h : s.card = k), Set.range (VTask.orderEmbOfFin s h) = ↑s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.range_orderEmbOfFin"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.range_orderEmbOfFin"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.208,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderEmbOfFin_image_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [LinearOrder α] (s : Finset α) {k : ℕ} (h : s.card = k), Finset.image (VTask.orderEmbOfFin s h) Finset.univ = s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.image_orderEmbOfFin_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.image_orderEmbOfFin_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.286,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderEmbOfFin_last_is_max",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [LinearOrder α] (s : Finset α) {k : ℕ} (h : s.card = k) (hz : 0 < k), VTask.orderEmbOfFin s h ⟨k - 1, Nat.sub_lt hz (Nat.succ_pos 0)⟩ = s.max' (Finset.card_pos.mp (h.symm ▸ hz))",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.orderEmbOfFin_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.orderEmbOfFin_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.027,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderEmbOfFin_strictMono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [LinearOrder α] (s : Finset α) {k : ℕ} (h : s.card = k), StrictMono (VTask.orderEmbOfFin s h)",
+      "domain_inputs": {},
+      "anchors": [
+        "OrderEmbedding.strictMono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "OrderEmbedding.strictMono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.472,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderEmbOfFin_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [LinearOrder α] (s : Finset α) {k : ℕ} (h : s.card = k), Function.Injective (VTask.orderEmbOfFin s h)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelEmbedding.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelEmbedding.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.425,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orderEmbOfFin_not_decreasing",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (s : Finset ℕ) (h : s.card = 2) (i j : Fin 2), i < j → VTask.orderEmbOfFin s h i > VTask.orderEmbOfFin s h j)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.orderEmbOfFin_last"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.orderEmbOfFin_last"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.orderEmbOfFin",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.orderEmbOfFin-d2b6293d",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,380 @@
+{
+  "task_id": "AlternatingMap.mkContinuous",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mkContinuous",
+  "signature": {
+    "name": "VTask.mkContinuous",
+    "type": "{𝕜 : Type u} -> {E : Type wE} -> {F : Type wF} -> {ι : Type v} -> [NontriviallyNormedField 𝕜] -> [SeminormedAddCommGroup E] -> [NormedSpace 𝕜 E] -> [SeminormedAddCommGroup F] -> [NormedSpace 𝕜 F] -> [Fintype ι] -> (f : E [⋀^ι]→ₗ[𝕜] F) -> (C : ℝ) -> (H : ∀ (m : ι → E), ‖f m‖ ≤ C * ∏ i, ‖m i‖) -> E [⋀^ι]→L[𝕜] F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "C",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "C may be negative",
+        "statement": "The constant C is not required to be non-negative; if C < 0, the hypothesis H forces f to be identically zero, and the construction remains valid.",
+        "note": "When C < 0, the operator norm bound max C 0 = 0 is used instead of C itself."
+      },
+      {
+        "point": "Operator norm bound with possibly negative C",
+        "statement": "For any C (possibly negative), the operator norm of the result satisfies ‖VTask.mkContinuous f C H‖ ≤ max C 0.",
+        "note": "When 0 ≤ C, this specialises to ‖VTask.mkContinuous f C H‖ ≤ C."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mkContinuous_norm_le_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C : ℝ} (hC : 0 ≤ C) (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ C",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.659,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_le_max",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C : ℝ} (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ max C 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 61.996,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_le_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) (C : ℝ) (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖) (m : ι → E), ‖VTask.mkContinuous f C H m‖ ≤ C * ∏ i, ‖m i‖",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.127,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_negative_C_norm_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C : ℝ} (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ max C 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.117,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_zero_map_zero_C",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (H : ∀ m : ι → E, ‖(0 : E [⋀^ι]→ₗ[𝕜] F) m‖ ≤ 0 * ∏ i, ‖m i‖), ‖VTask.mkContinuous (0 : E [⋀^ι]→ₗ[𝕜] F) 0 H‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_larger_C_still_valid",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C C' : ℝ} (hC' : 0 ≤ C') (hCC' : C ≤ C') (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖) (H' : ∀ m : ι → E, ‖f m‖ ≤ C' * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C' H'‖ ≤ C'",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.291,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_le_max_nonneg_part",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C : ℝ} (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖), 0 ≤ ‖VTask.mkContinuous f C H‖",
+      "domain_inputs": {},
+      "anchors": [
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.716,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_neg_C_norm_bounded_by_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} {E : Type*} {F : Type*} {ι : Type*} [NontriviallyNormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F] [NormedSpace 𝕜 F] [Fintype ι] (f : E [⋀^ι]→ₗ[𝕜] F) {C : ℝ} (hC : C < 0) (H : ∀ m : ι → E, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ‖VTask.mkContinuous f C H‖ ≤ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.mkContinuous_norm_le'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_norm_nonneg_always",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ [⋀^Fin 1]→ₗ[ℝ] ℝ) (C : ℝ) (hf : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), 0 ≤ ‖VTask.mkContinuous f C hf‖",
+      "domain_inputs": {},
+      "anchors": [
+        "norm_nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "norm_nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.009,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkContinuous_reject_norm_bound_violated",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ [⋀^Fin 1]→ₗ[ℝ] ℝ) (C : ℝ) (hf : ∀ m, ‖f m‖ ≤ C * ∏ i, ‖m i‖), ¬ (‖VTask.mkContinuous f C hf‖ < 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "norm_nonneg",
+        "not_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "norm_nonneg",
+        "not_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.058,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlternatingMap.mkContinuous",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlternatingMap.mkContinuous-f54469ce",
+    "review_status": "unreviewed"
+  }
+}

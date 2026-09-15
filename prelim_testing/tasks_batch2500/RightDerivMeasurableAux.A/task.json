@@ -1,0 +1,328 @@
+{
+  "task_id": "RightDerivMeasurableAux.A",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.A",
+  "signature": {
+    "name": "VTask.A",
+    "type": "{F : Type u_1} -> [NormedAddCommGroup F] -> [NormedSpace ℝ F] -> (f : ℝ → F) -> (L : F) -> (r ε : ℝ) -> Set ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "L",
+      "r",
+      "ε"
+    ],
+    "conventions": [
+      {
+        "point": "r ≤ 0",
+        "statement": "When r ≤ 0, the interval Ioc (r/2) r is empty, so no witness r' exists and VTask.A f L r ε = ∅.",
+        "note": "Follows directly from the existential quantifier over an empty interval."
+      },
+      {
+        "point": "ε < 0",
+        "statement": "When ε < 0 and r > 0, the bound ε * r is negative; since norms are non-negative the set VTask.A f L r ε is empty for any f whose increments are not identically equal to those of the linear map h ↦ h • L.",
+        "note": "No special junk value is declared; the formula is applied as stated."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "A_mono_epsilon",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (L : F) (r : ℝ) (ε δ : ℝ), ε ≤ δ → VTask.A f L r ε ⊆ VTask.A f L r δ",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.39,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_mem_nhdsGT",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (L : F) (r ε x : ℝ), x ∈ VTask.A f L r ε → VTask.A f L r ε ∈ nhdsWithin x (Set.Ioi x)",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.A_mem_nhdsGT"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.A_mem_nhdsGT"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.437,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_norm_sub_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (r x ε : ℝ) (L₁ L₂ : F), 0 < r → x ∈ VTask.A f L₁ r ε → x ∈ VTask.A f L₂ r ε → ‖L₁ - L₂‖ ≤ 4 * ε",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.norm_sub_le_of_mem_A"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.norm_sub_le_of_mem_A"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.492,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_monotone_in_epsilon_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (L : F) (r : ℝ), VTask.A f L r 0 ⊆ VTask.A f L r 1",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_differentiable_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (ε : ℝ), 0 < ε → ∀ x : ℝ, DifferentiableWithinAt ℝ f (Set.Ici x) x → ∃ R > 0, ∀ r ∈ Set.Ioo (0 : ℝ) R, x ∈ VTask.A f (derivWithin f (Set.Ici x) x) r ε",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.mem_A_of_differentiable"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.mem_A_of_differentiable"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.235,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_le_of_mem_A_midpoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (r ε : ℝ) (L : F) (x : ℝ), x ∈ VTask.A f L r ε → ∀ y z : ℝ, y ∈ Set.Icc x (x + r / 2) → z ∈ Set.Icc x (x + r / 2) → ‖f z - f y - (z - y) • L‖ ≤ ε * r",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.le_of_mem_A"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.le_of_mem_A"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.795,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_uniqueness_small_epsilon",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (r x : ℝ) (L₁ L₂ : F), 0 < r → x ∈ VTask.A f L₁ r (1/8) → x ∈ VTask.A f L₂ r (1/8) → ‖L₁ - L₂‖ ≤ 1/2",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.norm_sub_le_of_mem_A"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.norm_sub_le_of_mem_A"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_subset_monotone_epsilon_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (L : F) (r ε : ℝ), VTask.A f L r ε ⊆ VTask.A f L r (ε + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.A_mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "A_open_right_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (F : Type*) [NormedAddCommGroup F] [NormedSpace ℝ F] (f : ℝ → F) (L : F) (r ε : ℝ) (x : ℝ), x ∈ VTask.A f L r ε → ∃ δ > 0, Set.Ioo x (x + δ) ⊆ VTask.A f L r ε",
+      "domain_inputs": {},
+      "anchors": [
+        "RightDerivMeasurableAux.A_mem_nhdsGT"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RightDerivMeasurableAux.A_mem_nhdsGT"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RightDerivMeasurableAux.A",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RightDerivMeasurableAux.A-e5b70997",
+    "review_status": "unreviewed"
+  }
+}

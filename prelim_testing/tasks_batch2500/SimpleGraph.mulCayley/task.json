@@ -1,0 +1,372 @@
+{
+  "task_id": "SimpleGraph.mulCayley",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mulCayley",
+  "signature": {
+    "name": "VTask.mulCayley",
+    "type": "{M : Type u_1} -> (s : Set M) -> [Mul M] -> SimpleGraph M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "M"
+    ],
+    "conventions": [
+      {
+        "point": "self_loops_excluded",
+        "statement": "The adjacency relation is irreflexive: even if some generator g in s satisfies x * g = x, the vertex x is not considered adjacent to itself.",
+        "note": "Enforced by the SimpleGraph contract, which always removes self-loops."
+      },
+      {
+        "point": "symmetrisation",
+        "statement": "The edge relation is automatically symmetrised: x is adjacent to y if and only if y is adjacent to x, regardless of whether M is commutative or s is inverse-closed.",
+        "note": "Symmetry is imposed by fromRel, not by any algebraic property of M or s."
+      },
+      {
+        "point": "empty_generators",
+        "statement": "When s is the empty set, the resulting graph has no edges — all vertices are isolated.",
+        "note": "No generator exists to witness the adjacency relation, so the relation is everywhere false before symmetrisation."
+      },
+      {
+        "point": "no_group_structure_required",
+        "statement": "M need not be a group, monoid, or have any invertibility; only a binary multiplication [Mul M] is required.",
+        "note": "This generalises the classical Cayley graph construction beyond groups."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mulCayley_no_selfloop",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] (s : Set M) (x : M), ¬ (VTask.mulCayley s).Adj x x",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.irrefl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.irrefl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.334,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.mulCayley] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.mulCayley] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulCayley_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] (s : Set M) (x y : M), (VTask.mulCayley s).Adj x y → (VTask.mulCayley s).Adj y x",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.adj_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulCayley_adj_witness",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] (s : Set M) (x y : M), (VTask.mulCayley s).Adj x y → x ≠ y ∧ (∃ g ∈ s, x * g = y ∨ y * g = x)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.adj_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.024,
+        "at": "authoring",
+        "script": "by simp only [_root_.SimpleGraph.mulCayley] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.SimpleGraph.mulCayley] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulCayley_adj_gen_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] (s : Set M) (x y : M) (g : M), g ∈ s → x * g = y → x ≠ y → (VTask.mulCayley s).Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.adj_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.603,
+        "at": "authoring",
+        "script": "by simp only [_root_.SimpleGraph.mulCayley] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.SimpleGraph.mulCayley] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulCayley_subset_gens_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] (s t : Set M), s ⊆ t → ∀ x y : M, (VTask.mulCayley s).Adj x y → (VTask.mulCayley t).Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.adj_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.adj_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulCayley_zmod4_not_adj_0_2",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.mulCayley ({1} : Set (ZMod 4))).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ],
+        "M": [
+          "ZMod 4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.mulCayley ({1} : Set (ZMod 4))).Adj 0 2",
+      "violated_property": "no generator g in s satisfies 0 * g = 2 or 2 * g = 0 in ZMod 4 with s = {1}"
+    },
+    {
+      "id": "mulCayley_zmod4_no_selfloop_0",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.mulCayley ({1} : Set (ZMod 4))).Adj 0 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ],
+        "M": [
+          "ZMod 4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.mulCayley ({1} : Set (ZMod 4))).Adj 0 0",
+      "violated_property": "SimpleGraph adjacency is irreflexive: self-loops are excluded"
+    },
+    {
+      "id": "mulCayley_zmod4_empty_not_adj",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.mulCayley (∅ : Set (ZMod 4))).Adj 0 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "M": [
+          "ZMod 4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.mulCayley (∅ : Set (ZMod 4))).Adj 0 1",
+      "violated_property": "empty generating set yields no edges"
+    },
+    {
+      "id": "mulCayley_zmod4_two_gens_adj_0_2",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mulCayley ({1, 2} : Set (ZMod 4))).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2}"
+        ],
+        "M": [
+          "ZMod 4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.mulCayley ({1, 2} : Set (ZMod 4))).Adj 0 2"
+    },
+    {
+      "id": "mulCayley_zmod4_full_complete_graph",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.mulCayley (Set.univ : Set (ZMod 3))).Adj 0 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ],
+        "M": [
+          "ZMod 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.mulCayley (Set.univ : Set (ZMod 3))).Adj 0 2"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.mulCayley",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.mulCayley-d310242f",
+    "review_status": "unreviewed"
+  }
+}

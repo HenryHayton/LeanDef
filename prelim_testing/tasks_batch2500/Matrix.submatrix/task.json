@@ -1,0 +1,357 @@
+{
+  "task_id": "Matrix.submatrix",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.submatrix",
+  "signature": {
+    "name": "VTask.submatrix",
+    "type": "{l : Type u_1} -> {m : Type u_2} -> {n : Type u_3} -> {o : Type u_4} -> {α : Type v} -> (A : Matrix m n α) -> (r : l → m) -> (c : o → n) -> Matrix l o α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "A",
+      "r",
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "non-injective reindexing",
+        "statement": "The maps r and c are not required to be injective; rows or columns of A may be repeated in the output without any error.",
+        "note": "Duplication is allowed by design."
+      },
+      {
+        "point": "non-surjective reindexing",
+        "statement": "The maps r and c are not required to be surjective; rows or columns of A may be omitted from the output.",
+        "note": "Omission is allowed by design."
+      },
+      {
+        "point": "dimension change",
+        "statement": "The output index types l and o may differ in cardinality from the input index types m and n; the total number of rows and columns need not be preserved.",
+        "note": "Dimension mismatch is explicitly supported."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "submatrix_entry_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![1, 2, 3; 4, 5, 6; 7, 8, 9] (![1, 2] : Fin 2 → Fin 3) (![0, 2] : Fin 2 → Fin 3)) 0 1 = 6 := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![1, 2, 3; 4, 5, 6; 7, 8, 9]"
+        ],
+        "r": [
+          "![1, 2]"
+        ],
+        "c": [
+          "![0, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_entry_row2_col0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![1, 2, 3; 4, 5, 6; 7, 8, 9] (![1, 2] : Fin 2 → Fin 3) (![0, 2] : Fin 2 → Fin 3)) 1 0 = 7 := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![1, 2, 3; 4, 5, 6; 7, 8, 9]"
+        ],
+        "r": [
+          "![1, 2]"
+        ],
+        "c": [
+          "![0, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_row2_map0to2_col_01",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![10, 20, 30; 40, 50, 60; 70, 80, 90] (![2] : Fin 1 → Fin 3) (![0, 1] : Fin 2 → Fin 3)) 0 1 = 80 := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![10, 20, 30; 40, 50, 60; 70, 80, 90]"
+        ],
+        "r": [
+          "![2]"
+        ],
+        "c": [
+          "![0, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_duplicate_row",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![1, 2; 3, 4] (![0, 0] : Fin 2 → Fin 2) (id : Fin 2 → Fin 2)) 0 1 = (VTask.submatrix !![1, 2; 3, 4] (![0, 0] : Fin 2 → Fin 2) (id : Fin 2 → Fin 2)) 1 1 := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![1, 2; 3, 4]"
+        ],
+        "r": [
+          "![0, 0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_id_id_entry",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![5, 6; 7, 8] (id : Fin 2 → Fin 2) (id : Fin 2 → Fin 2)) 1 0 = 7 := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![5, 6; 7, 8]"
+        ],
+        "r": [
+          "id"
+        ],
+        "c": [
+          "id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_symm_preserves",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n m α : Type*} (A : Matrix n n α) (f : m → n), A.IsSymm → (VTask.submatrix A f f).IsSymm",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.IsSymm.submatrix"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.IsSymm.submatrix"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.785,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_hermitian_preserves",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n m α : Type*} [Star α] (A : Matrix n n α) (f : m → n), A.IsHermitian → (VTask.submatrix A f f).IsHermitian",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.IsHermitian.submatrix"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.IsHermitian.submatrix"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.111,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_det_permute_row",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : Type*} [Fintype n] [DecidableEq n] {R : Type*} [CommRing R] (σ : Equiv.Perm n) (M : Matrix n n R), (VTask.submatrix M σ id).det = Equiv.Perm.sign σ * M.det",
+      "domain_inputs": {},
+      "anchors": [
+        "Matrix.det_permute"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Matrix.det_permute"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.605,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "submatrix_symm_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.submatrix !![1, 2; 2, 3] (id : Fin 2 → Fin 2) (id : Fin 2 → Fin 2)).IsSymm := by decide",
+      "domain_inputs": {
+        "A": [
+          "!![1, 2; 2, 3]"
+        ],
+        "r": [
+          "id"
+        ],
+        "c": [
+          "id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Matrix.submatrix-c563329d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.submatrix !![1, 2; 2, 3] (id : Fin 2 → Fin 2) (id : Fin 2 → Fin 2)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Matrix.submatrix",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Matrix.submatrix-c563329d",
+    "review_status": "unreviewed"
+  }
+}

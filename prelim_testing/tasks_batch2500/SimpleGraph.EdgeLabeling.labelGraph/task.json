@@ -1,0 +1,430 @@
+{
+  "task_id": "SimpleGraph.EdgeLabeling.labelGraph",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.labelGraph",
+  "signature": {
+    "name": "VTask.labelGraph",
+    "type": "{V : Type u_1} -> {G : SimpleGraph V} -> {K : Type u_3} -> (C : G.EdgeLabeling K) -> (k : K) -> SimpleGraph V",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined for all simple graphs, all edge labelings, and all choices of label; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "labelGraph_adj_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K) (x y : V), (VTask.labelGraph C k).Adj x y ↔ ∃ H : G.Adj x y, C ⟨s(x, y), H⟩ = k",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.969,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_le_G",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K), VTask.labelGraph C k ≤ G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.931,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iSup_labelGraph_eq_G",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K), ⨆ k : K, VTask.labelGraph C k = G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.iSup_labelGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.iSup_labelGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.934,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwise_disjoint_labelGraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K), Pairwise (fun k l => Disjoint (VTask.labelGraph C k) (VTask.labelGraph C l))",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.524,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pairwiseDisjoint_univ_labelGraph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K), Set.PairwiseDisjoint (@Set.univ K) (VTask.labelGraph C)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.pairwiseDisjoint_univ_labelGraph"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.pairwiseDisjoint_univ_labelGraph"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.596,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_not_adj_wrong_label",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k l : K) (x y : V), k ≠ l → (VTask.labelGraph C k).Adj x y → ¬ (VTask.labelGraph C l).Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph",
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph",
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.125,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.EdgeLabeling.labelGraph] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.EdgeLabeling.labelGraph] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_adj_implies_G_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K) (x y : V), (VTask.labelGraph C k).Adj x y → G.Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_no_edge_not_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K) (x y : V), ¬ G.Adj x y → ¬ (VTask.labelGraph C k).Adj x y",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.451,
+        "at": "authoring",
+        "script": "by simp only [_root_.SimpleGraph.EdgeLabeling.labelGraph] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.SimpleGraph.EdgeLabeling.labelGraph] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_adj_label_matches",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K) (x y : V) (H : G.Adj x y), (VTask.labelGraph C k).Adj x y ↔ C ⟨s(x, y), H⟩ = k",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_adj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_le_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K), VTask.labelGraph C k ≤ G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.965,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_disjoint_different_labels_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k k' : K), k ≠ k' → Disjoint (VTask.labelGraph C k) (VTask.labelGraph C k')",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.pairwise_disjoint_labelGraph"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "labelGraph_not_exceeds_G",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {K : Type*} (C : G.EdgeLabeling K) (k : K), ¬ (G < VTask.labelGraph C k)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le",
+        "lt_irrefl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.EdgeLabeling.labelGraph_le",
+        "lt_irrefl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.EdgeLabeling.labelGraph",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.EdgeLabeling.labelGraph-e83f69c6",
+    "review_status": "unreviewed"
+  }
+}

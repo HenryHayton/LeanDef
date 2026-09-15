@@ -1,0 +1,469 @@
+{
+  "task_id": "BoxIntegral.TaggedPrepartition.single",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.single",
+  "signature": {
+    "name": "VTask.single",
+    "type": "{ι : Type u_1} -> (I J : BoxIntegral.Box ι) -> (hJ : J ≤ I) -> (x : ι → ℝ) -> (h : x ∈ BoxIntegral.Box.Icc I) -> BoxIntegral.TaggedPrepartition I",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I",
+      "J",
+      "hJ",
+      "x",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "uniform tag",
+        "statement": "Every box in the single-box collection carries the same tag `x`; the tag function is constant.",
+        "note": "This is the only meaningful choice when there is exactly one box."
+      },
+      {
+        "point": "Henstock condition",
+        "statement": "The tagged prepartition satisfies the Henstock condition if and only if `x ∈ Box.Icc J`, even though the type only requires `x ∈ Box.Icc I`.",
+        "note": "Having `x ∈ Box.Icc I \\ Box.Icc J` is a valid construction but not Henstock."
+      },
+      {
+        "point": "partition vs prepartition",
+        "statement": "The result is a full partition of `I` if and only if `J = I`; otherwise it is a strict prepartition with uncovered interior.",
+        "note": "NONE_DECLARED: not a junk-value convention but a genuine mathematical fact about the object's completeness."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "single_mem_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), J ∈ VTask.single I J hJ x h",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.248,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J J' : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), J' ∈ VTask.single I J hJ x h ↔ J' = J",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.271,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_iUnion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), (VTask.single I J hJ x h).iUnion = ↑J",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.iUnion_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.iUnion_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.28,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_isPartition_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), (VTask.single I J hJ x h).IsPartition ↔ J = I",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.894,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_isPartition_when_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I : BoxIntegral.Box ι) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), (VTask.single I I le_rfl x h).IsPartition",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.258,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_isHenstock_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), BoxIntegral.TaggedPrepartition.IsHenstock (VTask.single I J hJ x h) ↔ x ∈ BoxIntegral.Box.Icc J",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.254,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_isHenstock_when_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I : BoxIntegral.Box ι) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), BoxIntegral.TaggedPrepartition.IsHenstock (VTask.single I I le_rfl x h)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.156,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_forall_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I) (p : (ι → ℝ) → BoxIntegral.Box ι → Prop), (∀ J' ∈ VTask.single I J hJ x h, p ((VTask.single I J hJ x h).tag J') J') ↔ p x J",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.forall_mem_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.forall_mem_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.319,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_not_isPartition_when_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), J ≠ I → ¬(VTask.single I J hJ x h).IsPartition",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isPartition_single_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_not_isHenstock_outside_J",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), x ∉ BoxIntegral.Box.Icc J → ¬BoxIntegral.TaggedPrepartition.IsHenstock (VTask.single I J hJ x h)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.isHenstock_single_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.618,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_mem_not_other",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J J' : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), J' ≠ J → J' ∉ VTask.single I J hJ x h",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.mem_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.324,
+        "at": "authoring",
+        "script": "by simp [_root_.BoxIntegral.TaggedPrepartition.single] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.BoxIntegral.TaggedPrepartition.single] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_iUnion_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (I J : BoxIntegral.Box ι) (hJ : J ≤ I) (x : ι → ℝ) (h : x ∈ BoxIntegral.Box.Icc I), (VTask.single I J hJ x h).iUnion ⊆ ↑I",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.iUnion_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.iUnion_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.15,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoxIntegral.TaggedPrepartition.single",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoxIntegral.TaggedPrepartition.single-72bbbe18",
+    "review_status": "unreviewed"
+  }
+}

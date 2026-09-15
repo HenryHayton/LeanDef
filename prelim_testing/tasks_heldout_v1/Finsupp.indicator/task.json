@@ -1,0 +1,328 @@
+{
+  "task_id": "Finsupp.indicator",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.indicator",
+  "signature": {
+    "name": "VTask.indicator",
+    "type": "{ι : Type u_1} -> {α : Type u_2} -> [Zero α] -> (s : Finset ι) -> (f : (i : ι) → i ∈ s → α) -> ι →₀ α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "i ∉ s",
+        "statement": "When the index i does not belong to s, VTask.indicator s f i = 0.",
+        "note": "This is the defining junk value: indices outside the prescribed finset always yield the zero of α."
+      },
+      {
+        "point": "f i hi = 0 for some i ∈ s",
+        "statement": "If f assigns 0 to an index i in s, that index is excluded from the support of the resulting finsupp.",
+        "note": "Consistent with the finsupp invariant that the support contains only nonzero entries; the support is a strict subset of s in this case."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "indicator_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (s : Finset ι), Function.Injective (fun f : ∀ i ∈ s, α => VTask.indicator s f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.indicator_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.indicator_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.407,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_of_mem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [Zero α] {i : ι} {s : Finset ι} (hi : i ∈ s) (f : ∀ i ∈ s, α), VTask.indicator s f i = f i hi",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.indicator_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.indicator_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.484,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_of_notMem_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [Zero α] {i : ι} {s : Finset ι} (hi : i ∉ s) (f : ∀ i ∈ s, α), VTask.indicator s f i = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.indicator_of_notMem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.indicator_of_notMem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.244,
+        "at": "authoring",
+        "script": "by simp only [_root_.Finsupp.indicator] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Finsupp.indicator] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_single_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (i : ι) (b : α), Finsupp.single i b = VTask.indicator {i} (fun _ _ => b)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.single_eq_indicator"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.single_eq_indicator"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.157,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_eq_indicator_self_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {α : Type*} [Zero α] (s : Finset ι) (d : ι →₀ α), (d = VTask.indicator s (fun i _ => d i)) ↔ d.support ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.eq_indicator_self_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.eq_indicator_self_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.917,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_empty_is_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.indicator (∅ : Finset ℕ) (fun i _ => i) 0 = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "f": [
+          "fun i _ => i"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_support_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*) (α : Type*) [inst : DecidableEq ι] [inst2 : Zero α] (s : Finset ι) (f : ∀ i ∈ s, α), (VTask.indicator s f).support ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_indicator_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_indicator_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.44,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "indicator_ne_wrong_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (i : Fin 3) (b : ℤ), b ≠ 0 → VTask.indicator (Finset.univ : Finset (Fin 3)) (fun j _ => b) i ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.indicator_of_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.indicator_of_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.265,
+        "at": "authoring",
+        "script": "by simp [_root_.Finsupp.indicator] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Finsupp.indicator] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.indicator-6052474c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.indicator",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.indicator-6052474c",
+    "review_status": "unreviewed"
+  }
+}

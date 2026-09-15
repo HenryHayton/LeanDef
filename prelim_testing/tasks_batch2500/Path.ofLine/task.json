@@ -1,0 +1,239 @@
+{
+  "task_id": "Path.ofLine",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLine",
+  "signature": {
+    "name": "VTask.ofLine",
+    "type": "{X : Type u_1} -> [TopologicalSpace X] -> {x y : X} -> {f : ℝ → X} -> (hf : ContinuousOn f unitInterval) -> (h₀ : f 0 = x) -> (h₁ : f 1 = y) -> Path x y",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "hf",
+      "h₀",
+      "h₁"
+    ],
+    "conventions": [
+      {
+        "point": "evaluation",
+        "statement": "The path evaluates at t : unitInterval as f applied to the coercion of t to ℝ; no reparametrisation or extension is performed.",
+        "note": "The underlying function is the literal restriction of f to unitInterval."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLine_mem_image",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} {f : ℝ → X} (hf : ContinuousOn f unitInterval) (h₀ : f 0 = x) (h₁ : f 1 = y) (t : unitInterval), VTask.ofLine hf h₀ h₁ t ∈ f '' unitInterval",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.ofLine_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.ofLine_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.989,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLine_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} {f : ℝ → X} (hf : ContinuousOn f unitInterval) (h₀ : f 0 = x) (h₁ : f 1 = y), Continuous (VTask.ofLine hf h₀ h₁)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.096,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLine_outside_irrelevant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} {f g : ℝ → X} (hf : ContinuousOn f unitInterval) (hg : ContinuousOn g unitInterval) (h₀ : f 0 = x) (h₁ : f 1 = y) (h₀' : g 0 = x) (h₁' : g 1 = y), (∀ t : unitInterval, f t = g t) → VTask.ofLine hf h₀ h₁ = VTask.ofLine hg h₀' h₁'",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.ext"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.ext"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.084,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLine_extend_recovers_path",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} (γ : Path x y) (t : unitInterval), VTask.ofLine (γ.continuous_extend.continuousOn) (Path.extend_zero γ) (Path.extend_one γ) t = γ t",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.ofLine_extend"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.ofLine_extend"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.395,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLine_image_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} {f : ℝ → X} (hf : ContinuousOn f unitInterval) (h₀ : f 0 = x) (h₁ : f 1 = y), Set.range (VTask.ofLine hf h₀ h₁) ⊆ f '' unitInterval",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.ofLine_mem",
+        "Set.range_subset_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.ofLine_mem",
+        "Set.range_subset_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLine_reject_ne_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f g : ℝ → ℝ) (hf : ContinuousOn f unitInterval) (hg : ContinuousOn g unitInterval) (h₀f : f 0 = 0) (h₁f : f 1 = 1) (h₀g : g 0 = 0) (h₁g : g 1 = 1), VTask.ofLine hf h₀f h₁f = VTask.ofLine hg h₀g h₁g",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Path.ofLine-6e2709e3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Path.ofLine",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Path.ofLine-6e2709e3",
+    "review_status": "unreviewed"
+  }
+}

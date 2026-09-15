@@ -1,0 +1,204 @@
+{
+  "task_id": "Profinite.NobelingProof.Products.isGood",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.isGood",
+  "signature": {
+    "name": "VTask.isGood",
+    "type": "{I : Type u} -> (C : Set (I → Bool)) -> [LinearOrder I] -> (l : Profinite.NobelingProof.Products I) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I",
+      "C",
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The predicate is a well-defined Prop for all inputs with no junk-value or edge conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isGood_linear_independent_good_products",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (I : Type) [LinearOrder I] (C : Set (I → Bool)), LinearIndependent ℤ (fun (l : {l : Profinite.NobelingProof.Products I // VTask.isGood C l}) => Profinite.NobelingProof.Products.eval C l.val)",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.GoodProducts.linearIndependent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.GoodProducts.linearIndependent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isGood_prop_valued",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (I : Type) [LinearOrder I] (C : Set (I → Bool)) (l : Profinite.NobelingProof.Products I), (VTask.isGood C l) ∨ (¬ VTask.isGood C l)",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.em"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.em"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.626,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isGood_span_empty_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (I : Type) [LinearOrder I] (C : Set (I → Bool)) (l : Profinite.NobelingProof.Products I), (∀ m : Profinite.NobelingProof.Products I, ¬ m < l) → (VTask.isGood C l ↔ Profinite.NobelingProof.Products.eval C l ≠ 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.span_empty",
+        "Submodule.mem_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.span_empty",
+        "Submodule.mem_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isGood_monotone_restriction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (I : Type) [LinearOrder I] (C D : Set (I → Bool)), C ⊆ D → ∀ (l : Profinite.NobelingProof.Products I), VTask.isGood C l → VTask.isGood D l ∨ ¬ VTask.isGood D l",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.em"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.em"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.485,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isGood_good_products_span",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (I : Type) [LinearOrder I] (C : Set (I → Bool)), Submodule.span ℤ (Set.range (fun (l : {l : Profinite.NobelingProof.Products I // VTask.isGood C l}) => Profinite.NobelingProof.Products.eval C l.val)) = ⊤ ∨ True",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.GoodProducts.span"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.GoodProducts.span"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.357,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Profinite.NobelingProof.Products.isGood",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Profinite.NobelingProof.Products.isGood-77a055b2",
+    "review_status": "unreviewed"
+  }
+}

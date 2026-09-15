@@ -1,0 +1,266 @@
+{
+  "task_id": "ContDiffMapSupportedIn.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{E : Type u_2} -> {F : Type u_3} -> [NormedAddCommGroup E] -> [NormedSpace ℝ E] -> [NormedAddCommGroup F] -> [NormedSpace ℝ F] -> {n : ℕ∞} -> {K : TopologicalSpace.Compacts E} -> (f : ContDiffMapSupportedIn E F n K) -> (f' : E → F) -> (h : f' = ⇑f) -> ContDiffMapSupportedIn E F n K",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "copy_eq",
+        "statement": "The result of VTask.copy f f' h is propositionally equal to the original f as an element of ContDiffMapSupportedIn E F n K.",
+        "note": "This holds because h witnesses f' = ⇑f, so all fields coincide."
+      },
+      {
+        "point": "coe_copy",
+        "statement": "The coercion of VTask.copy f f' h to a bare function E → F is definitionally (and propositionally) equal to f', the supplied replacement function.",
+        "note": "This is the main purpose of copy: to install f' as the toFun field."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f : ContDiffMapSupportedIn E F n K) (f' : E → F) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.657,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_coe_eq_original_coe",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f : ContDiffMapSupportedIn E F n K) (f' : E → F) (h : f' = ⇑f), ⇑(VTask.copy f f' h) = ⇑f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.coe_copy",
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.coe_copy",
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.624,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_copy_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f : ContDiffMapSupportedIn E F n K) (f' : E → F) (h : f' = ⇑f) (f'' : E → F) (h' : f'' = ⇑(VTask.copy f f' h)), VTask.copy (VTask.copy f f' h) f'' h' = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.476,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_wrong_f_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f g : ContDiffMapSupportedIn E F n K) (h_ne : f ≠ g) (h : ⇑g = ⇑f), VTask.copy f (⇑g) h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.737,
+        "at": "authoring",
+        "script": "by simp only [_root_.ContDiffMapSupportedIn.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.ContDiffMapSupportedIn.copy] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_apply_eq_original_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f : ContDiffMapSupportedIn E F n K) (f' : E → F) (h : f' = ⇑f) (x : E), (VTask.copy f f' h : E → F) x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.coe_copy",
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.coe_copy",
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.674,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_wrong_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E : Type*} {F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddCommGroup F] [NormedSpace ℝ F] {n : ℕ∞} {K : TopologicalSpace.Compacts E} (f g : ContDiffMapSupportedIn E F n K) (f' : E → F) (h : f' = ⇑f), f ≠ g → VTask.copy f f' h ≠ g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContDiffMapSupportedIn.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.433,
+        "at": "authoring",
+        "script": "by simp only [_root_.ContDiffMapSupportedIn.copy] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.ContDiffMapSupportedIn.copy] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContDiffMapSupportedIn.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContDiffMapSupportedIn.copy-4666d483",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "task_id": "AlgEquiv.ofLeftInverse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofLeftInverse",
+  "signature": {
+    "name": "VTask.ofLeftInverse",
+    "type": "{R : Type u} -> {A : Type v} -> {B : Type w} -> [CommSemiring R] -> [Semiring A] -> [Semiring B] -> [Algebra R A] -> [Algebra R B] -> {g : B → A} -> {f : A →ₐ[R] B} -> (h : Function.LeftInverse g ⇑f) -> A ≃ₐ[R] ↥f.range",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "inverse_on_range",
+        "statement": "The inverse map of the resulting isomorphism is defined as the composition of the range subtype inclusion into B followed by g; hence g is only required to be a left inverse of f (not a global right inverse on all of B), and the right-inverse property on f.range is automatically derived.",
+        "note": "This is the defining convention distinguishing this construction from one requiring a full two-sided inverse."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofLeftInverse_left_inverse_condition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) (B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (g : B → A) (f : A →ₐ[R] B) (h : Function.LeftInverse g ⇑f) (a : A), (VTask.ofLeftInverse h).symm (VTask.ofLeftInverse h a) = a",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.662,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_right_inverse_on_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) (B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (g : B → A) (f : A →ₐ[R] B) (h : Function.LeftInverse g ⇑f) (b : ↥f.range), (VTask.ofLeftInverse h) ((VTask.ofLeftInverse h).symm b) = b",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.999,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_image_in_range_subtype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) (B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (g : B → A) (f : A →ₐ[R] B) (h : Function.LeftInverse g ⇑f) (a : A), ↑(VTask.ofLeftInverse h a) ∈ f.range",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.462,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) (B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (g : B → A) (f : A →ₐ[R] B) (h : Function.LeftInverse g ⇑f), Function.Injective ⇑(VTask.ofLeftInverse h)",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.248,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofLeftInverse_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) (B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (g : B → A) (f : A →ₐ[R] B) (h : Function.LeftInverse g ⇑f), Function.Surjective ⇑(VTask.ofLeftInverse h)",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.118,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgEquiv.ofLeftInverse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgEquiv.ofLeftInverse-828fdebf",
+    "review_status": "unreviewed"
+  }
+}

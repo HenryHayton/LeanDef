@@ -1,0 +1,115 @@
+{
+  "task_id": "AdjoinRoot.powerBasis",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.powerBasis",
+  "signature": {
+    "name": "VTask.powerBasis",
+    "type": "{K : Type u_5} -> [Field K] -> {f : Polynomial K} -> (hf : f ≠ 0) -> PowerBasis K (AdjoinRoot f)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "f ≠ 0",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The only constraint is the explicit hypothesis hf : f ≠ 0; there are no junk-value conventions because the definition is simply not applicable when f = 0 (the hypothesis is not provable)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "powerBasis_basis_vector",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] (f : Polynomial K) (hf : f ≠ 0) (i : Fin (VTask.powerBasis hf).dim), (VTask.powerBasis hf).basis i = (AdjoinRoot.root f) ^ (i : ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "PowerBasis.basis_eq_pow"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PowerBasis.basis_eq_pow"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.048,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AdjoinRoot.powerBasis-f0f361f9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "powerBasis_dim_nonzero_for_irred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (K : Type*) [Field K] (f : Polynomial K) (hf : f ≠ 0), 0 < f.natDegree → 0 < (VTask.powerBasis hf).dim",
+      "domain_inputs": {},
+      "anchors": [
+        "AdjoinRoot.powerBasis_dim"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AdjoinRoot.powerBasis_dim"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.642,
+        "at": "authoring",
+        "script": "by simp [_root_.AdjoinRoot.powerBasis] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.AdjoinRoot.powerBasis] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AdjoinRoot.powerBasis-f0f361f9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AdjoinRoot.powerBasis",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AdjoinRoot.powerBasis-f0f361f9",
+    "review_status": "unreviewed"
+  }
+}

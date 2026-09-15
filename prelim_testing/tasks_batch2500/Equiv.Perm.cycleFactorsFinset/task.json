@@ -1,0 +1,339 @@
+{
+  "task_id": "Equiv.Perm.cycleFactorsFinset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cycleFactorsFinset",
+  "signature": {
+    "name": "VTask.cycleFactorsFinset",
+    "type": "{α : Type u_2} -> [DecidableEq α] -> [Fintype α] -> (f : Equiv.Perm α) -> Finset (Equiv.Perm α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "f = 1",
+        "statement": "VTask.cycleFactorsFinset 1 = ∅ (the identity permutation has an empty cycle factorization).",
+        "note": "Fixed by convention: the identity requires no cycles, so the set is empty rather than containing a trivial element."
+      },
+      {
+        "point": "fixed points",
+        "statement": "Fixed points of f (elements a with f a = a) do not appear as length-1 cycles in VTask.cycleFactorsFinset f; only non-trivial cycles (IsCycle) are included.",
+        "note": "IsCycle requires a permutation to move at least one point and act as a single orbit on its support, ruling out the identity and fixed-point-only permutations."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cycleFactorsFinset_identity",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.cycleFactorsFinset (1 : Equiv.Perm (Fin 3)) = ∅ := by decide",
+      "domain_inputs": {
+        "f": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_swap_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.cycleFactorsFinset (Equiv.swap (0 : Fin 3) 1) = {Equiv.swap 0 1} := by decide",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 3) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_card_identity",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleFactorsFinset (1 : Equiv.Perm (Fin 4))).card = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_card_transposition",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.cycleFactorsFinset (Equiv.swap (0 : Fin 4) 1)).card = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 4) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_mem_swap_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : Equiv.swap (0 : Fin 4) 1 ∈ VTask.cycleFactorsFinset (Equiv.swap (0 : Fin 4) 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 4) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Equiv.swap (0 : Fin 4) 1"
+    },
+    {
+      "id": "cycleFactorsFinset_mem_identity_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (1 : Equiv.Perm (Fin 4)) ∉ VTask.cycleFactorsFinset (Equiv.swap (0 : Fin 4) 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "Equiv.swap (0 : Fin 4) 1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(1 : Equiv.Perm (Fin 4))",
+      "violated_property": "IsCycle: the identity permutation is not a cycle"
+    },
+    {
+      "id": "cycleFactorsFinset_isCycle_of_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f c : Equiv.Perm (Fin 5)), c ∈ VTask.cycleFactorsFinset f → c.IsCycle",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_isCycle_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : Equiv.Perm (Fin 5)), f.IsCycle → VTask.cycleFactorsFinset f = {f}",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.IsCycle.cycleFactorsFinset_eq_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.149,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_disjoint_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f g : Equiv.Perm (Fin 5)), Equiv.Perm.Disjoint f g → VTask.cycleFactorsFinset (f * g) = VTask.cycleFactorsFinset f ∪ VTask.cycleFactorsFinset g",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.Disjoint.disjoint_cycleFactorsFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.Disjoint.disjoint_cycleFactorsFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.343,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cycleFactorsFinset_cycleOf_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (g : Equiv.Perm (Fin 5)) (x : Fin 5), g.cycleOf x ≠ 1 → g.cycleOf x ∈ VTask.cycleFactorsFinset g",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Perm.cycleOf_ne_one_iff_mem_cycleFactorsFinset"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Perm.cycleOf_ne_one_iff_mem_cycleFactorsFinset"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Perm.cycleFactorsFinset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Perm.cycleFactorsFinset-d2f2665f",
+    "review_status": "unreviewed"
+  }
+}

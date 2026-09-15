@@ -1,0 +1,247 @@
+{
+  "task_id": "Cardinal.IsStrongPrelimit",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsStrongPrelimit",
+  "signature": {
+    "name": "VTask.IsStrongPrelimit",
+    "type": "(c : Cardinal.{u_1}) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "c = 0",
+        "statement": "IsStrongPrelimit 0 holds by vacuous truth: the universal quantifier over cardinals strictly less than 0 is empty.",
+        "note": "This is by design to make IsStrongPrelimit the zero-inclusive ('pre') variant of the strong limit notion."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strong_prelimit_implies_succ_prelimit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ c : Cardinal, VTask.IsStrongPrelimit c → Order.IsSuccPrelimit c",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.IsStrongPrelimit.isSuccPrelimit"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.IsStrongPrelimit.isSuccPrelimit"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.182,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_prelimit_zero_theorem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.IsStrongPrelimit 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.IsStrongPrelimit.zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.IsStrongPrelimit.zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.042,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "not_strong_prelimit_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ c : Cardinal, ¬ VTask.IsStrongPrelimit c ↔ ∃ x < c, c ≤ 2 ^ x",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.not_isStrongPrelimit_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.not_isStrongPrelimit_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.318,
+        "at": "authoring",
+        "script": "by simp [_root_.Cardinal.IsStrongPrelimit] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Cardinal.IsStrongPrelimit] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_prelimit_prebeth_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ o : Ordinal, VTask.IsStrongPrelimit (Cardinal.preBeth o) ↔ Order.IsSuccPrelimit o",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.isStrongPrelimit_preBeth"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.isStrongPrelimit_preBeth"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.094,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_prelimit_closure_two_pow",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ c : Cardinal, VTask.IsStrongPrelimit c → ∀ x : Cardinal, x < c → 2 ^ x < c",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.not_isStrongPrelimit_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.not_isStrongPrelimit_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.304,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strong_prelimit_implies_not_succ_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ c : Cardinal, VTask.IsStrongPrelimit c → c ≠ 0 → ∀ x : Cardinal, x < c → x + 1 < c",
+      "domain_inputs": {},
+      "anchors": [
+        "Cardinal.IsStrongPrelimit.isSuccPrelimit",
+        "Order.IsSuccPrelimit.succ_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Cardinal.IsStrongPrelimit.isSuccPrelimit",
+        "Order.IsSuccPrelimit.succ_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Cardinal.IsStrongPrelimit",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Cardinal.IsStrongPrelimit-f3de4cff",
+    "review_status": "unreviewed"
+  }
+}

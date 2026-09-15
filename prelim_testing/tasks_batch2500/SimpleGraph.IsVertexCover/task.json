@@ -1,0 +1,323 @@
+{
+  "task_id": "SimpleGraph.IsVertexCover",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsVertexCover",
+  "signature": {
+    "name": "VTask.IsVertexCover",
+    "type": "{V : Type u_1} -> (G : SimpleGraph V) -> (c : Set V) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "empty cover",
+        "statement": "VTask.IsVertexCover G ∅ holds if and only if G has no edges (G = ⊥); it is False for any graph with at least one edge.",
+        "note": "This is a genuine logical equivalence, not a junk-value convention."
+      },
+      {
+        "point": "full cover",
+        "statement": "VTask.IsVertexCover G Set.univ is always True for any graph G, since every vertex belongs to Set.univ.",
+        "note": "No special convention needed; follows directly from the definition."
+      },
+      {
+        "point": "edgeless graph",
+        "statement": "VTask.IsVertexCover ⊥ c holds for every set c, since there are no edges to cover.",
+        "note": "Vacuously true; no junk-value convention involved."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "vc_compl_indep_iff_cover",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G : SimpleGraph V) (c : Set V), G.IsIndepSet cᶜ ↔ VTask.IsVertexCover G c",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isIndepSet_compl_iff_isVertexCover"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isIndepSet_compl_iff_isVertexCover"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.128,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_cover_compl_is_indep",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G : SimpleGraph V) (c : Set V), VTask.IsVertexCover G cᶜ ↔ G.IsIndepSet c",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isVertexCover_compl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isVertexCover_compl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.118,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_monotone_in_graph",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G G' : SimpleGraph V) (c : Set V), G ≤ G' → VTask.IsVertexCover G' c → VTask.IsVertexCover G c",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsVertexCover.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsVertexCover.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.317,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_monotone_in_cover",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G : SimpleGraph V) (c d : Set V), c ⊆ d → VTask.IsVertexCover G c → VTask.IsVertexCover G d",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsVertexCover.subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsVertexCover.subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.338,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_empty_iff_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G : SimpleGraph V), VTask.IsVertexCover G ∅ ↔ G = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isVertexCover_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isVertexCover_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.201,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_univ_always_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type) (G : SimpleGraph V), VTask.IsVertexCover G Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isVertexCover_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isVertexCover_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.089,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_preimage_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V W : Type) (G : SimpleGraph V) (H : SimpleGraph W) (f : G →g H) (c : Set W), VTask.IsVertexCover H c → VTask.IsVertexCover G (f ⁻¹' c)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsVertexCover.preimage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsVertexCover.preimage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.545,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vc_iso_image_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V W : Type) (G : SimpleGraph V) (H : SimpleGraph W) (f : G ≃g H) (c : Set V), VTask.IsVertexCover H (f '' c) ↔ VTask.IsVertexCover G c",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isVertexCover_image_iso"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isVertexCover_image_iso"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.204,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.IsVertexCover",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.IsVertexCover-8588947e",
+    "review_status": "unreviewed"
+  }
+}

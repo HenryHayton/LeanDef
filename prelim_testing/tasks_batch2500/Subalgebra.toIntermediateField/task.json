@@ -1,0 +1,334 @@
+{
+  "task_id": "Subalgebra.toIntermediateField",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toIntermediateField",
+  "signature": {
+    "name": "VTask.toIntermediateField",
+    "type": "{K : Type u_1} -> {L : Type u_2} -> [Field K] -> [Field L] -> [Algebra K L] -> (S : Subalgebra K L) -> (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) -> IntermediateField K L",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "S",
+      "inv_mem"
+    ],
+    "conventions": [
+      {
+        "point": "inv_mem at zero",
+        "statement": "The hypothesis `inv_mem` must hold for `x = 0`; since `0⁻¹ = 0` by the junk-value convention for fields, and every subalgebra contains `0`, this is automatically satisfied and imposes no real burden on the caller.",
+        "note": "Junk-value: in Lean/Mathlib fields, `0⁻¹` is defined to equal `0`, making the inverse-closure condition trivially true at zero for any substructure containing zero."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toIntermediateField_inv_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) (x : L), x ∈ VTask.toIntermediateField S inv_mem → x⁻¹ ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.inv_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.inv_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.54,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_zero_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S), (0 : L) ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.zero_mem",
+        "IntermediateField.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.zero_mem",
+        "IntermediateField.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.471,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_one_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S), (1 : L) ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.one_mem",
+        "IntermediateField.one_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.one_mem",
+        "IntermediateField.one_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.466,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_add_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) (x y : L), x ∈ VTask.toIntermediateField S inv_mem → y ∈ VTask.toIntermediateField S inv_mem → x + y ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.573,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_mul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) (x y : L), x ∈ VTask.toIntermediateField S inv_mem → y ∈ VTask.toIntermediateField S inv_mem → x * y ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.mul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.mul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.862,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_algebraMap_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) (k : K), algebraMap K L k ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.algebraMap_mem",
+        "IntermediateField.algebraMap_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.algebraMap_mem",
+        "IntermediateField.algebraMap_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.516,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_sub_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S) (x y : L), x ∈ VTask.toIntermediateField S inv_mem → y ∈ VTask.toIntermediateField S inv_mem → x - y ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "IntermediateField.sub_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IntermediateField.sub_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.452,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "toIntermediateField_zero_inv_convention",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} {L : Type*} [Field K] [Field L] [Algebra K L] (S : Subalgebra K L) (inv_mem : ∀ x ∈ S, x⁻¹ ∈ S), (0 : L)⁻¹ ∈ VTask.toIntermediateField S inv_mem",
+      "domain_inputs": {},
+      "anchors": [
+        "inv_zero",
+        "Subalgebra.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "inv_zero",
+        "Subalgebra.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.492,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subalgebra.toIntermediateField",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subalgebra.toIntermediateField-6cbd38d5",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,416 @@
+{
+  "task_id": "ApproximatesLinearOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ApproximatesLinearOn",
+  "signature": {
+    "name": "VTask.ApproximatesLinearOn",
+    "type": "{𝕜 : Type u_1} -> [NontriviallyNormedField 𝕜] -> {E : Type u_2} -> [NormedAddCommGroup E] -> [NormedSpace 𝕜 E] -> {F : Type u_3} -> [NormedAddCommGroup F] -> [NormedSpace 𝕜 F] -> (f : E → F) -> (f' : E →L[𝕜] F) -> (s : Set E) -> (c : NNReal) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "s",
+      "c"
+    ],
+    "conventions": [
+      {
+        "point": "empty set",
+        "statement": "VTask.ApproximatesLinearOn f f' ∅ c holds for all f, f', c, since the universal quantification is vacuously satisfied.",
+        "note": "Corresponds to the theorem approximatesLinearOn_empty."
+      },
+      {
+        "point": "monotone in constant",
+        "statement": "If VTask.ApproximatesLinearOn f f' s c holds and c ≤ c', then VTask.ApproximatesLinearOn f f' s c' holds.",
+        "note": "Corresponds to ApproximatesLinearOn.mono_num."
+      },
+      {
+        "point": "monotone in set (downward)",
+        "statement": "If VTask.ApproximatesLinearOn f f' t c holds and s ⊆ t, then VTask.ApproximatesLinearOn f f' s c holds.",
+        "note": "Corresponds to ApproximatesLinearOn.mono_set."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "approx_iff_lipschitz_on_with",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' s c ↔ LipschitzOnWith c (f - ⇑f') s",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.879,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_lipschitz_sub",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' s c → LipschitzWith c (fun x : s => f x - f' x)",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.lipschitz_sub"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.lipschitz_sub"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.145,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_continuous_on",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' s c → ContinuousOn f s",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.continuousOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.continuousOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.028,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_lipschitz",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' s c → LipschitzWith (‖f'‖₊ + c) (s.restrict f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.lipschitz"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.lipschitz"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.673,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_c0_means_exact",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ}, VTask.ApproximatesLinearOn f f' s 0 → ∀ x ∈ s, ∀ y ∈ s, f x - f y = f' (x - y)",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.approximatesLinearOn_iff_lipschitzOnWith"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_reject_c_too_small",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.ApproximatesLinearOn (fun x : ℝ => x ^ 2) (0 : ℝ →L[ℝ] ℝ) Set.univ 0",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ],
+        "c": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.ApproximatesLinearOn (fun x : ℝ => x ^ 2) (0 : ℝ →L[ℝ] ℝ) Set.univ 0",
+      "violated_property": "The residual ‖x² - y² - 0‖ = |x² - y²| is not identically zero and not bounded by 0 · ‖x - y‖ on all of ℝ"
+    },
+    {
+      "id": "approx_subset_from_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' Set.univ c → VTask.ApproximatesLinearOn f f' s c",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.mono_set"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.mono_set"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.45,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_mono_num_weak",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c : NNReal}, VTask.ApproximatesLinearOn f f' s c → VTask.ApproximatesLinearOn f f' s (c + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.mono_num"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.mono_num"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_mono_num_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s : Set ℝ} {c c' : NNReal}, c ≤ c' → VTask.ApproximatesLinearOn f f' s c → VTask.ApproximatesLinearOn f f' s c'",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.mono_num"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.mono_num"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.015,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_mono_set_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {f : ℝ → ℝ} {f' : ℝ →L[ℝ] ℝ} {s t : Set ℝ} {c : NNReal}, s ⊆ t → VTask.ApproximatesLinearOn f f' t c → VTask.ApproximatesLinearOn f f' s c",
+      "domain_inputs": {},
+      "anchors": [
+        "ApproximatesLinearOn.mono_set"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ApproximatesLinearOn.mono_set"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.597,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "approx_linear_reject_norm_bound",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.ApproximatesLinearOn (fun x : ℝ => (2 : ℝ) * x) (ContinuousLinearMap.id ℝ ℝ) Set.univ 0",
+      "domain_inputs": {
+        "f": [
+          "fun x : ℝ => (2 : ℝ) * x"
+        ],
+        "s": [
+          "Set.univ"
+        ],
+        "c": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.ApproximatesLinearOn (fun x : ℝ => (2 : ℝ) * x) (ContinuousLinearMap.id ℝ ℝ) Set.univ 0",
+      "violated_property": "‖f(x) - f(y) - f'(x - y)‖ ≤ c · ‖x - y‖ for all x, y ∈ s"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ApproximatesLinearOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ApproximatesLinearOn-c04d1a29",
+    "review_status": "unreviewed"
+  }
+}

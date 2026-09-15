@@ -1,0 +1,326 @@
+{
+  "task_id": "Path.trans",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.trans",
+  "signature": {
+    "name": "VTask.trans",
+    "type": "{X : Type u_1} -> [TopologicalSpace X] -> {x y z : X} -> (γ : Path x y) -> (γ' : Path y z) -> Path x z",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "γ",
+      "γ'"
+    ],
+    "conventions": [
+      {
+        "point": "junction at t = 1/2",
+        "statement": "At the parameter value t = 1/2, both piecewise formulas agree because γ(1) = y = γ'(0), so the concatenated path is continuous with no junk value.",
+        "note": "No special junk value is introduced; continuity follows from the shared endpoint."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "trans_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {a b c : X} (γ₁ : Path a b) (γ₂ : Path b c), Set.range (VTask.trans γ₁ γ₂) = Set.range γ₁ ∪ Set.range γ₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.trans_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.trans_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.876,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y z : X} (γ : Path x y) (γ' : Path y z), (VTask.trans γ γ').symm = VTask.trans γ'.symm γ.symm",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.trans_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.trans_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.529,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {x y z : X} (γ : Path x y) (γ' : Path y z) (f : X → Y) (h : Continuous f), (VTask.trans γ γ').map h = VTask.trans (γ.map h) (γ'.map h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.map_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.map_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.822,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_extend_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y z : X} (γ₁ : Path x y) (γ₂ : Path y z) (t : ℝ), t ≤ 1 / 2 → (VTask.trans γ₁ γ₂).extend t = γ₁.extend (2 * t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.extend_trans_of_le_half"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.extend_trans_of_le_half"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.867,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_extend_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y z : X} (γ₁ : Path x y) (γ₂ : Path y z) (t : ℝ), 1 / 2 ≤ t → (VTask.trans γ₁ γ₂).extend t = γ₂.extend (2 * t - 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.extend_trans_of_half_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.extend_trans_of_half_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.986,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_refl_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] (a : X), VTask.trans (Path.refl a) (Path.refl a) = Path.refl a",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.refl_trans_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.refl_trans_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.152,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] {a₁ a₂ a₃ : X} {b₁ b₂ b₃ : Y} (γ₁ : Path a₁ a₂) (δ₁ : Path a₂ a₃) (γ₂ : Path b₁ b₂) (δ₂ : Path b₂ b₃), VTask.trans (γ₁.prod γ₂) (δ₁.prod δ₂) = (VTask.trans γ₁ δ₁).prod (VTask.trans γ₂ δ₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.trans_prod_eq_prod_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.trans_prod_eq_prod_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.209,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trans_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y z : X}, Continuous (fun ρ : Path x y × Path y z => VTask.trans ρ.1 ρ.2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.continuous_trans"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.continuous_trans"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.348,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.trans-4ce802fb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Path.trans",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Path.trans-4ce802fb",
+    "review_status": "unreviewed"
+  }
+}

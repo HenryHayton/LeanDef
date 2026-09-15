@@ -1,0 +1,310 @@
+{
+  "task_id": "MulAction.fixedPoints",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fixedPoints",
+  "signature": {
+    "name": "VTask.fixedPoints",
+    "type": "(M : Type u_1) -> (α : Type u_3) -> [Monoid M] -> [MulAction M α] -> Set α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "α"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: fixedPoints is a totally defined set comprehension; it is meaningful and well-formed for any monoid M and any MulAction M α, including trivial or degenerate cases, with no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fixedPoints_one_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) (α : Type*) [Monoid M] [MulAction M α] (a : α), a ∈ VTask.fixedPoints M α → (1 : M) • a = a",
+      "domain_inputs": {},
+      "anchors": [
+        "one_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "one_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.433,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixedPoints_empty_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Monoid M] [MulAction M Empty], VTask.fixedPoints M Empty = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.eq_empty_of_isEmpty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.eq_empty_of_isEmpty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.437,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixedPoints_reject_nontrivial_free_action",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (0 : ℤ) ∈ VTask.fixedPoints (Multiplicative ℤ) ℤ",
+      "domain_inputs": {
+        "M": [
+          "Multiplicative ℤ"
+        ],
+        "α": [
+          "ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : ℤ)",
+      "violated_property": "∀ m : Multiplicative ℤ, m • (0 : ℤ) = 0"
+    },
+    {
+      "id": "fixedPoints_smul_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) (α : Type*) [Monoid M] [MulAction M α] (m : M) (a : α), a ∈ VTask.fixedPoints M α → m • a = a",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.mem_fixedPoints"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.mem_fixedPoints"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.048,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": true
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixedPoints_inter_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) (α : Type*) [Monoid M] [MulAction M α], VTask.fixedPoints M α ⊆ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.264,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixedPoints_not_mem_requires_all",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (37 : ℤ) ∈ VTask.fixedPoints (Multiplicative ℤ) ℤ",
+      "domain_inputs": {
+        "M": [
+          "Multiplicative ℤ"
+        ],
+        "α": [
+          "ℤ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(37 : ℤ)",
+      "violated_property": "∀ m : Multiplicative ℤ, m • (37 : ℤ) = 37"
+    },
+    {
+      "id": "fixedPoints_accept_trivial_smul_nat",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(42 : ℕ) ∈ VTask.fixedPoints Unit ℕ",
+      "domain_inputs": {
+        "M": [
+          "Unit"
+        ],
+        "α": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.051,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(42 : ℕ)"
+    },
+    {
+      "id": "fixedPoints_not_ne_stabilizer",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) (α : Type*) [Monoid M] [MulAction M α] (a : α), a ∈ VTask.fixedPoints M α → ∀ m : M, m • a = a",
+      "domain_inputs": {},
+      "anchors": [
+        "MulAction.mem_fixedPoints"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulAction.mem_fixedPoints"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.228,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.fixedPoints-31303ebd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulAction.fixedPoints",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulAction.fixedPoints-31303ebd",
+    "review_status": "unreviewed"
+  }
+}

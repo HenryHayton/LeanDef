@@ -1,0 +1,354 @@
+{
+  "task_id": "npowRec'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.npowRec'",
+  "signature": {
+    "name": "VTask.npowRec'",
+    "type": "{M : Type u_2} -> [One M] -> [Mul M] -> ℕ → M → M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.npowRec' 0 m = 1 for all m, regardless of the base.",
+        "note": "Standard empty-product convention."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.npowRec' 1 m = m; the base is returned with no multiplication performed.",
+        "note": "Single-element product is the element itself."
+      },
+      {
+        "point": "n = k + 2",
+        "statement": "VTask.npowRec' (k + 2) m = VTask.npowRec' (k + 1) m * m; right-multiplication recursion for exponents ≥ 2.",
+        "note": "Ensures the function is a semigroup homomorphism from ℕ₊."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "npowRec'_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 0 (5 : ℕ) = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ],
+        "m": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 1 (7 : ℕ) = 7 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ],
+        "m": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_four_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 4 (2 : ℕ) = 16 := by decide",
+      "domain_inputs": {
+        "n": [
+          "4"
+        ],
+        "m": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_three_three",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 3 (3 : ℕ) = 27 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ],
+        "m": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_two_zero_base",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 2 (0 : ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "m": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_succ_positive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Mul M] [One M] {k : ℕ} (hk : k ≠ 0) (m : M), VTask.npowRec' (k + 1) m = VTask.npowRec' k m * m",
+      "domain_inputs": {},
+      "anchors": [
+        "npowRec'_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "npowRec'_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.648,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_two_mul_eq_square_power",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Semigroup M] [One M] (k : ℕ) (m : M), VTask.npowRec' (2 * k) m = VTask.npowRec' k (m * m)",
+      "domain_inputs": {},
+      "anchors": [
+        "npowRec'_two_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "npowRec'_two_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.206,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_mul_comm_semigroup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Semigroup M] [One M] {k : ℕ} (hk : k ≠ 0) (m : M), m * VTask.npowRec' k m = VTask.npowRec' k m * m",
+      "domain_inputs": {},
+      "anchors": [
+        "npowRec'_mul_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "npowRec'_mul_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.395,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_npowRec_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M : Type*) [Semigroup M] [One M] (k : ℕ) (m : M), npowRec (k + 1) m = 1 * VTask.npowRec' (k + 1) m",
+      "domain_inputs": {},
+      "anchors": [
+        "npowRec_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "npowRec_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.334,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "npowRec'_mem_positive_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.npowRec' 3 (2 : ℕ) ∈ Set.Ici 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ],
+        "m": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "npowRec'-ff004237",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.npowRec' 3 (2 : ℕ)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "npowRec'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "npowRec'-ff004237",
+    "review_status": "unreviewed"
+  }
+}

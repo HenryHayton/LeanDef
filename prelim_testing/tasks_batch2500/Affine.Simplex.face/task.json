@@ -1,0 +1,191 @@
+{
+  "task_id": "Affine.Simplex.face",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.face",
+  "signature": {
+    "name": "VTask.face",
+    "type": "{k : Type u_1} -> {V : Type u_2} -> {P : Type u_5} -> [Ring k] -> [AddCommGroup V] -> [Module k V] -> [AddTorsor V P] -> {n : ℕ} -> (s : Affine.Simplex k P n) -> {fs : Finset (Fin (n + 1))} -> {m : ℕ} -> (h : fs.card = m + 1) -> Affine.Simplex k P m",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "fs.card = m + 1",
+    "variables": [
+      "fs",
+      "m"
+    ],
+    "conventions": [
+      {
+        "point": "Vertex ordering in the face",
+        "statement": "The vertices of the face are indexed by the canonical order embedding of `fs` into `Fin (n+1)`, so the $i$-th vertex of the face is the $i$-th smallest element of `fs` as a vertex of the original simplex.",
+        "note": "This means the face vertex ordering is always consistent with the natural ordering on `Fin (n+1)`, regardless of how `fs` was constructed."
+      },
+      {
+        "point": "Affine independence inheritance",
+        "statement": "Affine independence of the face simplex is inherited from the ambient simplex and requires no additional hypothesis.",
+        "note": "Any sub-collection of affinely independent points is itself affinely independent."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "face_vertices_in_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V : Type*) (P : Type*) [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P] (n : ℕ) (s : Affine.Simplex k P n) (fs : Finset (Fin (n + 1))) (m : ℕ) (h : fs.card = m + 1) (i : Fin (m + 1)), (VTask.face s h).points i ∈ Set.range s.points",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.748,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.face-dc02b583",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "face_affine_independent",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V : Type*) (P : Type*) [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P] (n : ℕ) (s : Affine.Simplex k P n) (fs : Finset (Fin (n + 1))) (m : ℕ) (h : fs.card = m + 1), AffineIndependent k (VTask.face s h).points",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.independent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.independent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.82,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.face-dc02b583",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "face_orderemb_range_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V : Type*) (P : Type*) [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P] (n : ℕ) (s : Affine.Simplex k P n) (fs : Finset (Fin (n + 1))) (m : ℕ) (h : fs.card = m + 1), Set.range (VTask.face s h).points ⊆ Set.range s.points",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_comp_subset_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_comp_subset_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.699,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.face-dc02b583",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "face_nonempty_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V : Type*) (P : Type*) [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P] (n : ℕ) (s : Affine.Simplex k P n) (fs : Finset (Fin (n + 1))) (m : ℕ) (h : fs.card = m + 1), (Set.range (VTask.face s h).points).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.range_nonempty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.range_nonempty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.68,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.face-dc02b583",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Affine.Simplex.face",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Affine.Simplex.face-dc02b583",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,246 @@
+{
+  "task_id": "FirstOrder.Language.Term.restrictVar",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrictVar",
+  "signature": {
+    "name": "VTask.restrictVar",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> {β : Type v'} -> [DecidableEq α] -> (t : L.Term α) -> (_f : ↥t.varFinset → β) -> L.Term β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t",
+      "_f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on all terms and all functions from the variable-finset; there are no junk-value or boundary conventions because the domain of _f is precisely the variables that occur in t, leaving no undefined cases."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restrictVar_realize_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α β M : Type*} [DecidableEq α] [L.Structure M] (t : L.Term α) (f : t.varFinset → β) (v : β → M) (v' : α → M), (∀ a, v (f a) = v' a) → (VTask.restrictVar t f).realize v = t.realize v'",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.553,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictVar_realize_inclusion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α M : Type*} [DecidableEq α] [L.Structure M] (t : L.Term α) (s : Set α) (h : ↑t.varFinset ⊆ s) (v : α → M), (VTask.restrictVar t (Set.inclusion h)).realize (v ∘ (↑)) = t.realize v",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.762,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictVar_non_injective_allowed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α β : Type*} [DecidableEq α] (t : L.Term α) (f : t.varFinset → β), ∃ (r : L.Term β), r = VTask.restrictVar t f",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.002,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictVar_func_structure_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α β M : Type*} [DecidableEq α] [L.Structure M] {n : ℕ} (F : L.Functions n) (ts : Fin n → L.Term α) (f : (FirstOrder.Language.Term.func F ts).varFinset → β) (v : β → M) (v' : α → M), (∀ a, v (f a) = v' a) → (VTask.restrictVar (FirstOrder.Language.Term.func F ts) f).realize v = (FirstOrder.Language.Term.func F ts).realize v'",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 25.759,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictVar_same_realize_two_valuations",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α β M : Type*} [DecidableEq α] [L.Structure M] (t : L.Term α) (f : t.varFinset → β) (v w : β → M), (∀ b, v b = w b) → (VTask.restrictVar t f).realize v = (VTask.restrictVar t f).realize w",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictVar_restrictVarLeft_analogy",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {L : FirstOrder.Language} {α β M : Type*} [DecidableEq α] [L.Structure M] {t : L.Term α} {s : Set α} (h : ↑t.varFinset ⊆ s) (v : α → M), (VTask.restrictVar t (Set.inclusion h)).realize (v ∘ (↑)) = t.realize v",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.Term.realize_restrictVar'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.Term.realize_restrictVar'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.613,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.Term.restrictVar",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.Term.restrictVar-c366ea4d",
+    "review_status": "unreviewed"
+  }
+}

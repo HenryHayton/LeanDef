@@ -1,0 +1,264 @@
+{
+  "task_id": "PiTensorProduct.lifts",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lifts",
+  "signature": {
+    "name": "VTask.lifts",
+    "type": "{ι : Type u_1} -> {R : Type u_4} -> [CommSemiring R] -> {s : ι → Type u_7} -> [(i : ι) → AddCommMonoid (s i)] -> [(i : ι) → Module R (s i)] -> (x : PiTensorProduct R fun i => s i) -> Set (FreeAddMonoid (R × ((i : ι) → s i)))",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and well-defined for every element x of the tensor product, with no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lifts_add_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (x y : PiTensorProduct R fun i => s i) (p q : FreeAddMonoid (R × ((i : ι) → s i))), p ∈ VTask.lifts x → q ∈ VTask.lifts y → p + q ∈ VTask.lifts (x + y)",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.158,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_is_preimage_fiber",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (x y : PiTensorProduct R fun i => s i), x ≠ y → VTask.lifts x ∩ VTask.lifts y = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.disjoint_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.disjoint_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.222,
+        "at": "authoring",
+        "script": "by simp only [_root_.PiTensorProduct.lifts] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.PiTensorProduct.lifts] <;> aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_union_covers_all",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (p : FreeAddMonoid (R × ((i : ι) → s i))), ∃ x : PiTensorProduct R fun i => s i, p ∈ VTask.lifts x",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.14,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_subset_free_add_monoid",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (x : PiTensorProduct R fun i => s i), VTask.lifts x ⊆ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.715,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_partition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)], (Set.univ : Set (FreeAddMonoid (R × ((i : ι) → s i)))) = ⋃ x : PiTensorProduct R fun i => s i, VTask.lifts x",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.iUnion_eq_univ_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.iUnion_eq_univ_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.509,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_scalar_mult",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (x : PiTensorProduct R fun i => s i) (p : FreeAddMonoid (R × ((i : ι) → s i))) (n : ℕ), p ∈ VTask.lifts x → n • p ∈ VTask.lifts (n • x)",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_nsmul"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_nsmul"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lifts_not_submonoid_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : Type*} [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (x : PiTensorProduct R fun i => s i) (p q : FreeAddMonoid (R × ((i : ι) → s i))), x ≠ 0 → p ∈ VTask.lifts x → q ∈ VTask.lifts x → p + q ∉ VTask.lifts x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddMonoidHom.map_add"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddMonoidHom.map_add"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PiTensorProduct.lifts",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PiTensorProduct.lifts-8309ed7f",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,318 @@
+{
+  "task_id": "Stream'.Seq.update",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.update",
+  "signature": {
+    "name": "VTask.update",
+    "type": "{α : Type u} -> (s : Stream'.Seq α) -> (n : ℕ) -> (f : α → α) -> Stream'.Seq α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "n",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "index out of range",
+        "statement": "When `s.get? n = none` (n is past the end of a finite sequence), `VTask.update s n f = s` — no element is inserted or changed.",
+        "note": "Option.map f none = none, so the absent position remains absent"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "update_get?_match_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ((Stream'.Seq.cons 10 Stream'.Seq.nil).update 0 (fun x => x + 5)).get? 0 = some 15 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(Stream'.Seq.cons 10 Stream'.Seq.nil).update 0 (fun x => x + 5) |>.get? 0"
+    },
+    {
+      "id": "update_get?_nonmatch_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (((Stream'.Seq.cons 10 (Stream'.Seq.cons 20 Stream'.Seq.nil)).update 0 (fun x => x + 5)).get? 1 = some 25) := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "((Stream'.Seq.cons 10 (Stream'.Seq.cons 20 Stream'.Seq.nil)).update 0 (fun x => x + 5)).get? 1",
+      "violated_property": "Only position n is updated; other positions are unchanged"
+    },
+    {
+      "id": "update_nil_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (f : ℕ → ℕ), VTask.update (Stream'.Seq.nil : Stream'.Seq ℕ) n f = Stream'.Seq.nil",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.update_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.update_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.083,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_cons_zero_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (hd : ℕ) (tl : Stream'.Seq ℕ) (f : ℕ → ℕ), VTask.update (Stream'.Seq.cons hd tl) 0 f = Stream'.Seq.cons (f hd) tl",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.update_cons_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.update_cons_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.133,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_cons_succ_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (hd : ℕ) (tl : Stream'.Seq ℕ) (n : ℕ) (f : ℕ → ℕ), VTask.update (Stream'.Seq.cons hd tl) (n + 1) f = Stream'.Seq.cons hd (VTask.update tl n f)",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.update_cons_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.update_cons_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.147,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_get?_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s : Stream'.Seq α) (n m : ℕ) (f : α → α), (VTask.update s n f).get? m = if m = n then (s.get? m).map f else s.get? m",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.get?_update"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.get?_update"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.739,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_id_extensional",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s : Stream'.Seq α) (n : ℕ), ∀ m : ℕ, (VTask.update s n id).get? m = s.get? m",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.get?_update"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.get?_update"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_out_of_range_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (s : Stream'.Seq α) (n : ℕ) (f : α → α), s.get? n = none → VTask.update s n f = s",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.get?_update",
+        "Stream'.Seq.ext"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.get?_update",
+        "Stream'.Seq.ext"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "update_cons_succ_not_head",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (hd : α) (tl : Stream'.Seq α) (f : α → α), VTask.update (Stream'.Seq.cons hd tl) 1 f ≠ Stream'.Seq.cons (f hd) tl",
+      "domain_inputs": {},
+      "anchors": [
+        "Stream'.Seq.update_cons_succ",
+        "Stream'.Seq.update_cons_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Stream'.Seq.update_cons_succ",
+        "Stream'.Seq.update_cons_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.update-3f54ac23",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Stream'.Seq.update",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Stream'.Seq.update-3f54ac23",
+    "review_status": "unreviewed"
+  }
+}

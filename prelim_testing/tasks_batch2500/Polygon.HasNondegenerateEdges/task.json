@@ -1,0 +1,128 @@
+{
+  "task_id": "Polygon.HasNondegenerateEdges",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.HasNondegenerateEdges",
+  "signature": {
+    "name": "VTask.HasNondegenerateEdges",
+    "type": "{P : Type u_3} -> {n : ℕ} -> (poly : Polygon P n) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "poly"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: HasNondegenerateEdges is a clean universal quantification with no junk-value or boundary conventions beyond its vacuous truth at n = 0, which follows directly from the logic and requires no special convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "hne_not_injective_but_nondegen",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {P : Type*} {n : ℕ} (poly : Polygon P n), Function.Injective poly → VTask.HasNondegenerateEdges poly",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polygon.HasNondegenerateEdges-52c601e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hne_injective_implies_stronger",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (poly : Polygon ℕ 3), VTask.HasNondegenerateEdges poly ∧ ¬Function.Injective poly",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Polygon.HasNondegenerateEdges-52c601e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "hne_n1_no_poly",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {P : Type*} (poly : Polygon P 1), ¬VTask.HasNondegenerateEdges poly",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.val_fin_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.val_fin_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.175,
+        "at": "authoring",
+        "script": "by simp [_root_.Polygon.HasNondegenerateEdges] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Polygon.HasNondegenerateEdges] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polygon.HasNondegenerateEdges-52c601e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polygon.HasNondegenerateEdges",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polygon.HasNondegenerateEdges-52c601e6",
+    "review_status": "unreviewed"
+  }
+}

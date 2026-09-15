@@ -1,0 +1,124 @@
+{
+  "task_id": "Stream'.Seq.destruct",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.destruct",
+  "signature": {
+    "name": "VTask.destruct",
+    "type": "{α : Type u} -> (s : Stream'.Seq α) -> Option (Stream'.Seq1 α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "nil input",
+        "statement": "VTask.destruct Stream'.Seq.nil = none",
+        "note": "The empty sequence has no head element, so the destructor returns none."
+      },
+      {
+        "point": "cons input",
+        "statement": "For any a and t, VTask.destruct (Stream'.Seq.cons a t) = some (a, t)",
+        "note": "A non-empty sequence is destructed into its head element and its tail, wrapped in some."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "destruct_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.destruct (Stream'.Seq.nil : Stream'.Seq ℕ) = none := by decide",
+      "domain_inputs": {
+        "s": [
+          "Stream'.Seq.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.destruct-990e17ba",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "destruct_nil_mem_none",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.destruct (Stream'.Seq.nil : Stream'.Seq ℕ) = none := by decide",
+      "domain_inputs": {
+        "s": [
+          "Stream'.Seq.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.destruct-990e17ba",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.destruct (Stream'.Seq.nil : Stream'.Seq ℕ)"
+    },
+    {
+      "id": "destruct_cons_ne_none",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.destruct (Stream'.Seq.cons 5 Stream'.Seq.nil) ≠ none := by decide",
+      "domain_inputs": {
+        "s": [
+          "Stream'.Seq.cons 5 Stream'.Seq.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Stream'.Seq.destruct-990e17ba",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.destruct (Stream'.Seq.cons 5 Stream'.Seq.nil)",
+      "violated_property": "destruct of a cons cell must be some, not none"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Stream'.Seq.destruct",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Stream'.Seq.destruct-990e17ba",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "task_id": "Equiv.sigmaCongrRight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sigmaCongrRight",
+  "signature": {
+    "name": "VTask.sigmaCongrRight",
+    "type": "{α : Type u_3} -> {β₁ : α → Type u_1} -> {β₂ : α → Type u_2} -> (F : (a : α) → β₁ a ≃ β₂ a) -> (a : α) × β₁ a ≃ (a : α) × β₂ a",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α",
+      "β₁",
+      "β₂",
+      "F"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.sigmaCongrRight is a total constructor; it accepts any type α, any fiber families β₁ β₂, and any pointwise equivalence family F without restriction, so no junk-value or edge conventions arise."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sigmaCongrRight_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (β₁ β₂ : α → Type*) (F : ∀ a, β₁ a ≃ β₂ a), Function.Bijective (VTask.sigmaCongrRight F).toFun",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sigmaCongrRight_fst_preserved_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ((VTask.sigmaCongrRight (fun (_ : Bool) => Equiv.refl (Fin 3))).toFun ⟨true, 2⟩).1 = true := by decide",
+      "domain_inputs": {
+        "α": [
+          "Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "((VTask.sigmaCongrRight (fun (_ : Bool) => Equiv.refl (Fin 3))).toFun ⟨true, 2⟩).1"
+    },
+    {
+      "id": "sigmaCongrRight_fst_wrong_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.sigmaCongrRight (fun (_ : Bool) => Equiv.refl (Fin 3))).toFun ⟨true, 2⟩).1 = false := by decide",
+      "domain_inputs": {
+        "α": [
+          "Bool"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "((VTask.sigmaCongrRight (fun (_ : Bool) => Equiv.refl (Fin 3))).toFun ⟨true, 2⟩).1",
+      "violated_property": "The forward map preserves the base component; it cannot change true to false."
+    },
+    {
+      "id": "sigmaCongrRight_symm_inverts_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 3))).symm.toFun ((VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 3))).toFun ⟨1, 2⟩) = ⟨1, 2⟩ := by decide",
+      "domain_inputs": {
+        "α": [
+          "Fin 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 3))).symm.toFun ((VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 3))).toFun ⟨1, 2⟩)"
+    },
+    {
+      "id": "sigmaCongrRight_not_changing_base_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ ((VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 2))).toFun ⟨0, 1⟩ = ⟨1, 1⟩) := by decide",
+      "domain_inputs": {
+        "α": [
+          "Fin 2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.sigmaCongrRight (fun (_ : Fin 2) => Equiv.refl (Fin 2))).toFun ⟨0, 1⟩",
+      "violated_property": "The forward map cannot change the base component from 0 to 1."
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.sigmaCongrRight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.sigmaCongrRight-bd69cc6d",
+    "review_status": "unreviewed"
+  }
+}

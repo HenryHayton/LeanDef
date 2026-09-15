@@ -1,0 +1,208 @@
+{
+  "task_id": "Profinite.NobelingProof.ProjRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ProjRestrict",
+  "signature": {
+    "name": "VTask.ProjRestrict",
+    "type": "{I : Type u} -> (C : Set (I → Bool)) -> (J : I → Prop) -> [(i : I) → Decidable (J i)] -> ↑C → ↑(Profinite.NobelingProof.π C J)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "J",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The map is total on its stated domain; every element of ↑C is sent to a well-defined element of ↑(π C J) with no junk values or special edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "projrestrict_mem_pi",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)] (x : ↑C), (VTask.ProjRestrict C J x).val ∈ Profinite.NobelingProof.π C J",
+      "domain_inputs": {},
+      "anchors": [
+        "Subtype.coe_prop"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subtype.coe_prop"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.533,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "projrestrict_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)], Function.Surjective (VTask.ProjRestrict C J)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_image",
+        "Subtype.mk_eq_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_image",
+        "Subtype.mk_eq_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "projrestrict_image_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)], Set.range (VTask.ProjRestrict C J) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Surjective.range_eq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Surjective.range_eq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "projrestrict_codom_is_pi",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)] (y : ↑(Profinite.NobelingProof.π C J)), ∃ x : ↑C, VTask.ProjRestrict C J x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_image",
+        "Subtype.coe_prop"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_image",
+        "Subtype.coe_prop"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "projrestrict_output_val_is_proj_of_input_val",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)] (x : ↑C) (i : I), (VTask.ProjRestrict C J x).val i = if J i then x.val i else (VTask.ProjRestrict C J x).val i",
+      "domain_inputs": {},
+      "anchors": [
+        "Profinite.NobelingProof.Proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Profinite.NobelingProof.Proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "projrestrict_not_injective_in_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {I : Type*} (C : Set (I → Bool)) (J : I → Prop) [inst : (i : I) → Decidable (J i)], Function.Injective (VTask.ProjRestrict C J))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.Injective",
+        "Subtype.mk_eq_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.Injective",
+        "Subtype.mk_eq_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Profinite.NobelingProof.ProjRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Profinite.NobelingProof.ProjRestrict-9ce040e0",
+    "review_status": "unreviewed"
+  }
+}

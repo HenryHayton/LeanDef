@@ -1,0 +1,276 @@
+{
+  "task_id": "Sylow.subtype",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtype",
+  "signature": {
+    "name": "VTask.subtype",
+    "type": "{p : ℕ} -> {G : Type u_1} -> [Group G] -> (P : Sylow p G) -> {N : Subgroup G} -> (h : ↑P ≤ N) -> Sylow p ↥N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "G",
+      "P",
+      "N",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is a total construction on well-typed inputs with the containment hypothesis h built into the signature; there are no junk-value conventions or boundary edge cases requiring special treatment."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtype_is_sylow_of_N",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), (VTask.subtype P h : Subgroup ↥N).carrier.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.one_mem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.one_mem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_toSubgroup_le_N",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), ((VTask.subtype P h : Subgroup ↥N).map N.subtype : Subgroup G) ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.map_subtype_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.map_subtype_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.512,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_map_subtype_eq_P",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), ∀ x : G, x ∈ (VTask.subtype P h : Subgroup ↥N).map N.subtype ↔ x ∈ (P : Subgroup G)",
+      "domain_inputs": {},
+      "anchors": [
+        "Sylow.coe_subtype",
+        "Subgroup.mem_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sylow.coe_subtype",
+        "Subgroup.mem_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.74,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_le_top_containment",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), (VTask.subtype P h : Subgroup ↥N) ≤ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "le_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "le_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.506,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_comap_inclusion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), (VTask.subtype P h : Subgroup ↥N).map N.subtype ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.map_subtype_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.map_subtype_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.486,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_one_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {G : Type*} [Group G] (P : Sylow p G) {N : Subgroup G} (h : ↑P ≤ N), (1 : ↥N) ∈ (VTask.subtype P h : Subgroup ↥N)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subgroup.one_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subgroup.one_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.515,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtype_ne_wrong_subgroup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (G : Type*) [Group G] (P : Sylow p G) (N : Subgroup G) (h : ↑P ≤ N), (VTask.subtype P h : Subgroup ↥N).map N.subtype ≠ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Sylow.ne_bot_of_dvd_card"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Sylow.ne_bot_of_dvd_card"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Sylow.subtype-4ed54842",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Sylow.subtype",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Sylow.subtype-4ed54842",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "task_id": "Nat.find",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.find",
+  "signature": {
+    "name": "VTask.find",
+    "type": "{p : ℕ → Prop} -> [DecidablePred p] -> (H : ∃ n, p n) -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "∃ n, p n",
+    "variables": [
+      "p",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "find_spec",
+        "statement": "VTask.find H satisfies the predicate p, i.e., p (VTask.find H) holds.",
+        "note": "This is the primary correctness guarantee of the function."
+      },
+      {
+        "point": "find_min",
+        "statement": "For any m < VTask.find H, the predicate p m does not hold.",
+        "note": "This encodes strict minimality of the returned value."
+      },
+      {
+        "point": "find_min'",
+        "statement": "For any m satisfying p m, we have VTask.find H ≤ m.",
+        "note": "Equivalent form of minimality: the result is a lower bound of all witnesses."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "find_min_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (H : ∃ n, p n) (m : ℕ), m < VTask.find H → ¬p m",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_min"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_min"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.947,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_min_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (H : ∃ n, p n) (m : ℕ), p m → VTask.find H ≤ m",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_min'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_min'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.569,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_mono_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : ℕ → Prop) [DecidablePred p] [DecidablePred q] (h : ∀ n, q n → p n) (hp : ∃ n, p n) (hq : ∃ n, q n), VTask.find hp ≤ VTask.find hq",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.496,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_congr_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p q : ℕ → Prop) [DecidablePred p] [DecidablePred q] (hp : ∃ n, p n) (hq : ∃ n, q n), (∀ n, p n ↔ q n) → VTask.find hp = VTask.find hq",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_congr'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_congr'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_zero_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (H : ∃ n, p n), 0 ≤ VTask.find H",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.157,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "find_comp_succ_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ → Prop) [DecidablePred p] (h₁ : ∃ n, p n) (h₂ : ∃ n, p (n + 1)), ¬p 0 → VTask.find h₁ = VTask.find h₂ + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.find_comp_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.find_comp_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.933,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.find-aaf0a3f4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.find",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.find-aaf0a3f4",
+    "review_status": "unreviewed"
+  }
+}

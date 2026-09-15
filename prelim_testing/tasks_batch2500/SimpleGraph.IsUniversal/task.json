@@ -1,0 +1,474 @@
+{
+  "task_id": "SimpleGraph.IsUniversal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsUniversal",
+  "signature": {
+    "name": "VTask.IsUniversal",
+    "type": "{V : Type u} -> (G : SimpleGraph V) -> (v : V) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "subsingleton",
+        "statement": "When the vertex type V is a subsingleton, VTask.IsUniversal G v holds vacuously for every graph G and vertex v, since there is no distinct vertex w to be adjacent to.",
+        "note": "Corresponds to SimpleGraph.IsUniversal.of_subsingleton."
+      },
+      {
+        "point": "irreflexivity",
+        "statement": "The adjacency condition only applies to vertices w with w ≠ v; self-adjacency is never required (and is impossible in a simple graph), so the predicate correctly captures 'adjacent to every other vertex'.",
+        "note": "Follows from the irreflexivity of SimpleGraph.Adj."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isUniversal_subsingleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : SimpleGraph Unit), VTask.IsUniversal G ()",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsUniversal.of_subsingleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsUniversal.of_subsingleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.064,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_top_all_vertices",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (v : V), VTask.IsUniversal (⊤ : SimpleGraph V) v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsUniversal.top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsUniversal.top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.257,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_eq_top_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V), G = ⊤ ↔ ∀ v, VTask.IsUniversal G v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.eq_top_iff_forall_isUniversal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.eq_top_iff_forall_isUniversal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.626,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_implies_connected",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (v : V), VTask.IsUniversal G v → G.Connected",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Connected.of_isUniversal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Connected.of_isUniversal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.103,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_compl_iff_isolated",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (v : V), VTask.IsUniversal Gᶜ v ↔ G.IsIsolated v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isUniversal_compl_iff_isIsolated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isUniversal_compl_iff_isIsolated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.038,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isIsolated_compl_iff_isUniversal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G : SimpleGraph V) (v : V), Gᶜ.IsIsolated v ↔ VTask.IsUniversal G v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isIsolated_compl_iff_isUniversal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isIsolated_compl_iff_isUniversal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.907,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_not_isolated",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [Nontrivial V] (G : SimpleGraph V) (v w : V), VTask.IsUniversal G v → ¬G.IsIsolated w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsUniversal.not_isIsolated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsUniversal.not_isIsolated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.592,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isIsolated_not_universal",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [Nontrivial V] (G : SimpleGraph V) (v w : V), G.IsIsolated v → ¬VTask.IsUniversal G w",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsIsolated.not_isUniversal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsIsolated.not_isUniversal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.428,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_degree_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [Fintype V] [DecidableEq V] (G : SimpleGraph V) [DecidableRel G.Adj] (v : V), G.degree v = Fintype.card V - 1 ↔ VTask.IsUniversal G v",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.degree_eq_card_sub_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.degree_eq_card_sub_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.066,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_star_center",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) [DecidableEq V] (r : V), VTask.IsUniversal (SimpleGraph.starGraph r) r",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.isUniversal_starGraph_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.isUniversal_starGraph_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.237,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isUniversal_empty_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUniversal (⊥ : SimpleGraph (Fin 2)) (0 : Fin 2)",
+      "domain_inputs": {
+        "G": [
+          "⊥"
+        ],
+        "v": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.086,
+        "at": "authoring",
+        "script": "by simp only [_root_.SimpleGraph.IsUniversal] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.SimpleGraph.IsUniversal] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsUniversal (⊥ : SimpleGraph (Fin 2)) (0 : Fin 2)",
+      "violated_property": "A universal vertex must be adjacent to every other vertex, but the empty graph has no edges"
+    },
+    {
+      "id": "isUniversal_empty_reject_3",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsUniversal (⊥ : SimpleGraph (Fin 3)) (1 : Fin 3)",
+      "domain_inputs": {
+        "G": [
+          "⊥"
+        ],
+        "v": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.083,
+        "at": "authoring",
+        "script": "by simp only [_root_.SimpleGraph.IsUniversal] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.SimpleGraph.IsUniversal] <;> decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsUniversal (⊥ : SimpleGraph (Fin 3)) (1 : Fin 3)",
+      "violated_property": "A universal vertex must be adjacent to every other vertex, but the empty graph has no edges"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.IsUniversal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.IsUniversal-04f289c2",
+    "review_status": "unreviewed"
+  }
+}

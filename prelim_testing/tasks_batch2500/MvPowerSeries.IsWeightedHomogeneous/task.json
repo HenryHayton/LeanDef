@@ -1,0 +1,237 @@
+{
+  "task_id": "MvPowerSeries.IsWeightedHomogeneous",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsWeightedHomogeneous",
+  "signature": {
+    "name": "VTask.IsWeightedHomogeneous",
+    "type": "{σ : Type u_1} -> {R : Type u_2} -> [Semiring R] -> (w : σ → ℕ) -> (f : MvPowerSeries σ R) -> (p : ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w",
+      "f",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "zero series",
+        "statement": "The zero power series satisfies VTask.IsWeightedHomogeneous w p for every natural number p, because the defining condition is vacuously true when there are no nonzero coefficients.",
+        "note": "Standard vacuous-truth convention for the universal quantifier over nonzero coefficients."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "add_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (f g : MvPowerSeries σ R) (p : ℕ), VTask.IsWeightedHomogeneous w f p → VTask.IsWeightedHomogeneous w g p → VTask.IsWeightedHomogeneous w (f + g) p",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.IsWeightedHomogeneous.add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.IsWeightedHomogeneous.add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.927,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mul_degree_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (f g : MvPowerSeries σ R) (p q : ℕ), VTask.IsWeightedHomogeneous w f p → VTask.IsWeightedHomogeneous w g q → VTask.IsWeightedHomogeneous w (f * g) (p + q)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.IsWeightedHomogeneous.mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.IsWeightedHomogeneous.mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.392,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "homogeneous_component_is_weighted_homogeneous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p : ℕ), VTask.IsWeightedHomogeneous w (MvPowerSeries.weightedHomogeneousComponent w p f) p",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.isWeightedHomogeneous_weightedHomogeneousComponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.648,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iff_eq_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p : ℕ), VTask.IsWeightedHomogeneous w f p ↔ f = MvPowerSeries.weightedHomogeneousComponent w p f",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.isWeightedHomogeneous_iff_eq_weightedHomogeneousComponent"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.777,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "degree_unique",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (f : MvPowerSeries σ R) (p q : ℕ), VTask.IsWeightedHomogeneous w f p → VTask.IsWeightedHomogeneous w f q → f ≠ 0 → p = q",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.IsWeightedHomogeneous.coeff_eq_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.IsWeightedHomogeneous.coeff_eq_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smul_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {σ : Type*} {R : Type*} [inst : CommSemiring R] (w : σ → ℕ) (r : R) (f : MvPowerSeries σ R) (p : ℕ), VTask.IsWeightedHomogeneous w f p → VTask.IsWeightedHomogeneous w (r • f) p",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.IsWeightedHomogeneous.coeff_eq_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.IsWeightedHomogeneous.coeff_eq_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPowerSeries.IsWeightedHomogeneous",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPowerSeries.IsWeightedHomogeneous-f9c1e943",
+    "review_status": "unreviewed"
+  }
+}

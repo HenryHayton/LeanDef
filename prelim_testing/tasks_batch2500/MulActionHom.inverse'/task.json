@@ -1,0 +1,133 @@
+{
+  "task_id": "MulActionHom.inverse'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inverse'",
+  "signature": {
+    "name": "VTask.inverse'",
+    "type": "{M : Type u_2} -> {N : Type u_3} -> {φ : M → N} -> {X : Type u_5} -> [SMul M X] -> {Y : Type u_6} -> [SMul N Y] -> {φ' : N → M} -> (f : X →ₑ[φ] Y) -> (g : Y → X) -> (k : Function.RightInverse φ' φ) -> (h₁ : Function.LeftInverse g ⇑f) -> (h₂ : Function.RightInverse g ⇑f) -> Y →ₑ[φ'] X",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "k",
+      "h₁",
+      "h₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total on all inputs satisfying the stated hypotheses; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inverse'_bijective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {N : Type*} {φ : M → N} {X : Type*} {Y : Type*} [SMul M X] [SMul N Y] {φ' : N → M} (f : X →ₑ[φ] Y) (g : Y → X) (k : Function.RightInverse φ' φ) (h₁ : Function.LeftInverse g ⇑f) (h₂ : Function.RightInverse g ⇑f), Function.Bijective ⇑(VTask.inverse' f g k h₁ h₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "MulActionHom.inverse'_comp",
+        "MulActionHom.comp_inverse'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulActionHom.inverse'_comp",
+        "MulActionHom.comp_inverse'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulActionHom.inverse'-184887a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inverse'_ne_wrong_underlying",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) (φ : M → N) (X : Type*) (Y : Type*) [SMul M X] [SMul N Y] (φ' : N → M) (f : X →ₑ[φ] Y) (g h : Y → X) (k : Function.RightInverse φ' φ) (h₁ : Function.LeftInverse g ⇑f) (h₂ : Function.RightInverse g ⇑f) (h₁' : Function.LeftInverse h ⇑f) (h₂' : Function.RightInverse h ⇑f), (∀ y, g y ≠ h y) → (VTask.inverse' f g k h₁ h₂ : Y →ₑ[φ'] X) ≠ VTask.inverse' f h k h₁' h₂'",
+      "domain_inputs": {},
+      "anchors": [
+        "MulActionHom.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulActionHom.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulActionHom.inverse'-184887a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    },
+    {
+      "id": "inverse'_comp_ne_wrong_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) (φ : M → N) (φ' : N → M) (X Y : Type*) [SMul M X] [SMul N Y] (f : X →ₑ[φ] Y) (g : Y → X) (k : Function.RightInverse φ' φ) (h₁ : Function.LeftInverse g ⇑f) (h₂ : Function.RightInverse g ⇑f), ¬Function.Bijective (⇑f) → ¬Function.LeftInverse (⇑(VTask.inverse' f g k h₁ h₂)) (⇑f) → True",
+      "domain_inputs": {},
+      "anchors": [
+        "MulActionHom.inverse'_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MulActionHom.inverse'_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.393,
+        "at": "authoring",
+        "script": "by simp [_root_.MulActionHom.inverse'] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MulActionHom.inverse'] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulActionHom.inverse'-184887a1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulActionHom.inverse'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulActionHom.inverse'-184887a1",
+    "review_status": "unreviewed"
+  }
+}

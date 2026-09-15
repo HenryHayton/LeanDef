@@ -1,0 +1,231 @@
+{
+  "task_id": "Ordnode.size",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.size",
+  "signature": {
+    "name": "VTask.size",
+    "type": "{α : Type u_1} -> Ordnode α → ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "nil case",
+        "statement": "VTask.size Ordnode.nil = 0",
+        "note": "The empty tree has size 0 by definition."
+      },
+      {
+        "point": "node case trusts cached tag",
+        "statement": "VTask.size (Ordnode.node sz l v r) = sz",
+        "note": "The function reads the cached size field sz stored in the node without traversing children; correctness of this value depends on well-formedness of the tree."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "size_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (t : Ordnode α), 0 ≤ VTask.size t",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.119,
+        "at": "authoring",
+        "script": "by omega",
+        "self_cited": false
+      },
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.nil (α := Nat)) = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil (α := Nat)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_single_node",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.node 1 Ordnode.nil 42 Ordnode.nil) = 1 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 1 Ordnode.nil 42 Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_node_sz_3",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.node 3 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 (Ordnode.node 1 Ordnode.nil 4 Ordnode.nil)) = 3 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 3 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 (Ordnode.node 1 Ordnode.nil 4 Ordnode.nil)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_trusts_cached_tag",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.node 7 Ordnode.nil 42 Ordnode.nil) = 7 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 7 Ordnode.nil 42 Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_zero_tag",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.node 0 Ordnode.nil 5 Ordnode.nil) = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 0 Ordnode.nil 5 Ordnode.nil"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "size_nil_membership",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.size (Ordnode.nil (α := Nat)) = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil (α := Nat)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.size-562c1288",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "Ordnode.nil (α := Nat)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.size",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.size-562c1288",
+    "review_status": "unreviewed"
+  }
+}

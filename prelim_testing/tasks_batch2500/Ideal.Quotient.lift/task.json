@@ -1,0 +1,346 @@
+{
+  "task_id": "Ideal.Quotient.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{R : Type u} -> [Ring R] -> (I : Ideal R) -> {S : Type v} -> [I.IsTwoSided] -> [Semiring S] -> (f : R →+* S) -> (H : ∀ a ∈ I, f a = 0) -> R ⧸ I →+* S",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I",
+      "f",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is totally defined on all inputs of the correct types; there are no junk values or special out-of-domain conventions -- every argument is a genuine mathematical datum (ring, ideal, homomorphism, proof)."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0), Function.Surjective f → Function.Surjective (VTask.lift I f H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.lift_surjective_of_surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.lift_surjective_of_surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.445,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_injective_of_ker_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0), RingHom.ker f ≤ I → Function.Injective (VTask.lift I f H)",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.lift_injective_of_ker_le_ideal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.lift_injective_of_ker_le_ideal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.702,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_ker_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Ring S] (f : R →+* S) (H : I ≤ RingHom.ker f), RingHom.ker (VTask.lift I f (fun a ha => H ha)) = (RingHom.ker f).map (Ideal.Quotient.mk I)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.ker_quotient_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.ker_quotient_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.828,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_whole_ideal_sends_one_to_zero_or_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0), (VTask.lift I f H) 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.785,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0), (VTask.lift I f H) 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.788,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_add_homomorphism",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0) (x y : R ⧸ I), VTask.lift I f H (x + y) = VTask.lift I f H x + VTask.lift I f H y",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.218,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_element_of_ideal_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f : R →+* S) (H : ∀ a ∈ I, f a = 0) (a : R), a ∈ I → VTask.lift I f H (Ideal.Quotient.mk I a) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.lift_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.lift_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.044,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_not_id_on_quotient_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Ring R] (I : Ideal R) [I.IsTwoSided] {S : Type*} [Semiring S] (f g : R →+* S) (H : ∀ a ∈ I, f a = 0) (H' : ∀ a ∈ I, g a = 0), (∀ a : R, f a = g a) → ∀ x : R ⧸ I, VTask.lift I f H x = VTask.lift I g H' x",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.Quotient.lift_mk",
+        "RingHom.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.Quotient.lift_mk",
+        "RingHom.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_neg_reject_H_not_satisfied",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f : ℤ →+* ℤ) (H : ∀ a ∈ (Ideal.span {(2 : ℤ)} : Ideal ℤ), f a = 0), Function.Injective (VTask.lift (Ideal.span {(2 : ℤ)}) f H) ∧ Function.Surjective (VTask.lift (Ideal.span {(2 : ℤ)}) f H))",
+      "domain_inputs": {
+        "I": [
+          "Ideal.span {(2 : ℤ)}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.lift (Ideal.span {(2 : ℤ)}) (RingHom.id ℤ) _",
+      "violated_property": "H: the zero map on ℤ kills span{2} but fails surjectivity; alternatively, the identity on ℤ does not kill span{2}, so the hypothesis H cannot be satisfied for f = id"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ideal.Quotient.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ideal.Quotient.lift-66bb6573",
+    "review_status": "unreviewed"
+  }
+}

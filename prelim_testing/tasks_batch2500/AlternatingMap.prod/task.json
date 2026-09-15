@@ -1,0 +1,189 @@
+{
+  "task_id": "AlternatingMap.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{R : Type u_1} -> [Semiring R] -> {M : Type u_2} -> [AddCommMonoid M] -> [Module R M] -> {N : Type u_3} -> [AddCommMonoid N] -> [Module R N] -> {P : Type u_4} -> [AddCommMonoid P] -> [Module R P] -> {ι : Type u_7} -> (f : M [⋀^ι]→ₗ[R] N) -> (g : M [⋀^ι]→ₗ[R] P) -> M [⋀^ι]→ₗ[R] (N × P)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This definition is a total constructor over all valid pairs of alternating maps sharing the same source, scalar ring, and index type; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_add_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M] {N : Type*} [AddCommMonoid N] [Module R N] {P : Type*} [AddCommMonoid P] [Module R P] {ι : Type*} (f₁ f₂ : M [⋀^ι]→ₗ[R] N) (g : M [⋀^ι]→ₗ[R] P), VTask.prod (f₁ + f₂) g = VTask.prod f₁ g + VTask.prod f₂ g",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.prod-23b61dd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_add_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M] {N : Type*} [AddCommMonoid N] [Module R N] {P : Type*} [AddCommMonoid P] [Module R P] {ι : Type*} (f : M [⋀^ι]→ₗ[R] N) (g₁ g₂ : M [⋀^ι]→ₗ[R] P), VTask.prod f (g₁ + g₂) = VTask.prod f g₁ + VTask.prod f g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.prod-23b61dd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_alternating_vanishes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M] {N : Type*} [AddCommMonoid N] [Module R N] {P : Type*} [AddCommMonoid P] [Module R P] {ι : Type*} (f : M [⋀^ι]→ₗ[R] N) (g : M [⋀^ι]→ₗ[R] P) (v : ι → M) (i j : ι), i ≠ j → v i = v j → VTask.prod f g v = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.map_eq_zero_of_eq",
+        "AlternatingMap.prod_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.map_eq_zero_of_eq",
+        "AlternatingMap.prod_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.046,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlternatingMap.prod-23b61dd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_smul_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {M : Type*} [AddCommMonoid M] [Module R M] {N : Type*} [AddCommMonoid N] [Module R N] {P : Type*} [AddCommMonoid P] [Module R P] {ι : Type*} (r : R) (f : M [⋀^ι]→ₗ[R] N) (g : M [⋀^ι]→ₗ[R] P), VTask.prod (r • f) g = r • VTask.prod f g",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.prod-23b61dd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_ext_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [Semiring R] {M : Type*} [AddCommMonoid M] [Module R M] {N : Type*} [AddCommMonoid N] [Module R N] {P : Type*} [AddCommMonoid P] [Module R P] {ι : Type*} (f₁ f₂ : M [⋀^ι]→ₗ[R] N) (g₁ g₂ : M [⋀^ι]→ₗ[R] P), VTask.prod f₁ g₁ = VTask.prod f₂ g₂ ↔ f₁ = f₂ ∧ g₁ = g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply",
+        "Prod.mk.injEq"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlternatingMap.ext",
+        "AlternatingMap.prod_apply",
+        "Prod.mk.injEq"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlternatingMap.prod-23b61dd4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlternatingMap.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlternatingMap.prod-23b61dd4",
+    "review_status": "unreviewed"
+  }
+}

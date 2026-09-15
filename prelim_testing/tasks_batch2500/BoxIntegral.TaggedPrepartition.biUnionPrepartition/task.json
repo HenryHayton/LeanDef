@@ -1,0 +1,106 @@
+{
+  "task_id": "BoxIntegral.TaggedPrepartition.biUnionPrepartition",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.biUnionPrepartition",
+  "signature": {
+    "name": "VTask.biUnionPrepartition",
+    "type": "{ι : Type u_1} -> {I : BoxIntegral.Box ι} -> (π : BoxIntegral.TaggedPrepartition I) -> (πi : (J : BoxIntegral.Box ι) → BoxIntegral.Prepartition J) -> BoxIntegral.TaggedPrepartition I",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "π",
+      "πi"
+    ],
+    "conventions": [
+      {
+        "point": "tag for boxes outside π",
+        "statement": "For a box B that is not contained in any box of π, the tag assigned by the result is the tag of a canonical fallback box from π; however, such boxes never appear as members of the result prepartition, so this junk value has no mathematical effect.",
+        "note": "The tag function is total and must return a value in the ambient Icc; the fallback ensures well-typedness without affecting the mathematical content of the construction."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "biUnionPrepartition_isPartition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {I : BoxIntegral.Box ι} (π : BoxIntegral.TaggedPrepartition I) (πi : ∀ J : BoxIntegral.Box ι, BoxIntegral.Prepartition J), π.IsPartition → (∀ J ∈ π, (πi J).IsPartition) → (VTask.biUnionPrepartition π πi).IsPartition",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.IsPartition.biUnionPrepartition"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.IsPartition.biUnionPrepartition"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.561,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.biUnionPrepartition-3a1ecf14",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "biUnionPrepartition_not_henstock",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {ι : Type*} {I : BoxIntegral.Box ι} (π : BoxIntegral.TaggedPrepartition I) (πi : ∀ J : BoxIntegral.Box ι, BoxIntegral.Prepartition J), π.IsHenstock → (VTask.biUnionPrepartition π πi).IsHenstock)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoxIntegral.TaggedPrepartition.IsHenstock"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoxIntegral.TaggedPrepartition.IsHenstock"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoxIntegral.TaggedPrepartition.biUnionPrepartition-3a1ecf14",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoxIntegral.TaggedPrepartition.biUnionPrepartition",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoxIntegral.TaggedPrepartition.biUnionPrepartition-3a1ecf14",
+    "review_status": "unreviewed"
+  }
+}

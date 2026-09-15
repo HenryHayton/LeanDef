@@ -1,0 +1,206 @@
+{
+  "task_id": "ArithmeticFunction.ppow",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ppow",
+  "signature": {
+    "name": "VTask.ppow",
+    "type": "{R : Type u_1} -> [Semiring R] -> (f : ArithmeticFunction R) -> (k : ℕ) -> ArithmeticFunction R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "k"
+    ],
+    "conventions": [
+      {
+        "point": "k = 0",
+        "statement": "VTask.ppow f 0 = ζ for every arithmetic function f, regardless of f's values.",
+        "note": "Junk-value convention: the zeroth pointwise power is defined as the arithmetic zeta function to keep the operation total on ℕ exponents."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ppow_one_is_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (f : ArithmeticFunction R), VTask.ppow f 1 = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.ppow_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.ppow_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.314,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ppow_apply_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (f : ArithmeticFunction R) (k x : ℕ), 0 < k → VTask.ppow f k x = f x ^ k",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.ppow_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.ppow_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.52,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ppow_succ_recurrence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (f : ArithmeticFunction R) (k : ℕ), 0 < k → VTask.ppow f (k + 1) = (VTask.ppow f k).pmul f",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.ppow_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.ppow_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ppow_succ_prime_recurrence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] (f : ArithmeticFunction R) (k : ℕ), VTask.ppow f (k + 1) = f.pmul (VTask.ppow f k)",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.ppow_succ'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.ppow_succ'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.551,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ppow_not_eq_f_at_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ArithmeticFunction ℕ), VTask.ppow f 0 ≠ f ∨ f = ArithmeticFunction.zeta",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.ppow_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.ppow_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.296,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ArithmeticFunction.ppow",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ArithmeticFunction.ppow-d87c283c",
+    "review_status": "unreviewed"
+  }
+}

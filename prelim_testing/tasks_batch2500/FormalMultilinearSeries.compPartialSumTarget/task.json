@@ -1,0 +1,137 @@
+{
+  "task_id": "FormalMultilinearSeries.compPartialSumTarget",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.compPartialSumTarget",
+  "signature": {
+    "name": "VTask.compPartialSumTarget",
+    "type": "(m M N : ℕ) -> Finset ((n : ℕ) × Composition n)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "m",
+      "M",
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": "M ≤ m",
+        "statement": "When M ≤ m, the resulting Finset is empty because no composition can have a number of parts in the empty interval [m, M).",
+        "note": "Natural set-theoretic consequence; no special junk value assigned."
+      },
+      {
+        "point": "N = 0",
+        "statement": "When N = 0, the resulting Finset is empty because no composition block can satisfy the strict upper bound of 0.",
+        "note": "Natural set-theoretic consequence; no special junk value assigned."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cpst_mem_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m M N : ℕ, ∀ p : (n : ℕ) × Composition n, p ∈ VTask.compPartialSumTarget m M N ↔ m ≤ p.2.length ∧ p.2.length < M ∧ ∀ i : Fin p.2.length, p.2.blocksFun i < N",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.mem_filter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.mem_filter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.655,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.compPartialSumTarget-0c77a371",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cpst_monotone_in_M",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m M₁ M₂ N : ℕ, M₁ ≤ M₂ → VTask.compPartialSumTarget m M₁ N ⊆ VTask.compPartialSumTarget m M₂ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.filter_subset_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.filter_subset_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.compPartialSumTarget-0c77a371",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cpst_monotone_in_N",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m M N₁ N₂ : ℕ, N₁ ≤ N₂ → VTask.compPartialSumTarget m M N₁ ⊆ VTask.compPartialSumTarget m M N₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.filter_subset_filter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.filter_subset_filter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "FormalMultilinearSeries.compPartialSumTarget-0c77a371",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FormalMultilinearSeries.compPartialSumTarget",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FormalMultilinearSeries.compPartialSumTarget-0c77a371",
+    "review_status": "unreviewed"
+  }
+}

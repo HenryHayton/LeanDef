@@ -1,0 +1,235 @@
+{
+  "task_id": "PFun.prodLift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prodLift",
+  "signature": {
+    "name": "VTask.prodLift",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> (f : α →. β) -> (g : α →. γ) -> α →. β × γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.prodLift is a total function on its two partial-function arguments; the notion of undefinedness is carried entirely within the resulting partial function's own partiality structure, so no junk-value or edge conventions apply at the meta level."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prodLift_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ) (x : α) (y : β × γ), y ∈ VTask.prodLift f g x ↔ y.1 ∈ f x ∧ y.2 ∈ g x",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.mem_prodLift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.mem_prodLift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.778,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_fst_comp_snd_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ δ : Type*} (f : α →. γ) (g : β →. δ), VTask.prodLift (f.comp ((Prod.fst : α × β → α) : α × β →. α)) (g.comp ((Prod.snd : α × β → β) : α × β →. β)) = PFun.prodMap f g",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.prodLift_fst_comp_snd_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.prodLift_fst_comp_snd_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.319,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_dom_subset_f_dom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ), (VTask.prodLift f g).Dom ⊆ f.Dom",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.dom_prodLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.dom_prodLift"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_dom_subset_g_dom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ), (VTask.prodLift f g).Dom ⊆ g.Dom",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.dom_prodLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.dom_prodLift"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_first_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ) (x : α) (b : β) (c : γ), (b, c) ∈ VTask.prodLift f g x → b ∈ f x",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.mem_prodLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.mem_prodLift"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_second_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ) (x : α) (b : β) (c : γ), (b, c) ∈ VTask.prodLift f g x → c ∈ g x",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.mem_prodLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.mem_prodLift"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodLift_pair_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} (f : α →. β) (g : α →. γ) (x : α) (b : β) (c : γ), (b, c) ∈ VTask.prodLift f g x ↔ b ∈ f x ∧ c ∈ g x",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.mem_prodLift"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.mem_prodLift"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.prodLift-57de8897",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PFun.prodLift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PFun.prodLift-57de8897",
+    "review_status": "unreviewed"
+  }
+}

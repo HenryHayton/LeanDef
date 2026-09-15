@@ -1,0 +1,184 @@
+{
+  "task_id": "EisensteinSeries.gammaSet",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.gammaSet",
+  "signature": {
+    "name": "VTask.gammaSet",
+    "type": "(N r : ℕ) -> (a : Fin 2 → ZMod N) -> Set (Fin 2 → ℤ)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "N",
+      "r",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": "N = 1",
+        "statement": "When N = 1 the congruence condition is vacuous, so VTask.gammaSet 1 r a = {v : Fin 2 → ℤ | (v 0).gcd (v 1) = r} for every choice of a.",
+        "note": "Proved as gammaSet_one_eq in Mathlib."
+      },
+      {
+        "point": "r = 0",
+        "statement": "The GCD of two integers equals 0 iff both are 0, so VTask.gammaSet N 0 a is {(0,0)} when a is the zero residue class and empty otherwise.",
+        "note": "Follows from Int.gcd_eq_zero_iff."
+      },
+      {
+        "point": "N = 0",
+        "statement": "When N = 0, ZMod 0 = ℤ so the congruence condition requires the integer pair to equal a exactly, making the set either a singleton or empty depending on the GCD condition.",
+        "note": "ZMod 0 is definitionally ℤ in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "gammaSet_one_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ) (a a' : Fin 2 → ZMod 1), VTask.gammaSet 1 r a = VTask.gammaSet 1 r a'",
+      "domain_inputs": {},
+      "anchors": [
+        "EisensteinSeries.gammaSet_one_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "EisensteinSeries.gammaSet_one_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.179,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "EisensteinSeries.gammaSet-1e1647a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gammaSet_N1_one_iff_coprime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (v : Fin 2 → ℤ), v ∈ VTask.gammaSet 1 1 0 ↔ IsCoprime (v 0) (v 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "EisensteinSeries.mem_gammaSet_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "EisensteinSeries.mem_gammaSet_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.773,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "EisensteinSeries.gammaSet-1e1647a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gammaSet_N1_eq_gcd_set",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r : ℕ) (a : Fin 2 → ZMod 1), VTask.gammaSet 1 r a = {v : Fin 2 → ℤ | (v 0).gcd (v 1) = r}",
+      "domain_inputs": {},
+      "anchors": [
+        "EisensteinSeries.gammaSet_one_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "EisensteinSeries.gammaSet_one_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.217,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "EisensteinSeries.gammaSet-1e1647a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "gammaSet_different_r_disjoint",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (N : ℕ) (a : Fin 2 → ZMod N) (r s : ℕ), r ≠ s → Disjoint (VTask.gammaSet N r a) (VTask.gammaSet N s a)",
+      "domain_inputs": {},
+      "anchors": [
+        "EisensteinSeries.pairwise_disjoint_gammaSet"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "EisensteinSeries.pairwise_disjoint_gammaSet"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "EisensteinSeries.gammaSet-1e1647a9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "EisensteinSeries.gammaSet",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "EisensteinSeries.gammaSet-1e1647a9",
+    "review_status": "unreviewed"
+  }
+}

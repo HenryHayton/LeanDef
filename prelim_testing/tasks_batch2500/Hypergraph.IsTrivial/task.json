@@ -1,0 +1,198 @@
+{
+  "task_id": "Hypergraph.IsTrivial",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsTrivial",
+  "signature": {
+    "name": "VTask.IsTrivial",
+    "type": "{α : Type u_1} -> (H : Hypergraph α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsTrivial is a total predicate with no junk-value conventions; it is simply false for hypergraphs that do not satisfy both conditions (nonempty vertex set and empty edge set)."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isTrivial_implies_isNonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α), VTask.IsTrivial H → Hypergraph.IsNonempty H",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsTrivial.isNonempty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsTrivial.isNonempty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsTrivial-31206361",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isTrivial_implies_no_edge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (e : Set α), VTask.IsTrivial H → e ∉ Hypergraph.edgeSet H",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsTrivial.not_mem_edgeSet"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsTrivial.not_mem_edgeSet"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.352,
+        "at": "authoring",
+        "script": "by simp only [_root_.Hypergraph.IsTrivial] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Hypergraph.IsTrivial] <;> aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsTrivial-31206361",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isTrivial_not_isComplete",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α), H.IsComplete → ¬ VTask.IsTrivial H",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsComplete.not_isTrivial"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsComplete.not_isTrivial"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.334,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsTrivial-31206361",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isTrivial_isNonempty_not_implies_trivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (H : Hypergraph Unit), Hypergraph.IsNonempty H ∧ ¬ VTask.IsTrivial H",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsComplete.not_isTrivial",
+        "Hypergraph.IsTrivial.isNonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsComplete.not_isTrivial",
+        "Hypergraph.IsTrivial.isNonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsTrivial-31206361",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isTrivial_and_nonempty_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α), VTask.IsTrivial H → VTask.IsTrivial H ↔ (Hypergraph.IsNonempty H ∧ ∀ e : Set α, e ∉ Hypergraph.edgeSet H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.IsTrivial.isNonempty",
+        "Hypergraph.IsTrivial.not_mem_edgeSet"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.IsTrivial.isNonempty",
+        "Hypergraph.IsTrivial.not_mem_edgeSet"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.IsTrivial-31206361",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Hypergraph.IsTrivial",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Hypergraph.IsTrivial-31206361",
+    "review_status": "unreviewed"
+  }
+}

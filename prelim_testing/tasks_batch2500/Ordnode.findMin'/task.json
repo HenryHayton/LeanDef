@@ -1,0 +1,210 @@
+{
+  "task_id": "Ordnode.findMin'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.findMin'",
+  "signature": {
+    "name": "VTask.findMin'",
+    "type": "{α : Type u_1} -> Ordnode α → α → α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t",
+      "default"
+    ],
+    "conventions": [
+      {
+        "point": "empty tree",
+        "statement": "When the first argument is the empty tree (nil), VTask.findMin' returns the second argument (the default value) unchanged.",
+        "note": "This is the intended junk-value convention: callers supply a fallback to avoid partiality."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "findMin'_nil_default",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.nil : Ordnode ℕ) 37 = 37 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil"
+        ],
+        "default": [
+          "37"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "findMin'_nil_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.nil : Ordnode ℕ) 0 = 0 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.nil"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "findMin'_single_node",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil) 99 = 5 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 1 Ordnode.nil 5 Ordnode.nil"
+        ],
+        "default": [
+          "99"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "findMin'_single_node_ignores_default",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.node 1 Ordnode.nil 5 Ordnode.nil) 0 = 5 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 1 Ordnode.nil 5 Ordnode.nil"
+        ],
+        "default": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "findMin'_left_child_wins",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.node 3 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 Ordnode.nil) 99 = 1 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 3 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 2 Ordnode.nil"
+        ],
+        "default": [
+          "99"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "findMin'_left_skewed",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.findMin' (Ordnode.node 3 (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 3 Ordnode.nil) 5 Ordnode.nil) 99 = 1 := by decide",
+      "domain_inputs": {
+        "t": [
+          "Ordnode.node 3 (Ordnode.node 2 (Ordnode.node 1 Ordnode.nil 1 Ordnode.nil) 3 Ordnode.nil) 5 Ordnode.nil"
+        ],
+        "default": [
+          "99"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.findMin'-918aaf36",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.findMin'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.findMin'-918aaf36",
+    "review_status": "unreviewed"
+  }
+}

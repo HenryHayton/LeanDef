@@ -1,0 +1,193 @@
+{
+  "task_id": "DyckWord.take",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.take",
+  "signature": {
+    "name": "VTask.take",
+    "type": "(p : DyckWord) -> (i : ℕ) -> (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)) -> DyckWord",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)",
+    "variables": [
+      "p",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on its domain; all inputs satisfying the explicit balance hypothesis `hi` produce a well-formed DyckWord with no junk values or special-case overrides."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "take_length_eq_min",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : DyckWord) (i : ℕ) (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)), (VTask.take p i hi).toList.length = min i p.toList.length",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_take"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_take"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DyckWord.take-76349f08",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_count_U_eq_count_D",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : DyckWord) (i : ℕ) (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)), List.count DyckStep.U (VTask.take p i hi).toList = List.count DyckStep.D (VTask.take p i hi).toList",
+      "domain_inputs": {},
+      "anchors": [
+        "DyckWord.count_U_eq_count_D"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DyckWord.count_U_eq_count_D"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.369,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DyckWord.take-76349f08",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_count_balance_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : DyckWord) (i : ℕ) (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)), (VTask.take p i hi).toList.count DyckStep.U = (VTask.take p i hi).toList.count DyckStep.D",
+      "domain_inputs": {},
+      "anchors": [
+        "DyckWord.count_U_eq_count_D"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DyckWord.count_U_eq_count_D"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.372,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DyckWord.take-76349f08",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_length_le_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : DyckWord) (i : ℕ) (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)), (VTask.take p i hi).toList.length ≤ p.toList.length",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_take_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_take_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DyckWord.take-76349f08",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "take_intermediate_prefix_count_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : DyckWord) (i j : ℕ) (hi : List.count DyckStep.U (List.take i ↑p) = List.count DyckStep.D (List.take i ↑p)) (hj : j < i), (List.take (j + 1) (VTask.take p i hi).toList).count DyckStep.D ≤ (List.take (j + 1) (VTask.take p i hi).toList).count DyckStep.U",
+      "domain_inputs": {},
+      "anchors": [
+        "DyckWord.count_D_le_count_U"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DyckWord.count_D_le_count_U"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.512,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DyckWord.take-76349f08",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DyckWord.take",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DyckWord.take-76349f08",
+    "review_status": "unreviewed"
+  }
+}

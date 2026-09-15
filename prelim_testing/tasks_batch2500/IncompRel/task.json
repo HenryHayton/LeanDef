@@ -1,0 +1,470 @@
+{
+  "task_id": "IncompRel",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IncompRel",
+  "signature": {
+    "name": "VTask.IncompRel",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (a b : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "a",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IncompRel is a total predicate defined for every binary relation and every pair of elements; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "incomprel_symm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (a b : α), VTask.IncompRel r a b → VTask.IncompRel r b a",
+      "domain_inputs": {},
+      "anchors": [
+        "IncompRel.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IncompRel.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_not_total",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [inst : LinearOrder α] (a b : α), ¬ VTask.IncompRel (· ≤ ·) a b",
+      "domain_inputs": {},
+      "anchors": [
+        "not_incompRel_of_total"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_incompRel_of_total"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.461,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_refl_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) [Std.Refl r] {a b : α}, VTask.IncompRel r a b → a ≠ b",
+      "domain_inputs": {},
+      "anchors": [
+        "IncompRel.ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IncompRel.ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.686,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_not_antisymm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) {a b : α}, VTask.IncompRel r a b → ¬ AntisymmRel r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "IncompRel.not_antisymmRel"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IncompRel.not_antisymmRel"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.718,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_iff_not_symmgen",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (a b : α), ¬ Relation.SymmGen r a b ↔ VTask.IncompRel r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "not_symmGen_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "not_symmGen_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.998,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_empty_rel_holds",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (a b : α), VTask.IncompRel (fun _ _ => False) a b",
+      "domain_inputs": {},
+      "anchors": [
+        "IncompRel.refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IncompRel.refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_le_not_le_consequence",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Preorder α] {a b : α}, VTask.IncompRel (· ≤ ·) a b → ¬ a ≤ b",
+      "domain_inputs": {},
+      "anchors": [
+        "IncompRel.not_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IncompRel.not_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.534,
+        "at": "authoring",
+        "script": "by simp only [_root_.IncompRel] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.IncompRel] <;> aesop",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "incomprel_reject_le_2_3",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IncompRel (· ≤ ·) (2 : ℕ) 3",
+      "domain_inputs": {
+        "a": [
+          "2"
+        ],
+        "b": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.044,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IncompRel (· ≤ ·) (2 : ℕ) 3",
+      "violated_property": "¬ r a b (since 2 ≤ 3)"
+    },
+    {
+      "id": "incomprel_reject_le_2_5",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IncompRel (· ≤ ·) (2 : ℕ) 5",
+      "domain_inputs": {
+        "a": [
+          "2"
+        ],
+        "b": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.042,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IncompRel (· ≤ ·) (2 : ℕ) 5",
+      "violated_property": "¬ r a b (since 2 ≤ 5)"
+    },
+    {
+      "id": "incomprel_reject_le_refl",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IncompRel (· ≤ ·) (3 : ℕ) 3",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "b": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.044,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IncompRel (· ≤ ·) (3 : ℕ) 3",
+      "violated_property": "¬ r a b (since 3 ≤ 3 by reflexivity)"
+    },
+    {
+      "id": "incomprel_accept_lt_refl",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IncompRel (· < ·) (3 : ℕ) 3",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "b": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.027,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IncompRel (· < ·) (3 : ℕ) 3"
+    },
+    {
+      "id": "incomprel_accept_lt_refl_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IncompRel (· < ·) (0 : ℕ) 0",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.026,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IncompRel (· < ·) (0 : ℕ) 0"
+    },
+    {
+      "id": "incomprel_reject_lt_0_1",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IncompRel (· < ·) (0 : ℕ) 1",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.035,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IncompRel-8e803846",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IncompRel (· < ·) (0 : ℕ) 1",
+      "violated_property": "¬ r a b (since 0 < 1)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IncompRel",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IncompRel-8e803846",
+    "review_status": "unreviewed"
+  }
+}

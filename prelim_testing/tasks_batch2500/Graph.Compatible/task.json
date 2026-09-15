@@ -1,0 +1,371 @@
+{
+  "task_id": "Graph.Compatible",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Compatible",
+  "signature": {
+    "name": "VTask.Compatible",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> (G H : Graph α β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": "disjoint_edge_sets",
+        "statement": "If E(G) and E(H) are disjoint, then VTask.Compatible G H holds vacuously, as there are no shared edges to check.",
+        "note": "The universal quantification ranges only over edges in both graphs; an empty intersection makes the condition trivially true."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "compatible_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G : Graph α β), VTask.Compatible G G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.105,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H : Graph α β), VTask.Compatible G H → VTask.Compatible H G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.221,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_of_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H : Graph α β), H ≤ G → VTask.Compatible H G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.of_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.of_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.264,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_of_le_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H₁ H₂ : Graph α β), H₁ ≤ G → H₂ ≤ G → VTask.Compatible H₁ H₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.of_le_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.of_le_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.509,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_of_disjoint_edgeSet",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H : Graph α β), Disjoint (Graph.edgeSet G) (Graph.edgeSet H) → VTask.Compatible G H",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.of_disjoint_edgeSet"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.of_disjoint_edgeSet"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.261,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_anti",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G G₁ H H₁ : Graph α β), G₁ ≤ G → H₁ ≤ H → VTask.Compatible G H → VTask.Compatible G₁ H₁",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.anti"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.anti"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.618,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_isLink_congr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H : Graph α β) (e : β) (x y : α), e ∈ Graph.edgeSet G → e ∈ Graph.edgeSet H → VTask.Compatible G H → (Graph.IsLink G e x y ↔ Graph.IsLink H e x y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.isLink_congr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.isLink_congr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.991,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_not_transitive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {α : Type*} {β : Type*} (G H K : Graph α β), VTask.Compatible G H → VTask.Compatible H K → VTask.Compatible G K)",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.rfl",
+        "Graph.Compatible.of_disjoint_edgeSet"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.rfl",
+        "Graph.Compatible.of_disjoint_edgeSet"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_anti_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G G₁ H : Graph α β), G₁ ≤ G → VTask.Compatible G H → VTask.Compatible G₁ H",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.anti_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.anti_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.436,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "compatible_symm_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (G H : Graph α β), VTask.Compatible G H ↔ VTask.Compatible H G",
+      "domain_inputs": {},
+      "anchors": [
+        "Graph.Compatible.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Graph.Compatible.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.224,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Graph.Compatible-bbe7c7b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Graph.Compatible",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Graph.Compatible-bbe7c7b9",
+    "review_status": "unreviewed"
+  }
+}

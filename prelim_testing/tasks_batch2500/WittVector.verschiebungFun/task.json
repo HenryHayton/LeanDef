@@ -1,0 +1,222 @@
+{
+  "task_id": "WittVector.verschiebungFun",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.verschiebungFun",
+  "signature": {
+    "name": "VTask.verschiebungFun",
+    "type": "{p : ℕ} -> {R : Type u_1} -> [CommRing R] -> (x : WittVector p R) -> WittVector p R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "coeff at 0",
+        "statement": "The 0th coefficient of `VTask.verschiebungFun x` is always `0`, for every input `x`.",
+        "note": "This is the defining insertion of 0 at the bottom of the shifted sequence."
+      },
+      {
+        "point": "coeff at i+1",
+        "statement": "For every natural number `i`, `(VTask.verschiebungFun x).coeff (i + 1) = x.coeff i`.",
+        "note": "All original coefficients are preserved, shifted up by one."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "verschiebungFun_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R], Function.Injective (VTask.verschiebungFun : WittVector p R → WittVector p R)",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.verschiebungFun_coeff_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.verschiebungFun_coeff_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "verschiebungFun_not_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Nontrivial R], ¬Function.Surjective (VTask.verschiebungFun : WittVector p R → WittVector p R)",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.verschiebungFun_coeff_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.verschiebungFun_coeff_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "verschiebungFun_coeff_succ_shift",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] (x y : WittVector p R), (∀ i : ℕ, x.coeff i = y.coeff i) → ∀ i : ℕ, (VTask.verschiebungFun x).coeff i = (VTask.verschiebungFun y).coeff i",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.verschiebungFun_coeff_zero",
+        "WittVector.verschiebungFun_coeff_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.verschiebungFun_coeff_zero",
+        "WittVector.verschiebungFun_coeff_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "verschiebungFun_coeff_zero_nonzero_not_in_image",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∃ (x : WittVector 2 ℤ), VTask.verschiebungFun x = WittVector.mk 2 (fun n => if n = 0 then 1 else 0)",
+      "domain_inputs": {
+        "x": [
+          "WittVector.mk 2 (fun n => if n = 0 then 1 else 0)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∃ (x : WittVector 2 ℤ), VTask.verschiebungFun x = WittVector.mk 2 (fun n => if n = 0 then 1 else 0)",
+      "violated_property": "coeff 0 of verschiebungFun is always 0, so no vector with nonzero 0th coefficient is in the image"
+    },
+    {
+      "id": "verschiebungFun_zero_coeff_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.verschiebungFun (0 : WittVector 2 ℤ)).coeff 0 = 0",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.039,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.verschiebungFun (0 : WittVector 2 ℤ)).coeff 0 = 0"
+    },
+    {
+      "id": "verschiebungFun_zero_coeff_one_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.verschiebungFun (0 : WittVector 2 ℤ)).coeff 1 = 0",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.051,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.verschiebungFun (0 : WittVector 2 ℤ)).coeff 1 = 0"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "WittVector.verschiebungFun",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "WittVector.verschiebungFun-d45fa501",
+    "review_status": "unreviewed"
+  }
+}

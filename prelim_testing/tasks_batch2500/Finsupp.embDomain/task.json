@@ -1,0 +1,288 @@
+{
+  "task_id": "Finsupp.embDomain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.embDomain",
+  "signature": {
+    "name": "VTask.embDomain",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {M : Type u_4} -> [Zero M] -> (f : α ↪ β) -> (v : α →₀ M) -> β →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "out-of-range evaluation",
+        "statement": "For any b : β with b ∉ Set.range f, VTask.embDomain f v b = 0.",
+        "note": "Points in β outside the image of f are assigned the zero of M."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "embDomain_eq_zero_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (l : α →₀ M), VTask.embDomain f l = 0 ↔ l = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.388,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β), Function.Injective (VTask.embDomain f : (α →₀ M) → β →₀ M)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.976,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_refl_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [inst : Zero M], VTask.embDomain (Function.Embedding.refl α) = (id : (α →₀ M) → α →₀ M)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.343,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_notin_range_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (v : α →₀ M) (b : β), b ∉ Set.range f → VTask.embDomain f v b = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_notin_range"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_notin_range"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.11,
+        "at": "authoring",
+        "script": "by simp only [_root_.Finsupp.embDomain] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.Finsupp.embDomain] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_eq_mapDomain_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : AddCommMonoid M] (f : α ↪ β) (v : α →₀ M), VTask.embDomain f v = Finsupp.mapDomain f v",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_eq_mapDomain"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_eq_mapDomain"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.562,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_nonzero_not_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {M : Type*} [inst : Zero M] (f : α ↪ β) (v : α →₀ M), v ≠ 0 → VTask.embDomain f v ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.embDomain_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.embDomain_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.899,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "embDomain_zero_casework",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.embDomain (Function.Embedding.refl (Fin 3)) (0 : Fin 3 →₀ ℕ) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "Function.Embedding.refl (Fin 3)"
+        ],
+        "v": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.embDomain-5726c41f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.embDomain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.embDomain-5726c41f",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "task_id": "SimpleGraph.IsAlternating",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsAlternating",
+  "signature": {
+    "name": "VTask.IsAlternating",
+    "type": "{V : Type u_1} -> (G G' : SimpleGraph V) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "G",
+      "G'"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsAlternating is a universally quantified Prop with no boundary inputs; there are no junk-value conventions to record."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isAlternating_empty_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G' : SimpleGraph V), VTask.IsAlternating (⊥ : SimpleGraph V) G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isAlternating_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G G'' G' : SimpleGraph V), VTask.IsAlternating G G' → G'' ≤ G → VTask.IsAlternating G'' G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.313,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isAlternating_spanningCoe",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G G' : SimpleGraph V) (H : SimpleGraph.Subgraph G), VTask.IsAlternating G G' → VTask.IsAlternating H.spanningCoe G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.spanningCoe"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.spanningCoe"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.274,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isAlternating_sup_edge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G G' : SimpleGraph V) (u x : V), VTask.IsAlternating G G' → ¬G'.Adj u x → (∀ u', u' ≠ u → G.Adj x u' → G'.Adj x u') → (∀ x', x' ≠ x → G.Adj x' u → G'.Adj x' u) → VTask.IsAlternating (G ⊔ SimpleGraph.edge u x) G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.sup_edge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.sup_edge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.443,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isAlternating_not_symmetric_general",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (V : Type*) (G G' : SimpleGraph V), VTask.IsAlternating G G' → VTask.IsAlternating G' G",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isAlternating_subgraph_inherit",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (V : Type*) (G G' G'' : SimpleGraph V), VTask.IsAlternating G G' → G'' ≤ G → VTask.IsAlternating G'' G'",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.IsAlternating.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.097,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.IsAlternating",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.IsAlternating-9dde85c0",
+    "review_status": "unreviewed"
+  }
+}

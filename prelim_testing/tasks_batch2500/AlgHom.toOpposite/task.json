@@ -1,0 +1,81 @@
+{
+  "task_id": "AlgHom.toOpposite",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.toOpposite",
+  "signature": {
+    "name": "VTask.toOpposite",
+    "type": "{R : Type u_1} -> {A : Type u_3} -> {B : Type u_4} -> [CommSemiring R] -> [Semiring A] -> [Semiring B] -> [Algebra R A] -> [Algebra R B] -> (f : A →ₐ[R] B) -> (hf : ∀ (x y : A), Commute (f x) (f y)) -> A →ₐ[R] Bᵐᵒᵖ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": "underlying function",
+        "statement": "The underlying function of VTask.toOpposite f hf is op ∘ f, where op : B → Bᵐᵒᵖ is the canonical map into the opposite type.",
+        "note": "This is the standard choice; no alternative data is introduced."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "toOpposite_commutes",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R A B : Type*) [CommSemiring R] [Semiring A] [Semiring B] [Algebra R A] [Algebra R B] (f : A →ₐ[R] B) (hf : ∀ x y : A, Commute (f x) (f y)) (r : R), (VTask.toOpposite f hf) (algebraMap R A r) = algebraMap R Bᵐᵒᵖ r",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgHom.commutes",
+        "AlgHom.toRingHom_toOpposite"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgHom.commutes",
+        "AlgHom.toRingHom_toOpposite"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.033,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgHom.toOpposite-cd27575a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgHom.toOpposite",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgHom.toOpposite-cd27575a",
+    "review_status": "unreviewed"
+  }
+}

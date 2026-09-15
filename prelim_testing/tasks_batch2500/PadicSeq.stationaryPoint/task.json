@@ -1,0 +1,328 @@
+{
+  "task_id": "PadicSeq.stationaryPoint",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.stationaryPoint",
+  "signature": {
+    "name": "VTask.stationaryPoint",
+    "type": "{p : ℕ} -> [Fact (Nat.Prime p)] -> {f : PadicSeq p} -> (hf : ¬f ≈ 0) -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": "nonconstructive_choice",
+        "statement": "The returned index is chosen via classical (nonconstructive) choice among all valid stabilisation indices; its exact value is not determined beyond satisfying the stabilisation property for all larger indices.",
+        "note": "Any natural number ≥ the chosen index is also a valid stabilisation index, so uniqueness is not claimed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "stationaryPoint_spec_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (m n : ℕ), VTask.stationaryPoint hf ≤ m → VTask.stationaryPoint hf ≤ n → padicNorm p (f n) = padicNorm p (f m)",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.978,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_norm_stable_at_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0), padicNorm p (f (VTask.stationaryPoint hf)) = padicNorm p (f (VTask.stationaryPoint hf + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_lift_index_left_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (v2 v3 : ℕ), padicNorm p (f (VTask.stationaryPoint hf)) = padicNorm p (f (max (VTask.stationaryPoint hf) (max v2 v3)))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.lift_index_left_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.lift_index_left_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.881,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_lift_index_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (v1 v2 : ℕ), padicNorm p (f (VTask.stationaryPoint hf)) = padicNorm p (f (max v1 (max v2 (VTask.stationaryPoint hf))))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.lift_index_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.lift_index_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.009,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_is_nat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0), (VTask.stationaryPoint hf : ℕ) ≥ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.zero_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.zero_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.295,
+        "at": "authoring",
+        "script": "by simp [_root_.PadicSeq.stationaryPoint] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.PadicSeq.stationaryPoint] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_self_ge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0), VTask.stationaryPoint hf ≤ max (VTask.stationaryPoint hf) 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.le_max_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.le_max_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.337,
+        "at": "authoring",
+        "script": "by simp [_root_.PadicSeq.stationaryPoint] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.PadicSeq.stationaryPoint] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_norm_eq_above_any_two",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (n : ℕ), VTask.stationaryPoint hf ≤ n → padicNorm p (f n) = padicNorm p (f (VTask.stationaryPoint hf))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_norm_constant_beyond",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (k : ℕ), padicNorm p (f (VTask.stationaryPoint hf)) = padicNorm p (f (VTask.stationaryPoint hf + k))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.stationaryPoint_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "stationaryPoint_lift_index_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (f : PadicSeq p) (hf : ¬f ≈ 0) (v1 v3 : ℕ), padicNorm p (f (VTask.stationaryPoint hf)) = padicNorm p (f (max v1 (max (VTask.stationaryPoint hf) v3)))",
+      "domain_inputs": {},
+      "anchors": [
+        "PadicSeq.lift_index_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PadicSeq.lift_index_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.003,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PadicSeq.stationaryPoint",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PadicSeq.stationaryPoint-c3a8820f",
+    "review_status": "unreviewed"
+  }
+}

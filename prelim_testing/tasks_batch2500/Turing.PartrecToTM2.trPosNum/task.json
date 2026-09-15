@@ -1,0 +1,309 @@
+{
+  "task_id": "Turing.PartrecToTM2.trPosNum",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.trPosNum",
+  "signature": {
+    "name": "VTask.trPosNum",
+    "type": "PosNum → List Turing.PartrecToTM2.Γ'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "little-endian ordering",
+        "statement": "The least-significant bit of the numeral appears at the head of the output list, and the most-significant bit appears at the tail.",
+        "note": "Matches the docstring's explicit examples: 2 = [bit0, bit1], 4 = [bit0, bit0, bit1]."
+      },
+      {
+        "point": "no trailing bit0",
+        "statement": "The last element of every output list is always Γ'.bit1, because PosNum structurally forbids a most-significant zero.",
+        "note": "This is a structural invariant inherited from PosNum, not an extra normalization step."
+      },
+      {
+        "point": "natEnd false for all elements",
+        "statement": "Every symbol in the output list satisfies natEnd x = false; no element acts as a tape end-marker.",
+        "note": "Captured by the theorem trPosNum_natEnd in the Mathlib neighborhood."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "trPosNum_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.trPosNum PosNum.one = [Turing.PartrecToTM2.Γ'.bit1] := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.one"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.trPosNum (PosNum.bit0 PosNum.one) = [Turing.PartrecToTM2.Γ'.bit0, Turing.PartrecToTM2.Γ'.bit1] := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.bit0 PosNum.one"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_three",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.trPosNum (PosNum.bit1 PosNum.one) = [Turing.PartrecToTM2.Γ'.bit1, Turing.PartrecToTM2.Γ'.bit1] := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.bit1 PosNum.one"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_four",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.trPosNum (PosNum.bit0 (PosNum.bit0 PosNum.one)) = [Turing.PartrecToTM2.Γ'.bit0, Turing.PartrecToTM2.Γ'.bit0, Turing.PartrecToTM2.Γ'.bit1] := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.bit0 (PosNum.bit0 PosNum.one)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_length_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.trPosNum PosNum.one).length = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.one"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_length_four",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.trPosNum (PosNum.bit0 (PosNum.bit0 PosNum.one))).length = 3 := by decide",
+      "domain_inputs": {
+        "n": [
+          "PosNum.bit0 (PosNum.bit0 PosNum.one)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, VTask.trPosNum n ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_natEnd_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : PosNum) (x : Turing.PartrecToTM2.Γ'), x ∈ VTask.trPosNum n → Turing.PartrecToTM2.natEnd x = false",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.701,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_last_never_bit0_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, ∃ l : List Turing.PartrecToTM2.Γ', VTask.trPosNum n = l ++ [Turing.PartrecToTM2.Γ'.bit1]",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trPosNum_not_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, VTask.trPosNum n ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Turing.PartrecToTM2.trPosNum_natEnd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Turing.PartrecToTM2.trPosNum",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Turing.PartrecToTM2.trPosNum-52d64104",
+    "review_status": "unreviewed"
+  }
+}

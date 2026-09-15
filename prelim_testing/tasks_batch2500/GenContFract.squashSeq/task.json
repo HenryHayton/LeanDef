@@ -1,0 +1,292 @@
+{
+  "task_id": "GenContFract.squashSeq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.squashSeq",
+  "signature": {
+    "name": "VTask.squashSeq",
+    "type": "{K : Type u_1} -> [DivisionRing K] -> (s : Stream'.Seq (GenContFract.Pair K)) -> (n : ℕ) -> Stream'.Seq (GenContFract.Pair K)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "s.TerminatedAt (n + 1)",
+        "statement": "If the sequence s has terminated at position n+1 (i.e., s.get? (n+1) = none), then VTask.squashSeq s n = s (the sequence is returned unmodified).",
+        "note": "This covers both the case where s.get? n is none and the case where s.get? n is some but s.get? (n+1) is none."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "squashSeq_terminated_eq_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [inst : DivisionRing K] (s : Stream'.Seq (GenContFract.Pair K)) (n : ℕ), s.TerminatedAt (n + 1) → VTask.squashSeq s n = s",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashSeq_eq_self_of_terminated"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashSeq_eq_self_of_terminated"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.178,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashSeq_empty_seq_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.squashSeq (Stream'.Seq.nil : Stream'.Seq (GenContFract.Pair ℚ)) 0 = Stream'.Seq.nil",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 52.658,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.squashSeq Stream'.Seq.nil 0"
+    },
+    {
+      "id": "squashSeq_empty_seq_reject_not_nonempty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.squashSeq (Stream'.Seq.nil : Stream'.Seq (GenContFract.Pair ℚ)) 0).get? 0 = some ⟨1, 2⟩",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.175,
+        "at": "authoring",
+        "script": "by simp [_root_.GenContFract.squashSeq] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.GenContFract.squashSeq] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.squashSeq Stream'.Seq.nil 0",
+      "violated_property": "The sequence is nil so no element exists at position 0"
+    },
+    {
+      "id": "squashSeq_does_not_modify_position_zero_when_squashing_at_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [inst : DivisionRing K] (s : Stream'.Seq (GenContFract.Pair K)), (VTask.squashSeq s 1).get? 0 = s.get? 0",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashSeq_nth_of_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashSeq_nth_of_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashSeq_terminated_at_zero_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(Stream'.Seq.nil : Stream'.Seq (GenContFract.Pair ℚ)).TerminatedAt 1 → VTask.squashSeq (Stream'.Seq.nil : Stream'.Seq (GenContFract.Pair ℚ)) 0 = Stream'.Seq.nil",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.194,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.squashSeq Stream'.Seq.nil 0"
+    },
+    {
+      "id": "squashSeq_position_n_not_unchanged_when_both_present",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [inst : DivisionRing K] (s : Stream'.Seq (GenContFract.Pair K)) (n : ℕ) (gp_n gp_succ_n : GenContFract.Pair K), s.get? n = some gp_n → s.get? (n + 1) = some gp_succ_n → gp_succ_n.a / gp_succ_n.b ≠ 0 → (VTask.squashSeq s n).get? n ≠ s.get? n",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashSeq_nth_of_not_terminated"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashSeq_nth_of_not_terminated"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashSeq_tail_zero_is_squashSeq_tail",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [inst : DivisionRing K] (s : Stream'.Seq (GenContFract.Pair K)), (VTask.squashSeq s 1).tail = VTask.squashSeq s.tail 0",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashSeq_succ_n_tail_eq_squashSeq_tail_n"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashSeq_succ_n_tail_eq_squashSeq_tail_n"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.585,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squashSeq_result_at_n_has_correct_a_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {K : Type*} [inst : DivisionRing K] (s : Stream'.Seq (GenContFract.Pair K)) (n : ℕ) (gp_n gp_succ_n : GenContFract.Pair K), s.get? n = some gp_n → s.get? (n + 1) = some gp_succ_n → ∃ gp : GenContFract.Pair K, (VTask.squashSeq s n).get? n = some gp ∧ gp.a = gp_n.a",
+      "domain_inputs": {},
+      "anchors": [
+        "GenContFract.squashSeq_nth_of_not_terminated"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "GenContFract.squashSeq_nth_of_not_terminated"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "GenContFract.squashSeq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "GenContFract.squashSeq-3d9c5cb4",
+    "review_status": "unreviewed"
+  }
+}

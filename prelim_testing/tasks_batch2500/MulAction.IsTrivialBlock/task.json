@@ -1,0 +1,153 @@
+{
+  "task_id": "MulAction.IsTrivialBlock",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsTrivialBlock",
+  "signature": {
+    "name": "VTask.IsTrivialBlock",
+    "type": "{X : Type u_2} -> (B : Set X) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "B"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsTrivialBlock is a total disjunctive predicate on Set X with no junk-value or boundary conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "trivial_block_subsingleton_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type) (B : Set X), Set.Subsingleton B → VTask.IsTrivialBlock B",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Subsingleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Subsingleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.IsTrivialBlock-d12c9567",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trivial_block_univ_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type), VTask.IsTrivialBlock (Set.univ : Set X)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.eq_univ_iff_forall"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.eq_univ_iff_forall"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.IsTrivialBlock-d12c9567",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trivial_block_nontrivial_not_univ_reject",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type) (B : Set X), Set.Nontrivial B → B ≠ Set.univ → ¬ VTask.IsTrivialBlock B",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.Nontrivial",
+        "Set.Subsingleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.Nontrivial",
+        "Set.Subsingleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.223,
+        "at": "authoring",
+        "script": "by simp [_root_.MulAction.IsTrivialBlock] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MulAction.IsTrivialBlock] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MulAction.IsTrivialBlock-d12c9567",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "trivial_block_singleton_any_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X : Type) (x : X), VTask.IsTrivialBlock ({x} : Set X)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subsingleton_singleton"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subsingleton_singleton"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MulAction.IsTrivialBlock-d12c9567",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MulAction.IsTrivialBlock",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MulAction.IsTrivialBlock-d12c9567",
+    "review_status": "unreviewed"
+  }
+}

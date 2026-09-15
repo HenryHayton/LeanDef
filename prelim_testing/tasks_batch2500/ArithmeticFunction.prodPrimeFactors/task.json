@@ -1,0 +1,142 @@
+{
+  "task_id": "ArithmeticFunction.prodPrimeFactors",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prodPrimeFactors",
+  "signature": {
+    "name": "VTask.prodPrimeFactors",
+    "type": "{R : Type u_1} -> [CommMonoidWithZero R] -> (f : ℕ → R) -> ArithmeticFunction R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.prodPrimeFactors f 0 = 0 for any f, as a junk value required by the ArithmeticFunction interface.",
+        "note": "The zero of ℕ is mapped to the zero of R; this carries no number-theoretic meaning."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prodPrimeFactors_nonzero_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ) (n : ℕ), n ≠ 0 → VTask.prodPrimeFactors f n = ∏ p ∈ n.primeFactors, f p",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.prodPrimeFactors_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.prodPrimeFactors_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.249,
+        "at": "authoring",
+        "script": "by simp [_root_.ArithmeticFunction.prodPrimeFactors] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.ArithmeticFunction.prodPrimeFactors] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.prodPrimeFactors-f6920daf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodPrimeFactors_one_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℕ → ℕ), VTask.prodPrimeFactors f 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.prodPrimeFactors_apply",
+        "Nat.primeFactors_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.prodPrimeFactors_apply",
+        "Nat.primeFactors_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.089,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.prodPrimeFactors-f6920daf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodPrimeFactors_not_prime_power_eq_f_composite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.prodPrimeFactors id 12 ≠ VTask.prodPrimeFactors id 8",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.prodPrimeFactors_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.prodPrimeFactors_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.prodPrimeFactors-f6920daf",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ArithmeticFunction.prodPrimeFactors",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ArithmeticFunction.prodPrimeFactors-f6920daf",
+    "review_status": "unreviewed"
+  }
+}

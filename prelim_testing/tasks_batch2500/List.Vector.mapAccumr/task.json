@@ -1,0 +1,113 @@
+{
+  "task_id": "List.Vector.mapAccumr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapAccumr",
+  "signature": {
+    "name": "VTask.mapAccumr",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {σ : Type u_3} -> {n : ℕ} -> (f : α → σ → σ × β) -> List.Vector α n → σ → σ × List.Vector β n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "v",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "empty vector",
+        "statement": "When the input vector has length 0, the step function is never called, the accumulator is returned unchanged, and the output vector is the empty vector of length 0.",
+        "note": "This is the natural base case behavior inherited from the underlying list operation."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapAccumr_output_length",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β σ : Type} {n : ℕ} (f : α → σ → σ × β) (v : List.Vector α n) (s : σ), (VTask.mapAccumr f v s).2.toList.length = n",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Vector.toList_length"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Vector.toList_length"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.858,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.mapAccumr-e9a416d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapAccumr_identity_acc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α σ : Type} {n : ℕ} (v : List.Vector α n) (s : σ), (VTask.mapAccumr (fun a c => (c, a)) v s).1 = s",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mapAccumr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mapAccumr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.254,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.Vector.mapAccumr-e9a416d0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.Vector.mapAccumr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.Vector.mapAccumr-e9a416d0",
+    "review_status": "unreviewed"
+  }
+}

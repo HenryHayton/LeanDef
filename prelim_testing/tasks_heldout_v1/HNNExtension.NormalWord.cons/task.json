@@ -1,0 +1,206 @@
+{
+  "task_id": "HNNExtension.NormalWord.cons",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cons",
+  "signature": {
+    "name": "VTask.cons",
+    "type": "{G : Type u_1} -> [Group G] -> {A B : Subgroup G} -> {d : HNNExtension.NormalWord.TransversalPair G A B} -> (g : G) -> (u : ℤˣ) -> (w : HNNExtension.NormalWord d) -> (h1 : w.head ∈ d.set u) -> (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u') -> HNNExtension.NormalWord d",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "u",
+      "w",
+      "h1",
+      "h2"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: All arguments are constrained by explicit types and propositions; the function is total on its stated domain and no junk-value or edge conventions apply."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cons_smul_one_head",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), (1 : G) • VTask.cons g u w h1 h2 = VTask.cons g u w h1 h2",
+      "domain_inputs": {},
+      "anchors": [
+        "HNNExtension.NormalWord.smul_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HNNExtension.NormalWord.smul_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.141,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_ne_ofGroup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), VTask.cons g₁ u w h1 h2 ≠ HNNExtension.NormalWord.ofGroup g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "HNNExtension.NormalWord.consRecOn_cons",
+        "HNNExtension.NormalWord.consRecOn_ofGroup"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HNNExtension.NormalWord.consRecOn_cons",
+        "HNNExtension.NormalWord.consRecOn_ofGroup"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_toList_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), (VTask.cons g u w h1 h2).toList ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "HNNExtension.NormalWord.consRecOn_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HNNExtension.NormalWord.consRecOn_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.866,
+        "at": "authoring",
+        "script": "by simp [_root_.HNNExtension.NormalWord.cons] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.HNNExtension.NormalWord.cons] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_smul_mul_head",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ g₃ : G) (u : ℤˣ) (w : HNNExtension.NormalWord d) (h1 : w.head ∈ d.set u) (h2 : ∀ u' ∈ Option.map Prod.fst w.toList.head?, w.head ∈ HNNExtension.toSubgroup A B u → u = u'), g₁ • (g₂ • VTask.cons g₃ u w h1 h2) = VTask.cons (g₁ * g₂ * g₃) u w h1 h2",
+      "domain_inputs": {},
+      "anchors": [
+        "HNNExtension.NormalWord.smul_cons"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HNNExtension.NormalWord.smul_cons"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cons_ne_cons_different_u",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {G : Type*} [Group G] {A B : Subgroup G} {d : HNNExtension.NormalWord.TransversalPair G A B} (g₁ g₂ : G) (w₁ w₂ : HNNExtension.NormalWord d) (h1a : w₁.head ∈ d.set 1) (h2a : ∀ u' ∈ Option.map Prod.fst w₁.toList.head?, w₁.head ∈ HNNExtension.toSubgroup A B 1 → (1 : ℤˣ) = u') (h1b : w₂.head ∈ d.set (-1)) (h2b : ∀ u' ∈ Option.map Prod.fst w₂.toList.head?, w₂.head ∈ HNNExtension.toSubgroup A B (-1) → (-1 : ℤˣ) = u'), VTask.cons g₁ 1 w₁ h1a h2a ≠ VTask.cons g₂ (-1) w₂ h1b h2b",
+      "domain_inputs": {},
+      "anchors": [
+        "HNNExtension.NormalWord.consRecOn_cons"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HNNExtension.NormalWord.consRecOn_cons"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 18.511,
+        "at": "authoring",
+        "script": "by simp [_root_.HNNExtension.NormalWord.cons] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.HNNExtension.NormalWord.cons] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "HNNExtension.NormalWord.cons",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "HNNExtension.NormalWord.cons-92ee691c",
+    "review_status": "unreviewed"
+  }
+}

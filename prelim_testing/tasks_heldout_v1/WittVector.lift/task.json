@@ -1,0 +1,503 @@
+{
+  "task_id": "WittVector.lift",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lift",
+  "signature": {
+    "name": "VTask.lift",
+    "type": "{p : ℕ} -> {R : Type u_1} -> [CommRing R] -> [Fact (Nat.Prime p)] -> {S : Type u_2} -> [Semiring S] -> (f : (k : ℕ) → S →+* TruncatedWittVector p k R) -> (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) -> S →+* WittVector p R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f_compat"
+    ],
+    "conventions": [
+      {
+        "point": "implicit_f_compat",
+        "statement": "In practice the compatibility proof `f_compat` is passed as an explicit argument but the first (unnamed) slot in `lift` is conventionally written as `_` in the library, letting Lean infer `p`; only `f_compat` needs to be supplied explicitly.",
+        "note": "Matches library usage pattern `lift _ f_compat`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lift_truncate_compat",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ) (s : S), WittVector.truncate n (VTask.lift f f_compat s) = f n s",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.truncate_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.truncate_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.592,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_comp_truncate",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ), (WittVector.truncate n).comp (VTask.lift f f_compat) = f n",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.truncate_comp_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.truncate_comp_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.402,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_unique",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∀ k, (WittVector.truncate k).comp g = f k) → VTask.lift f f_compat = g",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.lift_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.lift_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.257,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_is_ring_hom_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), VTask.lift f f_compat 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.354,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_is_ring_hom_map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), VTask.lift f f_compat 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.302,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s t : S), VTask.lift f f_compat (s + t) = VTask.lift f f_compat s + VTask.lift f f_compat t",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.57,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_map_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s t : S), VTask.lift f f_compat (s * t) = VTask.lift f f_compat s * VTask.lift f f_compat t",
+      "domain_inputs": {},
+      "anchors": [
+        "RingHom.map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RingHom.map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.485,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_truncate_at_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s : S), WittVector.truncate 0 (VTask.lift f f_compat s) = f 0 s",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.truncate_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.truncate_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.508,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_truncate_level1",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (s : S), WittVector.truncate 1 (VTask.lift f f_compat s) = f 1 s",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.truncate_lift"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.truncate_lift"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.429,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_not_determined_by_single_truncation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∀ k, (WittVector.truncate k).comp g = f k) → g = VTask.lift f f_compat",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.lift_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.lift_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.02,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_comp_is_ring_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] {T : Type*} [Semiring T] (φ : T →+* S) (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁), ∀ k, (WittVector.truncate k).comp ((VTask.lift f f_compat).comp φ) = (f k).comp φ",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.truncate_comp_lift",
+        "RingHom.comp_assoc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.truncate_comp_lift",
+        "RingHom.comp_assoc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.311,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_self_comp_truncate_eq_id_on_witt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {p : ℕ} {R : Type*} [CommRing R] [Fact (Nat.Prime p)] {S : Type*} [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ k₁ k₂ (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (n : ℕ), (WittVector.truncate n).comp (VTask.lift f f_compat) = f n",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.lift_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.lift_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.385,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lift_unique_neq_wrong_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (R : Type*) [CommRing R] (S : Type*) [Semiring S] (f : (k : ℕ) → S →+* TruncatedWittVector p k R) (f_compat : ∀ (k₁ k₂ : ℕ) (hk : k₁ ≤ k₂), (TruncatedWittVector.truncate hk).comp (f k₂) = f k₁) (g : S →+* WittVector p R), (∃ k, (WittVector.truncate k).comp g ≠ f k) → g ≠ VTask.lift f f_compat",
+      "domain_inputs": {},
+      "anchors": [
+        "WittVector.lift_unique"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "WittVector.lift_unique"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 20.398,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "WittVector.lift-64566383",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "WittVector.lift",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "WittVector.lift-64566383",
+    "review_status": "unreviewed"
+  }
+}

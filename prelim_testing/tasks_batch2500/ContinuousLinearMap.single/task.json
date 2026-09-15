@@ -1,0 +1,522 @@
+{
+  "task_id": "ContinuousLinearMap.single",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.single",
+  "signature": {
+    "name": "VTask.single",
+    "type": "(R : Type u_1) -> [Semiring R] -> {ι : Type u_4} -> (φ : ι → Type u_5) -> [(i : ι) → TopologicalSpace (φ i)] -> [(i : ι) → AddCommMonoid (φ i)] -> [(i : ι) → Module R (φ i)] -> [DecidableEq ι] -> (i : ι) -> φ i →L[R] (i : ι) → φ i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "ι",
+      "φ",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": "Evaluation at the insertion index",
+        "statement": "For any `x : φ i`, `VTask.single R φ i x i = x`.",
+        "note": "Standard Pi.single convention: the value at the chosen index is the inserted element."
+      },
+      {
+        "point": "Evaluation at a different index",
+        "statement": "For any `x : φ i` and `j ≠ i`, `VTask.single R φ i x j = 0`.",
+        "note": "Standard Pi.single convention: the value at any other index is zero."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "single_eval_same",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι) (x : φ i), VTask.single R φ i x i = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.single_eq_same"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.single_eq_same"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.238,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_eval_diff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i j : ι) (h : j ≠ i) (x : φ i), VTask.single R φ i x j = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.single_eq_of_ne"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.single_eq_of_ne"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.346,
+        "at": "authoring",
+        "script": "by simp [_root_.ContinuousLinearMap.single] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.ContinuousLinearMap.single] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι), VTask.single R φ i 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.292,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι) (x y : φ i), VTask.single R φ i (x + y) = VTask.single R φ i x + VTask.single R φ i y",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.677,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι) (r : R) (x : φ i), VTask.single R φ i (r • x) = r • VTask.single R φ i x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.043,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_is_clm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι), Continuous (VTask.single R φ i)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.072,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_proj_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι) (x : φ i), (ContinuousLinearMap.proj i) (VTask.single R φ i x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.single_eq_same",
+        "ContinuousLinearMap.proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.single_eq_same",
+        "ContinuousLinearMap.proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_support_outside",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i j : ι) (x : φ i), j ≠ i → (ContinuousLinearMap.proj j) (VTask.single R φ i x) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.single_eq_of_ne",
+        "ContinuousLinearMap.proj"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.single_eq_of_ne",
+        "ContinuousLinearMap.proj"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_fin2_eval_same_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.single ℕ (fun _ : Fin 2 => ℕ) 0 3 0 = 3 := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_fin2_eval_diff_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.single ℕ (fun _ : Fin 2 => ℕ) 0 5 1 = 0 := by decide",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_unit_eval_same_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.single ℕ (fun _ : Unit => ℕ) () 7 () = 7 := by decide",
+      "domain_inputs": {
+        "i": [
+          "()"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_zero_map_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.single ℕ (fun _ : Fin 3 => ℕ) 1 0 = 0 := by decide",
+      "domain_inputs": {
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_not_proj",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (x y : ℝ), VTask.single ℝ (fun _ : Fin 2 => ℝ) 0 x = VTask.single ℝ (fun _ : Fin 2 => ℝ) 0 y → x = y → (VTask.single ℝ (fun _ : Fin 2 => ℝ) 0 x 1 = x)",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.single ℝ (fun _ : Fin 2 => ℝ) 0",
+      "violated_property": "projection (the map does not project onto a component; it includes a component into the product)"
+    },
+    {
+      "id": "single_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [Semiring R] {ι : Type*} [DecidableEq ι] (φ : ι → Type*) [(i : ι) → TopologicalSpace (φ i)] [(i : ι) → AddCommMonoid (φ i)] [(i : ι) → Module R (φ i)] (i : ι), Function.Injective (VTask.single R φ i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Pi.single_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Pi.single_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "single_ne_proj_type",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.single ℝ (fun _ : Fin 2 => ℝ) 0 (0 : ℝ) 1 ≠ 0)",
+      "domain_inputs": {
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.112,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.single ℝ (fun _ : Fin 2 => ℝ) 0 0",
+      "violated_property": "nonzero output: the image of 0 is 0, not a nonzero element"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.single",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.single-dd9d6ffb",
+    "review_status": "unreviewed"
+  }
+}

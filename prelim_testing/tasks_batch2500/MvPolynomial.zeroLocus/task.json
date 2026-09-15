@@ -1,0 +1,270 @@
+{
+  "task_id": "MvPolynomial.zeroLocus",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.zeroLocus",
+  "signature": {
+    "name": "VTask.zeroLocus",
+    "type": "{k : Type u_1} -> (K : Type u_2) -> [Field k] -> [Field K] -> [Algebra k K] -> {σ : Type u_3} -> (I : Ideal (MvPolynomial σ k)) -> Set (σ → K)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total with no junk-value conventions; it produces a well-defined set for every ideal, including the zero ideal and the unit ideal, with mathematically natural behaviour at all boundaries."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "zeroLocus_unit_ideal_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*), VTask.zeroLocus K (⊤ : Ideal (MvPolynomial σ k)) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.eq_top_iff_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.eq_top_iff_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.353,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_zero_ideal_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*), VTask.zeroLocus K (⊥ : Ideal (MvPolynomial σ k)) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.387,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*) (I J : Ideal (MvPolynomial σ k)), I ≤ J → VTask.zeroLocus K J ⊆ VTask.zeroLocus K I",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.sep_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.sep_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.761,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*) (I : Ideal (MvPolynomial σ k)) (x : σ → K), x ∈ VTask.zeroLocus K I ↔ ∀ p ∈ I, MvPolynomial.eval x (MvPolynomial.map (algebraMap k K) p) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.eval_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.eval_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 12.005,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_inf_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*) (I J : Ideal (MvPolynomial σ k)), VTask.zeroLocus K I ∪ VTask.zeroLocus K J ⊆ VTask.zeroLocus K (I ⊓ J)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_inf"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_inf"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_nonempty_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*), (VTask.zeroLocus K (⊥ : Ideal (MvPolynomial σ k))).Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.univ_nonempty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.univ_nonempty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.179,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeroLocus_inter_subset_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k K : Type*) [Field k] [Field K] [Algebra k K] (σ : Type*) (I J : Ideal (MvPolynomial σ k)), VTask.zeroLocus K (I ⊔ J) ⊆ VTask.zeroLocus K I",
+      "domain_inputs": {},
+      "anchors": [
+        "le_sup_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "le_sup_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.zeroLocus",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.zeroLocus-589c9cc9",
+    "review_status": "unreviewed"
+  }
+}

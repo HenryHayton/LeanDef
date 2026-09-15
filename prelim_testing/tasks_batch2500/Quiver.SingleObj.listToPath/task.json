@@ -1,0 +1,348 @@
+{
+  "task_id": "Quiver.SingleObj.listToPath",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.listToPath",
+  "signature": {
+    "name": "VTask.listToPath",
+    "type": "{α : Type u_1} -> List α → Quiver.Path (Quiver.SingleObj.star α) (Quiver.SingleObj.star α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.listToPath is a total structural recursion with no junk values or special boundary conventions beyond its recursive definition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "listToPath_roundtrip_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (l : List α), Quiver.SingleObj.pathToList (VTask.listToPath l) = l",
+      "domain_inputs": {},
+      "anchors": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.413,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_left_inverse_pathToList",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type) (p : Quiver.Path (Quiver.SingleObj.star α) (Quiver.SingleObj.star α)), VTask.listToPath (Quiver.SingleObj.pathToList p) = p.cast rfl Quiver.SingleObj.ext",
+      "domain_inputs": {},
+      "anchors": [
+        "Quiver.SingleObj.listToPath_pathToList"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quiver.SingleObj.listToPath_pathToList"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.286,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type), Function.Injective (VTask.listToPath : List α → Quiver.Path (Quiver.SingleObj.star α) (Quiver.SingleObj.star α))",
+      "domain_inputs": {},
+      "anchors": [
+        "Quiver.SingleObj.pathToList_listToPath",
+        "Function.LeftInverse.injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quiver.SingleObj.pathToList_listToPath",
+        "Function.LeftInverse.injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_length_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.listToPath [true]).length = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[true]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_length_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.listToPath [true, false]).length = 2 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[true, false]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_length_three",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.listToPath [false, true, false]).length = 3 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[false, true, false]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_roundtrip_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Quiver.SingleObj.pathToList (VTask.listToPath ([] : List Bool)) = [] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_roundtrip_cons",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Quiver.SingleObj.pathToList (VTask.listToPath [true, false, true]) = [true, false, true] := by decide",
+      "domain_inputs": {
+        "l": [
+          "[true, false, true]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_source_target_star",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.listToPath [true, false] ∈ ({p : Quiver.Path (Quiver.SingleObj.star Bool) (Quiver.SingleObj.star Bool) | p.length = 2} : Set _) := by decide",
+      "domain_inputs": {
+        "l": [
+          "[true, false]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.listToPath [true, false]"
+    },
+    {
+      "id": "listToPath_nil_neq_cons",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (a : ℕ) (l : List ℕ), VTask.listToPath (a :: l) ≠ VTask.listToPath ([] : List ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.293,
+        "at": "authoring",
+        "script": "by simp [_root_.Quiver.SingleObj.listToPath] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Quiver.SingleObj.listToPath] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "listToPath_length_neq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.listToPath ([1] : List ℕ) ≠ VTask.listToPath ([1, 2] : List ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Quiver.SingleObj.pathToList_listToPath"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.268,
+        "at": "authoring",
+        "script": "by simp [_root_.Quiver.SingleObj.listToPath] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Quiver.SingleObj.listToPath] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Quiver.SingleObj.listToPath",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Quiver.SingleObj.listToPath-22734d03",
+    "review_status": "unreviewed"
+  }
+}

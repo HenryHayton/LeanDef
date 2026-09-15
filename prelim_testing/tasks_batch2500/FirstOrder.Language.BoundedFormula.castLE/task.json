@@ -1,0 +1,183 @@
+{
+  "task_id": "FirstOrder.Language.BoundedFormula.castLE",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.castLE",
+  "signature": {
+    "name": "VTask.castLE",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> {m n : ℕ} -> (_h : m ≤ n) -> L.BoundedFormula α m → L.BoundedFormula α n",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "m ≤ n",
+    "variables": [
+      "m",
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "castLE h φ when h : n ≤ n",
+        "statement": "When m = n (i.e., h is a proof of n ≤ n), VTask.castLE h φ = φ — the cast is the identity.",
+        "note": "Recorded as castLE_rfl in Mathlib."
+      },
+      {
+        "point": "Transitivity of casting",
+        "statement": "Composing two casts castLE mn ∘ castLE km equals the single cast castLE (km.trans mn); no formula is duplicated or lost.",
+        "note": "Recorded as castLE_comp_castLE and castLE_castLE in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "castLE_comp_castLE",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (α : Type*) (k m n : ℕ) (km : k ≤ m) (mn : m ≤ n), (VTask.castLE mn ∘ VTask.castLE km : L.BoundedFormula α k → L.BoundedFormula α n) = VTask.castLE (km.trans mn)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.castLE_comp_castLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.castLE_comp_castLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.402,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.castLE-9508d4f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLE_castLE_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (α : Type*) (k m n : ℕ) (km : k ≤ m) (mn : m ≤ n) (φ : L.BoundedFormula α k), VTask.castLE mn (VTask.castLE km φ) = VTask.castLE (km.trans mn) φ",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.castLE_castLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.castLE_castLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.316,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.castLE-9508d4f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLE_realize_of_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (M : Type*) [inst : L.Structure M] (α : Type*) (m n : ℕ) (heq : m = n) (h' : m ≤ n) (φ : L.BoundedFormula α m) (v : α → M) (xs : Fin n → M), (VTask.castLE h' φ).Realize v xs ↔ φ.Realize v (xs ∘ Fin.cast heq)",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.realize_castLE_of_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.realize_castLE_of_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.782,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.castLE-9508d4f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "castLE_trans_assoc",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : FirstOrder.Language) (α : Type*) (j k m n : ℕ) (jk : j ≤ k) (km : k ≤ m) (mn : m ≤ n) (φ : L.BoundedFormula α j), VTask.castLE mn (VTask.castLE km (VTask.castLE jk φ)) = VTask.castLE (jk.trans (km.trans mn)) φ",
+      "domain_inputs": {},
+      "anchors": [
+        "FirstOrder.Language.BoundedFormula.castLE_castLE"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "FirstOrder.Language.BoundedFormula.castLE_castLE"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.922,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.castLE-9508d4f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.BoundedFormula.castLE",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.BoundedFormula.castLE-9508d4f1",
+    "review_status": "unreviewed"
+  }
+}

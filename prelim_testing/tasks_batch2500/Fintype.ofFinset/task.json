@@ -1,0 +1,327 @@
+{
+  "task_id": "Fintype.ofFinset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofFinset",
+  "signature": {
+    "name": "VTask.ofFinset",
+    "type": "{α : Type u_1} -> {p : Set α} -> (s : Finset α) -> (H : ∀ (x : α), x ∈ s ↔ x ∈ p) -> Fintype ↑p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and no junk-value conventions are needed; every combination of valid inputs produces a well-defined Fintype instance."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofFinset_card_eq_finset_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Set α} (s : Finset α) (H : ∀ x : α, x ∈ s ↔ x ∈ p), @Fintype.card (↑p) (VTask.ofFinset s H) = s.card",
+      "domain_inputs": {},
+      "anchors": [
+        "Fintype.subtype_card"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fintype.subtype_card"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.456,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_nonempty_card_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Set α} (s : Finset α) (H : ∀ x : α, x ∈ s ↔ x ∈ p), s.card > 0 → @Fintype.card (↑p) (VTask.ofFinset s H) > 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Fintype.subtype_card"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fintype.subtype_card"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.697,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_card_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @Fintype.card (↑{x : ℕ | x ∈ ({1} : Finset ℕ)}) (VTask.ofFinset {1} (fun x => by simp)) = 1 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_card_three_elems",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @Fintype.card (↑{x : ℕ | x ∈ ({1, 2, 3} : Finset ℕ)}) (VTask.ofFinset {1, 2, 3} (fun x => by simp)) = 3 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_card_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @Fintype.card (↑{x : ℕ | x ∈ (∅ : Finset ℕ)}) (VTask.ofFinset ∅ (fun x => by simp)) = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_reject_two_not_in_singleton",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (2 : ℕ) ∈ ({1} : Finset ℕ) := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(2 : ℕ)",
+      "violated_property": "x ∈ s ↔ x ∈ p"
+    },
+    {
+      "id": "ofFinset_reject_zero_not_in_positive",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (0 : ℕ) ∈ ({1, 2, 3} : Finset ℕ) := by decide",
+      "domain_inputs": {
+        "s": [
+          "{1, 2, 3}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : ℕ)",
+      "violated_property": "x ∈ s ↔ x ∈ p"
+    },
+    {
+      "id": "ofFinset_card_two_elems",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : @Fintype.card (↑{x : ℕ | x ∈ ({0, 1} : Finset ℕ)}) (VTask.ofFinset {0, 1} (fun x => by simp)) = 2 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFinset_card_le_of_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {p : Set α} (s t : Finset α) (H : ∀ x : α, x ∈ s ↔ x ∈ p) (Ht : ∀ x : α, x ∈ t ↔ x ∈ p), s = t → @Fintype.card (↑p) (VTask.ofFinset s H) = @Fintype.card (↑p) (VTask.ofFinset t Ht)",
+      "domain_inputs": {},
+      "anchors": [
+        "Fintype.subtype_card"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fintype.subtype_card"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.357,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fintype.ofFinset-03218aa1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fintype.ofFinset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fintype.ofFinset-03218aa1",
+    "review_status": "unreviewed"
+  }
+}

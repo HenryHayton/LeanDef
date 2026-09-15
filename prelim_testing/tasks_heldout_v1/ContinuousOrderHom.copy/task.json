@@ -1,0 +1,309 @@
+{
+  "task_id": "ContinuousOrderHom.copy",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.copy",
+  "signature": {
+    "name": "VTask.copy",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> [TopologicalSpace α] -> [Preorder α] -> [TopologicalSpace β] -> [Preorder β] -> (f : α →Co β) -> (f' : α → β) -> (h : f' = ⇑f) -> α →Co β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "f'",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: the definition is total and fully constrained; the hypothesis h : f' = ⇑f ensures no junk inputs exist"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "copy_eq_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), VTask.copy f f' h = f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.976,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_apply_eq_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.coe_copy",
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.coe_copy",
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.667,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_not_diff_from_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), ¬ (VTask.copy f f' h ≠ f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.218,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_preserves_order_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f), (VTask.copy f f' h : α →o β) = (f : α →o β)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.249,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_comp_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] [TopologicalSpace γ] [Preorder γ] (f : α →Co β) (g : β →Co γ) (f' : α → β) (h : f' = ⇑f), ContinuousOrderHom.comp g (VTask.copy f f' h) = ContinuousOrderHom.comp g f",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.732,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_eq_means_not_a_distinct_hom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f g : α →Co β) (f' : α → β) (h : f' = ⇑f), f = g → VTask.copy f f' h = g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.126,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_coe_ne_wrong_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [TopologicalSpace α] [Preorder α] [TopologicalSpace β] [Preorder β] (f : α →Co β) (f' : α → β) (h : f' = ⇑f) (x : α), VTask.copy f f' h x = f x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.coe_copy"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.coe_copy"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.57,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "copy_ne_wrong_coercion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : (OrderDual ℝ) →Co (OrderDual ℝ)), ¬ (∃ (g : (OrderDual ℝ) →Co (OrderDual ℝ)), (⇑(VTask.copy f (⇑f) rfl) ≠ ⇑g) ∧ VTask.copy f (⇑f) rfl = g)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOrderHom.copy_eq",
+        "ContinuousOrderHom.coe_copy"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOrderHom.copy_eq",
+        "ContinuousOrderHom.coe_copy"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.295,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousOrderHom.copy",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousOrderHom.copy-7a2109d9",
+    "review_status": "unreviewed"
+  }
+}

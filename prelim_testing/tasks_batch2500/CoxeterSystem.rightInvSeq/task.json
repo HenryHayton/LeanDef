@@ -1,0 +1,120 @@
+{
+  "task_id": "CoxeterSystem.rightInvSeq",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.rightInvSeq",
+  "signature": {
+    "name": "VTask.rightInvSeq",
+    "type": "{B : Type u_1} -> {W : Type u_2} -> [Group W] -> {M : CoxeterMatrix B} -> (cs : CoxeterSystem M W) -> (ω : List B) -> List W",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ω"
+    ],
+    "conventions": [
+      {
+        "point": "ω = []",
+        "statement": "VTask.rightInvSeq cs [] = []",
+        "note": "The right inversion sequence of the empty word is the empty list; the recursion's base case returns [] with no junk value needed."
+      },
+      {
+        "point": "ordering",
+        "statement": "The entry for the first generator of ω (conjugated by all subsequent generators) appears first in the output; the entry for the last generator (equal to that generator itself) appears last.",
+        "note": "This ordering convention distinguishes rightInvSeq from leftInvSeq."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "rightInvSeq_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {B : Type*} {W : Type*} [Group W] {M : CoxeterMatrix B} (cs : CoxeterSystem M W) (i : B), VTask.rightInvSeq cs [i] = [cs.simple i]",
+      "domain_inputs": {},
+      "anchors": [
+        "CoxeterSystem.rightInvSeq_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CoxeterSystem.rightInvSeq_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.295,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CoxeterSystem.rightInvSeq-2c07d317",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "rightInvSeq_reject_single_wrong_element",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (B : Type) (W : Type) [Group W] (M : CoxeterMatrix B) (cs : CoxeterSystem M W) (i j : B), cs.simple i ≠ cs.simple j → VTask.rightInvSeq cs [i] ≠ [cs.simple j]",
+      "domain_inputs": {},
+      "anchors": [
+        "List.cons.injEq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.cons.injEq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.38,
+        "at": "authoring",
+        "script": "by simp [_root_.CoxeterSystem.rightInvSeq] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.CoxeterSystem.rightInvSeq] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CoxeterSystem.rightInvSeq-2c07d317",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CoxeterSystem.rightInvSeq",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CoxeterSystem.rightInvSeq-2c07d317",
+    "review_status": "unreviewed"
+  }
+}

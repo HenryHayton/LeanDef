@@ -1,0 +1,334 @@
+{
+  "task_id": "Fin.init",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.init",
+  "signature": {
+    "name": "VTask.init",
+    "type": "{n : ℕ} -> {α : Fin (n + 1) → Sort u_1} -> (q : (i : Fin (n + 1)) → α i) -> (i : Fin n) -> α i.castSucc",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "α",
+      "q",
+      "i"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined on all inputs with no junk values or special edge conventions; every output is uniquely determined by restricting the input tuple to castSucc indices."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "init_pointwise_def",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.init (fun i : Fin 3 => (![10, 20, 30] i : ℕ)) ⟨0, by omega⟩ = 10 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "init_pointwise_second",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.init (fun i : Fin 3 => (![10, 20, 30] i : ℕ)) ⟨1, by omega⟩ = 20 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "i": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "init_n_zero_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : ∀ i : Fin 0, VTask.init (fun _ : Fin 1 => (42 : ℕ)) i = (fun i : Fin 0 => (42 : ℕ)) i := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "snoc_init_self_reconstruct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (q : (i : Fin (n + 1)) → α i), Fin.snoc (VTask.init q) (q (Fin.last n)) = q",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.snoc_init_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.snoc_init_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.133,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "init_update_last_unchanged",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (q : (i : Fin (n + 1)) → α i) (z : α (Fin.last n)), VTask.init (Function.update q (Fin.last n) z) = VTask.init q",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.init_update_last"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.init_update_last"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.146,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "init_update_castSucc_propagates",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {α : Fin (n + 1) → Sort*} (q : (i : Fin (n + 1)) → α i) (i : Fin n) (y : α i.castSucc), VTask.init (Function.update q i.castSucc y) = Function.update (VTask.init q) i y",
+      "domain_inputs": {},
+      "anchors": [
+        "Fin.init_update_castSucc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Fin.init_update_castSucc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.217,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "init_excludes_last_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 10 := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 10"
+    },
+    {
+      "id": "init_excludes_last_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 30) := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 30",
+      "violated_property": "init drops the last element; the last element 30 is not in the output"
+    },
+    {
+      "id": "init_not_tail",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 20) := by decide",
+      "domain_inputs": {
+        "n": [
+          "2"
+        ],
+        "i": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Fin.init-abf74cd3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.init (![10, 20, 30] : Fin 3 → ℕ) ⟨0, by omega⟩ = 20",
+      "violated_property": "init returns castSucc values starting from index 0, not tail (which would skip the first element)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Fin.init",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Fin.init-abf74cd3",
+    "review_status": "unreviewed"
+  }
+}

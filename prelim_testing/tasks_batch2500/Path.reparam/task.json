@@ -1,0 +1,136 @@
+{
+  "task_id": "Path.reparam",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.reparam",
+  "signature": {
+    "name": "VTask.reparam",
+    "type": "{X : Type u_1} -> [TopologicalSpace X] -> {x y : X} -> (γ : Path x y) -> (f : ↑unitInterval → ↑unitInterval) -> (hfcont : Continuous f) -> (hf₀ : f 0 = 0) -> (hf₁ : f 1 = 1) -> Path x y",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "γ",
+      "f",
+      "hfcont",
+      "hf₀",
+      "hf₁"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and all inputs satisfying the stated types and proofs produce a valid Path with no junk values or special edge conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "reparam_range_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} (γ : Path x y) (f : ↑unitInterval → ↑unitInterval) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1), Set.range ⇑(VTask.reparam γ f hfcont hf₀ hf₁) = Set.range γ",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.range_reparam"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.range_reparam"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.051,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Path.reparam-657c39b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reparam_range_subset_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} [TopologicalSpace X] {x y : X} (γ : Path x y) (f : ↑unitInterval → ↑unitInterval) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1), Set.range ⇑(VTask.reparam γ f hfcont hf₀ hf₁) ⊆ Set.range γ",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.range_reparam"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.range_reparam"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Path.reparam-657c39b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "reparam_ne_wrong_coercion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x y : ℝ) (γ : Path x y) (f : ↑unitInterval → ↑unitInterval) (hfcont : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1), (⇑(VTask.reparam γ f hfcont hf₀ hf₁) : ↑unitInterval → ℝ) ≠ (fun _ => x) ∨ x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "Path.coe_reparam",
+        "Path.range_reparam"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Path.coe_reparam",
+        "Path.range_reparam"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Path.reparam-657c39b9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Path.reparam",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Path.reparam-657c39b9",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "task_id": "lowerPolar",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lowerPolar",
+  "signature": {
+    "name": "VTask.lowerPolar",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> (r : α → β → Prop) -> (t : Set β) -> Set α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "t = ∅",
+        "statement": "VTask.lowerPolar r ∅ = Set.univ",
+        "note": "Every element of α vacuously relates to all elements of the empty set, so the lower polar is the whole type."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lowerPolar_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (r : α → β → Prop), VTask.lowerPolar r ∅ = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "lowerPolar_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lowerPolar_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.196,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lowerPolar-278f7856",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mem_lowerPolar_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (r : α → β → Prop) (a : α) (b : β), a ∈ VTask.lowerPolar r {b} ↔ r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "mem_lowerPolar_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mem_lowerPolar_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.231,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lowerPolar-278f7856",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lowerPolar_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (r : α → β → Prop), Antitone (VTask.lowerPolar r)",
+      "domain_inputs": {},
+      "anchors": [
+        "lowerPolar_anti"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lowerPolar_anti"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.644,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "lowerPolar-278f7856",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lowerPolar_superset_of_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (r : α → β → Prop) (t₁ t₂ : Set β), t₁ ⊆ t₂ → VTask.lowerPolar r t₂ ⊆ VTask.lowerPolar r t₁",
+      "domain_inputs": {},
+      "anchors": [
+        "lowerPolar_anti"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "lowerPolar_anti"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "lowerPolar-278f7856",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lowerPolar_univ_is_empty_when_no_rel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} (r : α → β → Prop) (t : Set β) (a : α), (∀ b ∈ t, r a b) → a ∈ VTask.lowerPolar r t",
+      "domain_inputs": {},
+      "anchors": [
+        "mem_lowerPolar_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mem_lowerPolar_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.854,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "lowerPolar-278f7856",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "lowerPolar",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "lowerPolar-278f7856",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "task_id": "ModuleCat.restrictScalarsCongr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrictScalarsCongr",
+  "signature": {
+    "name": "VTask.restrictScalarsCongr",
+    "type": "{R : Type u₁} -> {S : Type u₂} -> [Ring R] -> [Ring S] -> {f g : R →+* S} -> (e : f = g) -> ModuleCat.restrictScalars f ≅ ModuleCat.restrictScalars g",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "e"
+    ],
+    "conventions": [
+      {
+        "point": "e = rfl",
+        "statement": "When e is rfl, the natural isomorphism VTask.restrictScalarsCongr rfl is the identity natural isomorphism on ModuleCat.restrictScalars f.",
+        "note": "The construction reduces to the identity because the scalar actions are definitionally equal."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restrictScalarsCongr_component_is_iso",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [Ring R] [Ring S] {f g : R →+* S} (e : f = g) (X : ModuleCat S), CategoryTheory.IsIso ((VTask.restrictScalarsCongr e).hom.app X)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.929,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ModuleCat.restrictScalarsCongr-f6901a89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.restrictScalarsCongr (rfl : RingHom.id ℤ = RingHom.id ℤ)).hom"
+    },
+    {
+      "id": "restrictScalarsCongr_is_nat_iso",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {S : Type*} [Ring R] [Ring S] (f : R →+* S), CategoryTheory.IsIso (VTask.restrictScalarsCongr (rfl : f = f)).hom",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.969,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ModuleCat.restrictScalarsCongr-f6901a89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.restrictScalarsCongr (rfl : RingHom.id ℤ = RingHom.id ℤ)"
+    },
+    {
+      "id": "restrictScalarsCongr_hom_not_trivially_zero",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R : Type*} {S : Type*} [Ring R] [Ring S] {f : R →+* S} (X : ModuleCat S), ((VTask.restrictScalarsCongr (rfl : f = f)).hom.app X).toAddMonoidHom = 0",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ModuleCat.restrictScalarsCongr-f6901a89",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.restrictScalarsCongr (rfl : RingHom.id ℤ = RingHom.id ℤ)).hom",
+      "violated_property": "The natural transformation hom should be the identity, not the zero map"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ModuleCat.restrictScalarsCongr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ModuleCat.restrictScalarsCongr-f6901a89",
+    "review_status": "unreviewed"
+  }
+}

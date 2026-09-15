@@ -1,0 +1,205 @@
+{
+  "task_id": "Covariant",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Covariant",
+  "signature": {
+    "name": "VTask.Covariant",
+    "type": "(M : Type u_1) -> (N : Type u_2) -> (μ : M → N → N) -> (r : N → N → Prop) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "M",
+      "N",
+      "μ",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.Covariant is a universally-quantified Prop over arbitrary types and relations; vacuous truth in degenerate cases (empty types, empty relations) is a logical consequence, not a junk-value convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "covariant_flip_of_commutative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (N : Type*) (mu : N → N → N) (r : N → N → Prop), Std.Commutative mu → VTask.Covariant N N (Function.swap mu) r → VTask.Covariant N N mu r",
+      "domain_inputs": {},
+      "anchors": [
+        "covariant_flip_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "covariant_flip_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.519,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "covariant_imp_monotone_each",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) (μ : M → N → N) (r : N → N → Prop), VTask.Covariant M N μ r → ∀ m : M, ∀ n₁ n₂ : N, r n₁ n₂ → r (μ m n₁) (μ m n₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Covariant.monotone_of_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Covariant.monotone_of_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.945,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "covariant_univ_empty_type_vacuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (N : Type*) (μ : Empty → N → N) (r : N → N → Prop), VTask.Covariant Empty N μ r",
+      "domain_inputs": {},
+      "anchors": [
+        "isEmpty_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isEmpty_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "covariant_flip_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (M N : Type*) (μ : M → N → N) (r : N → N → Prop), VTask.Covariant M N μ r → VTask.Covariant M N μ (Function.swap r)",
+      "domain_inputs": {},
+      "anchors": [
+        "Covariant.flip"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Covariant.flip"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "covariant_reject_add_gt",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Covariant ℕ ℕ (· + ·) (· > ·)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Covariant ℕ ℕ (· + ·) (· > ·)",
+      "violated_property": "for all m n₁ n₂, r n₁ n₂ → r (μ m n₁) (μ m n₂)"
+    },
+    {
+      "id": "covariant_reject_sub_le",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.Covariant ℕ ℕ (fun m n => n - m) (· ≤ ·)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Covariant-a480bc70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.Covariant ℕ ℕ (fun m n => n - m) (· ≤ ·)",
+      "violated_property": "for all m n₁ n₂, r n₁ n₂ → r (μ m n₁) (μ m n₂)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Covariant",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Covariant-a480bc70",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "task_id": "Finpartition.bind",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.bind",
+  "signature": {
+    "name": "VTask.bind",
+    "type": "{α : Type u_1} -> [Lattice α] -> [OrderBot α] -> [IsModularLattice α] -> [DecidableEq α] -> {a : α} -> (P : Finpartition a) -> (Q : (i : α) → i ∈ P.parts → Finpartition i) -> Finpartition a",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "P",
+      "Q"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: all inputs are fully constrained to be genuine Finpartition values; the output is always a well-formed Finpartition and no junk-value convention is needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "bind_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a b : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), b ∈ (VTask.bind P Q).parts ↔ ∃ A hA, b ∈ (Q A hA).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_bind"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_bind"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.095,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_card_eq_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), (VTask.bind P Q).parts.card = ∑ A ∈ P.parts.attach, (Q _ A.2).parts.card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.card_bind"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.card_bind"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.213,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_mem_subpart_gives_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a b : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i) (A : α) (hA : A ∈ P.parts), b ∈ (Q A hA).parts → b ∈ (VTask.bind P Q).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_bind"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_bind"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.273,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_card_two_parts",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), P.parts.card = 2 → (∀ i hi, (Q i hi).parts.card = 3) → (VTask.bind P Q).parts.card = 6",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.card_bind"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.card_bind"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_card_nonneg",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), 0 < (VTask.bind P Q).parts.card",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.card_bind",
+        "Finpartition.parts_nonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.card_bind",
+        "Finpartition.parts_nonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_parts_supIndep",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), (VTask.bind P Q).parts.SupIndep id",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.supIndep"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.supIndep"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.97,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_not_mem_of_not_in_any_subpartition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a b : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), (∀ A (hA : A ∈ P.parts), b ∉ (Q A hA).parts) → b ∉ (VTask.bind P Q).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_bind"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_bind"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.482,
+        "at": "authoring",
+        "script": "by simp [_root_.Finpartition.bind] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Finpartition.bind] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_parts_not_contain_part_of_P_unless_singleton_subpartition",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i) (A : α) (hA : A ∈ P.parts), A ∈ (VTask.bind P Q).parts → A ∈ (Q A hA).parts",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.mem_bind"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.mem_bind"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "bind_card_eq_sum_two_three_four",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [Lattice α] [OrderBot α] [IsModularLattice α] [DecidableEq α] {a : α} (P : Finpartition a) (Q : ∀ i, i ∈ P.parts → Finpartition i), P.parts.card = 2 → (∀ i hi, (Q i hi).parts.card = 3 ∨ (Q i hi).parts.card = 4) → (VTask.bind P Q).parts.card ≥ 6",
+      "domain_inputs": {},
+      "anchors": [
+        "Finpartition.card_bind"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finpartition.card_bind"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finpartition.bind-fa5c43d3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finpartition.bind",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finpartition.bind-fa5c43d3",
+    "review_status": "unreviewed"
+  }
+}

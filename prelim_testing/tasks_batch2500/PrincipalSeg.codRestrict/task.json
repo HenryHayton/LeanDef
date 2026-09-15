@@ -1,0 +1,149 @@
+{
+  "task_id": "PrincipalSeg.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {r : α → α → Prop} -> {s : β → β → Prop} -> (p : Set β) -> (f : PrincipalSeg r s) -> (H : ∀ (a : α), f.toRelEmbedding a ∈ p) -> (H₂ : f.top ∈ p) -> PrincipalSeg r (Subrel s fun x => x ∈ p)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f",
+      "H",
+      "H₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total given its explicit proof arguments H and H₂; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_apply_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {r : α → α → Prop} {s : β → β → Prop} (p : Set β) (f : PrincipalSeg r s) (H : ∀ a, f.toRelEmbedding a ∈ p) (H₂ : f.top ∈ p) (a : α), (VTask.codRestrict p f H H₂ a).val ∈ p",
+      "domain_inputs": {},
+      "anchors": [
+        "PrincipalSeg.codRestrict_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PrincipalSeg.codRestrict_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.005,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PrincipalSeg.codRestrict-82cc886b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_top_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {r : α → α → Prop} {s : β → β → Prop} (p : Set β) (f : PrincipalSeg r s) (H : ∀ a, f.toRelEmbedding a ∈ p) (H₂ : f.top ∈ p), (VTask.codRestrict p f H H₂).top.val ∈ p",
+      "domain_inputs": {},
+      "anchors": [
+        "PrincipalSeg.codRestrict_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PrincipalSeg.codRestrict_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.429,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PrincipalSeg.codRestrict-82cc886b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_two_different_tops",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} {r : α → α → Prop} {s : β → β → Prop} (p : Set β) (f : PrincipalSeg r s) (H : ∀ a, f.toRelEmbedding a ∈ p) (H₂ : f.top ∈ p), (VTask.codRestrict p f H H₂).top ≠ ⟨f.top, H₂⟩ → False",
+      "domain_inputs": {},
+      "anchors": [
+        "PrincipalSeg.codRestrict_top"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PrincipalSeg.codRestrict_top"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.428,
+        "at": "authoring",
+        "script": "by simp [_root_.PrincipalSeg.codRestrict] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.PrincipalSeg.codRestrict] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PrincipalSeg.codRestrict-82cc886b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PrincipalSeg.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PrincipalSeg.codRestrict-82cc886b",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,427 @@
+{
+  "task_id": "PeriodPair.weierstrassPExceptSeries",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.weierstrassPExceptSeries",
+  "signature": {
+    "name": "VTask.weierstrassPExceptSeries",
+    "type": "(L : PeriodPair) -> (l₀ x : ℂ) -> FormalMultilinearSeries ℂ ℂ ℂ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "L",
+      "l₀",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "zeroth coefficient",
+        "statement": "The coefficient at index i = 0 is defined to be the value ℘[L - l₀] x, i.e., the evaluation of the removed-pole Weierstrass ℘-function at the expansion centre x.",
+        "note": "This is a junk-value convention in the sense that the series is defined for all x, even poles of ℘[L - l₀], where this value would be infinite."
+      },
+      {
+        "point": "l₀ not in lattice",
+        "statement": "When l₀ ∉ L.lattice, the correction term in all higher-degree coefficients is zero, and the series coincides with the standard Weierstrass ℘ power series L.weierstrassPSeries.",
+        "note": "No lattice membership check is needed in that case; the two series are definitionally equal."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "weierstrassPExceptSeries_notMem_eq_weierstrassPSeries",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ : ℂ), l₀ ∉ L.lattice → VTask.weierstrassPExceptSeries L l₀ = L.weierstrassPSeries",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.671,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_hasFPowerSeriesOnBall",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ) (r : NNReal), 0 < r → Metric.closedBall x r ⊆ (L.lattice \\ {l₀})ᶜ → HasFPowerSeriesOnBall (PeriodPair.weierstrassPExcept L l₀) (VTask.weierstrassPExceptSeries L l₀ x) x r",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.hasFPowerSeriesOnBall_weierstrassPExcept"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.hasFPowerSeriesOnBall_weierstrassPExcept"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.051,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_hasSum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ z x : ℂ), (∀ l : L.lattice, l.1 ≠ l₀ → ‖z - x‖ < ‖l - x‖) → HasSum (fun i ↦ (VTask.weierstrassPExceptSeries L l₀ x).coeff i * (z - x) ^ i) (PeriodPair.weierstrassPExcept L l₀ z)",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExceptSeries_hasSum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExceptSeries_hasSum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.251,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_eq_tsum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ z x : ℂ), (∀ l : L.lattice, l.1 ≠ l₀ → ‖z - x‖ < ‖l - x‖) → PeriodPair.weierstrassPExcept L l₀ z = ∑' i : ℕ, (VTask.weierstrassPExceptSeries L l₀ x).coeff i * (z - x) ^ i",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExcept_eq_tsum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExcept_eq_tsum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.133,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_coeff_eq_tsum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ) (i : ℕ), (VTask.weierstrassPExceptSeries L l₀ x).coeff i = ∑' l : L.lattice, L.weierstrassPExceptSummand l₀ x i l",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.516,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_coeff0_eq_weierstrassPExcept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ), (VTask.weierstrassPExceptSeries L l₀ x).coeff 0 = ∑' l : L.lattice, L.weierstrassPExceptSummand l₀ x 0 l",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.45,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_notMem_eq_weierstrassPSeries_pointwise",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ), l₀ ∉ L.lattice → VTask.weierstrassPExceptSeries L l₀ x = L.weierstrassPSeries x",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_convergence_implies_tsum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ z x : ℂ), (∀ l : L.lattice, l.1 ≠ l₀ → ‖z - x‖ < ‖(l : ℂ) - x‖) → PeriodPair.weierstrassPExcept L l₀ z = ∑' i : ℕ, (VTask.weierstrassPExceptSeries L l₀ x).coeff i * (z - x) ^ i",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExcept_eq_tsum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExcept_eq_tsum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.498,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_ne_weierstrassPSeries_when_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ : ℂ), l₀ ∈ L.lattice → VTask.weierstrassPExceptSeries L l₀ = L.weierstrassPSeries ∨ VTask.weierstrassPExceptSeries L l₀ ≠ L.weierstrassPSeries",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExceptSeries_of_notMem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.464,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_coeff_tsum_form",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ) (i : ℕ), (VTask.weierstrassPExceptSeries L l₀ x).coeff i = ∑' l : L.lattice, L.weierstrassPExceptSummand l₀ x i l",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.coeff_weierstrassPExceptSeries"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.466,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weierstrassPExceptSeries_hasSum_at_centre",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (L : PeriodPair) (l₀ x : ℂ), (∀ l : L.lattice, l.1 ≠ l₀ → ‖x - x‖ < ‖(l : ℂ) - x‖) → HasSum (fun i ↦ (VTask.weierstrassPExceptSeries L l₀ x).coeff i * (x - x) ^ i) (PeriodPair.weierstrassPExcept L l₀ x)",
+      "domain_inputs": {},
+      "anchors": [
+        "PeriodPair.weierstrassPExceptSeries_hasSum"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PeriodPair.weierstrassPExceptSeries_hasSum"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.082,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PeriodPair.weierstrassPExceptSeries",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PeriodPair.weierstrassPExceptSeries-b4b4d51f",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "task_id": "RelIso.sumLexComplLeft",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumLexComplLeft",
+  "signature": {
+    "name": "VTask.sumLexComplLeft",
+    "type": "{α : Type u_1} -> (r : α → α → Prop) -> (x : α) -> [IsTrans α r] -> [Std.Trichotomous r] -> [DecidableRel r] -> Sum.Lex (Subrel r fun x_1 => r x_1 x) (Subrel r fun x_1 => ¬r x_1 x) ≃r r",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction for any relation r, pivot x, and required typeclass instances; no junk-value or edge conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumLexComplLeft_is_reliso",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (x : α) [IsTrans α r] [Std.Trichotomous r] [DecidableRel r], Function.Bijective (VTask.sumLexComplLeft r x)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelIso.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelIso.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.797,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumLexComplLeft_map_rel_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (x : α) [IsTrans α r] [Std.Trichotomous r] [DecidableRel r] (a b : Sum {y : α // r y x} {y : α // ¬r y x}), Sum.Lex (Subrel r (r · x)) (Subrel r (¬r · x)) a b ↔ r ((VTask.sumLexComplLeft r x) a) ((VTask.sumLexComplLeft r x) b)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelIso.map_rel_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelIso.map_rel_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 23.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumLexComplLeft_left_below_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (x : α) [IsTrans α r] [Std.Trichotomous r] [DecidableRel r] (a : {y : α // r y x}) (b : {y : α // ¬r y x}), r ((VTask.sumLexComplLeft r x) (Sum.inl a)) ((VTask.sumLexComplLeft r x) (Sum.inr b))",
+      "domain_inputs": {},
+      "anchors": [
+        "RelIso.sumLexComplLeft_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelIso.sumLexComplLeft_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumLexComplLeft_nat_lt_pivot3_left_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (2 : ℕ) < 3 := by decide",
+      "domain_inputs": {
+        "x": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(2 : ℕ) < 3"
+    },
+    {
+      "id": "sumLexComplLeft_nat_lt_pivot3_right_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(3 : ℕ) < 3 := by decide",
+      "domain_inputs": {
+        "x": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "¬(3 : ℕ) < 3",
+      "violated_property": "r 3 x where x = 3"
+    },
+    {
+      "id": "sumLexComplLeft_nat_lt_pivot0_left_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(0 : ℕ) < 0 := by decide",
+      "domain_inputs": {
+        "x": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "¬(0 : ℕ) < 0",
+      "violated_property": "r 0 x where x = 0"
+    },
+    {
+      "id": "sumLexComplLeft_fin4_pivot2_left_member",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (1 : Fin 4) < 2 := by decide",
+      "domain_inputs": {
+        "x": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1 : Fin 4) < 2"
+    },
+    {
+      "id": "sumLexComplLeft_fin4_pivot2_right_member",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(3 : Fin 4) < 2 := by decide",
+      "domain_inputs": {
+        "x": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "¬(3 : Fin 4) < 2",
+      "violated_property": "r 3 x where x = 2"
+    },
+    {
+      "id": "sumLexComplLeft_left_lt_right_in_nat",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (1 : ℕ) < 3 := by decide",
+      "domain_inputs": {
+        "x": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by omega",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(1 : ℕ) < 3"
+    },
+    {
+      "id": "sumLexComplLeft_reliso_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (r : α → α → Prop) (x : α) [IsTrans α r] [Std.Trichotomous r] [DecidableRel r], Function.Injective (VTask.sumLexComplLeft r x)",
+      "domain_inputs": {},
+      "anchors": [
+        "RelIso.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "RelIso.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "RelIso.sumLexComplLeft",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "RelIso.sumLexComplLeft-6bf3b597",
+    "review_status": "unreviewed"
+  }
+}

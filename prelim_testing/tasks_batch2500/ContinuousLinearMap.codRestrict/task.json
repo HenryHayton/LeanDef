@@ -1,0 +1,249 @@
+{
+  "task_id": "ContinuousLinearMap.codRestrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.codRestrict",
+  "signature": {
+    "name": "VTask.codRestrict",
+    "type": "{R₁ : Type u_1} -> {R₂ : Type u_2} -> [Semiring R₁] -> [Semiring R₂] -> {σ₁₂ : R₁ →+* R₂} -> {M₁ : Type u_4} -> {M₂ : Type u_5} -> [TopologicalSpace M₁] -> [AddCommMonoid M₁] -> [Module R₁ M₁] -> [TopologicalSpace M₂] -> [AddCommMonoid M₂] -> [Module R₂ M₂] -> (f : M₁ →SL[σ₁₂] M₂) -> (p : Submodule R₂ M₂) -> (h : ∀ (x : M₁), f x ∈ p) -> M₁ →SL[σ₁₂] ↥p",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "p",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total on all well-typed inputs (the membership proof h is required explicitly), so there are no junk-value or out-of-domain edge conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "codRestrict_ker_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [Module R₁ M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : ∀ x, f x ∈ p), LinearMap.ker (VTask.codRestrict f p h : M₁ →ₛₗ[σ₁₂] ↥p) = LinearMap.ker (f : M₁ →ₛₗ[σ₁₂] M₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.902,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_values_in_p",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [Module R₁ M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : ∀ x, f x ∈ p) (x : M₁), (VTask.codRestrict f p h x : M₂) ∈ p",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coe_codRestrict_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coe_codRestrict_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.887,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_coe_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [Module R₁ M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₂ M₂] (f g : M₁ →SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (hf : ∀ x, f x ∈ p) (hg : ∀ x, g x ∈ p), VTask.codRestrict f p hf = VTask.codRestrict g p hg → f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coe_codRestrict_apply",
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coe_codRestrict_apply",
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_ker_zero_of_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R₁ R₂ : Type*} [Semiring R₁] [Semiring R₂] {σ₁₂ : R₁ →+* R₂} {M₁ M₂ : Type*} [TopologicalSpace M₁] [AddCommMonoid M₁] [Module R₁ M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [Module R₂ M₂] (f : M₁ →SL[σ₁₂] M₂) (p : Submodule R₂ M₂) (h : ∀ x, f x ∈ p), LinearMap.ker (f : M₁ →ₛₗ[σ₁₂] M₂) = ⊥ → LinearMap.ker (VTask.codRestrict f p h : M₁ →ₛₗ[σ₁₂] ↥p) = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.88,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_reject_coercion_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : (ℝ →L[ℝ] ℝ)) (p : Submodule ℝ ℝ) (h : ∀ x, f x ∈ p) (x : ℝ), ¬ ((VTask.codRestrict f p h x : ℝ) ≠ f x)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.coe_codRestrict_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.coe_codRestrict_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.372,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "codRestrict_reject_wrong_kernel",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : (ℝ →L[ℝ] ℝ)) (p : Submodule ℝ ℝ) (h : ∀ x, f x ∈ p), ¬ (LinearMap.ker (VTask.codRestrict f p h : ℝ →ₛₗ[RingHom.id ℝ] ↥p) ≠ LinearMap.ker (f : ℝ →ₛₗ[RingHom.id ℝ] ℝ))",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ker_codRestrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.302,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.codRestrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.codRestrict-288d7595",
+    "review_status": "unreviewed"
+  }
+}

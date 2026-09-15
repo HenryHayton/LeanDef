@@ -1,0 +1,191 @@
+{
+  "task_id": "PFun.fixInduction",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.fixInduction",
+  "signature": {
+    "name": "VTask.fixInduction",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {C : α → Sort u_7} -> {f : α →. β ⊕ α} -> {b : β} -> {a : α} -> (h : b ∈ f.fix a) -> (H : (a' : α) → b ∈ f.fix a' → ((a'' : α) → Sum.inr a'' ∈ f a' → C a'') → C a') -> C a",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on its stated inputs; the membership proof h ensures termination and there is no junk-value or boundary convention to record."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fixInduction_unfold_spec",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {C : α → Sort*} {f : α →. β ⊕ α} {b : β} {a : α} (h : b ∈ f.fix a) (H : ∀ a', b ∈ f.fix a' → (∀ a'', Sum.inr a'' ∈ f a' → C a'') → C a'), VTask.fixInduction h H = H a h (fun a'' ha'' => VTask.fixInduction (PFun.fix_fwd h ha'') H)",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.fixInduction_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.fixInduction_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.676,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFun.fixInduction-b7b95bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixInduction_H_called_with_a",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {C : α → Sort*} {f : α →. β ⊕ α} {b : β} {a : α} (h : b ∈ f.fix a) (H : ∀ a', b ∈ f.fix a' → (∀ a'', Sum.inr a'' ∈ f a' → C a'') → C a'), ∃ (ih : ∀ a'', Sum.inr a'' ∈ f a → C a''), VTask.fixInduction h H = H a h ih",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.fixInduction_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.fixInduction_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.fixInduction-b7b95bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixInduction_step_uses_fix_fwd",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {C : α → Sort*} {f : α →. β ⊕ α} {b : β} {a a'' : α} (h : b ∈ f.fix a) (ha'' : Sum.inr a'' ∈ f a) (H : ∀ a', b ∈ f.fix a' → (∀ a''', Sum.inr a''' ∈ f a' → C a''') → C a'), VTask.fixInduction (PFun.fix_fwd h ha'') H = VTask.fixInduction (PFun.fix_fwd h ha'') H",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.fix_fwd"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.fix_fwd"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.fixInduction-b7b95bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixInduction_agrees_with_variant_on_step",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {C : α → Sort*} {f : α →. β ⊕ α} {b : β} {a a' : α} (h : b ∈ f.fix a) (h' : b ∈ f.fix a') (hstep : Sum.inr a' ∈ f a) (H : ∀ a'', b ∈ f.fix a'' → (∀ a''', Sum.inr a''' ∈ f a'' → C a''') → C a''), VTask.fixInduction h H = H a h (fun a'' ha'' => VTask.fixInduction (PFun.fix_fwd h ha'') H)",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.fixInduction_spec"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.fixInduction_spec"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 17.848,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PFun.fixInduction-b7b95bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fixInduction_ne_wrong_output",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {α : Type*} {β : Type*} {C : α → Sort*} {f : α →. β ⊕ α} {b : β} {a : α} (h : b ∈ f.fix a) (H : ∀ a', b ∈ f.fix a' → (∀ a'', Sum.inr a'' ∈ f a' → C a'') → C a'), (VTask.fixInduction h H : C a) = (VTask.fixInduction h H : C a) → False)",
+      "domain_inputs": {},
+      "anchors": [
+        "PFun.fixInduction_spec"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PFun.fixInduction_spec"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PFun.fixInduction-b7b95bd9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PFun.fixInduction",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PFun.fixInduction-b7b95bd9",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "task_id": "Squarefree",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Squarefree",
+  "signature": {
+    "name": "VTask.Squarefree",
+    "type": "{R : Type u_1} -> [Monoid R] -> (r : R) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": "Units are squarefree",
+        "statement": "For any unit u in a monoid, VTask.Squarefree u holds because x * x ∣ u implies x is a unit.",
+        "note": "Standard consequence of unit divisibility."
+      },
+      {
+        "point": "Zero is not squarefree in nontrivial rings",
+        "statement": "In a nontrivial ring, VTask.Squarefree 0 fails because x * x ∣ 0 for all x, yet not every x is a unit.",
+        "note": "Edge case: the predicate is total but evaluates to False for 0 in most rings."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "squarefree_unit_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : Monoid R] (u : Rˣ), VTask.Squarefree (u : R)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsUnit.squarefree"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsUnit.squarefree"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Squarefree-3a3c1a3a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squarefree_one_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : Monoid R], VTask.Squarefree (1 : R)",
+      "domain_inputs": {},
+      "anchors": [
+        "squarefree_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "squarefree_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Squarefree-3a3c1a3a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squarefree_of_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommMonoidWithZero R] (p : R), Prime p → VTask.Squarefree p",
+      "domain_inputs": {},
+      "anchors": [
+        "Irreducible.squarefree",
+        "Prime.irreducible"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Irreducible.squarefree",
+        "Prime.irreducible"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Squarefree-3a3c1a3a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "squarefree_of_squarefree_mul_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [inst : CommMonoid R] (a b : R), VTask.Squarefree (a * b) → VTask.Squarefree a",
+      "domain_inputs": {},
+      "anchors": [
+        "Squarefree.of_mul_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Squarefree.of_mul_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.779,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Squarefree-3a3c1a3a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Squarefree",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Squarefree-3a3c1a3a",
+    "review_status": "unreviewed"
+  }
+}

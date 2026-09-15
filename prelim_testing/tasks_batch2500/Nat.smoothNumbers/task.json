@@ -1,0 +1,247 @@
+{
+  "task_id": "Nat.smoothNumbers",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.smoothNumbers",
+  "signature": {
+    "name": "VTask.smoothNumbers",
+    "type": "(n : ℕ) -> Set ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.smoothNumbers 0 = {1}: the only member is 1, which has no prime factors, satisfying the vacuous condition.",
+        "note": "Proved as Nat.smoothNumbers_zero in Mathlib."
+      },
+      {
+        "point": "m = 0",
+        "statement": "0 is never a member of VTask.smoothNumbers n for any n, because membership requires m ≠ 0.",
+        "note": "Exclusion of zero is part of the definition."
+      },
+      {
+        "point": "n composite",
+        "statement": "When n is not prime, VTask.smoothNumbers (n+1) = VTask.smoothNumbers n, because no new prime threshold is crossed.",
+        "note": "Proved as Nat.smoothNumbers_succ."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "smooth_0_notin_7",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : 0 ∉ VTask.smoothNumbers 7 := by decide",
+      "domain_inputs": {
+        "n": [
+          "7"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "0",
+      "violated_property": "membership requires m ≠ 0"
+    },
+    {
+      "id": "smooth_zero_eq_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.smoothNumbers 0 = {1}",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smoothNumbers_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smoothNumbers_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.339,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smooth_monotone_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.smoothNumbers n ⊆ VTask.smoothNumbers (n + 1)",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.mem_smoothNumbers'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.mem_smoothNumbers'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smooth_nonzero_member",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n m : ℕ, m ∈ VTask.smoothNumbers n → m ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.ne_zero_of_mem_smoothNumbers"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.ne_zero_of_mem_smoothNumbers"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.373,
+        "at": "authoring",
+        "script": "by simp [_root_.Nat.smoothNumbers] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Nat.smoothNumbers] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smooth_succ_non_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ N : ℕ, ¬ N.Prime → VTask.smoothNumbers (N + 1) = VTask.smoothNumbers N",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smoothNumbers_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smoothNumbers_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 55.318,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smooth_mem_of_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ m n : ℕ, 0 < m → m < n → m ∈ VTask.smoothNumbers n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.mem_smoothNumbers_of_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.mem_smoothNumbers_of_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.829,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.smoothNumbers",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.smoothNumbers-5ee0d25e",
+    "review_status": "unreviewed"
+  }
+}

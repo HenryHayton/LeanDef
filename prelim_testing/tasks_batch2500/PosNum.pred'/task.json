@@ -1,0 +1,282 @@
+{
+  "task_id": "PosNum.pred'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pred'",
+  "signature": {
+    "name": "VTask.pred'",
+    "type": "PosNum → Num",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on PosNum with no junk-value or out-of-domain convention needed; every input has a canonical, meaningful output."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pred'_one_eq_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.pred' 1 = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_result_not_pos_for_one",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.pred' 1 ≠ Num.pos 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.pred' 1",
+      "violated_property": "pred' 1 should be Num.zero, not any Num.pos value"
+    },
+    {
+      "id": "pred'_cast_to_nat_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, (VTask.pred' n : ℕ) = Nat.pred (n : ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.pred'_to_nat"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.pred'_to_nat"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.315,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_to_nat_plus_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, (n : ℕ) = (VTask.pred' n : ℕ) + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.to_nat_eq_succ_pred",
+        "PosNum.pred'_to_nat"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.to_nat_eq_succ_pred",
+        "PosNum.pred'_to_nat"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.269,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_to_int_eq_succ_pred",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, (n : ℤ) = (VTask.pred' n : ℕ) + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.to_int_eq_succ_pred"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.to_int_eq_succ_pred"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.309,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_pos_result_for_gt_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, 1 < (n : ℕ) → ∃ m : PosNum, VTask.pred' n = Num.pos m",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.pred'_to_nat",
+        "PosNum.to_nat_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.pred'_to_nat",
+        "PosNum.to_nat_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_cast_nat_lt_original",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : PosNum, (VTask.pred' n : ℕ) < (n : ℕ)",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.pred'_to_nat",
+        "PosNum.to_nat_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.pred'_to_nat",
+        "PosNum.to_nat_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pred'_ne_pos_one_at_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.pred' 1 ≠ Num.pos 1",
+      "domain_inputs": {},
+      "anchors": [
+        "PosNum.pred'_to_nat"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PosNum.pred'_to_nat"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.054,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "PosNum.pred'-9809f41e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PosNum.pred'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PosNum.pred'-9809f41e",
+    "review_status": "unreviewed"
+  }
+}

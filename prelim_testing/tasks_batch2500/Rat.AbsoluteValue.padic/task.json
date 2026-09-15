@@ -1,0 +1,255 @@
+{
+  "task_id": "Rat.AbsoluteValue.padic",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.padic",
+  "signature": {
+    "name": "VTask.padic",
+    "type": "(p : ℕ) -> [Fact (Nat.Prime p)] -> AbsoluteValue ℚ ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "Nat.Prime p",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "zero",
+        "statement": "VTask.padic p 0 = 0 for any prime p.",
+        "note": "Required by the AbsoluteValue axioms; the p-adic norm of zero is defined to be zero."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "padic_nonneg_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (x : ℚ), 0 ≤ VTask.padic p x",
+      "domain_inputs": {},
+      "anchors": [
+        "AbsoluteValue.nonneg"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AbsoluteValue.nonneg"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.616,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_integer_le_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)] (n : ℤ), VTask.padic p (n : ℚ) ≤ 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.AbsoluteValue.padic_le_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.AbsoluteValue.padic_le_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.295,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_not_equiv_real",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], ¬ (Rat.AbsoluteValue.real.IsEquiv (VTask.padic p))",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.AbsoluteValue.not_real_isEquiv_padic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.AbsoluteValue.not_real_isEquiv_padic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.17,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_ostrowski_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : AbsoluteValue ℚ ℝ), f.IsNontrivial → f ≈ Rat.AbsoluteValue.real ∨ ∃! p, ∃ (_ : Fact (Nat.Prime p)), f ≈ (VTask.padic p)",
+      "domain_inputs": {},
+      "anchors": [
+        "Rat.AbsoluteValue.equiv_real_or_padic"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Rat.AbsoluteValue.equiv_real_or_padic"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.453,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_map_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], VTask.padic p 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "AbsoluteValue.map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AbsoluteValue.map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.099,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "padic_map_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) [Fact (Nat.Prime p)], VTask.padic p 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "AbsoluteValue.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AbsoluteValue.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.089,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Rat.AbsoluteValue.padic",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Rat.AbsoluteValue.padic-6a4f66bc",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "task_id": "Finmap.liftOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.liftOn",
+  "signature": {
+    "name": "VTask.liftOn",
+    "type": "{α : Type u} -> {β : α → Type v} -> {γ : Type u_1} -> (s : Finmap β) -> (f : AList β → γ) -> (H : ∀ (a b : AList β), a.entries.Perm b.entries → f a = f b) -> γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "f",
+      "H"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined for all inputs satisfying the permutation-invariance hypothesis; there are no junk-value conventions or special edge treatments."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftOn_const",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} {γ : Type*} (s : Finmap β) (c : γ) (H : ∀ (a b : AList β), a.entries.Perm b.entries → c = c), VTask.liftOn s (fun _ => c) H = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finmap.liftOn-21987fa9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_id_type_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} (s : AList β) (H : ∀ (a b : AList β), a.entries.Perm b.entries → a = b → True), True",
+      "domain_inputs": {
+        "s": [
+          "s"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.161,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finmap.liftOn-21987fa9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "True"
+    },
+    {
+      "id": "liftOn_determines_by_finmap_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : α → Type*} {γ : Type*} (s₁ s₂ : Finmap β) (f : AList β → γ) (H : ∀ (a b : AList β), a.entries.Perm b.entries → f a = f b), s₁ = s₂ → VTask.liftOn s₁ f H = VTask.liftOn s₂ f H",
+      "domain_inputs": {},
+      "anchors": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.804,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finmap.liftOn-21987fa9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_reject_different_results",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (α : Type) (β : α → Type) (γ : Type) (s : Finmap β) (f g : AList β → γ) (Hf : ∀ a b : AList β, a.entries.Perm b.entries → f a = f b) (Hg : ∀ a b : AList β, a.entries.Perm b.entries → g a = g b), VTask.liftOn s f Hf = VTask.liftOn s g Hg)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finmap.liftOn_toFinmap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finmap.liftOn-21987fa9",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finmap.liftOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finmap.liftOn-21987fa9",
+    "review_status": "unreviewed"
+  }
+}

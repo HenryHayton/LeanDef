@@ -1,0 +1,440 @@
+{
+  "task_id": "List.sym2",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sym2",
+  "signature": {
+    "name": "VTask.sym2",
+    "type": "{α : Type u_1} -> List α → List (Sym2 α)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "xs"
+    ],
+    "conventions": [
+      {
+        "point": "diagonal pairs included",
+        "statement": "For any element `a` in `xs`, the diagonal pair `s(a, a)` is included in `VTask.sym2 xs`; the function does not exclude equal-component pairs.",
+        "note": "This means the output is all unordered pairs with repetition allowed (multiset pairs), not just strictly off-diagonal ones."
+      },
+      {
+        "point": "each unordered pair once when no duplicates",
+        "statement": "Because `Sym2` identifies `s(a, b)` with `s(b, a)`, when `xs` has no duplicates each unordered pair appears exactly once in `VTask.sym2 xs`.",
+        "note": "Follows from `List.Nodup.sym2`."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sym2_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sym2 ([] : List Nat) = [] := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sym2 [1] = [s(1, 1)] := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_two_elements",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sym2 [1, 2] = [s(1, 1), s(1, 2), s(2, 2)] := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_length_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sym2 ([] : List Nat)).length = Nat.choose (0 + 1) 2 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_length_three",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sym2 [1, 2, 3]).length = Nat.choose (3 + 1) 2 := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_diagonal_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : s(2, 2) ∈ VTask.sym2 [1, 2, 3] := by decide",
+      "domain_inputs": {
+        "xs": [
+          "[1, 2, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "s(2, 2)"
+    },
+    {
+      "id": "sym2_length_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List Nat), (VTask.sym2 xs).length = Nat.choose (xs.length + 1) 2",
+      "domain_inputs": {},
+      "anchors": [
+        "List.length_sym2"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.length_sym2"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.67,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_eq_nil_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (xs : List Nat), VTask.sym2 xs = [] ↔ xs = []",
+      "domain_inputs": {},
+      "anchors": [
+        "List.sym2_eq_nil_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.sym2_eq_nil_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.083,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (xs : List α) (z : Sym2 α), z ∈ VTask.sym2 xs ↔ ∀ y ∈ z, y ∈ xs",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mem_sym2_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mem_sym2_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.688,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_mk_mem_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (xs : List α) (a b : α), s(a, b) ∈ VTask.sym2 xs ↔ a ∈ xs ∧ b ∈ xs",
+      "domain_inputs": {},
+      "anchors": [
+        "List.mk_mem_sym2_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.mk_mem_sym2_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.397,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_nodup_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} (xs : List α), xs.Nodup → (VTask.sym2 xs).Nodup",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Nodup.sym2"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Nodup.sym2"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.219,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_dedup_commute",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type} [DecidableEq α] (xs : List α), (VTask.sym2 xs).dedup = VTask.sym2 xs.dedup",
+      "domain_inputs": {},
+      "anchors": [
+        "List.dedup_sym2"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.dedup_sym2"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.486,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sym2_map_commute",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β) (xs : List α), VTask.sym2 (xs.map f) = (VTask.sym2 xs).map (Sym2.map f)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.sym2_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.sym2_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.296,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.sym2-b96f037e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.sym2",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.sym2-b96f037e",
+    "review_status": "unreviewed"
+  }
+}

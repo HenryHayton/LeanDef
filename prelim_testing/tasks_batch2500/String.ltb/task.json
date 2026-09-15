@@ -1,0 +1,120 @@
+{
+  "task_id": "String.ltb",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ltb",
+  "signature": {
+    "name": "VTask.ltb",
+    "type": "(s₁ s₂ : String.Legacy.Iterator) -> Bool",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s₁",
+      "s₂"
+    ],
+    "conventions": [
+      {
+        "point": "both exhausted",
+        "statement": "If both iterators have no remaining characters, `VTask.ltb s₁ s₂ = false`.",
+        "note": "Empty is not strictly less than empty."
+      },
+      {
+        "point": "first exhausted, second non-empty",
+        "statement": "If `s₁` has no remaining characters but `s₂` does, `VTask.ltb s₁ s₂ = true`.",
+        "note": "Empty suffix is the minimum element."
+      },
+      {
+        "point": "second exhausted",
+        "statement": "If `s₂` has no remaining characters (regardless of `s₁`), `VTask.ltb s₁ s₂ = false`.",
+        "note": "Nothing is strictly less than the empty suffix."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ltb_iff_string_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ s₁ s₂ : String, s₁ < s₂ ↔ VTask.ltb (String.Legacy.iter s₁) (String.Legacy.iter s₂) = true",
+      "domain_inputs": {},
+      "anchors": [
+        "String.lt_iff_ltb"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "String.lt_iff_ltb"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.261,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "String.ltb-16abc3ac",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ltb_antisymm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ s₁ s₂ : String, VTask.ltb (String.Legacy.iter s₁) (String.Legacy.iter s₂) = true → VTask.ltb (String.Legacy.iter s₂) (String.Legacy.iter s₁) = false",
+      "domain_inputs": {},
+      "anchors": [
+        "String.lt_iff_ltb",
+        "lt_irrefl",
+        "String.lt_irrefl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "String.lt_iff_ltb",
+        "lt_irrefl",
+        "String.lt_irrefl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "String.ltb-16abc3ac",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "String.ltb",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "String.ltb-16abc3ac",
+    "review_status": "unreviewed"
+  }
+}

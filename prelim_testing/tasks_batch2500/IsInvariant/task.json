@@ -1,0 +1,209 @@
+{
+  "task_id": "IsInvariant",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsInvariant",
+  "signature": {
+    "name": "VTask.IsInvariant",
+    "type": "{τ : Type u_1} -> {α : Type u_2} -> (ϕ : τ → α → α) -> (s : Set α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ϕ",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.IsInvariant is a universally quantified proposition that is meaningful and well-formed for all inputs including edge cases; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isInvariant_iff_image_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} (ϕ : τ → α → α) (s : Set α), VTask.IsInvariant ϕ s ↔ ∀ t, ϕ t '' s ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "isInvariant_iff_image"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "isInvariant_iff_image"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.189,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInvariant_implies_forwardInvariant",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} [Preorder τ] [Zero τ] (ϕ : τ → α → α) (s : Set α), VTask.IsInvariant ϕ s → IsForwardInvariant ϕ s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsInvariant.isForwardInvariant"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsInvariant.isForwardInvariant"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.204,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isForwardInvariant_implies_isInvariant_canonically_ordered",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} [AddMonoid τ] [PartialOrder τ] [CanonicallyOrderedAdd τ] (ϕ : τ → α → α) (s : Set α), IsForwardInvariant ϕ s → VTask.IsInvariant ϕ s",
+      "domain_inputs": {},
+      "anchors": [
+        "IsForwardInvariant.isInvariant"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsForwardInvariant.isInvariant"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInvariant_inter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} (ϕ : τ → α → α) (s t : Set α), VTask.IsInvariant ϕ s → VTask.IsInvariant ϕ t → VTask.IsInvariant ϕ (s ∩ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.MapsTo.inter_inter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.MapsTo.inter_inter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInvariant_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} (ϕ : τ → α → α) (s t : Set α), VTask.IsInvariant ϕ s → VTask.IsInvariant ϕ t → VTask.IsInvariant ϕ (s ∪ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.MapsTo.union_union"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.MapsTo.union_union"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isInvariant_fixed_implies",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {τ α : Type*} (ϕ : τ → α → α) (s : Set α), (∀ t : τ, ∀ x ∈ s, ϕ t x = x) → VTask.IsInvariant ϕ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mapsTo_id",
+        "isInvariant_iff_image"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mapsTo_id",
+        "isInvariant_iff_image"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsInvariant-e495e1ca",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsInvariant",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsInvariant-e495e1ca",
+    "review_status": "unreviewed"
+  }
+}

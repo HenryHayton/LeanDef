@@ -1,0 +1,194 @@
+{
+  "task_id": "Subalgebra.inclusion",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.inclusion",
+  "signature": {
+    "name": "VTask.inclusion",
+    "type": "{R : Type u} -> {A : Type v} -> [CommSemiring R] -> [Semiring A] -> [Algebra R A] -> {S T : Subalgebra R A} -> (h : S ≤ T) -> ↥S →ₐ[R] ↥T",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The map is total and its behaviour is uniformly defined by the containment proof; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inclusion_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T), Function.Injective (VTask.inclusion h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.inclusion_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.inclusion_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.07,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.inclusion-748d4af3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_is_alg_hom",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T), (VTask.inclusion h).toFun = fun x => ⟨x.1, h x.2⟩",
+      "domain_inputs": {
+        "h": [
+          "S ≤ T"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.466,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Subalgebra.inclusion-748d4af3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.inclusion"
+    },
+    {
+      "id": "inclusion_not_surjective_strict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R : Type*} {A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T), Function.Surjective (VTask.inclusion h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subalgebra.inclusion_injective",
+        "Function.Injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subalgebra.inclusion_injective",
+        "Function.Injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subalgebra.inclusion-748d4af3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inclusion_not_val",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R : Type*} {A : Type*} [CommSemiring R] [Semiring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T), (VTask.inclusion h : S →ₐ[R] T) = (AlgHom.comp (Subalgebra.val T) (VTask.inclusion h) : S →ₐ[R] A)",
+      "domain_inputs": {
+        "h": [
+          "S ≤ T"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subalgebra.inclusion-748d4af3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "fun {R A} [CommSemiring R] [Semiring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T) => (VTask.inclusion h : S →ₐ[R] T)",
+      "violated_property": "The inclusion lands in T (a subalgebra), not in A (the full algebra); Subalgebra.val targets A, not T"
+    },
+    {
+      "id": "inclusion_not_subring_inclusion",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R : Type*} {A : Type*} [CommSemiring R] [Ring A] [Algebra R A] {S T : Subalgebra R A} (h : S ≤ T), (VTask.inclusion h : S →ₐ[R] T).toRingHom = Subring.inclusion (Subalgebra.toSubring_mono h)",
+      "domain_inputs": {
+        "h": [
+          "S ≤ T"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Subalgebra.inclusion-748d4af3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "Subring.inclusion",
+      "violated_property": "Subring.inclusion is only a ring homomorphism, not an R-algebra homomorphism; it does not preserve the scalar algebra structure"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Subalgebra.inclusion",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Subalgebra.inclusion-748d4af3",
+    "review_status": "unreviewed"
+  }
+}

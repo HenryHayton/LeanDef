@@ -1,0 +1,206 @@
+{
+  "task_id": "Metric.InductiveLimit",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.InductiveLimit",
+  "signature": {
+    "name": "VTask.InductiveLimit",
+    "type": "{X : ℕ → Type u} -> [(n : ℕ) → MetricSpace (X n)] -> {f : (n : ℕ) → X n → X (n + 1)} -> (I : ∀ (n : ℕ), Isometry (f n)) -> Type u",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "X",
+      "f",
+      "I"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: InductiveLimit is a total type-valued construction; it is well-defined for every isometric inductive system and has no junk-value or boundary conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "inductive_limit_is_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : ℕ → Type*} [inst : (n : ℕ) → MetricSpace (X n)] {f : (n : ℕ) → X n → X (n + 1)} (I : ∀ n, Isometry (f n)), Nonempty (VTask.InductiveLimit I) ∨ ¬Nonempty (VTask.InductiveLimit I)",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.em"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.em"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.488,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Metric.InductiveLimit-98be0ace",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductive_limit_nonempty_when_spaces_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : ℕ → Type*} [inst : (n : ℕ) → MetricSpace (X n)] {f : (n : ℕ) → X n → X (n + 1)} (I : ∀ n, Isometry (f n)), (∀ n, Nonempty (X n)) → Nonempty (VTask.InductiveLimit I)",
+      "domain_inputs": {},
+      "anchors": [
+        "Classical.em"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Classical.em"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Metric.InductiveLimit-98be0ace",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "inductive_limit_accepts_identity_system",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "Nonempty (VTask.InductiveLimit (fun n => @isometry_id ℝ _))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.049,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Metric.InductiveLimit-98be0ace",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.InductiveLimit (fun n => @isometry_id ℝ _)"
+    },
+    {
+      "id": "inductive_limit_isometry_id_is_valid",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, Isometry (@id ℝ)",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.071,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Metric.InductiveLimit-98be0ace",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "fun n => (isometry_id : Isometry (@id ℝ))"
+    },
+    {
+      "id": "inductive_limit_distance_zero_implies_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : ℕ → Type*} [inst : (n : ℕ) → MetricSpace (X n)] {f : (n : ℕ) → X n → X (n + 1)} (I : ∀ n, Isometry (f n)) (x y : VTask.InductiveLimit I), dist x y = 0 → x = y",
+      "domain_inputs": {},
+      "anchors": [
+        "dist_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "dist_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.218,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Metric.InductiveLimit-98be0ace",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Metric.InductiveLimit",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Metric.InductiveLimit-98be0ace",
+    "review_status": "unreviewed"
+  }
+}

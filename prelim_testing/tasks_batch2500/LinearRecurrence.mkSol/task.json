@@ -1,0 +1,277 @@
+{
+  "task_id": "LinearRecurrence.mkSol",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mkSol",
+  "signature": {
+    "name": "VTask.mkSol",
+    "type": "{R : Type u_1} -> [CommSemiring R] -> (E : LinearRecurrence R) -> (init : Fin E.order → R) -> ℕ → R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "E",
+      "init"
+    ],
+    "conventions": [
+      {
+        "point": "Base case: n < E.order",
+        "statement": "When the index n satisfies n < E.order, VTask.mkSol E init n = init ⟨n, h⟩, returning the prescribed initial value directly.",
+        "note": "This is the defining base case; the recurrence coefficients play no role here."
+      },
+      {
+        "point": "Recursive case: n ≥ E.order",
+        "statement": "When n ≥ E.order, VTask.mkSol E init n is the linear combination ∑ k : Fin E.order, E.coeffs k * VTask.mkSol E init (n - E.order + k), extending the sequence by the recurrence.",
+        "note": "Well-founded because each recursive call has a strictly smaller index."
+      },
+      {
+        "point": "Order 0 edge case",
+        "statement": "When E.order = 0, every index is ≥ 0 = E.order, so the sequence is defined entirely by the empty recurrence sum, yielding 0 everywhere.",
+        "note": "The Fin 0 → R initial data is unique (vacuously empty) and plays no role."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mkSol_injective_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R), Function.Injective (VTask.mkSol E)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_uniqueness_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R) (u : ℕ → R) (init : Fin E.order → R), E.IsSolution u → (∀ n : Fin E.order, u n = init n) → u = VTask.mkSol E init",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.eq_mk_of_is_sol_of_eq_init'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.eq_mk_of_is_sol_of_eq_init'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.907,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_eq_init_pointwise_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R) (init : Fin E.order → R) (n : Fin E.order), VTask.mkSol E init ↑n = init n",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.mkSol_eq_init"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.mkSol_eq_init"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.017,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_two_inits_distinct",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R) (init1 init2 : Fin E.order → R), init1 ≠ init2 → VTask.mkSol E init1 ≠ VTask.mkSol E init2",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_is_solution_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R) (init : Fin E.order → R), E.IsSolution (VTask.mkSol E init)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.is_sol_mkSol"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.is_sol_mkSol"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.081,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_agrees_with_init_accept",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (E : LinearRecurrence R) (init : Fin E.order → R) (n : Fin E.order), VTask.mkSol E init n = init n",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.mkSol_eq_init"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.mkSol_eq_init"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.035,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mkSol_ne_wrong_init",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (E : LinearRecurrence ℕ) (init1 init2 : Fin E.order → ℕ), init1 ≠ init2 → VTask.mkSol E init1 ≠ VTask.mkSol E init2",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearRecurrence.mkSol_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearRecurrence.mkSol",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearRecurrence.mkSol-eb5844cd",
+    "review_status": "unreviewed"
+  }
+}

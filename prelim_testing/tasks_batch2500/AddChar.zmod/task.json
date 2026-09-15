@@ -1,0 +1,186 @@
+{
+  "task_id": "AddChar.zmod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.zmod",
+  "signature": {
+    "name": "VTask.zmod",
+    "type": "(n : ℕ) -> [NeZero n] -> (x : ZMod n) -> AddChar (ZMod n) Circle",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "NeZero n",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "x = 0",
+        "statement": "VTask.zmod n 0 is the trivial additive character, mapping every y : ZMod n to 1 ∈ Circle.",
+        "note": "This follows from e^(2πi·0·y/n) = 1 for all y."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "zmod_zero_is_trivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) [NeZero n] (y : ZMod n), (VTask.zmod n 0) y = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.168,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddChar.zmod-b75c2251",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zmod_is_addchar",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) [NeZero n] (x : ZMod n), (VTask.zmod n x).toFun 0 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.291,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddChar.zmod-b75c2251",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zmod_map_zero_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) [NeZero n] (x : ZMod n), (VTask.zmod n x) 0 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddChar.map_zero_eq_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.138,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddChar.zmod-b75c2251",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zmod_reject_distinct_characters",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) [NeZero n] (x y : ZMod n), x ≠ y → VTask.zmod n x ≠ VTask.zmod n y",
+      "domain_inputs": {},
+      "anchors": [
+        "AddChar.injective_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddChar.injective_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.418,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddChar.zmod-b75c2251",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AddChar.zmod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AddChar.zmod-b75c2251",
+    "review_status": "unreviewed"
+  }
+}

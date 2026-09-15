@@ -1,0 +1,97 @@
+{
+  "task_id": "OrderedFinpartition.applyOrderedFinpartition",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.applyOrderedFinpartition",
+  "signature": {
+    "name": "VTask.applyOrderedFinpartition",
+    "type": "{𝕜 : Type u_1} -> [NontriviallyNormedField 𝕜] -> {E : Type u_2} -> [NormedAddCommGroup E] -> [NormedSpace 𝕜 E] -> {F : Type u_3} -> [NormedAddCommGroup F] -> [NormedSpace 𝕜 F] -> {n : ℕ} -> (c : OrderedFinpartition n) -> (p : (i : Fin c.length) → E [×c.partSize i]→L[𝕜] F) -> (Fin n → E) → Fin c.length → F",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and imposes no junk-value conventions; it is well-defined for all valid inputs without any special sentinel behaviour."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "applyOrderedFinpartition_congr_p",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜 : Type*} [NontriviallyNormedField 𝕜] {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E] {F : Type*} [NormedAddCommGroup F] [NormedSpace 𝕜 F] {n : ℕ} (c : OrderedFinpartition n) (p q : (i : Fin c.length) → E [×c.partSize i]→L[𝕜] F) (v : Fin n → E) (m : Fin c.length), p m = q m → VTask.applyOrderedFinpartition c p v m = VTask.applyOrderedFinpartition c q v m",
+      "domain_inputs": {},
+      "anchors": [
+        "congrArg"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "congrArg"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderedFinpartition.applyOrderedFinpartition-0365e34a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "applyOrderedFinpartition_reject_nonzero_on_zero_maps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (n : ℕ) (c : OrderedFinpartition n) (p : (i : Fin c.length) → ℝ [×c.partSize i]→L[ℝ] ℝ) (v : Fin n → ℝ) (m : Fin c.length), (∀ i, p i = 0) → VTask.applyOrderedFinpartition c p v m = (1 : ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousMultilinearMap.zero_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousMultilinearMap.zero_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "OrderedFinpartition.applyOrderedFinpartition-0365e34a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "violated_property": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "OrderedFinpartition.applyOrderedFinpartition",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "OrderedFinpartition.applyOrderedFinpartition-0365e34a",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "task_id": "LocalizedModule.liftOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.liftOn",
+  "signature": {
+    "name": "VTask.liftOn",
+    "type": "{R : Type u} -> [CommSemiring R] -> {S : Submonoid R} -> {M : Type v} -> [AddCommMonoid M] -> [Module R M] -> {α : Type u_3} -> (x : LocalizedModule S M) -> (f : M × ↥S → α) -> (wd : ∀ (p p' : M × ↥S), p ≈ p' → f p = f p') -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x",
+      "f",
+      "wd"
+    ],
+    "conventions": [
+      {
+        "point": "liftOn_mk",
+        "statement": "When x = mk m s, VTask.liftOn x f wd = f ⟨m, s⟩.",
+        "note": "This is the fundamental computation rule for liftOn."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "liftOn_mk_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.liftOn (LocalizedModule.mk (0 : ZMod 2) (1 : (⊤ : Submonoid (ZMod 2)))) (fun _ => (42 : ℕ)) (fun _ _ _ => rfl) = 42 := by decide",
+      "domain_inputs": {
+        "x": [
+          "LocalizedModule.mk (0 : ZMod 2) (1 : (⊤ : Submonoid (ZMod 2)))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_const_eq_42",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (x : LocalizedModule S M), VTask.liftOn x (fun _ => (42 : ℕ)) (fun _ _ _ => rfl) = 42",
+      "domain_inputs": {},
+      "anchors": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_wd_respected",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (α : Type*) (f : M × ↥S → α) (wd : ∀ p p' : M × ↥S, p ≈ p' → f p = f p') (m m' : M) (s s' : ↥S), LocalizedModule.mk m s = LocalizedModule.mk m' s' → VTask.liftOn (LocalizedModule.mk m s) f wd = VTask.liftOn (LocalizedModule.mk m' s') f wd",
+      "domain_inputs": {},
+      "anchors": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 28.592,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_accept_mk_eq_apply",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.liftOn (LocalizedModule.mk (0 : ZMod 3) (1 : (⊤ : Submonoid (ZMod 3)))) (fun _ => (7 : Fin 10)) (fun _ _ _ => rfl) = 7 := by decide",
+      "domain_inputs": {
+        "x": [
+          "LocalizedModule.mk (0 : ZMod 3) (1 : (⊤ : Submonoid (ZMod 3)))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.liftOn (LocalizedModule.mk (0 : ZMod 3) (1 : (⊤ : Submonoid (ZMod 3)))) (fun _ => (7 : Fin 10)) (fun _ _ _ => rfl)"
+    },
+    {
+      "id": "liftOn_not_zero_when_f_const_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (m : M) (s : ↥S), VTask.liftOn (LocalizedModule.mk m s) (fun _ => (1 : ℕ)) (fun _ _ _ => rfl) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.837,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "liftOn_independent_of_rep",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommSemiring R] (S : Submonoid R) (M : Type*) [AddCommMonoid M] [Module R M] (α : Type*) (f : M × ↥S → α) (wd : ∀ p p' : M × ↥S, p ≈ p' → f p = f p') (x : LocalizedModule S M) (m : M) (s : ↥S), x = LocalizedModule.mk m s → VTask.liftOn x f wd = f ⟨m, s⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LocalizedModule.liftOn_mk"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 63.544,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LocalizedModule.liftOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LocalizedModule.liftOn-f2ab4ba8",
+    "review_status": "unreviewed"
+  }
+}

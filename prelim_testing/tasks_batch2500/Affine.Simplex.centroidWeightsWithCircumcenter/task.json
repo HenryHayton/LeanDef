@@ -1,0 +1,165 @@
+{
+  "task_id": "Affine.Simplex.centroidWeightsWithCircumcenter",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.centroidWeightsWithCircumcenter",
+  "signature": {
+    "name": "VTask.centroidWeightsWithCircumcenter",
+    "type": "{n : ℕ} -> (fs : Finset (Fin (n + 1))) -> Affine.Simplex.PointsWithCircumcenterIndex n → ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "fs"
+    ],
+    "conventions": [
+      {
+        "point": "fs = ∅",
+        "statement": "When fs is empty, every weight is 0 (using the convention (0 : ℝ)⁻¹ = 0), so the sum of weights is 0 and the weight vector does not define a proper affine combination.",
+        "note": "Junk value by real-division convention; the function remains total."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "centroid_weights_sum_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (fs : Finset (Fin (n + 1))), fs.Nonempty → ∑ i, VTask.centroidWeightsWithCircumcenter fs i = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.164,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.centroidWeightsWithCircumcenter-39e47639",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "centroid_weights_sum_empty_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), ∑ i, VTask.centroidWeightsWithCircumcenter (∅ : Finset (Fin (n + 1))) i = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.centroidWeightsWithCircumcenter-39e47639",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "centroid_weights_vertex_in_fs",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (fs : Finset (Fin (n + 1))) (i : Fin (n + 1)), i ∈ fs → VTask.centroidWeightsWithCircumcenter fs (Affine.Simplex.PointsWithCircumcenterIndex.pointIndex i) = (↑(Finset.card fs))⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.centroidWeightsWithCircumcenter-39e47639",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "centroid_weights_vertex_not_in_fs",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (fs : Finset (Fin (n + 1))) (i : Fin (n + 1)), i ∉ fs → VTask.centroidWeightsWithCircumcenter fs (Affine.Simplex.PointsWithCircumcenterIndex.pointIndex i) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Affine.Simplex.sum_centroidWeightsWithCircumcenter"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.394,
+        "at": "authoring",
+        "script": "by simp only [_root_.Affine.Simplex.centroidWeightsWithCircumcenter] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.Affine.Simplex.centroidWeightsWithCircumcenter] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Affine.Simplex.centroidWeightsWithCircumcenter-39e47639",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Affine.Simplex.centroidWeightsWithCircumcenter",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Affine.Simplex.centroidWeightsWithCircumcenter-39e47639",
+    "review_status": "unreviewed"
+  }
+}

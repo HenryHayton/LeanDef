@@ -1,0 +1,308 @@
+{
+  "task_id": "LinearEquiv.sumArrowLequivProdArrow",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumArrowLequivProdArrow",
+  "signature": {
+    "name": "VTask.sumArrowLequivProdArrow",
+    "type": "(α : Type u_5) -> (β : Type u_6) -> (R : Type u_7) -> (M : Type u_8) -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> (α ⊕ β → M) ≃ₗ[R] (α → M) × (β → M)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α",
+      "β",
+      "R",
+      "M"
+    ],
+    "conventions": [
+      {
+        "point": "forward direction",
+        "statement": "The forward map sends f : α ⊕ β → M to (fun a => f (Sum.inl a), fun b => f (Sum.inr b)).",
+        "note": "Inherited from Equiv.sumArrowEquivProdArrow; the linear structure is pointwise."
+      },
+      {
+        "point": "inverse direction",
+        "statement": "The inverse map sends (g, h) to the function that returns g a on Sum.inl a and h b on Sum.inr b.",
+        "note": "Case-splitting on the Sum tag reconstructs the original function type."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumArrowLequivProdArrow_symm_comp_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (f : α ⊕ β → M), (VTask.sumArrowLequivProdArrow α β R M).symm (VTask.sumArrowLequivProdArrow α β R M f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.63,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumArrowLequivProdArrow_fst_not_inr",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ (fun _ => 0)).1 () = 1)",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "Unit"
+        ],
+        "R": [
+          "ℕ"
+        ],
+        "M": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.083,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ (fun _ => 0)).1 () = 1",
+      "violated_property": "The first component at Unit evaluates to f (Sum.inl ()), which is 0 for the zero function, not 1"
+    },
+    {
+      "id": "sumArrowLequivProdArrow_fst_correct_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "(VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ (fun _ => 0)).1 () = 0",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "Unit"
+        ],
+        "R": [
+          "ℕ"
+        ],
+        "M": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.074,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ (fun _ => 0)).1 ()"
+    },
+    {
+      "id": "sumArrowLequivProdArrow_symm_inl_correct",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inl ()) = 3",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "Unit"
+        ],
+        "R": [
+          "ℕ"
+        ],
+        "M": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.09,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inl ())"
+    },
+    {
+      "id": "sumArrowLequivProdArrow_symm_inr_correct",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inr ()) = 7",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "Unit"
+        ],
+        "R": [
+          "ℕ"
+        ],
+        "M": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.087,
+        "at": "authoring",
+        "script": "by rfl",
+        "self_cited": false
+      },
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inr ())"
+    },
+    {
+      "id": "sumArrowLequivProdArrow_symm_inl_wrong_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inr ()) = 3)",
+      "domain_inputs": {
+        "α": [
+          "Unit"
+        ],
+        "β": [
+          "Unit"
+        ],
+        "R": [
+          "ℕ"
+        ],
+        "M": [
+          "ℕ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.093,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "((VTask.sumArrowLequivProdArrow Unit Unit ℕ ℕ).symm (fun _ => 3, fun _ => 7)) (Sum.inr ()) = 3",
+      "violated_property": "The inverse applied to Sum.inr () gives the second function value (7), not the first (3)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearEquiv.sumArrowLequivProdArrow",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearEquiv.sumArrowLequivProdArrow-484f181e",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "task_id": "AlgEquiv.sumArrowEquivProdArrow",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumArrowEquivProdArrow",
+  "signature": {
+    "name": "VTask.sumArrowEquivProdArrow",
+    "type": "(α : Type u_1) -> (β : Type u_2) -> (R : Type u_3) -> [CommSemiring R] -> (S : Type u_8) -> [Semiring S] -> [Algebra R S] -> (α ⊕ β → S) ≃ₐ[R] (α → S) × (β → S)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "α",
+      "β",
+      "R",
+      "S"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction on arbitrary types and algebra structures with no degenerate or junk-value inputs requiring special conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumArrowEquivProdArrow_leftInverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S] (f : α ⊕ β → S), (VTask.sumArrowEquivProdArrow α β R S).symm (VTask.sumArrowEquivProdArrow α β R S f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.5,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.sumArrowEquivProdArrow-a410d7b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumArrowEquivProdArrow_isAlgEquiv",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ _ : (Unit ⊕ Unit → ℤ) ≃ₐ[ℤ] (Unit → ℤ) × (Unit → ℤ), True",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgEquiv.sumArrowEquivProdArrow-a410d7b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.sumArrowEquivProdArrow Unit Unit ℤ ℤ"
+    },
+    {
+      "id": "sumArrowEquivProdArrow_symm_is_inverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β R S : Type*) [CommSemiring R] [Semiring S] [Algebra R S], Function.LeftInverse (VTask.sumArrowEquivProdArrow α β R S).symm (VTask.sumArrowEquivProdArrow α β R S)",
+      "domain_inputs": {},
+      "anchors": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AlgEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.631,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AlgEquiv.sumArrowEquivProdArrow-a410d7b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumArrowEquivProdArrow_toRingEquiv_not_trivial",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ((VTask.sumArrowEquivProdArrow Bool Unit ℤ ℤ).toEquiv = Equiv.refl (Bool ⊕ Unit → ℤ))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AlgEquiv.sumArrowEquivProdArrow-a410d7b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.sumArrowEquivProdArrow Bool Unit ℤ ℤ)",
+      "violated_property": "The equivalence is not the identity on the domain (Bool ⊕ Unit → ℤ); its codomain is the product (Bool → ℤ) × (Unit → ℤ), which is a structurally different type."
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AlgEquiv.sumArrowEquivProdArrow",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AlgEquiv.sumArrowEquivProdArrow-a410d7b5",
+    "review_status": "unreviewed"
+  }
+}

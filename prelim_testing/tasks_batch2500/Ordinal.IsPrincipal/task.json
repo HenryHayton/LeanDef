@@ -1,0 +1,186 @@
+{
+  "task_id": "Ordinal.IsPrincipal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsPrincipal",
+  "signature": {
+    "name": "VTask.IsPrincipal",
+    "type": "(op : Ordinal.{u_1} → Ordinal.{u_1} → Ordinal.{u_1}) -> (o : Ordinal.{u_1}) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "op",
+      "o"
+    ],
+    "conventions": [
+      {
+        "point": "o = 0",
+        "statement": "VTask.IsPrincipal op 0 holds for every operation op, by vacuous truth: there are no ordinals strictly less than 0.",
+        "note": "Explicitly breaks the usual convention that principal ordinals are positive, for definitional simplicity."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isPrincipal_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (op : Ordinal → Ordinal → Ordinal) (o : Ordinal), VTask.IsPrincipal (Function.swap op) o ↔ VTask.IsPrincipal op o",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordinal.isPrincipal_swap_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordinal.isPrincipal_swap_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.12,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordinal.IsPrincipal-53e7eefe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isPrincipal_sSup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (op : Ordinal → Ordinal → Ordinal) (s : Set Ordinal), (∀ x ∈ s, VTask.IsPrincipal op x) → VTask.IsPrincipal op (sSup s)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordinal.IsPrincipal.sSup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordinal.IsPrincipal.sSup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.493,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordinal.IsPrincipal-53e7eefe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isPrincipal_iSup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (op : Ordinal → Ordinal → Ordinal) {ι : Type*} (f : ι → Ordinal), (∀ i, VTask.IsPrincipal op (f i)) → VTask.IsPrincipal op (⨆ i, f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordinal.IsPrincipal.iSup"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordinal.IsPrincipal.iSup"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.435,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordinal.IsPrincipal-53e7eefe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isPrincipal_monotone_diag_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (op : Ordinal → Ordinal → Ordinal) (o : Ordinal), (∀ a, Monotone (op a)) → (∀ a, Monotone (Function.swap op a)) → (VTask.IsPrincipal op o ↔ ∀ a < o, op a a < o)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordinal.isPrincipal_iff_of_monotone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordinal.isPrincipal_iff_of_monotone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.553,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordinal.IsPrincipal-53e7eefe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordinal.IsPrincipal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordinal.IsPrincipal-53e7eefe",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "task_id": "upperPolar",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.upperPolar",
+  "signature": {
+    "name": "VTask.upperPolar",
+    "type": "{α : Type u_2} -> {β : Type u_3} -> (r : α → β → Prop) -> (s : Set α) -> Set β",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "s = ∅",
+        "statement": "VTask.upperPolar r ∅ = Set.univ",
+        "note": "The empty set imposes no constraints, so every element of β belongs to the upper polar."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "upperPolar_empty_eq_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (r : α → β → Prop), VTask.upperPolar r ∅ = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "upperPolar_empty"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "upperPolar_empty"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.191,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upperPolar_antitone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (r : α → β → Prop), Antitone (VTask.upperPolar r)",
+      "domain_inputs": {},
+      "anchors": [
+        "upperPolar_anti"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "upperPolar_anti"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.238,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upperPolar_singleton_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (r : α → β → Prop) (a : α) (b : β), b ∈ VTask.upperPolar r {a} ↔ r a b",
+      "domain_inputs": {},
+      "anchors": [
+        "mem_upperPolar_singleton"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mem_upperPolar_singleton"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.244,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upperPolar_antitone_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (r : α → β → Prop) (s₁ s₂ : Set α), s₁ ⊆ s₂ → VTask.upperPolar r s₂ ⊆ VTask.upperPolar r s₁",
+      "domain_inputs": {},
+      "anchors": [
+        "upperPolar_anti"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "upperPolar_anti"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upperPolar_univ_eq_inter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type*} (r : α → β → Prop) (s : Set α), VTask.upperPolar r s = ⋂ a ∈ s, {b | r a b}",
+      "domain_inputs": {},
+      "anchors": [
+        "mem_upperPolar_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mem_upperPolar_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.698,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "upperPolar_accept_singleton",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "true ∈ VTask.upperPolar (fun (a : Bool) (b : Bool) => a = b) {true}",
+      "domain_inputs": {
+        "s": [
+          "{true}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.037,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "true"
+    },
+    {
+      "id": "upperPolar_reject_singleton_wrong",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ (false ∈ VTask.upperPolar (fun (a : Bool) (b : Bool) => a = b) {true})",
+      "domain_inputs": {
+        "s": [
+          "{true}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.068,
+        "at": "authoring",
+        "script": "by simp only [_root_.upperPolar] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.upperPolar] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "upperPolar-7efff979",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "false",
+      "violated_property": "r a b must hold for every a in s; r true false is false"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "upperPolar",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "upperPolar-7efff979",
+    "review_status": "unreviewed"
+  }
+}

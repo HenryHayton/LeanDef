@@ -1,0 +1,405 @@
+{
+  "task_id": "Polynomial.ofFn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofFn",
+  "signature": {
+    "name": "VTask.ofFn",
+    "type": "{R : Type u_1} -> [Semiring R] -> [DecidableEq R] -> (n : ℕ) -> (Fin n → R) →ₗ[R] Polynomial R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "v"
+    ],
+    "conventions": [
+      {
+        "point": "coefficient at index i < n",
+        "statement": "The coefficient of `VTask.ofFn n v` at degree `i` (with `i < n`) equals `v ⟨i, _⟩`.",
+        "note": "This is the primary intended behavior: the polynomial reads off the vector entries as coefficients."
+      },
+      {
+        "point": "coefficient at index i ≥ n",
+        "statement": "The coefficient of `VTask.ofFn n v` at degree `i` (with `i ≥ n`) is `0`.",
+        "note": "Out-of-range degrees contribute zero, which is consistent with polynomial semantics and not a junk value."
+      },
+      {
+        "point": "n = 0 case",
+        "statement": "When `n = 0`, `VTask.ofFn 0` maps the unique element of `Fin 0 → R` to the zero polynomial.",
+        "note": "The empty coefficient vector produces the zero polynomial."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofFn_coeff_in_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (v : Fin n → ℤ) (i : Fin n), Polynomial.coeff (VTask.ofFn n v) i.val = v i",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.coeff_ofFinsupp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.coeff_ofFinsupp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.285,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_coeff_out_of_range",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (v : Fin n → ℤ) (i : ℕ), n ≤ i → Polynomial.coeff (VTask.ofFn n v) i = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Polynomial.coeff_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Polynomial.coeff_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.827,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_coeff_0_at_deg0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Polynomial.coeff (VTask.ofFn 3 ![1, 2, 3] : Polynomial ℤ) 0 = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_coeff_1_at_deg1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Polynomial.coeff (VTask.ofFn 3 ![1, 2, 3] : Polynomial ℤ) 1 = 2 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_coeff_2_at_deg2",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Polynomial.coeff (VTask.ofFn 3 ![1, 2, 3] : Polynomial ℤ) 2 = 3 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_coeff_out_of_range_decide",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Polynomial.coeff (VTask.ofFn 3 ![1, 2, 3] : Polynomial ℤ) 3 = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_zero_vec_is_zero_poly",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.ofFn 3 ![0, 0, 0] = (0 : Polynomial ℤ) := by decide",
+      "domain_inputs": {
+        "n": [
+          "3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_n1_constant_poly",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : Polynomial.coeff (VTask.ofFn 1 ![5] : Polynomial ℤ) 0 = 5 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_is_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (v w : Fin n → ℤ), VTask.ofFn n (v + w) = VTask.ofFn n v + VTask.ofFn n w",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.27,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_scalar_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (r : ℤ) (v : Fin n → ℤ), VTask.ofFn n (r • v) = r • VTask.ofFn n v",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.629,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofFn_injective_nontrivial",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ), Function.Injective (VTask.ofFn n : (Fin n → ℤ) →ₗ[ℤ] Polynomial ℤ)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.ker_eq_bot"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.ker_eq_bot"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.19,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Polynomial.ofFn-18124434",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Polynomial.ofFn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Polynomial.ofFn-18124434",
+    "review_status": "unreviewed"
+  }
+}

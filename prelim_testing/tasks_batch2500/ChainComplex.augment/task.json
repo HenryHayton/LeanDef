@@ -1,0 +1,217 @@
+{
+  "task_id": "ChainComplex.augment",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.augment",
+  "signature": {
+    "name": "VTask.augment",
+    "type": "{V : Type u} -> [CategoryTheory.Category.{v, u} V] -> [CategoryTheory.Limits.HasZeroMorphisms V] -> (C : ChainComplex V ℕ) -> {X : V} -> (f : C.X 0 ⟶ X) -> (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0) -> ChainComplex V ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "C",
+      "f",
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": "differential at non-adjacent or out-of-range index pairs",
+        "statement": "For index pairs `(i, j)` that are not of the form `(n+1, n)` (i.e., where the complex's shape condition rules out a nonzero differential), the differential `(VTask.augment C f w).d i j` is zero.",
+        "note": "This is the standard chain-complex convention inherited by the augmented complex; in particular `d 0 j = 0` for all `j` and `d (i+2) 0 = 0`."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "augment_d_succ_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0) (i j : ℕ), (VTask.augment C f w).d (i + 1) (j + 1) = C.d i j",
+      "domain_inputs": {},
+      "anchors": [
+        "ChainComplex.augment_d_succ_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ChainComplex.augment_d_succ_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.787,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.augment-e273fbcd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "augment_d_d_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), CategoryTheory.CategoryStruct.comp ((VTask.augment C f w).d 1 0) ((VTask.augment C f w).d 0 0) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HomologicalComplex.d_comp_d"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HomologicalComplex.d_comp_d"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.877,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.augment-e273fbcd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "augment_d_comp_d_at_junction",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), CategoryTheory.CategoryStruct.comp ((VTask.augment C f w).d 2 1) ((VTask.augment C f w).d 1 0) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "HomologicalComplex.d_comp_d"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "HomologicalComplex.d_comp_d"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.232,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.augment-e273fbcd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "augment_not_same_X0_as_C",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), (VTask.augment C f w).X 0 = C.X 0",
+      "domain_inputs": {
+        "C": [
+          "C"
+        ],
+        "f": [
+          "f"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ChainComplex.augment-e273fbcd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), (VTask.augment C f w).X 0 = C.X 0",
+      "violated_property": "degree-0 object is X, not C.X 0"
+    },
+    {
+      "id": "augment_d_zero_neq_f",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} [CategoryTheory.Category V] [CategoryTheory.Limits.HasZeroMorphisms V] (C : ChainComplex V ℕ) {X : V} (f : C.X 0 ⟶ X) (w : CategoryTheory.CategoryStruct.comp (C.d 1 0) f = 0), (VTask.augment C f w).d 1 0 ≠ (0 : C.X 0 ⟶ X) ∨ f = (0 : C.X 0 ⟶ X)",
+      "domain_inputs": {},
+      "anchors": [
+        "ChainComplex.augment_d_one_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ChainComplex.augment_d_one_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ChainComplex.augment-e273fbcd",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ChainComplex.augment",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ChainComplex.augment-e273fbcd",
+    "review_status": "unreviewed"
+  }
+}

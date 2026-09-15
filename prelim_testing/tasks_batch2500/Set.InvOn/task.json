@@ -1,0 +1,319 @@
+{
+  "task_id": "Set.InvOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.InvOn",
+  "signature": {
+    "name": "VTask.InvOn",
+    "type": "{α : Type u} -> {β : Type v} -> (g : β → α) -> (f : α → β) -> (s : Set α) -> (t : Set β) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f",
+      "s",
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.InvOn is a Prop-valued predicate that is well-formed and meaningful for all inputs; no junk-value or boundary conventions govern its definition."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "invon_finset_insert_erase",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.InvOn (insert (0 : Fin 3)) (fun s => s.erase 0) {s : Finset (Fin 3) | 0 ∈ s} {s : Finset (Fin 3) | 0 ∉ s}",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.insert_erase_invOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.insert_erase_invOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.241,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "invon_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (g : β → α) (f : α → β) (s : Set α) (t : Set β), VTask.InvOn g f s t → VTask.InvOn f g t s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.InvOn.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.InvOn.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.748,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "invon_bijOn_symm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β) (g : β → α) (s : Set α) (t : Set β), VTask.InvOn g f s t → Set.BijOn f s t → Set.BijOn g t s",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.BijOn.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.BijOn.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "invon_fixed_points_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β : Type} (f : α → β) (g : β → α), VTask.InvOn f g (Function.fixedPoints (f ∘ g)) (Function.fixedPoints (g ∘ f))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.invOn_fixedPoints_comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.invOn_fixedPoints_comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.712,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "invon_id_univ",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.InvOn id id (Set.univ : Set ℕ) (Set.univ : Set ℕ)",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ],
+        "t": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.034,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.InvOn id id (Set.univ : Set ℕ) (Set.univ : Set ℕ)"
+    },
+    {
+      "id": "invon_empty_sets",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.InvOn (fun n : ℕ => n) (fun n : ℕ => n) (∅ : Set ℕ) (∅ : Set ℕ)",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "t": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.InvOn (fun n : ℕ => n) (fun n : ℕ => n) (∅ : Set ℕ) (∅ : Set ℕ)"
+    },
+    {
+      "id": "invon_arbitrary_fns_empty",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.InvOn (fun _ : ℕ => (0 : ℕ)) (fun n : ℕ => n) (∅ : Set ℕ) (∅ : Set ℕ)",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ],
+        "t": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.InvOn (fun _ : ℕ => (0 : ℕ)) (fun n : ℕ => n) (∅ : Set ℕ) (∅ : Set ℕ)"
+    },
+    {
+      "id": "invon_not_left_inv",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.InvOn (fun _ : ℕ => (0 : ℕ)) (fun n : ℕ => n) (Set.univ : Set ℕ) (Set.univ : Set ℕ)",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ],
+        "t": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.InvOn (fun _ : ℕ => (0 : ℕ)) (fun n : ℕ => n) (Set.univ : Set ℕ) (Set.univ : Set ℕ)",
+      "violated_property": "left inverse condition: g(f(x)) = x for all x in s"
+    },
+    {
+      "id": "invon_left_ok_right_fails",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.InvOn id (fun _ : ℕ => (0 : ℕ)) (Set.univ : Set ℕ) (Set.univ : Set ℕ)",
+      "domain_inputs": {
+        "s": [
+          "Set.univ"
+        ],
+        "t": [
+          "Set.univ"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.InvOn-fc9189a6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.InvOn id (fun _ : ℕ => (0 : ℕ)) (Set.univ : Set ℕ) (Set.univ : Set ℕ)",
+      "violated_property": "right inverse condition: f(g(y)) = y for all y in t"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.InvOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.InvOn-fc9189a6",
+    "review_status": "unreviewed"
+  }
+}

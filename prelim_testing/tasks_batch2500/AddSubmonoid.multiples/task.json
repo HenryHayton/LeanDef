@@ -1,0 +1,250 @@
+{
+  "task_id": "AddSubmonoid.multiples",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.multiples",
+  "signature": {
+    "name": "VTask.multiples",
+    "type": "{A : Type u_2} -> [AddMonoid A] -> (x : A) -> AddSubmonoid A",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "natural number multiples only",
+        "statement": "The scalar `n` in `n • x` ranges over `ℕ`, so all elements are non-negative integer multiples of `x`; negative multiples are excluded.",
+        "note": "Consequence of using ℕ-scalar multiplication (nsmul) rather than ℤ-scalar multiplication."
+      },
+      {
+        "point": "zero is always a member",
+        "statement": "The identity element `0 = 0 • x` is always a member, as required for any additive submonoid.",
+        "note": "This is the n=0 case and follows from the definition of AddSubmonoid."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "multiples_zero_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A] (x : A), (0 : A) ∈ VTask.multiples x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.zero_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.zero_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.305,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "multiples_nsmul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A] (x : A) (n : ℕ), n • x ∈ VTask.multiples x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.nsmul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.nsmul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.562,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "multiples_add_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A] (x : A) (a b : A), a ∈ VTask.multiples x → b ∈ VTask.multiples x → a + b ∈ VTask.multiples x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.402,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "multiples_zero_eq_bot",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A], VTask.multiples (0 : A) = ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.eq_bot_iff_forall"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.eq_bot_iff_forall"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.248,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "multiples_le_closure_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A] (x : A), VTask.multiples x ≤ AddSubmonoid.closure {x}",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.closure_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.closure_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "multiples_ge_closure_singleton",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (A : Type*) [AddMonoid A] (x : A), AddSubmonoid.closure {x} ≤ VTask.multiples x",
+      "domain_inputs": {},
+      "anchors": [
+        "AddSubmonoid.closure_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "AddSubmonoid.closure_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.349,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "AddSubmonoid.multiples",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "AddSubmonoid.multiples-a072f22a",
+    "review_status": "unreviewed"
+  }
+}

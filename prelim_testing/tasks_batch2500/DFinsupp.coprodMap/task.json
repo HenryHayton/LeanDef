@@ -1,0 +1,394 @@
+{
+  "task_id": "DFinsupp.coprodMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.coprodMap",
+  "signature": {
+    "name": "VTask.coprodMap",
+    "type": "{ι : Type u_1} -> {R : Type u_3} -> {M : ι → Type u_5} -> {N : Type u_6} -> [Semiring R] -> [(i : ι) → AddCommMonoid (M i)] -> [(i : ι) → Module R (M i)] -> [AddCommMonoid N] -> [Module R N] -> [DecidableEq ι] -> (f : (i : ι) → M i →ₗ[R] N) -> (Π₀ (i : ι), M i) →ₗ[R] N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.coprodMap is a total construction whose behavior on all inputs, including degenerate cases like empty index types or zero elements, is fully determined by linearity and the universal property with no junk-value conventions needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "coprodMap_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {R : Type} {M : ι → Type} {N : Type} [Semiring R] [(i : ι) → AddCommMonoid (M i)] [(i : ι) → Module R (M i)] [AddCommMonoid N] [Module R N] [DecidableEq ι] (f : (i : ι) → M i →ₗ[R] N) (i : ι) (m : M i), VTask.coprodMap f (DFinsupp.single i m) = f i m",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.lsum_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.lsum_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.703,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprodMap_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {R : Type} {M : ι → Type} {N : Type} [Semiring R] [(i : ι) → AddCommMonoid (M i)] [(i : ι) → Module R (M i)] [AddCommMonoid N] [Module R N] [DecidableEq ι] (f : (i : ι) → M i →ₗ[R] N) (x y : Π₀ i, M i), VTask.coprodMap f (x + y) = VTask.coprodMap f x + VTask.coprodMap f y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.136,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprodMap_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {R : Type} {M : ι → Type} {N : Type} [Semiring R] [(i : ι) → AddCommMonoid (M i)] [(i : ι) → Module R (M i)] [AddCommMonoid N] [Module R N] [DecidableEq ι] (f : (i : ι) → M i →ₗ[R] N) (r : R) (x : Π₀ i, M i), VTask.coprodMap f (r • x) = r • VTask.coprodMap f x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.336,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprodMap_zero_maps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {R : Type} {M : ι → Type} {N : Type} [Semiring R] [(i : ι) → AddCommMonoid (M i)] [(i : ι) → Module R (M i)] [AddCommMonoid N] [Module R N] [DecidableEq ι] (x : Π₀ i, M i), VTask.coprodMap (fun i => (0 : M i →ₗ[R] N)) x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_zero",
+        "Finset.sum_const_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_zero",
+        "Finset.sum_const_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprodMap_is_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type} {R : Type} {M : ι → Type} {N : Type} [Semiring R] [(i : ι) → AddCommMonoid (M i)] [(i : ι) → Module R (M i)] [AddCommMonoid N] [Module R N] [DecidableEq ι] (f : (i : ι) → M i →ₗ[R] N), IsLinearMap R (VTask.coprodMap f)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.isLinear"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.isLinear"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.124,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "coprodMap_single_nat_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 2) => ℕ) (N := ℕ) (fun _ => LinearMap.id) (DFinsupp.single 0 3) = 3 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) (DFinsupp.single 0 3)"
+    },
+    {
+      "id": "coprodMap_single_at_1_nat_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 2) => ℕ) (N := ℕ) (fun _ => LinearMap.id) (DFinsupp.single 1 5) = 5 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) (DFinsupp.single 1 5)"
+    },
+    {
+      "id": "coprodMap_zero_element_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 3) => ℕ) (N := ℕ) (fun _ => LinearMap.id) 0 = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) 0"
+    },
+    {
+      "id": "coprodMap_not_nonzero_on_zero_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 2) => ℕ) (N := ℕ) (fun _ => LinearMap.id) 0 = 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) 0",
+      "violated_property": "map_zero: a linear map must send 0 to 0, not to 1"
+    },
+    {
+      "id": "coprodMap_single_0_nonzero_reject",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 2) => ℕ) (N := ℕ) (fun _ => LinearMap.id) (DFinsupp.single 0 3) = 5) := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) (DFinsupp.single 0 3)",
+      "violated_property": "single-support evaluation: coprodMap f (single i m) must equal f i m, not a different value"
+    },
+    {
+      "id": "coprodMap_sum_two_singles",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.coprodMap (R := ℕ) (M := fun (_ : Fin 2) => ℕ) (N := ℕ) (fun _ => LinearMap.id) (DFinsupp.single 0 3 + DFinsupp.single 1 4) = 7 := by decide",
+      "domain_inputs": {
+        "f": [
+          "fun _ => LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.coprodMap (fun _ => LinearMap.id) (DFinsupp.single 0 3 + DFinsupp.single 1 4)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DFinsupp.coprodMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DFinsupp.coprodMap-9fe7e0c6",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "task_id": "Function.mulSupport",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mulSupport",
+  "signature": {
+    "name": "VTask.mulSupport",
+    "type": "{ι : Type u_1} -> {M : Type u_3} -> [One M] -> (f : ι → M) -> Set ι",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and its predicate f x ≠ 1 is well-formed for all inputs; no junk-value or boundary conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mulSupport_const_one_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ι : Type*), VTask.mulSupport (fun _ : ι => (1 : ℕ)) = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.mulSupport_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.mulSupport_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.086,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulSupport_subset_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : Type*} [One M] (f : ι → M), VTask.mulSupport f ⊆ Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.subset_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.subset_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.188,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulSupport_empty_iff_eq_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : Type*} [One M] (f : ι → M), VTask.mulSupport f = ∅ ↔ ∀ x, f x = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.mulSupport_eq_empty_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.mulSupport_eq_empty_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.498,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulSupport_compl_eq_preimage_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : Type*} [One M] (f : ι → M), (VTask.mulSupport f)ᶜ = f ⁻¹' {1}",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.compl_mulSupport"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.compl_mulSupport"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.208,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulSupport_const_nonone_is_univ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {M : Type*} [One M] (c : M), c ≠ 1 → VTask.mulSupport (fun _ : ι => c) = Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.mulSupport_const"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.mulSupport_const"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.717,
+        "at": "authoring",
+        "script": "by simp [_root_.Function.mulSupport] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Function.mulSupport] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mulSupport_unit_type_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (f : ι → Unit), VTask.mulSupport f = ∅",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.mulSupport_eq_empty_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.mulSupport_eq_empty_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.226,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.mulSupport-9a73ee1e",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.mulSupport",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.mulSupport-9a73ee1e",
+    "review_status": "unreviewed"
+  }
+}

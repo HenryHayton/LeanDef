@@ -1,0 +1,240 @@
+{
+  "task_id": "IsMinFilter",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsMinFilter",
+  "signature": {
+    "name": "VTask.IsMinFilter",
+    "type": "{α : Type u} -> {β : Type v} -> [Preorder β] -> (f : α → β) -> (l : Filter α) -> (a : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "l",
+      "a"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.IsMinFilter is a well-formed Prop for all valid inputs; no junk-value conventions or special case assignments are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "isminfilter_implies_isextr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [inst : Preorder β] (f : α → β) (l : Filter α) (a : α), VTask.IsMinFilter f l a → IsExtrFilter f l a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.isExtr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.isExtr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.3,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isminfilter_filter_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [inst : Preorder β] (f : α → β) (l l' : Filter α) (a : α), VTask.IsMinFilter f l a → l' ≤ l → VTask.IsMinFilter f l' a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.filter_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.filter_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.923,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isminfilter_comp_mono",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [inst : Preorder β] [inst2 : Preorder γ] (f : α → β) (l : Filter α) (a : α) (g : β → γ), VTask.IsMinFilter f l a → Monotone g → VTask.IsMinFilter (g ∘ f) l a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.comp_mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.comp_mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.318,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isminfilter_comp_antitone_gives_max",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} {γ : Type*} [inst : Preorder β] [inst2 : Preorder γ] (f : α → β) (l : Filter α) (a : α) (g : β → γ), VTask.IsMinFilter f l a → Antitone g → IsMaxFilter (g ∘ f) l a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.comp_antitone"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.comp_antitone"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.236,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isminfilter_tendsto_Ici",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [inst : Preorder β] (f : α → β) (l : Filter α) (a : α), VTask.IsMinFilter f l a → Filter.Tendsto f l (Filter.principal (Set.Ici (f a)))",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.tendsto_principal_Ici"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.tendsto_principal_Ici"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.788,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "isminfilter_inf_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {β : Type*} [inst : Preorder β] (f : α → β) (l l' : Filter α) (a : α), VTask.IsMinFilter f l a → VTask.IsMinFilter f (l ⊓ l') a",
+      "domain_inputs": {},
+      "anchors": [
+        "IsMinFilter.filter_inf"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsMinFilter.filter_inf"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.954,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsMinFilter-f14fcc00",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsMinFilter",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsMinFilter-f14fcc00",
+    "review_status": "unreviewed"
+  }
+}

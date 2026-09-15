@@ -1,0 +1,363 @@
+{
+  "task_id": "SetRel.IsCover",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsCover",
+  "signature": {
+    "name": "VTask.IsCover",
+    "type": "{X : Type u_1} -> (U : SetRel X X) -> (s N : Set X) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "U",
+      "s",
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsCover is a universally quantified Prop with no junk-value conventions; it is meaningful and well-defined for all values of U, s, and N, including degenerate cases such as empty sets or non-reflexive relations."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "iscover_empty_net_nonempty_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsCover (∅ : Set (ℕ × ℕ)) {0} ∅",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ],
+        "N": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.085,
+        "at": "authoring",
+        "script": "by simp [_root_.SetRel.IsCover] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SetRel.IsCover] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsCover (∅ : Set (ℕ × ℕ)) {0} ∅",
+      "violated_property": "every point of s is U-related to at least one point of N"
+    },
+    {
+      "id": "iscover_refl_self_cover",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsCover (Set.univ : Set (ℕ × ℕ)) {0, 1, 2} {0, 1, 2}",
+      "domain_inputs": {
+        "s": [
+          "{0, 1, 2}"
+        ],
+        "N": [
+          "{0, 1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.047,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.IsCover (Set.univ : Set (ℕ × ℕ)) {0, 1, 2} {0, 1, 2}"
+    },
+    {
+      "id": "iscover_non_reflexive_self_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsCover (∅ : Set (ℕ × ℕ)) {0} {0}",
+      "domain_inputs": {
+        "s": [
+          "{0}"
+        ],
+        "N": [
+          "{0}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.087,
+        "at": "authoring",
+        "script": "by simp [_root_.SetRel.IsCover] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SetRel.IsCover] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.IsCover (∅ : Set (ℕ × ℕ)) {0} {0}",
+      "violated_property": "every point of s is U-related to at least one point of N"
+    },
+    {
+      "id": "iscover_global_anti",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s t N : Set X), s ⊆ t → VTask.IsCover U t N → VTask.IsCover U s N",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.anti"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.anti"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.417,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_global_mono_net",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s N₁ N₂ : Set X), N₁ ⊆ N₂ → VTask.IsCover U s N₁ → VTask.IsCover U s N₂",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.327,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_global_mono_entourage",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U V : Set (X × X)) (s N : Set X), U ⊆ V → VTask.IsCover U s N → VTask.IsCover V s N",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.mono_entourage"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.mono_entourage"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.437,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_global_union",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s t N₁ N₂ : Set X), VTask.IsCover U s N₁ → VTask.IsCover U t N₂ → VTask.IsCover U (s ∪ t) (N₁ ∪ N₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.union"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.union"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.366,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_univ_net",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s : Set X), (∀ x : X, ∃ y : X, (x, y) ∈ U) → VTask.IsCover U s Set.univ",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_subset_of_cover_and_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s t N : Set X), VTask.IsCover U s N → t ⊆ s → VTask.IsCover U t N",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.anti"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.anti"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.292,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "iscover_union_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X : Type*} (U : Set (X × X)) (s N : Set X), VTask.IsCover U s N → VTask.IsCover U s (N ∪ s)",
+      "domain_inputs": {},
+      "anchors": [
+        "SetRel.IsCover.mono"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SetRel.IsCover.mono"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SetRel.IsCover",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SetRel.IsCover-a7d9a7a5",
+    "review_status": "unreviewed"
+  }
+}

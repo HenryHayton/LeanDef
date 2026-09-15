@@ -1,0 +1,263 @@
+{
+  "task_id": "Submodule.IsFullyInvariant",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsFullyInvariant",
+  "signature": {
+    "name": "VTask.IsFullyInvariant",
+    "type": "{R : Type u_5} -> {M : Type u_6} -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> (N : Submodule R M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "N"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: IsFullyInvariant is a universally quantified Prop with no junk-value or boundary conventions; it is meaningful for every submodule N of every R-module M over any semiring R."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "fully_invariant_unfold",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N : Submodule R M), VTask.IsFullyInvariant N ↔ ∀ (f : M →ₗ[R] M), Submodule.map f N ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_all_endos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N : Submodule R M), VTask.IsFullyInvariant N → ∀ (f : M →ₗ[R] M) (x : M), x ∈ N → f x ∈ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mem_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mem_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.241,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_inf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N K : Submodule R M), VTask.IsFullyInvariant N → VTask.IsFullyInvariant K → VTask.IsFullyInvariant (N ⊓ K)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.map_inf_le"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.map_inf_le"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_sup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N K : Submodule R M), VTask.IsFullyInvariant N → VTask.IsFullyInvariant K → VTask.IsFullyInvariant (N ⊔ K)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.map_sup"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.map_sup"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_isotypic_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (S : Type*) [AddCommGroup S] [Module R S] [Fact (IsSimpleModule R S)], VTask.IsFullyInvariant (isotypicComponent R M S)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.IsFullyInvariant.isotypicComponent"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.IsFullyInvariant.isotypicComponent"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_of_mem_isotypic_components",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Ring R] [AddCommGroup M] [Module R M] (m : Submodule R M), m ∈ isotypicComponents R M → VTask.IsFullyInvariant m",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.IsFullyInvariant.of_mem_isotypicComponents"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.IsFullyInvariant.of_mem_isotypicComponents"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.845,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_implies_map_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N : Submodule R M) (f : M →ₗ[R] M), VTask.IsFullyInvariant N → Submodule.map f N ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "fully_invariant_not_characteristic_confusion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] (N : Submodule R M), VTask.IsFullyInvariant N → ∀ (f : M →ₗ[R] M), Submodule.map f N ≤ N",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.map_le_iff_le_comap"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.IsFullyInvariant",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.IsFullyInvariant-c60ced48",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "task_id": "Submodule.quotEquivOfEqBot",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.quotEquivOfEqBot",
+  "signature": {
+    "name": "VTask.quotEquivOfEqBot",
+    "type": "{R : Type u_1} -> {M : Type u_2} -> [Ring R] -> [AddCommGroup M] -> [Module R M] -> (p : Submodule R M) -> (hp : p = ⊥) -> (M ⧸ p) ≃ₗ[R] M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "p = ⊥",
+    "variables": [
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "forward map on classes",
+        "statement": "The forward direction sends the equivalence class ⟦x⟧ in M ⧸ p to x in M.",
+        "note": "Witnessed by quotEquivOfEqBot_apply_mk."
+      },
+      {
+        "point": "symm map",
+        "statement": "The inverse (symm) sends x : M to its equivalence class ⟦x⟧ in M ⧸ p.",
+        "note": "Witnessed by quotEquivOfEqBot_symm_apply."
+      },
+      {
+        "point": "symm coercion equals mkQ",
+        "statement": "The coercion of the symm to a linear map M →ₗ[R] M ⧸ p equals the canonical quotient map mkQ.",
+        "note": "Witnessed by coe_quotEquivOfEqBot_symm."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "quotEquivOfEqBot_is_linear_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥), Function.Bijective (VTask.quotEquivOfEqBot p hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.111,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_leftInverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥), Function.LeftInverse (VTask.quotEquivOfEqBot p hp) (VTask.quotEquivOfEqBot p hp).symm",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.left_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.left_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.084,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_rightInverse",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥), Function.RightInverse (VTask.quotEquivOfEqBot p hp) (VTask.quotEquivOfEqBot p hp).symm",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.right_inv"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.right_inv"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥) (x y : M ⧸ p), VTask.quotEquivOfEqBot p hp (x + y) = VTask.quotEquivOfEqBot p hp x + VTask.quotEquivOfEqBot p hp y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.432,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_map_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥) (r : R) (x : M ⧸ p), VTask.quotEquivOfEqBot p hp (r • x) = r • VTask.quotEquivOfEqBot p hp x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.617,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_backward_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥) (q : M ⧸ p), (VTask.quotEquivOfEqBot p hp).symm (VTask.quotEquivOfEqBot p hp q) = q",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.856,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "quotEquivOfEqBot_forward_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [Ring R] [AddCommGroup M] [Module R M] (p : Submodule R M) (hp : p = ⊥), Function.Injective (VTask.quotEquivOfEqBot p hp)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.761,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.quotEquivOfEqBot",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.quotEquivOfEqBot-2307dcf4",
+    "review_status": "unreviewed"
+  }
+}

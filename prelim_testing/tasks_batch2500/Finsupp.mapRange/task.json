@@ -1,0 +1,257 @@
+{
+  "task_id": "Finsupp.mapRange",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mapRange",
+  "signature": {
+    "name": "VTask.mapRange",
+    "type": "{α : Type u_1} -> {M : Type u_4} -> {N : Type u_5} -> [Zero M] -> [Zero N] -> (f : M → N) -> (hf : f 0 = 0) -> (g : α →₀ M) -> α →₀ N",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "hf",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "support containment",
+        "statement": "The support of VTask.mapRange f hf g is always a subset of the support of g.",
+        "note": "Equality holds when f is injective."
+      },
+      {
+        "point": "injective f preserves support",
+        "statement": "When f is injective, the support of VTask.mapRange f hf g equals the support of g exactly.",
+        "note": "Follows from f 0 = 0 and injectivity."
+      },
+      {
+        "point": "identity law",
+        "statement": "VTask.mapRange id (by rfl) g = g for any finitely-supported g.",
+        "note": "Composing with the identity leaves g unchanged."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mapRange_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} {N : Type*} [instM : Zero M] [instN : Zero N] (f : M → N) (hf : f 0 = 0), VTask.mapRange f hf (0 : α →₀ M) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapRange_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapRange_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.378,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRange_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [inst : Zero M] (g : α →₀ M), VTask.mapRange id rfl g = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapRange_id"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapRange_id"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.287,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "support_mapRange_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} {N : Type*} [instM : Zero M] [instN : Zero N] (f : M → N) (hf : f 0 = 0) (g : α →₀ M), (VTask.mapRange f hf g).support ⊆ g.support",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_mapRange"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_mapRange"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.123,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "support_mapRange_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} {N : Type*} [instM : Zero M] [instN : Zero N] (e : M → N) (he0 : e 0 = 0) (g : α →₀ M), Function.Injective e → (VTask.mapRange e he0 g).support = g.support",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_mapRange_of_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_mapRange_of_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.741,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRange_single",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} {N : Type*} [instM : Zero M] [instN : Zero N] (f : M → N) (hf : f 0 = 0) (a : α) (m : M), VTask.mapRange f hf (Finsupp.single a m) = Finsupp.single a (f m)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mapRange_single"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mapRange_single"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.387,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mapRange_reject_support_not_superset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f : ℤ → ℤ) (hf : f 0 = 0) (g : Fin 2 →₀ ℤ), g.support ⊆ (VTask.mapRange f hf g).support",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_mapRange_of_injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_mapRange_of_injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finsupp.mapRange-a614b81b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.mapRange",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.mapRange-a614b81b",
+    "review_status": "unreviewed"
+  }
+}

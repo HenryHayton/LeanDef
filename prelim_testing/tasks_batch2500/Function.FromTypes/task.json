@@ -1,0 +1,97 @@
+{
+  "task_id": "Function.FromTypes",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.FromTypes",
+  "signature": {
+    "name": "VTask.FromTypes",
+    "type": "{n : ℕ} -> (Fin n → Type u) → Type u → Type u",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "p",
+      "τ"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "When n = 0, VTask.FromTypes p τ = τ for any p : Fin 0 → Type u; the arity-zero function type is definitionally equal to the return type itself.",
+        "note": "Base case of the recursion; p is vacuous."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "from_types_reject_arity0_not_fun",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.FromTypes (fun _ : Fin 0 => Bool) Nat = (Bool → Nat))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.fromTypes_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.fromTypes_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FromTypes-9d3d6595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "from_types_reject_arity1_wrong_return",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.FromTypes ![Bool] Nat = (Bool → Int → Nat))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.fromTypes_cons",
+        "Function.fromTypes_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.fromTypes_cons",
+        "Function.fromTypes_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FromTypes-9d3d6595",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.FromTypes",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.FromTypes-9d3d6595",
+    "review_status": "unreviewed"
+  }
+}

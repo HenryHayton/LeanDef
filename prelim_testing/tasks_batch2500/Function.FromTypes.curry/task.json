@@ -1,0 +1,198 @@
+{
+  "task_id": "Function.FromTypes.curry",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.curry",
+  "signature": {
+    "name": "VTask.curry",
+    "type": "{n : ℕ} -> {p : Fin n → Type u} -> {τ : Type u} -> (((i : Fin n) → p i) → τ) → Function.FromTypes p τ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n",
+      "p",
+      "τ",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "When `n = 0`, `VTask.curry f` is not a function but a bare value of type `τ`, obtained by evaluating `f` at the unique empty dependent tuple (via `isEmptyElim`).",
+        "note": "The result type `Function.FromTypes p τ` degenerates to `τ` when `n = 0`, so no function arrow remains."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "curry_uncurry_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {p : Fin n → Type} {τ : Type} (f : ((i : Fin n) → p i) → τ), Function.FromTypes.uncurry (VTask.curry f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.673,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FromTypes.curry-919e8564",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "uncurry_curry_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {p : Fin n → Type} {τ : Type} (f : Function.FromTypes p τ), VTask.curry (Function.FromTypes.uncurry f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FromTypes.curry_uncurry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FromTypes.curry_uncurry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.176,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FromTypes.curry-919e8564",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_compose_uncurry_is_id",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {n : ℕ} {p : Fin n → Type} {τ : Type} (g : Function.FromTypes p τ), VTask.curry (Function.FromTypes.uncurry g) = g",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FromTypes.curry_uncurry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FromTypes.curry_uncurry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.167,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Function.FromTypes.curry-919e8564",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_reject_wrong_zero_value",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f : ((i : Fin 0) → (fun _ => ℕ) i) → ℕ), VTask.curry f = (37 : ℕ))",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FromTypes.curry-919e8564",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "curry_reject_not_identity_on_result",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (f : ((i : Fin 1) → (fun _ => ℕ) i) → ℕ) (a : ℕ), VTask.curry f a = a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Function.FromTypes.uncurry_curry"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Function.FromTypes.curry-919e8564",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Function.FromTypes.curry",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Function.FromTypes.curry-919e8564",
+    "review_status": "unreviewed"
+  }
+}

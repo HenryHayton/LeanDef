@@ -1,0 +1,195 @@
+{
+  "task_id": "MvPolynomial.NonTorsionWeight",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.NonTorsionWeight",
+  "signature": {
+    "name": "VTask.NonTorsionWeight",
+    "type": "{M : Type u_2} -> {σ : Type u_3} -> [AddCommMonoid M] -> (w : σ → M) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: NonTorsionWeight is a universally quantified Prop with no junk-value conventions; it is vacuously true on an empty index type and is well-defined for all inputs."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "nontorsion_implies_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), VTask.NonTorsionWeight w → ∀ x : σ, w x ≠ 0 → True",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.437,
+        "at": "authoring",
+        "script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontorsion_of_torsion_free_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] [IsAddTorsionFree M] (w : σ → M), (∀ i : σ, w i ≠ 0) → VTask.NonTorsionWeight w",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.585,
+        "at": "authoring",
+        "script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontorsion_zero_index_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} [AddCommMonoid M] (w : Empty → M), VTask.NonTorsionWeight w",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontorsion_values_all_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), VTask.NonTorsionWeight w → ∀ x : σ, 1 • w x = 0 → False",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "nontorsion_not_implies_some_torsion",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M : Type*} {σ : Type*} [AddCommMonoid M] (w : σ → M), ¬ VTask.NonTorsionWeight w → ∃ n : ℕ, ∃ x : σ, n • w x = 0 ∧ n ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPolynomial.nonTorsionWeight_of"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.78,
+        "at": "authoring",
+        "script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MvPolynomial.NonTorsionWeight] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPolynomial.NonTorsionWeight",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPolynomial.NonTorsionWeight-e428e0b4",
+    "review_status": "unreviewed"
+  }
+}

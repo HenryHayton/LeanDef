@@ -1,0 +1,316 @@
+{
+  "task_id": "PiTensorProduct.tprodCoeff",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.tprodCoeff",
+  "signature": {
+    "name": "VTask.tprodCoeff",
+    "type": "{ι : Type u_1} -> (R : Type u_4) -> [CommSemiring R] -> {s : ι → Type u_7} -> [(i : ι) → AddCommMonoid (s i)] -> [(i : ι) → Module R (s i)] -> (r : R) -> (f : (i : ι) → s i) -> PiTensorProduct R fun i => s i",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "r",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "zero coefficient",
+        "statement": "If r = 0 then VTask.tprodCoeff R r f = 0.",
+        "note": "Regardless of the family f."
+      },
+      {
+        "point": "zero component",
+        "statement": "If f i = 0 for some i then VTask.tprodCoeff R r f = 0.",
+        "note": "Regardless of the coefficient r and the other components of f."
+      },
+      {
+        "point": "unit coefficient recovers tprod",
+        "statement": "VTask.tprodCoeff R 1 f = tprod R f.",
+        "note": "The coefficient-1 case is the standard pure tensor."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "tprodCoeff_zero_coeff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (f : ∀ i, s i), VTask.tprodCoeff R 0 f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.zero_tprodCoeff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.zero_tprodCoeff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.055,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_eq_smul_tprod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (z : R) (f : ∀ i, s i), VTask.tprodCoeff R z f = z • PiTensorProduct.tprod R f",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.tprodCoeff_eq_smul_tprod"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.tprodCoeff_eq_smul_tprod"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.924,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_zero_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (z : R) (f : ∀ i, s i) (i : ι), f i = 0 → VTask.tprodCoeff R z f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.zero_tprodCoeff'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.zero_tprodCoeff'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 11.309,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_add_coeffs",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] (z₁ z₂ : R) (f : ∀ i, s i), VTask.tprodCoeff R z₁ f + VTask.tprodCoeff R z₂ f = VTask.tprodCoeff R (z₁ + z₂) f",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.add_tprodCoeff'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.add_tprodCoeff'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 9.852,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_update_smul_component",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] [DecidableEq ι] (z : R) (f : ∀ i, s i) (i : ι) (r : R), VTask.tprodCoeff R z (Function.update f i (r • f i)) = VTask.tprodCoeff R (r * z) f",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.smul_tprodCoeff_aux"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.smul_tprodCoeff_aux"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.761,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_add_components",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} (R : Type*) [CommSemiring R] {s : ι → Type*} [∀ i, AddCommMonoid (s i)] [∀ i, Module R (s i)] [DecidableEq ι] (z : R) (f : ∀ i, s i) (i : ι) (m₁ m₂ : s i), VTask.tprodCoeff R z (Function.update f i m₁) + VTask.tprodCoeff R z (Function.update f i m₂) = VTask.tprodCoeff R z (Function.update f i (m₁ + m₂))",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.add_tprodCoeff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.add_tprodCoeff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.322,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_zero_coeff_ne_tprod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : (i : Fin 1) → (fun _ => ℤ) i), VTask.tprodCoeff ℤ 0 f ≠ PiTensorProduct.tprod ℤ f",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.zero_tprodCoeff",
+        "PiTensorProduct.tprod_eq_tprodCoeff_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.zero_tprodCoeff",
+        "PiTensorProduct.tprod_eq_tprodCoeff_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "tprodCoeff_zero_coeff_ne_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : (i : Fin 1) → (fun _ => ℤ) i), VTask.tprodCoeff ℤ 0 f ≠ (2 : ℤ) • PiTensorProduct.tprod ℤ f",
+      "domain_inputs": {},
+      "anchors": [
+        "PiTensorProduct.zero_tprodCoeff",
+        "PiTensorProduct.tprodCoeff_eq_smul_tprod"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "PiTensorProduct.zero_tprodCoeff",
+        "PiTensorProduct.tprodCoeff_eq_smul_tprod"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "PiTensorProduct.tprodCoeff",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "PiTensorProduct.tprodCoeff-bbb514b4",
+    "review_status": "unreviewed"
+  }
+}

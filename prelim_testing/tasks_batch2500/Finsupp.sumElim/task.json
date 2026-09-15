@@ -1,0 +1,177 @@
+{
+  "task_id": "Finsupp.sumElim",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.sumElim",
+  "signature": {
+    "name": "VTask.sumElim",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> [Zero γ] -> (f : α →₀ γ) -> (g : β →₀ γ) -> α ⊕ β →₀ γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and structurally well-behaved for all inputs, including zero finsupps; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sumElim_zero_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumElim (0 : Fin 1 →₀ ℤ) (0 : Fin 1 →₀ ℤ) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "(0 : Fin 1 →₀ ℤ)"
+        ],
+        "g": [
+          "(0 : Fin 1 →₀ ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.sumElim-8fcf3814",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumElim_support_empty_both",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.sumElim (0 : Fin 2 →₀ ℤ) (0 : Fin 2 →₀ ℤ)).support = ∅ := by decide",
+      "domain_inputs": {
+        "f": [
+          "(0 : Fin 2 →₀ ℤ)"
+        ],
+        "g": [
+          "(0 : Fin 2 →₀ ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.sumElim-8fcf3814",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumElim_zero_left_inl",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.sumElim (0 : Fin 1 →₀ ℤ) (Finsupp.single 0 (5 : ℤ)) (Sum.inl 0) = 0 := by decide",
+      "domain_inputs": {
+        "f": [
+          "(0 : Fin 1 →₀ ℤ)"
+        ],
+        "g": [
+          "Finsupp.single 0 (5 : ℤ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.sumElim-8fcf3814",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sumElim_add_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [AddZeroClass γ] (f₁ f₂ : α →₀ γ) (g₁ g₂ : β →₀ γ), VTask.sumElim (f₁ + f₂) (g₁ + g₂) = VTask.sumElim f₁ g₁ + VTask.sumElim f₂ g₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.sumElim_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.sumElim_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.383,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.sumElim-8fcf3814",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.sumElim",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.sumElim-8fcf3814",
+    "review_status": "unreviewed"
+  }
+}

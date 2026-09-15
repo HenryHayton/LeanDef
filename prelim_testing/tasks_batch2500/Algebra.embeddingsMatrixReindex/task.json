@@ -1,0 +1,89 @@
+{
+  "task_id": "Algebra.embeddingsMatrixReindex",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.embeddingsMatrixReindex",
+  "signature": {
+    "name": "VTask.embeddingsMatrixReindex",
+    "type": "{κ : Type w} -> (A : Type u) -> {B : Type v} -> (C : Type z) -> [CommRing A] -> [CommRing B] -> [Algebra A B] -> [CommRing C] -> [Algebra A C] -> (b : κ → B) -> (e : κ ≃ (B →ₐ[A] C)) -> Matrix κ κ C",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "e"
+    ],
+    "conventions": [
+      {
+        "point": "column indexing direction",
+        "statement": "Column index j selects the embedding e(j) : B →ₐ[A] C, so the (i, j)-entry is e(j)(b(i)).",
+        "note": "The equivalence e is applied in the forward direction for columns."
+      },
+      {
+        "point": "empty index type",
+        "statement": "When κ is the empty type, the result is the unique 0×0 matrix, which is valid and contains no entries.",
+        "note": "The definition is total and produces a well-typed value even when κ is empty."
+      },
+      {
+        "point": "zero family",
+        "statement": "When b is the zero map, every entry of the resulting matrix is 0, since A-algebra homomorphisms preserve 0.",
+        "note": "This is a consequence of the algebraic structure, not a special case in the definition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "embedMatReindex_result_type",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {κ : Type*} (A : Type*) {B : Type*} (C : Type*) [CommRing A] [CommRing B] [Algebra A B] [CommRing C] [Algebra A C] (b : κ → B) (e : κ ≃ (B →ₐ[A] C)), ∀ i j : κ, VTask.embeddingsMatrixReindex A C b e i j ∈ (Set.univ : Set C)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.mem_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.mem_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.661,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Algebra.embeddingsMatrixReindex-f1d761fe",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Algebra.embeddingsMatrixReindex",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Algebra.embeddingsMatrixReindex-f1d761fe",
+    "review_status": "unreviewed"
+  }
+}

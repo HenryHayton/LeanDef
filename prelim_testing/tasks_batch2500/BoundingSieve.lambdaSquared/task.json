@@ -1,0 +1,108 @@
+{
+  "task_id": "BoundingSieve.lambdaSquared",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.lambdaSquared",
+  "signature": {
+    "name": "VTask.lambdaSquared",
+    "type": "(weights : ℕ → ℝ) -> ℕ → ℝ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "weights",
+      "d"
+    ],
+    "conventions": [
+      {
+        "point": "d = 0",
+        "statement": "VTask.lambdaSquared weights 0 = 0, because Nat.divisors 0 is the empty finset, making the double sum vacuous.",
+        "note": "Follows from the convention Nat.divisors 0 = ∅ in Mathlib."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "lambdaSquared_one_eq_sq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (weights : ℕ → ℝ), VTask.lambdaSquared weights 1 = weights 1 ^ 2",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.divisors_one",
+        "Nat.lcm_self"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.divisors_one",
+        "Nat.lcm_self"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "BoundingSieve.lambdaSquared-f421145b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "lambdaSquared_upper_moebius",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (weights : ℕ → ℝ), weights 1 = 1 → BoundingSieve.IsUpperMoebius (VTask.lambdaSquared weights)",
+      "domain_inputs": {},
+      "anchors": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "BoundingSieve.upperMoebius_lambdaSquared"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.09,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "BoundingSieve.lambdaSquared-f421145b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "BoundingSieve.lambdaSquared",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "BoundingSieve.lambdaSquared-f421145b",
+    "review_status": "unreviewed"
+  }
+}

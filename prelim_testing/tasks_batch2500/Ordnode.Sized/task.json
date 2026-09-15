@@ -1,0 +1,295 @@
+{
+  "task_id": "Ordnode.Sized",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Sized",
+  "signature": {
+    "name": "VTask.Sized",
+    "type": "{α : Type u_1} -> Ordnode α → Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "t"
+    ],
+    "conventions": [
+      {
+        "point": "nil case",
+        "statement": "VTask.Sized Ordnode.nil is defined to be True; the empty tree trivially satisfies the predicate.",
+        "note": "Base case of the recursive definition; no size fields exist to be inconsistent."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "sized_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized (Ordnode.node s l x r) → 0 < s",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.78,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_size_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized (Ordnode.node s l x r) → Ordnode.size (Ordnode.node s l x r) = Ordnode.size l + Ordnode.size r + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.size_eq"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.size_eq"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.191,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_size_eq_zero_iff_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (t : Ordnode α), VTask.Sized t → (Ordnode.size t = 0 ↔ t = Ordnode.nil)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.size_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.size_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.256,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_dual_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (t : Ordnode α), VTask.Sized (Ordnode.dual t) ↔ VTask.Sized t",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.dual_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.dual_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.153,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_node'_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized l → VTask.Sized r → VTask.Sized (Ordnode.node' l x r)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.node'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.node'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.519,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_rotateL_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized l → VTask.Sized r → VTask.Sized (Ordnode.rotateL l x r)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.rotateL"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.rotateL"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.464,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_rotateR_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized l → VTask.Sized r → VTask.Sized (Ordnode.rotateR l x r)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.rotateR"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.rotateR"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.458,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "sized_eq_node'",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (s : ℕ) (l : Ordnode α) (x : α) (r : Ordnode α), VTask.Sized (Ordnode.node s l x r) → Ordnode.node s l x r = Ordnode.node' l x r",
+      "domain_inputs": {},
+      "anchors": [
+        "Ordnode.Sized.eq_node'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ordnode.Sized.eq_node'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.658,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Ordnode.Sized-dd74928f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ordnode.Sized",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ordnode.Sized-dd74928f",
+    "review_status": "unreviewed"
+  }
+}

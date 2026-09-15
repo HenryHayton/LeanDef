@@ -1,0 +1,332 @@
+{
+  "task_id": "ArithmeticFunction.carmichael",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.carmichael",
+  "signature": {
+    "name": "VTask.carmichael",
+    "type": "ArithmeticFunction ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.carmichael 0 = 0 by definition, as a junk value required by the ArithmeticFunction typeclass; there is no unit group of ZMod 0 in the relevant sense.",
+        "note": "Mandated by the ArithmeticFunction interface (map_zero' = rfl)."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "carmichael_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.carmichael 0 = 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_dvd_totient_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, VTask.carmichael n ∣ n.totient",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_dvd_totient"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_dvd_totient"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.135,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_mul_coprime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ a b : ℕ, Nat.Coprime a b → VTask.carmichael (a * b) = Nat.lcm (VTask.carmichael a) (VTask.carmichael b)",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.634,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_lcm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ a b : ℕ, VTask.carmichael (Nat.lcm a b) = Nat.lcm (VTask.carmichael a) (VTask.carmichael b)",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_lcm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_lcm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.233,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_dvd_monotone",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ a b : ℕ, a ∣ b → VTask.carmichael a ∣ VTask.carmichael b",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_dvd"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_dvd"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.255,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_pow_odd_prime",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (p : ℕ) (n : ℕ), p.Prime → p ≠ 2 → VTask.carmichael (p ^ n) = (p ^ n).totient",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_pow_of_prime_ne_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_pow_of_prime_ne_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.756,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_pos_of_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 0 < n → 0 < VTask.carmichael n",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_dvd_totient",
+        "Nat.totient_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_dvd_totient",
+        "Nat.totient_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_two_pow_three_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 3 ≤ n → 2 * VTask.carmichael (2 ^ n) = (2 ^ n).totient",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.two_mul_carmichael_two_pow_of_three_le_eq_totient"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.two_mul_carmichael_two_pow_of_three_le_eq_totient"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.379,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "carmichael_ne_totient_12",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.carmichael 12 ≠ Nat.totient 12",
+      "domain_inputs": {},
+      "anchors": [
+        "ArithmeticFunction.carmichael_dvd_totient"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ArithmeticFunction.carmichael_dvd_totient"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ArithmeticFunction.carmichael",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ArithmeticFunction.carmichael-f2ac0596",
+    "review_status": "unreviewed"
+  }
+}

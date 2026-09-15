@@ -1,0 +1,136 @@
+{
+  "task_id": "Finsupp.subtypeDomain",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.subtypeDomain",
+  "signature": {
+    "name": "VTask.subtypeDomain",
+    "type": "{α : Type u_1} -> {M : Type u_5} -> [Zero M] -> (p : α → Prop) -> (f : α →₀ M) -> Subtype p →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total and structurally well-behaved for all inputs; no junk-value conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "subtypeDomain_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [AddZeroClass M] (p : α → Prop) (f g : α →₀ M), VTask.subtypeDomain p (f + g) = VTask.subtypeDomain p f + VTask.subtypeDomain p g",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.subtypeDomain_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.subtypeDomain_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.439,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.subtypeDomain-80886bc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeDomain_disjoint_support_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (p : α → Prop) (f : α →₀ M), (∀ a ∈ f.support, ¬ p a) → VTask.subtypeDomain p f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.subtypeDomain_eq_zero_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.subtypeDomain_eq_zero_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finsupp.subtypeDomain-80886bc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "subtypeDomain_zero_function_support_empty",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.subtypeDomain (fun _ : Fin 3 => True) (0 : Fin 3 →₀ ℕ)).support = ∅ := by decide",
+      "domain_inputs": {
+        "f": [
+          "(0 : Fin 3 →₀ ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.subtypeDomain-80886bc6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.subtypeDomain (fun _ : Fin 3 => True) (0 : Fin 3 →₀ ℕ)).support"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.subtypeDomain",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.subtypeDomain-80886bc6",
+    "review_status": "unreviewed"
+  }
+}

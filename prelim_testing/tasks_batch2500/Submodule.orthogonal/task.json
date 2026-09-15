@@ -1,0 +1,282 @@
+{
+  "task_id": "Submodule.orthogonal",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.orthogonal",
+  "signature": {
+    "name": "VTask.orthogonal",
+    "type": "{𝕜 : Type u_1} -> {E : Type u_2} -> [RCLike 𝕜] -> [NormedAddCommGroup E] -> [InnerProductSpace 𝕜 E] -> (K : Submodule 𝕜 E) -> Submodule 𝕜 E",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "K"
+    ],
+    "conventions": [
+      {
+        "point": "inner_product_slot_order",
+        "statement": "Membership of `v` in `VTask.orthogonal K` requires `⟪u, v⟫ = 0` for all `u ∈ K`, i.e., the submodule element occupies the first (conjugate-linear) slot of the inner product.",
+        "note": "Follows the Mathlib / physicist convention where the inner product is conjugate-linear in the first argument."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "orthogonal_zero_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E), (0 : E) ∈ VTask.orthogonal K",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.mem_orthogonal_singleton_iff_inner_left",
+        "inner_zero_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.mem_orthogonal_singleton_iff_inner_left",
+        "inner_zero_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.493,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_le_of_le",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K₁ K₂ : Submodule 𝕜 E), K₁ ≤ K₂ → VTask.orthogonal K₂ ≤ VTask.orthogonal K₁",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.orthogonal_le"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.orthogonal_le"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.624,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_inf_sup",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E), K ⊓ VTask.orthogonal K ≤ ⊥",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.inf_orthogonal_eq_bot"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.inf_orthogonal_eq_bot"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_disjoint_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E), Disjoint K (VTask.orthogonal K)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.orthogonal_disjoint"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.orthogonal_disjoint"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.514,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_double_complement_ge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E), K ≤ VTask.orthogonal (VTask.orthogonal K)",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.le_orthogonal_orthogonal"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.le_orthogonal_orthogonal"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.445,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_is_submodule",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E) (u v : E), u ∈ VTask.orthogonal K → v ∈ VTask.orthogonal K → u + v ∈ VTask.orthogonal K",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.381,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orthogonal_scalar_closed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (𝕜 : Type*) (E : Type*) [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (K : Submodule 𝕜 E) (c : 𝕜) (v : E), v ∈ VTask.orthogonal K → c • v ∈ VTask.orthogonal K",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.smul_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.smul_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.417,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Submodule.orthogonal-5ffa0787",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Submodule.orthogonal",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Submodule.orthogonal-5ffa0787",
+    "review_status": "unreviewed"
+  }
+}

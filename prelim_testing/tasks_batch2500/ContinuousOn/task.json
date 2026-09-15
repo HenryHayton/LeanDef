@@ -1,0 +1,246 @@
+{
+  "task_id": "ContinuousOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ContinuousOn",
+  "signature": {
+    "name": "VTask.ContinuousOn",
+    "type": "{X : Type u_1} -> {Y : Type u_2} -> [TopologicalSpace X] -> [TopologicalSpace Y] -> (f : X → Y) -> (s : Set X) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s"
+    ],
+    "conventions": [
+      {
+        "point": "empty set",
+        "statement": "When s = ∅, VTask.ContinuousOn f s holds vacuously for every function f.",
+        "note": "Universal quantification over the empty set yields True with no conditions on f."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "continuousOn_univ_iff_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y), VTask.ContinuousOn f Set.univ ↔ Continuous f",
+      "domain_inputs": {},
+      "anchors": [
+        "continuousOn_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuousOn_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.356,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "continuous_implies_continuousOn",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s : Set X), Continuous f → VTask.ContinuousOn f s",
+      "domain_inputs": {},
+      "anchors": [
+        "Continuous.continuousOn"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Continuous.continuousOn"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.923,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "continuousOn_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y Z : Type*) [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z] (g : Y → Z) (f : X → Y) (s : Set X) (t : Set Y), VTask.ContinuousOn g t → VTask.ContinuousOn f s → Set.MapsTo f s t → VTask.ContinuousOn (g ∘ f) s",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOn.comp"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOn.comp"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.058,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "continuousOn_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s t : Set X), VTask.ContinuousOn f s → t ⊆ s → VTask.ContinuousOn f t",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.331,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "continuousOn_iff_continuous_restrict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s : Set X), VTask.ContinuousOn f s ↔ Continuous (Set.restrict s f)",
+      "domain_inputs": {},
+      "anchors": [
+        "continuousOn_iff_continuous_restrict"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuousOn_iff_continuous_restrict"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.973,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "continuousOn_inter_of_open",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s t : Set X), VTask.ContinuousOn f s → IsOpen t → VTask.ContinuousOn f (s ∩ t)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousOn.mono",
+        "Set.inter_subset_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousOn.mono",
+        "Set.inter_subset_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousOn-4564134a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousOn-4564134a",
+    "review_status": "unreviewed"
+  }
+}

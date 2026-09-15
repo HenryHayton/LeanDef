@@ -1,0 +1,47 @@
+{
+  "task_id": "Convexity.StdSimplex.restrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrict",
+  "signature": {
+    "name": "VTask.restrict",
+    "type": "{X : Type u_2} -> {K : Type u_8} -> [Semifield K] -> [LinearOrder K] -> [IsStrictOrderedRing K] -> (w : Convexity.StdSimplex K X) -> (s : Set X) -> (hs : ∃ x ∈ s, w.weights x ≠ 0) -> Convexity.StdSimplex K X",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "∃ x ∈ s, w.weights x ≠ 0",
+    "variables": [
+      "w",
+      "s",
+      "hs"
+    ],
+    "conventions": [
+      {
+        "point": "weights outside s",
+        "statement": "For any vertex x ∉ s, (w.restrict s hs).weights x = 0, because the filter removes all such vertices before normalisation.",
+        "note": "This follows from the filter operation: weights are zeroed outside s."
+      },
+      {
+        "point": "normalisation scalar",
+        "statement": "The weights of the restricted point are the weights of w on s scaled by the reciprocal of their sum, so that the total is exactly 1.",
+        "note": "The existence condition hs ensures the sum is nonzero, making the reciprocal well-defined."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Convexity.StdSimplex.restrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Convexity.StdSimplex.restrict-cd1a4989",
+    "review_status": "unreviewed"
+  }
+}

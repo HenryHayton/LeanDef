@@ -1,0 +1,239 @@
+{
+  "task_id": "LinearMap.restrict",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrict",
+  "signature": {
+    "name": "VTask.restrict",
+    "type": "{R : Type u_1} -> {R₂ : Type u_3} -> {M : Type u_5} -> {M₂ : Type u_7} -> [Semiring R] -> [Semiring R₂] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> [Module R M] -> [Module R₂ M₂] -> {σ₁₂ : R →+* R₂} -> (f : M →ₛₗ[σ₁₂] M₂) -> {p : Submodule R M} -> {q : Submodule R₂ M₂} -> (hf : ∀ x ∈ p, f x ∈ q) -> ↥p →ₛₗ[σ₁₂] ↥q",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "p",
+      "q",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": "σ₁₂ inheritance",
+        "statement": "The ring homomorphism σ₁₂ governing semilinearity is inherited unchanged from f; no new scalar structure is introduced by restricting to submodules.",
+        "note": "This is a structural convention: the restriction does not alter the σ₁₂ parameter."
+      },
+      {
+        "point": "Full submodule recovery",
+        "statement": "When p = ⊤ and q = ⊤, VTask.restrict f hf is canonically equivalent to f itself.",
+        "note": "Boundary convention: restricting to the whole module recovers the original map up to the top-submodule coercion."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restrict_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (p : Submodule R M) (q : Submodule R M₂) (hf : ∀ x ∈ p, f x ∈ q) (x y : p), VTask.restrict f hf (x + y) = VTask.restrict f hf x + VTask.restrict f hf y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.302,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrict_smul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [CommSemiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (p : Submodule R M) (q : Submodule R M₂) (hf : ∀ x ∈ p, f x ∈ q) (r : R) (x : p), VTask.restrict f hf (r • x) = r • VTask.restrict f hf x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.864,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrict_bot_domain",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R M M₂ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (q : Submodule R M₂) (hf : ∀ x ∈ (⊥ : Submodule R M), f x ∈ q), VTask.restrict f hf = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Submodule.eq_zero_of_bot_submodule",
+        "LinearMap.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Submodule.eq_zero_of_bot_submodule",
+        "LinearMap.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.0,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrict_accept_invariant_submodule",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "∃ (h : ∀ x ∈ (⊤ : Submodule ℤ ℤ), (LinearMap.id : ℤ →ₗ[ℤ] ℤ) x ∈ (⊤ : Submodule ℤ ℤ)), Function.Injective (VTask.restrict (LinearMap.id : ℤ →ₗ[ℤ] ℤ) h)",
+      "domain_inputs": {
+        "f": [
+          "LinearMap.id"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.256,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.restrict (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (fun x _ => Submodule.mem_top)"
+    },
+    {
+      "id": "restrict_reject_coe_ne_wrong",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R M M₂ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (p : Submodule R M) (q : Submodule R M₂) (hf : ∀ x ∈ p, f x ∈ q) (x : p), (VTask.restrict f hf x : M₂) = f (x : M) + f (x : M))",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.restrict_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.restrict_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrict_reject_ne_domRestrict",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (R M M₂ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [Module R M] [Module R M₂] (f : M →ₗ[R] M₂) (p : Submodule R M) (q : Submodule R M₂) (hf : ∀ x ∈ p, f x ∈ q) (x : p), (VTask.restrict f hf x : M₂) = (LinearMap.domRestrict f p x : M₂) + (LinearMap.domRestrict f p x : M₂))",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.restrict_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.restrict_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.restrict",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.restrict-6b5e6e8f",
+    "review_status": "unreviewed"
+  }
+}

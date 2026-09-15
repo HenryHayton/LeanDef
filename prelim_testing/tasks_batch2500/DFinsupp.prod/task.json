@@ -1,0 +1,457 @@
+{
+  "task_id": "DFinsupp.prod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prod",
+  "signature": {
+    "name": "VTask.prod",
+    "type": "{ι : Type u} -> {γ : Type w} -> {β : ι → Type v} -> [DecidableEq ι] -> [(i : ι) → Zero (β i)] -> [(i : ι) → (x : β i) → Decidable (x ≠ 0)] -> [CommMonoid γ] -> (f : Π₀ (i : ι), β i) -> (g : (i : ι) → β i → γ) -> γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "empty support",
+        "statement": "When f = 0 (empty support), VTask.prod f g = 1 (empty product).",
+        "note": "Standard empty product convention in a CommMonoid."
+      },
+      {
+        "point": "out-of-support indices ignored",
+        "statement": "Indices i where f i = 0 do not contribute any factor to the product; only i ∈ f.support are included.",
+        "note": "Defines the meaning of 'product over the support'."
+      },
+      {
+        "point": "support extensibility",
+        "statement": "If g i 0 = 1 for all i in an extended set s ⊇ f.support, then VTask.prod f g = ∏ i ∈ s, g i (f i).",
+        "note": "Extra terms evaluate to 1 and do not change the product."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prod_single_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → Zero (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {i : ι} {b : β i} {g : (i : ι) → β i → γ}, g i 0 = 1 → VTask.prod (DFinsupp.single i b) g = g i b",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_single_index"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_single_index"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 15.235,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → AddCommMonoid (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {f : Π₀ i, β i} {h₁ h₂ : (i : ι) → β i → γ}, VTask.prod f (fun i b => h₁ i b * h₂ i b) = VTask.prod f h₁ * VTask.prod f h₂",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.141,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → AddCommMonoid (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {f : Π₀ i, β i}, VTask.prod f (fun _ _ => (1 : γ)) = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.96,
+        "at": "authoring",
+        "script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_eq_one_all_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → Zero (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {f : Π₀ i, β i} {h : (i : ι) → β i → γ}, (∀ i, h i (f i) = 1) → VTask.prod f h = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_eq_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_eq_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.61,
+        "at": "authoring",
+        "script": "by simp only [_root_.DFinsupp.prod] <;> aesop",
+        "self_cited": true
+      },
+      "cached_script": "by simp only [_root_.DFinsupp.prod] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_neg_index",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → AddGroup (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {g : Π₀ i, β i} {h : (i : ι) → β i → γ}, (∀ i, h i 0 = 1) → VTask.prod (-g) h = VTask.prod g (fun i b => h i (-b))",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_neg_index"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_neg_index"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.103,
+        "at": "authoring",
+        "script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → AddCommMonoid (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [DivisionCommMonoid γ] {f : Π₀ i, β i} {h : (i : ι) → β i → γ}, VTask.prod f (fun i b => (h i b)⁻¹) = (VTask.prod f h)⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_inv"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_inv"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.011,
+        "at": "authoring",
+        "script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.DFinsupp.prod] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_eq_prod_fintype",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [Fintype ι] [inst1 : (i : ι) → Zero (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] (v : Π₀ i, β i) {f : (i : ι) → β i → γ}, (∀ i, f i 0 = 1) → VTask.prod v f = ∏ i, f i (DFinsupp.equivFunOnFintype v i)",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_eq_prod_fintype"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_eq_prod_fintype"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.738,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_of_support_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {γ : Type*} {β : ι → Type*} [DecidableEq ι] [inst1 : (i : ι) → Zero (β i)] [inst2 : (i : ι) → (x : β i) → Decidable (x ≠ 0)] [CommMonoid γ] {f : Π₀ i, β i} {g : (i : ι) → β i → γ} {s : Finset ι}, f.support ⊆ s → (∀ i ∈ s, g i 0 = 1) → VTask.prod f g = ∏ i ∈ s, g i (f i)",
+      "domain_inputs": {},
+      "anchors": [
+        "DFinsupp.prod_of_support_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "DFinsupp.prod_of_support_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.975,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prod_zero_nat_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (0 : Π₀ _ : Fin 3, ℕ) (fun _ n => n + 1) = 1 := by decide",
+      "domain_inputs": {
+        "f": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.prod (0 : Π₀ _ : Fin 3, ℕ) (fun _ n => n + 1)"
+    },
+    {
+      "id": "prod_single_nat_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (DFinsupp.single (2 : Fin 3) (5 : ℕ)) (fun _ n => n + 1) = 6 := by decide",
+      "domain_inputs": {
+        "f": [
+          "DFinsupp.single (2 : Fin 3) (5 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.prod (DFinsupp.single (2 : Fin 3) (5 : ℕ)) (fun _ n => n + 1)"
+    },
+    {
+      "id": "prod_not_one_for_nonzero_f",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬(VTask.prod (DFinsupp.single (0 : Fin 2) (2 : ℕ)) (fun _ n => n + 1) = 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "DFinsupp.single (0 : Fin 2) (2 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prod (DFinsupp.single (0 : Fin 2) (2 : ℕ)) (fun _ n => n + 1)",
+      "violated_property": "Product over nonempty support with nontrivial kernel cannot equal 1"
+    },
+    {
+      "id": "prod_two_indices_mul",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.prod (DFinsupp.single (0 : Fin 2) (3 : ℕ) + DFinsupp.single (1 : Fin 2) (4 : ℕ)) (fun _ n => n + 1) = 20 := by decide",
+      "domain_inputs": {
+        "f": [
+          "DFinsupp.single (0 : Fin 2) (3 : ℕ) + DFinsupp.single (1 : Fin 2) (4 : ℕ)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "DFinsupp.prod-0a8da8ff",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.prod (DFinsupp.single (0 : Fin 2) (3 : ℕ) + DFinsupp.single (1 : Fin 2) (4 : ℕ)) (fun _ n => n + 1)"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "DFinsupp.prod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "DFinsupp.prod-0a8da8ff",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,339 @@
+{
+  "task_id": "Finsupp.onFinset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.onFinset",
+  "signature": {
+    "name": "VTask.onFinset",
+    "type": "{α : Type u_1} -> {M : Type u_4} -> [Zero M] -> (s : Finset α) -> (f : α → M) -> (hf : ∀ (a : α), f a ≠ 0 → a ∈ s) -> α →₀ M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "f",
+      "hf"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is fully determined by its arguments for all valid inputs; no junk-value or out-of-domain conventions are needed."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "onFinset_apply_basic",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.onFinset {0, 1} (fun n : Fin 3 => if n = 1 then 5 else 0) (by intro a ha; fin_cases a <;> simp_all)) 1 = 5 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "f": [
+          "fun n : Fin 3 => if n = 1 then 5 else 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_apply_zero_index",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.onFinset {0, 1} (fun n : Fin 3 => if n = 1 then 5 else 0) (by intro a ha; fin_cases a <;> simp_all)) 0 = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "f": [
+          "fun n : Fin 3 => if n = 1 then 5 else 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_apply_two_index",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.onFinset {0, 1} (fun n : Fin 3 => if n = 1 then 5 else 0) (by intro a ha; fin_cases a <;> simp_all)) 2 = 0 := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "f": [
+          "fun n : Fin 3 => if n = 1 then 5 else 0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_zero_function_empty_support",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.onFinset (∅ : Finset (Fin 3)) (fun _ => (0 : ℕ)) (by intro a ha; exact absurd rfl ha)).support = ∅ := by decide",
+      "domain_inputs": {
+        "s": [
+          "∅"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_support_subset_s",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (s : Finset α) (f : α → M) (hf : ∀ a : α, f a ≠ 0 → a ∈ s), (VTask.onFinset s f hf).support ⊆ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_onFinset_subset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_onFinset_subset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.978,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_mem_support_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] (s : Finset α) (f : α → M) (hf : ∀ a : α, f a ≠ 0 → a ∈ s) (a : α), a ∈ (VTask.onFinset s f hf).support ↔ f a ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.mem_support_onFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.mem_support_onFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.356,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_support_eq_filter",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} [Zero M] [DecidableEq M] (s : Finset α) (f : α → M) (hf : ∀ a : α, f a ≠ 0 → a ∈ s), (VTask.onFinset s f hf).support = s.filter (fun a => f a ≠ 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_onFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_onFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.167,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_support_not_superset_of_s",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (s : Finset (Fin 2)) (f : Fin 2 → ℕ) (hf : ∀ a : Fin 2, f a ≠ 0 → a ∈ s), (VTask.onFinset s f hf).support ⊂ s",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.support_onFinset_subset",
+        "Finset.ssubset_iff_exists_subset_erase"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.support_onFinset_subset",
+        "Finset.ssubset_iff_exists_subset_erase"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "onFinset_prod_eq_finset_prod",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} {M : Type*} {N : Type*} [CommMonoid N] [Zero M] (s : Finset α) (f : α → M) (hf : ∀ a : α, f a ≠ 0 → a ∈ s) (g : α → M → N) (hg : ∀ i ∈ s, g i 0 = 1), (VTask.onFinset s f hf).prod g = ∏ a ∈ s, g a (f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finsupp.prod_onFinset"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finsupp.prod_onFinset"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.369,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finsupp.onFinset-8147b37a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finsupp.onFinset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finsupp.onFinset-8147b37a",
+    "review_status": "unreviewed"
+  }
+}

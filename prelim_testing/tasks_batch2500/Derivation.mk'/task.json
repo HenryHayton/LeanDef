@@ -1,0 +1,328 @@
+{
+  "task_id": "Derivation.mk'",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.mk'",
+  "signature": {
+    "name": "VTask.mk'",
+    "type": "{R : Type u_1} -> [CommSemiring R] -> {A : Type u_2} -> [CommSemiring A] -> [Algebra R A] -> {M : Type u_3} -> [AddCancelCommMonoid M] -> [Module R M] -> [Module A M] -> (D : A →ₗ[R] M) -> (h : ∀ (a b : A), D (a * b) = a • D b + b • D a) -> Derivation R A M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "D",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "map_one_eq_zero derived automatically",
+        "statement": "The condition D 1 = 0 is not an explicit input; it is deduced from h together with the AddCancelCommMonoid structure of M by evaluating the Leibniz rule at a = b = 1 and cancelling.",
+        "note": "This is what distinguishes VTask.mk' from the base Derivation constructor."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "mk'_map_one_eq_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D : A →ₗ[R] M) (h : ∀ (a b : A), D (a * b) = a • D b + b • D a), VTask.mk' D h 1 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.map_one_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.map_one_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.621,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_leibniz",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D : A →ₗ[R] M) (h : ∀ (a b : A), D (a * b) = a • D b + b • D a) (a b : A), VTask.mk' D h (a * b) = a • VTask.mk' D h b + b • VTask.mk' D h a",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.leibniz",
+        "Derivation.coe_mk'"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.leibniz",
+        "Derivation.coe_mk'"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.428,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_rlinear",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D : A →ₗ[R] M) (h : ∀ (a b : A), D (a * b) = a • D b + b • D a) (r : R) (a : A), VTask.mk' D h (r • a) = r • VTask.mk' D h a",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.coe_mk'",
+        "LinearMap.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.coe_mk'",
+        "LinearMap.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.588,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D : A →ₗ[R] M) (h : ∀ (a b : A), D (a * b) = a • D b + b • D a) (a b : A), VTask.mk' D h (a + b) = VTask.mk' D h a + VTask.mk' D h b",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.coe_mk'",
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.coe_mk'",
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.467,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_one_not_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D : A →ₗ[R] M) (h : ∀ (a b : A), D (a * b) = a • D b + b • D a), ¬(VTask.mk' D h 1 ≠ 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.map_one_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.map_one_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.355,
+        "at": "authoring",
+        "script": "by push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_injective_in_linear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D₁ D₂ : A →ₗ[R] M) (h₁ : ∀ (a b : A), D₁ (a * b) = a • D₁ b + b • D₁ a) (h₂ : ∀ (a b : A), D₂ (a * b) = a • D₂ b + b • D₂ a), D₁ = D₂ → VTask.mk' D₁ h₁ = VTask.mk' D₂ h₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.coe_mk'_linearMap",
+        "Derivation.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.coe_mk'_linearMap",
+        "Derivation.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.791,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_ext_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D₁ D₂ : A →ₗ[R] M) (h₁ : ∀ (a b : A), D₁ (a * b) = a • D₁ b + b • D₁ a) (h₂ : ∀ (a b : A), D₂ (a * b) = a • D₂ b + b • D₂ a), VTask.mk' D₁ h₁ = VTask.mk' D₂ h₂ ↔ ∀ a, D₁ a = D₂ a",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.coe_mk'",
+        "Derivation.ext_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.coe_mk'",
+        "Derivation.ext_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 16.586,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "mk'_linear_map_ne_implies_derivation_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} [CommSemiring R] {A : Type*} [CommSemiring A] [Algebra R A] {M : Type*} [AddCancelCommMonoid M] [Module R M] [Module A M] (D₁ D₂ : A →ₗ[R] M) (h₁ : ∀ (a b : A), D₁ (a * b) = a • D₁ b + b • D₁ a) (h₂ : ∀ (a b : A), D₂ (a * b) = a • D₂ b + b • D₂ a), D₁ ≠ D₂ → VTask.mk' D₁ h₁ ≠ VTask.mk' D₂ h₂",
+      "domain_inputs": {},
+      "anchors": [
+        "Derivation.coe_mk'_linearMap"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Derivation.coe_mk'_linearMap"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 14.474,
+        "at": "authoring",
+        "script": "by simp [_root_.Derivation.mk'] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Derivation.mk'] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Derivation.mk'-48745dec",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Derivation.mk'",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Derivation.mk'-48745dec",
+    "review_status": "unreviewed"
+  }
+}

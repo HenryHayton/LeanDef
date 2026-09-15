@@ -1,0 +1,279 @@
+{
+  "task_id": "Hypergraph.Adj",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Adj",
+  "signature": {
+    "name": "VTask.Adj",
+    "type": "{α : Type u_1} -> (H : Hypergraph α) -> (x y : α) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "H",
+      "x",
+      "y"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The predicate is a well-defined existential proposition for all inputs; vertices outside the vertex set simply make the predicate false with no special convention required."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "adj_symm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α), VTask.Adj H x y → VTask.Adj H y x",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.Adj.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.Adj.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.269,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_comm_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α), VTask.Adj H x y ↔ VTask.Adj H y x",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.adj_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.adj_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.262,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_symmetric_relation",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α), Symmetric (VTask.Adj H)",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.Adj.symm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.Adj.symm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_of_mem_both",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α) (e : Set α), e ∈ H.edgeSet → x ∈ e → y ∈ e → VTask.Adj H x y",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.adj_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.adj_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_self_iff_incident_to_some_edge",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x : α), VTask.Adj H x x ↔ ∃ e ∈ H.edgeSet, x ∈ e",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.adj_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.adj_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_implies_symm_adj",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α), VTask.Adj H x y → VTask.Adj H y x",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.Adj.symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.Adj.symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.259,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_nonempty_edgeset_not_sufficient",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α), VTask.Adj H x y → H.edgeSet.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.adj_comm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.adj_comm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.467,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "adj_comm_eq_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} (H : Hypergraph α) (x y : α), VTask.Adj H x y = VTask.Adj H y x",
+      "domain_inputs": {},
+      "anchors": [
+        "Hypergraph.adj_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Hypergraph.adj_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Hypergraph.Adj-fe557133",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Hypergraph.Adj",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Hypergraph.Adj-fe557133",
+    "review_status": "unreviewed"
+  }
+}

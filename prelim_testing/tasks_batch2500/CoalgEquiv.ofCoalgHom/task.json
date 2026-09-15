@@ -1,0 +1,117 @@
+{
+  "task_id": "CoalgEquiv.ofCoalgHom",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ofCoalgHom",
+  "signature": {
+    "name": "VTask.ofCoalgHom",
+    "type": "{R : Type u_1} -> {A : Type u_2} -> {B : Type u_3} -> [CommSemiring R] -> [AddCommMonoid A] -> [AddCommMonoid B] -> [Module R A] -> [Module R B] -> [CoalgebraStruct R A] -> [CoalgebraStruct R B] -> (f : A →ₗc[R] B) -> (g : B →ₗc[R] A) -> (h₁ : f.comp g = CoalgHom.id R B) -> (h₂ : g.comp f = CoalgHom.id R A) -> A ≃ₗc[R] B",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g",
+      "h₁",
+      "h₂"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This constructor is a total function on well-typed inputs; every argument is a genuine mathematical datum and there are no junk-value or degenerate edge regimes."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ofCoalgHom_forward_not_g",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {A : Type*} {B : Type*} [CommSemiring R] [AddCommMonoid A] [AddCommMonoid B] [Module R A] [Module R B] [CoalgebraStruct R A] [CoalgebraStruct R B] (f : A →ₗc[R] B) (g : B →ₗc[R] A) (h₁ : f.comp g = CoalgHom.id R B) (h₂ : g.comp f = CoalgHom.id R A) (a : A), ¬ ((VTask.ofCoalgHom f g h₁ h₂) a ≠ f a)",
+      "domain_inputs": {},
+      "anchors": [
+        "CoalgEquiv.coe_ofCoalgHom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CoalgEquiv.coe_ofCoalgHom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 10.237,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CoalgEquiv.ofCoalgHom-72f2b9b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ofCoalgHom_reject_h1",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (A : Type*) [CommSemiring R] [AddCommMonoid A] [Module R A] [CoalgebraStruct R A] (f g : A →ₗc[R] A) (h₁ : f.comp g = CoalgHom.id R A) (h₂ : g.comp f = CoalgHom.id R A), (VTask.ofCoalgHom f g h₁ h₂ : A →ₗc[R] A) ≠ (g : A →ₗc[R] A) ∨ f = g",
+      "domain_inputs": {},
+      "anchors": [
+        "CoalgEquiv.coe_ofCoalgHom"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "CoalgEquiv.coe_ofCoalgHom"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 13.331,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "CoalgEquiv.ofCoalgHom-72f2b9b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CoalgEquiv.ofCoalgHom",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CoalgEquiv.ofCoalgHom-72f2b9b8",
+    "review_status": "unreviewed"
+  }
+}

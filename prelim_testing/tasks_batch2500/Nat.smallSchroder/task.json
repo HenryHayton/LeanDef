@@ -1,0 +1,266 @@
+{
+  "task_id": "Nat.smallSchroder",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.smallSchroder",
+  "signature": {
+    "name": "VTask.smallSchroder",
+    "type": "ℕ → ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.smallSchroder 0 = 1 by definition (empty/base case).",
+        "note": "The 0th small Schröder number is set to 1 as a base case, consistent with the combinatorial convention of counting the empty configuration."
+      },
+      {
+        "point": "n = 1",
+        "statement": "VTask.smallSchroder 1 = 1 by definition (second base case).",
+        "note": "The 1st small Schröder number is set to 1 as an explicit base case, not derived from the large Schröder number formula."
+      },
+      {
+        "point": "n ≥ 2",
+        "statement": "For n ≥ 2, VTask.smallSchroder n = largeSchroder (n - 1) / 2, and this division is exact because largeSchroder is even for positive arguments.",
+        "note": "The exactness of the division relies on the fact that large Schröder numbers are always even for positive indices."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "smallSchroder_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.smallSchroder 0 = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smallSchroder_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.smallSchroder 1 = 1 := by decide",
+      "domain_inputs": {
+        "n": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smallSchroder_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, 0 < VTask.smallSchroder n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smallSchroder_succ",
+        "Nat.two_mul_smallSchroder_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smallSchroder_succ",
+        "Nat.two_mul_smallSchroder_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smallSchroder_two_mul_succ",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, n ≠ 0 → 2 * VTask.smallSchroder (n + 1) = Nat.largeSchroder n",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.two_mul_smallSchroder_succ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.two_mul_smallSchroder_succ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.322,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smallSchroder_succ_eq_div",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, n ≠ 0 → VTask.smallSchroder (n + 1) = Nat.largeSchroder n / 2",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smallSchroder_succ_eq_largeSchroder_div_two"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smallSchroder_succ_eq_largeSchroder_div_two"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.183,
+        "at": "authoring",
+        "script": "by simp [_root_.Nat.smallSchroder] <;> push_neg <;> simp_all",
+        "self_cited": true
+      },
+      "cached_script": "by simp [_root_.Nat.smallSchroder] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "smallSchroder_zero_ne_zero",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.smallSchroder 0 ≠ 0 := by decide",
+      "domain_inputs": {
+        "n": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.smallSchroder 0",
+      "violated_property": "smallSchroder 0 is not zero"
+    },
+    {
+      "id": "smallSchroder_recurrence_at_3",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.smallSchroder 4 = 3 * VTask.smallSchroder 3 + 2 * ∑ i ∈ Finset.Ioo 0 2, (i + 1).smallSchroder * (3 - i).smallSchroder",
+      "domain_inputs": {},
+      "anchors": [
+        "Nat.smallSchroder_succ"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Nat.smallSchroder_succ"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Nat.smallSchroder-6e39eac3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Nat.smallSchroder",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Nat.smallSchroder-6e39eac3",
+    "review_status": "unreviewed"
+  }
+}

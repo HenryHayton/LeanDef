@@ -1,0 +1,177 @@
+{
+  "task_id": "List.alternatingProd",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.alternatingProd",
+  "signature": {
+    "name": "VTask.alternatingProd",
+    "type": "{G : Type u_4} -> [One G] -> [Mul G] -> [Inv G] -> List G → G",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty list",
+        "statement": "VTask.alternatingProd [] = 1",
+        "note": "The alternating product of the empty list is the identity element provided by the [One G] instance."
+      },
+      {
+        "point": "singleton list",
+        "statement": "VTask.alternatingProd [g] = g",
+        "note": "The alternating product of a one-element list is that element itself, with no inversion applied."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "alternatingProd_cons_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [One G] [Mul G] [Inv G] (a : G) (l : List G), VTask.alternatingProd (a :: l) = a * (VTask.alternatingProd l)⁻¹",
+      "domain_inputs": {},
+      "anchors": [
+        "List.alternatingProd_cons'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.alternatingProd_cons'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.alternatingProd-3923f0e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "alternatingProd_append_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [One G] [Mul G] [Inv G] [DivInvMonoid G] (l₁ l₂ : List G), VTask.alternatingProd (l₁ ++ l₂) = VTask.alternatingProd l₁ * (VTask.alternatingProd l₂) ^ ((-1 : ℤ) ^ l₁.length)",
+      "domain_inputs": {},
+      "anchors": [
+        "List.alternatingProd_append"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.alternatingProd_append"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.alternatingProd-3923f0e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "alternatingProd_reverse_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (G : Type*) [One G] [Mul G] [Inv G] [DivInvMonoid G] (l : List G), VTask.alternatingProd l.reverse = (VTask.alternatingProd l) ^ ((-1 : ℤ) ^ (l.length + 1))",
+      "domain_inputs": {},
+      "anchors": [
+        "List.alternatingProd_reverse"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.alternatingProd_reverse"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.alternatingProd-3923f0e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "alternatingProd_nil",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.alternatingProd ([] : List (ZMod 7)) = 1 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.alternatingProd-3923f0e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "alternatingProd_singleton",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.alternatingProd ([3] : List (ZMod 7)) = 3 := by decide",
+      "domain_inputs": {
+        "l": [
+          "[3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.alternatingProd-3923f0e6",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.alternatingProd",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.alternatingProd-3923f0e6",
+    "review_status": "unreviewed"
+  }
+}

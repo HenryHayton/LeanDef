@@ -1,0 +1,116 @@
+{
+  "task_id": "Finset.affineCombination",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.affineCombination",
+  "signature": {
+    "name": "VTask.affineCombination",
+    "type": "(k : Type u_1) -> {V : Type u_2} -> {P : Type u_3} -> [Ring k] -> [AddCommGroup V] -> [Module k V] -> [S : AddTorsor V P] -> {ι : Type u_4} -> (s : Finset ι) -> (p : ι → P) -> (ι → k) →ᵃ[k] P",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "p"
+    ],
+    "conventions": [
+      {
+        "point": "Empty finset",
+        "statement": "When `s = ∅`, `VTask.affineCombination s p w` equals the internally chosen base point of the torsor for every weight function `w`.",
+        "note": "The base point is a classical choice from the nonempty torsor; no geometric meaning is attached to the empty combination."
+      },
+      {
+        "point": "Weights not summing to 1",
+        "statement": "The map `VTask.affineCombination s p` is defined for all weight functions; the barycentric interpretation (convex/affine combination) is only valid and invoked in lemmas that carry an explicit `∑ i in s, w i = 1` hypothesis.",
+        "note": "This is a deliberate design choice: the definition is total, and barycentricity is opt-in via hypotheses."
+      },
+      {
+        "point": "Choice of base point",
+        "statement": "The internal base point used in the computation is chosen classically from the torsor and does not affect the value of the affine map for any weight function.",
+        "note": "Two different classical choices yield the same affine map; the construction is canonical even though an arbitrary element is used internally."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "affineCombination_weighted_vsub_apply",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (k : Type*) (V : Type*) (P : Type*) (ι : Type*) [Ring k] [AddCommGroup V] [Module k V] [AddTorsor V P] (s : Finset ι) (p : ι → P) (w₁ w₂ : ι → k), VTask.affineCombination k s p w₁ -ᵥ VTask.affineCombination k s p w₂ = Finset.weightedVSub s p (w₁ - w₂)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.affineCombination_vsub"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.affineCombination_vsub"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 8.974,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Finset.affineCombination-d942dd70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "affineCombination_not_weightedVSub",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (ι : Type) (s : Finset ι) (p : ι → ℝ) (w : ι → ℝ), VTask.affineCombination ℝ s p w ≠ (Finset.weightedVSub s p w : ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "Finset.affineCombination_linear"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Finset.affineCombination_linear"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Finset.affineCombination-d942dd70",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Finset.affineCombination",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Finset.affineCombination-d942dd70",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "task_id": "Computation.orElse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.orElse",
+  "signature": {
+    "name": "VTask.orElse",
+    "type": "{α : Type u} -> (c₁ : Computation α) -> (c₂ : Unit → Computation α) -> Computation α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "c₁",
+      "c₂"
+    ],
+    "conventions": [
+      {
+        "point": "c₂ thunk is forced immediately",
+        "statement": "The `Unit →` wrapper on `c₂` is a typeclass artifact; `c₂ ()` is evaluated at the moment `orElse` is called, so both computations run from step one.",
+        "note": "Reflects the OrElse typeclass convention; no actual laziness."
+      },
+      {
+        "point": "simultaneous result favors c₁",
+        "statement": "If both `c₁` and `c₂` produce a value in the same round, the value from `c₁` is returned.",
+        "note": "Follows from the left-biased pattern match in the step function."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "orElse_pure_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (a : α) (c₂ : Unit → Computation α), VTask.orElse (pure a) c₂ = pure a",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.ret_orElse"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.ret_orElse"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_empty_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (c : Computation α), VTask.orElse (Computation.empty α) (fun _ => c) = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.empty_orElse"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.empty_orElse"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_empty_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (c : Computation α), VTask.orElse c (fun _ => Computation.empty α) = c",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.orElse_empty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.orElse_empty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_think_both",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (c₁ c₂ : Computation α), VTask.orElse (Computation.think c₁) (fun _ => Computation.think c₂) = Computation.think (VTask.orElse c₁ (fun _ => c₂))",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.orElse_think"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.orElse_think"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_pure_right_beats_think",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (c₁ : Computation α) (a : α), VTask.orElse (Computation.think c₁) (fun _ => pure a) = pure a",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.orElse_pure"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.orElse_pure"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_not_symmetric_pure_wins",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (a b : α), a ≠ b → VTask.orElse (pure a) (fun _ => pure b) ≠ pure b",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.ret_orElse"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.ret_orElse"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "orElse_ne_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (a b : ℕ), VTask.orElse (Computation.pure a) (fun _ => Computation.pure b) ≠ VTask.orElse (Computation.pure b) (fun _ => Computation.pure a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Computation.ret_orElse"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Computation.ret_orElse"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Computation.orElse-40b272e2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Computation.orElse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Computation.orElse-40b272e2",
+    "review_status": "unreviewed"
+  }
+}

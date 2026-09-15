@@ -1,0 +1,99 @@
+{
+  "task_id": "CantorScheme.VanishingDiam",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.VanishingDiam",
+  "signature": {
+    "name": "VTask.VanishingDiam",
+    "type": "{β : Type u_1} -> {α : Type u_2} -> (A : List β → Set α) -> [PseudoMetricSpace α] -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "A"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VanishingDiam is a universally quantified Prop with no junk-value or boundary conventions; it is well-defined for every scheme A on every pseudo-metric space without any special case treatment."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "vanishing_diam_forall_branch",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β α : Type*} [PseudoMetricSpace α] (A : List β → Set α), VTask.VanishingDiam A ↔ ∀ (x : ℕ → β), Filter.Tendsto (fun n => Metric.ediam (A (List.ofFn (fun i : Fin n => x i)))) Filter.atTop (nhds 0)",
+      "domain_inputs": {},
+      "anchors": [
+        "Filter.Tendsto"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Filter.Tendsto"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CantorScheme.VanishingDiam-16d44cbb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "vanishing_diam_mono_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {β α : Type*} [PseudoMetricSpace α] (A B : List β → Set α), VTask.VanishingDiam A → (∀ l : List β, B l ⊆ A l) → VTask.VanishingDiam B",
+      "domain_inputs": {},
+      "anchors": [
+        "Metric.ediam_mono",
+        "Filter.Tendsto.congr'",
+        "ENNReal.tendsto_nhds_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Metric.ediam_mono",
+        "Filter.Tendsto.congr'",
+        "ENNReal.tendsto_nhds_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "CantorScheme.VanishingDiam-16d44cbb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "CantorScheme.VanishingDiam",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "CantorScheme.VanishingDiam-16d44cbb",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "task_id": "FirstOrder.Language.BoundedFormula.freeVarFinset",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.freeVarFinset",
+  "signature": {
+    "name": "VTask.freeVarFinset",
+    "type": "{L : FirstOrder.Language} -> {α : Type u'} -> [DecidableEq α] -> {n : ℕ} -> L.BoundedFormula α n → Finset α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "φ"
+    ],
+    "conventions": [
+      {
+        "point": "falsum",
+        "statement": "VTask.freeVarFinset (falsum : L.BoundedFormula α n) = ∅",
+        "note": "The constant-false formula contains no terms and hence no free variables."
+      },
+      {
+        "point": "all (universal quantifier)",
+        "statement": "VTask.freeVarFinset f.all = VTask.freeVarFinset f",
+        "note": "The universally quantified variable is a de-Bruijn index of type Fin, not an α-typed name, so quantification does not change the free-variable finset."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "freeVarFinset_falsum_empty",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : (VTask.freeVarFinset (FirstOrder.Language.BoundedFormula.falsum : FirstOrder.Language.empty.BoundedFormula (Fin 3) 0)) = ∅ := by decide",
+      "domain_inputs": {
+        "φ": [
+          "FirstOrder.Language.BoundedFormula.falsum"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.freeVarFinset-3715ea9a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "freeVarFinset_falsum_not_mem",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (0 : Fin 3) ∉ VTask.freeVarFinset (FirstOrder.Language.BoundedFormula.falsum : FirstOrder.Language.empty.BoundedFormula (Fin 3) 0) := by decide",
+      "domain_inputs": {
+        "φ": [
+          "FirstOrder.Language.BoundedFormula.falsum"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "FirstOrder.Language.BoundedFormula.freeVarFinset-3715ea9a",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(0 : Fin 3)",
+      "violated_property": "falsum has no free variables, so its freeVarFinset is empty"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "FirstOrder.Language.BoundedFormula.freeVarFinset",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "FirstOrder.Language.BoundedFormula.freeVarFinset-3715ea9a",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,223 @@
+{
+  "task_id": "Equiv.Finset.disjUnionEquiv",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.disjUnionEquiv",
+  "signature": {
+    "name": "VTask.disjUnionEquiv",
+    "type": "{α : Type u_1} -> [DecidableEq α] -> (s t : Finset α) -> (h : Disjoint s t) -> ↥s ⊕ ↥t ≃ ↥(s.disjUnion t h)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "t",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total and well-defined for all disjoint finsets s and t. There are no junk-value or out-of-domain conventions."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "disjUnionEquiv_roundtrip",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (s t : Finset α) (h : Disjoint s t) (x : ↥s ⊕ ↥t), (VTask.disjUnionEquiv s t h).symm (VTask.disjUnionEquiv s t h x) = x",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.601,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnionEquiv_is_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (s t : Finset α) (h : Disjoint s t), Function.Bijective (VTask.disjUnionEquiv s t h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.978,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnionEquiv_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α : Type*} [DecidableEq α] (s t : Finset α) (h : Disjoint s t), Function.Injective (VTask.disjUnionEquiv s t h)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.895,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnionEquiv_reject_inl_neq_inr",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (s t : Finset ℕ) (h : Disjoint s t) (x : ↥s) (y : ↥t), VTask.disjUnionEquiv s t h (Sum.inl x) ≠ VTask.disjUnionEquiv s t h (Sum.inr y)",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.Finset.disjUnionEquiv_inl",
+        "Equiv.Finset.disjUnionEquiv_inr"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.Finset.disjUnionEquiv_inl",
+        "Equiv.Finset.disjUnionEquiv_inr"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.44,
+        "at": "authoring",
+        "script": "by simp [_root_.Equiv.Finset.disjUnionEquiv] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Equiv.Finset.disjUnionEquiv] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "disjUnionEquiv_reject_not_disjoint",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ Disjoint ({0, 1} : Finset ℕ) ({1, 2} : Finset ℕ) := by decide",
+      "domain_inputs": {
+        "s": [
+          "{0, 1}"
+        ],
+        "t": [
+          "{1, 2}"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(({0, 1} : Finset ℕ) ∩ ({1, 2} : Finset ℕ)).card = 0",
+      "violated_property": "Disjoint s t"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Equiv.Finset.disjUnionEquiv",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Equiv.Finset.disjUnionEquiv-1f8b05eb",
+    "review_status": "unreviewed"
+  }
+}
