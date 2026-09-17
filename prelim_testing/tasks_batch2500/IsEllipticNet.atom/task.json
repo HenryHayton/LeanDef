@@ -1,0 +1,388 @@
+{
+  "task_id": "IsEllipticNet.atom",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.atom",
+  "signature": {
+    "name": "VTask.atom",
+    "type": "{R : Type u_1} -> [CommRing R] -> (W : ℤ → R) -> (a b : ℤ) -> R",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "W",
+      "a",
+      "b"
+    ],
+    "conventions": [
+      {
+        "point": "mixed parity inputs",
+        "statement": "When `a` and `b` have different parity, `VTask.atom W a b` is defined (the function is total) but its value is a junk value: the truncated divisions produce incorrect half-indices and the result does not represent a meaningful elliptic atom.",
+        "note": "The docstring explicitly states the definition should only be used when `a` and `b` have the same parity."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "atom_id_3_1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) 3 1 = 2 := by decide",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_id_4_2",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) 4 2 = 3 := by decide",
+      "domain_inputs": {
+        "a": [
+          "4"
+        ],
+        "b": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_id_0_0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) 0 0 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "0"
+        ],
+        "b": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_id_neg_1_1",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) (-1) 1 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "-1"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_comm_same_parity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommRing R] (W : ℤ → R) (a b : ℤ), VTask.atom W a b = VTask.atom W b a",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_comm",
+        "Int.add_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_comm",
+        "Int.add_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_is_product",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommRing R] (W : ℤ → R) (a b : ℤ), VTask.atom W a b = W ((a + b) / 2) * W ((a - b) / 2)",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_diag_zero_W0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommRing R] (W : ℤ → R) (a : ℤ), W 0 = 0 → VTask.atom W a a = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.01,
+        "at": "authoring",
+        "script": "by aesop",
+        "self_cited": false
+      },
+      "cached_script": "by aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_mem_accept_same_parity",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) 3 1 = (2 : ℤ) * 1 := by decide",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "VTask.atom (fun n : ℤ => n) 3 1"
+    },
+    {
+      "id": "atom_mem_reject_not_single_eval",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : VTask.atom (fun n : ℤ => n) 3 1 ≠ (3 : ℤ) := by decide",
+      "domain_inputs": {
+        "a": [
+          "3"
+        ],
+        "b": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.atom (fun n : ℤ => n) 3 1",
+      "violated_property": "atom is a product of two W evaluations, not a single evaluation of W at a"
+    },
+    {
+      "id": "atom_zero_W_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommRing R] (a b : ℤ), VTask.atom (fun _ => (0 : R)) a b = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_zero"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_zero"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_one_W_is_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) [CommRing R] (a b : ℤ), VTask.atom (fun _ => (1 : R)) a b = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "atom_neq_single_eval",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (W : ℤ → ℤ) (a b : ℤ), VTask.atom W a b ≠ W a",
+      "domain_inputs": {},
+      "anchors": [
+        "mul_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "mul_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "IsEllipticNet.atom-8c243610",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "IsEllipticNet.atom",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "IsEllipticNet.atom-8c243610",
+    "review_status": "unreviewed"
+  }
+}

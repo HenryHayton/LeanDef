@@ -1,0 +1,264 @@
+{
+  "task_id": "Set.PartiallyWellOrderedOn",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.PartiallyWellOrderedOn",
+  "signature": {
+    "name": "VTask.PartiallyWellOrderedOn",
+    "type": "{α : Type u_2} -> (s : Set α) -> (r : α → α → Prop) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "s",
+      "r"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a Prop-valued predicate with no junk-value conventions; it is either true or false for each (s, r) pair, and the definition is meaningful and total for all inputs including the empty set and arbitrary relations."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pwo_subset_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s t : Set α) (r : α → α → Prop), VTask.PartiallyWellOrderedOn t r → s ⊆ t → VTask.PartiallyWellOrderedOn s r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.357,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_union_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s t : Set α) (r : α → α → Prop), VTask.PartiallyWellOrderedOn s r → VTask.PartiallyWellOrderedOn t r → VTask.PartiallyWellOrderedOn (s ∪ t) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.union"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.union"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.382,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_insert_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) (r : α → α → Prop) (a : α), VTask.PartiallyWellOrderedOn s r → VTask.PartiallyWellOrderedOn (insert a s) r",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.insert"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.insert"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_implies_well_founded_on",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) (r : α → α → Prop), VTask.PartiallyWellOrderedOn s r → s.WellFoundedOn (fun a b => r a b ∧ ¬ r b a)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.wellFoundedOn"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.wellFoundedOn"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_finite_antichain_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) (r : α → α → Prop) [Std.Symm r], VTask.PartiallyWellOrderedOn s r ↔ ∀ t, t ⊆ s → IsAntichain r t → t.Finite",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.partiallyWellOrderedOn_iff_finite_antichains"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.partiallyWellOrderedOn_iff_finite_antichains"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_antichain_iff_finite",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) (r : α → α → Prop), IsAntichain r s → (VTask.PartiallyWellOrderedOn s r ↔ s.Finite)",
+      "domain_inputs": {},
+      "anchors": [
+        "IsAntichain.partiallyWellOrderedOn_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "IsAntichain.partiallyWellOrderedOn_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_prod_closure",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α β : Type*) (s : Set α) (t : Set β) (r : α → α → Prop) (r' : β → β → Prop), VTask.PartiallyWellOrderedOn s r → VTask.PartiallyWellOrderedOn t r' → VTask.PartiallyWellOrderedOn (s ×ˢ t) (fun x y : α × β => r x.1 y.1 ∧ r' x.2 y.2)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.prod"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.prod"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pwo_exists_lt_property",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (α : Type*) (s : Set α) (r : α → α → Prop), VTask.PartiallyWellOrderedOn s r → ∀ f : ℕ → α, (∀ n, f n ∈ s) → ∃ m n, m < n ∧ r (f m) (f n)",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.PartiallyWellOrderedOn.exists_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.PartiallyWellOrderedOn.exists_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.736,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Set.PartiallyWellOrderedOn",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Set.PartiallyWellOrderedOn-42758798",
+    "review_status": "unreviewed"
+  }
+}

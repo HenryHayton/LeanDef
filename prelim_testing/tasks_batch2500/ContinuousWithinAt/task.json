@@ -1,0 +1,216 @@
+{
+  "task_id": "ContinuousWithinAt",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ContinuousWithinAt",
+  "signature": {
+    "name": "VTask.ContinuousWithinAt",
+    "type": "{X : Type u_1} -> {Y : Type u_2} -> [TopologicalSpace X] -> [TopologicalSpace Y] -> (f : X → Y) -> (s : Set X) -> (x : X) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "s",
+      "x"
+    ],
+    "conventions": [
+      {
+        "point": "x is not a limit point of s",
+        "statement": "When x is isolated from s (the within-neighbourhood filter 𝓝[s] x contains no points of s other than possibly x itself), VTask.ContinuousWithinAt f s x holds for every f.",
+        "note": "Vacuous tendsto: the filter 𝓝[s] x is trivial or supported only at x, so the convergence condition imposes no real constraint."
+      },
+      {
+        "point": "s = ∅",
+        "statement": "VTask.ContinuousWithinAt f ∅ x is true for every f : X → Y and every x : X.",
+        "note": "The within-filter 𝓝[∅] x equals ⊥, and tendsto from ⊥ to any filter holds trivially."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cwat_univ_iff_continuousAt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ → ℝ) (x : ℝ), VTask.ContinuousWithinAt f Set.univ x ↔ ContinuousAt f x",
+      "domain_inputs": {},
+      "anchors": [
+        "continuousWithinAt_univ"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuousWithinAt_univ"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.147,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousWithinAt-7c61c50b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cwat_continuous_implies_cwat_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s : Set X) (x : X), Continuous f → VTask.ContinuousWithinAt f s x",
+      "domain_inputs": {},
+      "anchors": [
+        "Continuous.continuousWithinAt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Continuous.continuousWithinAt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.08,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousWithinAt-7c61c50b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cwat_mono_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s t : Set X) (x : X), VTask.ContinuousWithinAt f t x → s ⊆ t → VTask.ContinuousWithinAt f s x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousWithinAt.mono"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousWithinAt.mono"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.165,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousWithinAt-7c61c50b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cwat_comp",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y Z : Type*} [TopologicalSpace X] [TopologicalSpace Y] [TopologicalSpace Z] (g : Y → Z) (f : X → Y) (s : Set X) (x : X), VTask.ContinuousWithinAt g (Set.range f) (f x) → VTask.ContinuousWithinAt f s x → VTask.ContinuousWithinAt (g ∘ f) s x",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousWithinAt.comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousWithinAt.comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousWithinAt-7c61c50b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cwat_insert_self",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] (f : X → Y) (s : Set X) (x : X), VTask.ContinuousWithinAt f s x ↔ VTask.ContinuousWithinAt f (insert x s) x",
+      "domain_inputs": {},
+      "anchors": [
+        "continuousWithinAt_insert_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "continuousWithinAt_insert_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.379,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousWithinAt-7c61c50b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousWithinAt",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousWithinAt-7c61c50b",
+    "review_status": "unreviewed"
+  }
+}

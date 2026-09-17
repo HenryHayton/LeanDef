@@ -1,0 +1,159 @@
+{
+  "task_id": "Ideal.pi",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.pi",
+  "signature": {
+    "name": "VTask.pi",
+    "type": "{ι : Type u_1} -> {R : ι → Type u_5} -> [(i : ι) → Semiring (R i)] -> (I : (i : ι) → Ideal (R i)) -> Ideal ((i : ι) → R i)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The definition is total with no junk inputs; it is well-defined for any family of ideals over any family of semirings indexed by any type, including empty index types."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "pi_empty_index_eq_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : PEmpty → Type*} [inst : (i : PEmpty) → Semiring (R i)] (I : (i : PEmpty) → Ideal (R i)), VTask.pi I = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_pi",
+        "Submodule.eq_top_iff'"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_pi",
+        "Submodule.eq_top_iff'"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ideal.pi-277d6410",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_inf_eq_pi_inf",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : ι → Type*} [inst : (i : ι) → Semiring (R i)] (I J : (i : ι) → Ideal (R i)), VTask.pi I ⊓ VTask.pi J = VTask.pi (fun i => I i ⊓ J i)",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_pi",
+        "Ideal.mem_inf"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_pi",
+        "Ideal.mem_inf"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ideal.pi-277d6410",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_single_index_isom",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Fin 1 → Type*} [inst : (i : Fin 1) → Semiring (R i)] (I : (i : Fin 1) → Ideal (R i)) (r : (i : Fin 1) → R i), r ∈ VTask.pi I ↔ r 0 ∈ I 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_pi",
+        "Fin.forall_fin_one"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_pi",
+        "Fin.forall_fin_one"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Ideal.pi-277d6410",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "pi_closed_under_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι : Type*} {R : ι → Type*} [inst : (i : ι) → Semiring (R i)] (I : (i : ι) → Ideal (R i)) (r s : (i : ι) → R i), r ∈ VTask.pi I → s ∈ VTask.pi I → r + s ∈ VTask.pi I",
+      "domain_inputs": {},
+      "anchors": [
+        "Ideal.mem_pi",
+        "Ideal.add_mem"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Ideal.mem_pi",
+        "Ideal.add_mem"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 5.253,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound"
+      ],
+      "provenance": {
+        "validation_run_id": "Ideal.pi-277d6410",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Ideal.pi",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Ideal.pi-277d6410",
+    "review_status": "unreviewed"
+  }
+}

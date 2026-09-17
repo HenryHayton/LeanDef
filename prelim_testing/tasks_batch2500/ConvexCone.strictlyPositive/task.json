@@ -1,0 +1,226 @@
+{
+  "task_id": "ConvexCone.strictlyPositive",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.strictlyPositive",
+  "signature": {
+    "name": "VTask.strictlyPositive",
+    "type": "(R : Type u_2) -> (M : Type u_4) -> [Semiring R] -> [PartialOrder R] -> [AddCommGroup M] -> [PartialOrder M] -> [IsOrderedAddMonoid M] -> [Module R M] -> [PosSMulStrictMono R M] -> ConvexCone R M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "M"
+    ],
+    "conventions": [
+      {
+        "point": "naming",
+        "statement": "The definition is named `strictlyPositive` rather than `pos` to avoid collision with the established mathematical term 'positive cone', which conventionally refers to non-negative elements and is represented in Mathlib by `ConvexCone.positive`.",
+        "note": "Intentional divergence from the standard Mathlib pos/nonneg naming convention."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "strictlyPositive_smul_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (r x : ℝ), 0 < r → x ∈ VTask.strictlyPositive ℝ ℝ → r • x ∈ VTask.strictlyPositive ℝ ℝ",
+      "domain_inputs": {},
+      "anchors": [
+        "ConvexCone.smul_mem",
+        "smul_pos"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ConvexCone.smul_mem",
+        "smul_pos"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 6.155,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictlyPositive_not_pointed",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (VTask.strictlyPositive ℝ ℝ).Pointed",
+      "domain_inputs": {},
+      "anchors": [
+        "ConvexCone.Pointed",
+        "lt_irrefl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ConvexCone.Pointed",
+        "lt_irrefl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictlyPositive_subset_positive",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ), x ∈ VTask.strictlyPositive ℝ ℝ → x ∈ ConvexCone.positive ℝ ℝ",
+      "domain_inputs": {},
+      "anchors": [
+        "ConvexCone.mem_positive",
+        "le_of_lt"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ConvexCone.mem_positive",
+        "le_of_lt"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictlyPositive_zero_not_mem_positive_not_subset",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ (x : ℝ), x ∈ ConvexCone.positive ℝ ℝ → x ∈ VTask.strictlyPositive ℝ ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "ConvexCone.mem_positive",
+        "lt_irrefl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ConvexCone.mem_positive",
+        "lt_irrefl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.641,
+        "at": "authoring",
+        "script": "by push_neg <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by push_neg <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictlyPositive_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "(VTask.strictlyPositive ℝ ℝ).carrier.Nonempty",
+      "domain_inputs": {},
+      "anchors": [
+        "Set.nonempty_Ioi",
+        "Set.Ioi_nonempty"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Set.nonempty_Ioi",
+        "Set.Ioi_nonempty"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "strictlyPositive_neg_not_mem",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (x : ℝ), x ∈ VTask.strictlyPositive ℝ ℝ → -x ∉ VTask.strictlyPositive ℝ ℝ",
+      "domain_inputs": {},
+      "anchors": [
+        "neg_nonpos_of_nonneg",
+        "le_of_lt",
+        "lt_irrefl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "neg_nonpos_of_nonneg",
+        "le_of_lt",
+        "lt_irrefl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ConvexCone.strictlyPositive",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ConvexCone.strictlyPositive-a5e2a395",
+    "review_status": "unreviewed"
+  }
+}

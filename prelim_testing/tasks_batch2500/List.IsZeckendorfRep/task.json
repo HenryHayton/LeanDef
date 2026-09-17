@@ -1,0 +1,476 @@
+{
+  "task_id": "List.IsZeckendorfRep",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.IsZeckendorfRep",
+  "signature": {
+    "name": "VTask.IsZeckendorfRep",
+    "type": "(l : List ℕ) -> Prop",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "l"
+    ],
+    "conventions": [
+      {
+        "point": "empty list",
+        "statement": "VTask.IsZeckendorfRep [] holds; the empty list is a valid Zeckendorf representation corresponding to the number 0.",
+        "note": "Base case; the chain condition on an empty list with the sentinel is vacuously satisfied."
+      },
+      {
+        "point": "sentinel 0 appended",
+        "statement": "The chain condition is checked on l ++ [0], so entries in l must satisfy the gap-of-2 condition not only among themselves but also relative to the trailing sentinel 0, effectively requiring all entries to be ≥ 2.",
+        "note": "This sentinel enforces the 'indices ≥ 2' requirement without an explicit lower-bound check."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "zeck_nil_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.IsZeckendorfRep []",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsZeckendorfRep_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsZeckendorfRep_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.033,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeck_singleton_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ k : ℕ, VTask.IsZeckendorfRep [k] ↔ 2 ≤ k",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsZeckendorfRep_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsZeckendorfRep_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeck_sum_fib_lt",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (n : ℕ) (l : List ℕ), VTask.IsZeckendorfRep l → (∀ a ∈ (l ++ [0]).head?, a < n) → (l.map Nat.fib).sum < Nat.fib n",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsZeckendorfRep.sum_fib_lt"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsZeckendorfRep.sum_fib_lt"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.391,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeck_fib_sum_positive_nonempty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : List ℕ), VTask.IsZeckendorfRep l → l ≠ [] → 0 < (l.map Nat.fib).sum",
+      "domain_inputs": {},
+      "anchors": [
+        "List.IsZeckendorfRep.sum_fib_lt",
+        "Nat.fib_pos"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.IsZeckendorfRep.sum_fib_lt",
+        "Nat.fib_pos"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zeck_empty_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsZeckendorfRep []",
+      "domain_inputs": {
+        "l": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.021,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "[]"
+    },
+    {
+      "id": "zeck_singleton_2_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsZeckendorfRep [2]",
+      "domain_inputs": {
+        "l": [
+          "[2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "[2]"
+    },
+    {
+      "id": "zeck_singleton_1_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [1]",
+      "domain_inputs": {
+        "l": [
+          "[1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.053,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[1]",
+      "violated_property": "all entries must be at least 2"
+    },
+    {
+      "id": "zeck_singleton_0_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [0]",
+      "domain_inputs": {
+        "l": [
+          "[0]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[0]",
+      "violated_property": "all entries must be at least 2"
+    },
+    {
+      "id": "zeck_52_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsZeckendorfRep [5, 2]",
+      "domain_inputs": {
+        "l": [
+          "[5, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "[5, 2]"
+    },
+    {
+      "id": "zeck_532_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [5, 3, 2]",
+      "domain_inputs": {
+        "l": [
+          "[5, 3, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.057,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[5, 3, 2]",
+      "violated_property": "adjacent entries must differ by at least 2"
+    },
+    {
+      "id": "zeck_31_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [3, 1]",
+      "domain_inputs": {
+        "l": [
+          "[3, 1]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.049,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[3, 1]",
+      "violated_property": "all entries must be at least 2"
+    },
+    {
+      "id": "zeck_equal_adjacent_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [3, 3]",
+      "domain_inputs": {
+        "l": [
+          "[3, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.05,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[3, 3]",
+      "violated_property": "adjacent entries must differ by at least 2 (strictly decreasing with gap ≥ 2)"
+    },
+    {
+      "id": "zeck_74_accept",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "VTask.IsZeckendorfRep [7, 4, 2]",
+      "domain_inputs": {
+        "l": [
+          "[7, 4, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "[7, 4, 2]"
+    },
+    {
+      "id": "zeck_gap_exactly_one_reject",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ VTask.IsZeckendorfRep [4, 3]",
+      "domain_inputs": {
+        "l": [
+          "[4, 3]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.048,
+        "at": "authoring",
+        "script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.List.IsZeckendorfRep] <;> decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "List.IsZeckendorfRep-5a071406",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "[4, 3]",
+      "violated_property": "adjacent entries must differ by at least 2"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "List.IsZeckendorfRep",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "List.IsZeckendorfRep-5a071406",
+    "review_status": "unreviewed"
+  }
+}

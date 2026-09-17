@@ -1,0 +1,256 @@
+{
+  "task_id": "LinearIsometry.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{R : Type u_1} -> {R₂ : Type u_2} -> {R₃ : Type u_3} -> {E : Type u_5} -> {E₂ : Type u_6} -> {E₃ : Type u_7} -> [Semiring R] -> [Semiring R₂] -> [Semiring R₃] -> {σ₁₂ : R →+* R₂} -> {σ₁₃ : R →+* R₃} -> {σ₂₃ : R₂ →+* R₃} -> [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] -> [SeminormedAddCommGroup E] -> [SeminormedAddCommGroup E₂] -> [SeminormedAddCommGroup E₃] -> [Module R E] -> [Module R₂ E₂] -> [Module R₃ E₃] -> (g : E₂ →ₛₗᵢ[σ₂₃] E₃) -> (f : E →ₛₗᵢ[σ₁₂] E₂) -> E →ₛₗᵢ[σ₁₃] E₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.comp is a total operation on composable semilinear isometries with no junk-value conventions; every valid input pair produces a well-defined semilinear isometry."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_norm_preserving",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂) (x : E), ‖VTask.comp g f x‖ = ‖x‖",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.norm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.norm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.07,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_norm_map_eq_norm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂) (x : E), ‖VTask.comp g f x‖ = ‖f x‖",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.norm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.norm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.044,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_isometry",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂), Isometry (VTask.comp g f)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.isometry"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.isometry"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.243,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_add_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂) (x y : E), VTask.comp g f (x + y) = VTask.comp g f x + VTask.comp g f y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.133,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_nnnorm_preserving",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂) (x : E), ‖VTask.comp g f x‖₊ = ‖x‖₊",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.nnnorm_map"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.nnnorm_map"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.017,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_zero_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {E E₂ E₃ : Type*} [SeminormedAddCommGroup E] [SeminormedAddCommGroup E₂] [SeminormedAddCommGroup E₃] [Module ℝ E] [Module ℝ E₂] [Module ℝ E₃] (g : E₂ →ₛₗᵢ[RingHom.id ℝ] E₃) (f : E →ₛₗᵢ[RingHom.id ℝ] E₂), VTask.comp g f 0 = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearIsometry.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearIsometry.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.036,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearIsometry.comp-c9f52309",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearIsometry.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearIsometry.comp-c9f52309",
+    "review_status": "unreviewed"
+  }
+}

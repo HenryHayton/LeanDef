@@ -1,0 +1,240 @@
+{
+  "task_id": "MonoidHom.prodMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prodMap",
+  "signature": {
+    "name": "VTask.prodMap",
+    "type": "{M : Type u_3} -> {N : Type u_4} -> [MulOneClass M] -> [MulOneClass N] -> {M' : Type u_6} -> {N' : Type u_7} -> [MulOneClass M'] -> [MulOneClass N'] -> (f : M →* M') -> (g : N →* N') -> M × N →* M' × N'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: This is a total construction with no junk-value conventions; it is well-defined for all monoid homomorphisms f and g without degenerate edge cases."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prodMap_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.prodMap (MonoidHom.id (Fin 2 →* Fin 2)) (MonoidHom.id (Fin 2 →* Fin 2)) (MonoidHom.id (Fin 2), MonoidHom.id (Fin 2)) = (MonoidHom.id (Fin 2), MonoidHom.id (Fin 2)) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MonoidHom.id (Fin 2 →* Fin 2)"
+        ],
+        "g": [
+          "MonoidHom.id (Fin 2 →* Fin 2)"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodMap_identity_one_nat",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.prodMap (MonoidHom.id (Multiplicative (ZMod 3))) (MonoidHom.id (Multiplicative (ZMod 5))) (1, 1) = (1, 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MonoidHom.id (Multiplicative (ZMod 3))"
+        ],
+        "g": [
+          "MonoidHom.id (Multiplicative (ZMod 5))"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodMap_preserves_one",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N M' N' : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass M'] [MulOneClass N'] (f : M →* M') (g : N →* N'), VTask.prodMap f g 1 = 1",
+      "domain_inputs": {},
+      "anchors": [
+        "map_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.11,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodMap_preserves_mul",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {M N M' N' : Type*} [MulOneClass M] [MulOneClass N] [MulOneClass M'] [MulOneClass N'] (f : M →* M') (g : N →* N') (x y : M × N), VTask.prodMap f g (x * y) = VTask.prodMap f g x * VTask.prodMap f g y",
+      "domain_inputs": {},
+      "anchors": [
+        "map_mul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "map_mul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.084,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodMap_not_eq_swap",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : ¬ (∀ (p : ZMod 2 × ZMod 3), (VTask.prodMap (MonoidHom.id (ZMod 2)) (1 : ZMod 3 →* ZMod 3)) p = (1, (1 : ZMod 3 →* ZMod 3) p.2)) := by decide",
+      "domain_inputs": {
+        "f": [
+          "MonoidHom.id (ZMod 2)"
+        ],
+        "g": [
+          "1 : ZMod 3 →* ZMod 3"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prodMap (MonoidHom.id (ZMod 2)) (1 : ZMod 3 →* ZMod 3)",
+      "violated_property": "first component maps via f"
+    },
+    {
+      "id": "prodMap_not_injective_when_f_not_injective",
+      "type": "membership",
+      "mechanism": "proof",
+      "statement": "¬ Function.Injective (VTask.prodMap (1 : ZMod 2 →* ZMod 2) (MonoidHom.id (ZMod 3)))",
+      "domain_inputs": {},
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.087,
+        "at": "authoring",
+        "script": "by decide",
+        "self_cited": false
+      },
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MonoidHom.prodMap-c808b438",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "VTask.prodMap (1 : ZMod 2 →* ZMod 2) (MonoidHom.id (ZMod 3))",
+      "violated_property": "injectivity"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MonoidHom.prodMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MonoidHom.prodMap-c808b438",
+    "review_status": "unreviewed"
+  }
+}

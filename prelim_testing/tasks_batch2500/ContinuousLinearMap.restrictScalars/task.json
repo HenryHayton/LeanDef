@@ -1,0 +1,127 @@
+{
+  "task_id": "ContinuousLinearMap.restrictScalars",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.restrictScalars",
+  "signature": {
+    "name": "VTask.restrictScalars",
+    "type": "{A : Type u_1} -> {M₁ : Type u_2} -> {M₂ : Type u_3} -> (R : Type u_4) -> [Semiring A] -> [Semiring R] -> [AddCommMonoid M₁] -> [Module A M₁] -> [Module R M₁] -> [TopologicalSpace M₁] -> [AddCommMonoid M₂] -> [Module A M₂] -> [Module R M₂] -> [TopologicalSpace M₂] -> [LinearMap.CompatibleSMul M₁ M₂ R A] -> (f : M₁ →L[A] M₂) -> M₁ →L[R] M₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "underlying_function_preserved",
+        "statement": "The underlying set-function of `VTask.restrictScalars R f` is definitionally equal to that of `f`; only the linearity and continuity witnesses are repackaged, no new function is built.",
+        "note": "This is a standard junk-value convention: coercing to a function gives the same result regardless of which scalar ring is named."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "restrictScalars_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {A : Type*} {M₁ : Type*} {M₂ : Type*} (R : Type*) [Semiring A] [Semiring R] [AddCommMonoid M₁] [Module A M₁] [Module R M₁] [TopologicalSpace M₁] [AddCommMonoid M₂] [Module A M₂] [Module R M₂] [TopologicalSpace M₂] [LinearMap.CompatibleSMul M₁ M₂ R A] (f : M₁ →L[A] M₂), Continuous (VTask.restrictScalars R f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 7.756,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.restrictScalars-c98742a8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictScalars_reject_underlying_fn_change",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ (f g : ℝ →L[ℝ] ℝ), VTask.restrictScalars ℝ f = VTask.restrictScalars ℝ g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.restrictScalars-c98742a8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "restrictScalars_reject_ne_different_maps",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.restrictScalars ℝ (ContinuousLinearMap.id ℝ ℝ) ≠ VTask.restrictScalars ℝ (0 : ℝ →L[ℝ] ℝ)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff",
+        "ContinuousLinearMap.zero_apply",
+        "ContinuousLinearMap.id_apply"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff",
+        "ContinuousLinearMap.zero_apply",
+        "ContinuousLinearMap.id_apply"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.restrictScalars-c98742a8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.restrictScalars",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.restrictScalars-c98742a8",
+    "review_status": "unreviewed"
+  }
+}

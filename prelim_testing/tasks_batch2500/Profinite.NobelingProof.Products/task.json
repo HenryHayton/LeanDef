@@ -1,0 +1,130 @@
+{
+  "task_id": "Profinite.NobelingProof.Products",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.Products",
+  "signature": {
+    "name": "VTask.Products",
+    "type": "(I : Type u_1) -> [LinearOrder I] -> Type u_1",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "I"
+    ],
+    "conventions": [
+      {
+        "point": "empty list membership",
+        "statement": "The empty list is always a valid element of VTask.Products I, representing the empty (length-zero) product.",
+        "note": "This holds for any I, including the empty type."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "products_singleton_accept",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (⟨[⟨2, by omega⟩], by simp [List.Chain']⟩ : VTask.Products (Fin 4)).val = [⟨2, by omega⟩] := by decide",
+      "domain_inputs": {
+        "I": [
+          "Fin 4"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products-5af9c0f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "⟨[⟨2, by omega⟩], by simp [List.Chain']⟩"
+    },
+    {
+      "id": "products_nonempty_lt_empty",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (l : VTask.Products (Fin 5)), l.val = [] ∨ l.val ≠ []",
+      "domain_inputs": {},
+      "anchors": [
+        "List.eq_nil_or_concat"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.eq_nil_or_concat"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products-5af9c0f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "products_val_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "Function.Injective (fun l : VTask.Products (Fin 4) => l.val)",
+      "domain_inputs": {},
+      "anchors": [
+        "Subtype.val_injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Subtype.val_injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.247,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Profinite.NobelingProof.Products-5af9c0f2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Profinite.NobelingProof.Products",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Profinite.NobelingProof.Products-5af9c0f2",
+    "review_status": "unreviewed"
+  }
+}

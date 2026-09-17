@@ -1,0 +1,112 @@
+{
+  "task_id": "LinearMap.prodMap",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.prodMap",
+  "signature": {
+    "name": "VTask.prodMap",
+    "type": "{R : Type u} -> {M : Type v} -> {M₂ : Type w} -> {M₃ : Type y} -> {M₄ : Type z} -> [Semiring R] -> [AddCommMonoid M] -> [AddCommMonoid M₂] -> [AddCommMonoid M₃] -> [AddCommMonoid M₄] -> [Module R M] -> [Module R M₂] -> [Module R M₃] -> [Module R M₄] -> (f : M →ₗ[R] M₃) -> (g : M₂ →ₗ[R] M₄) -> M × M₂ →ₗ[R] M₃ × M₄",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.prodMap is a total construction on linear maps with no junk-value conventions; every pair of linear maps yields a well-defined linear map on the product."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "prodMap_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M M₂ M₃ M₄ : Type*) [Semiring R] [AddCommMonoid M] [AddCommMonoid M₂] [AddCommMonoid M₃] [AddCommMonoid M₄] [Module R M] [Module R M₂] [Module R M₃] [Module R M₄] (f : M →ₗ[R] M₃) (g : M₂ →ₗ[R] M₄) (x y : M × M₂), VTask.prodMap f g (x + y) = VTask.prodMap f g x + VTask.prodMap f g y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearMap.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearMap.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.33,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prodMap-a8ea3bf3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "prodMap_ne_swap",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.prodMap (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (0 : ℤ →ₗ[ℤ] ℤ)) (1, 1) ≠ ((0 : ℤ →ₗ[ℤ] ℤ) 1, (LinearMap.id : ℤ →ₗ[ℤ] ℤ) 1) := by decide",
+      "domain_inputs": {
+        "f": [
+          "LinearMap.id"
+        ],
+        "g": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LinearMap.prodMap-a8ea3bf3",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.prodMap (LinearMap.id : ℤ →ₗ[ℤ] ℤ) (0 : ℤ →ₗ[ℤ] ℤ)) (1, 1)",
+      "violated_property": "The result should apply f to the first component and g to the second; swapping them gives a different map when f ≠ g"
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LinearMap.prodMap",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LinearMap.prodMap-a8ea3bf3",
+    "review_status": "unreviewed"
+  }
+}

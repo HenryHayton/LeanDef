@@ -1,0 +1,126 @@
+{
+  "task_id": "ZMod",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.ZMod",
+  "signature": {
+    "name": "VTask.ZMod",
+    "type": "ℕ → Type",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "n"
+    ],
+    "conventions": [
+      {
+        "point": "n = 0",
+        "statement": "VTask.ZMod 0 is defined to be ℤ (the integers), not Fin 0 or a trivial type.",
+        "note": "This is a deliberate junk-value convention: arithmetic modulo 0 is degenerate, so the definition falls back to ℤ to keep the construction total and algebraically meaningful."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "zmod_pos_card",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ n : ℕ, Fintype.card (VTask.ZMod (n + 1)) = n + 1",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.card"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.card"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.146,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ZMod-9103b1c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zmod_not_fin0",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.ZMod 0 ≠ Fin 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.val_natCast"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.val_natCast"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod-9103b1c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "zmod_not_int_pos",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "VTask.ZMod 5 ≠ ℤ",
+      "domain_inputs": {},
+      "anchors": [
+        "ZMod.card"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ZMod.card"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ZMod-9103b1c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ZMod",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ZMod-9103b1c2",
+    "review_status": "unreviewed"
+  }
+}

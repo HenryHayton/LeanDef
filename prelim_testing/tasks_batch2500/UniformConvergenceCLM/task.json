@@ -1,0 +1,78 @@
+{
+  "task_id": "UniformConvergenceCLM",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.UniformConvergenceCLM",
+  "signature": {
+    "name": "VTask.UniformConvergenceCLM",
+    "type": "{𝕜₁ : Type u_1} -> {𝕜₂ : Type u_2} -> [NormedField 𝕜₁] -> [NormedField 𝕜₂] -> (σ : 𝕜₁ →+* 𝕜₂) -> {E : Type u_3} -> (F : Type u_4) -> [AddCommGroup E] -> [Module 𝕜₁ E] -> [TopologicalSpace E] -> [AddCommGroup F] -> [Module 𝕜₂ F] -> [TopologicalSpace F] -> Set (Set E) → Type (max u_3 u_4)",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "σ",
+      "F",
+      "𝔖"
+    ],
+    "conventions": [
+      {
+        "point": "type_synonym_equality",
+        "statement": "VTask.UniformConvergenceCLM σ F 𝔖 is definitionally equal to E →SL[σ] F as a type; the synonym exists solely to carry a different topology instance.",
+        "note": "The type synonym mechanism allows the uniform-convergence topology and any other topology on continuous linear maps to coexist without instance conflict."
+      },
+      {
+        "point": "empty_family",
+        "statement": "When 𝔖 is the empty family of subsets, the topology of uniform convergence on 𝔖 is the indiscrete topology.",
+        "note": "The definition is still well-formed; no sets to converge on means no nontrivial open sets from the uniform-convergence construction."
+      },
+      {
+        "point": "tvs_condition",
+        "statement": "The synonym forms a topological vector space only when the continuous linear image of every set in 𝔖 is bounded in F; this is a hypothesis, not enforced by the definition.",
+        "note": "Without this condition the topology is still defined but may lack the required algebraic-topological compatibility."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "ucclm_def_eq_clm",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {𝕜₁ 𝕜₂ : Type*} [NormedField 𝕜₁] [NormedField 𝕜₂] (σ : 𝕜₁ →+* 𝕜₂) {E : Type*} (F : Type*) [AddCommGroup E] [Module 𝕜₁ E] [TopologicalSpace E] [AddCommGroup F] [Module 𝕜₂ F] [TopologicalSpace F] (𝔖 : Set (Set E)), ∃ _ : VTask.UniformConvergenceCLM σ F 𝔖 ≃ (E →SL[σ] F), True",
+      "domain_inputs": {},
+      "anchors": [
+        "Equiv.refl"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Equiv.refl"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "UniformConvergenceCLM-40357411",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "UniformConvergenceCLM",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "UniformConvergenceCLM-40357411",
+    "review_status": "unreviewed"
+  }
+}

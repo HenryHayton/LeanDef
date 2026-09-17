@@ -1,0 +1,215 @@
+{
+  "task_id": "Part.getOrElse",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.getOrElse",
+  "signature": {
+    "name": "VTask.getOrElse",
+    "type": "{α : Type u_1} -> (a : Part α) -> [Decidable a.Dom] -> (d : α) -> α",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "a",
+      "d"
+    ],
+    "conventions": [
+      {
+        "point": "a = Part.none",
+        "statement": "When a is the undefined partial value (Part.none), VTask.getOrElse a d = d for any default d.",
+        "note": "Part.none has an empty domain, so the branch always falls to the default."
+      },
+      {
+        "point": "a = Part.some v",
+        "statement": "When a = Part.some v, VTask.getOrElse a d = v for any default d.",
+        "note": "Part.some v has a trivially nonempty domain, so the stored value is returned and d is ignored."
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "getOrElse_none_42",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse Part.none 42 = 42 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.none"
+        ],
+        "d": [
+          "42"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getOrElse_some_7_42",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse (Part.some 7) 42 = 7 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.some 7"
+        ],
+        "d": [
+          "42"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getOrElse_some_0_default_ignored",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse (Part.some 0) 99 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.some 0"
+        ],
+        "d": [
+          "99"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getOrElse_none_0",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse Part.none 0 = 0 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.none"
+        ],
+        "d": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getOrElse_some_eq_default",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse (Part.some 5) 5 = 5 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.some 5"
+        ],
+        "d": [
+          "5"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "getOrElse_some_ne_default",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.getOrElse (Part.some 3) 10 ≠ 10 := by decide",
+      "domain_inputs": {
+        "a": [
+          "Part.some 3"
+        ],
+        "d": [
+          "10"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [],
+      "provenance": {
+        "validation_run_id": "Part.getOrElse-d15f0643",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Part.getOrElse",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Part.getOrElse-d15f0643",
+    "review_status": "unreviewed"
+  }
+}

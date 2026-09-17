@@ -1,0 +1,343 @@
+{
+  "task_id": "Module.Basis.constr",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.constr",
+  "signature": {
+    "name": "VTask.constr",
+    "type": "{M' : Type u_7} -> [AddCommMonoid M'] -> {ι : Type u_10} -> {R : Type u_11} -> {M : Type u_12} -> [Semiring R] -> [AddCommMonoid M] -> [Module R M] -> (b : Module.Basis ι R M) -> [Module R M'] -> (S : Type u_13) -> [Semiring S] -> [Module S M'] -> [SMulCommClass R S M'] -> (ι → M') ≃ₗ[S] M →ₗ[R] M'",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "b",
+      "S"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.constr is a total construction; it does not impose any junk-value conventions because it is well-defined for all arguments satisfying the stated type-class constraints."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "constr_apply_basis_vector",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (f : ι → M') (i : ι), (VTask.constr b S f) (b i) = f i",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.constr_basis"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.constr_basis"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.355,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_is_linear_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'], Function.Bijective (VTask.constr b S)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.bijective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.bijective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_slinear_map",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (c : S) (f g : ι → M'), VTask.constr b S (c • f + g) = c • VTask.constr b S f + VTask.constr b S g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_add",
+        "LinearEquiv.map_smul"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_add",
+        "LinearEquiv.map_smul"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.752,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_left_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (f : ι → M'), (VTask.constr b S).symm (VTask.constr b S f) = f",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_apply_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.272,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_right_inv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (g : M →ₗ[R] M'), VTask.constr b S ((VTask.constr b S).symm g) = g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.apply_symm_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.apply_symm_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.253,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_zero_function",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'], VTask.constr b S (0 : ι → M') = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.222,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_add_functions",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (f g : ι → M'), VTask.constr b S (f + g) = VTask.constr b S f + VTask.constr b S g",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.389,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_not_send_nonbasis_arbitrarily",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'] (f : ι → M') (i : ι), (VTask.constr b S f) (b i) ≠ (0 : M') → f i ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Module.Basis.constr_basis"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Module.Basis.constr_basis"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.54,
+        "at": "authoring",
+        "script": "by simp [_root_.Module.Basis.constr] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.Module.Basis.constr] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "constr_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {ι R M M' : Type*} [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M'] [Module R M'] (b : Module.Basis ι R M) (S : Type*) [Semiring S] [Module S M'] [SMulCommClass R S M'], Function.Injective (VTask.constr b S)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.injective"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.injective"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Module.Basis.constr-791f8b5f",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Module.Basis.constr",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Module.Basis.constr-791f8b5f",
+    "review_status": "unreviewed"
+  }
+}
