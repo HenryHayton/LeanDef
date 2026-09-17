@@ -1,0 +1,417 @@
+{
+  "task_id": "SimpleGraph.Walk.append",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.append",
+  "signature": {
+    "name": "VTask.append",
+    "type": "{V : Type u} -> {G : SimpleGraph V} -> {u v w : V} -> G.Walk u v → G.Walk v w → G.Walk u w",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "p",
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": "left identity",
+        "statement": "When the first argument is Walk.nil (the trivial walk at v), VTask.append Walk.nil q = q.",
+        "note": "nil is a left identity for append"
+      },
+      {
+        "point": "right identity",
+        "statement": "When the second argument is Walk.nil (the trivial walk at v), VTask.append p Walk.nil = p.",
+        "note": "nil is a right identity for append"
+      },
+      {
+        "point": "associativity",
+        "statement": "For any three composable walks p, q, r, VTask.append p (VTask.append q r) = VTask.append (VTask.append p q) r.",
+        "note": "append is associative"
+      }
+    ]
+  },
+  "axiom_baseline": [],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "append_nil_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v : V} (p : G.Walk u v), VTask.append p SimpleGraph.Walk.nil = p",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.append_nil"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.append_nil"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.213,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_assoc_global",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w x : V} (p : G.Walk u v) (q : G.Walk v w) (r : G.Walk w x), VTask.append p (VTask.append q r) = VTask.append (VTask.append p q) r",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.append_assoc"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.append_assoc"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.603,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_length_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), (VTask.append p q).length = p.length + q.length",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.3,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_support",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), (VTask.append p q).support = p.support ++ q.support.tail",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.support_append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.support_append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.275,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispath_of_append_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} {p : G.Walk u v} {q : G.Walk v w}, (VTask.append p q).IsPath → p.IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.of_append_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.of_append_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.039,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "ispath_of_append_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} {p : G.Walk u v} {q : G.Walk v w}, (VTask.append p q).IsPath → q.IsPath",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.of_append_right"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.of_append_right"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.433,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "istrail_of_append_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} {p : G.Walk u v} {q : G.Walk v w}, (VTask.append p q).IsTrail → p.IsTrail",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsTrail.of_append_left"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsTrail.of_append_left"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.5,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_path_not_necessarily_path",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ (∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), p.IsPath → q.IsPath → (VTask.append p q).IsPath)",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.IsPath.of_append_left"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.IsPath.of_append_left"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_edges_subset_left",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), p.edges ⊆ (VTask.append p q).edges",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.edges_append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.edges_append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.313,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_length_zero_both_nil",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (p : G.Walk u v) (q : G.Walk v w), (VTask.append p q).length = 0 ↔ p.length = 0 ∧ q.length = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.length_append",
+        "Nat.add_eq_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.length_append",
+        "Nat.add_eq_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.224,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "append_not_nil_cons",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {V : Type*} {G : SimpleGraph V} {u v w : V} (h : G.Adj u v) (p : G.Walk v w), ¬ (SimpleGraph.Walk.cons h p).Nil → ¬ (VTask.append (SimpleGraph.Walk.cons h p) SimpleGraph.Walk.nil).Nil → True",
+      "domain_inputs": {},
+      "anchors": [
+        "SimpleGraph.Walk.Nil.append"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "SimpleGraph.Walk.Nil.append"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.314,
+        "at": "authoring",
+        "script": "by simp [_root_.SimpleGraph.Walk.append] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.SimpleGraph.Walk.append] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "SimpleGraph.Walk.append",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "SimpleGraph.Walk.append-c43883f1",
+    "review_status": "unreviewed"
+  }
+}

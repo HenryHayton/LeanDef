@@ -1,0 +1,258 @@
+{
+  "task_id": "MvPowerSeries.weightedOrder",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.weightedOrder",
+  "signature": {
+    "name": "VTask.weightedOrder",
+    "type": "{σ : Type u_1} -> {R : Type u_2} -> [Semiring R] -> (w : σ → ℕ) -> (f : MvPowerSeries σ R) -> ℕ∞",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "w",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "f = 0",
+        "statement": "When f is the zero power series, VTask.weightedOrder w f = ⊤ (top element of ℕ∞, representing infinity).",
+        "note": "Standard convention: the weighted order of zero is infinite."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "weightedOrder_zero_series_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [Semiring R] (w : σ → ℕ), VTask.weightedOrder w (0 : MvPowerSeries σ R) = ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.194,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weightedOrder_one_eq_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [Semiring R] [Nontrivial R] (w : σ → ℕ), VTask.weightedOrder w (1 : MvPowerSeries σ R) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_one"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_one"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.556,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weightedOrder_nonzero_ne_top",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R), f ≠ 0 → VTask.weightedOrder w f ≠ ⊤",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_eq_top_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_eq_top_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.376,
+        "at": "authoring",
+        "script": "by simp [_root_.MvPowerSeries.weightedOrder] <;> push_neg <;> simp_all",
+        "self_cited": false
+      },
+      "cached_script": "by simp [_root_.MvPowerSeries.weightedOrder] <;> push_neg <;> simp_all",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weightedOrder_top_iff_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R), VTask.weightedOrder w f = ⊤ ↔ f = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_eq_top_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_eq_top_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.247,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weightedOrder_finite_iff_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [Semiring R] (w : σ → ℕ) (f : MvPowerSeries σ R), (∃ n : ℕ, VTask.weightedOrder w f = n) ↔ f ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_eq_top_iff",
+        "WithTop.ne_top_iff_exists"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_eq_top_iff",
+        "WithTop.ne_top_iff_exists"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 4.934,
+        "at": "authoring",
+        "script": "by simp only [_root_.MvPowerSeries.weightedOrder] <;> aesop",
+        "self_cited": false
+      },
+      "cached_script": "by simp only [_root_.MvPowerSeries.weightedOrder] <;> aesop",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "weightedOrder_mul_ge_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (σ : Type) (R : Type) [CommSemiring R] (w : σ → ℕ) (f g : MvPowerSeries σ R), VTask.weightedOrder w f + VTask.weightedOrder w g ≤ VTask.weightedOrder w (f * g)",
+      "domain_inputs": {},
+      "anchors": [
+        "MvPowerSeries.weightedOrder_mul_ge"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "MvPowerSeries.weightedOrder_mul_ge"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.349,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "MvPowerSeries.weightedOrder",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "MvPowerSeries.weightedOrder-5da87a40",
+    "review_status": "unreviewed"
+  }
+}

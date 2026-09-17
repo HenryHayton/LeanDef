@@ -1,0 +1,165 @@
+{
+  "task_id": "ContinuousLinearMap.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{R₁ : Type u_1} -> {R₂ : Type u_2} -> {R₃ : Type u_3} -> [Semiring R₁] -> [Semiring R₂] -> [Semiring R₃] -> {σ₁₂ : R₁ →+* R₂} -> {σ₂₃ : R₂ →+* R₃} -> {σ₁₃ : R₁ →+* R₃} -> {M₁ : Type u_4} -> [TopologicalSpace M₁] -> [AddCommMonoid M₁] -> {M₂ : Type u_6} -> [TopologicalSpace M₂] -> [AddCommMonoid M₂] -> {M₃ : Type u_7} -> [TopologicalSpace M₃] -> [AddCommMonoid M₃] -> [Module R₁ M₁] -> [Module R₂ M₂] -> [Module R₃ M₃] -> [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] -> (g : M₂ →SL[σ₂₃] M₃) -> (f : M₁ →SL[σ₁₂] M₂) -> M₁ →SL[σ₁₃] M₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "argument order",
+        "statement": "The outer map `g` is the first explicit argument and the inner map `f` is the second, matching the mathematical convention `g ∘ f` (i.e., `g` is applied after `f`).",
+        "note": "Mirrors standard mathematical function-composition notation."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_continuous",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (f : ℝ →L[ℝ] ℝ) (g : ℝ →L[ℝ] ℝ), Continuous (VTask.comp g f)",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.continuous"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.28,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.comp-23749bd0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_zero_right",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R M₁ M₂ M₃ : Type*} [Semiring R] [TopologicalSpace M₁] [AddCommMonoid M₁] [TopologicalSpace M₂] [AddCommMonoid M₂] [TopologicalSpace M₃] [AddCommMonoid M₃] [Module R M₁] [Module R M₂] [Module R M₃] (g : M₂ →L[R] M₃), VTask.comp g (0 : M₁ →L[R] M₂) = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.comp_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.comp_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.705,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.comp-23749bd0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_not_commutative",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "¬ ∀ {R M : Type*} [Semiring R] [TopologicalSpace M] [AddCommMonoid M] [Module R M] (f g : M →L[R] M), VTask.comp g f = VTask.comp f g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.comp-23749bd0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_ne_swap",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∃ (f g : ℝ →L[ℝ] ℝ), VTask.comp g f ≠ VTask.comp f g",
+      "domain_inputs": {},
+      "anchors": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "ContinuousLinearMap.ext_iff"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "ContinuousLinearMap.comp-23749bd0",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "ContinuousLinearMap.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "ContinuousLinearMap.comp-23749bd0",
+    "review_status": "unreviewed"
+  }
+}

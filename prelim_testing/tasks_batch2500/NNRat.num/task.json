@@ -1,0 +1,339 @@
+{
+  "task_id": "NNRat.num",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.num",
+  "signature": {
+    "name": "VTask.num",
+    "type": "(q : ℚ≥0) -> ℕ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "q"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: The function is total on ℚ≥0 with no junk-value or edge conventions; the only noteworthy behavior (reduction to lowest terms before extracting the numerator) is part of the mathematical specification, not a junk-value convention."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "num_zero",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.num 0 = 0 := by decide",
+      "domain_inputs": {
+        "q": [
+          "0"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_one",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.num 1 = 1 := by decide",
+      "domain_inputs": {
+        "q": [
+          "1"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_two",
+      "type": "casework",
+      "mechanism": "decide",
+      "statement": "example : VTask.num 2 = 2 := by decide",
+      "domain_inputs": {
+        "q": [
+          "2"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_coprime_den",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ q : ℚ≥0, (VTask.num q).Coprime q.den",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.coprime_num_den"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.coprime_num_den"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.409,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_div_den_eq",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ q : ℚ≥0, (VTask.num q : ℚ≥0) / q.den = q",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.num_div_den"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.num_div_den"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.157,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": true
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_mul_formula",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ q₁ q₂ : ℚ≥0, VTask.num (q₁ * q₂) = q₁.num * q₂.num / Nat.gcd (q₁.num * q₂.num) (q₁.den * q₂.den)",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.mul_num"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.mul_num"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.307,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_inv_eq_den",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ q : ℚ≥0, q ≠ 0 → VTask.num q⁻¹ = q.den",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.num_inv_of_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.num_inv_of_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.318,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_le_characterization",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p q : ℚ≥0, p ≤ q ↔ VTask.num p * q.den ≤ VTask.num q * p.den",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.le_def"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.le_def"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.213,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "num_ext_iff",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ p q : ℚ≥0, p = q ↔ VTask.num p = VTask.num q ∧ p.den = q.den",
+      "domain_inputs": {},
+      "anchors": [
+        "NNRat.ext_num_den_iff"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": true,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "NNRat.ext_num_den_iff"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 2.278,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": true
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "NNRat.num-9bf053c2",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "NNRat.num",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "NNRat.num-9bf053c2",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,364 @@
+{
+  "task_id": "TensorPower.cast",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.cast",
+  "signature": {
+    "name": "VTask.cast",
+    "type": "(R : Type u_1) -> (M : Type u_2) -> [CommSemiring R] -> [AddCommMonoid M] -> [Module R M] -> {i j : ℕ} -> (h : i = j) -> TensorPower R i M ≃ₗ[R] TensorPower R j M",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "R",
+      "M",
+      "i",
+      "j",
+      "h"
+    ],
+    "conventions": [
+      {
+        "point": "h = rfl",
+        "statement": "When h is the reflexivity proof (i = i), VTask.cast R M rfl is the identity linear equivalence on TensorPower R i M.",
+        "note": "Transport along rfl is the identity."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "cast_rfl_is_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] (i : ℕ), VTask.cast R M (rfl : i = i) = LinearEquiv.refl R (TensorPower R i M)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.refl_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.refl_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.446,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_trans_is_cast_trans",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j k : ℕ} (h1 : i = j) (h2 : j = k), (VTask.cast R M h1).trans (VTask.cast R M h2) = VTask.cast R M (h1.trans h2)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.trans_refl"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.trans_refl"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.549,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_comp_symm_is_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j), (VTask.cast R M h).trans (VTask.cast R M h.symm) = LinearEquiv.refl R (TensorPower R i M)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.self_trans_symm"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.self_trans_symm"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.476,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_symm_comp_is_refl",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j), (VTask.cast R M h.symm).trans (VTask.cast R M h) = LinearEquiv.refl R (TensorPower R j M)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.symm_trans_self"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.symm_trans_self"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.47,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_is_linear_equiv",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j), Function.Bijective (VTask.cast R M h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.bijective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.bijective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.329,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_apply_rfl_identity",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] (i : ℕ) (x : TensorPower R i M), VTask.cast R M (rfl : i = i) x = x",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.refl_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.refl_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.438,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_surjective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j), Function.Surjective (VTask.cast R M h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.surjective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.surjective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.298,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_injective",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j), Function.Injective (VTask.cast R M h)",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.injective"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.injective"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 1.34,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "cast_linear_map_add",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (R : Type*) (M : Type*) [CommSemiring R] [AddCommMonoid M] [Module R M] {i j : ℕ} (h : i = j) (x y : TensorPower R i M), VTask.cast R M h (x + y) = VTask.cast R M h x + VTask.cast R M h y",
+      "domain_inputs": {},
+      "anchors": [
+        "LinearEquiv.map_add"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LinearEquiv.map_add"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.964,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "TensorPower.cast-74d0f759",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "TensorPower.cast",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "TensorPower.cast-74d0f759",
+    "review_status": "unreviewed"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "task_id": "LieHom.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{R : Type u} -> {L₁ : Type v} -> {L₂ : Type w} -> {L₃ : Type w₁} -> [CommRing R] -> [LieRing L₁] -> [LieAlgebra R L₁] -> [LieRing L₂] -> [LieAlgebra R L₂] -> [LieRing L₃] -> [LieAlgebra R L₃] -> (f : L₂ →ₗ⁅R⁆ L₃) -> (g : L₁ →ₗ⁅R⁆ L₂) -> L₁ →ₗ⁅R⁆ L₃",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "f",
+      "g"
+    ],
+    "conventions": [
+      {
+        "point": "argument order",
+        "statement": "The first argument `f` is the outer (post-) morphism and the second argument `g` is the inner (pre-) morphism, so `VTask.comp f g` applied to `x` yields `f (g x)`, following standard mathematical left-to-right composition notation.",
+        "note": "Mirrors the convention of LinearMap.comp and standard categorical composition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_preserves_bracket",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L₁ : Type*} {L₂ : Type*} {L₃ : Type*} [CommRing R] [LieRing L₁] [LieAlgebra R L₁] [LieRing L₂] [LieAlgebra R L₂] [LieRing L₃] [LieAlgebra R L₃] (f : L₂ →ₗ⁅R⁆ L₃) (g : L₁ →ₗ⁅R⁆ L₂) (x y : L₁), VTask.comp f g ⁅x, y⁆ = ⁅VTask.comp f g x, VTask.comp f g y⁆",
+      "domain_inputs": {},
+      "anchors": [
+        "LieHom.map_lie"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieHom.map_lie"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.688,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieHom.comp-9975406b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_zero_right_is_zero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {R : Type*} {L₁ : Type*} {L₂ : Type*} {L₃ : Type*} [CommRing R] [LieRing L₁] [LieAlgebra R L₁] [LieRing L₂] [LieAlgebra R L₂] [LieRing L₃] [LieAlgebra R L₃] (f : L₂ →ₗ⁅R⁆ L₃) (x : L₁), VTask.comp f (0 : L₁ →ₗ⁅R⁆ L₂) x = 0",
+      "domain_inputs": {},
+      "anchors": [
+        "LieHom.comp_apply",
+        "LieHom.zero_apply"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "LieHom.comp_apply",
+        "LieHom.zero_apply"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 0.669,
+        "at": "authoring",
+        "script": "by norm_num",
+        "self_cited": false
+      },
+      "cached_script": "by norm_num",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "LieHom.comp-9975406b",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "LieHom.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "LieHom.comp-9975406b",
+    "review_status": "unreviewed"
+  }
+}

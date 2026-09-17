@@ -1,0 +1,160 @@
+{
+  "task_id": "Dilation.comp",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.comp",
+  "signature": {
+    "name": "VTask.comp",
+    "type": "{α : Type u_1} -> {β : Type u_2} -> {γ : Type u_3} -> [PseudoEMetricSpace α] -> [PseudoEMetricSpace β] -> [PseudoEMetricSpace γ] -> (g : β →ᵈ γ) -> (f : α →ᵈ β) -> α →ᵈ γ",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "g",
+      "f"
+    ],
+    "conventions": [
+      {
+        "point": "ratio of composition",
+        "statement": "The ratio of VTask.comp g f equals ratio g * ratio f.",
+        "note": "Follows from the multiplicativity of the scaling factors under composition."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "comp_ratio",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [PseudoEMetricSpace α] [PseudoEMetricSpace β] [PseudoEMetricSpace γ] (g : β →ᵈ γ) (f : α →ᵈ β), Dilation.ratio (VTask.comp g f) = Dilation.ratio g * Dilation.ratio f",
+      "domain_inputs": {},
+      "anchors": [
+        "Dilation.ratio_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dilation.ratio_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Dilation.comp-f4c272b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_ratio_nonzero",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [PseudoEMetricSpace α] [PseudoEMetricSpace β] [PseudoEMetricSpace γ] (g : β →ᵈ γ) (f : α →ᵈ β), Dilation.ratio (VTask.comp g f) ≠ 0",
+      "domain_inputs": {},
+      "anchors": [
+        "Dilation.ratio_comp",
+        "Dilation.ratio_ne_zero"
+      ],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dilation.ratio_comp",
+        "Dilation.ratio_ne_zero"
+      ],
+      "discharge": {
+        "tier": 2,
+        "wall_clock_s": 3.172,
+        "at": "authoring",
+        "script": "by exact?",
+        "self_cited": false
+      },
+      "cached_script": "by exact?",
+      "axiom_closure": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "Dilation.comp-f4c272b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_ratio_comm_ne",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [PseudoEMetricSpace α] [PseudoEMetricSpace β] [PseudoEMetricSpace γ] (g : β →ᵈ γ) (f : α →ᵈ β), Dilation.ratio (VTask.comp g f) = Dilation.ratio f * Dilation.ratio g",
+      "domain_inputs": {},
+      "anchors": [
+        "Dilation.ratio_comp",
+        "mul_comm"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dilation.ratio_comp",
+        "mul_comm"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Dilation.comp-f4c272b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "comp_ratio_not_sum",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ {α β γ : Type*} [PseudoEMetricSpace α] [PseudoEMetricSpace β] [PseudoEMetricSpace γ] (g : β →ᵈ γ) (f : α →ᵈ β), Dilation.ratio (VTask.comp g f) ≠ Dilation.ratio g + Dilation.ratio f ∨ Dilation.ratio g * Dilation.ratio f = Dilation.ratio g + Dilation.ratio f",
+      "domain_inputs": {},
+      "anchors": [
+        "Dilation.ratio_comp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "Dilation.ratio_comp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "Dilation.comp-f4c272b8",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "Dilation.comp",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "Dilation.comp-f4c272b8",
+    "review_status": "unreviewed"
+  }
+}

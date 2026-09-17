@@ -1,0 +1,289 @@
+{
+  "task_id": "HolorIndex.drop",
+  "schema_version": "1.1",
+  "task_symbol": "VTask.drop",
+  "signature": {
+    "name": "VTask.drop",
+    "type": "{ds₂ ds₁ : List ℕ} -> HolorIndex (ds₁ ++ ds₂) → HolorIndex ds₂",
+    "imports": [
+      "Mathlib"
+    ]
+  },
+  "domain": {
+    "constraint": "True",
+    "variables": [
+      "ds₁",
+      "ds₂",
+      "is"
+    ],
+    "conventions": [
+      {
+        "point": null,
+        "statement": null,
+        "note": "NONE_DECLARED: VTask.drop is a total, type-safe projection with no junk-value or boundary conventions needed; every well-typed input produces a valid HolorIndex ds₂ output."
+      }
+    ]
+  },
+  "axiom_baseline": [
+    "propext"
+  ],
+  "admissibility_contract": {
+    "single_declaration": true
+  },
+  "ladder_budget_override": null,
+  "facts": [
+    {
+      "id": "drop_empty_suffix",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ds₁ : List ℕ) (i : HolorIndex (ds₁ ++ [])), VTask.drop i = ⟨[], List.Forall₂.nil⟩",
+      "domain_inputs": {},
+      "anchors": [
+        "List.append_nil"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.append_nil"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    },
+    {
+      "id": "drop_singleton_prefix_concrete",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := [3]) (ds₂ := [4, 2]) ⟨[1, 2, 0], by decide⟩).1 = [2, 0] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[3]"
+        ],
+        "ds₂": [
+          "[4, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.drop (ds₁ := [3]) (ds₂ := [4, 2]) ⟨[1, 2, 0], by decide⟩).1 = [2, 0]"
+    },
+    {
+      "id": "drop_double_prefix_concrete",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := [2, 3]) (ds₂ := [5]) ⟨[1, 2, 4], by decide⟩).1 = [4] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[2, 3]"
+        ],
+        "ds₂": [
+          "[5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.drop (ds₁ := [2, 3]) (ds₂ := [5]) ⟨[1, 2, 4], by decide⟩).1 = [4]"
+    },
+    {
+      "id": "drop_empty_suffix_concrete",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := [2, 3]) (ds₂ := []) ⟨[1, 2], by decide⟩).1 = [] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[2, 3]"
+        ],
+        "ds₂": [
+          "[]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.drop (ds₁ := [2, 3]) (ds₂ := []) ⟨[1, 2], by decide⟩).1 = []"
+    },
+    {
+      "id": "drop_empty_prefix_identity",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := []) (ds₂ := [3, 4]) ⟨[2, 1], by decide⟩).1 = [2, 1] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[]"
+        ],
+        "ds₂": [
+          "[3, 4]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by rfl",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "accept",
+      "instance": "(VTask.drop (ds₁ := []) (ds₂ := [3, 4]) ⟨[2, 1], by decide⟩).1 = [2, 1]"
+    },
+    {
+      "id": "drop_not_take",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := [3]) (ds₂ := [4, 2]) ⟨[1, 2, 0], by decide⟩).1 ≠ [1] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[3]"
+        ],
+        "ds₂": [
+          "[4, 2]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.drop (ds₁ := [3]) (ds₂ := [4, 2]) ⟨[1, 2, 0], by decide⟩).1 ≠ [1]",
+      "violated_property": "drop retains trailing components, not leading ones"
+    },
+    {
+      "id": "drop_does_not_give_full_list",
+      "type": "membership",
+      "mechanism": "decide",
+      "statement": "example : (VTask.drop (ds₁ := [2, 3]) (ds₂ := [5]) ⟨[1, 2, 4], by decide⟩).1 ≠ [1, 2, 4] := by decide",
+      "domain_inputs": {
+        "ds₁": [
+          "[2, 3]"
+        ],
+        "ds₂": [
+          "[5]"
+        ]
+      },
+      "anchors": [],
+      "validation_status": "CERTIFIED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [],
+      "discharge": null,
+      "cached_script": "by decide",
+      "axiom_closure": [
+        "Quot.sound",
+        "propext"
+      ],
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; certified by the v1.2 kernel validation ladder"
+      },
+      "polarity": "reject",
+      "instance": "(VTask.drop (ds₁ := [2, 3]) (ds₂ := [5]) ⟨[1, 2, 4], by decide⟩).1 ≠ [1, 2, 4]",
+      "violated_property": "drop discards leading components, so the result cannot equal the full input list when ds₁ is nonempty"
+    },
+    {
+      "id": "drop_bounds_preserved",
+      "type": "global",
+      "mechanism": "proof",
+      "statement": "∀ (ds₁ ds₂ : List ℕ) (i : HolorIndex (ds₁ ++ ds₂)), List.Forall₂ (· < ·) (VTask.drop i : HolorIndex ds₂).1 ds₂",
+      "domain_inputs": {},
+      "anchors": [
+        "List.Forall₂.imp"
+      ],
+      "validation_status": "PROVISIONALLY_VALIDATED",
+      "self_restatement": false,
+      "boundary_vs_interior": null,
+      "near_miss_clause": null,
+      "anchors_resolved": [
+        "List.Forall₂.imp"
+      ],
+      "discharge": null,
+      "cached_script": null,
+      "axiom_closure": null,
+      "provenance": {
+        "validation_run_id": "HolorIndex.drop-423f96b5",
+        "note": "authored by eu.anthropic.claude-sonnet-4-6; unvalidated by the v1.2 kernel validation ladder"
+      },
+      "polarity": null
+    }
+  ],
+  "heldout": false,
+  "mutants": [],
+  "provenance": {
+    "source": "mathlib",
+    "mathlib_name": "HolorIndex.drop",
+    "dossier_generator": "eu.anthropic.claude-sonnet-4-6",
+    "validation_run_id": "HolorIndex.drop-423f96b5",
+    "review_status": "unreviewed"
+  }
+}
